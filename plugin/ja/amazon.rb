@@ -1,5 +1,5 @@
 #
-# English resource of amazon plugin $Revision: 1.2 $
+# English resource of amazon plugin $Revision: 1.3 $
 #
 
 #
@@ -66,3 +66,5 @@
 @amazon_label_usedefault = 'デフォルトのイメージを使う'
 @amazon_label_clearcache = 'キャッシュの削除'
 @amazon_label_clearcache_desc = 'イメージ関連情報のキャッシュを削除する(Amazon上の表示と矛盾がある場合に試して下さい)'
+@amazon_label_over18 = 'アダルト商品の書影'
+@amazon_label_over18_desc = 'アダルト商品の書影を取得する。すでに取得済みの書影を無効化するわけではないので、必要に応じてキャッシュを削除して下さい。'

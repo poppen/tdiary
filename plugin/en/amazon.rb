@@ -1,5 +1,5 @@
 #
-# English resource of amazon plugin $Revision: 1.4 $
+# English resource of amazon plugin $Revision: 1.5 $
 #
 
 #
@@ -50,3 +50,5 @@
 @amazon_label_usedefault = 'Use default image'
 @amazon_label_clearcache = 'Clear Cache'
 @amazon_label_clearcache_desc = 'Delete local cache file about book images'
+@amazon_label_over18 = 'Images of adult materials'
+@amazon_label_over18_desc = 'Fetch images of adult materials.'

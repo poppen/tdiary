@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.26 $
+# amazon.rb $Revision: 1.27 $
 #
 # See document in language resource file: en/amazon.rb
 #
@@ -47,6 +47,7 @@ def get_amazon( asin )
 
 	timeout( limittime ) do
 		item_url = "#{@amazon_url}/#{asin}/"
+		item_url += "?val=authorized" if @conf['amazon.over18']
 
 		begin
 			if %r|http://([^:/]*):?(\d*)(/.*)| =~ item_url then
@@ -138,9 +139,9 @@ def get_amazon_image( position, asin, comment )
 			r << item[1].strip if position == "amazon"
 		end
 		r << %Q[</a>]
-	rescue
+	rescue NameError, StandardError
 		$stderr.puts "3 #$!"
-		asin
+		%Q[<a href="#{item[0].strip}/ref=nosim/">#{asin}</a>]
 	end
 end
 
@@ -173,6 +174,7 @@ def amazon_conf_proc
 			@conf['amazon.imgsize'] = @cgi.params['amazon.imgsize'][0].to_i
 			@conf['amazon.hidename'] = (@cgi.params['amazon.hidename'][0] == 'true')
 			@conf['amazon.nodefault'] = (@cgi.params['amazon.nodefault'][0] == 'true')
+			@conf['amazon.over18'] = (@cgi.params['amazon.over18'][0] == 'true')
 			if @cgi.params['amazon.clearcache'][0] == 'true' then
 				Dir["#{@cache_path}/amazon/*"].each do |cache|
 					File::delete( cache.untaint )
@@ -203,6 +205,8 @@ def amazon_conf_proc
 				<option value="true"#{if @conf['amazon.nodefault'] then " selected" end}>#{@amazon_label_usetitle}</option>
 				<option value="false"#{if not @conf['amazon.nodefault'] then " selected" end}>#{@amazon_label_usedefault}</option>
 			</select></p>
+			<h3>#{@amazon_label_over18}</h3>
+			<p><input type="checkbox" name="amazon.over18" value="true"#{@conf['amazon.over18'] ? " checked" : ""}>#{@amazon_label_over18_desc}</input></p>
 			<h3>#{@amazon_label_clearcache}</h3>
 			<p><input type="checkbox" name="amazon.clearcache" value="true">#{@amazon_label_clearcache_desc}</input></p>
 		HTML

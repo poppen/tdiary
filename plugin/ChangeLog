@@ -1,3 +1,6 @@
+2004-10-03 Junichiro Kita <kita@kitaj.no-ip.com>
+	* amazon.rb: add new option, @conf['amazon.over18']
+
 2004-10-01  Masao Mutoh  <mutoh@highway.ne.jp>
 
 	* counter.rb: Support @options["bot"]
