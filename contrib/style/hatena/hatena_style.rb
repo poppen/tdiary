@@ -18,7 +18,7 @@
 # OUT OF  OR IN CONNECTION WITH  THE CODE OR THE  USE OR OTHER  DEALINGS IN THE
 # CODE.
 
-# $Id: hatena_style.rb,v 1.9 2004-05-16 14:53:46 mput Exp $
+# $Id: hatena_style.rb,v 1.10 2004-11-06 18:06:49 mput Exp $
 # Hatena::Diary compatible style
 # Works only under ruby 1.8.1 or later
 
@@ -668,7 +668,7 @@ class Hatena::Inline
       when /\A\[(?:(g:(?:.*?)|a|d):)?id:(.*?)\]/m, /\A(?:(g:(?:.*?)|a|d):)?id:((?:[\w\d_]+)(?::(?:\d+|about))?)/n
         m = Regexp.last_match
         @elems.push Hatena::ID.new(m[1], m[2], true)
-      when /\A\[(ISBN|ASIN):(.*?)(:image(:(small|large))?)?\]/m, /(ISBN|ASIN):([\-0-9A-Z]+)(:image(:(small|large))?)?/
+      when /\A\[(ISBN|ASIN|isbn|asin):(.*?)(:image(:(small|large))?)?\]/m, /(ISBN|ASIN|isbn|asin):([\-0-9A-Za-z]+)(:image(:(small|large))?)?/
         @elems.push Hatena::Amazon.new(Regexp.last_match[2], true)
       when /\A\[tex:(.*?)\]/m
         @elems.push Hatena::TeX.new(Regexp.last_match[1])
@@ -739,7 +739,7 @@ class Hatena::TAG
         @elems.push Hatena::Google.new(Regexp.last_match[1], false)
       when /\Aid:(.*)/
         @elems.push Hatena::ID.new(Regexp.last_match[1], false)
-      when /\A(ISBN|ASIN):(.*)/
+      when /\A(ISBN|ASIN|isbn|asin):(.*)/
         @elems.push Hatena::Amazon.new(Regexp.last_match[2], false)
       when /\Akeyword:(.*)/
         @elems.push Hatena::Keyword.new(Regexp.last_match[1], false)
@@ -878,7 +878,7 @@ class Hatena::Amazon
 
   def convert(mode)
     if @tag_p
-      sprintf('<%%=isbn "%s", ""%%>' % @str) # %=
+      sprintf('<%%=isbn_image "%s", "isbn:%s"%%>', @str, @str.gsub(/\-/, '')) # %=
     else
       sprintf('http://www.amazon.co.jp/exec/obidos/ASIN/%s/%s',
               @str,
@@ -945,4 +945,5 @@ end
 # mode: ruby
 # code: euc-jp-unix
 # End:
+
 
