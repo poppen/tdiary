@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.6 $
+# makerss.rb: $Revision: 1.7 $
 #
 # generate RSS file when updating.
 #
@@ -153,10 +153,14 @@ def makerss_body( uri, rdfsec )
 	rdf << %Q|<link>#{uri}#{anchor rdfsec.id}</link>\n|
 	rdf << %Q|<dc:date>#{rdfsec.time_string}</dc:date>\n|
 	if rdfsec.section.respond_to?( :body_to_html ) then
+		a = rdfsec.id.scan( /(\d{4})(\d\d)(\d\d)/ ).flatten.map{|s| s.to_i}
+		date = Time::local( *a )
 		old_apply_plugin = @options['apply_plugin']
 		@options['apply_plugin'] = true
+		body_enter_proc( date )
 		subtitle = apply_plugin( rdfsec.section.subtitle_to_html, true ).strip
 		desc = subtitle + apply_plugin( rdfsec.section.body_to_html ).strip
+		body_leave_proc( date )
 		@options['apply_plugin'] = old_apply_plugin
 		rdf << %Q|<title>#{subtitle}</title>\n|
 		rdf << %Q|<dc:creator>#{CGI::escapeHTML( @conf.author_name )}</dc:creator>\n|
@@ -181,3 +185,8 @@ if /^showcomment$/ =~ @mode then
 	makerss_update
 end
 
+add_header_proc {
+	rdf_url = @options['makerss.url'] || "#{@conf.base_url}index.rdf"
+	rdf_url = "#{@conf.base_url}index.rdf" if rdf_url.length == 0
+	%Q|\t<link rel="alternate" type="application/rss+xml" title="RSS" href="#{rdf_url}">\n|
+}

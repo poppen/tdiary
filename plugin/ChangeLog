@@ -1,5 +1,7 @@
 2004-06-19 TADA Tadashi <sho@spc.gr.jp>
 	* footnote.rb: suppress making footnote in update mode.
+	* makerss.rb: call body_enter_proc and body_leave_proc before output each section.
+	* makerss.rb: support RSS auto discovery.
 
 2004-06-19 zunda <zunda at freeshell.org>
 	* category.rb: support ruby 1.6.x on secure mode.
