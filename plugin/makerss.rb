@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.21 $
+# makerss.rb: $Revision: 1.22 $
 #
 # generate RSS file when updating.
 #
@@ -129,7 +129,7 @@ def makerss_update
 		end
 	end
 
-	if @conf.icon
+	if @conf.icon and not @conf.icon.empty?
 		if /^http/ =~ @conf.icon
 			rdf_image = @conf.icon
 		else

@@ -1,4 +1,7 @@
 2004-11-29 zunda <zunda at freeshell.org>
+	* makerss.rb: @conf.icon can be empty
+
+2004-11-29 zunda <zunda at freeshell.org>
 	* ja/makerss.rb: better description of options,
 	thanks to TADA Tadashi <sho@spc.gr.jp>
 
