@@ -1,4 +1,4 @@
-# ja/category.rb $Revision: 1.1 $
+# ja/category.rb $Revision: 1.2 $
 #
 # Copyright (c) 2004 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -104,7 +104,29 @@ HTML
 HTML
 	end
 	r << <<HTML
+
 </table>
+
+<h3 class="subtitle">Default period</h3>
+<p>
+Specify the default display period for category view.
+</p>
+<p><select name="category.period">
+HTML
+	[
+		['month', 'month', false],
+		['quarter', 'quarter', true],
+		['half-year', 'half', false],
+		['year', 'year', false],
+		['all', 'all', false],
+	].each do |text, value, default|
+		selected = @conf["category.period"] ? @conf["category.period"] == value : default
+		r << <<HTML
+<option value="#{value}"#{" selected" if selected}>#{text}</option>
+HTML
+	end
+	r << <<HTML
+</select></p>
 HTML
 end
 

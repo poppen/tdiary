@@ -1,5 +1,8 @@
-2004-03-15  mput <root@mput.dip.jp>
+2004.03.15 Masashi Seiki <mass@starshine.jp>
+	* category.rb: save configurations.
+	* category.rb: add new conf parameter: @conf['category.period']
 
+2004-03-15  mput <root@mput.dip.jp>
 	* category.rb (Cache::categorize_diary): bug fix for heredoc handling
 
 2004.03.15 Junichiro Kita <kita@kitaj.no-ip.com>

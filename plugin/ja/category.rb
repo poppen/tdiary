@@ -1,4 +1,4 @@
-# ja/category.rb $Revision: 1.2 $
+# ja/category.rb $Revision: 1.3 $
 #
 # Copyright (c) 2004 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -104,7 +104,29 @@ HTML
 HTML
 	end
 	r << <<HTML
+
 </table>
+
+<h3 class="subtitle">デフォルトの表示期間</h3>
+<p>
+カテゴリ表示モードのデフォルトの表示期間を指定します．
+</p>
+<p><select name="category.period">
+HTML
+	[
+		['月', 'month', false],
+		['四半期', 'quarter', true],
+		['半期', 'half', false],
+		['年', 'year', false],
+		['全日記', 'all', false],
+	].each do |text, value, default|
+		selected = @conf["category.period"] ? @conf["category.period"] == value : default
+		r << <<HTML
+<option value="#{value}"#{" selected" if selected}>#{text}</option>
+HTML
+	end
+	r << <<HTML
+</select></p>
 HTML
 end
 

@@ -1,4 +1,4 @@
-# category.rb $Revision: 1.10 $
+# category.rb $Revision: 1.11 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -22,10 +22,24 @@ def category_form
 end
 
 def category_anchor(cname)
+	period = @conf['category.period'] || 'quarter'
+	period_string = 
+		case period
+		when "month"
+			"year=#{@date.year};month=#{@date.month};"
+		when "quarter"
+			"year=#{@date.year};month=#{(@date.month - 1) / 3 + 1}Q;"
+		when "half"
+			"year=#{@date.year};month=#{(@date.month - 1) / 6 + 1}H;"
+		when "year"
+			"year=#{@date.year};"
+		else
+			""
+		end
 	if @options['category.icon'] and @options['category.icon'][cname]
-		%Q|<a href="#{@index}?year=#{@date.year};month=#{(@date.month - 1) / 3 + 1}Q;category=#{CGI::escape(cname)}"><img src="#{@options['category.icon'][cname] }" alt="#{cname}"></a>|
+		%Q|<a href="#{@index}?#{period_string}category=#{CGI::escape(cname)}"><img src="#{@options['category.icon'][cname] }" alt="#{cname}"></a>|
 	else
-		%Q|[<a href="#{@index}?year=#{@date.year};month=#{(@date.month - 1) / 3 + 1}Q;category=#{CGI::escape(cname)}">#{cname}</a>]|
+		%Q|[<a href="#{@index}?#{period_string}category=#{CGI::escape(cname)}">#{cname}</a>]|
 	end
 end
 
@@ -498,7 +512,34 @@ if @mode == 'conf' || @mode == 'saveconf'
 	add_conf_proc('category', @category_conf_label) do
 		cache = Category::Cache.new(@conf, binding)
 		if @mode == 'saveconf'
-			nil
+			[
+				'category.header1',
+				'category.header2',
+			].each do |name|
+				@conf[name] = @conf.to_native( @cgi.params[name][0] )
+			end
+			[
+				'category.prev_year',
+				'category.next_year',
+				'category.prev_half',
+				'category.next_half',
+				'category.prev_quarter',
+				'category.next_quarter',
+				'category.prev_month',
+				'category.next_month',
+				'category.this_year',
+				'category.this_half',
+				'category.this_quarter',
+				'category.this_month',
+				'category.all_diary',
+				'category.all_category',
+				'category.all',
+			].each do |name|
+				@conf[name] = @conf.to_native( @cgi.params[name][0] )
+			end
+			if ["month", "quearter", "half", "year", "all"].index(@cgi.params["category.period"][0])
+				@conf["category.period"] = @cgi.params["category.period"][0]
+			end
 		elsif @cgi.valid?('category_initialize')
 			cache.recreate(@years)
 		end
