@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.43 2005-01-23 08:03:31 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.44 2005-01-27 04:05:31 zunda Exp $-))
 
 == 概要
 アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
@@ -651,6 +651,7 @@ class DispRef2URL
 				setup['search_engines'][engine].each do |e|
 					if( e[0] =~ urlbase ) then
 						title = eval( e[1] )
+						throw :done if keyword
 						if e[2].empty? then
 							keyword = setup['search.unknown_keyword']
 							throw :done

@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.17 2005-01-23 07:53:44 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.18 2005-01-27 04:05:32 zunda Exp $-))
 日本語リソース
 
 == 概要
@@ -482,8 +482,8 @@ DispReferrer2_Engines = {
 	'lycos' => [[%r{\Ahttp://.*?\.lycos\.([^/]+)}i, '".#{$1}のLycos"', ['query', 'q', 'qt'], nil ]],
 	'fresheye' => [[%r{\Ahttp://.*?\.fresheye}i, '"フレッシュアイ"', ['kw'], nil ]],
 	'goo' => [
-		[%r{\Ahttp://((www|ocn|dictionary|kids|eco|oshiete|search|community|machi|bb|bsearch|dir|channel|ocnsearch)\.)?goo\.ne\.jp}i, '"goo"', ['MT'], nil ],
-		[%r{\Ahttp://((www|ocn|dictionary|kids|eco|oshiete|search|community|machi|bb|bsearch|dir|channel|ocnsearch)\.)?goo\.ne\.jp}i, '"goo"', [], nil ],
+		[%r{\Ahttp://((www|ocn|dictionary|kids|eco|oshiete|.*search|community|machi|bb|bsearch|dir|channel|ocnsearch)\.)?goo\.ne\.jp}i, '"goo"', ['MT'], nil ],
+		[%r{\Ahttp://((www|ocn|dictionary|kids|eco|oshiete|.*search|community|machi|bb|bsearch|dir|channel|ocnsearch)\.)?goo\.ne\.jp}i, '"goo"', [], nil ],
 	],
 	'nifty' => [
 		[%r{\Ahttp://search\.nifty\.com}i, '"@nifty/@search"', ['q', 'Text'], DispReferrer2_Google_cache],
@@ -560,13 +560,14 @@ DispReferrer2_Engines = {
 	'comcast' => [[%r{\Ahttp://www\.comcast\.net/qry/websearch}i, '"COMCAST"', ['query'], nil]],
 	'mywebsearch' => [[%r{\Ahttp://www\.mywebsearch\.com/jsp/GGmain.jsp}i, '"My Web Search"', ['seachfor'], nil]],
 	'wisenut' => [[%r{\Ahttp://www\.wisenut\.com/search/query.dll}, '"WiseNut"', ['q'], nil]],
-	'livedoor' => [[%r{\Ahttp://(sf|www)\.livedoor\.}i, '"Livedoor"', ['q'], nil ]],
+	'livedoor' => [[%r{\Ahttp://(sf|www|search)\.livedoor\.}i, '"Livedoor"', ['q'], nil ]],
 	'tkensaku' => [[%r{\Ahttp://www\.tkensaku\.com/sclient\.cgi}i, '"TKENSAKU"', ['value'], nil]],
 	'yahoofs' => [[%r{\Ahttp://cache\.yahoofs\.jp/(?:search/)?cache}i, '"Yahoo! cache"', ['p', 'w'], nil]],
 	'googlie' => [[%r{\Ahttp://www\.googlie\.com/search}i, '"Google検索(へのリダイレクタ)"', ['as_q', 'q'], DispReferrer2_Google_cache]],
 	'toppg' => [[%r{\Ahttp://g\.toppg\.to/search}i, '"Google検索(へのリダイレクタ)"', ['as_q', 'q'], DispReferrer2_Google_cache]],
-	'dyndns' => [[%r{\Ahttp://naoya\.dyndns\.org/feedback/app/search}i, '"FeedBack"', ['keyword'], nil]],
+	'naoya' => [[%r{\Ahttp://naoya\.dyndns\.org/feedback/app/search}i, '"FeedBack"', ['keyword'], nil]],
 	'blogpeople' => [[%r{\Ahttp://bst\.blogpeople\.net/search_result\.jsp}i, '"blogpeople"', ['keyword'], nil]],
+	'matome' => [[%r{\Ahttp://(www|search)\.matome\.jp/keyword/(.*(?=\.html\Z)|.*\Z)}i, 'keyword=$2; "まとめ検索"', [], nil]],
 	'210' => [[%r{\Ahttp://210\.174\.160\.70/se_root.phtml}i, '"JWord（日本語キーワード）"', ['name'], nil]],
 	# % whois 64.233.160
 	# NetRange:   64.233.160.0 - 64.233.191.255
