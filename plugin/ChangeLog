@@ -1,3 +1,7 @@
+2003-01-09  MUTOH Masao <mutoh@highway.ne.jp>
+
+	* my-ex.rb: Improve to show the anchor's title of section.subtitle.
+
 2003-01-02  Kazuhiko  <kazuhiko@fdiary.net>
 
 	* nazo.rb (nazo): Add 'type="text/javascript"' for valid html output.
