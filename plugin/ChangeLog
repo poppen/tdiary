@@ -1,3 +1,6 @@
+2003.12.26 TADA Tadashi <sho@spc.gr.jp>
+	* tb-show.rb: shorten excerpt into 256 bytes.
+
 2003.12.25 TADA Tadashi <sho@spc.gr.jp>
 	* tb-send.rb: support error messages in multi-lines.
 	* makelirs.rb: set last-modified to time stamp of file. thanks Takeru KOMORIYA <komoriya@paken.org>.
