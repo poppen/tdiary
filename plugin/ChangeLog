@@ -1,3 +1,6 @@
+2003-10-08 Junichiro Kita <kita@kitaj.no-ip.com>
+	* todo.rb: if @conf['todo.todos'] == nil, @conf['todo.todos'] = ''.
+
 2003-10-08  Kazuhiko  <kazuhiko@fdiary.net>
 
 	* image.rb: show image size unless @conf.secure only.
