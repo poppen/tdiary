@@ -1,3 +1,6 @@
+2003-06-12 TADA Tadashi <sho@spc.gr.jp>
+	* [TESTING] comment_mail-*.rb: support conf_proc.
+
 2003-06-07 TADA Tadashi <sho@spc.gr.jp>
 	* image.rb: renumbering tabindex.
 	* trackback/tb-send.rb: renumbering tabindex.
