@@ -18,7 +18,7 @@
 # OUT OF  OR IN CONNECTION WITH  THE CODE OR THE  USE OR OTHER  DEALINGS IN THE
 # CODE.
 
-# $Id: hatena_style.rb,v 1.6 2004-03-21 10:02:25 mput Exp $
+# $Id: hatena_style.rb,v 1.7 2004-04-10 20:09:39 mput Exp $
 # Hatena::Diary compatible style
 # Works only under ruby 1.8.1 or later
 
@@ -27,6 +27,7 @@
   'net/http',
   'cgi',
   'pstore',
+  'time',
 ].each {|f| require f }
 
 class TDiary::HatenaDiary
@@ -225,8 +226,10 @@ end
 
 class Hatena::Section
   def initialize(str, author)
+    t = Time.now
     @author = author.freeze
-    @src    =  str.gsub(/^\*t\*/, '*%d*' % Time.now.to_i)
+    @src    =  str.gsub(/^\*t\*/, '*%d*' % t.to_i)\
+               .gsub(/<(ins|del)>/, '<\1 datetime="%s">' % t.xmlschema)
     @tree   = Hatena::Block.new(@src)
   end
 
@@ -612,7 +615,7 @@ end
 # Extension to Hatena: not using <br> but begins next paragraph
 class Hatena::Paragraph
   def initialize(str)
-    @elems = Hatena::Inline.new(str)
+    @elems = Hatena::Inline.new(str.gsub(/\n\n\n/,''))
   end
 
   def convert(mode)
@@ -657,7 +660,7 @@ class Hatena::Inline
         @elems.push Hatena::Keyword.new(Regexp.last_match[1], true)
       when /\A\[id:(.*?)\]/m, /\Aid:((?:[\w\d_]+)(?::(?:\d+|about))?)/n
         @elems.push Hatena::ID.new(Regexp.last_match[1], true)
-      when /\A\[(ISBN|ASIN):(.*?)\]/m, /(ISBN|ASIN):([\w\d]+)(:image(:(small|large))?)?/
+      when /\A\[(ISBN|ASIN):(.*?)(:image(:(small|large))?)?\]/m, /(ISBN|ASIN):([\-0-9A-Z]+)(:image(:(small|large))?)?/
         @elems.push Hatena::Amazon.new(Regexp.last_match[2], true)
       when /\A\[tex:(.*?)\]/m
         @elems.push Hatena::TeX.new(Regexp.last_match[1])
