@@ -1,4 +1,4 @@
-# image.rb $Revision: 1.20 $
+# image.rb $Revision: 1.21 $
 # -pv-
 # 
 # 名称:
@@ -72,7 +72,7 @@ unless @resource_loaded then
 	def image_label_add_plugin; '本文に追加'; end
 	def image_label_delete; 'チェックした画像の削除'; end
 	def image_label_only_jpeg; 'JPEGのみ'; end
-	def image_label_add_image; '画像の追加'; end
+	def image_label_add_image; 'この画像をアップロードする'; end
 end
 
 def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
@@ -293,7 +293,7 @@ add_form_proc do |date|
 				img_type, img_w, img_h = open(File.join(@image_dir,img).untaint, 'r') {|f| image_info(f)}
 			end
 			r << %Q[<td><img class="form" src="#{@image_url}/#{img}" alt="#{id}" width="#{(img_w && img_w > 160) ? 160 : img_w}"></td>]
-			ptag = "#{ptag1}image #{id}, '画像の説明', nil, #{img_w && img_h ? '['+img_w.to_s+','+img_h.to_s+']' : 'nil'}#{ptag2}"
+			ptag = "#{ptag1}image #{id}, '#{image_label_description}', nil, #{img_w && img_h ? '['+img_w.to_s+','+img_h.to_s+']' : 'nil'}#{ptag2}"
 			if @conf.secure then
 				img_info = ''
 			else
@@ -330,7 +330,7 @@ add_form_proc do |date|
 	#{@conf.secure ? image_label_only_jpeg : ''}
    <input type="hidden" name="plugin_image_addimage" value="true">
    <input type="hidden" name="date" value="#{date.strftime( '%Y%m%d' )}">
-   <input type="file" tabindex="#{tabidx+98}" name="plugin_image_file">
+   <input type="file" tabindex="#{tabidx+98}" name="plugin_image_file" size="50">
    <input type="submit" tabindex="#{tabidx+99}" name="plugin" value="#{image_label_add_image}">
    </div></form>
 	</div>]
