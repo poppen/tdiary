@@ -1,4 +1,4 @@
-# disp_referrer.rb $Revision: 1.6 $
+# disp_referrer.rb $Revision: 1.7 $
 # -pv-
 #
 # Ì¾¾Î¡§
@@ -23,6 +23,7 @@
 =begin ChangeLog
 2002-08-22 TADA Tadashi <sho@spc.gr.jp>
 	* support AlltheWeb search.
+	* support tDiary 1.5 HTML.
 
 2002-08-21 TADA Tadashi <sho@spc.gr.jp>
 	* support tDiary 1.5.
@@ -135,8 +136,8 @@ def referer_of_today_long( diary, limit )
 	["^http://www.alltheweb.com/.*?q=([^&]*).*", " \\1"]],
   ]
 
-  result = %Q[<div class="refererlist"><p class="referertitle">#{referer_today}</p>\n]
-  result << %Q[<ul class="referer">\n]
+  result = %Q[<div class="caption">#{referer_today}</div>\n]
+  result << %Q[<ul>\n]
 
   regexp = Regexp.new(search_tables.collect{|item| 
 						item[1..-1].collect{|v| v[0]}
@@ -150,7 +151,7 @@ def referer_of_today_long( diary, limit )
   refs.sort.reverse.each do |cnt, ref|
 	result << %Q[<li>#{cnt} <a href="#{CGI::escapeHTML(ref)}">#{CGI::escapeHTML(diary.disp_referer(@referer_table, ref))}</a></li>\n]
   end
-  result << "</ul>\n<ul class=\"referer\">"
+  result << %Q[</ul>\n<ul>\n]
 
   search_result = Array.new
   search_tables.each do |title, *table|
@@ -175,7 +176,7 @@ def referer_of_today_long( diary, limit )
     end
   end
 
-  result << "</ul></div>"
+  result << %Q[</ul>\n]
 end
 
 end
