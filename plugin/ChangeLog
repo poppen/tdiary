@@ -1,5 +1,7 @@
-2003-10-08  Kazuhiko  <kazuhiko@fdiary.net>
+2003-10-09 TADA Tadashi <sho@spc.gr.jp>
+	* referer-antibot.rb: support 'bot?' method and English document.
 
+2003-10-08  Kazuhiko  <kazuhiko@fdiary.net>
 	* todo.rb: catch exception of 'FileTest::exist?(todo_file)' for mod_ruby.
 
 2003-10-08 Junichiro Kita <kita@kitaj.no-ip.com>
