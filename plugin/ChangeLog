@@ -1,3 +1,6 @@
+2004.01.20 TADA Tadashi <sho@spc.gr.jp>
+	* tb-show.rb: fix typo on autodiscovery RDF.
+
 2004.01.14 Junichiro Kita <kita@kitaj.no-ip.com>
 	* makelirs.rb: define Time#utc_offset if not defined.
 

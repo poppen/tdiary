@@ -1,4 +1,4 @@
-# tb-show.rb $Revision: 1.10 $
+# tb-show.rb $Revision: 1.11 $
 #
 # functions:
 #   * show TrackBack ping URL in right of TSUKKOMI label.
@@ -55,7 +55,7 @@ if @mode == 'day' and not bot? then
 	xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/">
 <rdf:Description
 	rdf:about="#{@tb_id_url}"
-	dc:identifer="#{@tb_id_url}"
+	dc:identifier="#{@tb_id_url}"
 	dc:title="#{CGI::escapeHTML(@diaries[@tb_date.strftime('%Y%m%d')].title).gsub(/-{2,}/) {'&#45;' * $&.size}}"
 	trackback:ping="#{@tb_url}" />
 </rdf:RDF>
