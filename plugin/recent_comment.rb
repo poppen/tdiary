@@ -1,4 +1,4 @@
-# recent_comment.rb $Revision: 1.2 $
+# recent_comment.rb $Revision: 1.3 $
 #
 # recent_comment: 最近のツッコミをリストアップする
 #   パラメタ:
@@ -19,6 +19,7 @@ def recent_comment( max = 3, sep = '&nbsp;', form = nil, except = nil )
 	date = {}
 	index = {}
 	@diaries.each_value do |diary|
+		next unless diary.visible?
 		diary.each_comment_tail( max ) do |comment, idx|
 			if except && (/#{except}/ =~ comment.name)
 				next
