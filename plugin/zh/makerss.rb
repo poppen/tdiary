@@ -8,7 +8,16 @@ end
 
 add_conf_proc('makerss', 'RSS publication') do
 	if @mode == 'saveconf'
-		%w( makerss.hidecomment makerss.hidecontent makerss.shortdesc ).each do |item|
+		item = 'makerss.hidecomment'
+		case @cgi.params[item][0]
+		when 'f'
+			@conf[item] = false
+		when 'text'
+			@conf[item] = 'text'
+		when 'any'
+			@conf[item] = 'any'
+		end
+		%w( makerss.hidecontent makerss.shortdesc ).each do |item|
 			@conf[item] = ( 't' == @cgi.params[item][0] )
 		end
 	end
@@ -20,8 +29,9 @@ add_conf_proc('makerss', 'RSS publication') do
 	<ul>
 	<li><select name="makerss.hidecomment">
 		<option value="f"#{@conf['makerss.hidecomment'] ? '' : ' selected'}>Include</option>
-		<option value="t"#{@conf['makerss.hidecomment'] ? ' selected' : ''}>Hide</option></select>
-		TSUKKOMI text in RSS.
+		<option value="text"#{@conf['makerss.hidecomment'] == 'text' ? ' selected' : ''}>Hide the text of </option>
+		<option value="any"#{@conf['makerss.hidecomment'] == 'any' ? ' selected' : ''}>Ignore</option></select>
+		TSUKKOMI in RSS.
 	<li><select name="makerss.hidecontent">
 		<option value="f"#{@conf['makerss.hidecontent'] ? '' : ' selected'}>Include</option>
 		<option value="t"#{@conf['makerss.hidecontent'] ? ' selected' : ''}>Hide</option></select>

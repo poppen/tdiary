@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.20 $
+# makerss.rb: $Revision: 1.21 $
 #
 # generate RSS file when updating.
 #
@@ -21,6 +21,12 @@
 # Copyright (c) 2004 TADA Tadashi <sho@spc.gr.jp>
 # Distributed under the GPL
 #
+
+# backward compatibility
+item = 'makerss.hidecomment'
+if true == @conf[item] then
+  @conf[item] = 'content'
+end
 
 if /^append|replace|comment|showcomment|trackbackreceive|pingbackreceive$/ =~ @mode then
 	unless @conf.description
@@ -227,13 +233,15 @@ def makerss_body( uri, rdfsec )
 		body_leave_proc( date )
 		@conf['apply_plugin'] = old_apply_plugin
 	else # TSUKKOMI
-		rdf << %Q|<title>#{makerss_tsukkomi_label( rdfsec.id )} (#{CGI::escapeHTML( rdfsec.section.name )})</title>\n|
-		rdf << %Q|<dc:creator>#{CGI::escapeHTML( rdfsec.section.name )}</dc:creator>\n|
-		unless @conf['makerss.hidecomment']
-			text = CGI::escapeHTML( rdfsec.section.body )
-			rdf << %Q|<description>#{makerss_desc_shorten( text )}</description>\n|
-			unless @conf['makerss.hidecontent']
-				rdf << %Q|<content:encoded><![CDATA[#{text.gsub( /\n/, '<br>' )}]]></content:encoded>\n|
+		unless 'any' == @conf['makerss.hidecomment'] then
+			rdf << %Q|<title>#{makerss_tsukkomi_label( rdfsec.id )} (#{CGI::escapeHTML( rdfsec.section.name )})</title>\n|
+			rdf << %Q|<dc:creator>#{CGI::escapeHTML( rdfsec.section.name )}</dc:creator>\n|
+			unless 'text' == @conf['makerss.hidecomment']
+				text = CGI::escapeHTML( rdfsec.section.body )
+				rdf << %Q|<description>#{makerss_desc_shorten( text )}</description>\n|
+				unless @conf['makerss.hidecontent']
+					rdf << %Q|<content:encoded><![CDATA[#{text.gsub( /\n/, '<br>' )}]]></content:encoded>\n|
+				end
 			end
 		end
 	end

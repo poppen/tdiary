@@ -1,3 +1,8 @@
+2004-11-28 zunda <zunda at freeshell.org>
+	* makerss.rb, {ja,en,zh}/makerss.rb: added option to hide
+	tsukkomi-items from rss, thanks to Keiichiro SAKURAI
+	<kei-tdiary at ksakurai.nwr.jp>
+
 2004-11-24 zunda <zunda at freeshell.org>
 	* makerss.rb: does not include TSUKKOMI when it is hidden,
 	thanks to Mr. Hiromitsu Takagi (http://takagi-hiromitsu.jp/diary/20041124.html#p02)

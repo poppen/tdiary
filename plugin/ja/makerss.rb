@@ -14,7 +14,16 @@ end
 
 add_conf_proc('makerss', 'RSSの作成') do
 	if @mode == 'saveconf'
-		%w( makerss.hidecomment makerss.hidecontent makerss.shortdesc ).each do |item|
+		item = 'makerss.hidecomment'
+		case @cgi.params[item][0]
+		when 'f'
+			@conf[item] = false
+		when 'text'
+			@conf[item] = 'text'
+		when 'any'
+			@conf[item] = 'any'
+		end
+		%w( makerss.hidecontent makerss.shortdesc ).each do |item|
 			@conf[item] = ( 't' == @cgi.params[item][0] )
 		end
 	end
@@ -23,9 +32,10 @@ add_conf_proc('makerss', 'RSSの作成') do
 	<p>下記の設定でRSSを作ります。</p>
 	<p>RSSは他のプログラムに読みやすい形で、日記の内容を公開します。RSSに含まれる情報はRSSリーダーで読まれたり、更新通知サイトに転載されたりして利用されています。</p>
 	<ul>
-	<li>RSSにツッコミの文章を<select name="makerss.hidecomment">
-		<option value="f"#{@conf['makerss.hidecomment'] ? '' : ' selected'}>含める</option>
-		<option value="t"#{@conf['makerss.hidecomment'] ? ' selected' : ''}>含めない</option></select>
+	<li>RSSに<select name="makerss.hidecomment">
+		<option value="f"#{@conf['makerss.hidecomment'] ? '' : ' selected'}>ツッコミの全体を含める</option>
+		<option value="text"#{@conf['makerss.hidecomment'] == 'text' ? ' selected' : ''}>ツッコミの文章を含めない</option>
+		<option value="any"#{@conf['makerss.hidecomment'] == 'any' ? ' selected' : ''}>ツッコミがあったことを含めない</option></select>
 	<li>RSSに本文全体を<select name="makerss.hidecontent">
 		<option value="f"#{@conf['makerss.hidecontent'] ? '' : ' selected'}>含める</option>
 		<option value="t"#{@conf['makerss.hidecontent'] ? ' selected' : ''}>含めない</option></select>
