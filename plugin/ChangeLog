@@ -1,8 +1,11 @@
+2003-09-26 TADA Tadashi <sho@spc.gr.jp>
+	* select_plugins.rb: enable running on ruby 1.6.5. again.
+
 2003-09-25 zunda <zunda at freeshell.org>
 	* disp_referrer.rb: name.untaint to eval name
 
 2003-09-25 TADA Tadashi <sho@spc.gr.jp>
-	* select_plugins.rb: enable running on ruby 1.6.
+	* select_plugins.rb: enable running on ruby 1.6.5.
 
 2003-09-25 Junichiro Kita <kita@kitaj.no-ip.com>
 	* trackback/tb.rb, todo/todo.rb: use conf.encoding and conf.mobile_encoding instead of conf.charset.

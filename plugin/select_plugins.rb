@@ -1,5 +1,5 @@
 =begin
-= プラグイン選択プラグイン((-$Id: select_plugins.rb,v 1.4 2003-09-25 14:35:28 tadatadashi Exp $-))
+= プラグイン選択プラグイン((-$Id: select_plugins.rb,v 1.5 2003-09-26 09:18:25 tadatadashi Exp $-))
 Please see below for an English description.
 
 == 概要
@@ -207,7 +207,7 @@ if @options["#{Select_plugin_prefix}.path"] then
 							#{CGI::escapeHTML( file )}
 							#{"<a href=\"#{@conf.update}?conf=#{Select_plugin_prefix};help=o#{CGI::escape( file )}\">comments</a>" if false == @options["#{Select_plugin_prefix}.hidehelp"]}#{', ' if false == @options["#{Select_plugin_prefix}.hidehelp"] and false == @options["#{Select_plugin_prefix}.hidesource"]}
 							#{"<a href=\"#{@conf.update}?conf=#{Select_plugin_prefix};src=o#{CGI::escape( file )}\">source</a>" if false == @options["#{Select_plugin_prefix}.hidesource"]}
-							#{"(#{@sp_ver[ "o#{file}" ]})" if @sp_ver[ "o#{file}" ]}
+							#{"(#{@sp_ver[ 'o' + file ]})" if @sp_ver[ 'o' + file ]}
 							#{'[New! Try this.]' unless known.include?( file )}
 					_HTML
 				else
@@ -217,7 +217,7 @@ if @options["#{Select_plugin_prefix}.path"] then
 							#{"<a href=\"#{@conf.update}?conf=#{Select_plugin_prefix};help=o#{CGI::escape( file )}\">注釈</a>" if false == @options["#{Select_plugin_prefix}.hidehelp"]}
 							#{'・' if false == @options["#{Select_plugin_prefix}.hidehelp"] and false == @options["#{Select_plugin_prefix}.hidesource"]}
 							#{"<a href=\"#{@conf.update}?conf=#{Select_plugin_prefix};src=o#{CGI::escape( file )}\">ソース</a>" if false == @options["#{Select_plugin_prefix}.hidesource"]}
-							#{"(#{@sp_ver[ "o#{file}" ]})" if @sp_ver[ "o#{file}" ]}
+							#{"(#{@sp_ver[ 'o' + file ]})" if @sp_ver[ 'o' + file ]}
 							#{'[新入荷！お試しください。]' unless known.include?( file )}
 					_HTML
 				end
@@ -415,7 +415,7 @@ if @options["#{Select_plugin_prefix}.path"] then
 	if @conf["#{Select_plugin_prefix}.selected"] then
 		@conf["#{Select_plugin_prefix}.selected"].split( /\n/ ).sort.each do |file|
 			next if /(\/|\\)/ =~ file	# / or \ should not appear
-			path = "#{@options["#{Select_plugin_prefix}.path"]}/#{file}"
+			path = "#{@options[Select_plugin_prefix + '.path']}/#{file}"
 			begin
 				load_plugin( path.untaint )
 				@plugin_files << path
