@@ -1,5 +1,5 @@
 =begin
-= プラグイン選択プラグイン((-$Id: select_plugins.rb,v 1.5 2003-09-26 09:18:25 tadatadashi Exp $-))
+= プラグイン選択プラグイン((-$Id: select_plugins.rb,v 1.6 2003-09-26 10:08:09 tadatadashi Exp $-))
 Please see below for an English description.
 
 == 概要
@@ -138,7 +138,7 @@ if @options["#{Select_plugin_prefix}.path"] then
 	# list of plugins
 	def sp_list_plugins
 		r = ''
-		if false == @options["#{Select_plugin_prefix}.hidemandatory"] then
+		unless @options["#{Select_plugin_prefix}.hidemandatory"] then
 			case @conf.lang
 			when 'en'
 				r << <<-_HTML
@@ -158,17 +158,18 @@ if @options["#{Select_plugin_prefix}.path"] then
 				when 'en'
 					 r << <<-_HTML
 						<li>#{CGI::escapeHTML( file )}
-							#{"<a href=\"#{@conf.update}?conf=#{Select_plugin_prefix};help=d#{CGI::escape( file )}\">comments</a>" if false == @options["#{Select_plugin_prefix}.hidehelp"]}#{', ' if false == @options["#{Select_plugin_prefix}.hidehelp"] and false == @options["#{Select_plugin_prefix}.hidesource"]}
-							#{"<a href=\"#{@conf.update}?conf=#{Select_plugin_prefix};src=d#{CGI::escape( file )}\">source</a>" if false == @options["#{Select_plugin_prefix}.hidesource"]}
-							#{"(#{@sp_ver[ "d#{file}" ]})" if @sp_ver[ "d#{file}" ]}
+							#{'<a href="' + @conf.update + '?conf=' + Select_plugin_prefix + ';help=d' + CGI::escape( file ) + '">comments</a>' unless @options[Select_plugin_prefix + '.hidehelp']}
+							#{', ' if ! @options[Select_plugin_prefix + '.hidehelp'] and ! @options[Select_plugin_prefix + '.hidesource']}
+							#{'<a href="' + @conf.update + '?conf=' + Select_plugin_prefix + ';src=d' + CGI::escape( file ) + '">source</a>' unless @options[Select_plugin_prefix + '.hidesource']}
+							#{"(#{@sp_ver[ 'd' + file ]})" if @sp_ver[ 'd' + file ]}
 					_HTML
 				else
 					 r << <<-_HTML
 						<li>#{CGI::escapeHTML( file )}
-							#{"<a href=\"#{@conf.update}?conf=#{Select_plugin_prefix};help=d#{CGI::escape( file )}\">注釈</a>" if false == @options["#{Select_plugin_prefix}.hidehelp"]}
-							#{'・' if false == @options["#{Select_plugin_prefix}.hidehelp"] and false == @options["#{Select_plugin_prefix}.hidesource"]}
-							#{"<a href=\"#{@conf.update}?conf=#{Select_plugin_prefix};src=d#{CGI::escape( file )}\">ソース</a>" if false == @options["#{Select_plugin_prefix}.hidesource"]}
-							#{"(#{@sp_ver[ "d#{file}" ]})" if @sp_ver[ "d#{file}" ]}
+							#{'<a href="' + @conf.update + '?conf=' + Select_plugin_prefix + ';help=d' + CGI::escape( file ) + '">注釈</a>' unless @options[Select_plugin_prefix + '.hidehelp']}
+							#{'・' if ! @options[Select_plugin_prefix + '.hidehelp'] and ! @options[Select_plugin_prefix + '.hidesource']}
+							#{'<a href="' + @conf.update + '?conf=' + Select_plugin_prefix + ';src=d' + CGI::escape( file ) + '">ソース</a>' unless @options[Select_plugin_prefix + '.hidesource']}
+							#{"(#{@sp_ver[ 'd' + file ]})" if @sp_ver[ 'd' + file ]}
 					_HTML
 				end
 			end
@@ -203,21 +204,22 @@ if @options["#{Select_plugin_prefix}.path"] then
 				case @conf.lang
 				when 'en'
 					r << <<-_HTML
-						<li><input name="sp.#{CGI::escapeHTML( file )}" type="checkbox" value="t"#{((@conf["#{Select_plugin_prefix}.selected"] and @conf["#{Select_plugin_prefix}.selected"].split( /\n/ ).include?( file )) or (@conf["#{Select_plugin_prefix}.usenew"] and not known.include?( file ))) ? ' checked' : ''}>
+						<li><input name="sp.#{CGI::escapeHTML( file )}" type="checkbox" value="t"#{((@conf[Select_plugin_prefix + '.selected'] and @conf[Select_plugin_prefix + '.selected'].split( /\n/ ).include?( file )) or (@conf[Select_plugin_prefix + '.usenew'] and not known.include?( file ))) ? ' checked' : ''}>
 							#{CGI::escapeHTML( file )}
-							#{"<a href=\"#{@conf.update}?conf=#{Select_plugin_prefix};help=o#{CGI::escape( file )}\">comments</a>" if false == @options["#{Select_plugin_prefix}.hidehelp"]}#{', ' if false == @options["#{Select_plugin_prefix}.hidehelp"] and false == @options["#{Select_plugin_prefix}.hidesource"]}
-							#{"<a href=\"#{@conf.update}?conf=#{Select_plugin_prefix};src=o#{CGI::escape( file )}\">source</a>" if false == @options["#{Select_plugin_prefix}.hidesource"]}
-							#{"(#{@sp_ver[ 'o' + file ]})" if @sp_ver[ 'o' + file ]}
+							#{'<a href="' + @conf.update + '?conf=' + Select_plugin_prefix + ';help=o' + CGI::escape( file ) + '">comments</a>' unless @options[Select_plugin_prefix + '.hidehelp']}
+							#{', ' if ! @options[Select_plugin_prefix + '.hidehelp'] and ! @options[Select_plugin_prefix + '.hidesource']}
+							#{'<a href="' + @conf.update + '?conf=' + Select_plugin_prefix + ';src=o' + CGI::escape( file ) + '">source</a>' unless @options[Select_plugin_prefix + '.hidesource']}
+							#{'(' + @sp_ver[ 'o' + file ] + ')' if @sp_ver[ 'o' + file ]}
 							#{'[New! Try this.]' unless known.include?( file )}
 					_HTML
 				else
 					r << <<-_HTML
-						<li><input name="sp.#{CGI::escapeHTML( file )}" type="checkbox" value="t"#{((@conf["#{Select_plugin_prefix}.selected"] and @conf["#{Select_plugin_prefix}.selected"].split( /\n/ ).include?( file )) or (@conf["#{Select_plugin_prefix}.usenew"] and not known.include?( file ))) ? ' checked' : ''}>
+						<li><input name="sp.#{CGI::escapeHTML( file )}" type="checkbox" value="t"#{((@conf[Select_plugin_prefix + '.selected'] and @conf[Select_plugin_prefix + '.selected'].split( /\n/ ).include?( file )) or (@conf[Select_plugin_prefix + '.usenew'] and not known.include?( file ))) ? ' checked' : ''}>
 							#{CGI::escapeHTML( file )}
-							#{"<a href=\"#{@conf.update}?conf=#{Select_plugin_prefix};help=o#{CGI::escape( file )}\">注釈</a>" if false == @options["#{Select_plugin_prefix}.hidehelp"]}
-							#{'・' if false == @options["#{Select_plugin_prefix}.hidehelp"] and false == @options["#{Select_plugin_prefix}.hidesource"]}
-							#{"<a href=\"#{@conf.update}?conf=#{Select_plugin_prefix};src=o#{CGI::escape( file )}\">ソース</a>" if false == @options["#{Select_plugin_prefix}.hidesource"]}
-							#{"(#{@sp_ver[ 'o' + file ]})" if @sp_ver[ 'o' + file ]}
+							#{'<a href="' + @conf.update + '?conf=' + Select_plugin_prefix + ';help=o' + CGI::escape( file ) + '">注釈</a>' unless @options[Select_plugin_prefix + '.hidehelp']}
+							#{'・' if ! @options[Select_plugin_prefix + '.hidehelp'] and ! @options[Select_plugin_prefix + '.hidesource']}
+							#{'<a href="' + @conf.update + '?conf=' + Select_plugin_prefix + ';src=o' + CGI::escape( file ) + '">ソース</a>' unless @options[Select_plugin_prefix + '.hidesource']}
+							#{'(' + @sp_ver[ 'o' + file ] + ')' if @sp_ver[ 'o' + file ]}
 							#{'[新入荷！お試しください。]' unless known.include?( file )}
 					_HTML
 				end
@@ -248,7 +250,7 @@ if @options["#{Select_plugin_prefix}.path"] then
 				case @conf.lang
 				when 'en'
 					<<-_HTML
-						<p>Comments in #{CGI::escapeHTML( file.slice( 1..-1 ) )}.#{" Click <a href=\"#{@conf.update}?conf=#{Select_plugin_prefix};src=#{CGI::escape( file )}\">here</a> for the source." if false == @options["#{Select_plugin_prefix}.hidesource"]}</p>
+						<p>Comments in #{CGI::escapeHTML( file.slice( 1..-1 ) )}.#{' Click <a href="' + @conf.update + '?conf=' + Select_plugin_prefix + ';src=' + CGI::escape( file ) + '">here</a> for the source.' unless @options[Select_plugin_prefix + '.hidesource']}</p>
 						<p><a href="#{@conf.update}?conf=#{Select_plugin_prefix}">Back</a>
 						<hr>
 						<pre>#{CGI::escapeHTML( help )}</pre>
@@ -256,7 +258,7 @@ if @options["#{Select_plugin_prefix}.path"] then
 					_HTML
 				else
 					<<-_HTML
-						<p>#{CGI::escapeHTML( file.slice( 1..-1 ) )}の注釈です。#{"ソースを見るには、<a href=\"#{@conf.update}?conf=#{Select_plugin_prefix};src=#{CGI::escape( file )}\">こちら</a>。" if false == @options["#{Select_plugin_prefix}.hidesource"]}</p>
+						<p>#{CGI::escapeHTML( file.slice( 1..-1 ) )}の注釈です。#{'ソースを見るには、<a href="' + @conf.update + '?conf=' + Select_plugin_prefix + ';src=' + CGI::escape( file ) + '">こちら</a>。' unless @options[Select_plugin_prefix + '.hidesource']}</p>
 						<p><a href="#{@conf.update}?conf=#{Select_plugin_prefix}">戻る</a>
 						<hr>
 						<pre>#{CGI::escapeHTML( help )}</pre>
@@ -267,11 +269,11 @@ if @options["#{Select_plugin_prefix}.path"] then
 				case @conf.lang
 				when 'en'
 					<<-_HTML
-						<p>There is no comment in #{CGI::escapeHTML( file.slice( 1..-1 ))}.#{" Click <a href=\"#{@conf.update}?conf=#{Select_plugin_prefix};src=#{CGI::escape( file )}\">here</a> for the source." if false == @options["#{Select_plugin_prefix}.hidesource"] and @sp_src[file]}</p>
+						<p>There is no comment in #{CGI::escapeHTML( file.slice( 1..-1 ))}.#{' Click <a href="' + @conf.update + '?conf=' + Select_plugin_prefix + ';src=' + CGI::escape( file ) + '">here</a> for the source.' if ! @options[Select_plugin_prefix + '.hidesource'] and @sp_src[file]}</p>
 					_HTML
 				else
 					<<-_HTML
-						<p>#{CGI::escapeHTML( file.slice( 1..-1 ))}の注釈はありません。#{"ソースを見るには、<a href=\"#{@conf.update}?conf=#{Select_plugin_prefix};src=#{CGI::escape( file )}\">こちら</a>。" if false == @options["#{Select_plugin_prefix}.hidesource"] and @sp_src[file]}</p>
+						<p>#{CGI::escapeHTML( file.slice( 1..-1 ))}の注釈はありません。#{'ソースを見るには、<a href="'+ @conf.update + '?conf=' + Select_plugin_prefix + ';src=' + CGI::escape( file ) + '">こちら</a>。' if ! @options[Select_plugin_prefix + '.hidesource'] and @sp_src[file]}</p>
 					_HTML
 				end
 			end
