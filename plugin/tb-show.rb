@@ -1,4 +1,4 @@
-# tb-show.rb $Revision: 1.3 $
+# tb-show.rb $Revision: 1.4 $
 #
 # functions:
 #   * show TrackBack ping URL in right of TSUKKOMI label.
@@ -99,7 +99,7 @@ def referer_of_today_short( diary, limit )
 	return r unless @plugin_files.grep(/blog_style.rb\z/).empty?
 	if diary and !bot? then
 		count = 0
-		diary.each_visible_trackback( 128 ) {|t,count|} # count up
+		diary.each_visible_trackback( 100 ) {|t,count|} # count up
 		r << %Q|<a href="#{@index}#{anchor @tb_date.strftime( '%Y%m%d' )}#t">TrackBack#{count > 1 ? 's' : ''}(#{count})</a>| unless count == 0 and @options['tb.hide_if_no_tb']
 	end
 	r
@@ -141,7 +141,7 @@ def trackbacks_of_today_short( diary, limit = @conf['trackback_limit'] || 3 )
 	r
 end
 
-def trackbacks_of_today_long( diary, limit = 128 )
+def trackbacks_of_today_long( diary, limit = 100 )
 	count = 0
 	diary.each_visible_trackback( limit ) {|t,count|} # count up
 	fragment = 't%02d'
@@ -195,12 +195,5 @@ add_conf_proc( 'TrackBack', 'TrackBack' ) do
 		@conf['trackback_limit']  = @cgi.params['trackback_limit'][0].to_i
 		@conf['trackback_limit'] = 3 if @conf['trackback_limit'] < 1
 	end
-	<<-"HTML"
-	<h3 class="subtitle">TrackBack アンカー</h3>
-	#{"<p>他の weblog からの TrackBack の先頭に挿入される、リンク用のアンカー文字列を指定します。なお「&lt;span class=\"tanchor\"&gt;_&lt;/span&gt;」を指定すると、テーマによっては自動的に画像アンカーがつくようになります多分。なってほしいな。そのうちなるに違いない。</p>" unless @conf.mobile_agent?}
-	<p><input name="trackback_anchor" value="#{ CGI::escapeHTML(@conf['trackback_anchor'] || @conf.comment_anchor ) }" size="40"></p>
-	<h3 class="subtitle">TrackBack リスト表示数</h3>
-	#{"<p>最新もしくは月別表示時に表示する、 TrackBack の最大件数を指定します。なお、日別表示時にはここの指定にかかわらずす最大128件の TrackBack が表示されます。</p>" unless @conf.mobile_agent?}
-	<p>最大<input name="trackback_limit" value="#{ @conf['trackback_limit'] || @conf.comment_limit }" size="3">件</p>
-	HTML
+	tb_show_conf_html
 end

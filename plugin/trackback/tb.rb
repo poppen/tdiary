@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# tb.rb $Revision: 1.6 $
+# tb.rb $Revision: 1.7 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -7,7 +7,6 @@
 # derived from sheepman's tb.rb. Thanks to sheepman <sheepman@tcn.zaq.ne.jp>
 # 
 
-$KCODE= 'e'
 BEGIN { $defout.binmode }
 
 begin

@@ -1,4 +1,4 @@
-# tb-send.rb $Revision: 1.2 $
+# tb-send.rb $Revision: 1.3 $
 #
 # Copyright (c) 2003 Junichiro Kita <kita@kitaj.no-ip.com>
 # You can distribute this file under the GPL.
@@ -8,9 +8,10 @@ add_edit_proc do |date|
 	url = @cgi.params['plugin_tb_url'][0] || ''
 	excerpt = @cgi.params['plugin_tb_excerpt'][0] || ''
 	<<FORM
+<h3 class="subtitle">TrackBack</h3>
 <div class="trackback">
 <div class="field title">
-#{trackback_ping_send} <input class="field" tabindex="500" name="plugin_tb_url" size="40" value="#{CGI::escapeHTML( url )}">
+#{trackback_ping_send} <input class="field" tabindex="500" name="plugin_tb_url" size="60" value="#{CGI::escapeHTML( url )}">
 </div>
 <div class="textarea">
 #{trackback_ping_excerpt} <textarea tabindex="501" style="height: 4em;" name="plugin_tb_excerpt" cols="70" rows="4">#{CGI::escapeHTML( excerpt )}</textarea>
@@ -48,7 +49,7 @@ if /^(append|replace)$/ =~ @mode then
 		my_url << anchor(@date.strftime('%Y%m%d'))
 
 		trackback = "url=#{CGI::escape(my_url)}"
-		trackback << "&charset=EUC-JP"
+		trackback << "&charset=#{trackback_ping_charset}"
 		trackback << "&title=#{CGI::escape( @conf.to_native( title ) )}" unless title.empty?
 		trackback << "&excerpt=#{CGI::escape( @conf.to_native( excerpt) )}" unless excerpt.empty?
 		trackback << "&blog_name=#{CGI::escape(blog_name)}"
@@ -75,8 +76,5 @@ if /^(append|replace)$/ =~ @mode then
 		end
 	end
 end
-
-def trackback_ping_send; "Send TrackBack to:"; end
-def trackback_ping_excerpt; "Excerpt(optional):"; end
 
 # vim: ts=3
