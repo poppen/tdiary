@@ -1,4 +1,4 @@
-# tb-show.rb $Revision: 1.14 $
+# tb-show.rb $Revision: 1.15 $
 #
 # functions:
 #   * show TrackBack ping URL in right of TSUKKOMI label.
@@ -34,11 +34,12 @@ unless @conf.mobile_agent? then
 # show TrackBack ping URL
 #
 add_body_enter_proc do |date|
-	base_url = @conf.base_url
 	cgi = File.basename(@options['tb.cgi'] || './tb.rb')
 	@tb_date = date
-	@tb_id_url = %Q|#{base_url}#{@conf.index}#{anchor @tb_date.strftime('%Y%m%d')}|.sub(%r|/\./|, '/')
-	@tb_url = %Q|#{base_url}#{cgi}/#{@tb_date.strftime('%Y%m%d')}|
+	@tb_id_url = %Q|#{@conf.index}#{anchor @tb_date.strftime('%Y%m%d')}|
+	@tb_id_url[0, 0] = @conf.base_url if %r|^https?://|i !~ @conf.index
+	@tb_id_url.gsub!( %r|/\./|, '/' )
+	@tb_url = %Q|#{@conf.base_url}#{cgi}/#{@tb_date.strftime('%Y%m%d')}|
 	''
 end
 

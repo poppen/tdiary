@@ -1,4 +1,4 @@
-# tb-send.rb $Revision: 1.12 $
+# tb-send.rb $Revision: 1.13 $
 #
 # Copyright (c) 2003 Junichiro Kita <kita@kitaj.no-ip.com>
 # You can distribute this file under the GPL.
@@ -85,8 +85,10 @@ def tb_send_trackback
 	#	excerpt = @conf.shorten( excerpt.gsub( /\r/, '' ).gsub( /\n/, "\001" ), 252 ).gsub( /\001/, "\n" )
 	#end
 
-	my_url = %Q|#{@conf.base_url}#{@conf.index}#{anchor(@date.strftime('%Y%m%d'))}|.sub(%r|/\./|, '/')
+	my_url = %Q|#{@conf.index}#{anchor(@date.strftime('%Y%m%d'))}|
+	my_url[0, 0] = @conf.base_url if %r|^https?://|i !~ @conf.index
 	my_url += "##{section}" if section && !section.empty?
+	my_url.gsub!( %r|/\./|, '/' )
  
 	require 'net/http'
 	urls.split.each do |url|

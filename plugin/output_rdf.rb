@@ -1,5 +1,5 @@
 # output_rdf.rb: tDiary plugin to generate RDF file when diary updated.
-# $Revision: 1.24 $
+# $Revision: 1.25 $
 #
 # See document to @lang/output_rdf.rb
 #
@@ -19,7 +19,9 @@ end
 def output_rdf_update
 	date = @date.strftime("%Y%m%d")
 	diary = @diaries[date]
-	uri = "#{@conf.base_url}#{@conf.index}".gsub(%r|/\./|, '/')
+	uri = @conf.index.dup
+	uri[0, 0] = @conf.base_url if %r|^https?://|i !~ @conf.index
+	uri.gsub!( %r|/\./|, '/' )
 	rdf_file = @options['output_rdf.file'] || 'index.rdf'
 	rdf_channel_about = "#{@conf.base_url}#{File::basename( rdf_file )}"
 	r = ""
