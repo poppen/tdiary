@@ -1,3 +1,6 @@
+2003-11-17 TADA Tadashi <sho@spc.gr.jp>
+	* edit.rb: remove.
+
 2003-11-14 TADA Tadashi <sho@spc.gr.jp>
 	* append-css.rb: add "type" attr and comment tag.
 	* random_google.rb: remove TARGET attr from A element.
