@@ -2,14 +2,12 @@
 	* todo.rb: if @conf['todo.todos'] == nil, @conf['todo.todos'] = ''.
 
 2003-10-08  Kazuhiko  <kazuhiko@fdiary.net>
-
 	* image.rb: show image size unless @conf.secure only.
 
 2003-10-07 Junichiro Kita <kita@kitaj.no-ip.com>
 	* tb-send.rb, tb-show.rb: move from trackback/
 
 2003-10-06  Kazuhiko  <kazuhiko@fdiary.net>
-
 	* comment_mail-smtp.rb: untaint 'From address' for mod_ruby.
 
 2003-10-02 zunda <zunda at freeshell.org>
@@ -30,7 +28,7 @@
 
 2003-09-28 Junichiro Kita <kita@kitaj.no-ip.com>
 	* image.rb: write images with print method instead of puts method.
-        * image.rb: show image size.
+	* image.rb: show image size.
 
 2003-09-27 Junichiro Kita <kita@kitaj.no-ip.com>
 	* trackback/tb-show.rb: make RDF only when @mode == 'day'.
@@ -108,7 +106,7 @@
 	* 01_select_plugins.rb: added
 
 2003-08-24 Junichiro Kita <kita@kitaj.no-ip.com>
-        * output_rdf.rb: use @date
+	* output_rdf.rb: use @date
 
 2003-08-20 TADA Tadashi <sho@spc.gr.jp>
 	* append-css.rb: add.
@@ -330,17 +328,15 @@
 	* my-ex.rb: Improve to show the anchor's title of section.subtitle.
 
 2003-01-02 Kazuhiko  <kazuhiko@fdiary.net>
-	* nazo.rb (nazo): Add 'type="text/javascript"' for valid html output.
-	Revise URI of FAQ.
+	* nazo.rb (nazo): Add 'type="text/javascript"' for valid html output. Revise URI of FAQ.
 
 2002-11-28 TADA Tadashi <sho@spc.gr.jp>
 	* HTML 4.01 Strict support.
 
 2002-10-13 MUTOH Masao <mutoh@highway.ne.jp>
-	* search_form.rb: Google検索で検索結果が文字化けする不具合の修正
-	* search_form.rb: Yahoo検索で検索ボックスの左側に画像を表示するようにした
-	* search_form.rb: Lycos検索削除（日本語の文字化けへの対応方法がわからなかったため）
-     All of them were pointed out by patagon.
+	* search_form.rb: fix in Google search.
+	* search_form.rb: insert image into Yahoo search.
+	* search_form.rb: remove Lycos search. All of them were pointed out by patagon.
 	* search_form.rb: version 1.0.2
 
 2002-09-01 Junichiro Kita <kita@kitaj.no-ip.com>
@@ -350,12 +346,12 @@
 	* follow chaging of title format in amazon.
 
 2002-05-19 MUTOH Masao <mutoh@highway.ne.jp>
-	* search_form.rb: ドキュメントアップデート
+	* search_form.rb: document update.
 	* search_form.rb: version 1.0.1
 
 2002-04-01 MUTOH Masao <mutoh@highway.ne.jp>
-	* search_form.rb: tab = 3, 文書の体裁を整えた
+	* search_form.rb: tab = 3, change document format.
 
 2002-03-24 MUTOH Masao <mutoh@highway.ne.jp>
-	* search_form.rb: Namazu, Google, Yahoo!, Lycosの検索フォームをサポート
+	* search_form.rb: support Namazu, Google, Yahoo!, Lycos
 	* search_form.rb: version 1.0.0
