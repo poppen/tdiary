@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.3 $
+# makerss.rb: $Revision: 1.4 $
 #
 # generate RSS file when updating.
 #
@@ -147,13 +147,13 @@ end
 
 def makerss_body( uri, rdfsec )
 	rdf = %Q|<item rdf:about="#{uri}#{anchor rdfsec.id}">\n|
-	rdf << %Q|<link>#{uri}#{anchor rdfsec.id}</link>|
-	rdf << %Q|<dc:date>#{rdfsec.time_string}</dc:date>|
+	rdf << %Q|<link>#{uri}#{anchor rdfsec.id}</link>\n|
+	rdf << %Q|<dc:date>#{rdfsec.time_string}</dc:date>\n|
 	if rdfsec.section.respond_to?( :body_to_html ) then
 		old_apply_plugin = @options['apply_plugin']
 		@options['apply_plugin'] = true
 		subtitle = apply_plugin( rdfsec.section.subtitle_to_html, true ).strip
-		desc = apply_plugin( rdfsec.section.subtitle_to_html + rdfsec.section.body_to_html ).strip
+		desc = subtitle + apply_plugin( rdfsec.section.body_to_html ).strip
 		@options['apply_plugin'] = old_apply_plugin
 		rdf << %Q|<title>#{subtitle}</title>\n|
 		rdf << %Q|<dc:creator>#{CGI::escapeHTML( @conf.author_name )}</dc:creator>\n|
