@@ -1,4 +1,4 @@
-# tb-send.rb $Revision: 1.11 $
+# tb-send.rb $Revision: 1.12 $
 #
 # Copyright (c) 2003 Junichiro Kita <kita@kitaj.no-ip.com>
 # You can distribute this file under the GPL.
@@ -71,7 +71,7 @@ def tb_send_trackback
 		end
 	end
 
-	if excerpt.empty?
+	if !excerpt || excerpt.empty?
 		excerpt = @diaries[date].to_html({})
 	end
 

@@ -1,3 +1,6 @@
+2004-05-05 yowa <yowaken@cool.ne.jp>
+	* tb-send.rb: check excerpt is not null.
+
 2004-05-04 TADA Tadashi <sho@spc.gr.jp>
 	* makelirs.rb: add a comment into HTML header.
 
