@@ -1,9 +1,11 @@
-# ping.rb: $Revision: 1.4 $
+# ping.rb: $Revision: 1.5 $
 #
 # ping to weblog ping servers.
 #
 # Copyright (c) 2004 TADA Tadashi <sho@spc.gr.jp>
 # Distributed under the GPL
+#
+# Modified: by MoonWolf <moonwolf@moonwolf.com>
 #
 add_update_proc do
 	if @conf['ping.list'] then
@@ -31,6 +33,7 @@ def ping( list )
 	XML
 
 	require 'net/http'
+	require 'timeout'
 	Net::HTTP.version_1_1
 	threads = []
 	list.each do |url|
@@ -40,10 +43,12 @@ def ping( list )
 					request = $2.empty? ? '/' : $2
 					host, port = $1.split( /:/, 2 )
 					port = '80' unless port
-					Net::HTTP.start( host.untaint, port.to_i ) do |http|
-						response, = http.post( request, xml, 'Content-Type' => 'text/xml' )
+					timeout(@conf['ping.timeout'].to_i) do
+						Net::HTTP.start( host.untaint, port.to_i ) do |http|
+							response, = http.post( request, xml, 'Content-Type' => 'text/xml' )
+						end
 					end
-				rescue
+				rescue Exception,Timeout::Error
 				end
 			end
 		end
@@ -58,13 +63,17 @@ end
 def ping_conf_proc
 	if @mode == 'saveconf' then
 		@conf['ping.list'] = @cgi.params['ping.list'][0]
+		@conf['ping.timeout'] = @cgi.params['ping.timeout'][0]
 	end
 	@conf['ping.list'] = '' unless @conf['ping.list']
+	@conf['ping.timeout'] = '3' unless @conf['ping.timeout']
 
 	result = <<-HTML
 		<h3>#{@ping_label_list}</h3>
 		<p>#{@ping_label_list_desc}</p>
 		<p><textarea name="ping.list" cols="70" rows="5">#{CGI::escapeHTML( @conf['ping.list'] )}</textarea></p>
+		<h3>#{@ping_label_timeout}</h3>
+		<p><input type="text" name="ping.timeout" value="#{CGI::escapeHTML( @conf['ping.timeout'] )}" /></p>
 	HTML
 end
 
@@ -75,8 +84,10 @@ end
 def ping_edit_proc
 	r = <<-HTML
 	<div class="ping">
-	<input type="checkbox" name="plugin_ping_send" value="true" checked tabindex="400">
+	<input type="checkbox" name="plugin_ping_send" value="true" checked tabindex="400" />
 	#{@ping_label_send}
 	</div>
 	HTML
 end
+# vim: ts=3
+
