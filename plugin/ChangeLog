@@ -1,3 +1,8 @@
+2003-05-19 MUTOH Masao <mutoh@highway.ne.jp>
+
+	* disp_referrer.rb: Support to seperate Antenna similar to 
+	disp_referrer2(by zunda).
+
 2003-05-17 TADA Tadashi <sho@spc.gr.jp>
 	* squeeze.rb: fix path of theme on CGI or CMD mode.
 	* image.rb: fix typo. thanks HASHIMOTO Keisuke.
