@@ -1,3 +1,6 @@
+2004.01.28 TADA Tadashi <sho@spc.gr.jp>
+	* tb-show.rb: fix error when TrackBack has only URL.
+
 2004.01.27 mput <mput@users.sf.net>
 	* ja/disp_referrer.rb: add Bulkfeeds to search engine.
 

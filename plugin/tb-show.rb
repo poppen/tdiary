@@ -1,4 +1,4 @@
-# tb-show.rb $Revision: 1.11 $
+# tb-show.rb $Revision: 1.12 $
 #
 # functions:
 #   * show TrackBack ping URL in right of TSUKKOMI label.
@@ -155,9 +155,10 @@ def trackbacks_of_today_long( diary, limit = 100 )
 	r << %Q!\t\t<div class="commentbody trackbackbody">\n!
 	diary.each_visible_trackback( limit ) do |t,i|
 		url, name, title, excerpt = t.body.split( /\n/,4 )
-		a = name || url
+		a = (name and name.length > 0) ? name : url
 		a += ':' + title if title &&! title.empty?
 		f = fragment % i
+		excerpt = excerpt || ''
 		if excerpt.length > 255
 			excerpt = @conf.shorten( excerpt, 252 ) + '...'
 		end
