@@ -1,7 +1,13 @@
-# counter.rb $Revision: 1.3 $
+# counter.rb $Revision: 1.4 $
 #
-# カウンタ表示プラグイン
+# カウンタ表示プラグイン version 1.2.1
 #
+# 訪問者数を「全て」「今日」「昨日」に分けて表示します。
+#
+# 使う場所：
+# ヘッダ、もしくはフッタ
+# 
+# 利用方法：
 # counter: 全ての訪問者数を表示する
 #	パラメタ：
 #	 figure: 表示桁数。未指定時は5桁。
@@ -14,20 +20,33 @@
 #	 figure: 表示桁数。未指定時は5桁。
 #	 filetype: ファイル種別(拡張子)。jpg, gif, png等。
 #              未指定時は、""(画像は使わない、CSSで外見を変える)。
+#
 # kiriban?: キリ番の時にtrueを返す(全て)。
 # kiriban_today?: キリ番の時にtrueを返す(今日)。
-#
 #  パラメタ：なし。
 #
-# 例：
+# 使用例：
 # counter
 # counter 3
 # coutner 3, "jpg"
-# counter 5, ""
 # counter_today 4, "jpg"
 # counter_yesterday
 #
-# CSSクラス:（各テーマのCSSファイルに入れてください。省略可）
+# オプションについて：
+# 訪問間隔の指定
+#   @options["counter.timer"] = 6
+# 初期値の指定
+#   @options["counter.init_num"] = 5
+# ログの取得
+#   @options["counter.log"] = true
+# カウントアップ制限
+#   @options['counter.deny_user_agents'] = ["w3m", "Mozilla/4"]
+#   @options['counter.deny_remote_addrs'] = ["127.0", "10.0.?.1", "192.168.1.2"]
+# キリ番
+#   @options["counter.kiriban"] = [1000, 3000, 5000, 10000, 15000, 20000]
+#   @options["counter.kiriban_today"] = [100, 200, 300, 400, 500, 600]
+#
+# CSSについて:
 #	 counter: 対象文字列全体(全て)
 #	 counter-today: 対象文字列全体(今日)
 #	 counter-yesterday: 対象文字列全体(昨日)
@@ -36,14 +55,20 @@
 #	 counter-kiriban: キリ番の数字の部分(全て)
 #	 counter-kiriban-today: キリ番の数字の部分(今日)
 #
-# その他の情報は 
+# その他：
 #   http://home2.highway.ne.jp/mutoh/tools/ruby/ja/counter.html
 # を参照してください。
 #
+# 権利表示：
 # Copyright (c) 2002 MUTOH Masao <mutoh@highway.ne.jp>
 # You can redistribute it and/or modify it under GPL2.
 # 
 =begin ChangeLog
+2002-05-05 MUTOH Masao  <mutoh@highway.ne.jp>
+	* @debug = true 削除 :->
+	* コメント変更
+	* version 1.2.1
+
 2002-05-04 MUTOH Masao  <mutoh@highway.ne.jp>
 	* tlinkプラグインからのアクセスをカウントしてしまう不具合の修正
 	* @options["counter.deny_user_agents"]追加
