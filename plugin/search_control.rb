@@ -1,5 +1,5 @@
 =begin
-= ここだけ検索プラグイン/search control plugin((-$Id: search_control.rb,v 1.6 2004-11-10 00:46:27 zunda Exp $-))
+= ここだけ検索プラグイン/search control plugin((-$Id: search_control.rb,v 1.7 2004-11-12 19:19:40 zunda Exp $-))
 
 Under revision! TODO: add/remove user agents
 
@@ -109,6 +109,9 @@ add_conf_proc( Search_control_prefix, Search_control_plugin_name ) do
 	if 'saveconf' == @mode then
 
 		# setting changes
+		if @cgi.params[_sc_nkey][0] then
+			@conf[_sc_nkey] = @cgi.params[_sc_nkey][0].to_i
+		end
 		(0...@conf[_sc_nkey]).each do |i|
 			if i > 0 and @cgi.params[_sc_akey( i )][0] then
 				agent = @cgi.params[_sc_akey( i )][0].strip
@@ -178,6 +181,7 @@ add_conf_proc( Search_control_prefix, Search_control_plugin_name ) do
 		r << %Q|<li><input name="#{_sc_vkey( view, 0 )}" value="t" type="checkbox"#{checked}>#{label}\n|
 	end
 	r << "</ul>\n</ul>\n"
+	r << %Q|<input type="hidden" name="#{_sc_nkey}" value="#{@conf[_sc_nkey]}">|
 end
 
 add_header_proc do

@@ -1,3 +1,9 @@
+2004-11-12 zunda <zunda at freeshell.org>
+	* search_control.rb: config form remembers number of agents.
+	Works properly even when the user delets an agent and
+	push back button to reconfigure it.
+
+
 2004-11-10 zunda <zunda at freeshell.org>
 	* ja/disp_refrrer.rb: better handles links from goo.ne.jp.
 	* ja/disp_refrrer.rb: support ocnsearch.goo.ne.jp
