@@ -1,4 +1,4 @@
-# tlink.rb $Revision: 1.3 $
+# tlink.rb $Revision: 1.4 $
 #
 # title Â°À­ÉÕ anchor plugin
 #
@@ -20,6 +20,9 @@
 # Modified: by abbey <inlet@cello.no-ip.org>
 #
 =begin ChangeLog
+2002-04-21 abbey <inlet@cello.no-ip.org>
+	* add error shori
+
 2002-04-20 NT <nt@24i.net>
 	* change User-Agent
 	* modify some regular expressions
@@ -53,23 +56,27 @@ def getcomment( url )
     port = $2
   end
   hata = 0
-  Net::HTTP.start( host, port ) { |http|
+  http = Net::HTTP.new( host, port )
+  begin
+    http.open_timeout = 3
     response , = http.get( "/#{path}", agent )
-      response.body.each { |line|
-        if %r[<A NAME="#{frag}] =~ line
-            if %r[<P><A NAME="p#?\d+">(?:.*?)</A> (.*?)</P>] =~ line.toeuc
-              result = $1
-	      break
-            else
-              hata = 1
-            end
-        elsif hata == 1 && %r[^\t*(.*?)<BR>] =~ line.toeuc
-            result = $1
-            hata = 0
-	    break
+    response.body.each { |line|
+      if %r[<A NAME="#{frag}] =~ line
+        if %r[<P><A NAME="p#?\d+">(?:.*?)</A> (.*?)</P>] =~ line.toeuc
+          result = $1
+          break
+        else
+          hata = 1
         end
-      }
-  }
+      elsif hata == 1 && %r[^\t*(.*?)<BR>] =~ line.toeuc
+        result = $1
+        hata = 0
+        break
+      end
+    }
+  rescue
+    result = ""
+  end
 
   result = CGI::escapeHTML( result.gsub( %r[</?[aA](.*?)>], "" ) ).gsub( /&amp;nbsp;/, " " )
 end
