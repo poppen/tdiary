@@ -1,3 +1,7 @@
+2004-02-25  mput <mput@users.sf.net>
+	* en/disp_referrer.rb (DispRef2SetupIF::show_unknown_list): ditto.
+	* ja/disp_referrer.rb (DispRef2SetupIF::show_unknown_list): add similarity search, answerbus, dogpile.
+
 2004-02-24 TADA Tadashi <sho@spc.gr.jp>
 	* referer_scheme.rb: a little modify about wiki scheme.
 
