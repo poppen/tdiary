@@ -1,4 +1,4 @@
-# comment_mail_sendmail.rb $Revision: 1.6 $
+# comment_mail_sendmail.rb $Revision: 1.7 $
 #
 # sendmailを使ってツッコミをメールで知らせる
 #   入れるだけで動作する。
@@ -39,7 +39,7 @@ def comment_mail( text, to )
 end
 
 add_update_proc do
-	comment_mail_send if @mode =~ /^(comment|trackbackreceive)$/
+	comment_mail_send if @mode =~ /^(comment|trackbackreceive|pingbackreceive)$/
 end
 
 add_conf_proc( 'comment_mail', comment_mail_conf_label ) do

@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# pb.rb $Revision: 1.3 $
+# pb.rb $Revision: 1.4 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Copyright (c) 2004 MoonWolf <moonwolf@moonwolf.com>
@@ -100,7 +100,8 @@ server.add_handler("pingback.ping") do |sourceURI,targetURI|
   @cgi.params['targetURI'] = [targetURI]
   conf = ::TDiary::Config::new(@cgi)
   tdiary = TDiary::TDiaryPingbackReceive::new( @cgi, 'day.rhtml', conf )
-  return "Pingback receive success"
+  tdiary.eval_rhtml
+  "Pingback receive success"
 end
 server.serve
 # vim: ts=2
