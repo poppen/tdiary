@@ -1,4 +1,4 @@
-# random_google.rb $Revision: 1.3 $
+# random_google.rb $Revision: 1.4 $
 #
 # random_google: 日記からランダムに抽出した単語をgoogleで検索するリンクを生成する
 #
@@ -56,7 +56,7 @@ def random_google_init
 	end
 end
 
-if /(latest|day)/ === @mode and not bot?
+if /(latest|day)/ === @mode and ! @conf.bot? and ! @conf.mobile_agent?
 	add_body_enter_proc do |date|
 		random_google_init
 
