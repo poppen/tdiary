@@ -1,4 +1,4 @@
-# disp_referrer.rb $Revision: 1.19 $
+# disp_referrer.rb $Revision: 1.20 $
 # -pv-
 #
 # 名称：
@@ -8,7 +8,7 @@
 # 本日のリンク元でサーチエンジンの検索文字の文字化けを直します。
 # また、サーチエンジンの検索結果を他のリンク元の下にまとめて表示します
 # （デフォルト時）。
-# なお、tDiary-1.4.x専用です。
+# なお、tDiary-1.5.x専用です。
 #
 # 使い方：
 # 文字化けを直すのみ（表示はtDiaryの標準時と同様の並びにする）の場合は、
@@ -19,7 +19,7 @@
 # EUC-JPで表現できない文字は表示できません。
 #
 # その他：
-# http://home2.highway.ne.jp/mutoh/tools/ruby/ja/disp_referrer.html
+# http://kitaj.no-ip.com/tDiary-FAQ/rw-cgi.rb?cmd=view;name=tDiary-FAQ-Plugin-how-to-disp_referrer
 # を参照してください。
 #
 # 著作権について：
@@ -27,6 +27,9 @@
 # You can redistribute it and/or modify it under GPL2.
 #
 =begin ChangeLog
+2002-12-04 TADA Tadashi <sho@spc.gr.jp>
+	* document update.
+	
 2002-10-13 MUTOH Masao <mutoh@highway.ne.jp>
 	* Metcha SearchのURLが間違えていたのを修正。
 	
