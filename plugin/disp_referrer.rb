@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.33 2003-10-14 17:38:18 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.34 2003-10-21 17:45:15 zunda Exp $-))
 
 == 概要
 アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
@@ -7,144 +7,20 @@
 
 最新の日記の表示では、通常のリンク元以外のリンク元を隠します。
 
-== 注意
-以前の版(1.1.2.39以前)からコードのほとんどを実装しなおしたため、
-* 検索エンジンに関する動作が違う
-* 廃止されたオプションがある
-* オプション名が変更された
-という非互換があります。基本的な設定はWWWブラウザからできるようになって
-いますので、我慢してください。すみません。
+== Acknowledgements
+This plugin uses
+* Some of the search engine names and URLs
+from disp_referrer.rb by MUTOH Masao.
 
-以前の版に比べると、
-* キャッシュにより表示が高速化された((-手元では、キャッシュを使わない場
-  合にくらべて、1日分で2/3ほど、最新3日分で1/2ほどの実時間で日記が生成
-  されました-))。この機能は残念ながら、レンタル日記などsecure=trueな日記
-  では使えません。
-* リンク元置換リストにないURLを比較的簡単にWWWブラウザからリストに追加で
-  きるようになった
-* 置換後の文字列の最初に[]で囲まれた文字を入れることによって、ユーザー
-  がカテゴリーを増設できるようになった。((-tDiary本体とは違い、１つの
-  URLは１つのカテゴリーしか持てないことにご注意ください。-))
-* 基本的な設定をWWWブラウザからできるようになった
-* disp_referrer.rbが無くても使える
-* UconvライブラリやNoraライブラリがあればあるなりに、無ければないなりに
-  動作する
-という利点があります。
+Methods that parses URL is copied from cgi.rb distributed with Ruby and
+edited.
 
-== 使い方
-このプラグインをインストールすることで、デフォルトでは、
-* 一日分の日記の表示で、「本日のリンク元」がアンテナ、検索エンジン、その
-  他にまとめて表示されるようになります。置換後の文字列の最後の()を除いた
-  タイトルでグループします。また、検索エンジンからのリンクは、キーワード
-  別にまとめられます。
-* 最新の日記の表示で、「本日のリンク元」にアンテナや検索エンジンからのリ
-  ンクが表示されなくなります。
-リンク元URLのタイトルへの置換は、tDiary本体のリンク元置換リストを使いま
-す。
+The idea that categorize the URLs with [] delimited strings is from
+kazuhiko.
 
-オプションについては下記をご覧ください。基本的なオプションは、tDiaryの設
-定画面から、「リンク元もうちょっと強化」をクリックすることで設定できます。
-初めて設定する時には、
-  Insecure: can't modify hash (SecurityError)
-というエラーが出る可能性があります。これはtDiaryの問題です。この場合には、
-tDiaryを新しくして1.5.5.20030806以降を使うか、「基本」から何も変更せず 
-に「OK」を押すことでエラーを回避できるでしょう。
+The author of this plugin  appreciates them.
 
-リンク元置換リストやオプションを変更した場合は、キャッシュディレクトリ
-にあるキャッシュファイルdisp_referrer2.cacheやdisp_referrer2.cache~をプ
-ラグインの設定画面から更新する必要があります。このプラグインの設定画面か
-ら変更した項目については、変更時にキャッシュの更新もします。
-
-リンク元は、以下のような基準で分類されます。
-
-: 通常のリンク元(「本日のリンク元」)
-  リンク元置換リストにあてはまるURLのうち、下記以外のもの。
-  @options['disp_referrer2.unknown.divide']=falseの場合は、リンク元置換
-  リストにあてはまらないURLもここに含まれます。
-
-  さらに、リンク元置換リストによって置換された後の文字列の最初に[]で囲ま
-  れた文字列がある場合は、これをカテゴリーと解釈してカテゴリー別に表示を
-  分けます。この機能を抑制するには、WWWブラウザから設定画面を利用するか、
-  tdiary.confで@options['disp_referrer2.normal.categorize']=falseにして
-  ください。このオプションを変更した場合にはキャッシュを更新する必要があ
-  ります。
-
-: アンテナ
-  URLに /a/ antenna/ antenna. などの文字列が含まれるか、置換後の文字列に、
-  アンテナ links などの文字列が含まれるリンク元です。これらの条件は、
-  @options['disp_referrer2.antenna.url']や
-  @options['disp_referrer2.antenna.title']によって変更できます。
-  tdiary.confを編集してください。キャッシュを更新する必要があります。
-
-: その他
-  リンク元置換リストになかったURLです。あまり長いURLは、tDiary本体の置換
-  リストによって通常のリンク元に分類されてしまう可能性があります。
-
-: 検索
-  このプラグインに含まれる検索エンジンのリストに一致したURLです。リスト
-  はDispRef2Setup::Enginesにあります。うまく検索エンジンと認識されない
-  URLは、ほとんどの場合、通常のリンク元に混ざって表示されてしまうでしょ
-  う。このような場合は、URLを
-  ((<URL:http://tdiary-users.sourceforge.jp/cgi-bin/wiki.cgi?disp_referrer2.rb>))
-  に知らせていただけると作者が喜びます。
-
-=== 環境
-ruby-1.6.7と1.8.0で動作を確認しています。これ以外のバージョンのRubyでも
-動作するかもしれません。
-
-tdiary-1.5.3-20030509以降で使えます。これ以前のtDiary-1.5では、
-00default.rbにbot?メソッドが定義されていないため、検索エンジンのクロール
-に対してリンク元が表示されてしまいます。
-
-secureモードでも使えますがキャッシュによる高速化ができません。
-
-mod_rubyでの動作は今のところ確認していません。
-
-=== インストール方法
-このファイルをtDiaryのpluginディレクトリ内にコピーしてください。このプラ
-グインの最新版は、
-((<URL:http://zunda.freeshell.org/d/plugin/disp_referrer2.rb>))
-にあるはずです。
-
-また、Noraライブラリがインストールされている場合には、URLの解釈やHTMLの
-エスケープに、Rubyに標準添付のCGIライブラリの代わりにNoraライブラリを使
-用します。これにより、処理速度が若干速くなります((-手元で試したところ、
-一日分の表示にかかる時間が1割程度短かくなりました。-))。Noraについての詳
-細は、((<URL:http://raa.ruby-lang.org/list.rhtml?name=Nora>))を参照して
-ください。
-
-=== オプション
-この日記で設定できるオプションの一覧は、DispRef2Setup::Defaultsにありま
-す。これらのオプションのkeyの最初に、「disp_referrer2.」を追加すること
-で、tdiary.confの@optionsのkeyとなり、tdiary.confから設定できるようにな
-ります。これらのオプションのうち、DispRef2URL::Cached_optionsに挙げられ
-ているものは、変更の際にキャッシュの更新が必要です。
-
-また、tDiaryの設定画面から「リンク元もうちょっと強化」を選ぶことでWWWブ
-ラウザから設定できる項目もあります。
-
-== 謝辞
-このプラグインは、
-* UTF-8文字列のEUC文字列への変換機能
-* 一部の検索エンジン名とそのURL
-* 検索エンジンのロボットのクローリングの際にリンク元を表示しない機能
-を、MUTOH Masaoさんのdisp_referrer.rbからコピー、編集して使わせていただ
-いています。(検索エンジンのロボットに関する機能は現在はtDiary本体にとり
-こまれています。)
-
-また、URLを解釈する機能の一部を、Rubyに付属のcgi.rbからコピー、編集して
-使わせていただいています。
-
-さらに、通常のリンク元を[]で囲まれた文字列を使ってカテゴリ分けするアイデ
-ィアは、kazuhikoさんのものです。
-
-皆様に感謝いたします。
-
-== Todos
-* secure=trueでリンク元置換リストのテキストフィールドでリターンを押した際の動作
-* parse_as_search高速化: hostnameのキャッシュ？
-
-== 著作権について
+== Copyright notice
 Copyright (C) 2003 zunda <zunda at freeshell.org>
 
 Please note that some methods in this plugin are written by other
@@ -156,6 +32,8 @@ version 2 or later.
 =end
 
 =begin ChangeLog
+See ChangeLog for changes after this.
+
 * Mon Sep 29, 2003 zunda <zunda at freeshell.org>
 - forgot to change arguments after changing initialize()
 * Thu Sep 25, 2003 zunda <zunda at freeshell.org>
@@ -401,8 +279,8 @@ class DispRef2String
 		return( '%.0f' % s ) if t < 1
 		s = t
 		t = s / 1024.0
-		return( '%.1fK' % s ) if t < 1
-		return( '%.1fM' % t )
+		return( '%.1f K' % s ) if t < 1
+		return( '%.1f M' % t )
 	end
 
 	# insert comma
@@ -496,13 +374,13 @@ class DispRef2Setup < Hash
 			# アンテナの置換後の文字列に一致する正規表現の文字列です。
 		'normal.label' => Dispref2plugin.referer_today,
 			# 通常のリンク元のタイトルです。デフォルトでは、「本日のリンク元」です。
-		'antenna.label' => 'アンテナ',
+		'antenna.label' => Disp_referrer2_antenna_label,
 			# アンテナのリンク元のタイトルです。
-		'unknown.label' => 'その他',
+		'unknown.label' => Disp_referrer2_unknown_label,
 			# その他のリンク元のタイトルです。
 		'unknown.hide' => false,
 			# trueの場合はリンク元置換リストにないURLは表示しません
-		'search.label' => '検索',
+		'search.label' => Disp_referrer2_search_label,
 			# 検索エンジンからのリンク元のタイトルです。
 		'unknown.divide' => true,
 			# trueの場合、置換リストに無いURLを通常のリンク元と分けて表示します。
@@ -522,11 +400,11 @@ class DispRef2Setup < Hash
 		'search.expand' => false,
 			# trueの場合、検索キーワードとともに検索エンジン名を表示します。
 			# falseの場合、回数のみを表示します。
-		'search.unknown_keyword' => 'キーワード不明',
+		'search.unknown_keyword' => Disp_referrer2_search_unknown_keyword,
 			# キーワードがわからない検索エンジンからのリンクに使う文字列です。
 		'search_engines' => DispReferrer2_Engines,
 			# 検索エンジンのハッシュです。
-		'cache_label' => '(%sのキャッシュ)',
+		'cache_label' => Disp_referrer2_cache_label,
 			# 検索エンジンのキャッシュのURLを表示する文字列です。
 		'cache_path' => "#{Dispref2plugin_cache_path}/disp_referrer2.cache",
 			# このプラグインで使うキャッシュファイルのパスです。
@@ -1308,277 +1186,27 @@ class DispRef2SetupIF
 
 	# show description
 	def show_description
-		case @conf.lang
-		when 'en'
-			<<-_HTML
-				<h3 class="subtitle">A little bit more powerful display of referrers</h3>
-			_HTML
+		r = Disp_referrer2_abstract.dup
+		if DispRef2String.nora? then
+			r << Disp_referrer2_with_Nora
 		else
-			r = <<-_HTML
-				<h3 class="subtitle">本日のリンク元もうちょっとだけ強化プラグイン</h3>
-				<p>$Revision: 1.33 $</p>
-				<p>アンテナからのリンク、サーチエンジンの検索結果を、
-					通常のリンク元の下にまとめて表示します。
-					サーチエンジンの検索結果は、検索語毎にまとめられます。
-					詳しくは、<a href="http://zunda.freeshell.org/d/plugin/disp_referrer2.rb">プラグインのソース</a>のドキュメントをご覧ください。
-					ご意見、ご要望は、<a href="http://tdiary-users.sourceforge.jp/cgi-bin/wiki.cgi?disp_referrer2.rb">こちらのWiki</a>まで。</p>
-			_HTML
-			if DispRef2String.nora? then
-				r << <<-_HTML
-					<p>Noraライブラリを使っていますので、
-						表示が少し速いはずです。</p>
-				_HTML
-			else
-				r << <<-_HTML
-					<p>表示速度が気になる場合は、
-						<a href="http://raa.ruby-lang.org/list.rhtml?name=Nora">Nora</a>
-						ライブラリをインストールしてみてください。</p>
-				_HTML
-			end
-			if @cache then
-				r << <<-_HTML if @updated_url
-					<p>キャッシュのうち、#{@updated_url}個のURLが更新されました。</p>
-				_HTML
-				r << <<-_HTML
-					<p>現在、キャッシュの大きさは#{DispRef2String::bytes( @cache.size )}バイト、
-						#{DispRef2String::comma( @cache.entries )}個のURLがキャッシュされています。
-						「<a href="#{@conf.update}?conf=referer">リンク元</a>」の変更の後にも
-						<a href="#{@conf.update}?conf=disp_referrer2;dr2.cache.update=force;dr2.current_mode=#{@current_mode}">キャッシュの更新</a>が必要かもしれません。
-					</p>
-				_HTML
-			end
-			case @current_mode
-			when Options
-				r << <<-_HTML
-					<p>その他のリンク元の置換リストの編集に<a href="#{@conf.update}?conf=disp_referrer2;dr2.new_mode=#{RefList};dr2.change_mode=true">移る</a>。
-				_HTML
-			when RefList
-				r << <<-_HTML
-					<p>基本的な設定に<a href="#{@conf.update}?conf=disp_referrer2;dr2.new_mode=#{Options};dr2.change_mode=true">移る</a>。
-				_HTML
-			end
-			r << <<-_HTML
-				リンク元置換リストは「<a href="#{@conf.update}?conf=referer">リンク元</a>」からも編集できます。</p>
-				<input type="hidden" name="saveconf" value="ok">
-				<hr>
-			_HTML
-			r
+			r << Disp_referrer2_without_Nora
 		end
-	end
-
-	# show options
-	def show_options
-		case @conf.lang
-		when 'en'
-			<<-_HTML
-				<h4>Options</h4>
-				<p>I am sorry. English page is not yet ready.</p>
-			_HTML
-		else
-			r = <<-_HTML
-				<h4>リンク元の分類と表示</h4>
-				<p>
-					<input name="dr2.current_mode" value="#{Options}" type="hidden">
-					リンク元置換リストにないリンク元を
-					<input name="dr2.unknown.divide" value="true" type="radio"#{' checked'if @setup['unknown.divide']}>#{@setup['unknown.label']}のリンク元として分ける /
-					<input name="dr2.unknown.divide" value="false" type="radio"#{' checked'if not @setup['unknown.divide']}>通常のリンク元と混ぜる。
-				</p>
-				<p>
-					#{@setup['unknown.label']}のリンク元を
-					<input name="dr2.unknown.hide" value="false" type="radio"#{' checked'if not @setup['unknown.hide']}>表示する /
-					<input name="dr2.unknown.hide" value="true" type="radio"#{' checked'if @setup['unknown.hide']}>隠す。
-				</p>
-				<p>
-					リンク元置換リストの置換後の文字列の最初の[]をカテゴリー分けに
-					<input name="dr2.normal.categorize" value="true" type="radio"#{' checked'if @setup['normal.categorize']}>使う /
-					<input name="dr2.normal.categorize" value="false" type="radio"#{' checked'if not @setup['normal.categorize']}>使わない。
-				</p>
-				<p>
-					一日分の表示で、通常のリンク元以外のリンク元を
-					<input name="dr2.long.only_normal" value="false" type="radio"#{' checked'if not @setup['long.only_normal']}>表示する /
-					<input name="dr2.long.only_normal" value="true" type="radio"#{' checked'if @setup['long.only_normal']}>隠す。
-				</p>
-				<p>
-					最新の表示で、通常のリンク元以外のリンク元を
-					<input name="dr2.short.only_normal" value="false" type="radio"#{' checked'if not @setup['short.only_normal']}>表示する /
-					<input name="dr2.short.only_normal" value="true" type="radio"#{' checked'if @setup['short.only_normal']}>隠す。
-					(表示する場合には、このプラグインが無い場合とまったく同じ表示になります。)
-				</p>
-				<h4>通常のリンク元のグループ化</h4>
-				<p>
-					通常のリンク元を
-					<input name="dr2.normal.group" value="true" type="radio"#{' checked'if @setup['normal.group']}>置換後の文字列でまとめる /
-					<input name="dr2.normal.group" value="false" type="radio"#{' checked'if not @setup['normal.group']}>URL毎に分ける。
-				</p>
-				<p>
-					通常のリンク元を置換後の文字列でまとめる場合に、最後の()を
-					<input name="dr2.normal.ignore_parenthesis" value="true" type="radio"#{' checked'if @setup['normal.ignore_parenthesis']}>無視する /
-					<input name="dr2.normal.ignore_parenthesis" value="false" type="radio"#{' checked'if not @setup['normal.ignore_parenthesis']}>無視しない。
-				</p>
-				<h4>アンテナからのリンクのグループ化</h4>
-				<p>
-					アンテナからのリンクを
-					<input name="dr2.antenna.group" value="true" type="radio"#{' checked'if @setup['antenna.group']}>置換後の文字列でまとめる /
-					<input name="dr2.antenna.group" value="false" type="radio"#{' checked'if not @setup['antenna.group']}>URL毎に分ける。
-				</p>
-				<p>
-					アンテナからのリンクを置換後の文字列でまとめる場合に、最後の()を
-					<input name="dr2.antenna.ignore_parenthesis" value="true" type="radio"#{' checked'if @setup['antenna.ignore_parenthesis']}>無視する /
-					<input name="dr2.antenna.ignore_parenthesis" value="false" type="radio"#{' checked'if not @setup['antenna.ignore_parenthesis']}>無視しない。
-				</p>
-				<h4>検索キーワードの表示</h4>
-				<p>
-					検索エンジン名を
-					<input name="dr2.search.expand" value="true" type="radio"#{' checked'if @setup['search.expand']}>表示する /
-					<input name="dr2.search.expand" value="false" type="radio"#{' checked'if not @setup['search.expand']}>表示しない。
-				</p>
-			_HTML
-			unless @setup.secure then
-			r << <<-_HTML
-				<h4>キャッシュ</h4>
-				<p>
-					キャッシュを
-					<input name="dr2.no_cache" value="false" type="radio"#{' checked'if not @setup['no_cache']}>利用する /
-					<input name="dr2.no_cache" value="true" type="radio"#{' checked'if @setup['no_cache']}>利用しない。
-				</p>
-				<p>今回の設定変更で、キャッシュを
-					<input name="dr2.cache.update" value="force" type="radio">更新する /
-					<input name="dr2.cache.update" value="auto" type="radio" checked>必要なら更新する /
-					<input name="dr2.cache.update" value="never" type="radio">更新しない。
-				</p>
-				<p>
-					キャッシュの更新には多少の時間がかかる場合があります。
-					OKボタンを押したらしばらくお待ちください。
-					一方、キャッシュを更新しないと表示に矛盾が生じることがあります。
-				</p>
-			_HTML
-			end # unless @setup.secure
-			r
+		if @cache then
+			r << sprintf( Disp_referrer2_updated_urls, @updated_url ) if @updated_url
+			r << sprintf( Disp_referrer2_cache_info, DispRef2String::bytes( @cache.size ), DispRef2String::comma( @cache.entries ) )
+			r << Disp_referrer2_update_info
 		end
-	end
-
-	# shows URL list to be added to the referer_table or no_referer
-	def show_unknown_list
-		if @setup.secure then
-			urls = DispRef2Latest_cache.unknown_urls
-		elsif @setup['no_cache'] then
-			urls = DispRef2Latest.new( @cgi, 'latest.rhtml', @conf, @setup ).unknown_urls
-		else
-			urls = DispRef2Cache.new( @setup ).unknown_urls
+		r << "<p>\n"
+		case @current_mode
+		when Options
+			r << sprintf( Disp_referrer2_move_to_refererlist, @conf.update, RefList )
+		when RefList
+			r << sprintf( Disp_referrer2_move_to_config, @conf.update, Options )
 		end
-		case @conf.lang
-		when 'en'
-			<<-_HTML
-				<h4>Referrer list</h4>
-				<p>I am sorry. English page is not yet ready.</p>
-			_HTML
-		else
-			r = <<-_HTML
-				<h4>リンク元置換リスト</h4>
-				<input name="dr2.current_mode" value="#{RefList}" type="hidden">
-			_HTML
-			if @cache then
-				r << "<p>#{@setup['unknown.label']}のリンク元はキャッシュの中から探しています。"
-			else
-				r << "<p>#{@setup['unknown.label']}のリンク元は最新表示の日記から探しています。"
-			end
-			r << <<-_HTML
-				リンク元除外リストや無視リストに一致するURLはここには表示されません。
-			</p>
-			<p>
-				リンク元置換リストや記録除外リストには入れたくないURLは、
-				無視リストに入れておくことで、
-				下記のリストに現れなくなります。
-				無視リストは、
-				下記のリストにURLを表示するかどうかの判断にだけ使われます。
-				<input name="dr2.clear_ignore_urls" value="true" type="checkbox">無視リストを空にする場合はチェックして下さい。
-			</p>
-			_HTML
-			if urls.size > 0 then
-				r << <<-_HTML
-					<p>リンク元置換リストにない下記のURLを、
-						リンク元置換リストに入れる場合は、
-						下段の空白にタイトルを入力してください。
-						また、リンク元記録除外リストに追加するには、
-						チェックボックスをチェックしてください。
-					</p>
-					<p>
-						正規表現はリンク元置換リストに追加するのに適当なものになっています。
-						確認して、不具合があれば編集してください。
-						リンク元置換リストにだけ追加する場合には、
-						もう少しマッチの条件が緩いものでもかまいません。
-					</p>
-					<p>
-						最後の空欄は、リンク元置換リストに追加する際のタイトルです。
-						URL中に現れた「(〜)」は、
-						置換文字列中で「\\1」のような「数字」で利用できます。
-						また、sprintf('[tdiary:%d]', $1.to_i+1) といった、
-						スクリプト片も利用できます。
-					</p>
-				_HTML
-				if ENV['AUTH_TYPE'] and ENV['REMOTE_USER'] and @setup['configure.use_link'] then
-					r << <<-_HTML
-						<p>
-							それぞれのURLはリンクになっていますが、これをクリックすることで、
-							リンク先に、この日記の更新・設定用のURLが知られることになります。
-							適切なアクセス制限が無い場合にはクリックしないようにしてください。
-						</p>
-					_HTML
-				end
-				r << <<-_HTML
-					<p>
-						ここにないURLは「<a href="#{@conf.update}?conf=referer">リンク元</a>」から修正してください。
-					</p>
-					<dl>
-				_HTML
-				i = 0
-				urls.sort.each do |url|
-					shown_url = DispRef2String::escapeHTML( @setup.to_native( DispRef2String::unescape( url ) ) )
-					if ENV['AUTH_TYPE'] and ENV['REMOTE_USER'] and @setup['configure.use_link'] then
-						r << "<dt><a href=\"#{url}\">#{shown_url}</a>"
-					else
-						r << "<dt>#{shown_url}"
-					end
-					r << <<-_HTML
-						<dd>
-							<input name="dr2.#{i}.noref" value="true" type="checkbox">除外リストに追加
-							<input name="dr2.#{i}.ignore" value="true" type="checkbox">無視リストに追加<br>
-							<input name="dr2.#{i}.reg" value="#{DispRef2String::escapeHTML( DispRef2String::url_regexp( url ) )}" type="text" size="70"><br>
-							<input name="dr2.#{i}.title" value="" type="text" size="70">
-					_HTML
-					i += 1
-				end
-				r << <<-_HTML
-					<input name="dr2.urls" type="hidden" value="#{i}">
-					</dl>
-				_HTML
-				unless @setup.secure or @setup['no_cache'] then
-					r << <<-_HTML
-						<p>
-							キャッシュの更新には多少の時間がかかる場合があります。
-							OKボタンを押したらしばらくお待ちください。
-						</p>
-					_HTML
-				end
-			else
-				r << <<-_HTML
-					<p>現在、#{@setup['unknown.label']}のリンク元はありません。</p>
-				_HTML
-			end
-			r << <<-_HTML
-				<h4>アンテナのための正規表現</h4>
-				<p>アンテナのURLや置換後の文字列にマッチする正規表現です。
-					これらの正規表現にマッチするリンク元は「アンテナ」に分類されます。</p>
-				<ul>
-				<li>URL:
-					<input name="dr2.antenna.url" value="#{DispRef2String::escapeHTML( @setup.to_native( @setup['antenna.url'] ) )}" type="text" size="70">
-					<input name="dr2.antenna.url.default" value="true" type="checkbox">デフォルトに戻す
-				<li>置換後の文字列:<input name="dr2.antenna.title" value="#{DispRef2String::escapeHTML( @setup.to_native( @setup['antenna.title'] ) )}" type="text" size="70">
-					<input name="dr2.antenna.title.default" value="true" type="checkbox">デフォルトに戻す
-				</ul>
-				_HTML
-			r
-		end
+		r << sprintf( Disp_referrer2_also_todayslink, @conf.update )
+		r << %Q{<input type="hidden" name="saveconf" value="ok"></p><hr>\n}
+		r
 	end
 
 	# updates the options
@@ -1735,7 +1363,7 @@ end
 =end
 
 # for configuration interface
-add_conf_proc( 'disp_referrer2', 'リンク元もうちょっと強化' ) do
+add_conf_proc( 'disp_referrer2', Disp_referrer2_name ) do
 	setup = DispRef2Setup.new( @conf, 100, true )
 	wwwif = DispRef2SetupIF.new( @cgi, setup, @conf, @mode )
 	wwwif.show_html

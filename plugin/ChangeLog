@@ -1,4 +1,8 @@
+2003-10-21 zunda <zunda at freeshell.org>
+	* disp_referrer.rb: language resources for ja and en completed (hopefully :)
+
 2003-10-21 Junichiro Kita <kita@kitaj.no-ip.com>
+
 	* output_rdf.rb: follow new @conf.shorten.
 
 2003-10-21  Kazuhiko  <kazuhiko@fdiary.net>
