@@ -110,13 +110,11 @@ if /^(append|replace|comment|trackbackreceive)$/ =~ @mode then
 
 	comment_link = ""
 	if diary.count_comments > 0 then
-  		diary.each_comment_tail( 1 ) do |comment,idx|
-		if comment.visible? then
-		comment_link = %Q[http://#{uri}#{anchor "#{date}\#c#{'%02d' % idx}"}]
-		r <<<<-RDF
+  		diary.each_visible_comment( 100 ) do |comment,idx|
+			comment_link = %Q[http://#{uri}#{anchor "#{date}\#c#{'%02d' % idx}"}]
+			r <<<<-RDF
        <rdf:li rdf:resource="#{comment_link}" />
-		RDF
-  		end
+			RDF
 		end
  	end
 	r <<<<-RDF
@@ -144,20 +142,16 @@ if /^(append|replace|comment|trackbackreceive)$/ =~ @mode then
   		idx += 1
 	end
 	if diary.count_comments > 0 then
-	   	r <<<<-RDF
- <item rdf:about="#{comment_link}">
-   <title>#{comment_today}#{comment_total(diary.count_comments)}</title>
-		RDF
-  		diary.each_comment_tail( 1 ) do |comment,idx|
-		if comment.visible? then
-		link = "http://#{uri}#{anchor "#{date}\#c#{'%02d' % idx}"}"	
+  		diary.each_visible_comment( 100 ) do |comment,idx|
+			link = "http://#{uri}#{anchor "#{date}\#c#{'%02d' % idx}"}"	
 		r <<<<-RDF
-   <link>#{comment_link}</link>
-   <description>#{CGI::escapeHTML( comment.name )}[#{CGI::escapeHTML( @conf.shorten( comment.body ) )}]</description>
-		RDF
-  		end
+ <item rdf:about="#{link}">
+   <title>#{comment_today}-#{idx} (#{CGI::escapeHTML( comment.name )})</title>
+   <link>#{link}</link>
+   <description>#{CGI::escapeHTML( @conf.shorten( comment.body ) )}</description>
+ </item>
+			RDF
 		end
- 	r << " </item>\n"
  	end
 	r << "</rdf:RDF>"
 	r = rdf_encoder.call( r )
