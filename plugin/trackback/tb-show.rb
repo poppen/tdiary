@@ -1,4 +1,4 @@
-# tb-show.rb $Revision: 1.8 $
+# tb-show.rb $Revision: 1.9 $
 #
 # functions:
 #   * show TrackBack ping URL in right of TSUKKOMI label.
@@ -99,7 +99,8 @@ def referer_of_today_long( diary, limit )
 	r = ''
 	if diary then
 		r << %Q[<div class="caption"><a name="t">TrackBacks</a>#{trackback_ping_url}</div>\n]
-		r << "<ul>\n"
+		r << %Q[	<div class="commentbody">\n]
+		i = "01"
 		diary.each_comment( 100 ) do |com, idx|
 			next unless com.visible_true?
 			next unless /^(Track|Ping)Back$/ =~ com.name
@@ -113,12 +114,15 @@ def referer_of_today_long( diary, limit )
 			a += ':' + title unless title.empty?
 			a = url if a.empty?
 
-			r << %Q|<li><a href="#{CGI::escapeHTML( url )}">#{CGI::escapeHTML( a )}</a>|
-			r << %Q| #{comment_date(com.date)}<br>|
-			r << CGI::escapeHTML( excerpt ).gsub( /\n/, '<br>' ).gsub( /<br><br>\Z/, '' ) unless excerpt.empty?
-			r << %Q|</li>\n|
+			r << %Q|		<div class="commentator">\n|
+			r << %Q|			<a name="t#{i}" href="#{@index}#{anchor @date.strftime("%Y%m%d#t#{i}")}">#{@conf.comment_anchor}\n|
+			r << %Q|			<span class="commentator"><a href="#{CGI::escapeHTML( url )}">#{CGI::escapeHTML( a )}</a></span>\n|
+			r << %Q|			<span class="commenttime">#{comment_date(com.date)}</span>\n|
+			r << %Q|		</div>\n|
+			r << %Q|		<p>#{CGI::escapeHTML( excerpt ).gsub( /\n/, '<br>' ).gsub( /<br><br>\Z/, '' )}</p>\n| unless excerpt.empty?
+			i = i.succ
 		end
-		r << "</ul>\n"
+		r << %Q|	</div>\n</div>\n<div class="refererlist">|
 	end
 	r << referer_of_today_long_tb_backup( diary, limit )
 end
