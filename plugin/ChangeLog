@@ -1,3 +1,6 @@
+2004-02-17 TADA Tadashi <sho@spc.gr.jp>
+	* trackback/bookmarklet.ja: add. written by s.sawada <moonwave@ba2.so-net.ne.jp>.
+
 2004-02-16 TADA Tadashi <sho@spc.gr.jp>
 	* amazon.rb: swap aliased method names, and bug fix.
 
