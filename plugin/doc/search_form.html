@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="euc-jp" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>search_form</title>
+<meta http-equiv="Content-type" content="text/html; charset=euc-jp" />
+<link href="./doc.css" type="text/css" rel="stylesheet"/>
+</head>
+
+<body><p><a href="./index.html">[Back] </a>
+
+<h1><a name="label:0" id="label:0">search_form.rb - 各種検索エンジンの検索フォーム表示プラグイン</a></h1><!-- RDLabel: "search_form.rb - 各種検索エンジンの検索フォーム表示プラグイン" -->
+<h2><a name="label:1" id="label:1">機能</a></h2><!-- RDLabel: "機能" -->
+<p>各種検索エンジンの検索フォームを生成します。<br /></p>
+<h2><a name="label:2" id="label:2">使う場所</a></h2><!-- RDLabel: "使う場所" -->
+<p>ヘッダもしくはフッタ<br /></p>
+<h2><a name="label:3" id="label:3">利用方法</a></h2><!-- RDLabel: "利用方法" -->
+<p>各パラメータの右辺値があるものはデフォルト引数です。特に変更する必要がない場合は省略可能です。<br /></p>
+<ul>
+<li>url - 検索エンジンのURL(例：/namazu/namazu.cgi)<br /></li>
+<li>button_name - ボタン名称（省略可能）<br /></li>
+<li>size - テキストボックスの幅（省略可能）<br /></li>
+<li>default_text - テキストボックスの初期表示文字（省略可能）<br /></li>
+</ul>
+<dl>
+<dt><a name="label:4" id="label:4"><code>namazu_form(<var>url</var>, <var>button_name</var> = "<var>Search</var>", <var>size</var> = <var>20</var>, <var>default_text</var> = "")</code></a></dt><!-- RDLabel: "namazu_form" -->
+<dd>
+Namazu用検索フォーム。urlにはnamazu.cgiのURLを指定してください。<br /></dd>
+</dl>
+<pre>例： &lt;%=namazu_form("/namazu/namazu.cgi")%&gt;</pre>
+<dl>
+<dt><a name="label:5" id="label:5"><code>googlej_form(<var>button_name</var> = "<var>Google</var> 検索", <var>size</var> = <var>20</var>, <var>default_text</var> = "")</code></a></dt><!-- RDLabel: "googlej_form" -->
+<dd>
+Google用検索フォーム。<br /></dd>
+</dl>
+<pre>例： &lt;%=googlej_form%&gt;</pre>
+<dl>
+<dt><a name="label:6" id="label:6"><code>yahooj_form(<var>button_name</var> = "<var>Yahoo</var>! 検索", <var>size</var> = <var>20</var>, <var>default_text</var> = "")</code></a></dt><!-- RDLabel: "yahooj_form" -->
+<dd>
+Yahoo!用検索フォーム。<br /></dd>
+</dl>
+<pre>例：　&lt;%=yahooj_form%&gt;</pre>
+<dl>
+<dt><a name="label:7" id="label:7"><code>lycosj_form(<var>button_name</var> = " 検索 ", <var>size</var> = <var>20</var>)</code></a></dt><!-- RDLabel: "lycosj_form" -->
+<dd>
+Lycos用検索フォーム<br /></dd>
+</dl>
+<pre>例: &lt;%=lycosj_form%&gt;</pre>
+<h2><a name="label:8" id="label:8">自分自身で検索フォームを生成する</a></h2><!-- RDLabel: "自分自身で検索フォームを生成する" -->
+<p>一番手っ取り早いのは自分自身でHTMLを書いてしまうことですが(^^;)、本プラグインのメソッドを使うこともできます。<br /></p>
+<dl>
+<dt><a name="label:9" id="label:9"><code>search_form(<var>url</var>, <var>query</var>, <var>button_name</var> = "<var>Search</var>", <var>size</var> = <var>20</var>, <var>default_text</var> = "", <var>first_form</var> = "", <var>last_form</var> = "")</code></a><!-- RDLabel: "search_form" -->
+</dl>
+<ul>
+<li>url - 検索エンジンのURL(例：/namazu/namazu.cgi)<br /></li>
+<li>query - テキストボックスのname属性値<br /></li>
+<li>button_name - ボタン名称（省略可能）<br /></li>
+<li>size - テキストボックスの幅（省略可能）<br /></li>
+<li>default_text - 初期表示文字（省略可能）<br /></li>
+<li>first_form - &lt;form&gt;タグの次の部分（省略可能）<br /></li>
+<li>last_form - &lt;/form&gt;タグの前の部分（省略可能）<br /></li>
+</ul>
+<h2><a name="label:10" id="label:10">注意点</a></h2><!-- RDLabel: "注意点" -->
+<p>各検索フォームは、検索エンジンを提供する各社が個人ホームページ向けに提供している検索フォームを利用しています。個人的な日記で使用することはほぼ問題ないと思います（私は解釈しています）が、気になる方は、各社のサイトで確認してください。商用で利用する場合は必ず各社に確認するようにしてください。<br /></p>
+<p>ちなみに、検索フォーム自体を使う場合はフリーですが、検索結果については制限する（加工等をしない、フレームで使わない、商用利用は応相談等）、とするライセンス形態が多いようです。<br /></p>
+<h2><a name="label:11" id="label:11">ライセンスについて</a></h2><!-- RDLabel: "ライセンスについて" -->
+<p>Copyright (C) 2002 MUTOH Masao &lt;mutoh@highwhay.ne.jp&gt;<br /></p>
+<p>本ソフトウェアはGNU General Public License Version 2(GNU一般公有使用許諾書バージョン2)に基づいてリリースされるフリーソフトウェアです。<br />
+また、本プログラムは無保証です。本プログラムの利用により何らかのトラブルが生じても、当方は一切責任を負いません。<br /></p>
+<h2><a name="label:12" id="label:12">メンテナ</a></h2><!-- RDLabel: "メンテナ" -->
+<p>本ソフトウェアについてのご意見・バグレポートは武藤まで。<br />
+MUTOH Masao &lt;mutoh@highway.ne.jp&gt;<br /></p>
+<h2><a name="label:13" id="label:13">ChangeLog</a></h2><!-- RDLabel: "ChangeLog" -->
+<dl>
+<dt><a name="label:14" id="label:14">2002-03-24 MUTOH Masao  &lt;mutoh@highway.ne.jp&gt;
+</a></dt><!-- RDLabel: "2002-03-24 MUTOH Masao  <mutoh@highway.ne.jp>
+" -->
+<dd>
+<ul>
+<li>Namazu, Google, Yahoo!, Lycosの検索フォームをサポート<br /></li>
+<li>version 1.0.0<br /></li>
+</ul>
+</dd>
+</dl>
+
+</body>
+</html>

@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="euc-jp" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>yasqueeze</title>
+<meta http-equiv="Content-type" content="text/html; charset=euc-jp" />
+<link href="./doc.css" type="text/css" rel="stylesheet"/>
+</head>
+
+<body><p><a href="./index.html">[Back] </a>
+
+<h1><a name="label:0" id="label:0">yasqueeze.rb　- Yet Another squeeze.rb</a></h1><!-- RDLabel: "yasqueeze.rb　- Yet Another squeeze.rb" -->
+<h2><a name="label:1" id="label:1">機能</a></h2><!-- RDLabel: "機能" -->
+<p>tDiary-1.3.x以降で系標準でついてくるsqueeze.rbの拡張版です。<br />
+tDiaryのデータベースから日別にHTMLファイルを生成し、任意のディレクトリに保存します。<br />
+検索エンジン(主にNamazu)での使用を想定しています。<br /></p>
+<ul>
+<li>日記本文からツッコミまでを再現<br /></li>
+<li>非表示の日記を対象にするかどうかを選択できる<br /></li>
+<li>年別にディレクトリを作成（1ディレクトリ最大365ファイル）、または全てのファイルをを一つのディレクトリに作成(tDiary互換モード)<br /></li>
+<li>CGIとしてもコマンドとしてもtDiaryプラグインとしても動作する<br /></li>
+</ul>
+<h2><a name="label:2" id="label:2">使い方</a></h2><!-- RDLabel: "使い方" -->
+<p>yasqueeze.rbは3つの使い方ができます。<br /></p>
+<h3><a name="label:3" id="label:3">プラグインとして使用(1日の日記をHTML化する)</a></h3><!-- RDLabel: "プラグインとして使用(1日の日記をHTML化する)" -->
+<p>tDiaryは標準でも更新時にHTMLファイルを任意のディレクトリに格納することができますが、ツッコミなどが保存されない、HTML形式ではない、など不完全です。<br />
+用途によってはそれで充分ですが、yasqueeze.rbプラグインを使えば完全なHTMLを生成できます。また、ディレクトリを年別に保存しますので、若干ファイルの視認性があがります（ほんとか？）。ただし、tDiaryと同様に1つのディレクトリに全てのファイルを置くことも可能です。<br /></p>
+<ul>
+<li>tdiary.confを変更します。 まず、@text_outputはfalseにします。<br /></li>
+</ul>
+<pre>@text_output = false
+@text_output_path = ''</pre>
+<ul>
+<li>次にtdiary.confに以下のオプションを追加します。<br /></li>
+</ul>
+<pre># 出力先ディレクトリ
+@options['yasqueeze.output_path'] = '/home/hoge/tdiary/html/'
+# 非表示の日記も対象とする場合はtrue。falseにした場合は非表示の日記は出力せず、かつ、すでに出力済みのファイルが存在した場合は削除します。
+# 検索エンジンで使用することを想定した場合、ここをtrueにしてしまうと隠しているつもりの日記も検索対象になってしまうので注意が必要です。
+@options['yasqueeze.all_data'] = false
+# squeeze.rb、tDiary標準と同じ出力先のディレクトリ構成にする場合はtrue
+@options['yasqueeze.compat_path'] = false</pre>
+<ul>
+<li>出力先のディレクトリを作成します。このディレクトリはWWWサーバが書込権限を持っている必要がありますので必要に応じてchmodしてください。<br />
+  上記指定の場合は /home/hoge/tdiary/htmlとなります。<br /></li>
+<li>pluginディレクトリにyasqueeze.rbを置きます。<br /></li>
+</ul>
+<p>これだけで、日記を登録・更新・ツッコミを登録するたびにHTMLファイルが生成されるようになります。<br /></p>
+<h3><a name="label:4" id="label:4">全ての日記を日別にHTML化する</a></h3><!-- RDLabel: "全ての日記を日別にHTML化する" -->
+<p>1からtDiaryを使う人はプラグインとしてyasqueeze.rbを使うだけでこちらは特に必要ないのですが、すでにtDiaryを運用している場合、いっぺんに過去の日記をHTML化したい場合があります。<br />
+そのような場合は以下の2つの方法でHTMLを生成できます。<br /></p>
+<h4><a name="label:5" id="label:5">CGIとして使用</a></h4><!-- RDLabel: "CGIとして使用" -->
+<ul>
+<li>次にtdiary.confにPluginとして使う場合と同じオプションを追加します。<br /></li>
+</ul>
+<pre>@options['yasqueeze.output_path'] = '/home/hoge/tdiary/html/'
+@options['yasqueeze.all_data'] = false
+@options['yasqueeze.compat_path'] = false
+
+ また、必要に応じて、1行目の#!/usr/bin/env ruby　行を変更します。 </pre>
+<ul>
+<li>出力先のディレクトリを作成します。<br />
+  このディレクトリはWWWサーバが書込権限を持っている必要がありますので必要に応じてchmodしてください。<br />
+  上記指定の場合は /home/hoge/tdiary/htmlとなります。<br /></li>
+<li>tDiaryがあるサーバと同じサーバのtdiaryディレクトリ直下(index.rbやupdate.rb、tdiary.confがあるディレクトリ)にyasqueeze.rbを置き、index.rb,update.rbと同じアクセス権限にします。<br /></li>
+<li>WWWブラウザからhttp://hogehoge/tdiary/yasqueeze.rbにアクセスします。<br /></li>
+</ul>
+<h4><a name="label:6" id="label:6">コマンドとして使用</a></h4><!-- RDLabel: "コマンドとして使用" -->
+<p>tDiaryがあるサーバと同じサーバで実行する必要があります。tdiary.confで指定した@data_pathへの書込権限が必要です。<br /></p>
+<ul>
+<li>出力先のディレクトリを作成します。<br />
+  このディレクトリはカレントユーザが書込権限を持っている必要がありますので必要に応じてchmodしてください。<br /></li>
+<li>yasqueeze.rbを実行します。<br />
+$ruby squeeze.rb [-p &lt;tDiary path&gt;] [-c &lt;tdiary.conf path&gt;] [-a] [-s] &lt;dest path&gt;<br /></li>
+</ul>
+<dl>
+<dt><a name="label:7" id="label:7">-p &lt;tDiary path&gt;
+</a></dt><!-- RDLabel: "-p <tDiary path>
+" -->
+<dd>
+<p>tDiaryのインストールパス。未指定時はカレントディレクトリ(例: -p /homge/hoge/tdiary)。<br /></p>
+</dd>
+<dt><a name="label:8" id="label:8">-c &lt;tdiary.conf path&gt;
+</a></dt><!-- RDLabel: "-c <tdiary.conf path>
+" -->
+<dd>
+<p>tdiary.confが存在するパス。未指定時はカレントディレクトリ(例: -c /home/hoge/public_html/diary)。<br /></p>
+</dd>
+<dt><a name="label:9" id="label:9">-a
+</a></dt><!-- RDLabel: "-a
+" -->
+<dd>
+<p>非表示の日記も対象とする。未指定時は非表示の日記は出力せず、かつ、すでに出力済みのファイルが存在した場合は削除する。<br /></p>
+</dd>
+<dt><a name="label:10" id="label:10">-s
+</a></dt><!-- RDLabel: "-s
+" -->
+<dd>
+<p>squeeze.rbモード。squeeze.rb、tDiary標準と同じ出力先のディレクトリ構成にする。<br /></p>
+</dd>
+<dt><a name="label:11" id="label:11">&lt;dest path&gt;
+</a></dt><!-- RDLabel: "<dest path>
+" -->
+<dd>
+<p>HTMLファイルの生成先ディレクトリ。<br /></p>
+</dd>
+</dl>
+<ul>
+<li>生成したファイルとディレクトリを、そのままプラグイン等で使用する場合は、WWWサーバが書込権限を持っている必要がありますので必要に応じてchmodしてください。<br /></li>
+</ul>
+<h3><a name="label:12" id="label:12">Namazuで使用する</a></h3><!-- RDLabel: "Namazuで使用する" -->
+<p>yasqueeze.rbは主にNamazu等の検索エンジンで使用することを目的としています。ここでは、典型的なNamazuの設定方法を示します。<br /></p>
+<ul>
+<li>/home/hoge/namazu - Namazuのインデックスファイルのあるディレクトリ<br /></li>
+<li>/home/hoge/html/  - yasqueeze.rbの出力先<br /></li>
+<li>/home/hoge/public_html/tdiary/ - tdiaryのあるディレクトリ<br /></li>
+<li>/home/hoge/public_html/namazu/ - namazu.cgi, .namazurcのあるディレクトリ<br /></li>
+<li>http://www.hoge.com/hoge/tdiary/ - tdiaryのURL(/home/hoge/public_html/tdiary/にマッピング)<br /></li>
+<li>http://www.hoge.com/hoge/namazu/ - namazu.cgiのURL(/home/hoge/public_html/namazu/にマッピング)<br /></li>
+</ul>
+<p>に指定されているとします。<br /></p>
+<h4><a name="label:13" id="label:13">オリジナルモード(@options['yasqueeze.compat_path'] = false)の場合</a></h4><!-- RDLabel: "オリジナルモード(@options['yasqueeze.compat_path'] = false)の場合" -->
+<p>以下のようにファイルが生成されます。<br /></p>
+<pre>/home/hoge/html/2000/0101( ... 1231)
+/home/hoge/html/2001/0101( ... 1231)
+/home/hoge/html/2002/0101( ... 1231)</pre>
+<p>.namazurcの内容を以下のようにします。<br /></p>
+<pre>Index /home/hoge/namazu/
+Replace /home/hoge/html/(\d\d\d\d)/ http://www.hoge.com/hoge/tdiary/?date=\1
+Lang ja</pre>
+<h4><a name="label:14" id="label:14">tDiary互換モード(@options['yasqueeze.compat_path'] = true)の場合</a></h4><!-- RDLabel: "tDiary互換モード(@options['yasqueeze.compat_path'] = true)の場合" -->
+<p>以下のようにファイルが生成されます。<br /></p>
+<pre>/home/hoge/html/20000101( ... 20001231)
+/home/hoge/html/20010101( ... 20011231)
+/home/hoge/html/20020101( ... 20021231)</pre>
+<p>.namazurcの内容を以下のようにします。<br /></p>
+<pre>Index /home/hoge/namazu/
+Replace /home/hoge/html/ http://www.hoge.com/hoge/tdiary/?date=
+Lang ja</pre>
+<h3><a name="label:15" id="label:15">Namazuのインデックスを生成</a></h3><!-- RDLabel: "Namazuのインデックスを生成" -->
+<p>ファイルが生成できれば、あとはそれを元にNamazuのインデックスファイルを生成します。<br /></p>
+<pre>$mknmz /home/hoge/html --output-dir=/home/hoge/namazu</pre>
+<h3><a name="label:16" id="label:16">動作確認</a></h3><!-- RDLabel: "動作確認" -->
+<p>これでhttp://www.hoge.com/namazu/namazu.cgiでNamazuから検索できると思います。できなかったらご一報を(^^;)。<br /></p>
+<h3><a name="label:17" id="label:17">tDiaryから検索できるようにする</a></h3><!-- RDLabel: "tDiaryから検索できるようにする" -->
+<p>tDiaryに検索用のフォームを表示させることもできます。tDiaryの設定画面から、お気に入りの場所に以下のテキストを挿入します。<br /></p>
+<pre>&lt;div class="search"&gt;
+ &lt;form class="search" method="get" action="/namazu/namazu.cgi"&gt;
+ &lt;input class="search" type="text" name="query" size=20 value=""&gt;
+ &lt;input class="search" type="submit" value="Search"&gt;
+ &lt;/form&gt;
+&lt;/div&gt;</pre>
+<p>上記例では、classを分けてあるので、CSSを使えばデザインをいろいろと変更できます。<br /></p>
+<p><a href="search_form.html">search_form.rb</a>を使うと、以下のように書くことができます。<br /></p>
+<pre>&lt;div class="search"&gt;
+&lt;%=namazu_form "/namazu/namazu.cgi"%&gt;
+&lt;/div&gt;</pre>
+<p>こっちの方が簡単ですね。<br /></p>
+<h2><a name="label:18" id="label:18">ライセンスについて</a></h2><!-- RDLabel: "ライセンスについて" -->
+<p>Copyright (C) 2002 MUTOH Masao &lt;mutoh@highway.ne.jp&gt;<br /></p>
+<p>本ソフトウェアはGNU General Public License Version 2(GNU一般公有使用許諾書バージョン2)に基づいてリリースされるフリーソフトウェアです。<br />
+また、本プログラムは無保証です。本プログラムの利用により何らかのトラブルが生じても、当方は一切責任を負いません。<br /></p>
+<p>なお、このスクリプトはsqueeze.rbの拡張版です。squeeze.rbのライセンスは以下の通りです。<br /></p>
+<p>Copyright (C) 2001,2002, All right reserved by TADA Tadashi &lt;sho@spc.gr.jp&gt;<br />
+You can redistribute it and/or modify it under GPL2.<br /></p>
+<h2><a name="label:19" id="label:19">メンテナ</a></h2><!-- RDLabel: "メンテナ" -->
+<p>本ソフトウェアについてのご意見・バグレポートは武藤まで。<br />
+MUTOH Masao &lt;mutoh@highway.ne.jp&gt;<br /></p>
+<h2><a name="label:20" id="label:20">ChangeLog</a></h2><!-- RDLabel: "ChangeLog" -->
+<dl>
+<dt><a name="label:21" id="label:21">2002-03-31 MUTOH Masao  &lt;mutoh@highway.ne.jp&gt;
+</a></dt><!-- RDLabel: "2002-03-31 MUTOH Masao  <mutoh@highway.ne.jp>
+" -->
+<dd>
+<ul>
+<li>TAB → スペース<br /></li>
+<li>ドキュメントチェックイン<br /></li>
+</ul>
+</dd>
+<dt><a name="label:22" id="label:22">2002-03-29 MUTOH Masao  &lt;mutoh@highway.ne.jp&gt;
+</a></dt><!-- RDLabel: "2002-03-29 MUTOH Masao  <mutoh@highway.ne.jp>
+" -->
+<dd>
+<ul>
+<li>出力ファイルを日付の昇順でソートするようにした<br /></li>
+<li>squeeze.rbと同様のコマンドオプションをサポートした<br />
+      （ただし --deleteオプションはなく代わりに--allオプションを用意）<br /></li>
+<li>コマンドラインオプションを追加したことで不要になった--nohtmlオプションをなくした<br /></li>
+<li>ドキュメント再見直し<br /></li>
+<li>tdiary.confの@options対応<br /></li>
+<li>add_update_proc do 〜　end 対応(このため、tDiary-1.3.x系では動かなくなりました)<br /></li>
+<li>version 1.2.0<br /></li>
+</ul>
+</dd>
+<dt><a name="label:23" id="label:23">2002-03-21 MUTOH Masao  &lt;mutoh@highway.ne.jp&gt;
+</a></dt><!-- RDLabel: "2002-03-21 MUTOH Masao  <mutoh@highway.ne.jp>
+" -->
+<dd>
+<ul>
+<li>非表示の日記を出力対象に含めるかどうかを設定できるようにした<br /></li>
+<li>ファイルの保存ディレクトリの構成を、tDiary標準のものとversion 1.0.0<br />
+      のものを設定できるようにした<br /></li>
+<li>ドキュメントをソースから追い出した<br /></li>
+<li>version 1.1.0<br /></li>
+</ul>
+</dd>
+<dt><a name="label:24" id="label:24">2002-03-19 MUTOH Masao &lt;mutoh@highway.ne.jp&gt;
+</a></dt><!-- RDLabel: "2002-03-19 MUTOH Masao <mutoh@highway.ne.jp>
+" -->
+<dd>
+<ul>
+<li>version 1.0.0<br /></li>
+</ul>
+</dd>
+</dl>
+
+</body>
+</html>

@@ -1,0 +1,143 @@
+/*
+doc.css: squeeze.rb ドキュメント用テーマ(willベース)
+
+Copyright 2002 (C) by TADA Tadashi <sho@spc.gr.jp>
+                      MUTOH Masao <mutoh@highway.ne.jp>
+	validated by W3C.
+*/
+
+body {
+	line-height: 1.2em;
+	background-color: white;
+	color: black;
+}
+
+a:link {
+	color: #f80;
+	background-color: white;
+}
+
+a:visited {
+	color: #d60;
+	background-color: white;
+}
+
+h1 {
+	background-color: #f80;
+	color: white;
+	margin-bottom: 2px;
+	padding: 8px;
+	line-height: 1.2em;
+}
+
+h2 {
+	margin-top: 4em;
+	margin-bottom: 2em;
+	font-size: medium;
+    padding-bottom: 3px;
+	border-style: solid;
+	border-color: #f80;
+	border-width: 0px 0px 1px 0px;
+}
+
+h3 {
+	font-size: medium;
+	border-style: dashed;
+	border-color: #f80;
+	border-width: 1px;
+	margin-top: 1.5em;
+	margin-bottom: 0.5em;
+	padding: 4px;
+}
+
+h4 {
+	font-size: medium;
+	margin-top: 1.5em;
+	margin-bottom: 0.5em;
+	padding-left: 10px;
+    text-decoration: underline;
+	border-color: #f80;
+}
+
+
+p {
+	color: black;
+	background-color: white;
+	padding-left: 10px;
+}
+
+pre {
+	color: black;
+	background-color: white;
+	border-style: solid;
+	border-width: 1px 1px 1px 6px;
+	border-color: #f80;
+	padding: 8px;
+	margin-left: 2em;
+}
+
+hr {
+	color: #f80;
+	background-color: transparent;
+	margin-top: 0.5em;
+}
+
+hr.sep {
+	display: none;
+}
+
+dt {
+	margin-top: 3em;
+	padding-left: 30px;
+	font-weight: bold;
+}
+
+dd {
+	margin-top: 0.3em;
+	margin-bottom: 0.5em;
+}
+
+a:link, a:visited {
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+	border-width: 1px;
+	border-color: #f80;
+}
+
+address, p.footer {
+	font-style: normal;
+	text-align: right;
+	font-size: small;
+}
+
+table {
+	margin-bottom: 1em;
+	background-color: #f80;
+	color: black;
+}
+
+th {
+	background-color: #fb3;
+	color: black;
+	padding: 0.2em;
+	text-align: left;
+}
+
+td {
+	background-color: white;
+	color: black;
+	padding: 0.2em;
+}
+
+ul {
+	margin-bottom: 1em;
+}
+
+li {
+	margin-bottom: 0.5em;
+}
+
+em {
+  color: green;
+  font-style: normal;
+}
