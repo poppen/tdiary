@@ -1,4 +1,4 @@
-# tb-send.rb $Revision: 1.4 $
+# tb-send.rb $Revision: 1.5 $
 #
 # Copyright (c) 2003 Junichiro Kita <kita@kitaj.no-ip.com>
 # You can distribute this file under the GPL.
@@ -63,7 +63,7 @@ if /^(append|replace)$/ =~ @mode then
 					
 					error = response.body.scan(%r|<error>(\d)</error>|)[0][0]
 					if error == '1'
-						reason = response.body.scan(%r|<message>(.*)</message>|)[0][0]
+						reason = response.body.scan(%r|<message>(.*)</message>|m)[0][0]
 						raise TDiaryTrackBackError.new(reason)
 					end
 				end
