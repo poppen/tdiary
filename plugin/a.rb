@@ -68,6 +68,7 @@ A_REG_COLON = /\:/
 A_REG_URL = /:\/\//
 A_REG_CHARSET = /euc|sjis|jis/
 A_REG_CHARSET2 = /sjis|jis/
+A_REG_CHARSET3 = /euc/
 A_REG_MY = /^\d{8}/
 
 if @options and @options["a.path"] 
@@ -114,8 +115,10 @@ def a_convert_charset(option, charset)
 	return option unless charset
 	if charset =~ A_REG_CHARSET2
 		ret = CGI.escape(NKF::nkf("-#{charset[0].chr}", option))
-	else
+	elsif charset =~ A_REG_CHARSET3
 		ret = CGI.escape(option)
+	else
+		ret = option
 	end
 	ret
 end
