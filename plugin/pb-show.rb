@@ -1,4 +1,4 @@
-# pb-show.rb $Revision: 1.4 $
+# pb-show.rb $Revision: 1.5 $
 #
 # functions:
 #   * show Pingback ping URL in right of TSUKKOMI label.
@@ -157,7 +157,7 @@ end
 @conf['pingback_anchor'] ||= @conf.comment_anchor
 @conf['pingback_limit']  ||= @conf.comment_limit
 
-add_conf_proc( 'Pingback', 'Pingback' ) do
+add_conf_proc( 'Pingback-Show', 'Pingback' ) do
 	if @mode == 'saveconf' then
 		@conf['pingback_anchor'] = @conf.to_native( @cgi.params['pingback_anchor'][0] )
 		@conf['pingback_limit']  = @cgi.params['pingback_limit'][0].to_i

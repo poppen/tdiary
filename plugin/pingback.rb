@@ -1,4 +1,4 @@
-# pingback.rb: $Revision: 1.3 $
+# pingback.rb: $Revision: 1.4 $
 #
 # Pingback when updating.
 #
@@ -11,7 +11,7 @@
 #
 
 add_header_proc do
-  %Q!\t<link rel="pingback" href="#{@options['pingback.url']}" />!
+  %Q!\t<link rel="pingback" href="#{@options['pingback.url']}" />\n!
 end
 
 add_update_proc do
