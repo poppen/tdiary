@@ -1,3 +1,7 @@
+2004-05-03 TADA Tadashi <sho@spc.gr.jp>
+	* tb-send.rb: support to specify multiple ping URL.
+	* tb-show.rb: remove to add '...' after shorten.
+
 2004-05-02 TADA Tadashi <sho@spc.gr.jp>
 	* image.rb: a little modify forms and labels.
 	* tb-send.rb: select section support in append mode.
