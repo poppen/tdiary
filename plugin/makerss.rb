@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.23 $
+# makerss.rb: $Revision: 1.24 $
 #
 # generate RSS file when updating.
 #
@@ -160,6 +160,7 @@ def makerss_header( uri )
 	copyright += ", copyright of comments by respective authors"
 
 	xml = %Q[<?xml version="1.0" encoding="#{@makerss_encode}"?>
+<?xml-stylesheet href="rss.css" type="text/css"?>
 <rdf:RDF xmlns="http://purl.org/rss/1.0/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xml:lang="#{@conf.html_lang}">
 	<channel rdf:about="#{rdf_url}">
 	<title>#{CGI::escapeHTML( @conf.html_title )}</title>
@@ -195,10 +196,11 @@ def makerss_desc_shorten( text )
 end
 
 def makerss_body( uri, rdfsec )
-	rdf = %Q|<item rdf:about="#{uri}#{anchor rdfsec.id}">\n|
-	rdf << %Q|<link>#{uri}#{anchor rdfsec.id}</link>\n|
-	rdf << %Q|<dc:date>#{rdfsec.time_string}</dc:date>\n|
+	rdf = ""
 	if rdfsec.section.respond_to?( :body_to_html ) then
+		rdf = %Q|<item rdf:about="#{uri}#{anchor rdfsec.id}">\n|
+		rdf << %Q|<link>#{uri}#{anchor rdfsec.id}</link>\n|
+		rdf << %Q|<dc:date>#{rdfsec.time_string}</dc:date>\n|
 		a = rdfsec.id.scan( /(\d{4})(\d\d)(\d\d)/ ).flatten.map{|s| s.to_i}
 		date = Time::local( *a )
 		body_enter_proc( date )
@@ -232,8 +234,12 @@ def makerss_body( uri, rdfsec )
 
 		body_leave_proc( date )
 		@conf['apply_plugin'] = old_apply_plugin
+		rdf << "</item>\n"
 	else # TSUKKOMI
 		unless 'any' == @conf['makerss.hidecomment'] then
+			rdf = %Q|<item rdf:about="#{uri}#{anchor rdfsec.id}">\n|
+			rdf << %Q|<link>#{uri}#{anchor rdfsec.id}</link>\n|
+			rdf << %Q|<dc:date>#{rdfsec.time_string}</dc:date>\n|
 			rdf << %Q|<title>#{makerss_tsukkomi_label( rdfsec.id )} (#{CGI::escapeHTML( rdfsec.section.name )})</title>\n|
 			rdf << %Q|<dc:creator>#{CGI::escapeHTML( rdfsec.section.name )}</dc:creator>\n|
 			unless 'text' == @conf['makerss.hidecomment']
@@ -243,9 +249,10 @@ def makerss_body( uri, rdfsec )
 					rdf << %Q|<content:encoded><![CDATA[#{text.gsub( /\n/, '<br>' )}]]></content:encoded>\n|
 				end
 			end
+			rdf << "</item>\n"
 		end
 	end
-	rdf << "</item>\n"
+	rdf
 end
 
 def makerss_footer

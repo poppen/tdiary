@@ -1,3 +1,6 @@
+2005-01-25 zunda <zunda at freeshell.org>
+	* makerss.rb: fix bug not to make empty items, contribution from Keiichiro SAKURAI <kei-tdiary at ksakurai.nwr.jp>
+
 2005-01-22 zunda <zunda at freeshell.org>
 	* ja/disp_referrer.rb: Feedback search and blogpeople, thanks to Hahahaha <rin_ne at big.or.jp>
 	* disp_referrer.rb: add rel="nofollow" to links, see http://www.google.com/googleblog/2005/01/preventing-comment-spam.html
