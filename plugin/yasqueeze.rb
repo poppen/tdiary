@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
-# yasqueeze.rb $Revision: 1.3 $
+# yasqueeze.rb $Revision: 1.4 $
+#
+# yasqueeze version 1.2.0
 #
 # Yet Another make HTML text files from tDiary's database.
 #
@@ -27,7 +29,7 @@ if mode == "CMD" || mode == "CGI"
 
   if mode == "CMD"
 	def usage
-	  puts "yasqueeze $Revision: 1.3 $: 
+	  puts "yasqueeze $Revision: 1.4 $"
       puts " Yet Another making html files from tDiary's database."
 	  puts " usage: ruby yasqueeze.rb [-p <tDiary path>] [-c <tdiary.conf path>] [-a] [-s] <dest path>"
 	  exit
@@ -166,7 +168,7 @@ if mode == "CGI" || mode == "CMD"
       </head>
       <body><div style="text-align:center">
       <h1>Yet Another Squeeze for tDiary</h1>
-      <p>$Revision: 1.3 $</p>
+      <p>$Revision: 1.4 $</p>
       <p>Copyright (C) 2002 MUTOH Masao&lt;mutoh@highway.ne.jp&gt;</p></div>
       <br><br>Start!</p><hr>
     ]
