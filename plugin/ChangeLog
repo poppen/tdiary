@@ -1,3 +1,6 @@
+2003-12-30 Junichiro Kita <kita@kitaj.no-ip.com>
+	* my-ex.rb: my can handle 'yyyymmdd#txx'.
+
 2003.12.26 TADA Tadashi <sho@spc.gr.jp>
 	* tb-show.rb: shorten excerpt into 256 bytes.
 	* image.rb: support blog styles.
