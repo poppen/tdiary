@@ -1,3 +1,6 @@
+2003-10-21 Junichiro Kita <kita@kitaj.no-ip.com>
+	* output_rdf.rb: follow new @conf.shorten.
+
 2003-10-21  Kazuhiko  <kazuhiko@fdiary.net>
 	* outpur_rdf.rb: make plain text title. ignore empty comment. add
 	'dc:date' to each comment.

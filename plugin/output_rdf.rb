@@ -133,7 +133,7 @@ if ( /^(append|replace|trackbackreceive)$/ =~ @mode ) || ( /^comment$/ =~ @mode 
 		subtitle = apply_plugin(subtitle, true).strip
 		desc = apply_plugin(desc, true).strip
 		@options['apply_plugin'] = old_apply_plugin
-		desc = @conf.shorten( desc ) || ''
+		desc = @conf.shorten( desc )
 		r <<<<-RDF
  <item rdf:about="#{link}">
    <title>#{CGI::escapeHTML( subtitle )}</title>
