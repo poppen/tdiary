@@ -1,3 +1,6 @@
+2003-10-12 Junichiro Kita <kita@kitaj.no-ip.com>
+	* image.rb: guess image type and image size from file header. thanks to akira@arika.org.
+
 2003-10-09  Kazuhiko  <kazuhiko@fdiary.net>
 	* comment_mail-qmail.rb: add "-f #{@conf.author_mail.untaint}"
 

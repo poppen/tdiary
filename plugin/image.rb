@@ -1,4 +1,4 @@
-# image.rb $Revision: 1.15 $
+# image.rb $Revision: 1.16 $
 # -pv-
 # 
 # 名称:
@@ -46,10 +46,6 @@
 #
 
 =begin Changelog
-2003-09-28 Junichiro Kita <kita@kitaj.no-ip.com>
-	* write images with print method instead of puts method.
-	* show image size.
-
 2003-09-25 TADA Tadashi <sho@spc.gr.jp>
 	* english support.
 
@@ -92,7 +88,7 @@ unless @resource_loaded then
 	def image_label_add_image; '画像の追加'; end
 end
 
-def image( id, alt = 'image', thumbnail = nil, width = nil, place = 'photo' )
+def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
 	if @conf.secure then
 		image = "#{@image_date}_#{id}.jpg"
 		image_t = "#{@image_date}_#{thumbnail}.jpg" unless thumbnail
@@ -100,10 +96,20 @@ def image( id, alt = 'image', thumbnail = nil, width = nil, place = 'photo' )
    	image = image_list( @image_date )[id.to_i]
    	image_t = image_list( @image_date )[thumbnail.to_i]
 	end
-	if thumbnail then
-   	%Q[<a href="#{@image_url}/#{image}"><img class="#{place}" src="#{@image_url}/#{image_t}" alt="#{alt}"></a>]
+	if size then
+		if size.kind_of?(Array)
+			size = " width=\"#{size[0]}\" height=\"#{size[1]}\""
+
+		else
+			size = " width=\"#{size.to_i}\""
+		end
 	else
-   	%Q[<img class="#{place}" src="#{@image_url}/#{image}" alt="#{alt}">]
+		size = ""
+	end
+	if thumbnail then
+	   	%Q[<a href="#{@image_url}/#{image}"><img class="#{place}" src="#{@image_url}/#{image_t}" alt="#{alt}" title="#{alt}"#{size}></a>]
+	else
+		%Q[<img class="#{place}" src="#{@image_url}/#{image}" alt="#{alt}" title="#{alt}"#{size}>]
 	end
 end
 
@@ -141,6 +147,48 @@ end
 # service methods below.
 #
 
+def image_info( path )
+	image_type = nil
+	image_height = nil
+	image_width = nil
+
+	File.open( path, 'r' ) do |f|
+		sig = f.read( 24 )
+		if /\A\x89PNG\x0D\x0A\x1A\x0A(....)IHDR(........)/on =~ sig
+			image_type = 'png'
+			image_height, image_width = $2.unpack( 'NN' )
+
+		elsif /\AGIF8[79]a(....)/on =~ sig
+			image_type   = 'gif'
+			image_height, image_width = $1.unpack( 'vv' )
+
+		elsif /\A\xFF\xD8/on =~ sig
+			image_type = 'jpg'
+			data = $'
+			until data.empty?
+				break if data[0] != 0xFF
+				break if data[1] == 0xD9
+
+				data_size = data[2,2].unpack( 'n' ).first + 2
+				if data[1] == 0xC0
+					image_width, image_height = data[5,4].unpack('nn')
+					break
+				else
+					if data.size < data_size
+						f.seek(data_size - data.size, IO::SEEK_CUR)
+						data = ''
+					else
+						data = data[data_size .. -1]
+					end
+					data << f.read( 128 ) if data.size < 4
+				end
+			end
+		end
+	end
+
+	return image_type, image_height, image_width
+end
+
 def image_ext
 	if @conf.secure then
 		'jpg'
@@ -172,8 +220,8 @@ if /^formplugin$/ =~ @mode then
 		images = image_list( date )
 	   if @cgi.params['plugin_image_addimage'][0]
 	      filename = @cgi.params['plugin_image_file'][0].original_filename
-	      if filename =~ /\.(#{image_ext})\z/i
-	         extension = $1.downcase
+			extension, = image_info( @cgi.params['plugin_image_file'][0].path )
+			if extension =~ /\A(#{image_ext})\z/i
 				begin
 	         	size = @cgi.params['plugin_image_file'][0].size
 				rescue NameError
@@ -186,7 +234,7 @@ if /^formplugin$/ =~ @mode then
 	         file = "#{@image_dir}/#{date}_#{images.length}.#{extension}".untaint
 		      File::umask( 022 )
 		      File::open( file, "wb" ) do |f|
-		         f.print @cgi.params['plugin_image_file'][0].read
+					f.print @cgi.params['plugin_image_file'][0].read
 		      end
 	         images << File::basename( file ) # for secure mode
 	      end
@@ -242,35 +290,37 @@ add_form_proc do |date|
 			ptag1 = "&lt;%="
 			ptag2 = "%&gt;"
 		end
-		r << %Q[<div class="form">
+	   r << %Q[<div class="form">
 		<div class="caption">
 		#{image_label_list_caption}
 		</div>
 		<form class="update" method="post" action="#{@conf.update}"><div>
 		<table>
 		<tr>]
-		images.each_with_index do |img,id|
-			if @conf.secure then
-				r << %Q[<td><img class="form" src="#{@image_url}/#{img}" alt="#{id}" width="160"></td>] if img
-			else
-				r << %Q[<td><img class="form" src="#{@image_url}/#{img}" alt="#{id}" width="160"><br>#{FileTest.size("#{@image_dir}/#{img}".untaint)}bytes</td>] if img
-			end
-		end
-		r << "</tr><tr>"
-		images.each_with_index do |img,id|
+		tmp = ''
+	   images.each_with_index do |img,id|
 			next unless img
-			ptag = "#{ptag1}image #{id}, '#{image_label_description}'#{ptag2}"
-			r << %Q[<td>
+			img_type, img_w, img_h = image_info(File.join(@image_dir,img).untaint)
+			r << %Q[<td><img class="form" src="#{@image_url}/#{img}" alt="#{id}" width="#{(img_w && img_w > 160) ? 160 : img_w}"></td>]
+			ptag = "#{ptag1}image #{id}, '画像の説明', nil, #{img_w && img_h ? '['+img_w.to_s+','+img_h.to_s+']' : 'nil'}#{ptag2}"
+			img_info = "#{File.size(File.join(@image_dir,img).untaint)} bytes"
+			if img_type && img_w && img_h
+				img_info << "<br>#{img_w} x #{img_h} (#{img_type})"
+			end
+			tmp << %Q[<td>
+			#{img_info}<br>
 			<input type="checkbox" tabindex="#{tabidx+id*2}" name="plugin_image_id" value="#{id}">#{id}
 			<input type="button" tabindex="#{tabidx+id*2+1}" onclick="ins(&quot;#{ptag}&quot;)" value="#{image_label_add_plugin}">
 			</td>]
-		end
-		r << %Q[</tr>
+	   end
+		r << "</tr><tr>"
+		r << tmp
+	   r << %Q[</tr>
 		</table>
 		<input type="hidden" name="plugin_image_delimage" value="true">
-		<input type="hidden" name="date" value="#{date.strftime( '%Y%m%d' )}">
-		<input type="submit" tabindex="#{tabidx+97}" name="plugin" value="#{image_label_delete}">
-		</div></form>
+	   <input type="hidden" name="date" value="#{date.strftime( '%Y%m%d' )}">
+	   <input type="submit" tabindex="#{tabidx+97}" name="plugin" value="#{image_label_delete}">
+	   </div></form>
 		</div>]
 	end
 
@@ -290,3 +340,4 @@ add_form_proc do |date|
    </div></form>
 	</div>]
 end
+
