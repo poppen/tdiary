@@ -1,4 +1,4 @@
-# disp_referrer.rb $Revision: 1.22 $
+# disp_referrer.rb $Revision: 1.23 $
 # -pv-
 #
 # 名称：
@@ -28,7 +28,7 @@
 #
 =begin ChangeLog
 2003-05-06 MUTOH Masao <mutoh@highway.ne.jp>
-	* MSN検索改善 Pointed out by やまださん
+	* MSN検索改善 Pointed out by やまださん, yoshimiさん
 
 2002-12-04 TADA Tadashi <sho@spc.gr.jp>
 	* document update.
@@ -275,7 +275,7 @@ def referer_of_today_long(diary, limit)
     [["excite検索", "http://www.excite.co.jp/"],
 	["^http://.*excite.*?(search|s)=([^&]*).*", "\\2"]],
     [["msn検索", "http://www.msn.co.jp/home.htm"],
-	["^http://.*search.msn.*?(&q|MT)=([^&]*).*", "\\2"]],
+	["^http://.*search.msn.*?([\?&]q|MT)=([^&]*).*", "\\2"]],
     [["BIGLOBE検索", "http://www.biglobe.ne.jp/"],
 	["^http://cgi.search.biglobe.ne.jp/cgi-bin/search.*?(q|key)=([^&]*).*", "\\2"]],
     [["テレコムサーチ", "http://www.odn.ne.jp/"],
