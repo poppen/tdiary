@@ -1,4 +1,4 @@
-# navi_user.rb footnote.rb $Revision: 1.4 $
+# navi_user.rb $Revision: 1.5 $
 #
 # navi_user: 前日，翌日→前の日記，次の日記
 #   modeがday/commentのときに表示される「前日」「翌日」ナビゲーション
