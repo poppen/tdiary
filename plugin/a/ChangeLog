@@ -1,47 +1,51 @@
+2003-03-07 MUTOH Masao <mutoh@highway.ne.jp>
+
+	* README.rd: Revised.
+	* version 1.3.2.
+	
 2003-03-06 MUTOH Masao <mutoh@highway.ne.jp>
 
 	* Don't escape when charset is not given.
 	Pointed out by UECHI Yasumasa.
-   * version 1.3.2.
 
 2003-03-04 MUTOH Masao <mutoh@highway.ne.jp>
 
 	* BugFix not to escape EUC-JP.
 	* Add a_conf.rb, a_conf.rhtml.
 	* Remove i.a_conf.rhtml.
-   * version 1.3.1.
+	* version 1.3.1.
 
 2003-03-03 MUTOH Masao <mutoh@highway.ne.jp>
 
-   * Support "name|key:option" style.
-   * Support my plugin style.
-   * Support Japanese to option. You need to charset to the dictionary(default:euc).
-   * version 1.3.0 as a tDiary standart plugin.
+	* Support "name|key:option" style.
+	* Support my plugin style.
+	* Support Japanese to option. You need to charset to the dictionary(default:euc).
+	* version 1.3.0 as a tDiary standart plugin.
 
-:2003-01-02 MUTOH Masao <mutoh@highway.ne.jp>
+2003-01-02 MUTOH Masao <mutoh@highway.ne.jp>
 
-   * Support tDiary-1.5.x.
+	* Support tDiary-1.5.x.
 
-:2002-05-08 MUTOH Masao <mutoh@highway.ne.jp>
+2002-05-08 MUTOH Masao <mutoh@highway.ne.jp>
 
 	* Bugfix when set url only.
-   * version 1.2.1
+	* version 1.2.1
 
-:2002-05-05 MUTOH Masao <mutoh@highway.ne.jp>
+2002-05-05 MUTOH Masao <mutoh@highway.ne.jp>
 
-   * Add @options["a.tlink"].
+	* Add @options["a.tlink"].
 	* Update the documentation.
-   * version 1.2.0
+	* version 1.2.0
 
-:2002-05-01 MUTOH Masao <mutoh@highway.ne.jp>
+2002-05-01 MUTOH Masao <mutoh@highway.ne.jp>
 
 	* Code clean up.
-   * @data_path/cache/a.dat set as default path for dictionary.
-   * Add Configuration CGI(a_conf.rb, a_conf.rhtml, i.a_conf.rhtml).
+	* @data_path/cache/a.dat set as default path for dictionary.
+	* Add Configuration CGI(a_conf.rb, a_conf.rhtml, i.a_conf.rhtml).
 	* Add navi_a.
-   * version 1.1.0
+	* version 1.1.0
 
-:2002-03-29 MUTOH Masao  <mutoh@highway.ne.jp>
+2002-03-29 MUTOH Masao  <mutoh@highway.ne.jp>
 
-   * version 1.0.0
+	* version 1.0.0
 
