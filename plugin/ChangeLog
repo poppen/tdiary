@@ -1,3 +1,7 @@
+2004-06-10 TADA Tadashi <sho@spc.gr.jp>
+	* ping.rb: multi threading.
+	* ping.rb: 'Sending ping' checkbox in edit form.
+
 2004-06-09 TADA Tadashi <sho@spc.gr.jp>
 	* append-css.rb: fix typo.
 	* ping.rb: append.

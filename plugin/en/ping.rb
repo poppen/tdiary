@@ -7,3 +7,5 @@ if /conf/ =~ @mode then
 	@ping_label_list = 'List of ping servers'
 	@ping_label_list_desc = 'Specify URLs of ping request.'
 end
+
+@ping_label_send = 'Sending ping'
