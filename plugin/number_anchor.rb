@@ -1,4 +1,4 @@
-# number_anchor.rb $Revision: 1.2 $
+# number_anchor.rb $Revision: 1.3 $
 #
 # number_anchor: アンカーにid属性を付加する
 #          アンカー画像を異なるものにするためのもの
@@ -26,7 +26,7 @@ def anchor( s )
 			if n && n > @total_anchor then
 				n = (n % @total_anchor)
 			end
-			"#{_orig_anchor(s)}\" class=\"#$2#{'%02d' % n}\""
+			"#{_orig_anchor(s)}\" class=\"#$2#{'%02d' % n}"
 		else
 			_orig_anchor(s)
 		end

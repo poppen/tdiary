@@ -1,3 +1,7 @@
+2003-09-16 TADA Tadashi <sho@spc.gr.jp>
+	* sn.rb: added.
+	* number_anchor.rb: fix typo.
+
 2003-09-10 zunda <zunda at freeshell.org>
 	* disp_referrer.rb: Branch_disp_referrer-1 made on disp_referrer.rb.
 	* disp_referrer.rb: use -r Branch_disp_referrer-1 option for MUTOH-san's
