@@ -1,4 +1,4 @@
-# calendar3.rb $Revision: 1.18 $
+# calendar3.rb $Revision: 1.19 $
 #
 # calendar3: 現在表示している月のカレンダーを表示します．
 #  パラメタ: なし
@@ -14,6 +14,15 @@
 #
 #
 # sample CSS for calendar3
+#
+# .calendar-popup {
+#         display: none;
+#         text-align: left;
+#         position: absolute;
+#         border-style: solid;
+#         border-width: 1px;
+#         padding: 0 1ex 0 1ex;
+# }
 #
 # .calendar-sunday {
 #         color: red;
@@ -41,6 +50,8 @@
 # }
 #
 =begin ChengeLog
+2003-01-07 Junichiro Kita <kita@kitaj.no-ip.com>
+   * append sample css
 2003-01-07 MURAI Kensou <murai@dosule.com>
 	* modify javascript for popdown-delay
 2002-12-20 TADA Tadashi <sho@spc.gr.jp>
