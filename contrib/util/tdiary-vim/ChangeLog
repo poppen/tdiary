@@ -1,3 +1,6 @@
+2004-11-08 Mon UECHI Yasumasa <uechi@potaway.net>
+	* change substitution order of character entity in TdiaryReplace(). thanx やえもん.
+
 2004-02-25 Wed UECHI Yasumasa <uechi@potaway.net>
 	* support TrackBack
 

@@ -2,7 +2,7 @@
 
 " Author: UECHI Yasumasa <uechi@.potaway.net>
 
-" $Revision: 1.5 $
+" $Revision: 1.6 $
 
 " This program is free software; you can redistribute it and/or
 " modify it under the terms of the GNU General Public License as
@@ -68,10 +68,10 @@ function! s:TDiaryReplace()
 	normal ndG
 	silent! %s///
 
-	silent! %s/&amp;/\&/g
 	silent! %s/&quot;/\"/g
 	silent! %s/&gt;/>/g
 	silent! %s/&lt;/</g
+	silent! %s/&amp;/\&/g
 
 	normal gg
 	let @/ = '^Title:'
