@@ -1,0 +1,15 @@
+# Japanese resource of pb-show.rb
+#
+
+def pingback_today; '本日のPingBacks'; end
+def pingback_total( total ); "(全#{total}件)"; end
+def pb_show_conf_html
+  <<-"HTML"
+  <h3 class="subtitle">PingBack アンカー</h3>
+  #{"<p>他のweblogからのPingBackの先頭に挿入される、リンク用のアンカー文字列を指定します。なお「&lt;span class=\"tanchor\"&gt;_&lt;/span&gt;」を指定すると、テーマによっては自動的に画像アンカーがつくようになります。</p>" unless @conf.mobile_agent?}
+  <p><input name="pingback_anchor" value="#{ CGI::escapeHTML(@conf['pingback_anchor'] || @conf.comment_anchor ) }" size="40"></p>
+  <h3 class="subtitle">PingBack リスト表示数</h3>
+  #{"<p>最新もしくは月別表示時に表示する、PingBackの最大件数を指定します。なお、日別表示時にはここの指定にかかわらず最大100件のPingBackが表示されます。</p>" unless @conf.mobile_agent?}
+  <p>最大<input name="pingback_limit" value="#{ @conf['pingback_limit'] || @conf.comment_limit }" size="3">件</p>
+  HTML
+end
