@@ -1,4 +1,4 @@
-# tlink.rb $Revision: 1.8 $
+# tlink.rb $Revision: 1.9 $
 #
 # title Â°À­ÉÕ anchor plugin
 #
@@ -20,6 +20,9 @@
 # Modified: by abbey <inlet@cello.no-ip.org>
 #
 =begin ChangeLog
+2002-11-19 NT <nt@24i.net>
+	* add require 'pstore'.
+
 2002-07-01 NT <nt@24i.net>
 	* change some regular expressions.
 
@@ -55,6 +58,7 @@
 
 require 'net/http'
 require 'kconv'
+require 'pstore'
 
 def tlink_initialize 
   dir = @cache_path + "/tlink"
