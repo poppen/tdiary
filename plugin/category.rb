@@ -1,8 +1,9 @@
-# category.rb $Revision: 1.8 $
+# category.rb $Revision: 1.9 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
 #
+require 'pstore'
 
 #
 # initialize
@@ -13,6 +14,9 @@ def category_init
 end
 category_init
 
+#
+# plugin methods
+#
 def category_form
 	# define me!
 end
@@ -55,18 +59,13 @@ def category_navi
 	result
 end
 
-
-#
-# list categories and times
-#
 def category_list_sections
 	info = Category::Info.new(@cgi, @years, @conf)
 	category = info.category
 	years = info.years
 	r = ''
 
-	categorized = Category::Cache.new(@conf).categorize(category, years)
-	categorized.keys.sort.each do |c|
+	@categorized.keys.sort.each do |c|
 		info.category = c
 		r << <<HTML
 <div class="conf day">
@@ -74,9 +73,9 @@ def category_list_sections
 	<div class="body">
 		<p>
 HTML
-		categorized[c].keys.sort.each do |ymd|
+		@categorized[c].keys.sort.each do |ymd|
 			text = Time.local(ymd[0,4], ymd[4,2], ymd[6,2]).strftime(@conf.date_format)
-			categorized[c][ymd].sort.each do |idx, title, content|
+			@categorized[c][ymd].sort.each do |idx, title, content|
 				r << %Q|\t\t\t<a href="#{@conf.index}#{anchor "#{ymd}#p#{'%02d' % idx}"}" title="#{CGI.escapeHTML(@conf.shorten(apply_plugin(content, true)))}">#{text}#p#{'%02d' % idx}</a> #{apply_plugin(title)}<br>\n|
 			end
 		end
@@ -91,11 +90,12 @@ end
 
 def category_list
 	info = Category::Info.new(@cgi, @years, @conf)
-	Category::Cache.new(@conf).restore_categories.map do |c|
+	@categories.map do |c|
 		info.category = c
 		info.make_anchor
 	end.join(" | \n")
 end
+
 
 #
 # misc
@@ -294,18 +294,11 @@ end
 # Cache
 #
 class Cache
-	def initialize(conf)
+	def initialize(conf, bind)
 		@conf = conf
+		@binding = bind                           # ...... very ugly
 		@dir = "#{conf.data_path}/category"
 		Dir.mkdir(@dir) unless File.exist?(@dir) 
-	end
-
-	def cache_file(category = nil)
-		if category
-			"#{@dir}/#{CGI.escape(category)}".untaint
-		else
-			"#{@dir}/category_list"
-		end
 	end
 
 	def add_categories(list)
@@ -330,44 +323,6 @@ class Cache
 			db.abort
 		end
 		list || []
-	end
-
-	#
-	# categorize sections of diary
-	#
-	# {"category" => {"yyyymmdd" => [[idx, title, excerpt], ...]}}
-	#
-	def categorize_diary(diary)
-		categorized = {}
-		ymd = diary.date.strftime('%Y%m%d')
-
-		idx = 1
-		diary.each_section do |s|
-			s.categories.each do |c|
-				categorized[c] = {} if categorized[c].nil?
-				categorized[c][ymd] = [] if categorized[c][ymd].nil?
-				categorized[c][ymd] << [idx, s.stripped_subtitle_to_html, s.body_to_html]
-			end
-			idx +=1
-		end
-
-		categorized
-	end
-
-	#
-	# cache each section of diary
-	# used in recreate
-	#
-	def initial_replace_sections(diary)
-		return if diary.nil? or !diary.visible? or !diary.categorizable?
-
-		categorized = categorize_diary(diary)
-		categorized.keys.each do |c|
-			PStore.new(cache_file(c)).transaction do |db|
-				db['category'] = {} unless db.root?('category')
-				db['category'].update(categorized[c])
-			end
-		end
 	end
 
 	#
@@ -460,6 +415,63 @@ class Cache
 
 		categorized
 	end
+
+private
+	def cache_file(category = nil)
+		if category
+			"#{@dir}/#{CGI.escape(category)}".untaint
+		else
+			"#{@dir}/category_list"
+		end
+	end
+
+	#
+	# categorize sections of diary
+	#
+	# {"category" => {"yyyymmdd" => [[idx, title, excerpt], ...]}}
+	#
+	def categorize_diary(diary)
+		categorized = {}
+		ymd = diary.date.strftime('%Y%m%d')
+
+		idx = 1
+		diary.each_section do |s|
+			s.categories.each do |c|
+				categorized[c] = {} if categorized[c].nil?
+				categorized[c][ymd] = [] if categorized[c][ymd].nil?
+				body = <<EVAL
+text = apply_plugin(<<BODY, true)
+#{s.body_to_html}
+BODY
+EVAL
+				shorten = begin
+					eval(body.untaint, @binding)
+				rescue NameError
+					""
+				end
+				categorized[c][ymd] << [idx, s.stripped_subtitle_to_html, shorten]
+			end
+			idx +=1
+		end
+
+		categorized
+	end
+
+	#
+	# cache each section of diary
+	# used in recreate
+	#
+	def initial_replace_sections(diary)
+		return if diary.nil? or !diary.visible? or !diary.categorizable?
+
+		categorized = categorize_diary(diary)
+		categorized.keys.each do |c|
+			PStore.new(cache_file(c)).transaction do |db|
+				db['category'] = {} unless db.root?('category')
+				db['category'].update(categorized[c])
+			end
+		end
+	end
 end
 end
 
@@ -468,7 +480,7 @@ end
 # when update diary, update cache
 #
 add_update_proc do
-	cache = Category::Cache.new(@conf)
+	cache = Category::Cache.new(@conf, binding)
 	list = []
 	diary = @diaries[@date.strftime('%Y%m%d')]
 	diary.each_section do |s|
@@ -483,15 +495,24 @@ end
 # configuration
 #
 if @mode == 'conf' || @mode == 'saveconf'
-add_conf_proc('category', @category_conf_label) do
-	cache = Category::Cache.new(@conf)
-	if @mode == 'saveconf'
-		nil
-	elsif @cgi.valid?('category_initialize')
-		cache.recreate(@years)
+	add_conf_proc('category', @category_conf_label) do
+		cache = Category::Cache.new(@conf, binding)
+		if @mode == 'saveconf'
+			nil
+		elsif @cgi.valid?('category_initialize')
+			cache.recreate(@years)
+		end
+		category_conf_html
 	end
-	category_conf_html
 end
+
+
+# read cache here so that you can use category with secure mode.
+@cache = Category::Cache.new(@conf, binding)
+@categories = @cache.restore_categories
+if @mode == 'categoryview'
+	info = Category::Info.new(@cgi, @years, @conf)
+	@categorized = @cache.categorize(info.category, info.years)
 end
 
 # vim: ts=3
