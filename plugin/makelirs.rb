@@ -1,4 +1,4 @@
-# makelirs.rb $Revision: 1.7 $
+# makelirs.rb $Revision: 1.8 $
 #
 # 更新情報をLIRSフォーマットのファイルに吐き出す
 #
@@ -56,5 +56,9 @@ if /^(append|replace|comment|trackbackreceive)$/ =~ @mode then
 	lirs = "LIRS,#{t.last_modified.tv_sec},#{Time.now.tv_sec},#{utc_offset},#{body.size},#{e[url]},#{e[@html_title]},#{e[@author_name]},,\n"
 	File::open( file, 'w' ) do |o|
 		o.puts lirs
+	end
+	begin
+		File::utime( t.last_modified.tv_sec, t.last_modified.tv_sec, file )
+	rescue
 	end
 end

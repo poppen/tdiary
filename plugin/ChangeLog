@@ -1,5 +1,7 @@
 2003.12.25 TADA Tadashi <sho@spc.gr.jp>
 	* tb-send.rb: support error messages in multi-lines.
+	* makelirs.rb: set last-modified to time stamp of file. thanks Takeru KOMORIYA <komoriya@paken.org>.
+	* output_rdf.rb: set revious time stamp to RDF when diary was hidden.
 
 2003.12.19 TADA Tadashi <sho@spc.gr.jp>
 	* squeeze.rb, windex.rb, trackback/tb.rb: set $KCODE to 'n'.
