@@ -1,17 +1,9 @@
 #!/usr/bin/env ruby
-# xmlrpc.rb $Revision: 1.1 $
+# xmlrpc.rb $Revision: 1.2 $
 #
 # Copyright (c) 2004 MoonWolf <moonwolf@moonwolf.com>
 # Distributed under the GPL
 #
-# tdiary.conf:
-# @options['xmlrpc.blogid']    = 'blogid'
-# @options['xmlrpc.username']  = 'username'
-# @options['xmlrpc.password']  = 'password'
-# @options['xmlrpc.lastname']  = 'lastname'
-# @options['xmlrpc.firstname'] = 'firstname'
-# @options['xmlrpc.userid']    = 'username'
-# 
 # require Ruby1.8 or xml-rpc(http://raa.ruby-lang.org/project/xml-rpc/)
 # require Uconv
 
@@ -28,14 +20,18 @@ require 'tdiary'
 require 'uconv'
 require 'uri'
 
-class ::TDiary::TDiaryBase
-  attr_reader :date
-  public :[]
-  public :calendar
+eval( <<MODIFY_CLASS, TOPLEVEL_BINDING )
+module TDiary
+  class TDiaryBase
+    attr_reader :date
+    public :[]
+    public :calendar
+  end
+  class TDiaryLatest
+    public :latest
+  end
 end
-class ::TDiary::TDiaryLatest
-  public :latest
-end
+MODIFY_CLASS
 
 require 'xmlrpc/server'
 if defined?(MOD_RUBY)
