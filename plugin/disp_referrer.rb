@@ -1,4 +1,4 @@
-# disp_referrer.rb $Revision: 1.9 $
+# disp_referrer.rb $Revision: 1.10 $
 # -pv-
 #
 # 名称：
@@ -27,6 +27,13 @@
 # You can redistribute it and/or modify it under GPL2.
 #
 =begin ChangeLog
+2002-09-08  MUTOH Masao <mutoh@highway.ne.jp>
+   * escapeモジュールがweb/ディレクトリ配下にインストールされる場合に対応
+   Pointed out by Junichiro KITA <kita@kitaj.no-ip.com>.
+	* tDiary-1.5.xで動作しなくなっていたバグの修正
+   Fixed by Junichiro KITA <kita@kitaj.no-ip.com>.
+   * version 2.2.1
+
 2002-09-04  MUTOH Masao <mutoh@highway.ne.jp>
    * 高速化。アルゴリズム見直しおよび、fastesc導入。当社比(?)で実行時間を半分以下(45%程度)に削減できた。
    * Netscape検索改善
@@ -83,7 +90,13 @@
 
 require 'uconv'
 require 'nkf'
-require 'escape'
+begin
+   require 'escape'
+rescue LoadError
+   begin
+      require 'web/escape'
+   end
+end
 
 eval(<<TOPLEVEL_CLASS, TOPLEVEL_BINDING)
 def Uconv.unknown_unicode_handler(unicode)
@@ -93,7 +106,7 @@ def Uconv.unknown_unicode_handler(unicode)
       raise Uconv::Error
    end
 end
-class Diary
+module DiaryBase
   REG_CHAR_UTF8 = /&#[0-9]+;/
   def referers
 	newer_referer
