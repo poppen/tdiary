@@ -1,4 +1,4 @@
-# counter.rb $Revision: 1.9 $
+# counter.rb $Revision: 1.10 $
 # -pv-
 #
 # 名称：
@@ -71,6 +71,13 @@
 # You can redistribute it and/or modify it under GPL2.
 # 
 =begin ChangeLog
+2002-07-23 MUTOH Masao  <mutoh@highway.ne.jp>
+	* バックアップファイルのファイル名のsuffixを曜日(0-6の数値)にした。
+		従って、1週間毎に古いファイルは上書きされるのでファイルの数は
+		最大7つとなる。数字が新しいものが最新というわけではないので注意。
+		(proposed by Junichiro KITA <kita@kitaj.no-ip.com>)
+	* version 1.5.1
+
 2002-07-19 MUTOH Masao  <mutoh@highway.ne.jp>
 	* 日々単位でデータをバックアップするようにした。
      @options["counter.dairy_backup"]で指定。falseを指定しない限り
@@ -197,7 +204,7 @@ end
 TOPLEVEL_CLASS
 
 module TDiaryCounter
-	@version = "1.5.0"
+	@version = "1.5.1"
 
 	def run(cache_path, cgi, options)
 		timer = options["counter.timer"] if options
@@ -255,7 +262,7 @@ module TDiaryCounter
 					if options["counter.daily_backup"] == nil || options["counter.daily_backup"] 
 						if FileTest.exist?(path)
 							File.open(path,  'rb' ) {|r|
-								File.open(path + "_" + today.to_s, 'wb' ) {|w|
+								File.open(path + "." + today.wday.to_s, 'wb' ) {|w|
 									st = r.stat
 									begin
 										while true do
