@@ -1,3 +1,6 @@
+2004-04-22 mput <root@mput.dip.jp>
+	* recent_comment3.rb (recent_comment3): Bug fix.
+
 2004.04.10 Masanori_KADO <QVE02451@nifty.com>
 	* category.rb: display categories you use on update form.
 
