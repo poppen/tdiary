@@ -1,4 +1,4 @@
-# category.rb $Revision: 1.22 $
+# category.rb $Revision: 1.23 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -28,7 +28,7 @@ def category_icon_init
 	@conf['category.icon'].split(/\n/).each do |l|
 		c, i = l.split
 		next if c.nil? or i.nil?
-		@category_icon[c] = i if File.exists?("#{@category_icon_dir}#{i.untaint}")
+		@category_icon[c] = i if File.exists?("#{@category_icon_dir}#{i}".untaint)
 	end
 end
 category_icon_init
@@ -56,7 +56,7 @@ def category_anchor(category)
 			""
 		end
 	if @category_icon[category]
-		%Q|<a href="#{@index}?#{period_string}category=#{CGI::escape(category)}"><img class="category" src="#{@category_icon_dir}#{@category_icon[category]}" alt="#{category}"></a>|
+		%Q|<a href="#{@index}?#{period_string}category=#{CGI::escape(category)}"><img class="category" src="#{@category_icon_url}#{@category_icon[category]}" alt="#{category}"></a>|
 	else
 		%Q|[<a href="#{@index}?#{period_string}category=#{CGI::escape(category)}">#{category}</a>]|
 	end
@@ -366,7 +366,7 @@ class Cache
 		@conf = conf
 		@binding = bind                           # ...... very ugly
 		@dir = "#{conf.data_path}/category"
-		Dir.mkdir(@dir) unless File.exist?(@dir) 
+		Dir.mkdir(@dir) unless File.exist?(@dir)
 	end
 
 	def add_categories(list)
@@ -616,7 +616,7 @@ end
 
 def category_icon_sample
 	@category_all_icon.map do |i|
-		%Q|<img src="#{@category_icon_url}#{i}" alt="#{i}">\n|
+		%Q|<img src="#{@category_icon_url}#{i}" alt="#{i}" title="#{i}">\n|
 	end.join("/\n")
 end
 
