@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.9 $
+# amazon.rb $Revision: 1.10 $
 #
 # isbn_image_left: 指定したISBNの書影をclass="left"で表示
 #   パラメタ:
@@ -46,6 +46,9 @@
 #              dai<dai@kato-agri.com>
 #
 =begin ChangeLog
+2003-02-09 Junichiro Kita <kita@kitaj.no-ip.com>
+	* merge from amazon2.rb. see http://kuwa.s26.xrea.com/b/20030211.html
+
 2003-01-13 TADA Tadashi <sho@spc.gr.jp>
 	* for ruby 1.6.8. thanks woods <sodium@da2.so-net.ne.jp>.
 
@@ -145,8 +148,9 @@ def getAmazon( asin )
 end
 
 def amazonNoImg(item_url,item_name)
-	%Q[<a href="#{item_url.strip}">#{item_name.strip}</a>]
+	%Q[<a href="#{item_url.strip}/ref=nosim/">#{item_name.strip}</a>]
 end
+
 
 def getAmazonImg(position,asin,comment)
 	begin
@@ -160,7 +164,7 @@ def getAmazonImg(position,asin,comment)
 			return amazonNoImg(item[0],item[1])
 		end
 		r = ""
-		r << %Q[<a href="#{item[0].strip}">]
+		r << %Q[<a href="#{item[0].strip}/ref=nosim/">]
 		r << %Q[<img class="#{position}" src="#{item[2].strip}" ]
 		r << %Q[width="#{item[4].strip}" ] if item[4]
 		r << %Q[height="#{item[5].strip}" ] if item[5]
