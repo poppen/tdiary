@@ -1,3 +1,6 @@
+2004-08-13 TADA Tadashi <sho@spc.gr.jp>
+	* makerss.rb: cut tail of entity reference. thanks IKEDA and snak.
+
 2004-08-10 zunda <zunda at freeshell.org>
 	* weather.rb, */weather.rb: show_robot enables to hide weather from robots
 
