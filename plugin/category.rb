@@ -1,4 +1,4 @@
-# category.rb $Revision: 1.11 $
+# category.rb $Revision: 1.12 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -43,6 +43,10 @@ def category_anchor(cname)
 	end
 end
 
+def category_navi_anchor(info, label)
+	((!label.nil?) && label.empty?) ? '' : %Q[<span class="adminmenu">#{info.make_anchor(label)}</span>\n]
+end
+
 def category_navi
 	info = Category::Info.new(@cgi, @years, @conf)
 	mode = info.mode
@@ -52,23 +56,23 @@ def category_navi
 	when :year, :half, :quarter, :month
 		all_diary = Category::Info.new(@cgi, @years, @conf, :year => -1, :month => -1)
 		all = Category::Info.new(@cgi, @years, @conf, :category => ['ALL'], :year => -1, :month => -1)
-		result << %Q[<span class="adminmenu">#{info.prev.make_anchor(@conf['category.prev_' + mode.to_s])}</span>\n]
-		result << %Q[<span class="adminmenu">#{info.next.make_anchor(@conf['category.next_' + mode.to_s])}</span>\n]
-		result << %Q[<span class="adminmenu">#{all_diary.make_anchor(@conf['category.all_diary'])}</span>\n]
-		result << %Q[<span class="adminmenu">#{all.make_anchor(@conf['category.all'])}</span>\n]
+		result << category_navi_anchor(info.prev, @conf['category.prev_' + mode.to_s])
+		result << category_navi_anchor(info.next, @conf['category.next_' + mode.to_s])
+		result << category_navi_anchor(all_diary, @conf['category.all_diary'])
+		result << category_navi_anchor(all, @conf['category.all'])
 	when :all
 		year = Category::Info.new(@cgi, @years, @conf, :year => Time.now.year.to_s)
 		half = Category::Info.new(@cgi, @years, @conf, :year => Time.now.year.to_s, :month => "#{((Time.now.month - 1) / 6 + 1)}H")
 		quarter = Category::Info.new(@cgi, @years, @conf, :year => Time.now.year.to_s, :month => "#{((Time.now.month - 1) / 3 + 1)}Q")
 		month = Category::Info.new(@cgi, @years, @conf, :year => Time.now.year.to_s, :month => '%02d' % Time.now.month)
-		result << %Q[<span class="adminmenu">#{year.make_anchor(@conf['category.this_year'])}</span>\n]
-		result << %Q[<span class="adminmenu">#{half.make_anchor(@conf['category.this_half'])}</span>\n]
-		result << %Q[<span class="adminmenu">#{quarter.make_anchor(@conf['category.this_quarter'])}</span>\n]
-		result << %Q[<span class="adminmenu">#{month.make_anchor(@conf['category.this_month'])}</span>\n]
+		result << category_navi_anchor(year, @conf['category.this_year'])
+		result << category_navi_anchor(half, @conf['category.this_half'])
+		result << category_navi_anchor(quarter, @conf['category.this_quarter'])
+		result << category_navi_anchor(month, @conf['category.this_month'])
 	end
 	if !info.category.include?('ALL')
 		all_category = Category::Info.new(@cgi, @years, @conf, :category => ['ALL'])
-		result << %Q[<span class="adminmenu">#{all_category.make_anchor(@conf['category.all_category'])}</span>\n]
+		result << category_navi_anchor(all_category, @conf['category.all_category'])
 	end
 	result
 end

@@ -1,4 +1,7 @@
 2004.03.15 Masashi Seiki <mass@starshine.jp>
+	* category.rb: category_navi does'nt show buttons who have empty labels.
+
+2004.03.15 Masashi Seiki <mass@starshine.jp>
 	* category.rb: save configurations.
 	* category.rb: add new conf parameter: @conf['category.period']
 
