@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 $KCODE= 'e'
 #
-# posttdiary: update tDiary via e-mail. $Revision: 1.3 $
+# posttdiary: update tDiary via e-mail. $Revision: 1.4 $
 #
 # Copyright (C) 2002, All right reserved by TADA Tadashi <sho@spc.gr.jp>
 # You can redistribute it and/or modify it under GPL2.
@@ -139,7 +139,7 @@ begin
 			if sub_head =~ %r[^Content-Type:\s*text/plain]i then
 				@body = sub_body
 			elsif sub_head =~ %r[^Content-Type:\s*(image/|application/octet-stream).*name=".*(\..*?)"]im
-				image_ext = $2
+				image_ext = $2.downcase
 				now = Time::now
 				list = image_list( now.strftime( "%Y%m%d" ), image_dir )
 				image_name = now.strftime( "%Y%m%d" ) + "_" + list.length.to_s + image_ext
