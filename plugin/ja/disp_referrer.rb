@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.13 2004-11-09 10:13:11 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.14 2004-11-10 05:38:13 zunda Exp $-))
 日本語リソース
 
 == 概要
@@ -560,7 +560,7 @@ DispReferrer2_Engines = {
 	'comcast' => [[%r{\Ahttp://www\.comcast\.net/qry/websearch}i, '"COMCAST"', ['query'], nil]],
 	'mywebsearch' => [[%r{\Ahttp://www\.mywebsearch\.com/jsp/GGmain.jsp}i, '"My Web Search"', ['seachfor'], nil]],
 	'wisenut' => [[%r{\Ahttp://www\.wisenut\.com/search/query.dll}, '"WiseNut"', ['q'], nil]],
-	'livedoor' => [[%r{\Ahttp://.*?\.livedoor\.}i, '"Livedoor"', ['q'], nil ]],
+	'livedoor' => [[%r{\Ahttp://(sf|www)\.livedoor\.}i, '"Livedoor"', ['q'], nil ]],
 	'tkensaku' => [[%r{\Ahttp://www\.tkensaku\.com/sclient\.cgi}i, '"TKENSAKU"', ['value'], nil]],
 	'yahoofs' => [[%r{\Ahttp://cache\.yahoofs\.jp/(?:search/)?cache}i, '"Yahoo! cache"', ['p', 'w'], nil]],
 	'googlie' => [[%r{\Ahttp://www\.googlie\.com/search}i, '"Google検索(へのリダイレクタ)"', ['as_q', 'q'], DispReferrer2_Google_cache]],

@@ -1,4 +1,10 @@
 2004-11-09 zunda <zunda at freeshell.org>
+	* disp_referrer.rb: shows unknown referrers when the diary is edited
+	Thanks to akira yamada (http://arika.org/diary/20041011#p01)
+	* ja/disp_referrer.rb: less livedoor.jp URLs as search engine
+	Thanks to Michitaka Ohno (http://bigfield.ddo.jp/diary/20041110.html#p02)
+
+2004-11-09 zunda <zunda at freeshell.org>
 	* search_control.rb: @cgi.user_agent can be nil
 
 2004-11-09 zunda <zunda at freeshell.org>

@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.39 2004-11-09 10:13:11 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.40 2004-11-10 05:38:13 zunda Exp $-))
 
 == 概要
 アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
@@ -442,7 +442,7 @@ class DispRef2Setup < Hash
 
 	attr_reader :is_long, :referer_table, :no_referer, :secure, :years, :conf
 
-	def initialize( conf, limit = 100, is_long = true, years = nil )
+	def initialize( conf, limit = 100, is_long = true, years = nil, mode = nil )
 		super()
 		@conf = conf
 		@years = years
@@ -451,6 +451,7 @@ class DispRef2Setup < Hash
 		@is_long = is_long
 		@limit = limit
 		@options = conf.options
+		@mode = mode
 
 		# URL tables
 		@referer_table = conf.referer_table
@@ -501,7 +502,7 @@ class DispRef2Setup < Hash
 				self['limit'][c] = @limit || 0
 			end
 		end
-		if self['unknown.hide'] then
+		if self['unknown.hide'] and not /\A(append|replace|edit)\Z/ =~ @mode then
 			self['limit'][DispRef2URL::Unknown] = 0
 		end
 		self
@@ -1425,7 +1426,7 @@ end
 
 # for configuration interface
 add_conf_proc( 'disp_referrer2', Disp_referrer2_name ) do
-	setup = DispRef2Setup.new( @conf, 100, true, @years )
+	setup = DispRef2Setup.new( @conf, 100, true, @years, @mode )
 	wwwif = DispRef2SetupIF.new( @cgi, setup, @conf, @mode )
 	wwwif.show_html
 end
@@ -1433,7 +1434,7 @@ end
 # for one-day diary
 def referer_of_today_long( diary, limit = 100 )
 	return '' if bot?
-	setup = DispRef2Setup.new( @conf, limit, true )
+	setup = DispRef2Setup.new( @conf, limit, true, nil, @mode )
 	DispRef2Refs.new( diary, setup ).to_long_html
 end
 
@@ -1442,7 +1443,7 @@ alias dispref2_original_referer_of_today_short referer_of_today_short
 def referer_of_today_short( diary, limit = 10 )
 	return '' if bot?
 	return dispref2_original_referer_of_today_short( diary, limit ) if @options.has_key?( 'disp_referrer2.short.only_normal' ) and not @options['disp_referrer2.short.only_normal']
-	setup = DispRef2Setup.new( @conf, limit, false )
+	setup = DispRef2Setup.new( @conf, limit, false, nil, @mode )
 	DispRef2Refs.new( diary, setup ).to_short_html
 end
 
@@ -1453,7 +1454,7 @@ if @conf.secure and (\
 		or ( @cgi.params['dr2.current_mode'] \
 		and DispRef2SetupIF::RefList == @cgi.params['dr2.current_mode'][0] ) )
 then
-	setup = DispRef2Setup.new( @conf, 100, true )
+	setup = DispRef2Setup.new( @conf, 100, true, @mode )
 	DispRef2Latest_cache = DispRef2Latest.new( @cgi, 'latest.rhtml', @conf, setup )
 else
 	DispRef2Latest_cache = nil
