@@ -1,4 +1,4 @@
-# tb-send.rb $Revision: 1.5 $
+# tb-send.rb $Revision: 1.6 $
 #
 # Copyright (c) 2003 Junichiro Kita <kita@kitaj.no-ip.com>
 # You can distribute this file under the GPL.
@@ -40,7 +40,7 @@ if /^(append|replace)$/ =~ @mode then
 		@options['apply_plugin'] = old_apply_plugin
 
 		if excerpt.length > 255
-			excerpt = @conf.shorten( excerpt.gsub( /\r/, '' ).gsub( /\n/, "\001" ), 252 ).gsub( /\001/, "\n" )
+			excerpt = @conf.shorten( excerpt.gsub( /\r/, '' ).gsub( /\n/, "\001" ), 252 ).gsub( /\001/, "\n" ) + '...'
 		end
 
 		my_url = %Q|#{@conf.base_url}#{@conf.index}#{anchor(@date.strftime('%Y%m%d'))}|.sub(%r|/\./|, '/')
