@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 =begin
-= その日の天気プラグイン((-$Id: weather.rb,v 1.5 2003-07-21 14:49:24 zunda Exp $-))
+= その日の天気プラグイン((-$Id: weather.rb,v 1.6 2003-07-22 12:43:57 zunda Exp $-))
 その日の天気を、その日の日記を最初に更新する時に取得して保存し、それぞれ
 の日の日記の上部に表示します。
 
@@ -775,7 +775,6 @@ def configure_weather
 			@conf['weather.tz'] = ''
 		end
 		# weather.show_mobile
-STDERR.puts @cgi.params['weather.show_mobile'][0]
 		case @cgi.params['weather.show_mobile'][0]
 		when 'true'
 			@conf['weather.show_mobile'] = true
