@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 =begin
-= その日の天気プラグイン((-$Id: weather.rb,v 1.4 2003-06-06 14:56:22 zunda Exp $-))
+= その日の天気プラグイン((-$Id: weather.rb,v 1.5 2003-07-21 14:49:24 zunda Exp $-))
 その日の天気を、その日の日記を最初に更新する時に取得して保存し、それぞれ
 の日の日記の上部に表示します。
 
@@ -10,12 +10,14 @@
 にあります。
 
 == 使い方
-=== インストール方法
+=== インストールと設定の方法
 このファイルをpluginディレクトリにコピーしてください。漢字コードは
 EUC-JPです。
 
-次に、tdiary.confを編集して、天気データをいただいてくるURLを
-@options['weather.url']に設定してください。
+次に、tdiary.confを編集するか、WWWブラウザからtDiaryの設定画面から「その
+日の天気」を選んで、天気データをいただいてくるURLを設定してください。
+tdiary.confを編集する場合には、@options['weather.url']に設定してくださ 
+い。両方で設定をした場合には、tDiaryの設定画面での設定が優先されます。
 
 例えば、 NOAA National Weather Serviceを利用する場合には、
 ((<URL:http://weather.noaa.gov/>))から、Select a country...で国名を選ん
@@ -27,9 +29,10 @@ EUC-JPです。
 うなWWWページから情報を取得しないように注意してください。
 
 さらに、将来日記のタイムゾーンが変化する可能性がある方は、今のタイムゾー
-ンを、@options['weather.tz']に設定しておくことをお勧めします。これによっ
-て、日記が引越した後も、天気データ取得時のタイムゾーンで天気を表示し続け
-ることができます。例えば日本標準時の場合は、
+ンを、@options['weather.tz']か、環境変数TZに設定しておくことをお勧めし 
+ます。これによって、日記が引越した後も、天気データ取得時のタイムゾーン 
+で天気を表示し続けることができます。tdiary.confに設定する場合は、例えば
+日本標準時の場合は、
   @options['weather.tz'] = 'Japan'
 と設定してください。
 
@@ -49,7 +52,8 @@ EUC-JPです。
 使えません。mod_rubyでの動作は今のところ確認していません。
 
 デフォルトでは、携帯端末から閲覧された場合には天気を表示しないようになっ
-ています。携帯からでも天気を表示したい場合には、
+ています。携帯からでも天気を表示したい場合には、設定画面から設定するか、
+tdiary.confに
   @options['weather.show_mobile'] = true
 を指定してください。
 
@@ -93,29 +97,31 @@ EUC-JPです。
   天気データを得られるWWWページのURL。
     @options['weather.url'] = 'http://weather.noaa.gov/weather/current/RJTI.html'
   など。情報の二次利用が制限されている場合がありますので、そのようなWWW
-  ページから情報を取得しないように注意してください。
+  ページから情報を取得しないように注意してください。ブラウザから設定した
+  場合はそちらが優先されます。
 
 ==== 指定しなくてもいい項目
 : @options['weather.show_mobile'] = false
   trueの場合は、携帯端末からのアクセスの場合に、i_html_stringで生成され
   たCHTMLを表示します。falseの場合は、携帯端末からのアクセスの場合には天
-  気を表示しません。
+  気を表示しません。ブラウザから設定した場合はそちらが優先されます。
   
 : @options['weather.tz']
   データを取得した場所のタイムゾーン。コマンドライン上で例えば、
     TZ=Japan date
   を実行して正しい時刻が表示される文字列を設定してください。Linuxでは、
-  /usr/share/zoneinfo以下のファイルネームを指定すればいいはずです。この
-  オプションが指定されていない場合、環境変数TZが設定されていればその値を
-  使用します。そうでなければタイムゾーンは記録しません。
-    
+  /usr/share/zoneinfo以下のファイル名を指定すればいいはずです。ブラウザ
+  から設定した場合はそちらが優先されます。このオプションが指定されてい
+  ない場合、環境変数TZが設定されていればその値を使用します。そうでなけ
+  ればタイムゾーンは記録しません。
+   
   天気データにタイムゾーンが記録されていない場合は、もし将来日記のタイム
   ゾーンが変更された場合に違う時刻を表示することになります。
   
   日付の判定など、天気データの記録以外の時刻の管理には、日記全体のタイム
   ゾーンが用いられます。
 
-: @options.['weather.oldest'] = 21600
+: @options['weather.oldest'] = 21600
   得られたデータが、このオプション(秒)より古い場合には、天気の取得エラー
   になり、次の日記の更新で再びデータを取得しようとします。デフォルトは6
   時間(21600秒)です。このオプションがnilに設定されている場合には、どんな
@@ -145,7 +151,7 @@ EUC-JPです。
   など。((-Accept-languageによって取得する言語を選べるサイトもあります。-))
   デフォルトでは追加のヘッダは送信しません。
 
-=== 天候の翻訳について
+== 天候の翻訳について
 NWSからのデータは英語ですので、適当に日本語に直してから出力するようにし
 てあります。翻訳は、WeatherTranslatorモジュールによっていて、変換表は、
 Weatherクラスに、Words_jaという配列定数として与えてあります。
@@ -155,11 +161,11 @@ Weatherクラスに、Words_jaという配列定数として与えてあります。
 ((<URL:http://tdiary-users.sourceforge.jp/cgi-bin/wiki.cgi?weather%2Erb>))
 に書いておくと、そのうち配布元で追加されるかもしれません。
 
-=== 細かい設定
+== 細かい設定
 天気データ取得元や好みに合わて、以下のメソッドを変更することで、より柔 
 軟な設定ができます。
 
-==== 表示に関するもの
+=== 表示に関するもの
 デフォルトでは、天気データは、HTML_STARTとHTML_ENDに設定されている文字 
 列で囲まれます。divやspanのクラスを変更する場合には、これらを変更するだ 
 けで充分です。それ以上の変更が必要な場合は以下を変更してください。
@@ -176,7 +182,7 @@ Weatherクラスに、Words_jaという配列定数として与えてあります。
 の場合には、上記の代わりに、それぞれI_HTML_START、I_HTML_END、
 Weather.i_html_stringが使われます。エラーの表示はできません。
 
-==== 天気データの取得に関するもの
+=== 天気データの取得に関するもの
 : Weather.parse_html( html, items )
   ((|html|))文字列を解析して、((|items|))ハッシュに従って@data[item]を定
   義してください。((|items|))には@optins['weather.items']または
@@ -184,7 +190,7 @@ Weather.i_html_stringが使われます。エラーの表示はできません。
   を用いた天気情報源ならば、このメソッドをあまり改造しないで使えるかも 
   しれません。
    
-==== 作成したメソッドのテスト
+== 作成したメソッドのテスト
 parse_htmlやhtml_stringのテストには以下のような方法が使えるかもしれませ 
 ん。
 
@@ -228,6 +234,10 @@ of GPL version 2 or later.
 =end
 
 =begin ChangeLog
+* Mon Jul 21, 2003 zunda <zunda at freeshell.org>
+- changed regexp literals from %r|..| to %r[..] for Ruby 1.8.x.
+* Fri Jul 17, 2003 zunda <zunda at freeshell.org>
+- WWW configuration interface
 * Thu Jun  5, 2003 zunda <zunda at freeshell.org>
 - checks the age of data
 * Tue Jun  3, 2003 zunda <zunda at freeshell.org>
@@ -270,8 +280,8 @@ We want Japanese displayed in a diary written in Japanese.
 
 --- Weather::Words_ja
     Array of arrays of a Regexp and a Statement to be executed.
-		WeatherTranslator::S.tr accepts this kind of hash to translate a
-		given string.
+    WeatherTranslator::S.tr accepts this kind of hash to translate a
+    given string.
 
 --- WeatherTranslator::S < String
     Extension of String class. It translates itself.
@@ -282,40 +292,40 @@ We want Japanese displayed in a diary written in Japanese.
 
 class Weather
 	Words_ja = [
-		[%r|\A(.*)/(.*)|, '"#{S.new( $1 ).translate( table )}/#{S.new( $2 ).translate( table )}"'],
-		[%r|\s*\b(greater\|more) than (-?[\d.]+\s*\S*)\s*|i, '"#{S.new( $2 ).translate( table )}以上"'],
-		[%r|^(.*?) with (.*)$|i, '"#{S.new( $2 ).translate( table )}ありの#{S.new( $1 ).translate( table )}"'],
-		[%r|^(.*?) during the past hours?$|i, '"直前まで#{S.new( $1 ).translate( table )}"'],
-		#[%r|\s*\b([\w\s]+?) in the vicinity|i, '"近辺で#{S.new( $1).translate( table )}"'],
-		[%r|\s*\bin the vicinity\b\s*|i, '""'],
+		[%r[\A(.*)/(.*)], '"#{S.new( $1 ).translate( table )}/#{S.new( $2 ).translate( table )}"'],
+		[%r[\s*\b(greater|more) than (-?[\d.]+\s*\S*)\s*]i, '"#{S.new( $2 ).translate( table )}以上"'],
+		[%r[^(.*?) with (.*)$]i, '"#{S.new( $2 ).translate( table )}ありの#{S.new( $1 ).translate( table )}"'],
+		[%r[^(.*?) during the past hours?$]i, '"直前まで#{S.new( $1 ).translate( table )}"'],
+		#[%r[\s*\b([\w\s]+?) in the vicinity]i, '"近辺で#{S.new( $1).translate( table )}"'],
+		[%r[\s*\bin the vicinity\b\s*]i, '""'],
 		# ... in the vicinityは無視されるようになっています。訳語が欲しい方は、
 		# 上のコメントアウトされている行のコメントを外してください。
-		[%r|\s*\bdirection variable\b\s*|i, '"不定"'],
-		[%r|\s*(-?[\d.]+)\s*\(?F\)?|, '"華氏#{$1}度"'],
-		[%r|\s*\bmile(\(?s\)?)?\s*|i, '"マイル"'],
-		[%r|\s*\b(mostly \|partly )clear\b\s*|i, '"晴"'],
-		[%r|\s*\bclear\b\s*|i, '"快晴"'],
-		[%r|\s*\b(mostly \|partly )?cloudy\b\s*|i, '"曇"'],
-		[%r|\s*\bovercast\b\s*|i, '"曇"'],
-		[%r|\s*\blight snow showers?\b\s*|i, '"にわか雪"'],
-		[%r|\s*\blight snow\b\s*|i, '"小雪"'],
-		[%r|\s*\blight drizzle\b\s*|i, '"小雨"'],
-		[%r|\s*\blight rain showers?\b\s*|i, '"弱いにわか雨"'],
-		[%r|\s*\bshowers?\b\s*|i, '"にわか雨"'],
-		[%r|\s*\bdrizzle\b\s*|i, 'こぬか雨"'],
-		[%r|\s*\blight rain\b\s*|i, '"霧雨"'],
-		[%r|\s*\brain\b\s*|i, '"雨"'],
-		[%r|\s*\bmist\b\s*|i, '"靄"'],
-		[%r|\s*\bhaze\b\s*|i, '"霞"'],
-		[%r|\s*\bfog\b\s*|i, '"霧"'],
-		[%r|\s*\bsnow\b\s*|i, '"雪"'],
-		[%r|\s*\bthunder( storm)?\b\s*|i, '"雷"'],
-		[%r|\s*\bsand\b\s*|i, '"黄砂"'],
-		[%r|\s*\bcumulonimbus clouds\b\s*|i, '"積乱雲"'],
-		[%r|\s*\bcumulus clouds\b\s*|i, '"積雲"'],
-		[%r|\s*\btowering\b\s*|i, '""'],
-		[%r|\s*\bobserved\b\s*|i, '""'],
-		[%r|\s*\bC\b\s*|, '"℃"'],
+		[%r[\s*\bdirection variable\b\s*]i, '"不定"'],
+		[%r[\s*(-?[\d.]+)\s*\(?F\)?], '"華氏#{$1}度"'],
+		[%r[\s*\bmile(\(?s\)?)?\s*]i, '"マイル"'],
+		[%r[\s*\b(mostly |partly )clear\b\s*]i, '"晴"'],
+		[%r[\s*\bclear\b\s*]i, '"快晴"'],
+		[%r[\s*\b(mostly |partly )?cloudy\b\s*]i, '"曇"'],
+		[%r[\s*\bovercast\b\s*]i, '"曇"'],
+		[%r[\s*\blight snow showers?\b\s*]i, '"にわか雪"'],
+		[%r[\s*\blight snow\b\s*]i, '"小雪"'],
+		[%r[\s*\blight drizzle\b\s*]i, '"小雨"'],
+		[%r[\s*\blight rain showers?\b\s*]i, '"弱いにわか雨"'],
+		[%r[\s*\bshowers?\b\s*]i, '"にわか雨"'],
+		[%r[\s*\bdrizzle\b\s*]i, 'こぬか雨"'],
+		[%r[\s*\blight rain\b\s*]i, '"霧雨"'],
+		[%r[\s*\brain\b\s*]i, '"雨"'],
+		[%r[\s*\bmist\b\s*]i, '"靄"'],
+		[%r[\s*\bhaze\b\s*]i, '"霞"'],
+		[%r[\s*\bfog\b\s*]i, '"霧"'],
+		[%r[\s*\bsnow\b\s*]i, '"雪"'],
+		[%r[\s*\bthunder( storm)?\b\s*]i, '"雷"'],
+		[%r[\s*\bsand\b\s*]i, '"黄砂"'],
+		[%r[\s*\bcumulonimbus clouds\b\s*]i, '"積乱雲"'],
+		[%r[\s*\bcumulus clouds\b\s*]i, '"積雲"'],
+		[%r[\s*\btowering\b\s*]i, '""'],
+		[%r[\s*\bobserved\b\s*]i, '""'],
+		[%r[\s*\bC\b\s*], '"℃"'],
 	].freeze
 end
 
@@ -402,7 +412,7 @@ class Weather
 
 		# time stamp
 		if @tz then
-		  tzbak = ENV['TZ']
+			tzbak = ENV['TZ']
 			ENV['TZ'] = @tz	# this is not thread safe...
 		end
 		if @data['timestamp'] then
@@ -412,7 +422,7 @@ class Weather
 		end
 		r << '現在'
 		if @tz then
-		  ENV['TZ'] = tzbak
+			ENV['TZ'] = tzbak
 		end
 
 		# weather
@@ -425,7 +435,7 @@ class Weather
 
 		# temperature
 		if @data['temperature(C)'] and t = @data['temperature(C)'].scan(/-?[\d.]+/)[-1] then
-		  r << %Q| #{sprintf( '%.0f', t )}℃|
+			r << %Q| #{sprintf( '%.0f', t )}℃|
 		end
 
 		r << "</a>#{HTML_END}\n"
@@ -456,10 +466,10 @@ class Weather
 		htmlitems = Hash.new
 
 		# weather data is in the 4th table in the HTML from weather.noaa.gov
-		table = html.scan( %r|<table.*?>(.*?)</table>|mi )[3][0]
-		table.scan( %r|<tr.*?>(.*?)</tr>|mi ).collect {|a| a[0]}.each do |row|
+		table = html.scan( %r[<table.*?>(.*?)</table>]mi )[3][0]
+		table.scan( %r[<tr.*?>(.*?)</tr>]mi ).collect {|a| a[0]}.each do |row|
 			# <tr><td> *item* -> downcased </td><td> *value* </td></tr>
-			if %r|<td.*?>(.*?)</td>\s*<td.*?>(.*?)</td>|mi =~ row then
+			if %r[<td.*?>(.*?)</td>\s*<td.*?>(.*?)</td>]mi =~ row then
 				item = $1
 				value = $2
 				item = item.gsub( /<br>/i, '/' ).gsub( /<.*?>/m , '').strip.downcase
@@ -516,12 +526,12 @@ class Weather
 				# record the value as read from the HTML
 				htmlitems[item] = value
 
-			end	# if %r|<td.*?>(.*?)</td>\s*<td.*?>(.*?)</td>|mi =~ row
-		end	# table.scan( %r|<tr.*?>(.*?)</tr>|mi ) ... do |row|
+			end	# if %r[<td.*?>(.*?)</td>\s*<td.*?>(.*?)</td>]mi =~ row
+		end	# table.scan( %r[<tr.*?>(.*?)</tr>]mi ) ... do |row|
 
 		# translate the parsed HTML into the Weather hash with more generic key
 		items.each do |from, to|
-		  if htmlitems[from] then
+			if htmlitems[from] then
 				# as specified in items
 				@data[to] = htmlitems[from]
 			elsif f = from.dup.sub!( /\([^)]+\)$/, '' ) \
@@ -543,10 +553,16 @@ class Weather
 
 	def initialize( date = nil, tz = nil )
 		@date = date or Time.now
-	  @data = Hash.new
+		@data = Hash.new
 		@error = nil
 		@url = nil
-		@tz = tz || ENV['TZ']
+		if tz and not tz.empty? then
+			@tz = tz
+		elsif ENV['TZ']
+			@tz = ENV['TZ']
+		else
+			@tz = nil
+		end
 	end
 
 	def get( url, header = nil, items = {} )
@@ -585,7 +601,7 @@ class Weather
 	end
 
 	def to_s
-	  tzstr = @tz ? " #{tz}" : ''
+		tzstr = @tz ? " #{tz}" : ''
 		r = "#{Weather::date_to_s( @date )}\t#{@url}\t#{@time.to_i}#{tzstr}\t#{@error}"
 		@data.each do |item, value|
 			r << "\t#{item}\t#{value}" if value and not value.empty?
@@ -710,6 +726,7 @@ Weather_default_items = {
 	'pressure (altimeter)(hPa)' => 'pressure(hPa)',
 }
 
+# shows weather
 def weather( date = nil )
 	path = @options['weather.dir'] || Weather_default_path
 	w = Weather::restore( path, date || @date )
@@ -724,6 +741,7 @@ def weather( date = nil )
 	end
 end
 
+# gets weather when the diary is updated
 def get_weather
 	return unless @options['weather.url']
 	return unless @mode == 'append' or @mode == 'replace'
@@ -744,10 +762,73 @@ def get_weather
 	end
 end
 
+# www configuration interface
+def configure_weather
+	if( @mode == 'saveconf' ) then
+		# weather.url
+		@conf['weather.url'] = @cgi.params['weather.url'][0]
+		# weather.tz
+		tz = @cgi.params['weather.tz'][0]
+		unless tz.empty? then	# need more checks
+			@conf['weather.tz'] = tz
+		else
+			@conf['weather.tz'] = ''
+		end
+		# weather.show_mobile
+STDERR.puts @cgi.params['weather.show_mobile'][0]
+		case @cgi.params['weather.show_mobile'][0]
+		when 'true'
+			@conf['weather.show_mobile'] = true
+		when 'false'
+			@conf['weather.show_mobile'] = false
+		end
+	end
+	case @conf.lang
+	when 'en'
+		<<-HTML
+		<h3 class="subtitle">Today's weather plugin</h3>
+		<p>I am sorry. English page is not yet ready.</p>
+		HTML
+	else
+		<<-HTML
+		<h3 class="subtitle">その日の天気プラグイン</h3>
+		<p>その日の天気を、その日の日記を最初に更新する時に取得して保存し、
+			それぞれの日の日記の上部に表示します。</p>
+		<h4>天気データ</h4>
+		<p>その日の天気を、例えばNOAA National Weather Serviceを利用する場合には、
+			<a href="http://weather.noaa.gov/">NOAA National Weather Service</a>
+			から、Select a country...で国名を選んでGo!ボタンを押し、
+			次に観測地点を選んでください。
+			そして、その時表示されたページのURLを、以下に記入してください。</p>
+		<p><input name="weather.url" value="#{@conf['weather.url']}" size="60"></p>
+		<p>将来日記のタイムゾーンが変化する可能性がある方は、
+			今のタイムゾーンを記録しておくことをお勧めします。
+			これによって、日記が引越した後も、
+			天気データ取得時のタイムゾーンで天気を表示し続けることができます。</p>
+		<p>タイムゾーンを記録するには、例えば日本標準時の場合には、
+			tdiary.rbと同じディレクトリにあるtdiary.confに、
+			ENV['TZ'] = 'Japan'などと書き足すか、
+			以下に、Japanと記入してください。</p>
+		<p><input name="weather.tz" value="#{@conf['weather.tz']}"></p>
+		<h4>携帯電話への表示</h4>
+		<p>下記から選んでください。</p>
+		<p><select name="weather.show_mobile">
+			<option value="true"#{' selected'if @conf['weather.show_mobile']}>
+			携帯電話にも今日の天気を表示する
+			<option value="false"#{' selected'unless @conf['weather.show_mobile']}>
+			携帯電話には今日の天気を表示しない
+		</select></p>
+		<h4>その他の設定</h4>
+		<p>この他にもいくつかtdiary.confから設定できる項目があります。
+			詳しくは、プラグインのファイル(weather.rb)をご覧ください。</p>
+		HTML
+	end
+end
 unless __FILE__ == $0 then
 # register to tDiary if executed as a plugin
 	add_body_enter_proc do |date| weather( date ) end
 	add_update_proc do get_weather end
+	add_conf_proc( 'weather', 'その日の天気' ) do configure_weather end
 else
 # translation test cases
 	[

@@ -1,3 +1,6 @@
+2003-07-21 zunda <zunda at freeshell.org>
+	* weather.rb: support conf_proc, %r literals for ruby-1.8.0
+
 2003-06-16 TADA Tadashi <sho@spc.gr.jp>
 	* comment_mail-*.rb: support conf_proc new spec.
 
