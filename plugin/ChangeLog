@@ -1,3 +1,6 @@
+2003-05-13 TADA Tadashi <sho@spc.gr.jp>
+	* amazon.rb: cancel modify on 2003-05-11.
+
 2003-05-11 TADA Tadashi <sho@spc.gr.jp>
 	* amazon.rb: escapeHTML strings from amazon.
 

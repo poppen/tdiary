@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.13 $
+# amazon.rb $Revision: 1.14 $
 #
 # isbn_image_left: 指定したISBNの書影をclass="left"で表示
 #   パラメタ:
@@ -151,7 +151,7 @@ def getAmazon( asin )
 end
 
 def amazonNoImg(item_url,item_name)
-	%Q[<a href="#{item_url.strip}/ref=nosim/">#{CGI::escapeHTML( item_name.strip )}</a>]
+	%Q[<a href="#{item_url.strip}/ref=nosim/">#{item_name.strip}</a>]
 end
 
 
@@ -168,10 +168,10 @@ def getAmazonImg(position,asin,comment)
 		end
 		r = ""
 		r << %Q[<a href="#{item[0].strip}/ref=nosim/">]
-		r << %Q[<img class="#{position}" src="#{CGI::escapeHTML( item[2].strip )}" ]
+		r << %Q[<img class="#{position}" src="#{item[2].strip}" ]
 		r << %Q[width="#{item[4].strip}" ] if item[4]
 		r << %Q[height="#{item[5].strip}" ] if item[5]
-		r << %Q[alt="#{CGI::escapeHTML( item[1].strip )}">]
+		r << %Q[alt="#{item[1].strip}">]
 		r << item[1].strip if position == "amazon"
 		r << %Q[</a>]
 	rescue
@@ -195,8 +195,8 @@ end
 alias isbn_image isbnImg
 alias amazon isbnImg
 
-def isbn(asin,comment)
+def isbn( asin, comment )
 	item_url = "http://www.amazon.co.jp/exec/obidos/ASIN/#{asin}/"
 	item_url << @options['amazon.aid'] if @options['amazon.aid']
-	amazonNoImg(item_url,comment)
+	amazonNoImg( item_url, comment )
 end
