@@ -1,3 +1,8 @@
+2005-02-21 zunda <zunda at freeshell.org>
+	* disp_referrer.rb: debug code removed
+	* disp_referrer.rb, {ja,en,zh}/disp_referrer.rb: configurable cache size
+	* zh/disp_referrer.rb: sync with the en resource
+
 2005-02-20 zunda <zunda at freeshell.org>
 	* disp_referrer.rb, {ja,en,zh}/disp_referrer.rb: cache URLs of search engines, cache files are divided into each month, thanks to Aoki-san and kazuhiko-san.
 

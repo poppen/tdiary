@@ -1,5 +1,5 @@
 =begin
-= A little bit more powerful display of referrers((-$Id: disp_referrer.rb,v 1.11 2005-02-21 08:20:52 zunda Exp $-))
+= A little bit more powerful display of referrers((-$Id: disp_referrer.rb,v 1.12 2005-02-22 03:59:45 zunda Exp $-))
 English resource
 
 == Copyright notice
@@ -169,14 +169,16 @@ class DispRef2SetupIF
 				<td><input name="dr2.no_cache" value="false" type="radio"#{' checked'if not @setup['no_cache']}>Use
 				<td><input name="dr2.no_cache" value="true" type="radio"#{' checked'if @setup['no_cache']}>Don't use
 				cache.
-			</table>
-			<table>
+			<tr>
+				<td>Limit cache size to
+				<td colspan="3"><input name="dr2.cache_max_size" value="#{@setup['cache_max_size']}" type="text">Bytes.
 			<tr>
 				<td><input name="dr2.cache.update" value="force" type="radio">clear
 				<td><input name="dr2.cache.update" value="auto" type="radio" checked>clear if needed
 				<td><input name="dr2.cache.update" value="never" type="radio">don't clear
 				the cache at this time.
 			</table>
+			<p>Cache size limit is an approximation. There is a chance that the cache size is bigger than the configured value. Setting the limit to zero disalbes limitation. K or M can be suffixed meaning Kbytes or Mbytes.</p>
 		_HTML
 		end # unless @setup.secure
 		r

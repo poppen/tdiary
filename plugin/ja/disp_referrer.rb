@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.21 2005-02-21 08:20:53 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.22 2005-02-22 03:59:46 zunda Exp $-))
 日本語リソース
 
 == 概要
@@ -311,11 +311,15 @@ class DispRef2SetupIF
 				<td><input name="dr2.no_cache" value="false" type="radio"#{' checked'if not @setup['no_cache']}>利用する
 				<td><input name="dr2.no_cache" value="true" type="radio"#{' checked'if @setup['no_cache']}>利用しない。
 			<tr>
+				<td>キャッシュの大きさを
+				<td colspan="3"><input name="dr2.cache_max_size" value="#{@setup['cache_max_size']}" type="text">バイトまでにする。
+			<tr>
 				<td>今回の設定変更で、キャッシュを
 				<td><input name="dr2.cache.update" value="force" type="radio">クリアする
 				<td><input name="dr2.cache.update" value="auto" type="radio" checked>必要ならクリアする
 				<td><input name="dr2.cache.update" value="never" type="radio">クリアしない。
 			</table>
+			<p>キャッシュの大きさの制限は目安です。これよりも大きくなる場合もあります。キャッシュの大きさの制限を0にすると、キャッシュの大きさを制限しなくなります。最後にKやMをつけると、キロバイト、メガバイト単位になります。</p>
 		_HTML
 		end # unless @setup.secure
 		r

@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.46 2005-02-21 08:20:51 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.47 2005-02-22 03:59:45 zunda Exp $-))
 
 == 概要
 アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
@@ -931,7 +931,6 @@ class DispRef2Refs
 		end
 		h = Hash.new
 		category.each do |cat|
-$stderr.puts cat
 			next unless @refs[cat]
 			@refs[cat].each do |a|
 				a[2].each do |b|
@@ -1251,6 +1250,24 @@ class DispRef2SetupIF
 					@need_cache_update = true if DispRef2URL::Cached_options.include?( key )
 					dirty = true
 				end
+			end
+		end
+
+		# numeric options
+		%w( cache_max_size ).each do |key|
+			tdiarykey = 'disp_referrer2.' + key
+			v = @cgi.params['dr2.' + key][0]
+			continue unless v
+			f = 1
+			if v.gsub!( /M\Z/, '' ) then
+				f = 1024*1024
+			elsif v.gsub!( /K\Z/, '' ) then
+				f = 1024
+			end
+			if /\A\d+\Z/ =~ v then
+				@conf[tdiarykey] = v.to_i * f
+				@need_cache_update = true if DispRef2URL::Cached_options.include?( key )
+				dirty = true
 			end
 		end
 
