@@ -1,4 +1,4 @@
-# calendar3.rb $Revision: 1.5 $
+# calendar3.rb $Revision: 1.6 $
 #
 # calendar3: 現在表示している月のカレンダーを表示します．
 #  パラメタ: なし
@@ -80,7 +80,7 @@ def calendar3
 	month = $2.to_i
 	day = $3.to_i
 	result << %Q|<a href="#{@index}#{anchor "%04d%02d" % Calendar3.prev_month(year, month)}">&lt;&lt;</a>\n|
-	result << "%04d/%02d/\n" % [year, month]
+	result << %Q|<a href="#{@index}#{anchor "%04d%02d" % [year, month]}">#{"%04d/%02d" % [year, month]}</a>/\n|
 	#Calendar3.make_cal(year, month)[(day - num >= 0 ? day - num : 0)..(day - 1)].each do |day, kind|
 	Calendar3.make_cal(year, month).each do |day, kind|
 		date = "%04d%02d%02d" % [year, month, day]
