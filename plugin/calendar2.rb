@@ -1,4 +1,4 @@
-# calendar2.rb $Revision: 1.2 $
+# calendar2.rb $Revision: 1.3 $
 #
 # calendar2: どこかで見たようなカレンダーを日記に追加する
 #   パラメタ:
@@ -7,7 +7,7 @@
 #     nav_format:  カレンダー上部に表示されるStringから構成されるArray
 #                  (["前", "%d年<br>%d月", "次"])
 #
-# Copyright (c) 2000-2001 Junichiro KITA <kita@kitaj.no-ip.com>
+# Copyright (c) 2001,2002 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
 #
 def calendar2_make_cal(year, month)
@@ -77,7 +77,7 @@ CALENDAR_HEAD
       else
         date = "%04d%02d%02d" % [year, month, day]
         result << %Q| <td class="calendar-day">%s</td>\n| %
-          if @diaries[date] == nil
+          if @diaries[date] == nil or ! @diaries[date].visible?
             day.to_s
           else
             subtitles = []

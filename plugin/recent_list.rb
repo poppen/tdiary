@@ -1,4 +1,4 @@
-# $Revision: 1.2 $
+# $Revision: 1.3 $
 # recent_list: 最近書いた日記のタイトル，サブタイトルを表示する
 #   パラメタ(カッコ内は未指定時の値):
 #     days:            何日分の日記を表示するか(20)
@@ -12,7 +12,7 @@
 #         なりません。ヘッダやフッタでtableタグを使ったり、CSSを書き換
 #         える必要があるでしょう。
 #
-# Copyright (c) 2000-2001 Junichiro KITA <kita@kitaj.no-ip.com>
+# Copyright (c) 2001,2002 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
 #
 eval( <<MODIFY_CLASS, TOPLEVEL_BINDING )
@@ -40,6 +40,7 @@ def recent_list(days = 30, date_format = @date_format,
         cgi.params['date'] = ["#{year}#{month}"]
         m = TDiaryMonth::new(cgi, '')
         m.diaries.keys.sort.reverse_each do |date|
+          next unless m.diaries[date].visible?
           result << %Q|<p class="recentitem"><a href="#{@index}?date=#{date}">#{m.diaries[date].date.strftime(date_format)}</a>\n|
           if show_title and m.diaries[date].title
             result << %Q| #{m.diaries[date].title}|
