@@ -1,4 +1,4 @@
-# tb-show.rb $Revision: 1.15 $
+# tb-show.rb $Revision: 1.16 $
 #
 # functions:
 #   * show TrackBack ping URL in right of TSUKKOMI label.
@@ -57,7 +57,7 @@ if @mode == 'day' and not bot? then
 <rdf:Description
 	rdf:about="#{@tb_id_url}"
 	dc:identifier="#{@tb_id_url}"
-	dc:title="#{CGI::escapeHTML(@diaries[@tb_date.strftime('%Y%m%d')].title).gsub(/-{2,}/) {'&#45;' * $&.size}}"
+	dc:title="#{CGI::escapeHTML( apply_plugin( @diaries[@tb_date.strftime('%Y%m%d')].title, true ) ).gsub(/-{2,}/) {'&#45;' * $&.size}}"
 	trackback:ping="#{@tb_url}" />
 </rdf:RDF>
 -->
