@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.22 $
+# makerss.rb: $Revision: 1.23 $
 #
 # generate RSS file when updating.
 #
@@ -208,9 +208,9 @@ def makerss_body( uri, rdfsec )
 		subtitle = apply_plugin( rdfsec.section.subtitle_to_html, true ).strip
 		if subtitle.empty?
 			subtitle = apply_plugin( rdfsec.section.body_to_html, true ).strip
-			subtitle = CGI::escapeHTML( @conf.shorten( subtitle.gsub( /&.*?;/, '' ), 20 ) ) unless subtitle.empty?
+			subtitle = @conf.shorten( subtitle.gsub( /&.*?;/, '' ), 20 )
 		end
-		rdf << %Q|<title>#{subtitle}</title>\n|
+		rdf << %Q|<title>#{CGI::escapeHTML( subtitle )}</title>\n|
 		rdf << %Q|<dc:creator>#{CGI::escapeHTML( @conf.author_name )}</dc:creator>\n|
 		if ! rdfsec.section.categories.empty?
 			rdfsec.section.categories.each do |category|
@@ -237,8 +237,8 @@ def makerss_body( uri, rdfsec )
 			rdf << %Q|<title>#{makerss_tsukkomi_label( rdfsec.id )} (#{CGI::escapeHTML( rdfsec.section.name )})</title>\n|
 			rdf << %Q|<dc:creator>#{CGI::escapeHTML( rdfsec.section.name )}</dc:creator>\n|
 			unless 'text' == @conf['makerss.hidecomment']
-				text = CGI::escapeHTML( rdfsec.section.body )
-				rdf << %Q|<description>#{makerss_desc_shorten( text )}</description>\n|
+				text = makerss_desc_shorten( rdfsec.section.body )
+				rdf << %Q|<description>#{CGI::escapeHTML( text )}</description>\n|
 				unless @conf['makerss.hidecontent']
 					rdf << %Q|<content:encoded><![CDATA[#{text.gsub( /\n/, '<br>' )}]]></content:encoded>\n|
 				end

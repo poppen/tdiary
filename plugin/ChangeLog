@@ -1,3 +1,6 @@
+2004-12-17 zunda <zunda at freeshell.org>
+	* makerss.rb: escapes inside description and title
+
 2004-12-05  NT  <nt@be.to>
 	* tlink.rb: adjusted to ruby 1.8.2
 
