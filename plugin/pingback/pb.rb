@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# pb.rb $Revision: 1.2 $
+# pb.rb $Revision: 1.3 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Copyright (c) 2004 MoonWolf <moonwolf@moonwolf.com>
@@ -20,15 +20,15 @@ require 'tdiary'
 
 module TDiary
   #
-  # exception class for PingBack
+  # exception class for Pingback
   #
-  class TDiaryPingBackError < StandardError
+  class TDiaryPingbackError < StandardError
   end
   
   #
-  # class TDiaryPingBackBase
+  # class TDiaryPingbackBase
   #
-  class TDiaryPingBackBase < ::TDiary::TDiaryBase
+  class TDiaryPingbackBase < ::TDiary::TDiaryBase
     public :mode
     def initialize( cgi, rhtml, conf )
       super
@@ -46,10 +46,10 @@ module TDiary
   end
   
   #
-  # class TDiaryPingBackReceive
-  #  receive PingBack ping and store as comment
+  # class TDiaryPingbackReceive
+  #  receive Pingback ping and store as comment
   #
-  class TDiaryPingBackReceive < TDiaryPingBackBase
+  class TDiaryPingbackReceive < TDiaryPingbackBase
     def initialize( cgi, rhtml, conf )
       super
       @error = nil
@@ -57,10 +57,10 @@ module TDiary
       sourceURI = @cgi.params['sourceURI'][0]
       targetURI = @cgi.params['targetURI'][0]
       body = [sourceURI,targetURI].join("\n")
-      @cgi.params['name'] = ['PingBack']
+      @cgi.params['name'] = ['Pingback']
       @cgi.params['body'] = [body]
       
-      @comment = Comment::new('PingBack', '', body)
+      @comment = ::TDiary::Comment::new('Pingback', '', body)
       begin
         @io.transaction( @date ) do |diaries|
           @diaries = diaries
@@ -79,7 +79,7 @@ module TDiary
     end
     
     def eval_rhtml( prefix = '' )
-      raise TDiaryPingBackError.new(@error) if @error
+      raise TDiaryPingbackError.new(@error) if @error
       load_plugins
       @plugin.instance_eval { update_proc }
     end
@@ -87,16 +87,20 @@ module TDiary
 end
 
 require 'xmlrpc/server'
-server = XMLRPC::CGIServer.new
+if defined?(MOD_RUBY)
+  server = XMLRPC::ModRubyServer.new
+else
+  server = XMLRPC::CGIServer.new
+end
 server.add_handler("pingback.ping") do |sourceURI,targetURI|
   ENV['REQUEST_METHOD'] = 'POST'
   ENV['REQUEST_URI'] = targetURI
   @cgi = CGI::new
   @cgi.params['sourceURI'] = [sourceURI]
   @cgi.params['targetURI'] = [targetURI]
-  conf = TDiary::Config::new(@cgi)
-  tdiary = TDiary::TDiaryPingBackReceive::new( @cgi, 'day.rhtml', conf )
-  return "PingBack receive success"
+  conf = ::TDiary::Config::new(@cgi)
+  tdiary = TDiary::TDiaryPingbackReceive::new( @cgi, 'day.rhtml', conf )
+  return "Pingback receive success"
 end
 server.serve
-# vim: ts=3
+# vim: ts=2

@@ -1,9 +1,9 @@
-# pingback.rb: $Revision: 1.1 $
+# pingback.rb: $Revision: 1.2 $
 #
-# PingBack when updating.
+# Pingback when updating.
 #
 # options:
-#   @options['pingback.url']    : URL of PingBack.
+#   @options['pingback.url']    : URL of Pingback.
 #   @options['pingback.expire'] : TTL for cache.
 #
 # Copyright (c) 2004 MoonWolf <moonwolf@moonwolf.com>
@@ -76,7 +76,7 @@ def pingback_send(sourceURI,targetURI)
   require 'uri'
   uri = URI.parse(targetURI)
   return unless uri.scheme=='http'
-  # detect PingBack server URL
+  # detect Pingback server URL
   target = nil
   require 'net/http'
   Net::HTTP.version_1_2
@@ -84,7 +84,7 @@ def pingback_send(sourceURI,targetURI)
     path = uri.path
     path << "?" << uri.query if uri.query
     response = http.get(path)
-    if value=response['X-PingBack']
+    if value=response['X-Pingback']
       target = URI.parse(value)
     elsif response.body=~%r!<link rel="pingback" href="([^"]+)" ?/?>! #"
       target = URI.parse($1)

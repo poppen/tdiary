@@ -1,15 +1,15 @@
-# pb-show.rb $Revision: 1.1 $
+# pb-show.rb $Revision: 1.2 $
 #
 # functions:
-#   * show PingBack ping URL in right of TSUKKOMI label.
-#   * hide PingBacks in TSUKKOMI.
-#   * show PingBacks above Today's Links.
+#   * show Pingback ping URL in right of TSUKKOMI label.
+#   * hide Pingbacks in TSUKKOMI.
+#   * show Pingbacks above Today's Links.
 #
 # options:
 #	@options['pb.cgi']:
-#		the PingBack ping URL. './tb.rb' is default.
+#		the Pingback ping URL. './tb.rb' is default.
 #	@options['pb.hide_if_no_pb']:
-#		If true, hide 'PingBacks(n)' when there is no PingBacks.  Default value is false.
+#		If true, hide 'Pingbacks(n)' when there is no Pingbacks.  Default value is false.
 #
 # Copyright (c) 2003 TADA Tadashi <sho@spc.gr.jp>
 # You can distribute this file under the GPL.
@@ -23,7 +23,7 @@
 unless @conf.mobile_agent? then
 
 #
-# hide PingBacks in TSUKKOMI
+# hide Pingbacks in TSUKKOMI
 #
 eval( <<MODIFY_CLASS, TOPLEVEL_BINDING )
 module TDiary
@@ -31,7 +31,7 @@ module TDiary
 		def each_visible_pingback( limit = 3 )
 			i = 0
 			@comments.find_all {|com|
-				com.visible_true? and /^PingBack$/ =~ com.name
+				com.visible_true? and /^Pingback$/ =~ com.name
 			}[0,limit].each do |com|
 				i += 1 # i starts with 1.
 				yield com,i
@@ -41,7 +41,7 @@ module TDiary
 		def each_visible_pingback_tail( limit = 3 )
 			i = 0
 			@comments.find_all {|com|
-				com.visible_true? and /^PingBack$/ =~ com.name
+				com.visible_true? and /^Pingback$/ =~ com.name
 			}.reverse[0,limit].reverse.each do |com|
 				i += 1 # i starts with 1.
 				yield com,i
@@ -52,7 +52,7 @@ end
 MODIFY_CLASS
 
 #
-# insert PingBacks above Today's Link.
+# insert Pingbacks above Today's Link.
 #
 alias :referer_of_today_short_pb_backup :referer_of_today_short
 def referer_of_today_short( diary, limit )
@@ -61,7 +61,7 @@ def referer_of_today_short( diary, limit )
 	if diary and !bot? then
 		count = 0
 		diary.each_visible_pingback( 100 ) {|t,count|} # count up
-		r << %Q|<a href="#{@index}#{anchor @pb_date.strftime( '%Y%m%d' )}#b">PingBack#{count > 1 ? 's' : ''}(#{count})</a>| unless count == 0 and @options['tb.hide_if_no_tb']
+		r << %Q|<a href="#{@index}#{anchor @pb_date.strftime( '%Y%m%d' )}#b">Pingback#{count > 1 ? 's' : ''}(#{count})</a>| unless count == 0 and @options['tb.hide_if_no_tb']
 	end
 	r
 end
@@ -135,7 +135,7 @@ end # unless mobile_agent?
 
 
 #
-# show PingBack ping URL
+# show Pingback ping URL
 #
 add_body_enter_proc do |date|
 	cgi = File.basename(@options['pb.cgi'] || './pb.rb')
@@ -157,7 +157,7 @@ end
 @conf['pingback_anchor'] ||= @conf.comment_anchor
 @conf['pingback_limit']  ||= @conf.comment_limit
 
-add_conf_proc( 'PingBack', 'PingBack' ) do
+add_conf_proc( 'Pingback', 'Pingback' ) do
 	if @mode == 'saveconf' then
 		@conf['pingback_anchor'] = @conf.to_native( @cgi.params['pingback_anchor'][0] )
 		@conf['pingback_limit']  = @cgi.params['pingback_limit'][0].to_i
