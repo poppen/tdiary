@@ -1,3 +1,6 @@
+2003-12-11 TADA Tadashi <sho@spc.gr.jp>
+	* squeeze.rb: behave to like a bot.
+
 2003-12-10 TADA Tadashi <sho@spc.gr.jp>
 	* amazon.rb: add 'clear cache' switch in prefenrences page.
 	* tb-show.rb: hide link when bot access (against trackback spam).
