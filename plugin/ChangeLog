@@ -1,3 +1,7 @@
+2003-10-08  Kazuhiko  <kazuhiko@fdiary.net>
+
+	* image.rb: show image size unless @conf.secure only.
+
 2003-10-07 Junichiro Kita <kita@kitaj.no-ip.com>
 	* tb-send.rb, tb-show.rb: move from trackback/
 

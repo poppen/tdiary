@@ -1,4 +1,4 @@
-# image.rb $Revision: 1.14 $
+# image.rb $Revision: 1.15 $
 # -pv-
 # 
 # Ì¾¾Î:
@@ -242,31 +242,35 @@ add_form_proc do |date|
 			ptag1 = "&lt;%="
 			ptag2 = "%&gt;"
 		end
-	   r << %Q[<div class="form">
+		r << %Q[<div class="form">
 		<div class="caption">
 		#{image_label_list_caption}
 		</div>
 		<form class="update" method="post" action="#{@conf.update}"><div>
 		<table>
 		<tr>]
-	   images.each_with_index do |img,id|
-	      r << %Q[<td><img class="form" src="#{@image_url}/#{img}" alt="#{id}" width="160"><br>#{FileTest.size("#{@image_dir}/#{img}".untaint)}bytes</td>] if img
-	   end
+		images.each_with_index do |img,id|
+			if @conf.secure then
+				r << %Q[<td><img class="form" src="#{@image_url}/#{img}" alt="#{id}" width="160"></td>] if img
+			else
+				r << %Q[<td><img class="form" src="#{@image_url}/#{img}" alt="#{id}" width="160"><br>#{FileTest.size("#{@image_dir}/#{img}".untaint)}bytes</td>] if img
+			end
+		end
 		r << "</tr><tr>"
-	   images.each_with_index do |img,id|
+		images.each_with_index do |img,id|
 			next unless img
 			ptag = "#{ptag1}image #{id}, '#{image_label_description}'#{ptag2}"
-	      r << %Q[<td>
+			r << %Q[<td>
 			<input type="checkbox" tabindex="#{tabidx+id*2}" name="plugin_image_id" value="#{id}">#{id}
 			<input type="button" tabindex="#{tabidx+id*2+1}" onclick="ins(&quot;#{ptag}&quot;)" value="#{image_label_add_plugin}">
 			</td>]
-	   end
-	   r << %Q[</tr>
+		end
+		r << %Q[</tr>
 		</table>
 		<input type="hidden" name="plugin_image_delimage" value="true">
-	   <input type="hidden" name="date" value="#{date.strftime( '%Y%m%d' )}">
-	   <input type="submit" tabindex="#{tabidx+97}" name="plugin" value="#{image_label_delete}">
-	   </div></form>
+		<input type="hidden" name="date" value="#{date.strftime( '%Y%m%d' )}">
+		<input type="submit" tabindex="#{tabidx+97}" name="plugin" value="#{image_label_delete}">
+		</div></form>
 		</div>]
 	end
 
@@ -286,4 +290,3 @@ add_form_proc do |date|
    </div></form>
 	</div>]
 end
-
