@@ -1,22 +1,22 @@
-# amazon.rb $Revision: 1.11 $
+# amazon.rb $Revision: 1.12 $
 #
 # isbn_image_left: 指定したISBNの書影をclass="left"で表示
 #   パラメタ:
-#     asin:    ASINまたはISBN
-#     comment: コメント
+#     asin:    ASINまたはISBN(必須)
+#     comment: コメント(省略可)
 #
 # isbn_image_right: 指定したISBNの書影をclass="right"で表示
 #   パラメタ:
-#     asin:    ASINまたはISBN
-#     comment: コメント
+#     asin:    ASINまたはISBN(必須)
+#     comment: コメント(省略可)
 #
 # isbn_image: 指定したISBNの書影をclass="amazon"で表示
-#     asin:    ASINまたはISBN
-#     comment: コメント
+#     asin:    ASINまたはISBN(必須)
+#     comment: コメント(省略可)
 #
 # isbn: amazonにアクセスしない簡易バージョン。
-#     asin:    ASINまたはISBN
-#     comment: コメント
+#     asin:    ASINまたはISBN(必須)
+#     comment: コメント(必須)
 #
 #   ASINとはアマゾン独自の商品管理IDです。
 #   書籍のISBNをASINに入力すると書籍が表示されます。
