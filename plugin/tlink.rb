@@ -1,4 +1,4 @@
-# tlink.rb $Revision: 1.9 $
+# tlink.rb $Revision: 1.10 $
 #
 # title Â°À­ÉÕ anchor plugin
 #
@@ -20,6 +20,9 @@
 # Modified: by abbey <inlet@cello.no-ip.org>
 #
 =begin ChangeLog
+2003-01-28 NT <nt@be.to>
+	* corresponded to change in PDA mode.
+
 2002-11-19 NT <nt@24i.net>
 	* add require 'pstore'.
 
@@ -107,7 +110,7 @@ def tlink_getcomment( url )
     response , = http.get( "/#{path}", agent )
     response.body.each { |line|
       if %r[<A NAME="#{frag}] =~ line
-        if %r[<P><A NAME="#{frag}">(?:.*?)</A> (.*?)</P>] =~ line.toeuc
+        if %r[<(?:P|H3)><A NAME="#{frag}">(?:.*?)</A> (.*?)</(?:P|H3)>] =~ line.toeuc
           result = $1
           break
         else
@@ -133,7 +136,7 @@ def tlink( url, str, title = nil )
     if @tlink_dic[url]
       title = @tlink_dic[url]
     else
-        title = tlink_getcomment( url )
+      title = tlink_getcomment( url )
       @tlink_dic[url] = title
       tlink_finalize
     end
