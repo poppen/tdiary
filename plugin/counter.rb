@@ -1,4 +1,4 @@
-# counter.rb $Revision: 1.2 $
+# counter.rb $Revision: 1.3 $
 #
 # カウンタ表示プラグイン
 #
@@ -7,20 +7,23 @@
 #	 figure: 表示桁数。未指定時は5桁。
 #	 filetype: ファイル種別(拡張子)。jpg, gif, png等。
 #						 未指定時は、""(画像は使わない、CSSで外見を変える)。
-#	 init_num: 初期値。未指定時は0。
 #
-# counter_today: 本日の訪問者数を表示する
+# counter_today: 今日の訪問者数を表示する
 # counter_yesterday: 昨日の訪問者数を表示する
 #	パラメタ：
 #	 figure: 表示桁数。未指定時は5桁。
 #	 filetype: ファイル種別(拡張子)。jpg, gif, png等。
-#						 未指定時は、""(画像は使わない、CSSで外見を変える)。
+#              未指定時は、""(画像は使わない、CSSで外見を変える)。
+# kiriban?: キリ番の時にtrueを返す(全て)。
+# kiriban_today?: キリ番の時にtrueを返す(今日)。
+#
+#  パラメタ：なし。
 #
 # 例：
 # counter
 # counter 3
 # coutner 3, "jpg"
-# counter 5, "", 100
+# counter 5, ""
 # counter_today 4, "jpg"
 # counter_yesterday
 #
@@ -30,6 +33,8 @@
 #	 counter-yesterday: 対象文字列全体(昨日)
 #	 counter-0, ... : 1桁分(左から)
 #	 counter-num-0, ... 9: 数字
+#	 counter-kiriban: キリ番の数字の部分(全て)
+#	 counter-kiriban-today: キリ番の数字の部分(今日)
 #
 # その他の情報は 
 #   http://home2.highway.ne.jp/mutoh/tools/ruby/ja/counter.html
@@ -39,6 +44,16 @@
 # You can redistribute it and/or modify it under GPL2.
 # 
 =begin ChangeLog
+2002-05-04 MUTOH Masao  <mutoh@highway.ne.jp>
+	* tlinkプラグインからのアクセスをカウントしてしまう不具合の修正
+	* @options["counter.deny_user_agents"]追加
+	* @options["counter.deny_remote_addrs"]追加
+	* @options["counter.init_num"]追加。キリ番機能との関係で、counter
+	* メソッドの引数のinit_numはobsoleteとします。
+	* @options["counter.kiriban"], @options["counter.kiriban_today"]追加
+	* キリ番機能追加(kiriban?,kiriban_today?メソッド追加)
+	* version 1.2.0
+
 2002-04-27 MUTOH Masao  <mutoh@highway.ne.jp>
 	* add_header_procを使わないようにした
 	* @options["counter.timer"]が有効にならない不具合の修正
@@ -75,18 +90,23 @@
 	* version 1.0.0
 =end
 
-if ["latest", "month", "day", "comment"].include?(@mode) and
-		@cgi.request_method =~ /POST|GET/
+@debug = true
+
+	
+if ["latest", "month", "day", "comment"].include?(@mode) and 
+	@cgi.request_method =~ /POST|GET/ 
 
 require 'date'
 
 eval(<<TOPLEVEL_CLASS, TOPLEVEL_BINDING)
 class TDiaryCountData
-	attr_reader :today, :yesterday, :all, :newestday, :timer
+	attr_reader :today, :yesterday, :all, :newestday, :timer, :ignore_cookie
+	attr_writer :ignore_cookie #means ALWAYS ignore a cookie.
 
 	def initialize
 		@today, @yesterday, @all = 0, 0, 0
 		@newestday = nil
+		@ignore_cookie = false
 	end
 
 	def up(now, cache_path, log)
@@ -111,11 +131,13 @@ end
 TOPLEVEL_CLASS
 
 module TDiaryCounter
-	@version = "1.1.0"
+	@version = "1.2.0"
 
 	def run(cache_path, cgi, options)
 		timer = options["counter.timer"] if options
 		timer = 12 unless timer	# 12 hour
+		@init_num = options["counter.init_num"] if options
+		@init_num = 0 unless @init_num
 		dir = cache_path + "/counter"
 		path = dir + "/counter.dat"
 		cookie = nil
@@ -130,15 +152,56 @@ module TDiaryCounter
 				@cnt = TDiaryCountData.new
 				cgi.cookies = nil
 			end
-			if ! cgi.cookies or ! cgi.cookies.keys.include?("tdiary_counter")
-				@cnt.up(Date.today, dir, (options and options["counter.log"]))
-				cookie = CGI::Cookie.new({"name" => "tdiary_counter", 
-													"value" => @version, 
-													 "expires" => Time.now + timer * 3600})
-				db["countdata"] = @cnt
+
+			allow = (cgi.user_agent !~ /tlink/ and
+						allow?(cgi.user_agent, options, "user_agents") and
+						allow?(cgi.remote_addr, options, "remote_addrs"))
+			no_cookie = (! cgi.cookies or ! cgi.cookies.keys.include?("tdiary_counter"))
+
+			if allow 
+				changed = false
+				if no_cookie || @cnt.ignore_cookie
+					@cnt.up(Date.today, dir, (options and options["counter.log"]))
+					cookie = CGI::Cookie.new({"name" => "tdiary_counter", 
+														"value" => @version, 
+														 "expires" => Time.now + timer * 3600})
+					changed = true
+				end
+				if options["counter.kiriban"]
+					@kiriban = options["counter.kiriban"].include?(@cnt.all + @init_num) 
+				end
+ 				if ! @kiriban and options["counter.kiriban_today"]
+					@kiriban_today = options["counter.kiriban_today"].include?(@cnt.today)
+				end
+
+				if @cnt.ignore_cookie
+					@cnt.ignore_cookie = false
+					changed = true
+				end
+
+				#when it is kiriban time, ignore the cookie next access time. 
+				if @kiriban or @kiriban_today
+					@cnt.ignore_cookie = true
+					changed = true
+				end
+
+				db["countdata"] = @cnt if changed
 			end
 		end
 		cookie
+	end
+
+	def allow?(cgi_value, options, option_name)
+		allow = true
+		if options and options["counter.deny_" + option_name] 
+			options["counter.deny_" + option_name].each do |deny|
+				if cgi_value =~ /#{deny}/
+					allow = false
+					break
+				end
+			end
+		end
+		allow 
 	end
 
 	def format(classtype, theme_url, cnt, figure = 5, filetype = "", init_num = 0, &proc)
@@ -160,14 +223,18 @@ module TDiaryCounter
 
 	def called?; @called; end
 	def called; @called = true; end
-	def all; @cnt.all; end
+	def all; @cnt.all + @init_num; end
 	def today; @cnt.today; end
 	def yesterday; @cnt.yesterday; end
+	def kiriban?; @kiriban; end
+	def kiriban_today?; @kiriban_today; end
 
-	module_function :all, :today, :yesterday, :format, :run
+	module_function :allow?, :all, :today, :yesterday, :format, :run, :kiriban?, :kiriban_today?
 end
 
-def counter(figure = 5, filetype = "", init_num = 0, &proc)
+#init_num is deprecated.
+#please replace it to @options["counter.init_num"]
+def counter(figure = 5, filetype = "", init_num = 0, &proc) 
 	TDiaryCounter.format("", theme_url, TDiaryCounter.all, figure, filetype, init_num, &proc)
 end
 
@@ -177,6 +244,14 @@ end
 
 def counter_yesterday(figure = 5, filetype = "", &proc)
 	TDiaryCounter.format("-yesterday", theme_url, TDiaryCounter.yesterday, figure, filetype, 0, &proc)
+end
+
+def kiriban?
+	TDiaryCounter.kiriban?
+end
+
+def kiriban_today?
+	TDiaryCounter.kiriban_today?
 end
 
 tdiary_counter_cookie = TDiaryCounter.run(@cache_path, @cgi, @options)
