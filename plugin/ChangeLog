@@ -1,3 +1,6 @@
+2003-10-12 TADA Tadashi <sho@spc.gr.jp>
+	* image.rb: comma separated image size by 3digs.
+
 2003-10-12 Junichiro Kita <kita@kitaj.no-ip.com>
 	* image.rb: guess image type and image size from file header. thanks to akira@arika.org.
 
@@ -69,6 +72,9 @@
 
 2003-09-25 Kita Junichiro <kita@kitaj.no-ip.com>
 	* trackback/tb-show.rb: add <div class="trackbacks">. Thanks to mput.
+
+2003-09-25 TADA Tadashi <sho@spc.gr.jp>
+	* image.rb: english support.
 
 2003-09-24 TADA Tadashi <sho@spc.gr.jp>
 	* speed_comment.rb: support cookie for name, and conf_proc.
@@ -300,7 +306,7 @@
 	* image: enable running on secure mode.
 
 2003-04-24 TADA Tadashi <sho@spc.gr.jp>
-	* add image.rb.
+	* add image.rb into plugin collection.
 
 2003-04-23 TADA Tadashi <sho@spc.gr.jp>
 	* amazon: add some comments to description of parameters.

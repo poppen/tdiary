@@ -1,4 +1,4 @@
-# image.rb $Revision: 1.16 $
+# image.rb $Revision: 1.17 $
 # -pv-
 # 
 # 名称:
@@ -46,23 +46,10 @@
 #
 
 =begin Changelog
-2003-09-25 TADA Tadashi <sho@spc.gr.jp>
-	* english support.
-
-2003-05-17 TADA Tadashi <sho@spc.gr.jp>
-	* add thumbnail in 3rd parameter of image method.
-	* force image width to 160 in update form.
-	* add image_link method.
-
-2003-04-25 TADA Tadashi <sho@spc.gr.jp>
-	* maxnum and maxsize effective in secure mode.
-	* show message when upload failed.
+See recent ChangeLog to plugins collections.
 
 2003-04-23 Yoshimi KURUMA <yoshimik@iris.dti.ne.jp>
-	* add JavaScript for insert plugin tag into diary.
-
-2003-04-24 TADA Tadashi <sho@spc.gr.jp>
-	* enable running on secure mode.
+	* image.rb: add JavaScript for insert plugin tag into diary.
 
 2003-04-23 Daisuke Kato <dai@kato-agri.com>
 	* tuning around form tag.
@@ -303,7 +290,7 @@ add_form_proc do |date|
 			img_type, img_w, img_h = image_info(File.join(@image_dir,img).untaint)
 			r << %Q[<td><img class="form" src="#{@image_url}/#{img}" alt="#{id}" width="#{(img_w && img_w > 160) ? 160 : img_w}"></td>]
 			ptag = "#{ptag1}image #{id}, '画像の説明', nil, #{img_w && img_h ? '['+img_w.to_s+','+img_h.to_s+']' : 'nil'}#{ptag2}"
-			img_info = "#{File.size(File.join(@image_dir,img).untaint)} bytes"
+			img_info = "#{File.size(File.join(@image_dir,img).untaint).to_s.reverse.gsub( /\d{3}/, '\0,' ).sub( /,$/, '' ).reverse} bytes"
 			if img_type && img_w && img_h
 				img_info << "<br>#{img_w} x #{img_h} (#{img_type})"
 			end
