@@ -1,4 +1,4 @@
-# tb-show.rb $Revision: 1.17 $
+# tb-show.rb $Revision: 1.18 $
 #
 # functions:
 #   * show TrackBack ping URL in right of TSUKKOMI label.
@@ -95,30 +95,32 @@ alias :referer_of_today_short_tb_backup :referer_of_today_short
 def referer_of_today_short( diary, limit )
 	r = referer_of_today_short_tb_backup( diary, limit )
 	return r unless @plugin_files.grep(/blog_style.rb\z/).empty?
-	if diary and !bot? then
+	if diary and !bot? and
+	  @conf['trackback_shortview_mode'] == "num_in_reflist" then
 		count = 0
 		diary.each_visible_trackback( 100 ) {|t,count|} # count up
-		r << %Q|<a href="#{@index}#{anchor @tb_date.strftime( '%Y%m%d' )}#t">TrackBack#{count > 1 ? 's' : ''}(#{count})</a>| unless count == 0 and @options['tb.hide_if_no_tb']
+		r << %Q|<a href="#{@index}#{anchor @tb_date.strftime( '%Y%m%d' )}#t">TrackBack#{count > 1 ? 's' : ''}(#{count})</a>| unless count == 0 and @conf['tb.hide_if_no_tb']
 	end
 	r
 end
 
 def trackbacks_of_today_short( diary, limit = @conf['trackback_limit'] || 3 )
-	# for BlogKit only
-	return if @plugin_files.grep(/blog_style.rb\z/).empty?
-
+	is_blog_style = !@plugin_files.grep(/blog_style.rb\z/).empty?
+	return unless is_blog_style || !diary.nil? &&
+	  (@conf['trackback_shortview_mode'] == "shortlist" ||
+	   @conf['trackback_disp_pingurl'])
 	fragment = 't%02d'
 	today = anchor( diary.date.strftime( '%Y%m%d' ) )
 	count = 0
 	diary.each_visible_trackback( limit ) {|t,count|} # count up
-
 	r = ''
 	r << %Q!\t<div class="comment trackbacks">\n!
 
 	r << %Q!\t\t<div class="caption">\n!
-	r << %Q!\t\t\t#{ trackback_today }#{ trackback_total( count ) }\n! if count > 0
-	r << %Q!\t\t\t[#{ trackback_ping_url }]\n!
+	r << %Q!\t\t\t#{ trackback_today }#{ trackback_total( count ) }\n! if count > 0 && (is_blog_style || @conf['trackback_shortview_mode'] == "shortlist")
+	r << %Q!\t\t\t[#{ trackback_ping_url }]\n! if is_blog_style || @conf['trackback_disp_pingurl']
 	r << %Q!\t\t</div>\n!
+	return r << %Q!\t</div>\n! unless is_blog_style || @conf['trackback_shortview_mode'] == "shortlist"
 
 	r << %Q!\t\t<div class="commentshort trackbackshort">\n!
 	r << %Q!\t\t\t<p><a href="#{ @index }#{ today }#t01">Before...</a></p>\n! if count > limit
@@ -131,7 +133,7 @@ def trackbacks_of_today_short( diary, limit = @conf['trackback_limit'] || 3 )
 		r << %Q!\t\t\t<p>\n!
 		r << %Q!\t\t\t\t<a href="#{ @index }#{ today }##{ fragment % i }">#{ @conf['trackback_anchor'] }</a>\n!
 		r << %Q!\t\t\t\t<span class="commentator blog"><a href="#{ CGI::escapeHTML( url ) }">#{CGI::escapeHTML( a )}</a></span>\n!
-		r << %Q!\t\t\t\t[<%= CGI::escapeHTML( @conf.shorten( excerpt, @conf.comment_length ) ) %>]\n! if excerpt
+		r << %Q!\t\t\t\t#{ CGI::escapeHTML( @conf.shorten( excerpt, @conf.comment_length ) ) } \n! if excerpt
 		r << %Q!\t\t\t</p>\n!
 	end
 	r << %Q!\t\t</div>\n!
@@ -198,8 +200,16 @@ end # unless mobile_agent?
 add_conf_proc( 'TrackBack', 'TrackBack' ) do
 	if @mode == 'saveconf' then
 		@conf['trackback_anchor'] = @conf.to_native( @cgi.params['trackback_anchor'][0] )
+		@conf['trackback_shortview_mode'] = @cgi.params['trackback_shortview_mode'][0]
+		if @conf['trackback_shortview_mode'] == "num_in_reflist_if_exists"
+			@conf['tb.hide_if_no_tb'] = true
+			@conf['trackback_shortview_mode'] = "num_in_reflist"
+		elsif @conf['trackback_shortview_mode'] == "num_in_reflist"
+			@conf['tb.hide_if_no_tb'] = false
+		end
 		@conf['trackback_limit']  = @cgi.params['trackback_limit'][0].to_i
 		@conf['trackback_limit'] = 3 if @conf['trackback_limit'] < 1
+		@conf['trackback_disp_pingurl'] = @cgi.params['trackback_disp_pingurl'][0] == "true" ? true : false
 	end
 	tb_show_conf_html
 end
