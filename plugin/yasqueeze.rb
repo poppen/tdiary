@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# yasqueeze.rb $Revision: 1.11 $
+# yasqueeze.rb $Revision: 1.12 $
 # -pv-
 #
 # Ì¾¾Î¡§
@@ -45,6 +45,10 @@
 # version 1.0.4 by TADA Tadashi <sho@spc.gr.jp> with GPL2.
 #
 =begin ChangeLog
+2002-08-16 TADA Tadashi <sho@spc.gr.jp>
+	* ignore parser cache.
+	* hide comment form.
+
 2002-08-13 TADA Tadashi <sho@spc.gr.jp>
 	* for tDiary 1.5. thanks NISHIO Mizuho <gha@intrastore.cdc.com>.
 
@@ -112,7 +116,7 @@ if mode == "CMD" || mode == "CGI"
 
 	if mode == "CMD"
 		def usage
-			puts "yasqueeze $Revision: 1.11 $"
+			puts "yasqueeze $Revision: 1.12 $"
 			puts " Yet Another making html files from tDiary's database."
 			puts " usage: ruby yasqueeze.rb [-p <tDiary path>] [-c <tdiary.conf path>] [-a] [-s] <dest path>"
 			exit
@@ -173,6 +177,8 @@ end
 #
 class YATDiarySqueeze < TDiary
 	def initialize(diary, dest, all_data, compat)
+		@ignore_parser_cache = true
+
 		super(nil, 'day.rhtml')
 		@header = ''
 		@footer = ''
@@ -226,6 +232,17 @@ end
 #
 class YATDiarySqueezeMain < TDiary
 	def initialize(dest, all_data, compat)
+		@ignore_parser_cache = true
+		eval <<-DIARY_CLASS, TOPLEVEL_BINDING
+			module DiaryBase
+				alias :__eval_rhtml :eval_rhtml
+				def eval_rhtml(opt, path)
+					opt['hide_comment_form'] = true
+					__eval_rhtml(opt, path)
+				end
+			end
+		DIARY_CLASS
+
 		super(nil, 'day.rhtml')
 		calendar
 		@years.keys.sort.each do |year|
@@ -251,7 +268,7 @@ if mode == "CGI" || mode == "CMD"
 			</head>
 			<body><div style="text-align:center">
 			<h1>Yet Another Squeeze for tDiary</h1>
-			<p>$Revision: 1.11 $</p>
+			<p>$Revision: 1.12 $</p>
 			<p>Copyright (C) 2002 MUTOH Masao&lt;mutoh@highway.ne.jp&gt;</p></div>
 			<br><br>Start!</p><hr>
 		]
