@@ -1,4 +1,4 @@
-# category.rb $Revision: 1.9 $
+# category.rb $Revision: 1.10 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -440,7 +440,7 @@ private
 				categorized[c] = {} if categorized[c].nil?
 				categorized[c][ymd] = [] if categorized[c][ymd].nil?
 				body = <<EVAL
-text = apply_plugin(<<BODY, true)
+text = apply_plugin(<<'BODY', true)
 #{s.body_to_html}
 BODY
 EVAL
