@@ -12,6 +12,15 @@
 	</p>
 	TEXT
 
+@antispamref_html_proxy = <<-TEXT
+	<h3>HTTPプロキシーサーバーの指定</h3>
+	<p>
+	このプラグインは、リンク元に指定された HTTP サーバーにアクセスして、リンク元のHTML を取得します。
+	このアクセスに HTTP プロキシを経由する必要がある場合は以下で設定してください。<br>
+	例 : server : proxy.foo.com  port : 8080
+	</p>
+	TEXT
+
 @antispamref_html_trustedurl = <<-TEXT
 	<h3>信頼するリンク元の指定</h3>
 	<p>
@@ -34,7 +43,34 @@
 	</p>
 	TEXT
 
+@antispamref_html_checkreftable = <<-TEXT
+	「リンク元置換リスト」にマッチするリンク元を信頼する。
+	TEXT
+
+
+@antispamref_html_comment = <<-TEXT
+	<h3>ツッコミに制限をかける</h3>
+	<p>
+	コメントスパムを防ぐために、コメントに対して様々な制限をかけることができます。
+	</p>
+	TEXT
+
+@antispamref_html_comment_kanaonly = <<-TEXT
+	ツッコミにひらがな/カタカナが含まれていない場合は拒否する。
+	TEXT
+
+@antispamref_html_comment_maxsize = <<-TEXT
+	ツッコミ文字列の長さの上限を指定（文字数）
+	TEXT
+
+@antispamref_html_comment_ngwords = <<-TEXT
+	以下の単語がツッコミに含まれていた場合は拒否する<br>
+	（正規表現も利用可能です。正規表現は複数行モードで動作します。
+	正規表現の先頭と末尾に \/ はつけないでください）<br>
+	TEXT
+
 @antispamref_html_faq = <<-TEXT
+	<h3>FAQ</h3>
 	<p>
 	その他、最新のFAQは <a href="http://www.netlife.gr.jp/redbug/diary/?date=20041018\#p02">http://www.netlife.gr.jp/redbug/diary/?date=20041018\#p02</a> を参照してください。
 	</p>
