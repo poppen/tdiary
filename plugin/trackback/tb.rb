@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# tb.rb $Revision: 1.5 $
+# tb.rb $Revision: 1.6 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -41,7 +41,7 @@ begin
 	body = ''
 	begin
 		body = tdiary.eval_rhtml
-		head['charset'] = conf.charset
+		head['charset'] = conf.encoding
 		head['Content-Length'] = body.size.to_s
 		head['Pragma'] = 'no-cache'
 		head['Cache-Control'] = 'no-cache'

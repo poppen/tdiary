@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# todo.rb $Revision: 1.5 $
+# todo.rb $Revision: 1.6 $
 #
 # todo: ToDoリストを表示します．
 #
@@ -219,11 +219,11 @@ begin
 	body = ''
 	if @cgi.mobile_agent? then
 		body = tdiary.eval_rhtml( 'i.' ).to_sjis
-		head['charset'] = conf.charset( true )
+		head['charset'] = conf.mobile_encoding
 		head['Content-Length'] = body.size.to_s
 	else
 		body = tdiary.eval_rhtml
-		head['charset'] = conf.charset
+		head['charset'] = conf.encoding
 		head['Content-Length'] = body.size.to_s
 		head['Pragma'] = 'no-cache'
 		head['Cache-Control'] = 'no-cache'

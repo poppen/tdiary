@@ -1,3 +1,6 @@
+2003-09-25 Junichiro Kita <kita@kitaj.no-ip.com>
+	* trackback/tb.rb, todo/todo.rb: use conf.encoding and conf.mobile_encoding instead of conf.charset.
+
 2003-09-25 zunda <zunda at freeshell.org>
 	* disp_referrer.rb: to_euc removed, instead using @conf.to_native
 

@@ -1,4 +1,4 @@
-# tb-send.rb $Revision: 1.13 $
+# tb-send.rb $Revision: 1.14 $
 #
 # Copyright (c) 2003 Junichiro Kita <kita@kitaj.no-ip.com>
 # You can distribute this file under the GPL.
@@ -52,7 +52,7 @@ if /^(append|replace)$/ =~ @mode then
 			begin
 				Net::HTTP.start( host.untaint, port.to_i ) do |http|
 					response, = http.post( request, trackback,
-							 "Content-Type" => 'application/x-www-form-urlencoded')
+						"Content-Type" => 'application/x-www-form-urlencoded')
 					
 					error = response.body.scan(%r|<error>(\d)</error>|)[0][0]
 					if error == '1'
