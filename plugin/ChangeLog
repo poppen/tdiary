@@ -1,3 +1,6 @@
+2004-02-16 TADA Tadashi <sho@spc.gr.jp>
+	* amazon.rb: swap aliased method names, and bug fix.
+
 2004-02-09 TADA Tadashi <sho@spc.gr.jp>
 	* my-ex.rb: fuzzy regexp in my plugin.
 	* makelirs.rb: remove option 'makelirs.url'.

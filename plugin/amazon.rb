@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.24 $
+# amazon.rb $Revision: 1.25 $
 #
 # See document in language resource file: en/amazon.rb
 #
@@ -16,8 +16,7 @@
 require 'net/http'
 require 'timeout'
 
-
-def getAmazon( asin )
+def get_amazon( asin )
 
 	cache = "#{@cache_path}/amazon"
 
@@ -98,24 +97,23 @@ def getAmazon( asin )
 	return item
 end
 
-def amazonNoImg(item_url,item_name)
+def amazon_no_image( item_url, item_name )
 	%Q[<a href="#{item_url.strip}/ref=nosim/">#{item_name.strip}</a>]
 end
 
-
-def getAmazonImg(position,asin,comment)
+def get_amazon_image( position, asin, comment )
 	return isbn( asin, comment || asin )  if @conf.secure
 
 	begin
 
-		item = getAmazon(asin)
+		item = get_amazon(asin)
 		item[0].sub!( %r|[^/]+$|, @conf['amazon.aid'] ) if @conf['amazon.aid']
 
 		item_name = item[1]
 		item[1] = comment if comment
 		unless item[2] then
 			if @conf['amazon.nodefault']
-				return amazonNoImg(item[0],item[1])
+				return amazon_no_image(item[0],item[1])
 			else
 				item[2] = "http://images-jp.amazon.com/images/G/09/icons/books/comingsoon_books.gif"
 			end
@@ -144,26 +142,22 @@ def getAmazonImg(position,asin,comment)
 	end
 end
 
-def isbnImgLeft(asin,comment = nil)
-	getAmazonImg("left",asin,comment)
+def isbn_image_left( asin, comment = nil )
+	get_amazon_image( "left", asin, comment )
 end
-alias isbn_image_left isbnImgLeft
 
-def isbnImgRight(asin,comment = nil)
-	getAmazonImg("right",asin,comment)
+def isbn_image_right( asin, comment = nil )
+	get_amazon_image( "right", asin, comment )
 end
-alias isbn_image_right isbnImgRight
 
-def isbnImg(asin,comment = nil)
-	getAmazonImg("amazon",asin,comment)
+def isbn_image( asin, comment = nil )
+	get_amazon_image( "amazon", asin, comment )
 end
-alias isbn_image isbnImg
-alias amazon isbnImg
 
 def isbn( asin, comment )
-	item_url = "http://www.amazon.co.jp/exec/obidos/ASIN/#{asin}/"
+	item_url = "#{@amazon_url}/#{asin}/"
 	item_url << @conf['amazon.aid'] if @conf['amazon.aid']
-	amazonNoImg( item_url, comment )
+	amazon_no_image( item_url, comment )
 end
 
 unless @conf.secure and @conf['amazon.hideconf'] then
@@ -219,3 +213,12 @@ def amazon_conf_proc
 	end
 	result
 end
+
+# for compatibility
+alias getAmazonImg get_amazon_image
+alias getAmazon get_amazon
+alias amazonNoImg amazon_no_image
+alias isbnImgLeft isbn_image_left
+alias isbnImgRight isbn_image_right
+alias isbnImg isbn_image
+alias amazon isbn_image
