@@ -1,12 +1,9 @@
-# calendar3.rb $Revision: 1.16 $
+# calendar3.rb $Revision: 1.17 $
 #
 # calendar3: 現在表示している月のカレンダーを表示します．
 #  パラメタ: なし
 #
 # tdiary.confで指定するオプション:
-#   @options['calendar3.erb']
-#     title属性に渡す文字列をERbLightで評価するかどうか (true/false)
-#     (省略時: true) 
 #   @options['calendar3.show_todo']
 #     パラグラフのサブサイトルとここで指定した文字列が一致し
 #     かつその日の日記が非表示の場合，そのパラグラフの内容を
@@ -119,13 +116,11 @@ MODIFY_CLASS
 end
 
 def calendar3
-	if @options.has_key? 'calendar3.erb'
-		extra_erb = @options['calendar3.erb']
-	else
-		extra_erb = true
-	end
 	show_todo = @options['calendar3.show_todo']
 	result = ''
+	if @options.has_key? 'calendar3.erb'
+		result << %Q|<p class="message">@options['calendar3.erb'] is obsolete!<p>|
+	end
 	if @mode == 'latest'
 		date = Time.now
 	else
@@ -163,11 +158,7 @@ def calendar3
 			r = []
 			@diaries[date].each_section do |section|
 				if section.subtitle
-					if extra_erb
-						text = apply_plugin( section.subtitle )
-					else
-						text = section.subtitle
-					end
+					text = apply_plugin( section.subtitle )
 					r << %Q|#{i}. #{text.gsub(/<.+?>/, '')}|
 				end
 				i += 1
@@ -179,13 +170,8 @@ def calendar3
 				i = 1
 				@diaries[date].each_section do |section|
 					if section.subtitle
-						if extra_erb
-							text = apply_plugin( section.to_src)
-							subtitle = apply_plugin( section.subtitle )
-						else
-							text = section.to_src
-							subtitle = section.subtitle
-						end
+						text = apply_plugin( section.to_src)
+						subtitle = apply_plugin( section.subtitle )
 						result << %Q|    <a href="#{@index}#{anchor "%s#p%02d" % [date, i]}" title="#{CGI::escapeHTML(Calendar3.shorten(text))}">#{i}</a>. #{subtitle}<br>\n|
 					end
 					i += 1
