@@ -1,4 +1,7 @@
 2003-10-13 Junichiro Kita <kita@kitaj.no-ip.com>
+	* kw.rb: kw can take 2 args. thanks to yowa.
+
+2003-10-13 Junichiro Kita <kita@kitaj.no-ip.com>
 	* tb-send.rb: HTMLize excerpt of TrackBack ping. thanks to matz.
 
 2003-10-13  Kazuhiko  <kazuhiko@fdiary.net>

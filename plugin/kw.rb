@@ -1,8 +1,9 @@
-# kw.rb $Revision: 1.7 $
+# kw.rb $Revision: 1.8 $
 #
 # kw: keyword link generator
 #   Parameters:
 #     keyword: keyword or InterWikiName (separated by ':').
+#     name: anchor string (optional).
 #
 # @options['kw.dic']
 #   array of dictionary table array. an item of array is:
@@ -59,7 +60,7 @@ def kw_generate_dic
 	kw_dic
 end
 
-def kw( keyword )
+def kw( keyword, name = nil )
 	@kw_dic = kw_generate_dic unless @kw_dic
 	show_inter = @options['kw.show_inter'] == nil ? true : @options['kw.show_inter']
 
@@ -69,6 +70,7 @@ def kw( keyword )
 		key = keyword
 	end
 	keyword = key unless show_inter
+	name = keyword unless name
 	begin
 		key = CGI::escape( case @kw_dic[inter][1]
 			when 'euc-jp'
@@ -85,7 +87,7 @@ def kw( keyword )
 		inter = nil
 		retry
 	end
-	%Q[<a href="#{@kw_dic[inter][0].sub( /\$1/, key )}">#{keyword}</a>]
+	%Q[<a href="#{@kw_dic[inter][0].sub( /\$1/, key )}">#{name}</a>]
 end
 
 #
