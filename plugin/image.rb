@@ -1,4 +1,4 @@
-# image.rb $Revision: 1.25 $
+# image.rb $Revision: 1.26 $
 # -pv-
 # 
 # 名称:
@@ -11,13 +11,15 @@
 # 本文
 #
 # 使い方:
-# image( number, 'altword', thumbnail ) - 画像を表示します。
+# image( number, 'altword', thumbnail, size, place ) - 画像を表示します。
 #    number - 画像の番号0、1、2等
 #    altword - imgタグの altに入れる文字列
 #    thumbnail - サムネイル(小さな画像)を指定する(省略可)
+#    size - 画像のサイズ(Array)。[width, height]の形式で指定(省略可)
+#    place - imgタグのclass名(省略可)。省略時は'photo'
 #
-# image_left( number, 'altword', thumbnail ) - imageにclass=leftを追加します。
-# image_right( number, 'altword', thumbnail ) - imageにclass=rightを追加します。
+# image_left( number, 'altword', thumbnail, size ) - imageにclass=leftを追加します。
+# image_right( number, 'altword', thumbnail, size ) - imageにclass=rightを追加します。
 #
 # image_link( number, 'desc' ) - 画像へのリンクを生成します。
 #    number - 画像の番号0、1、2等
@@ -37,6 +39,10 @@
 #  @options['image.maxsize']
 #     1枚あたりの最大画像バイト数。無指定時は10000
 #     ただし@secure = true時のみ有効
+#  @options['image.maxwidth']
+#     sizeを指定しなかった場合に指定できる画像の最大表示幅。無指定時はnil
+#     表示のたびにファイルアクセスが入るので、重くなるかも?
+#     @secure = true時は無効
 #
 # ライセンスについて:
 # Copyright (c) 2002,2003 Daisuke Kato <dai@kato-agri.com>
@@ -44,24 +50,6 @@
 # Copyright (c) 2003 Yoshimi KURUMA <yoshimik@iris.dti.ne.jp>
 # Distributed under the GPL
 #
-
-=begin Changelog
-See recent ChangeLog to plugins collections.
-
-2003-04-23 Yoshimi KURUMA <yoshimik@iris.dti.ne.jp>
-	* image.rb: add JavaScript for insert plugin tag into diary.
-
-2003-04-23 Daisuke Kato <dai@kato-agri.com>
-	* tuning around form tag.
-
-2003-04-23 Yoshimi KURUMA <yoshimik@iris.dti.ne.jp>
-	* Now img tag includes class="photo".
-	* New Option. image.maxnum, image.maxsize.
-	* fine tuning around form tag.
-
-2003-04-22 Yoshimi KURUMA <yoshimik@iris.dti.ne.jp>
-	* version 0.5 first form_proc version.
-=end
 
 unless @resource_loaded then
 	def image_error_num( max ); "画像は1日#{max}枚までです。不要な画像を削除してから追加してください"; end
@@ -90,8 +78,15 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
 		else
 			size = " width=\"#{size.to_i}\""
 		end
-	else
-		size = ""
+	elsif @image_maxwidth and not @conf.secure then
+		File::open( "#{@image_dir}/#{image}".untaint ) do |f|
+			t, w, h = image_info( f )
+			if w > @image_maxwidth then
+				size = %Q[ width="#{@image_maxwidth}"]
+			else
+				size = ""
+			end
+		end
 	end
 	if thumbnail then
 	   	%Q[<a href="#{@image_url}/#{image}"><img class="#{place}" src="#{@image_url}/#{image_t}" alt="#{alt}" title="#{alt}"#{size}></a>]
@@ -124,6 +119,7 @@ end
 @image_dir.chop! if /\/$/ =~ @image_dir
 @image_url = @options && @options['image.url'] || './images/'
 @image_url.chop! if /\/$/ =~ @image_url
+@image_maxwidth = @options && @options['image.maxwidth'] || nil
 
 add_body_enter_proc do |date|	
    @image_date = date.strftime( "%Y%m%d" )

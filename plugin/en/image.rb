@@ -1,17 +1,19 @@
 #
-# English resource of image plugin $Revision: 1.2 $
+# English resource of image plugin $Revision: 1.3 $
 #
 
 #
 # Image Diary -  Upload images and insert to diary.
 #
-# image( number, 'altword', thumbnail ) - show a image.
+# image( number, 'altword', thumbnail, size, place ) - show a image.
 #    number - image ID as 0, 1, 2...
 #    altword - alt strings of the img element.
 #    thumbnail - image ID of thumbnail (optional)
+#    size - array format of image size (optional), as [width, height]
+#    place - class name of <img> tag (optional), "place" is default.
 #
-# image_left( number, 'altword', thumbnail ) - show a image with "class=left"
-# image_right( number, 'altword', thumbnail ) - show a image with "class=right"
+# image_left( number, 'altword', thumbnail, size ) - show a image with "class=left"
+# image_right( number, 'altword', thumbnail, size ) - show a image with "class=right"
 #
 # image_link( number, 'desc' ) - make link to a image.
 #    number - image ID as 0, 1, 2...
@@ -29,6 +31,9 @@
 #  @options['image.maxsize']
 #     Max size of an image. Default is 10000 bytes.
 #     This option is effective in @secure = true.
+#  @options['image.maxwidth']
+#     Max display width of image without specified 'size' parameter.
+#     It will ignore when @secure = true.
 #
 def image_error_num( max ); "You can add images upto #{max} par a day."; end
 def image_error_size( max ); "You can add images upto #{max} bytes par an image."; end

@@ -1,5 +1,6 @@
 2005-03-10 TADA Tadashi <sho@spc.gr.jp>
-	* tb-send.rb: add some error check and bug fix. thanks Yutaka Oiwa <yutaka at oiwa.jp>
+	* tb-send.rb: add some error check and bug fix. thanks Yutaka Oiwa <yutaka at oiwa.jp>.
+	* image.rb: add new option "image.maxwidth", thanks Masaru Yokoi <masaru at masaru.org>.
 
 2005-03-09 TADA Tadashi <sho@spc.gr.jp>
 	* amazon.rb: remove debug print.
