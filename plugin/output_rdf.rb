@@ -1,5 +1,5 @@
 # output_rdf.rb: tDiary plugin to generate RDF file when diary updated.
-# $Revision: 1.16 $
+# $Revision: 1.17 $
 #
 # See document to @lang/output_rdf.rb
 #
@@ -15,12 +15,9 @@ add_header_proc {
 if ( /^(append|replace|trackbackreceive)$/ =~ @mode ) || ( /^comment$/ =~ @mode and @comment ) then
 	date = @date.strftime("%Y%m%d")
 	diary = @diaries[date]
-	host = ENV['HTTP_HOST'] 
-	path = ENV['REQUEST_URI']
-	path = path[0..path.rindex( "/" )]
-	uri = "#{host}#{path}#{@index}".gsub( /\/\.?\//, '/' )
+	uri = "#{@conf.base_url}#{@conf.index}".gsub(%r|/\./|, '/')
 	rdf_file = @options['output_rdf.file'] || 'index.rdf'
-	rdf_channel_about = "#{host}#{path}#{rdf_file}"
+	rdf_channel_about = "#{@conf.base_url}#{rdf_file}"
 	r = ""
 	r <<<<-RDF
 <?xml version="1.0" encoding="#{@output_rdf_encode}"?>
@@ -30,9 +27,9 @@ if ( /^(append|replace|trackbackreceive)$/ =~ @mode ) || ( /^comment$/ =~ @mode 
  xmlns:dc="http://purl.org/dc/elements/1.1/"
  xml:lang="#{@conf.html_lang}"
 >
- <channel rdf:about="http://#{rdf_channel_about}">
+ <channel rdf:about="#{rdf_channel_about}">
    <title>#{CGI::escapeHTML( @html_title )}</title>
-   <link>http://#{uri}</link>
+   <link>#{uri}</link>
    <description>#{CGI::escapeHTML( @html_title )}</description>
    <dc:date>#{Time.now.strftime('%Y-%m-%dT%H:%M')}</dc:date>
    <items>
@@ -42,7 +39,7 @@ if ( /^(append|replace|trackbackreceive)$/ =~ @mode ) || ( /^comment$/ =~ @mode 
  	diary.visible? and diary.each_section do |section|
 		if section.subtitle then
 		r <<<<-RDF
-       <rdf:li rdf:resource="http://#{uri}#{anchor "#{date}\#p#{'%02d' % idx}"}" />
+       <rdf:li rdf:resource="#{uri}#{anchor "#{date}\#p#{'%02d' % idx}"}" />
  		RDF
 		end
   		idx += 1
@@ -51,7 +48,7 @@ if ( /^(append|replace|trackbackreceive)$/ =~ @mode ) || ( /^comment$/ =~ @mode 
 	comment_link = ""
 	if diary.visible? and diary.count_comments > 0 then
   		diary.each_visible_comment( 100 ) do |comment,idx|
-			comment_link = %Q[http://#{uri}#{anchor "#{date}\#c#{'%02d' % idx}"}]
+			comment_link = %Q[#{uri}#{anchor "#{date}\#c#{'%02d' % idx}"}]
 			r <<<<-RDF
        <rdf:li rdf:resource="#{comment_link}" />
 			RDF
@@ -65,7 +62,7 @@ if ( /^(append|replace|trackbackreceive)$/ =~ @mode ) || ( /^comment$/ =~ @mode 
  	idx = 1
  	diary.visible? and diary.each_section do |section|
 		if section.subtitle then
-		link = %Q[http://#{uri}#{anchor "#{date}\#p#{'%02d' % idx}"}]
+		link = %Q[#{uri}#{anchor "#{date}\#p#{'%02d' % idx}"}]
 		subtitle = section.subtitle_to_html
 		desc = section.body_to_html
 		old_apply_plugin = @options['apply_plugin']
@@ -86,7 +83,7 @@ if ( /^(append|replace|trackbackreceive)$/ =~ @mode ) || ( /^comment$/ =~ @mode 
 	end
 	if diary.visible? and diary.count_comments > 0 then
   		diary.each_visible_comment( 100 ) do |comment,idx|
-			link = "http://#{uri}#{anchor "#{date}\#c#{'%02d' % idx}"}"	
+			link = "#{uri}#{anchor "#{date}\#c#{'%02d' % idx}"}"	
 		r <<<<-RDF
  <item rdf:about="#{link}">
    <title>#{comment_today}-#{idx} (#{CGI::escapeHTML( comment.name )})</title>

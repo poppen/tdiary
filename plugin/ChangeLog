@@ -1,3 +1,6 @@
+2003-11-19 Junichiro Kita <kita@kitaj.no-ip.com>
+	* tb-send.rb, tb-show.rb, makelirs.rb, output_rdf.rb: use @conf.base_url
+
 2003-11-18 zunda <zunda at freeshell.org>
 	* ja/disp_referrer.rb, en/disp_referer.rb: hopefully more usable config menu
 	* Thanks to Kazuhiro NISHIYAMA, TADA Tadashi, NISHIMURA Takashi, ysano, Daigo Moriwaki, and mass.

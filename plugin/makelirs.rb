@@ -1,4 +1,4 @@
-# makelirs.rb $Revision: 1.6 $
+# makelirs.rb $Revision: 1.7 $
 #
 # 更新情報をLIRSフォーマットのファイルに吐き出す
 #
@@ -49,10 +49,7 @@ if /^(append|replace|comment|trackbackreceive)$/ =~ @mode then
 	# escape comma
 	e = proc{|str| str.gsub(/[,\\]/) { "\\#{$&}" } }
 
-	host = ENV['HTTP_HOST']
-	path = ENV['REQUEST_URI']
-	path = path[0..path.rindex("/")]
-	url =  @options['makelirs.url'] || "http://#{host}#{path}"
+	url =  @options['makelirs.url'] || @conf.base_url
 	now = Time.now
 	utc_offset = (now.hour - now.utc.hour) * 3600
 

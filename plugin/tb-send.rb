@@ -1,4 +1,4 @@
-# tb-send.rb $Revision: 1.3 $
+# tb-send.rb $Revision: 1.4 $
 #
 # Copyright (c) 2003 Junichiro Kita <kita@kitaj.no-ip.com>
 # You can distribute this file under the GPL.
@@ -43,10 +43,7 @@ if /^(append|replace)$/ =~ @mode then
 			excerpt = @conf.shorten( excerpt.gsub( /\r/, '' ).gsub( /\n/, "\001" ), 252 ).gsub( /\001/, "\n" )
 		end
 
-		my_url = "http://#{ENV['HTTP_HOST']}"
-		my_url << ENV['REQUEST_URI'].sub(Regexp.new(Regexp.escape(@conf.update.sub(%r|^\./|, ''))), '')
-		my_url << @conf.index.sub(%r|^\./|, '')
-		my_url << anchor(@date.strftime('%Y%m%d'))
+		my_url = %Q|#{@conf.base_url}#{@conf.index}#{anchor(@date.strftime('%Y%m%d'))}|.sub(%r|/\./|, '/')
 
 		trackback = "url=#{CGI::escape(my_url)}"
 		trackback << "&charset=#{trackback_ping_charset}"
