@@ -1,3 +1,6 @@
+2004-06-14 TADA Tadashi <sho@spc.gr.jp>
+	* makerss.rb: new plugin.
+
 2004-06-12 zunda <zunda at freeshell.org>
 	* disp_referer.rb: option added for command-line executed benchmark
 	* {en,ja}/disp_referer.rb: better regexp, thanks to Aoki-san http://i.loveruby.net/d/20040530.html#p02
