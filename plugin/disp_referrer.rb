@@ -1,4 +1,4 @@
-# disp_referrer.rb $Revision: 1.13 $
+# disp_referrer.rb $Revision: 1.14 $
 # -pv-
 #
 # 名称：
@@ -27,6 +27,9 @@
 # You can redistribute it and/or modify it under GPL2.
 #
 =begin ChangeLog
+2002-10-07 Junichiro Kita <kita@kitaj.no-ip.com>
+	* add @options['disp_referrer.search_table']
+
 2002-10-07 TADA Tadashi <sho@spc.gr.jp>
 	* for tDiary 1.5.0.20021003.
 
@@ -232,6 +235,9 @@ def referer_of_today_long(diary, limit)
     [["DIONサーチ", "http://www.dion.ne.jp/"],
 	["^http://dir.dion.ne.jp/LookSmartSearch.jsp.*(key|QueryString)=([^&]*).*", "\\2"]]
   ]
+  if @options["disp_referrer.search_table"]
+	search_table += @options["disp_referrer.search_table"]
+  end
 
   result = %Q[<div class="caption">#{referer_today}</div>\n]
   result << %Q[<ul>\n]
