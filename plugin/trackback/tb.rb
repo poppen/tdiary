@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# tb.rb $Revision: 1.4 $
+# tb.rb $Revision: 1.5 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -25,7 +25,7 @@ begin
 
 	begin
 		if /POST/i === @cgi.request_method and @cgi.valid?( 'url' )
-			tdiary = TDiary::TDiaryTrackBackReceive::new( @cgi, nil, conf )
+			tdiary = TDiary::TDiaryTrackBackReceive::new( @cgi, 'day.rhtml', conf )
 		elsif @cgi.valid?( '__mode') and @cgi.params['__mode'][0] == 'rss'
 			tdiary = TDiary::TDiaryTrackBackRSS::new( @cgi, nil, conf )
 		end

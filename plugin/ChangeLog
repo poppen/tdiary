@@ -1,4 +1,7 @@
 2003-05-11 Junichiro Kita <kita@kitaj.no-ip.com>
+	* tb.rb: use day.rhtml to do some plugin task.
+
+2003-05-11 Junichiro Kita <kita@kitaj.no-ip.com>
 	* tb-show.rb: new option. @options['tb.hide_if_no_tb'].
 
 2003-05-10 Junichiro Kita <kita@kitaj.no-ip.com>
