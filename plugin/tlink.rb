@@ -1,4 +1,4 @@
-# tlink.rb $Revision: 1.1 $
+# tlink.rb $Revision: 1.2 $
 #
 # title Â°À­ÉÕ anchor plugin
 #
@@ -20,6 +20,10 @@
 # Modified: by abbey <inlet@cello.no-ip.org>
 #
 =begin ChangeLog
+2002-04-20 NT <nt@24i.net>
+	* change User-Agent
+	* modify some regular expressions
+
 2002-04-19 NT <nt@24i.net>
 	* modify some regular expressions
 	* add User-Agent
@@ -34,11 +38,15 @@
 
 require 'net/http'
 require 'cgi'
+require 'kconv'
 
 def getcomment( url )
-  agent = { "User-Agent" => "tDiary plugin (tlink)" }
   result = ""
+  agent = { "User-Agent" => "DoCoMo (compatible; tDiary plugin; tlink;)" }
   host, path, frag = url.scan( %r[http://(.*?)/(.*)#((?:p|c)\d\d)] )[0]
+  if /p0/ =~ frag
+    frag = "(" + frag + "|" + frag.sub( /p/, "p#" ).sub( /#0/, "#" ) + ")"
+  end
   port = 80
   if /(.*):(\d+)/ =~ host
     host = $1
@@ -48,22 +56,22 @@ def getcomment( url )
   Net::HTTP.start( host, port ) { |http|
     response , = http.get( "/#{path}", agent )
       response.body.each { |line|
-        if %r[<a name="#{frag}] =~ line
-          if %r[<a(?:.*?)##{frag}(?:.*?)</a>(.*?)</(h3|p)>] =~ line
+        if %r[<A NAME="#{frag}] =~ line
+            if %r[<P><A NAME="p\d\d">(?:.*?)</A> (.*?)</P>] =~ line.toeuc
+              result = $1
+	      break
+            else
+              hata = 1
+            end
+        elsif hata == 1 && %r[^\t*(.*?)<BR>] =~ line.toeuc
             result = $1
+            hata = 0
 	    break
-          else
-            hata = 1
-          end
-        elsif hata == 1 && %r[<p>(.*?)(<br>|</p>)] =~ line
-          result = $1
-          hata = 0
-	  break
         end
       }
   }
 
-  result = CGI::escapeHTML( result.gsub( %r[</?a(.*?)>], "" ) ).gsub( /&amp;nbsp;/, " " )
+  result = CGI::escapeHTML( result.gsub( %r[</?[aA](.*?)>], "" ) ).gsub( /&amp;nbsp;/, " " )
 end
 
 def tlink( url, str, title = nil )
@@ -73,3 +81,4 @@ def tlink( url, str, title = nil )
 
   %Q[<a href="#{url}", title="#{title}">#{str}</a>]
 end
+
