@@ -1,4 +1,4 @@
-# tb-send.rb $Revision: 1.3 $
+# tb-send.rb $Revision: 1.4 $
 #
 # Copyright (c) 2003 Junichiro Kita <kita@kitaj.no-ip.com>
 # You can distribute this file under the GPL.
@@ -30,9 +30,9 @@ if /^(append|replace)$/ =~ @mode then
 	my_url << anchor(@date.strftime('%Y%m%d'))
 
 	body = "url=#{CGI::escape(my_url)}"
-	body << ";title=#{CGI::escape(title.to_euc)}" unless title == ''
-	body << ";excerpt=#{CGI::escape(excerpt.to_euc)}" unless excerpt == ''
-	body << ";blog_name=#{CGI::escape(blog_name)}"
+	body << "&title=#{CGI::escape(title.to_euc)}" unless title == ''
+	body << "&excerpt=#{CGI::escape(excerpt.to_euc)}" unless excerpt == ''
+	body << "&blog_name=#{CGI::escape(blog_name)}"
 
 	if %r|^http://([^/]+)(/.*)$| =~ url then
 		request = $2
