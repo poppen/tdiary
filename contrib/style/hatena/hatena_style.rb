@@ -18,7 +18,7 @@
 # OUT OF  OR IN CONNECTION WITH  THE CODE OR THE  USE OR OTHER  DEALINGS IN THE
 # CODE.
 
-# $Id: hatena_style.rb,v 1.3 2004-03-09 11:04:10 mput Exp $
+# $Id: hatena_style.rb,v 1.4 2004-03-12 13:37:25 mput Exp $
 # Hatena::Diary compatible style
 # Works only under ruby 1.8.1 or later
 
@@ -81,6 +81,15 @@ end
 
 # This is the namespace module
 module Hatena
+
+  def Hatena.conf
+    ObjectSpace.each_object do |diary|
+      next unless diary.kind_of?(TDiary::TDiaryBase)
+      return diary.instance_eval { @conf }
+      break
+    end
+  end
+
   Diary = Object.new
   API = Object.new
 
@@ -96,14 +105,7 @@ module Hatena
   # find the cache_path from entore ruby world
   # could someone please tell me more eficient way to do this...
   def API.cache_path
-    ret = ''
-    ObjectSpace.each_object do |diary|
-      next unless diary.kind_of?(TDiary::TDiaryBase)
-      ret = diary.instance_eval {
-        @conf.cache_path||"#{@conf.data_path}cache"
-      }
-      break
-    end
+    ret = Hatena.conf.cache_path || Hatena.conf.data_path + '/cache'
 
     unless FileTest.directory?(ret)
       begin
@@ -644,11 +646,13 @@ class Hatena::Inline
         elsif str.index("</a>") == 0
           inside_a = false
         end
+      when /\A\[amazon:(.*?)\]/m
+        @elems.push Hatena::AmazonSearch.new(Regexp.last_match[1], true)
       when /\A\[google:(.*?)\]/m
         @elems.push Hatena::Google.new(Regexp.last_match[1], true)
       when /\A\[keyword:(.*?)\]/m, /\A\[\[(.*?)\]\]/m
         @elems.push Hatena::Keyword.new(Regexp.last_match[1], true)
-      when /\A\[id:(.*?)\]/m, /\Aid:((?:[\w\d_]+)(?::\d+)?)/n
+      when /\A\[id:(.*?)\]/m, /\Aid:((?:[\w\d_]+)(?::(?:\d+|about))?)/n
         @elems.push Hatena::ID.new(Regexp.last_match[1], true)
       when /\A\[(ISBN|ASIN):(.*?)\]/m, /(ISBN|ASIN):([\w\d]+)(:image(:(small|large))?)?/
         @elems.push Hatena::Amazon.new(Regexp.last_match[2], true)
@@ -831,8 +835,29 @@ class Hatena::Amazon
     else
       sprintf('http://www.amazon.co.jp/exec/obidos/ASIN/%s/%s',
               @str,
-              @conf['amazon.aid'] || '')
+              Hatena.conf['amazon.aid'] || '')
     end
+  end
+end
+
+# Amazon search
+# http://d.hatena.ne.jp/hatenadiary/20040310#1078879113
+class Hatena::AmazonSearch
+  def initialize(str, tag_p)
+    @str = str
+    @tag_p = tag_p
+  end
+
+  def convert(mode)
+    uri = 'http://www.amazon.co.jp/exec/obidos/external-search?mode=blended&amp;tag=%s&amp;encoding-string-jp=%%c6%%fc%%cb%%dc%%b8%%ec&amp;keyword=%s' % [Hatena.conf['amazon.aid'] || '', URI.escape(@str)]
+    return uri unless @tag_p
+    template=nil
+    if mode == :CHTML
+      template = '<A HREF="%s">amazon:%s</A>'
+    else
+      template = '<a href="%s">amazon:%s</a>'
+    end
+    sprintf(template, uri, @str)
   end
 end
 
