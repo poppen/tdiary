@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.15 2004-11-11 02:08:37 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.16 2004-11-11 02:11:03 zunda Exp $-))
 日本語リソース
 
 == 概要
@@ -482,8 +482,8 @@ DispReferrer2_Engines = {
 	'lycos' => [[%r{\Ahttp://.*?\.lycos\.([^/]+)}i, '".#{$1}のLycos"', ['query', 'q', 'qt'], nil ]],
 	'fresheye' => [[%r{\Ahttp://.*?\.fresheye}i, '"フレッシュアイ"', ['kw'], nil ]],
 	'goo' => [
-		[%r{\Ahttp://((www|dictionary|kids|eco|oshiete|search|community|machi|bb|bsearch|dir|channel)\.)?goo\.ne\.jp}i, '"goo"', ['MT'], nil ],
-		[%r{\Ahttp://((www|dictionary|kids|eco|oshiete|search|community|machi|bb|bsearch|dir|channel)\.)?goo\.ne\.jp}i, '"goo"', [], nil ],
+		[%r{\Ahttp://((www|dictionary|kids|eco|oshiete|search|community|machi|bb|bsearch|dir|channel|ocnsearch)\.)?goo\.ne\.jp}i, '"goo"', ['MT'], nil ],
+		[%r{\Ahttp://((www|dictionary|kids|eco|oshiete|search|community|machi|bb|bsearch|dir|channel|ocnsearch)\.)?goo\.ne\.jp}i, '"goo"', [], nil ],
 	],
 	'nifty' => [
 		[%r{\Ahttp://search\.nifty\.com}i, '"@nifty/@search"', ['q', 'Text'], DispReferrer2_Google_cache],
