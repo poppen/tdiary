@@ -1,4 +1,8 @@
 2004-11-09 zunda <zunda at freeshell.org>
+	* search_control.rb, {en,ja}/search_control.rb: multiple user
+	agents are now allowed 
+
+2004-11-09 zunda <zunda at freeshell.org>
 	* disp_referrer.rb: delete cache when it is broken
 	* disp_referrer.rb: i-know.jp and bloglines.com added as antenna
 	* ja/disp_referrer.rb: added and modified DispReferrer2_Engines

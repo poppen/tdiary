@@ -1,8 +1,10 @@
 =begin
-= ここだけ検索プラグイン/search control plugin((-$Id: search_control.rb,v 1.4 2003-10-13 14:55:24 zunda Exp $-))
+= ここだけ検索プラグイン/search control plugin((-$Id: search_control.rb,v 1.5 2004-11-09 21:07:39 zunda Exp $-))
 
-== 著作権について (Copyright notice)
-Copyright (C) 2003 zunda <zunda at freeshell.org>
+Under revision! TODO: add/remove user agents
+
+== License
+Copyright (C) 2003, 2004 zunda <zunda at freeshell.org>
 
 Permission is granted for use, copying, modification, distribution, and
 distribution of modified versions of this work under the terms of GPL
@@ -25,97 +27,181 @@ See ChangeLog for changes after this.
 - English translation
 =end ChangeLog
 
-# index or follow
-Search_control_categories = [ 'index' ]
+# Default values
+unless defined?( Search_control_agents ) then
+	Search_control_agents = [
+		'',
+		'Comaneci_bot',
+	]
+	Search_control_defaults = [
+		{	# agent: generic
+			'latest' => 'f',
+			'day' => 't',
+			'month' => 'f',
+			'nyear' => 'f',
+			'category' => 'f',
+		},
+		{	# agent: 'Comaneci_bot'
+			'latest' => 't',
+			'day' => 'f',
+			'month' => 'f',
+			'nyear' => 'f',
+			'category' => 'f',
+		},
+	]
 
-# [0]:index
-Search_control_defaults = {
-	'latest' => ['f'],
-	'day' => ['t'],
-	'month' => ['f'],
-	'nyear' => ['f'],
-	'category' => ['f'],
-}
+	# to be used for @options and in the HTML form
+	Search_control_prefix = 'search_control'
 
-# to be used for @options and in the HTML form
-Search_control_prefix = 'search_control'
+	# functions used in this file
+	# number of agents
+	def _sc_nkey
+		"#{Search_control_prefix}.agents"
+	end
+
+	# agent name key for agent number
+	def _sc_akey( number )
+		"#{Search_control_prefix}.agent#{number.to_i > 0 ? number : ''}"
+	end
+
+	# views
+	def _sc_vkey( view, number )
+		"#{Search_control_prefix}.#{number.to_i > 0 ? number : ''}#{view}.index"
+	end
+	def _sc_each_view
+		Search_control_defaults[0].each_key do |view|
+			yield( view )
+		end
+	end
+	def _sc_each_vkey( number )
+		_sc_each_view do |view|
+			yield( _sc_vkey( view, number ) )
+		end
+	end
+
+	# keys in the form
+	def _sc_newkey
+		"#{Search_control_prefix}.newagent"
+	end
+	def _sc_delkey( number )
+		"#{Search_control_prefix}.delete#{number}"
+	end
+end
 
 # defaults
-Search_control_categories.each_index do |c|
-	Search_control_defaults.each_key do |view|
-		cat = Search_control_categories[c]
-		key = "#{Search_control_prefix}.#{view}.#{cat}"
-		unless @conf[key] then
-			@conf[key] = Search_control_defaults[view][c]
-		end
+unless @conf[_sc_nkey] then
+	@conf[_sc_nkey] = Search_control_agents.size
+end
+_sc_each_vkey( 0 ) do |vkey|
+	@conf[vkey] = value unless @conf[vkey]
+end
+Search_control_defaults.each_with_index do |d, i|
+	@conf[_sc_akey(i)] = Search_control_agents[i] unless @conf[_sc_akey(i)] and i > 0
+	d.each_pair do |view, value|
+		vkey = _sc_vkey( view, i )
+		@conf[vkey] = value unless @conf[vkey]
 	end
 end
 
 # configuration
-add_conf_proc( Search_control_prefix, @search_control_plugin_name ) do
-
+add_conf_proc( Search_control_prefix, Search_control_plugin_name ) do
 	# receive the configurations from the form
 	if 'saveconf' == @mode then
-		Search_control_categories.each do |cat|
-			Search_control_defaults.each_key do |view|
-				key = "#{Search_control_prefix}.#{view}.#{cat}"
-				if 't' == @cgi.params[key][0] then
-					@conf[key] = 't'
+
+		# setting changes
+		(0...@conf[_sc_nkey]).each do |i|
+			if i > 0 and @cgi.params[_sc_akey( i )][0] then
+				agent = @cgi.params[_sc_akey( i )][0].strip
+				unless agent.empty? then
+					@conf[_sc_akey( i )] = agent
+				end
+			end
+			_sc_each_vkey( i ) do |vkey|
+				if 't' == @cgi.params[vkey][0] then
+					@conf[vkey] = 't'
 				else
-					@conf[key] = 'f'
+					@conf[vkey] = 'f'
 				end
 			end
 		end
+
+		# deleted agents
+		(@conf[_sc_nkey] - 1).downto( 1 ) do |i|
+			if 't' == @cgi.params[_sc_delkey( i )][0] then
+				(i...(@conf[_sc_nkey] - 1)).each do |j|
+					@conf[_sc_akey( j )] = @conf[_sc_akey( j+1 )]
+					_sc_each_view do |view|
+						@conf[_sc_vkey( view, j ) ] = @conf[_sc_vkey( view, j+1 ) ]
+					end
+				end
+				@conf[_sc_nkey] -= 1
+				@conf.delete( _sc_akey( @conf[_sc_nkey] ) )
+				_sc_each_vkey( @conf[_sc_nkey] ) do |vkey|
+					@conf.delete( vkey )
+				end
+			end
+		end
+
+		# new agent
+		newagent = @cgi.params[_sc_newkey] ? @cgi.params[_sc_newkey][0].strip : nil
+		if newagent and not newagent.empty? then
+			@conf[_sc_akey( @conf[_sc_nkey] )] = newagent
+			Search_control_defaults[0].each_pair do |view, value|
+				@conf[_sc_vkey( view, @conf[_sc_nkey] )] = value
+			end
+			@conf[_sc_nkey] += 1
+		end
+
 	end
 
 	# show the HTML
-	case @conf.lang
-	when 'en'
-		r = <<-_HTML
-		<p>Asks the crawlers from external search engines not to index
-			unwanted pages. Check the viewes you want the search engines to
-			index.</p>
-		<ul>
-		_HTML
-		[
-			[ 'Latest', 'latest' ], [ 'One-day', 'day' ], [ 'One-month', 'month' ],
-			[ 'Same-day', 'nyear' ], [ 'Category', 'category' ]
-		].each do |a|
-			label = a[0]
-			key = "#{Search_control_prefix}.#{a[1]}"
-			r << <<-_HTML
-				<li><input name="#{key}.index" value="t" type="checkbox"#{'t' == @conf["#{key}.index"] ? ' checked' : ''}>#{label}
-			_HTML
+	r = Search_control_description_html + "<ul>\n"
+	r << %Q|<li><input name="#{_sc_newkey}" value="" type="text"> #{Search_control_new_label}\n|
+	(@conf[_sc_nkey] - 1).downto( 1 ) do |i|
+		r << %Q|<li><input name="#{_sc_akey( i )}" value="#{CGI::escapeHTML( @conf[_sc_akey( i )] )}" type="text">\n|
+		r << %Q|#{Search_control_delete_label}<input name="#{_sc_delkey( i )}" value="t" type="checkbox">\n|
+		r << "<ul>\n"
+		Search_control_categories.each do |c|
+			label = c[0]
+			view = c[1]
+			checked = 't' == @conf[_sc_vkey( view, i )] ? ' checked' : ''
+			r << %Q|<li><input name="#{_sc_vkey( view, i )}" value="t" type="checkbox"#{checked}>#{label}\n|
 		end
-		r << "\t\t</ul>\n"
-	else
-		r = @search_control_description_html + "\t\t<ul>\n"
-		@search_control_categorirs.each do |a|
-			label = a[0]
-			key = "#{Search_control_prefix}.#{a[1]}"
-			r << <<-_HTML
-				<li><input name="#{key}.index" value="t" type="checkbox"#{'t' == @conf["#{key}.index"] ? ' checked' : ''}>#{label}
-			_HTML
-		end
-		r << "\t\t</ul>\n"
+		r << "</ul>\n"
 	end
-	r
-
+	r << %Q|<li>#{Search_control_default_label}\n|
+	r << "<ul>\n"
+	Search_control_categories.each do |c|
+		label = c[0]
+		view = c[1]
+		checked = 't' == @conf[_sc_vkey( view, 0 )] ? ' checked' : ''
+		r << %Q|<li><input name="#{_sc_vkey( view, 0 )}" value="t" type="checkbox"#{checked}>#{label}\n|
+	end
+	r << "</ul>\n</ul>\n"
 end
 
 add_header_proc do
-	# modes
+	# agent
+	number = ''	# default agent
+	(1...@conf[_sc_nkey]).each do |i|
+		if @cgi.user_agent.include?( @conf[_sc_akey( i )] ) then
+			number = i.to_s
+			break
+		end
+	end
+
+	# view
+	view = ''
 	if /^(latest|day|month|nyear)$/ =~ @mode then
-		key = "#{Search_control_prefix}.#{@mode}"
+		view = @mode
 	elsif /^category/ =~ @mode then
-		key = "#{Search_control_prefix}.category"
-	else
-		key = nil
+		view = 'category'
 	end
 
 	# output
-	if key then
-		%Q|\t<meta name="robots" content="#{'f' == @conf["#{key}.index"] ? 'noindex' : 'index' },follow">\n|
+	sw = @conf[_sc_vkey( view, number )]
+	if sw then
+		%Q|\t<meta name="robots" content="#{'f' == sw ? 'noindex' : 'index' },follow">\n|
 	else
 		''
 	end

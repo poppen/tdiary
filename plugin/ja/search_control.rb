@@ -1,5 +1,5 @@
 =begin
-= ここだけ検索プラグイン((-$Id: search_control.rb,v 1.2 2003-10-13 15:15:43 zunda Exp $-))
+= ここだけ検索プラグイン((-$Id: search_control.rb,v 1.3 2004-11-09 21:07:45 zunda Exp $-))
 日本語リソース
 
 == 概要
@@ -19,8 +19,8 @@
 
 secure==trueな日記でも使えます。
 
-== 著作権について (Copyright notice)
-Copyright (C) 2003 zunda <zunda at freeshell.org>
+== License
+Copyright (C) 2003, 2004 zunda <zunda at freeshell.org>
 
 Permission is granted for use, copying, modification, distribution, and
 distribution of modified versions of this work under the terms of GPL
@@ -44,13 +44,24 @@ See ../ChangeLog for changes after this.
 =end ChangeLog
 
 # configuration
-@search_control_plugin_name = 'ここだけ検索'
-@search_control_description_html = <<-'_HTML'
-	<p>メタタグを使って、検索エンジンのロボットに、
-		余分なページのインデックスを作らないようにお願いしてみます。
-		インデックスを作って欲しい表示だけにチェックをしてください。</p>
-	_HTML
-@search_control_categorirs = [
-	[ '最新', 'latest' ], [ '一日分', 'day' ], [ '一月分', 'month' ],
-	[ '長年', 'nyear' ], [ 'カテゴリー', 'category' ]
-]
+unless defined?( Search_control_plugin_name ) then
+	Search_control_plugin_name = 'ここだけ検索'
+	Search_control_description_html = <<'_HTML'
+<p>メタタグを使って、検索エンジンのロボットに、
+余分なページのインデックスを作らないようにお願いしてみます。
+インデックスを作って欲しい表示だけにチェックをしてください。</p>
+<p>User agent(検索エンジンのロボットの名前)が指定されていると、
+そのagentについて指定された動作をします。
+一致するUser agentが無い場合はデフォルトの動作をします。</p>
+_HTML
+	Search_control_delete_label = 'このagentを削除'
+	Search_control_new_label = '記入したagentを追加'
+	Search_control_default_label = 'デフォルト'
+	Search_control_categories = [
+		[ '最新', 'latest' ],
+		[ '一日分', 'day' ],
+		[ '一月分', 'month' ],
+		[ '長年', 'nyear' ],
+		[ 'カテゴリー', 'category' ]
+	]
+end
