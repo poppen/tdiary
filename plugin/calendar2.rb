@@ -1,11 +1,16 @@
-# calendar2.rb $Revision: 1.4 $
+# calendar2.rb $Revision: 1.5 $
 #
 # calendar2: どこかで見たようなカレンダーを日記に追加する
 #   パラメタ:
-#     days_format: 曜日を現すStringから構成されるArray
+#     days_format: 曜日を現すStringから構成されるArray．
+#                  nilを指定するとデフォルト値が選択される．
 #                  ("日月火水木金土".split(//))
 #     nav_format:  カレンダー上部に表示されるStringから構成されるArray
+#                  nilを指定するとデフォルト値が選択される．
 #                  (["前", "%d年<br>%d月", "次"])
+#     show_todo:   ここで指定した文字列が隠された日記中にサブタイトルとして現れると
+#                  予定としてpopupされる．
+#                  (nil)
 #
 # Copyright (c) 2001,2002 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -27,7 +32,11 @@ def calendar2_make_cal(year, month)
 end
 
 def calendar2_prev_current_next
-	yyyymm = @date.strftime "%Y%m"
+	yyyymm = if @mode == "latest"
+					Time.now
+				else
+					@date
+				end.strftime "%Y%m"
 	yms = [yyyymm]
 	@years.keys.each do |y|
 		yms |= @years[y].collect {|i| y + i}
@@ -47,11 +56,18 @@ def calendar2_make_anchor(ym, str)
 	end
 end
 
-def calendar2(days_format = "日月火水木金土".split(//),
-					nav_format = ["前", "%d年<br>%d月", "次"])
+def calendar2(days_format = nil, nav_format = nil, show_todo = nil)
+ 	days_format ||= "日月火水木金土".split(//)
+	nav_format ||= ["前", "%d年<br>%d月", "次"]
+
 	return '' if /TAMATEBAKO/ =~ ENV["HTTP_USER_AGENT"]
-	year = @date.year
-	month = @date.month  
+	date = if @mode == "latest"
+				Time.now
+			else
+				@date
+			end
+	year = date.year
+	month = date.month  
 	p_c_n = calendar2_prev_current_next
 
 	result = <<CALENDAR_HEAD
@@ -77,8 +93,24 @@ CALENDAR_HEAD
 			else
 				date = "%04d%02d%02d" % [year, month, day]
 				result << %Q| <td class="calendar-day">%s</td>\n| %
-					if @diaries[date] == nil or ! @diaries[date].visible?
+					if @diaries[date] == nil
 						day.to_s
+					elsif ! @diaries[date].visible?
+						if show_todo
+							todos = []
+							@diaries[date].each_paragraph do |paragraph|
+								if show_todo === paragraph.subtitle
+									todos << paragraph.body
+								end
+							end
+							if todos.size != 0
+								%Q|<a title="#{CGI::escapeHTML(todos.join "\n")}"><span class="calendar-todo">#{day}</span></a>|
+							else
+								day.to_s
+							end
+						else
+							day.to_s
+						end
 					else
 						subtitles = []
 						idx = "01"
