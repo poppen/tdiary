@@ -1,3 +1,6 @@
+2003-09-19 zunda <zunda at freeshell.org>
+	* disp_referrer.rb (head): overwritten with disp_referrer2.rb,v 1.1.2.104
+
 2003-09-19  Kazuhiko  <kazuhiko@fdiary.net>
 	* trackback/tb.rb: remove '</div>\n<div class="refererlist">'.
 
