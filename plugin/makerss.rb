@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.5 $
+# makerss.rb: $Revision: 1.6 $
 #
 # generate RSS file when updating.
 #
@@ -140,7 +140,7 @@ def makerss_seq( uri, rdfsec )
 end
 
 def makerss_image( uri, rdf_image )
-	%Q[<image rdf:abount="#{rdf_image}">
+	%Q[<image rdf:about="#{rdf_image}">
 	<title>#{@conf.html_title}</title>
 	<url>#{rdf_image}</url>
 	<link>#{uri}</link>

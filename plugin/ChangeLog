@@ -1,5 +1,6 @@
 2004-06-16 TADA Tadashi <sho@spc.gr.jp>
 	* add zh (Traditional Chinese) language resources. thanks Hiroshi Yui <thinker60@mail2000.com.tw>.
+	* makerss.rb: fix typo.
 
 2004-06-15 TADA Tadashi <sho@spc.gr.jp>
 	* makerss.rb: insert time zone into dc:date.
