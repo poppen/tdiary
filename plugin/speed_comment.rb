@@ -1,4 +1,4 @@
-# speed_comment.rb $Revision: 1.1 $
+# speed_comment.rb $Revision: 1.2 $
 #
 # spped_comment: 最新・月毎表示時に簡易なツッコミフォームを表示する
 #                pluginディレクトリに入れるだけで動きます。
@@ -6,17 +6,21 @@
 # Copyright (c) 2002 TADA Tadashi <sho@spc.gr.jp>
 # Distributed under the GPL
 #
+=begin ChangeLog
+2002-03-12 TADA Tadashi <sho@spc.gr.jp>
+	* support insert into @header.
+=end
+
 add_body_leave_proc( Proc::new do |date|
 	if /latest|month/ =~ @mode then
-		<<-FORM
-			<div class="form"><form method="post" action="#{@index}"><p>
-			<input type="hidden" name="date" value="#{date.strftime( '%Y%m%d' )}">
-			<input type="hidden" name="mail" value="">
-			#{comment_name_label}: <input class="field" name="name" value="">
-			#{comment_body_label}: <input class="field" name="body" size="40">
-			<input type="submit" name="comment" value="#{comment_submit_label}">
-			</p></form></div>
-		FORM
+		r = ""
+		r << %Q[<div class="form"><form method="post" action="] + @index + %Q["><p>]
+		r << %Q[<input type="hidden" name="date" value="] + date.strftime( '%Y%m%d' ) + %Q[">]
+		r << %Q[<input type="hidden" name="mail" value="">]
+		r << comment_name_label + %Q[: <input class="field" name="name" value="">]
+		r << comment_body_label + %Q[: <input class="field" name="body" size="40">]
+		r << %Q[<input type="submit" name="comment" value="] + comment_submit_label + %Q[">]
+		r << %Q[</p></form></div>]
 	else
 		''
 	end
