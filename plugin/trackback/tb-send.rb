@@ -1,4 +1,4 @@
-# tb-send.rb $Revision: 1.6 $
+# tb-send.rb $Revision: 1.7 $
 #
 # Copyright (c) 2003 Junichiro Kita <kita@kitaj.no-ip.com>
 # You can distribute this file under the GPL.
@@ -9,8 +9,12 @@ add_edit_proc do |date|
 	excerpt = @cgi.params['plugin_tb_excerpt'][0] || ''
 	<<FORM
 <div class="trackback">
-#{trackback_ping_send} <input class="field" name="plugin_tb_url" size="80" value="#{CGI::escapeHTML( url )}"><br>
-#{trackback_ping_excerpt} <textarea name="plugin_tb_excerpt" cols="80" rows="3">#{CGI::escapeHTML( excerpt )}</textarea>
+<div class="field title">
+#{trackback_ping_send} <input class="field" name="plugin_tb_url" size="40" value="#{CGI::escapeHTML( url )}">
+</div>
+<div class="textarea">
+#{trackback_ping_excerpt} <textarea style="height: 4em;" name="plugin_tb_excerpt" cols="70" rows="4">#{CGI::escapeHTML( excerpt )}</textarea>
+</div>
 </div>
 FORM
 end
