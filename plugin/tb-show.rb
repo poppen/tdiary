@@ -1,4 +1,4 @@
-# tb-show.rb $Revision: 1.6 $
+# tb-show.rb $Revision: 1.7 $
 #
 # functions:
 #   * show TrackBack ping URL in right of TSUKKOMI label.
@@ -161,7 +161,11 @@ def trackbacks_of_today_long( diary, limit = 100 )
 
 		r << %Q!\t\t\t<div class="commentator trackback">\n!
 		r << %Q!\t\t\t\t<a name="#{ f }" href="#{ @index }#{ today }##{ f }">#{ @conf['trackback_anchor'] }</a>\n!
-		r << %Q!\t\t\t\t<span class="commentator trackbackblog"><a href="#{ CGI::escapeHTML( url ) }">#{ CGI::escapeHTML( a )}</a></span>\n!
+		if bot? then
+			r << %Q!\t\t\t\t<span class="commentator trackbackblog">#{ CGI::escapeHTML( a )}</span>\n!
+		else
+			r << %Q!\t\t\t\t<span class="commentator trackbackblog"><a href="#{ CGI::escapeHTML( url ) }">#{ CGI::escapeHTML( a )}</a></span>\n!
+		end
 		r << %Q!\t\t\t\t<span class="commenttime trackbacktime">#{ comment_date( t.date ) }</span>\n!
 		r << %Q!\t\t\t</div>\n!
 		r << %Q!\t\t\t<p>#{ CGI::escapeHTML( excerpt ).strip.gsub( /\n/,'<br>') }</p>\n! if excerpt
