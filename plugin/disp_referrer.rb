@@ -1,4 +1,4 @@
-# disp_referrer.rb $Revision: 1.20 $
+# disp_referrer.rb $Revision: 1.21 $
 # -pv-
 #
 # 名称：
@@ -19,7 +19,7 @@
 # EUC-JPで表現できない文字は表示できません。
 #
 # その他：
-# http://kitaj.no-ip.com/tDiary-FAQ/rw-cgi.rb?cmd=view;name=tDiary-FAQ-Plugin-how-to-disp_referrer
+# http://tdiary-users.sourceforge.jp/cgi-bin/wiki.cgi?disp_referrer%2Erb
 # を参照してください。
 #
 # 著作権について：

@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# squeeze.rb $Revision: 1.6 $
+# squeeze.rb $Revision: 1.7 $
 # -pv-
 #
 # 名称：
@@ -34,7 +34,7 @@
 # その他：
 # プラグインとしてではなく、CGIやコマンドベースとして、一辺に全ての日記を
 # HTML化することもできます。
-# 詳しくは http://kitaj.no-ip.com/tDiary-FAQ/rw-cgi.rb?cmd=view;name=tDiary-FAQ-Plugin-how-to-yasqueeze
+# 詳しくは http://tdiary-users.sourceforge.jp/cgi-bin/wiki.cgi?squeeze%2Erb
 # を参照してください。
 #
 # 著作権について：
@@ -134,7 +134,7 @@ if mode == "CMD" || mode == "CGI"
 
 	if mode == "CMD"
 		def usage
-			puts "squeeze $Revision: 1.6 $"
+			puts "squeeze $Revision: 1.7 $"
 			puts " making html files from tDiary's database."
 			puts " usage: ruby squeeze.rb [-p <tDiary path>] [-c <tdiary.conf path>] [-a] [-s] <dest path>"
 			exit
@@ -278,7 +278,7 @@ if mode == "CGI" || mode == "CMD"
 			</head>
 			<body><div style="text-align:center">
 			<h1>Squeeze for tDiary</h1>
-			<p>$Revision: 1.6 $</p>
+			<p>$Revision: 1.7 $</p>
 			<p>Copyright (C) 2002 MUTOH Masao&lt;mutoh@highway.ne.jp&gt;</p></div>
 			<br><br>Start!</p><hr>
 		]
