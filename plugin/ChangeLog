@@ -1,3 +1,8 @@
+2003-12-02 TADA Tadashi <sho@spc.gr.jp>
+	* amazon.rb: add options amazon.imgsize and amazon.nodefault. thanx KOMORIYA.
+	* amazon.rb: remove options amazon.smallimg.
+	* amazon.rb: split ja resource.
+
 2003-12-01 TADA Tadashi <sho@spc.gr.jp>
 	* amazon.rb: add options amazon.smallimg and amazon.hidename. thanx KOMORIYA.
 

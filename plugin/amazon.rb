@@ -1,47 +1,8 @@
-# amazon.rb $Revision: 1.20 $
+# amazon.rb $Revision: 1.21 $
 #
-# isbn_image_left: 指定したISBNの書影をclass="left"で表示
-#   パラメタ:
-#     asin:    ASINまたはISBN(必須)
-#     comment: コメント(省略可)
+# See document in language resource file: en/amazon.rb
 #
-# isbn_image_right: 指定したISBNの書影をclass="right"で表示
-#   パラメタ:
-#     asin:    ASINまたはISBN(必須)
-#     comment: コメント(省略可)
-#
-# isbn_image: 指定したISBNの書影をclass="amazon"で表示
-#     asin:    ASINまたはISBN(必須)
-#     comment: コメント(省略可)
-#
-# isbn: amazonにアクセスしない簡易バージョン。
-#     asin:    ASINまたはISBN(必須)
-#     comment: コメント(必須)
-#
-#   ASINとはアマゾン独自の商品管理IDです。
-#   書籍のISBNをASINに入力すると書籍が表示されます。
-#
-#   それぞれ商品画像が見つからなかった場合は
-#       <a href="amazonのページ">商品名</a>
-#   のように商品名を表示します。
-#   コメントが記述されている場合は商品名がコメントの内容に変わります。
-#
-# tdiary.confにおける設定:
-#   @options['amazon.aid']:      アソシエイトIDを指定することで、自分のア
-#                                ソシエイトプログラムを利用できます
-#                                このオプションは設定画面から変更可能です
-#   @options['amazon.hideconf']: 設定画面上でアソシエイトIDを入力不可能
-#                                にしたい場合、trueに設定します
-#   @options['amazon.proxy']:    「host:post」形式でHTTP proxyを指定すると
-#                                Proxy経由でAmazonの情報を取得します
-#   @options['amazon.smallimg']: 小さいサイズの書影を表示したい場合、
-#                                trueに設定します
-#   @options['amazon.hidename']: class="amazon"のときに書名を表示したくな
-#                                い場合、trueに設定します
-#
-#
-# 注意：著作権が関連する為、www.amazon.co.jpのアソシエイトプログラムを
-# 確認の上利用して下さい。
+# ドキュメントはja/amazon.rbを見てください。
 #
 # Copyright (C) 2002 by HAL99 <hal99@mtj.biglobe.ne.jp>
 #
@@ -55,13 +16,6 @@
 require 'net/http'
 require 'timeout'
 
-unless @resource_loaded then
-	@amazon_url = 'http://www.amazon.co.jp/exec/obidos/ASIN'
-	@amazon_item_name = /^Amazon.co.jp： (.*)<.*$/
-	@amazon_item_image = %r|(<img src="(http://images-jp\.amazon\.com/images/P/(.*MZZZZZZZ.jpg))".*?>)|i
-	@amazon_label_conf ='Amazonプラグイン'
-	@amazon_label_conf2 = 'AmazonアソシエイトIDの指定'
-end
 
 def getAmazon( asin )
 
@@ -160,15 +114,22 @@ def getAmazonImg(position,asin,comment)
 		item_name = item[1]
 		item[1] = comment if comment
 		unless item[2] then
-			return amazonNoImg(item[0],item[1])
+			if @conf['amazon.nodefault']
+				return amazonNoImg(item[0],item[1])
+			else
+				item[2] = "http://images-jp.amazon.com/images/G/09/icons/books/comingsoon_books.gif"
+			end
 		end
-		if @conf['amazon.smallimg'] then
+		if @conf['amazon.imgsize'] == 1 then
 			item[2].gsub!(/MZZZZZZZ/, 'TZZZZZZZ')
+		end
+		if @conf['amazon.imgsize'] == 2 then
+			item[2].gsub!(/MZZZZZZZ/, 'THUMBZZZ')
 		end
 		r = ""
 		r << %Q[<a href="#{item[0].strip}/ref=nosim/">]
 		r << %Q[<img class="#{position}" src="#{item[2].strip}" ]
-		unless @conf['amazon.smallimg'] then
+		if @conf['amazon.imgsize'] == 0 then
 			r << %Q[width="#{item[4].strip}" ] if item[4]
 			r << %Q[height="#{item[5].strip}" ] if item[5]
 		end
@@ -205,16 +166,37 @@ def isbn( asin, comment )
 	amazonNoImg( item_url, comment )
 end
 
-if not @conf['amazon.hideconf'] then
-	add_conf_proc( 'amazon', @amazon_label_conf ) do
-		if @mode == 'saveconf' then
+add_conf_proc( 'amazon', @amazon_label_conf ) do
+	if @mode == 'saveconf' then
+		@conf['amazon.imgsize'] = @cgi.params['amazon.imgsize'][0].to_i
+		@conf['amazon.hidename'] = (@cgi.params['amazon.hidename'][0] == 'true')
+		@conf['amazon.nodefault'] = (@cgi.params['amazon.nodefault'][0] == 'true')
+		if not @conf['amazon.hideconf'] then
 			@conf['amazon.aid'] = @cgi.params['amazon.aid'][0]
 		end
-	
-		<<-HTML
-		<h3>#{@amazon_label_conf2}</h3>
-		<p><input name="amazon.aid" value="#{CGI::escapeHTML( @conf['amazon.aid'] ) if @conf['amazon.aid']}"></p>
-		HTML
 	end
+
+	<<-HTML
+	<h3>#{@amazon_label_imgsize}</h3>
+	<p><select name="amazon.imgsize">
+		<option value="0"#{if @conf['amazon.imgsize'] == 0 then " selected" end}>#{@amazon_label_large}</option>
+		<option value="1"#{if @conf['amazon.imgsize'] == 1 then " selected" end}>#{@amazon_label_regular}</option>
+		<option value="2"#{if @conf['amazon.imgsize'] == 2 then " selected" end}>#{@amazon_label_small}</option>
+	</select></p>
+	<h3>#{@amazon_label_title}</h3>
+	<p><select name="amazon.hidename">
+		<option value="true"#{if @conf['amazon.hidename'] then " selected" end}>#{@amazon_label_hide}</option>
+		<option value="false"#{if not @conf['amazon.hidename'] then " selected" end}>#{@amazon_label_show}</option>
+	</select></p>
+	<h3>#{@amazon_label_notfound}</h3>
+	<p><select name="amazon.nodefault">
+		<option value="true"#{if @conf['amazon.nodefault'] then " selected" end}>#{@amazon_label_usetitle}</option>
+		<option value="false"#{if not @conf['amazon.nodefault'] then " selected" end}>#{@amazon_label_usedefault}</option>
+	</select></p>
+	#{if not @conf['amazon.hideconf'] then
+		"<h3>#{@amazon_label_aid}</h3>
+		<p><input name=\"amazon.aid\" value=\"#{CGI::escapeHTML( @conf['amazon.aid'] ) if @conf['amazon.aid']}\"></p>"
+	end}
+	HTML
 end
 

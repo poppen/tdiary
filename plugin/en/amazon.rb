@@ -1,5 +1,5 @@
 #
-# English resource of amazon plugin $Revision: 1.2 $
+# English resource of amazon plugin $Revision: 1.3 $
 #
 
 #
@@ -27,12 +27,24 @@
 #   @options['amazon.hideconf']: When you want to prohibit changing amazon.aid
 #                                via preferences page, set false.
 #   @options['amazon.proxy']: HTTP proxy in "host:post" style.
-#   @options['amazon.smallimg']: show small image, set true.
+#   @options['amazon.imgsize']: specify image size (0:laege, 1:regular, 2:small)
 #   @options['amazon.hidename']: hide book name when class="amazon", set true.
+#   @options['amazon.nodefault']: If you dosen't want to show default image 
+#                                 when the book image not found, set true.
 #
 
 @amazon_url = 'http://www.amazon.com/exec/obidos/ASIN'
 @amazon_item_name = /^Amazon\.com: (.*)$/
 @amazon_item_image = %r|(<img src="(http://images\.amazon\.com/images/P/(.*MZZZZZZZ_.jpg))".*?>)|i
 @amazon_label_conf = 'Amazon'
-@amazon_label_conf2 = 'Amazon Assosiate ID'
+@amazon_label_aid = 'Amazon Assosiate ID'
+@amazon_label_imgsize = 'Image size of the book'
+@amazon_label_large = 'Large'
+@amazon_label_regular = 'Regular'
+@amazon_label_small = 'Small'
+@amazon_label_title = 'When using isbn_image plugin'
+@amazon_label_hide = 'Hide book title'
+@amazon_label_show = 'Show book title'
+@amazon_label_notfound = 'If book image dose not found'
+@amazon_label_usetitle = 'Show book title'
+@amazon_label_usedefault = 'Use default image'
