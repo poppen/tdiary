@@ -1,5 +1,5 @@
 =begin
-= Meta-scheme plugin((-$Id: referer_scheme.rb,v 1.4 2003-12-17 13:48:46 zunda Exp $-))
+= Meta-scheme plugin((-$Id: referer_scheme.rb,v 1.5 2003-12-17 15:59:22 zunda Exp $-))
 Enables to prefix `meta' schemes to URL regexp of the refer_table. See
 #{lang}/referer_scheme.rb for a documentation.
 
@@ -10,6 +10,23 @@ Permission is granted for use, copying, modification, distribution, and
 distribution of modified versions of this work under the terms of GPL
 version 2 or later.
 =end
+
+unless @conf.referer_table.respond_to?( 'scheme_ymd', true ) then
+	class << @conf.referer_table
+		private
+		def scheme_ymd( url, name )
+			[
+				['.*?(\d{4})[-/]?(\d{2})[-/]?(\d{2}).*', '(\1-\2-\3)'],
+				['.*?(\d{4})[-/]?(\d{2}).*', '(\1-\2)'],
+				['.*?(\d{2})[-/]?(\d{2}).*', '(\1-\2)'],
+				['(.+)', '(\1)'],
+			].each do |path, date|
+				yield( url + path, name + date )
+			end
+			yield( url, name )
+		end
+	end
+end
 
 unless @conf.referer_table.respond_to?( 'scheme_tdiary', true ) then
 	class << @conf.referer_table

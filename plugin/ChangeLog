@@ -4,6 +4,7 @@
 	* referer_scheme.rb: scheme_tdiary moved to the plugin-body
 	* referer_scheme.rb: bug fixed for scheme_tdiarynet. thanks to kosaka http://tnat.net/diary/?date=20031217#p01
 	* ja/weather.rb: translation for heavy rain added. thanks to kosaka http://tnat.net/diary/?date=20031217
+	* referer_scheme.rb: scheme_ymd added. thanks to kitaj http://kitaj.no-ip.com/tdiary/20031218.html#p02
 
 2003-12-16 zunda <zunda at freeshell.org>
 	* referer_scheme.rb: new plug-in to expand referer_table. Idea by akira yamada <akira at akira.org>, doesn't work with ruby 1.6.7 ;(
