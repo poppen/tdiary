@@ -1,3 +1,6 @@
+2003-09-01 zunda <zunda at freeshell.org>
+	* todo/todo.rhtml: s/%%>/%>/g for newer version of erb
+
 2003-08-26 zunda <zunda at freeshell.org>
 	* select_plugins.rb: simpler configuration display
 	* search_control.rb: simpler configuration display
