@@ -1,4 +1,4 @@
-# tb-show.rb $Revision: 1.11 $
+# tb-show.rb $Revision: 1.12 $
 #
 # functions:
 #   * show TrackBack ping URL in right of TSUKKOMI label.
@@ -8,11 +8,23 @@
 # options:
 #	@options['tb.cgi']:
 #		the TrackBack ping URL. './tb.rb' is default.
+#	@options['tb.hide_if_no_tb']:
+#		If true, hide 'TrackBacks(n)' when there is no TrackBacks.  Default value is false.
 #
 # Copyright (c) 2003 TADA Tadashi <sho@spc.gr.jp>
 # You can distribute this file under the GPL.
 #
 # Modified: by Junichiro Kita <kita@kitaj.no-ip.com>
+#
+#
+# If you want to show TrackBack Ping URL under comment_new link, try this.
+#
+#	alias :comment_new_tb_backup :comment_new
+#	def comment_new
+#		cgi = @options['tb.cgi'] || './tb.rb'
+#		url = "#{cgi}/#{@tb_date.strftime( '%Y%m%d' )}"
+#		%Q|#{comment_new_tb_backup }</a>]<br>[TrackBack to <a href="#{@tb_url}">#{@tb_url}|
+#	end
 #
  
 # running on only non mobile mode
@@ -32,13 +44,6 @@ add_body_enter_proc do |date|
 	end
 	''
 end
-
-#alias :comment_new_tb_backup :comment_new
-#def comment_new
-#	cgi = @options['tb.cgi'] || './tb.rb'
-#	url = "#{cgi}/#{@tb_date.strftime( '%Y%m%d' )}"
-#	%Q|#{comment_new_tb_backup }</a>]<br>[TrackBack to <a href="#{@tb_url}">#{@tb_url}|
-#end
 
 #
 # make RDF
@@ -93,7 +98,7 @@ def referer_of_today_short( diary, limit )
 			next unless com.visible_true?
 			count += 1 if /^(Track|Ping)Back$/ =~ com.name
 		end
-		r << %Q|<a href="#{@index}#{anchor @tb_date.strftime( '%Y%m%d' )}#t">TrackBacks(#{count})</a>|
+		r << %Q|<a href="#{@index}#{anchor @tb_date.strftime( '%Y%m%d' )}#t">TrackBack#{count > 1 ? 's' : ''}(#{count})</a>| unless count == 0 and @options['tb.hide_if_no_tb']
 	end
 	r
 end
@@ -118,12 +123,14 @@ def referer_of_today_long( diary, limit )
 			a += ':' + title unless title.empty?
 			a = url if a.empty?
 
-			r << %Q|		<div class="commentator">\n|
-			r << %Q|			<a name="t#{i}" href="#{@index}#{anchor @date.strftime("%Y%m%d#t#{i}")}">#{@conf.comment_anchor}\n|
-			r << %Q|			<span class="commentator"><a href="#{CGI::escapeHTML( url )}">#{CGI::escapeHTML( a )}</a></span>\n|
-			r << %Q|			<span class="commenttime">#{comment_date(com.date)}</span>\n|
-			r << %Q|		</div>\n|
-			r << %Q|		<p>#{CGI::escapeHTML( excerpt ).gsub( /\n/, '<br>' ).gsub( /<br><br>\Z/, '' )}</p>\n| unless excerpt.empty?
+			r << <<TBSHOW
+		<div class="commentator">
+			<a name="t#{i}" href="#{@index}#{anchor @date.strftime("%Y%m%d#t#{i}")}">#{@conf.comment_anchor}
+			<span class="commentator"><a href="#{CGI::escapeHTML( url )}">#{CGI::escapeHTML( a )}</a></span>
+			<span class="commenttime">#{comment_date(com.date)}</span>
+		</div>
+TBSHOW
+			r << %Q|<p>#{CGI::escapeHTML( excerpt ).gsub( /\n/, '<br>' ).gsub( /<br><br>\Z/, '' )}</p>\n| unless excerpt.empty?
 			i = i.succ
 		end
 		r << %Q|	</div>\n</div>\n<div class="refererlist">|
