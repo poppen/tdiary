@@ -1,3 +1,6 @@
+2004-06-19 TADA Tadashi <sho@spc.gr.jp>
+	* footnote.rb: suppress making footnote in update mode.
+
 2004-06-19 zunda <zunda at freeshell.org>
 	* category.rb: support ruby 1.6.x on secure mode.
 

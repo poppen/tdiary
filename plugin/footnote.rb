@@ -1,4 +1,4 @@
-# footnote.rb $Revision: 1.7 $
+# footnote.rb $Revision: 1.8 $
 #
 # fn: 脚注plugin
 #   パラメタ:
@@ -31,7 +31,7 @@
 @footnote_index.taint
 
 def fn(text, mark = '*')
-	if @footnote_name
+	if @footnote_name and /^append|replace$/ !~ @mode then
 		@footnote_index[0] += 1
 		@footnotes << [@footnote_index[0], text, mark]
 		r = %Q|<span class="footnote"><a |
