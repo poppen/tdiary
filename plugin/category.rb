@@ -1,4 +1,4 @@
-# category.rb $Revision: 1.18 $
+# category.rb $Revision: 1.19 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -544,6 +544,8 @@ end
 
 end # module Category
 
+# read cache here so that you can use category with secure mode.
+@category_cache = Category::Cache.new(@conf, binding)
 
 #
 # display categories you use on update form
@@ -577,7 +579,7 @@ end
 # when update diary, update cache
 #
 add_update_proc do
-	cache = Category::Cache.new(@conf, binding)
+	cache = @category_cache
 	list = []
 	diary = @diaries[@date.strftime('%Y%m%d')]
 	diary.each_section do |s|
@@ -620,7 +622,7 @@ end
 
 if @mode == 'conf' || @mode == 'saveconf'
 	add_conf_proc('category', @category_conf_label) do
-		cache = Category::Cache.new(@conf, binding)
+		cache = @category_cache
 		if @mode == 'saveconf'
 			[
 				'category.header1',
@@ -651,8 +653,6 @@ if @mode == 'conf' || @mode == 'saveconf'
 				@conf["category.period"] = @cgi.params["category.period"][0]
 			end
 			@conf['category.edit_support'] = (@cgi.params['category.edit_support'][0] == 'true')
-		elsif @cgi.valid?('category_initialize')
-			cache.recreate(@years)
 		end
 		category_conf_html
 	end
@@ -678,15 +678,15 @@ if @mode == 'conf' || @mode == 'saveconf'
 		end
 		category_icon_conf_html
 	end
+	if @cgi.valid?('category_initialize')
+		@category_cache.recreate(@years)
+	end
 end
 
-
-# read cache here so that you can use category with secure mode.
-@cache = Category::Cache.new(@conf, binding)
-@categories = @cache.restore_categories
+@categories = @category_cache.restore_categories
 if @mode == 'categoryview'
 	info = Category::Info.new(@cgi, @years, @conf)
-	@categorized = @cache.categorize(info.category, info.years)
+	@categorized = @category_cache.categorize(info.category, info.years)
 end
 
 # vim: ts=3
