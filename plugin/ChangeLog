@@ -1,3 +1,10 @@
+2004-03-04 TADA Tadashi <sho@spc.gr.jp>
+	* makelirs.rb: running under update_proc.
+	* output_rdf.rb: running under update_proc.
+	* squeeze.rb: running under update_proc.
+	* tb-send.rb: running under update_proc.
+	* comment_mail-*.rb: running under update_proc.
+
 2004-02-26 TADA Tadashi <sho@spc.gr.jp>
 	* ja/referer_scheme.rb: fix mod_ruby's error.
 	* ja/referer_scheme.rb: modify hatena's URL. thanks KAKUTANI Shintaro <shintaro@kakutani.com>

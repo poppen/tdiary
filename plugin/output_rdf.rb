@@ -1,5 +1,5 @@
 # output_rdf.rb: tDiary plugin to generate RDF file when diary updated.
-# $Revision: 1.23 $
+# $Revision: 1.24 $
 #
 # See document to @lang/output_rdf.rb
 #
@@ -12,7 +12,11 @@ add_header_proc {
   %Q'\t<link rel="alternate" type="application/rss+xml" title="RSS" href="#{@conf.base_url}#{File::basename( fname )}">\n'
 }
 
-if ( /^(append|replace|trackbackreceive)$/ =~ @mode ) || ( /^comment$/ =~ @mode and @comment ) then
+add_update_proc do
+	output_rdf_update
+end
+
+def output_rdf_update
 	date = @date.strftime("%Y%m%d")
 	diary = @diaries[date]
 	uri = "#{@conf.base_url}#{@conf.index}".gsub(%r|/\./|, '/')
@@ -126,3 +130,4 @@ if ( /^(append|replace|trackbackreceive)$/ =~ @mode ) || ( /^comment$/ =~ @mode 
 	rescue
 	end
 end
+

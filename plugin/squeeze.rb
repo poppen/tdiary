@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 $KCODE = 'n'
 
-# squeeze.rb $Revision: 1.16 $
+# squeeze.rb $Revision: 1.17 $
 #
 # Create daily HTML file from tDiary database.
 #
@@ -129,7 +129,7 @@ if mode == "CMD" || mode == "CGI"
 
 	if mode == "CMD"
 		def usage
-			puts "squeeze $Revision: 1.16 $"
+			puts "squeeze $Revision: 1.17 $"
 			puts " making html files from tDiary's database."
 			puts " usage: ruby squeeze.rb [-p <tDiary path>] [-c <tdiary.conf path>] [-a] [-s] [-x suffix] <dest path>"
 			exit
@@ -281,7 +281,7 @@ if mode == "CGI" || mode == "CMD"
 			</head>
 			<body><div style="text-align:center">
 			<h1>Squeeze for tDiary</h1>
-			<p>$Revision: 1.16 $</p>
+			<p>$Revision: 1.17 $</p>
 			<p>Copyright (C) 2002 MUTOH Masao&lt;mutoh@highway.ne.jp&gt;</p></div>
 			<br><br>Start!</p><hr>
 		]
@@ -310,7 +310,9 @@ if mode == "CGI" || mode == "CMD"
 	else
 		print "\n\n"
 	end
-elsif /^(append|replace|comment|trackbackreceive)$/ =~ @mode
+end
+
+add_update_proc do
 	conf = @conf.clone
 	conf.header = ''
 	conf.footer = ''

@@ -1,4 +1,4 @@
-# makelirs.rb $Revision: 1.10 $
+# makelirs.rb $Revision: 1.11 $
 #
 # 更新情報をLIRSフォーマットのファイルに吐き出す
 #
@@ -35,7 +35,7 @@
 	* create.
 =end
 
-if /^(append|replace|comment|trackbackreceive)$/ =~ @mode then
+add_update_proc do
 	unless Time.method_defined?(:utc_offset)
 		class Time
 			def utc_offset

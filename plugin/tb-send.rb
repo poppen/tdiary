@@ -1,4 +1,4 @@
-# tb-send.rb $Revision: 1.6 $
+# tb-send.rb $Revision: 1.7 $
 #
 # Copyright (c) 2003 Junichiro Kita <kita@kitaj.no-ip.com>
 # You can distribute this file under the GPL.
@@ -20,11 +20,15 @@ add_edit_proc do |date|
 FORM
 end
 
-if /^(append|replace)$/ =~ @mode then
-	require 'net/http'
+add_update_proc do
+	tb_send_trackback if /^(append|replace)$/ =~ @mode
+end
 
+def tb_send_trackback
 	url = @cgi.params['plugin_tb_url'][0]
 	unless url.nil? or url.empty?
+		require 'net/http'
+
 		title = @cgi.params['title'][0]
 		excerpt = @cgi.params['plugin_tb_excerpt'][0]
 		blog_name = @conf.html_title
