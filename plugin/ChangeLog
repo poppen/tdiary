@@ -1,4 +1,8 @@
 2003-05-15 Junichiro Kita <kita@kitaj.no-ip.com>
+	* tb-show.rb: CGI::escapeHTML dc:title.
+	* tb-show.rb: replace /-{2,}/ in RDF's dc:title to '&#45;'s.
+
+2003-05-15 Junichiro Kita <kita@kitaj.no-ip.com>
 	* tb-send.rb: add charset parameter.
 
 2003-05-13 TADA Tadashi <sho@spc.gr.jp>
