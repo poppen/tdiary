@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.19 2005-02-02 02:45:47 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.20 2005-02-02 02:52:37 zunda Exp $-))
 日本語リソース
 
 == 概要
@@ -482,8 +482,9 @@ DispReferrer2_Engines = {
 	'lycos' => [[%r{\Ahttp://.*?\.lycos\.([^/]+)}i, '".#{$1}のLycos"', ['query', 'q', 'qt'], nil ]],
 	'fresheye' => [[%r{\Ahttp://.*?\.fresheye}i, '"フレッシュアイ"', ['kw'], nil ]],
 	'goo' => [
-		[%r{\Ahttp://((www|ocn|dictionary|kids|eco|oshiete|.*search|community|machi|bb|bsearch|dir|channel|ocnsearch|gw\.mobile|msearch\.mobile)\.)?goo\.ne\.jp}i, '"goo"', ['MT'], nil ],
-		[%r{\Ahttp://((www|ocn|dictionary|kids|eco|oshiete|.*search|community|machi|bb|bsearch|dir|channel|ocnsearch|gw\.mobile|msearch\.mobile)\.)?goo\.ne\.jp}i, '"goo"', [], nil ],
+		[%r{\Ahttp://((www|ocn|dictionary|kids|eco|oshiete|.*search|community|machi|bb|bsearch|dir|channel|ocnsearch)\.)?goo\.ne\.jp}i, '"goo"', ['MT'], nil ],
+		[%r{\Ahttp://((www|ocn|dictionary|kids|eco|oshiete|.*search|community|machi|bb|bsearch|dir|channel|ocnsearch)\.)?goo\.ne\.jp}i, '"goo"', [], nil ],
+		[%r{\Ahttp://.*mobile\.goo\.ne\.jp/search_i.jsp}i, '"goo"', ['MT'], nil ],
 	],
 	'nifty' => [
 		[%r{\Ahttp://search\.nifty\.com}i, '"@nifty/@search"', ['q', 'Text'], DispReferrer2_Google_cache],
