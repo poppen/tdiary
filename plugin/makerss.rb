@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.10 $
+# makerss.rb: $Revision: 1.11 $
 #
 # generate RSS file when updating.
 #
@@ -165,6 +165,11 @@ def makerss_body( uri, rdfsec )
 		@options['apply_plugin'] = old_apply_plugin
 		rdf << %Q|<title>#{subtitle}</title>\n|
 		rdf << %Q|<dc:creator>#{CGI::escapeHTML( @conf.author_name )}</dc:creator>\n|
+		if ! rdfsec.section.categories.empty?
+			rdfsec.section.categories.each do |category|
+				rdf << %Q|<dc:subject>#{CGI::escapeHTML( category )}</dc:subject>\n|
+			end
+		end
 		rdf << %Q|<content:encoded><![CDATA[#{desc}]]></content:encoded>\n|
 	else # TSUKKOMI
 		rdf << %Q|<title>#{makerss_tsukkomi_label( rdfsec.id )} (#{CGI::escapeHTML( rdfsec.section.name )})</title>\n|
