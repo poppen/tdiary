@@ -1,3 +1,7 @@
+2003-08-27 zunda <zunda at freeshell.org>
+	* 01_select_plugins.rb: renamed as select_plugins.rb
+	* select_plugins.rb: does not show comments and sources in default
+
 2003-08-26 zunda <zunda at freeshell.org>
 	* search_control.rb: no table in configuration view, thanks to Tada-san.
 
