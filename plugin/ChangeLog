@@ -3,6 +3,7 @@
 	* image.rb: fix typo. thanks HASHIMOTO Keisuke.
 	* image.rb: add thumbnail in 3rd parameter of image method.
 	* image.rb: force image width to 160 in update form.
+	* image.rb: add image_link method.
 
 2003-05-15 TADA Tadashi <sho@spc.gr.jp>
 	* add trackback/README.

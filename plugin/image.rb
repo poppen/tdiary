@@ -1,4 +1,4 @@
-# image.rb $Revision: 1.10 $
+# image.rb $Revision: 1.11 $
 # -pv-
 # 
 # 名称:
@@ -19,8 +19,12 @@
 # image_left( number, 'altword', thumbnail ) - imageにclass=leftを追加します。
 # image_right( number, 'altword', thumbnail ) - imageにclass=rightを追加します。
 #
+# image_link( number, 'desc' ) - 画像へのリンクを生成します。
+#    number - 画像の番号0、1、2等
+#    desc - 画像の説明
+#
 # その他:
-# tDiary version 1.5.3.20030420以降で動作します。
+# tDiary version 1.5.4以降で動作します。
 # tdiary.confで指定できるオプション:
 #  @options['image.dir']
 #     画像ファイルを保存するディレクトリ。無指定時は'./images/'
@@ -45,6 +49,7 @@
 2003-05-17 TADA Tadashi <sho@spc.gr.jp>
 	* add thumbnail in 3rd parameter of image method.
 	* force image width to 160 in update form.
+	* add image_link method.
 
 2003-04-25 TADA Tadashi <sho@spc.gr.jp>
 	* maxnum and maxsize effective in secure mode.
@@ -89,6 +94,15 @@ end
 
 def image_right( id, alt = "image", thumbnail = nil, width = nil )
    image( id, alt, thumbnail, width, "right" )
+end
+
+def image_link( id, desc )
+	if @conf.secure then
+		image = "#{@image_date}_#{id}.jpg"
+	else
+   	image = image_list( @image_date )[id.to_i]
+	end
+   %Q[<a href="#{@image_url}/#{image}">#{desc}</a>]
 end
 
 #
