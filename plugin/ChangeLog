@@ -1,3 +1,6 @@
+2005-01-11 zunda <zunda at freeshell.org>
+	* disp_referrer.rb: rescue PStore errors on ruby-1.8.1 and 1.6.8, thanks to Ohiwa-san
+
 2005-01-05  Kazuhiko  <kazuhiko@fdiary.net>
 	* image.rb (image_info): get correct size of any jpeg files.
 

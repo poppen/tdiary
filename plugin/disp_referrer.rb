@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.41 2004-11-10 19:42:44 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.42 2005-01-12 00:57:56 zunda Exp $-))
 
 == 概要
 アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
@@ -1015,7 +1015,11 @@ class DispRef2Cache
 		db = DispRef2PStore.new( @setup['cache_path'] )
 		r = 0
 		db.transaction do
-			db[Root_DispRef2URL] = Hash.new unless db[Root_DispRef2URL]
+			begin
+				db[Root_DispRef2URL] ||= Hash.new
+			rescue PStore::Error
+				db[Root_DispRef2URL] = Hash.new
+			end
 			begin
 				db[Root_DispRef2URL].each_key do |url|
 					ref = DispRef2URL::new( url )
@@ -1044,7 +1048,11 @@ class DispRef2Cache
 		db = DispRef2PStore.new( @setup['cache_path'] )
 		r = 0
 		db.transaction do
-			db[Root_DispRef2URL] = Hash.new unless db[Root_DispRef2URL]
+			begin
+				db[Root_DispRef2URL] ||= Hash.new
+			rescue PStore::Error
+				db[Root_DispRef2URL] = Hash.new
+			end
 			begin
 				@setup.years.each do |y, ms|
 					ms.each do |m|
@@ -1083,7 +1091,7 @@ class DispRef2Cache
 		db.transaction( true ) do
 			begin
 				r = db[Root_DispRef2URL].size
-			rescue PStore::Error
+			rescue PStore::Error, NoMethodError
 				r = 0
 			end
 		end
