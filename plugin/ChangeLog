@@ -1,3 +1,6 @@
+2004.01.21 Junichiro Kita <kita@kitaj.no-ip.com>
+	* recent_trackback3.rb: add.
+
 2004.01.20 TADA Tadashi <sho@spc.gr.jp>
 	* tb-show.rb: fix typo on autodiscovery RDF.
 
