@@ -1,4 +1,4 @@
-# disp_referrer.rb $Revision: 1.7 $
+# disp_referrer.rb $Revision: 1.8 $
 # -pv-
 #
 # 名称：
@@ -6,15 +6,20 @@
 #
 # 概要：
 # 本日のリンク元でサーチエンジンの検索文字の文字化けを直します。
-# また、サーチエンジンの検索結果を他のリンク元の下にまとめて表示します（デフォルト時）。
+# また、サーチエンジンの検索結果を他のリンク元の下にまとめて表示します
+# （デフォルト時）。
 #
 # 使い方：
-# 文字化けを直すのみ（表示はtDiaryの標準時と同様の並びにする）の場合は、tdiary.confに
-# 以下を追加してください。
+# 文字化けを直すのみ（表示はtDiaryの標準時と同様の並びにする）の場合は、
+# tdiary.confに以下を追加してください。
 # @options['disp_referrer.old'] = true
 #
 # 制限：
 # EUC-JPで表現できない文字は表示できません。
+#
+# その他：
+# http://home2.highway.ne.jp/mutoh/tools/ruby/ja/disp_referrer.html
+# を参照してください。
 #
 # 著作権について：
 # Copyright (C) 2002 MUTOH Masao <mutoh@highway.ne.jp>
