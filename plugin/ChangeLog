@@ -1,8 +1,11 @@
+2003-08-04 zunda <zunda at freeshell.org>
+	* squeeze.rb: sets mtime of the HTML files, exit(1) when error
+
 2003-08-03 Junichiro Kita <kita@kitaj.no-ip.com>
 	* makelirs.rb: make lirs when receiving TrackBack Ping
 
 2003-07-24 zunda <zunda at freeshell.org>
-	* Syntax error in drizzle fixed
+	* weather.rb: Syntax error in drizzle fixed
 
 2003-07-22 zunda <zunda at freeshell.org>
 	* weather.rb: debug code erased m(. .;;)m

@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# squeeze.rb $Revision: 1.11 $
+# squeeze.rb $Revision: 1.12 $
 # -pv-
 #
 # Ì¾¾Î¡§
@@ -51,6 +51,10 @@
 # version 1.0.4 by TADA Tadashi <sho@spc.gr.jp> with GPL2.
 #
 =begin ChangeLog
+2003-07-31 zunda <zunda at freeshell.org>
+	* sets mtime and atime of the output files
+	* exit( 1 ) with an error
+
 2003-06-30 MUTOH Masao	<mutoh@highway.ne.jp>
 	* fix path of default output_path on CGI or CMD mode.
 	  Pointed out by OGAWA KenIchi.
@@ -154,7 +158,7 @@ if mode == "CMD" || mode == "CGI"
 
 	if mode == "CMD"
 		def usage
-			puts "squeeze $Revision: 1.11 $"
+			puts "squeeze $Revision: 1.12 $"
 			puts " making html files from tDiary's database."
 			puts " usage: ruby squeeze.rb [-p <tDiary path>] [-c <tdiary.conf path>] [-a] [-s] [-x suffix] <dest path>"
 			exit
@@ -184,6 +188,7 @@ if mode == "CMD" || mode == "CGI"
 			end
 		rescue
 			usage
+			exit( 1 )
 		end
 		output_path = ARGV.shift
 		usage unless output_path
@@ -211,7 +216,7 @@ if mode == "CMD" || mode == "CGI"
 		require "#{tdiary_path}/tdiary"
 	rescue LoadError
 		$stderr.print "squeeze.rb: cannot load tdiary.rb. <#{tdiary_path}/tdiary>\n"
-		exit
+		exit( 1 )
 	end
 end
 
@@ -245,8 +250,9 @@ module TDiary
 			filename = dir + "/" + name + @suffix
 			if @diary.visible? or @all_data
 				if not FileTest::exist?(filename) or 
-						File::mtime(filename) < @diary.last_modified
+						File::mtime(filename) != @diary.last_modified
 					File::open(filename, 'w'){|f| f.write(eval_rhtml)}
+					File::utime(@diary.last_modified, @diary.last_modified, filename)
 				end
 			else
 				if FileTest.exist?(filename) and ! @all_data
@@ -304,7 +310,7 @@ if mode == "CGI" || mode == "CMD"
 			</head>
 			<body><div style="text-align:center">
 			<h1>Squeeze for tDiary</h1>
-			<p>$Revision: 1.11 $</p>
+			<p>$Revision: 1.12 $</p>
 			<p>Copyright (C) 2002 MUTOH Masao&lt;mutoh@highway.ne.jp&gt;</p></div>
 			<br><br>Start!</p><hr>
 		]
@@ -325,6 +331,7 @@ if mode == "CGI" || mode == "CMD"
 		$@.each do |v|
 			print v, "\n"
 		end
+		exit( 1 )
 	end
 
 	if mode == "CGI"
