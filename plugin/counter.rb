@@ -1,30 +1,25 @@
-# counter.rb $Revision: 1.7 $
+# counter.rb $Revision: 1.8 $
 # -pv-
 #
+# 名称：
 # カウンタ表示プラグイン
 #
+# 概要：
 # 訪問者数を「全て」「今日」「昨日」に分けて表示します。
 #
 # 使う場所：
 # ヘッダ、もしくはフッタ
 # 
-# 利用方法：
-# counter: 全ての訪問者数を表示する
-#	パラメタ：
+# 使い方：
+# counter(figure, filetype): 全ての訪問者数を表示する
+# counter_today(figure, filetype): 今日の訪問者数を表示する
+# counter_yesterday(figure, filetype): 昨日の訪問者数を表示する
 #	 figure: 表示桁数(実際の数が表示桁数に満たない場合は前0)。未指定時は前0無し。
 #	 filetype: ファイル種別(拡張子)。jpg, gif, png等。
 #						 未指定時は、""(画像は使わない、CSSで外見を変える)。
 #
-# counter_today: 今日の訪問者数を表示する
-# counter_yesterday: 昨日の訪問者数を表示する
-#	パラメタ：
-#	 figure: 表示桁数(前0が埋められる)。未指定時は前0なし。
-#	 filetype: ファイル種別(拡張子)。jpg, gif, png等。
-#              未指定時は、""(画像は使わない、CSSで外見を変える)。
-#
 # kiriban?: キリ番の時にtrueを返す(全て)。
 # kiriban_today?: キリ番の時にtrueを返す(今日)。
-#  パラメタ：なし。
 #
 # 使用例：
 # counter
@@ -36,16 +31,21 @@
 # オプションについて：
 # 初期値の指定　未指定時：0
 #   @options["counter.init_num"] = 5
+#
 # ログの取得　未指定時：false
 #   @options["counter.log"] = true
+#
 # 訪問間隔の指定(単位：時間)　未指定時：12
 #   @options["counter.timer"] = 6
+#
 # 同一クライアントからの連続アクセスの非カウントアップ間隔の指定(単位：時間) 
 # 未指定時：0.1(6分)
 #   @options["counter.deny_same_src_interval"] = 0.1
+#
 # カウントアップ制限　未指定時：なし
 #   @options['counter.deny_user_agents'] = ["w3m", "Mozilla/4"]
 #   @options['counter.deny_remote_addrs'] = ["127.0", "10.0.?.1", "192.168.1.2"]
+#
 # キリ番　未指定時：なし
 #   @options["counter.kiriban"] = [1000, 3000, 5000, 10000, 15000, 20000]
 #   @options["counter.kiriban_today"] = [100, 200, 300, 400, 500, 600]
@@ -63,7 +63,7 @@
 #   http://home2.highway.ne.jp/mutoh/tools/ruby/ja/counter.html
 # を参照してください。
 #
-# 権利表示：
+# 著作権について：
 # Copyright (c) 2002 MUTOH Masao <mutoh@highway.ne.jp>
 # You can redistribute it and/or modify it under GPL2.
 # 

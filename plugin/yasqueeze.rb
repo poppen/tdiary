@@ -1,14 +1,17 @@
 #!/usr/bin/env ruby
-# yasqueeze.rb $Revision: 1.9 $
+# yasqueeze.rb $Revision: 1.10 $
+# -pv-
 #
-# yasqueeze: tDiary-1.3.x以降で標準でついてくるsqueeze.rbの拡張版
-#				 tDiaryのデータベースから日別にHTMLファイルを生成し、
-#				 任意のディレクトリに保存します。
-#				 検索エンジン(主にNamazu)での使用を想定しています。
+# 名称：
+# Yet Another squeeze.rb(squeeze.rbの拡張版)
+# 
+# 概要：
+# tDiaryのデータベースから日別にHTMLファイルを生成し、
+# 任意のディレクトリに保存します。
+# 検索エンジン(主にNamazu)での使用を想定しています。
 #
-#	パラメタ: なし
-#
-#	tdiary.confにて、以下の設定をしてください(全て省略可能です)。
+# 使い方:
+# 必要に応じて、tdiary.confに以下の設定を追加してください(全て省略可能です)。
 #
 #	----- (ここから) -----
 #	# 出力先ディレクトリ(省略時: (tdiary.confの@data_path)/cache/html)
@@ -28,11 +31,13 @@
 #	@options['yasqueeze.compat_path'] = false
 #	----- (ここまで) -----
 #
+# その他：
 # プラグインとしてではなく、CGIやコマンドベースとして、一辺に全ての日記を
 # HTML化することもできます。
 # 詳しくは http://home2.highway.ne.jp/mutoh/tools/ruby/ja/yasqueeze.html
 # を参照してください。
 #
+# 著作権について：
 # Copyright (C) 2002 MUTOH Masao <mutoh@highway.ne.jp>
 # You can redistribute it and/or modify it under GPL2.
 #
@@ -40,6 +45,9 @@
 # version 1.0.4 by TADA Tadashi <sho@spc.gr.jp> with GPL2.
 #
 =begin ChangeLog
+2002-05-19 MUTOH Masao	<mutoh@highway.ne.jp>
+	* ドキュメントアップデート
+
 2002-04-29 MUTOH Masao	<mutoh@highway.ne.jp>
 	* yasqueeze.rb自身の文字コードがISO-2022-JPだったのでEUC-JPに直した
 	* version 1.3.1
@@ -101,7 +109,7 @@ if mode == "CMD" || mode == "CGI"
 
 	if mode == "CMD"
 		def usage
-			puts "yasqueeze $Revision: 1.9 $"
+			puts "yasqueeze $Revision: 1.10 $"
 			puts " Yet Another making html files from tDiary's database."
 			puts " usage: ruby yasqueeze.rb [-p <tDiary path>] [-c <tdiary.conf path>] [-a] [-s] <dest path>"
 			exit
@@ -240,7 +248,7 @@ if mode == "CGI" || mode == "CMD"
 			</head>
 			<body><div style="text-align:center">
 			<h1>Yet Another Squeeze for tDiary</h1>
-			<p>$Revision: 1.9 $</p>
+			<p>$Revision: 1.10 $</p>
 			<p>Copyright (C) 2002 MUTOH Masao&lt;mutoh@highway.ne.jp&gt;</p></div>
 			<br><br>Start!</p><hr>
 		]

@@ -1,25 +1,33 @@
-# search_form.rb $Revision: 1.3 $
+# search_form.rb $Revision: 1.4 $
+# -pv-
 #
-# 各種検索エンジンの検索フォーム表示プラグイン
+# 名称：
+# 検索フォーム表示プラグイン
 #
-# namazu_form: Namazu用
-#		パラメタ：
+# 概要：
+# Namazu, Google, Yahoo!, Lycos用の検索フォームを表示します。
+#
+# 使う場所：
+# ヘッダ、もしくはフッタ
+#
+# 使い方：
+# namazu_form(url, button_name, size, default_text): Namazu用
 # 			url:				検索エンジンのURL(例：/namazu/namazu.cgi)
 # 			button_name:	ボタン名称(省略可)
 # 			size:				テキストボックスの幅(省略可)
 # 			default_text:	テキストボックスの初期表示文字(省略可)
 #
-# googlej_form: Google用
-#		パラメタ：
+# googlej_form(button_name, size, default_text): Google用
 # 			button_name:	ボタン名称(省略可)
 # 			size:				テキストボックスの幅(省略可)
 # 			default_text:	テキストボックスの初期表示文字(省略可)
 #
-# yahooj_form: Yahoo!用
+# yahooj_form(button_name, size, default_text): Yahoo!用
 # 			button_name:	ボタン名称(省略可)
 # 			size:				テキストボックスの幅(省略可)
 # 			default_text:	テキストボックスの初期表示文字(省略可)
-# lycosj_form: Lycos用
+#
+# lycosj_form(button_name, size, default_text): Lycos用
 # 			button_name:	ボタン名称(省略可)
 # 			size:				テキストボックスの幅(省略可)
 #
@@ -27,15 +35,22 @@
 # 各社検索エンジンをご利用になる際は、それぞれのサイトでライセンス等を
 # 確認してください。
 # 
+# その他：
 # 詳しくは、http://home2.highway.ne.jp/mutoh/tools/ruby/ja/search_form.html
 # を参照してください。
 #
+# 著作権について：
 # Copyright (c) 2002 MUTOH Masao <mutoh@highway.ne.jp>
 # Distributed under the same license terms as tDiary.
 # 
 =begin ChangeLog
+2002-05-19 MUTOH Masao <mutoh@highway.ne.jp>
+	* ドキュメントアップデート
+	* version 1.0.1
+
 2002-04-01 MUTOH Masao <mutoh@highway.ne.jp>
 	* tab = 3, 文書の体裁を整えた
+
 2002-03-24 MUTOH Masao <mutoh@highway.ne.jp>
 	* Namazu, Google, Yahoo!, Lycosの検索フォームをサポート
 	* version 1.0.0
