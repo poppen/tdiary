@@ -1,37 +1,37 @@
 #!/usr/bin/env ruby
-# yasqueeze.rb $Revision: 1.8 $
+# yasqueeze.rb $Revision: 1.9 $
 #
-# yasqueeze: tDiary-1.3.x$B0J9_$GI8=`$G$D$$$F$/$k(Bsqueeze.rb$B$N3HD%HG(B
-#				 tDiary$B$N%G!<%?%Y!<%9$+$iF|JL$K(BHTML$B%U%!%$%k$r@8@.$7!"(B
-#				 $BG$0U$N%G%#%l%/%H%j$KJ]B8$7$^$9!#(B
-#				 $B8!:w%(%s%8%s(B($B<g$K(BNamazu)$B$G$N;HMQ$rA[Dj$7$F$$$^$9!#(B
+# yasqueeze: tDiary-1.3.x°Ê¹ß¤ÇÉ¸½à¤Ç¤Ä¤¤¤Æ¤¯¤ësqueeze.rb¤Î³ÈÄ¥ÈÇ
+#				 tDiary¤Î¥Ç¡¼¥¿¥Ù¡¼¥¹¤«¤éÆüÊÌ¤ËHTML¥Õ¥¡¥¤¥ë¤òÀ¸À®¤·¡¢
+#				 Ç¤°Õ¤Î¥Ç¥£¥ì¥¯¥È¥ê¤ËÊÝÂ¸¤·¤Þ¤¹¡£
+#				 ¸¡º÷¥¨¥ó¥¸¥ó(¼ç¤ËNamazu)¤Ç¤Î»ÈÍÑ¤òÁÛÄê¤·¤Æ¤¤¤Þ¤¹¡£
 #
-#	$B%Q%i%a%?(B: $B$J$7(B
+#	¥Ñ¥é¥á¥¿: ¤Ê¤·
 #
-#	tdiary.conf$B$K$F!"0J2<$N@_Dj$r$7$F$/$@$5$$(B($BA4$F>JN,2DG=$G$9(B)$B!#(B
+#	tdiary.conf¤Ë¤Æ¡¢°Ê²¼¤ÎÀßÄê¤ò¤·¤Æ¤¯¤À¤µ¤¤(Á´¤Æ¾ÊÎ¬²ÄÇ½¤Ç¤¹)¡£
 #
-#	----- ($B$3$3$+$i(B) -----
-#	# $B=PNO@h%G%#%l%/%H%j(B($B>JN,;~(B: (tdiary.conf$B$N(B@data_path)/cache/html)
+#	----- (¤³¤³¤«¤é) -----
+#	# ½ÐÎÏÀè¥Ç¥£¥ì¥¯¥È¥ê(¾ÊÎ¬»þ: (tdiary.conf¤Î@data_path)/cache/html)
 #	@options['yasqueeze.output_path'] = '/home/hoge/tdiary/html/'
 # 
-#	#$BHsI=<($NF|5-$bBP>]$H$9$k$+$I$&$+(B
-#	#$BBP>]$H$9$k>l9g$O(Btrue$B!#(Bfalse$B$K$7$?>l9g$OHsI=<($NF|5-$O=PNO$;$:!"$+$D!"(B
-#	#$B$9$G$K=PNO:Q$_$N%U%!%$%k$,B8:_$7$?>l9g$O:o=|$7$^$9!#(B
-#	#$B8!:w%(%s%8%s$G;HMQ$9$k$3$H$rA[Dj$7$?>l9g!"$3$3$r(Btrue$B$K$7$F$7$^$&$H(B
-#	#$B1#$7$F$$$k$D$b$j$NF|5-$b8!:wBP>]$K$J$C$F$7$^$&$N$GCm0U$,I,MW$G$9!#(B
-#  #($B>JN,;~!'(B false)
+#	#ÈóÉ½¼¨¤ÎÆüµ­¤âÂÐ¾Ý¤È¤¹¤ë¤«¤É¤¦¤«
+#	#ÂÐ¾Ý¤È¤¹¤ë¾ì¹ç¤Ïtrue¡£false¤Ë¤·¤¿¾ì¹ç¤ÏÈóÉ½¼¨¤ÎÆüµ­¤Ï½ÐÎÏ¤»¤º¡¢¤«¤Ä¡¢
+#	#¤¹¤Ç¤Ë½ÐÎÏºÑ¤ß¤Î¥Õ¥¡¥¤¥ë¤¬Â¸ºß¤·¤¿¾ì¹ç¤Ïºï½ü¤·¤Þ¤¹¡£
+#	#¸¡º÷¥¨¥ó¥¸¥ó¤Ç»ÈÍÑ¤¹¤ë¤³¤È¤òÁÛÄê¤·¤¿¾ì¹ç¡¢¤³¤³¤òtrue¤Ë¤·¤Æ¤·¤Þ¤¦¤È
+#	#±£¤·¤Æ¤¤¤ë¤Ä¤â¤ê¤ÎÆüµ­¤â¸¡º÷ÂÐ¾Ý¤Ë¤Ê¤Ã¤Æ¤·¤Þ¤¦¤Î¤ÇÃí°Õ¤¬É¬Í×¤Ç¤¹¡£
+#  #(¾ÊÎ¬»þ¡§ false)
 #	@options['yasqueeze.all_data'] = false
 #
-#	#tDiary Text$B=PNO8_49%b!<%I(B
-#	#squeeze.rb$B!"(BtDiary$BI8=`$HF1$8=PNO@h$N%G%#%l%/%H%j9=@.$K$9$k>l9g$O(Btrue
-#  #($B>JN,;~!'(B false)
+#	#tDiary Text½ÐÎÏ¸ß´¹¥â¡¼¥É
+#	#squeeze.rb¡¢tDiaryÉ¸½à¤ÈÆ±¤¸½ÐÎÏÀè¤Î¥Ç¥£¥ì¥¯¥È¥ê¹½À®¤Ë¤¹¤ë¾ì¹ç¤Ïtrue
+#  #(¾ÊÎ¬»þ¡§ false)
 #	@options['yasqueeze.compat_path'] = false
-#	----- ($B$3$3$^$G(B) -----
+#	----- (¤³¤³¤Þ¤Ç) -----
 #
-# $B%W%i%0%$%s$H$7$F$G$O$J$/!"(BCGI$B$d%3%^%s%I%Y!<%9$H$7$F!"0lJU$KA4$F$NF|5-$r(B
-# HTML$B2=$9$k$3$H$b$G$-$^$9!#(B
-# $B>\$7$/$O(B http://home2.highway.ne.jp/mutoh/tools/ruby/ja/yasqueeze.html
-# $B$r;2>H$7$F$/$@$5$$!#(B
+# ¥×¥é¥°¥¤¥ó¤È¤·¤Æ¤Ç¤Ï¤Ê¤¯¡¢CGI¤ä¥³¥Þ¥ó¥É¥Ù¡¼¥¹¤È¤·¤Æ¡¢°ìÊÕ¤ËÁ´¤Æ¤ÎÆüµ­¤ò
+# HTML²½¤¹¤ë¤³¤È¤â¤Ç¤­¤Þ¤¹¡£
+# ¾Ü¤·¤¯¤Ï http://home2.highway.ne.jp/mutoh/tools/ruby/ja/yasqueeze.html
+# ¤ò»²¾È¤·¤Æ¤¯¤À¤µ¤¤¡£
 #
 # Copyright (C) 2002 MUTOH Masao <mutoh@highway.ne.jp>
 # You can redistribute it and/or modify it under GPL2.
@@ -40,37 +40,41 @@
 # version 1.0.4 by TADA Tadashi <sho@spc.gr.jp> with GPL2.
 #
 =begin ChangeLog
+2002-04-29 MUTOH Masao	<mutoh@highway.ne.jp>
+	* yasqueeze.rb¼«¿È¤ÎÊ¸»ú¥³¡¼¥É¤¬ISO-2022-JP¤À¤Ã¤¿¤Î¤ÇEUC-JP¤ËÄ¾¤·¤¿
+	* version 1.3.1
+
 2002-04-14 MUTOH Masao	<mutoh@highway.ne.jp>
-	* @options$B$r;XDj$7$J$/$F$b%G%U%)%k%H$NF0:n$r$9$k$h$&$K$7$?(B
+	* @options¤ò»ØÄê¤·¤Ê¤¯¤Æ¤â¥Ç¥Õ¥©¥ë¥È¤ÎÆ°ºî¤ò¤¹¤ë¤è¤¦¤Ë¤·¤¿
 		- output_path = (@data_path)/cache/html
 		- all_data = false
 		- compat_path = false
 	* version 1.3.0
 
 2002-04-01 MUTOH Masao	<mutoh@highway.ne.jp>
-	* $B%I%-%e%a%s%H:o=|(B
-	* $BK\%U%!%$%k$N%X%C%@ItJ,$N%I%-%e%a%s%H$r=<<B$5$;$?(B
+	* ¥É¥­¥å¥á¥ó¥Èºï½ü
+	* ËÜ¥Õ¥¡¥¤¥ë¤Î¥Ø¥Ã¥ÀÉôÊ¬¤Î¥É¥­¥å¥á¥ó¥È¤ò½¼¼Â¤µ¤»¤¿
 
 2002-03-31 MUTOH Masao	<mutoh@highway.ne.jp>
-	* TAB $B"*(B $B%9%Z!<%9(B
-	* $B%I%-%e%a%s%H%A%'%C%/%$%s(B
+	* TAB ¢ª ¥¹¥Ú¡¼¥¹
+	* ¥É¥­¥å¥á¥ó¥È¥Á¥§¥Ã¥¯¥¤¥ó
 
 2002-03-29 MUTOH Masao	<mutoh@highway.ne.jp>
-	* $B=PNO%U%!%$%k$rF|IU$N>:=g$G%=!<%H$9$k$h$&$K$7$?(B
-	* squeeze.rb$B$HF1MM$N%3%^%s%I%*%W%7%g%s$r%5%]!<%H$7$?(B
-	 $B!J$?$@$7(B --delete$B%*%W%7%g%s$O$J$/Be$o$j$K(B--all$B%*%W%7%g%s$rMQ0U!K(B
-	* $B%3%^%s%I%i%$%s%*%W%7%g%s$rDI2C$7$?$3$H$GITMW$K$J$C$?(B--nohtml$B%*%W%7%g%s(B
-	  $B$r$J$/$7$?(B
-	* $B%I%-%e%a%s%H:F8+D>$7(B
-	* tdiary.conf$B$N(B@options$BBP1~(B
-	* add_update_proc do $B!A!!(Bend $BBP1~(B
+	* ½ÐÎÏ¥Õ¥¡¥¤¥ë¤òÆüÉÕ¤Î¾º½ç¤Ç¥½¡¼¥È¤¹¤ë¤è¤¦¤Ë¤·¤¿
+	* squeeze.rb¤ÈÆ±ÍÍ¤Î¥³¥Þ¥ó¥É¥ª¥×¥·¥ç¥ó¤ò¥µ¥Ý¡¼¥È¤·¤¿
+	 ¡Ê¤¿¤À¤· --delete¥ª¥×¥·¥ç¥ó¤Ï¤Ê¤¯Âå¤ï¤ê¤Ë--all¥ª¥×¥·¥ç¥ó¤òÍÑ°Õ¡Ë
+	* ¥³¥Þ¥ó¥É¥é¥¤¥ó¥ª¥×¥·¥ç¥ó¤òÄÉ²Ã¤·¤¿¤³¤È¤ÇÉÔÍ×¤Ë¤Ê¤Ã¤¿--nohtml¥ª¥×¥·¥ç¥ó
+	  ¤ò¤Ê¤¯¤·¤¿
+	* ¥É¥­¥å¥á¥ó¥ÈºÆ¸«Ä¾¤·
+	* tdiary.conf¤Î@optionsÂÐ±þ
+	* add_update_proc do ¡Á¡¡end ÂÐ±þ
 	* version 1.2.0
 
 2002-03-21 MUTOH Masao	<mutoh@highway.ne.jp>
-	* $BHsI=<($NF|5-$r=PNOBP>]$K4^$a$k$+$I$&$+$r@_Dj$G$-$k$h$&$K$7$?(B
-	* $B%U%!%$%k$NJ]B8%G%#%l%/%H%j$N9=@.$r!"(BtDiary$BI8=`$N$b$N$H(Bversion 1.0.0
-	  $B$N$b$N$r@_Dj$G$-$k$h$&$K$7$?(B
-	* $B%I%-%e%a%s%H$r%=!<%9$+$iDI$$=P$7$?(B
+	* ÈóÉ½¼¨¤ÎÆüµ­¤ò½ÐÎÏÂÐ¾Ý¤Ë´Þ¤á¤ë¤«¤É¤¦¤«¤òÀßÄê¤Ç¤­¤ë¤è¤¦¤Ë¤·¤¿
+	* ¥Õ¥¡¥¤¥ë¤ÎÊÝÂ¸¥Ç¥£¥ì¥¯¥È¥ê¤Î¹½À®¤ò¡¢tDiaryÉ¸½à¤Î¤â¤Î¤Èversion 1.0.0
+	  ¤Î¤â¤Î¤òÀßÄê¤Ç¤­¤ë¤è¤¦¤Ë¤·¤¿
+	* ¥É¥­¥å¥á¥ó¥È¤ò¥½¡¼¥¹¤«¤éÄÉ¤¤½Ð¤·¤¿
 	* version 1.1.0
 
 2002-03-19 MUTOH Masao <mutoh@highway.ne.jp>
@@ -97,7 +101,7 @@ if mode == "CMD" || mode == "CGI"
 
 	if mode == "CMD"
 		def usage
-			puts "yasqueeze $Revision: 1.8 $"
+			puts "yasqueeze $Revision: 1.9 $"
 			puts " Yet Another making html files from tDiary's database."
 			puts " usage: ruby yasqueeze.rb [-p <tDiary path>] [-c <tdiary.conf path>] [-a] [-s] <dest path>"
 			exit
@@ -236,7 +240,7 @@ if mode == "CGI" || mode == "CMD"
 			</head>
 			<body><div style="text-align:center">
 			<h1>Yet Another Squeeze for tDiary</h1>
-			<p>$Revision: 1.8 $</p>
+			<p>$Revision: 1.9 $</p>
 			<p>Copyright (C) 2002 MUTOH Masao&lt;mutoh@highway.ne.jp&gt;</p></div>
 			<br><br>Start!</p><hr>
 		]
