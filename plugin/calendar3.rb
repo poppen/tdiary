@@ -1,4 +1,4 @@
-# calendar3.rb $Revision: 1.10 $
+# calendar3.rb $Revision: 1.11 $
 #
 # calendar3: 現在表示している月のカレンダーを表示します．
 #  パラメタ: なし
@@ -89,20 +89,20 @@ def calendar3
 	Calendar3.make_cal(year, month).each do |day, kind|
 		date = "%04d%02d%02d" % [year, month, day]
 		if @diaries[date].nil?
-			result << %Q|<span class="#{Calendar3::STYLE[kind]}">#{day}</span>\n|
+			result << %Q|<span class="calendar-normal"><a class="#{Calendar3::STYLE[kind]}">#{day}</a></span>\n|
  		elsif !@diaries[date].visible?
 			todos = []
 			if show_todo
 				@diaries[date].each_section do |section|
 					if show_todo === section.subtitle
-						todos << section.body
+						todos << CGI::escapeHTML(section.body).gsub(/\n/, "&#13;&#10;")
 					end
 				end
 			end
 			if todos.size != 0
-				result << %Q|<span class="calendar-todo"><a title="#{day}日の予定:\n#{CGI::escapeHTML(todos.join "\n")}">#{day}</a></span>\n|
+				result << %Q|<span class="calendar-todo"><a class="#{Calendar3::STYLE[kind]}" title="#{day}日の予定:&#13;&#10;#{todos.join "&#13;&#10;"}">#{day}</a></span>\n|
 			else
-				result << %Q|<span class="#{Calendar3::STYLE[kind]}">#{day}</span>\n|
+				result << %Q|<span class="calendar-normal"><a class="#{Calendar3::STYLE[kind]}">#{day}</a></span>\n|
 			end
 		else
 			result << %Q|<span class="calendar-day" id="target-#{day}" onmouseover="popup(document.getElementById('target-#{day}'),document.getElementById('popup-#{day}'), document.getElementById('title-#{day}'));" onmouseout="popdown(document.getElementById('popup-#{day}'));">\n|
