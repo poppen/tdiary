@@ -1,4 +1,4 @@
-# ja/category.rb $Revision: 1.1 $
+# ja/category.rb $Revision: 1.2 $
 #
 # Copyright (c) 2004 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -59,8 +59,8 @@ def category_conf_html
 <h3 class="subtitle">ヘッダ</h3>
 <p>
 画面上部に表示する文章を指定します．
-「%lt;%= category_navi %&gt;」で，カテゴリに特化したナビゲーションボタンを表示することができます．
-また「%lt;%= category_list%&gt;」でカテゴリ名一覧を表示することができます．
+「&lt;%= category_navi %&gt;」で，カテゴリに特化したナビゲーションボタンを表示することができます．
+また「&lt;%= category_list%&gt;」でカテゴリ名一覧を表示することができます．
 その他，各種プラグインやHTMLを記述できます．
 </p>
 
