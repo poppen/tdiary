@@ -1,3 +1,6 @@
+2004-12-05  NT  <nt@be.to>
+	* tlink.rb: adjusted to ruby 1.8.2
+
 2004-12-05  Kazuhiko  <kazuhiko@fdiary.net>
 	* category.rb: delete category icon setting if 'none' is selected
 
