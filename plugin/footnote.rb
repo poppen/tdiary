@@ -1,4 +1,4 @@
-# footnote.rb $Revision: 1.2 $
+# footnote.rb $Revision: 1.3 $
 #
 # fn: 脚注plugin
 #   パラメタ:
@@ -7,12 +7,31 @@
 #
 # Copyright (c) 2001,2002 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
+#
+=begin ChangeLog
+2002-03-12 TADA Tadashi <sho@spc.gr.jp>
+	* runable in secure mode.
+=end
+
+# initialize instance variable as taint
+@footnote_name = ""
+@footnote_name.taint
+@footnote_url = ""
+@footnote_url.taint
+@footnote_mark_name = ""
+@footnote_mark_name.taint
+@footnote_mark_url = ""
+@footnote_mark_url.taint
+@footnotes = []
+@footnotes.taint
+@footnote_index = [0]
+@footnote_index.taint
 
 def fn(text, mark = '*')
 	if @footnote_name
-		@footnote_index += 1
-		@footnotes << [@footnote_index, text, mark]
-		%Q|<span class="footnote"><a name="#{@footnote_mark_name % @footnote_index}" href="#{@footnote_url % @footnote_index}">#{mark}#{@footnote_index}</a></span>|
+		@footnote_index[0] += 1
+		@footnotes << [@footnote_index[0], text, mark]
+		%Q|<span class="footnote"><a name="#{@footnote_mark_name % @footnote_index[0]}" href="#{@footnote_url % @footnote_index[0]}">#{mark}#{@footnote_index[0]}</a></span>|
 	else
  		""
 	end
@@ -20,12 +39,10 @@ end
 
 add_body_enter_proc(Proc.new do |date|
 	date = date.strftime("%Y%m%d")
-	@footnote_name = "f%02d"
-	@footnote_url = "#{@index}#{anchor date}##{@footnote_name}"
-	@footnote_mark_name = "fm%02d"
-	@footnote_mark_url = "#{@index}#{anchor date}##{@footnote_mark_name}"
-	@footnotes = []
-	@footnote_index = 0
+	@footnote_name.replace "f%02d"
+	@footnote_url.replace "#{@index}#{anchor date}##{@footnote_name}"
+	@footnote_mark_name.replace "fm%02d"
+	@footnote_mark_url.replace "#{@index}#{anchor date}##{@footnote_mark_name}"
 	""
 end)
 
