@@ -1,3 +1,6 @@
+2005-01-12  Masao Mutoh <mutoh@highway.ne.jp>
+	* amazon.rb (get_amazon_image): add a title attribute.
+
 2005-01-11 zunda <zunda at freeshell.org>
 	* disp_referrer.rb: rescue PStore errors on ruby-1.8.1 and 1.6.8, thanks to Ohiwa-san
 

@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.27 $
+# amazon.rb $Revision: 1.28 $
 #
 # See document in language resource file: en/amazon.rb
 #
@@ -133,7 +133,7 @@ def get_amazon_image( position, asin, comment )
 				r << %Q[width="#{item[4].strip}" ] if item[4]
 				r << %Q[height="#{item[5].strip}" ] if item[5]
 			end
-			r << %Q[alt="#{item[1].strip}">]
+			r << %Q[alt="#{item[1].strip}" title="#{item[1].strip}">]
 		end
 		if !@conf['amazon.hidename']
 			r << item[1].strip if position == "amazon"
