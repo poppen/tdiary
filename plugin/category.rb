@@ -1,4 +1,4 @@
-# category.rb $Revision: 1.23 $
+# category.rb $Revision: 1.24 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -597,7 +597,7 @@ def category_icon_find_icons
    return if @category_all_icon
 	@category_all_icon = []
 	%w(png jpg gif bmp).each do |e|
-		@category_all_icon += Dir.glob("#{@category_icon_dir}*.#{e}").map {|i| File.basename(i)}
+		@category_all_icon += Dir.glob("#{@category_icon_dir}*.#{e}".untaint).map {|i| File.basename(i)}
 	end
 	@category_all_icon.sort!
 end
