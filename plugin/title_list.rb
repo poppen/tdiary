@@ -1,13 +1,15 @@
-# titile_list.rb $Revision: 1.3 $
+# titile_list.rb $Revision: 1.4 $
 #
 # title_list: 現在表示している月のタイトルリストを表示
-#   パラメタ: なし
+#   パラメタ(カッコ内は未指定時の値):
+#     rev:       逆順表示(false)
+#     extra_erb: タイトルリスト生成後さらにERbを通すか(false)
 #
 # 備考: タイトルリストを日記に埋め込むは、レイアウトを工夫しなければ
 # なりません。ヘッダやフッタでtableタグを使ったり、CSSを書き換える必
 # 要があるでしょう。
 #
-def title_list( rev = false )
+def title_list( rev = false, extra_erb = false )
 	result = ''
 	keys = @diaries.keys.sort
 	keys = keys.reverse if rev
@@ -19,6 +21,10 @@ def title_list( rev = false )
 		end
 		result << "</div>\n"
 	end
-	result
+	if extra_erb and /<%=/ === result
+		ERbLight.new( result ).result( binding )
+	else
+		result
+	end
 end
 
