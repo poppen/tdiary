@@ -1,6 +1,7 @@
 2003-12-10 TADA Tadashi <sho@spc.gr.jp>
 	* amazon.rb: add 'clear cache' switch in prefenrences page.
 	* tb-show.rb: hide link when bot access (against trackback spam).
+	* tb-show.rb: hide RDF of ping url when bot access (against trackback spam).
 
 2003-12-05 TADA Tadashi <sho@spc.gr.jp>
 	* amazon.rb: hide conf menu when secure mode and amazon.hideconf.
