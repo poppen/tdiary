@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.2 $
+# makerss.rb: $Revision: 1.3 $
 #
 # generate RSS file when updating.
 #
@@ -30,7 +30,7 @@ if /^append|replace|comment|showcomment$/ =~ @mode then
 					l = Time::local( g.year, g.month, g.day, g.hour, g.min, g.sec )
 					tz = (g.to_i - l.to_i)
 					zone = sprintf( "%+03d:%02d", tz / 3600, tz % 3600 / 60 )
-					@time.strftime( "%Y-%m-%dT%H:%M:%S#{zone}" )
+					@time.strftime( "%Y-%m-%dT%H:%M:%S" ) + zone
 				end
 
 				def <=>( other )
