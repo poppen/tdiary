@@ -1,4 +1,4 @@
-# calendar3.rb $Revision: 1.38 $
+# calendar3.rb $Revision: 1.39 $
 #
 # calendar3: 現在表示している月のカレンダーを表示します．
 #  パラメタ: なし
@@ -164,7 +164,11 @@ def calendar3
 				result << %Q|<span class="calendar-normal"><a class="#{Calendar3::STYLE[kind]}">#{day}</a></span>\n|
 			end
 		else
-			result << %Q|<span class="calendar-day" id="target-#{day}" onmouseover="popup(document.getElementById('target-#{day}'),document.getElementById('popup-#{day}'), document.getElementById('title-#{day}'));" onmouseout="popdown(document.getElementById('popup-#{day}'));">\n|
+			if @calendar3_show_popup
+				result << %Q|<span class="calendar-day" id="target-#{day}" onmouseover="popup(document.getElementById('target-#{day}'),document.getElementById('popup-#{day}'), document.getElementById('title-#{day}'));" onmouseout="popdown(document.getElementById('popup-#{day}'));">\n|
+			else
+				result << %Q|<span class="calendar-day" id="target-#{day}">\n|
+			end
 			result << %Q|  <a class="#{Calendar3::STYLE[kind]}" id="title-#{day}" title="|
 			i = 1
 			r = []

@@ -1,3 +1,6 @@
+2005-01-12 Junichiro Kita <kita@kitaj.no-ip.com>
+	* calendar3.rb: hide 'onmouseover' if @options['calendar3.show_popup'] == false, thanks to Ohiwa-san
+
 2005-01-12  Masao Mutoh <mutoh@highway.ne.jp>
 	* amazon.rb (get_amazon_image): add a title attribute.
 
