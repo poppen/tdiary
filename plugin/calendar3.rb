@@ -1,4 +1,4 @@
-# calendar3.rb $Revision: 1.28 $
+# calendar3.rb $Revision: 1.29 $
 #
 # calendar3: 現在表示している月のカレンダーを表示します．
 #  パラメタ: なし
@@ -54,6 +54,8 @@
 # }
 #
 =begin ChengeLog
+2003-03-25 Junichiro Kita <kita@kitaj.no-ip.com>
+	* add css to navigation links to next, current, prev month.
 2003-02-27 Junichiro Kita <kita@kitaj.no-ip.com>
 	* @options['calendar.show_popup']
 2003-01-07 Junichiro Kita <kita@kitaj.no-ip.com>
@@ -151,8 +153,8 @@ def calendar3
 	month = date.month
 	day = date.day
 
-	result << %Q|<a href="#{@index}#{anchor "%04d%02d" % Calendar3.prev_month(year, month)}">&lt;&lt;</a>\n|
-	result << %Q|<a href="#{@index}#{anchor "%04d%02d" % [year, month]}">#{"%04d/%02d" % [year, month]}</a>/\n|
+	result << %Q|<span class="calendar-prev-month"><a href="#{@index}#{anchor "%04d%02d" % Calendar3.prev_month(year, month)}">&lt;&lt;</a></span>\n|
+	result << %Q|<span class="calendar-current-month"><a href="#{@index}#{anchor "%04d%02d" % [year, month]}">#{"%04d/%02d" % [year, month]}</a>/</span>\n|
 	#Calendar3.make_cal(year, month)[(day - num >= 0 ? day - num : 0)..(day - 1)].each do |day, kind|
 	Calendar3.make_cal(year, month).each do |day, kind|
 		date = "%04d%02d%02d" % [year, month, day]
@@ -223,7 +225,7 @@ def calendar3
 			result << %Q|</span>\n|
 		end
 	end
-	result << %Q|<a href="#{@index}#{anchor "%04d%02d" % Calendar3.next_month(year, month)}">&gt;&gt;</a>\n|
+	result << %Q|<span class="calendar-next-month"><a href="#{@index}#{anchor "%04d%02d" % Calendar3.next_month(year, month)}">&gt;&gt;</a></span>\n|
 	result
 end
 
