@@ -1,4 +1,4 @@
-# calendar3.rb $Revision: 1.9 $
+# calendar3.rb $Revision: 1.10 $
 #
 # calendar3: 現在表示している月のカレンダーを表示します．
 #  パラメタ: なし
@@ -7,6 +7,10 @@
 #   @options['calendar3.erb']
 #     title属性に渡す文字列をERbLightで評価するかどうか (true/false)
 #     (省略時: true) 
+#   @options['calendar3.show_todo']
+#     パラグラフのサブサイトルとここで指定した文字列が一致し
+#     かつその日の日記が非表示の場合，そのパラグラフの内容を
+#     予定としてpopupする．
 #
 # Copyright (c) 2001,2002 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -74,6 +78,7 @@ def calendar3
 	else
 		extra_erb = true
 	end
+	show_todo = @options['calendar3.show_todo']
 	result = ''
 	year = @date.year
 	month = @date.month
@@ -83,8 +88,22 @@ def calendar3
 	#Calendar3.make_cal(year, month)[(day - num >= 0 ? day - num : 0)..(day - 1)].each do |day, kind|
 	Calendar3.make_cal(year, month).each do |day, kind|
 		date = "%04d%02d%02d" % [year, month, day]
-		if @diaries[date].nil? or !@diaries[date].visible?
+		if @diaries[date].nil?
 			result << %Q|<span class="#{Calendar3::STYLE[kind]}">#{day}</span>\n|
+ 		elsif !@diaries[date].visible?
+			todos = []
+			if show_todo
+				@diaries[date].each_section do |section|
+					if show_todo === section.subtitle
+						todos << section.body
+					end
+				end
+			end
+			if todos.size != 0
+				result << %Q|<span class="calendar-todo"><a title="#{day}日の予定:\n#{CGI::escapeHTML(todos.join "\n")}">#{day}</a></span>\n|
+			else
+				result << %Q|<span class="#{Calendar3::STYLE[kind]}">#{day}</span>\n|
+			end
 		else
 			result << %Q|<span class="calendar-day" id="target-#{day}" onmouseover="popup(document.getElementById('target-#{day}'),document.getElementById('popup-#{day}'), document.getElementById('title-#{day}'));" onmouseout="popdown(document.getElementById('popup-#{day}'));">\n|
 			result << %Q|  <a class="#{Calendar3::STYLE[kind]}" title="|
@@ -220,3 +239,4 @@ add_header_proc do
 </script>
 JAVASCRIPT
 end
+# vim: set ts=3:
