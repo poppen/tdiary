@@ -1,4 +1,4 @@
-# number_anchor.rb $Revision: 1.1 $
+# number_anchor.rb $Revision: 1.2 $
 #
 # number_anchor: アンカーにid属性を付加する
 #          アンカー画像を異なるものにするためのもの
@@ -20,7 +20,7 @@ alias :_orig_anchor :anchor
 
 def anchor( s )
 	if @use_number_anchor == true then
-	if /^(\d+)#?([pc])?(\d*)?$/ =~ s then
+	if /^(\d+)#?([pct])?(\d*)?$/ =~ s then
 		if $2 then
 			n = $3.to_i
 			if n && n > @total_anchor then
