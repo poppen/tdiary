@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 $KCODE= 'e'
 #
-# posttdiary: update tDiary via e-mail. $Revision: 1.1 $
+# posttdiary: update tDiary via e-mail. $Revision: 1.2 $
 #
 # Copyright (C) 2002, All right reserved by TADA Tadashi <sho@spc.gr.jp>
 # You can redistribute it and/or modify it under GPL2.
@@ -23,6 +23,8 @@ def usage
 		  --image-format, -f: format of image tag specified image serial
 		          number as '$0' and image url as '$1'.
 		          default format is ' <img class="photo" src="$1" alt="">'.
+		  --use-subject,  -s: use mail subject to subtitle.
+		          and insert image between subtitle and body.
   TEXT
   text.gsub( /\t/, '' )
 end
@@ -65,10 +67,12 @@ begin
 	image_dir = nil
 	image_url = nil
 	image_format = ' <img class="photo" src="$1" alt="">'
+	use_subject = false
 	parser.set_options(
 		['--image-path', '-i', GetoptLong::REQUIRED_ARGUMENT],
 		['--image-url', '-u', GetoptLong::REQUIRED_ARGUMENT],
-		['--image-format', '-f', GetoptLong::REQUIRED_ARGUMENT]
+		['--image-format', '-f', GetoptLong::REQUIRED_ARGUMENT],
+		['--use-subject', '-s', GetoptLong::NO_ARGUMENT]
 	)
 	begin
 		parser.each do |opt, arg|
@@ -79,6 +83,8 @@ begin
 				image_url = arg
 			when '--image-format'
 				image_format = arg
+			when '--use-subject'
+				use_subject = true
 			end
 		end
 	rescue
@@ -135,7 +141,11 @@ begin
 				image_name = now.strftime( "%Y%m%d" ) + "_" + list.length.to_s + image_ext
 				File::umask( 022 )
 				open( image_dir + image_name, "wb" ) do |s|
-					s.print decode64( sub_body.strip )
+					begin
+						s.print Base64::decode64( sub_body.strip )
+					rescue NameError
+						s.print decode64( sub_body.strip )
+					end
 				end
 				if /\.bmp$/i =~ image_name then
 					bmp_to_png( image_dir + image_name )
@@ -155,9 +165,13 @@ begin
 		img_src = ""
 		@image_name.each do |i|
 			serial = i.sub( /^\d+_(\d+)\..*$/, '\1' )
-			img_src = image_format.gsub( /\$0/, serial ).gsub( /\$1/, image_url + i )
+			img_src += image_format.gsub( /\$0/, serial ).gsub( /\$1/, image_url + i )
 		end
-		@body = "#{@body.sub( /\n+\z/, '' )}\n#{img_src}"
+		if use_subject then
+			@body = "#{img_src}\n#{@body.sub( /\n+\z/, '' )}"
+		else
+			@body = "#{@body.sub( /\n+\z/, '' )}\n#{img_src}"
+		end
 	end
 
 	addr = nil
@@ -180,20 +194,22 @@ begin
 	raise "no user." unless user
 	raise "no passwd." unless pass
 	
-	title = ''
-	if /^Subject:(.*)$/ =~ head then
-		title = $1.strip
+	subject = ''
+	if /^Subject:(.*)$/ =~ head
+		subject = NKF::nkf( '-eXd', $1.strip.sub( /[\r\n]+[^\t ].*/, '' ).gsub( /[\r\n\t]/, '' ) )
+	end
+	if use_subject then
+		title = ''
+		@body = "#{subject}\n#{@body}"
+	else
+		title = subject
 	end
 
 	require 'cgi'
 	require 'nkf'
-	data = "title=#{CGI::escape NKF::nkf( '-eXd', title )}"
+	data = "title=#{CGI::escape title}"
 	data << "&body=#{CGI::escape @body}"
 	data << "&append=true"
-#	now = Time::now
-#	data << "&year=#{now.year}"
-#	data << "&month=#{now.month}"
-#	data << "&day=#{now.day}"
 
 	require 'net/http'
 	Net::HTTP.start( host, port ) do |http|
