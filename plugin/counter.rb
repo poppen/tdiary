@@ -1,4 +1,4 @@
-# counter.rb $Revision: 1.12 $
+# counter.rb $Revision: 1.13 $
 # -pv-
 #
 # 名称：
@@ -71,6 +71,11 @@
 # You can redistribute it and/or modify it under GPL2.
 # 
 =begin ChangeLog
+2002-10-12 MUTOH Masao  <mutoh@highway.ne.jp>
+    * 初めて使うときに動作しなくなっていた不具合の修正。
+    * 1日1回保持しているユーザ情報をクリーンアップするようにした。
+    * version 1.6.1
+
 2002-08-30 MUTOH Masao  <mutoh@highway.ne.jp>
 	* データファイルが読み込めなくなったとき、1つ前のバックアップデータ
 	  を用いて復旧するようにした(その際に、1つ前のバックアップデータは
@@ -172,47 +177,61 @@ class TDiaryCountData
 	attr_writer :ignore_cookie #means ALWAYS ignore a cookie.
 
 	def initialize
-		@today, @yesterday, @all = 0, 0, 0
-		@newestday = nil
-		@ignore_cookie = false
+	  @today, @yesterday, @all = 0, 0, 0
+	  @newestday = nil
+	  @ignore_cookie = false
+	  @clean_time = Time.now
 	end
 
 	def up(now, cache_path, cgi, log)
-		if @newestday
-			if now == @newestday
-				@today += 1
-			else
-				log(@newestday, cache_path) if log
-				@yesterday = ((now - 1) == @newestday) ? @today : 0
-				@today = 1
-				@newestday = now
-			end
+	  if @newestday
+		if now == @newestday
+		  @today += 1
 		else
-			@yesterday = 0
-			@today = 1
-			@newestday = now
+		  log(@newestday, cache_path) if log
+		  @yesterday = ((now - 1) == @newestday) ? @today : 0
+		  @today = 1
+		  @newestday = now
 		end
-		@all += 1
+	  else
+		@yesterday = 0
+		@today = 1
+		@newestday = now
+	  end
+	  @all += 1
 	end
 
-	def previous_access_time(remote_addr, user_agent)
-		@users = Hash.new unless @users
-		ret = @users[[remote_addr, user_agent]]
-		@users[[remote_addr, user_agent]] = Time.now
-		ret
+	def previous_access_time(remote_addr, user_agent, interval)
+	  @users = Hash.new unless @users
+	  now = Time.now
+
+	  ret = @users[[remote_addr, user_agent]]
+	  @users[[remote_addr, user_agent]] = now
+
+	  if @clean_time
+		if @clean_time - now > 86400
+		  @users.reject!{|key, val|
+			now - val > interval * 3600
+		  }
+		  @clean_time = now
+		end
+	  else
+		@clean_time = Time.now
+	  end
+	  ret
 	end
 
 	def log(day, path)
-		return unless day
-		open(path + "/counter.log", "a") do |io|
-			io.print day, " : ", @all, ",", @today, ",", @yesterday, "\n"
-		end
+	  return unless day
+	  open(path + "/counter.log", "a") do |io|
+		io.print day, " : ", @all, ",", @today, ",", @yesterday, "\n"
+	  end
 	end
 end
 TOPLEVEL_CLASS
 
 module TDiaryCounter
-	@version = "1.6.0"
+	@version = "1.6.1"
 
 	def run(cache_path, cgi, options)
 		timer = options["counter.timer"] if options
@@ -226,16 +245,21 @@ module TDiaryCounter
 	
 		cookie = nil
 		begin
-			cookie = main(cache_path, cgi, options, timer, dir, path, today)
-		rescue 
-			back = (Dir.glob(path + ".?").sort{|a,b| File.mtime(a) <=> File.mtime(b)}.reverse)[0]
+		  cookie = main(cache_path, cgi, options, timer, dir, path, today)
+		rescue
+		  back = (Dir.glob(path + ".?").sort{|a,b| File.mtime(a) <=> File.mtime(b)}.reverse)[0]
+		  
+		  if back
 			copy(back, back + ".bak")
 			copy(back, path)
-			begin
-				main(cache_path, cgi, options, timer, dir, path, today)
-			rescue 
-				@cnt = TDiaryCountData.new
-			end
+		  else
+			rm(path)
+		  end
+		  begin
+			cookie = main(cache_path, cgi, options, timer, dir, path, today)
+		  rescue 
+			@cnt = TDiaryCountData.new
+		  end
 		end
 		cookie
 	end
@@ -247,14 +271,15 @@ module TDiaryCounter
 			begin
 				@cnt = db["countdata"]
 			rescue PStore::Error
-				@cnt = TDiaryCountData.new
-				cgi.cookies = nil
 			end
+            unless @cnt
+              @cnt = TDiaryCountData.new
+              cgi.cookies = nil
+            end
 
 			allow = (cgi.user_agent !~ /tlink/ and
 						allow?(cgi.user_agent, options, "user_agents") and
 						allow?(cgi.remote_addr, options, "remote_addrs"))
-
 			if allow 
 				changed = false
 				if new_user?(cgi, options)
@@ -293,6 +318,25 @@ module TDiaryCounter
 		cookie
 	end
 
+	def rm( fn, force = true )
+	  first = true
+	  begin
+		File.unlink fn
+	  rescue Errno::ENOENT
+		force or raise
+	  rescue
+		# rescue dos?
+		begin
+		  if first then
+			first = false
+			File.chmod 0777, fn
+			retry
+		  end
+		rescue
+		end
+	  end
+	end
+
 	def copy(old, new)
 		if FileTest.exist?(old)
 			File.open(old,  'rb') {|r|
@@ -326,7 +370,7 @@ module TDiaryCounter
 		if ! cgi.cookies or ! cgi.cookies.keys.include?("tdiary_counter")
 			interval = options["counter.deny_same_src_interval"] if options
 			interval = 2 unless interval	# 2 hour.
-			previous_access_time = @cnt.previous_access_time(cgi.remote_addr, cgi.user_agent)
+			previous_access_time = @cnt.previous_access_time(cgi.remote_addr, cgi.user_agent, interval)
 			if previous_access_time
 				ret = Time.now - previous_access_time > interval * 3600
 			else
@@ -364,7 +408,7 @@ module TDiaryCounter
 	def kiriban_today?; @kiriban_today; end
 
 	module_function :allow?, :new_user?, :all, :today, :yesterday, :format, 
-							:main, :run, :copy, :kiriban?, :kiriban_today?
+							:main, :run, :copy, :rm, :kiriban?, :kiriban_today?
 end
 
 #init_num is deprecated.
