@@ -1,4 +1,4 @@
-# a.rb $Revision: 1.7 $
+# a.rb $Revision: 1.8 $
 #
 # Create anchor easily.
 #
@@ -23,12 +23,15 @@
 #   a "Hoge Diary|http://www.hoge.com/diary/"
 #   a "Hoge Diary|20020201.html#p01"  #=> Same as "my" plugin
 #
-# 4. Documents
+# 2. Dictionary file
+# You can edit the dictionary file from "Preferences".
+# 
+# 3. Documents
 # See URLs below for more details.
 #   http://ponx.s5.xrea.com/hiki/a.rb.html (English) 
 #   http://ponx.s5.xrea.com/hiki/ja/a.rb.html (Japanese) 
 # 
-# Copyright (c) 2002,2003 MUTOH Masao <mutoh@highway.ne.jp>
+# Copyright (c) 2002-2004 MUTOH Masao <mutoh@highway.ne.jp>
 # You can redistribute it and/or modify it under GPL2.
 # 
 require 'nkf'
@@ -44,7 +47,7 @@ A_REG_MY = /^\d{8}/
 if @options and @options["a.path"] 
 	a_path = @options["a.path"]
 else
-	a_path = @cache_path + "/a.dat"
+	a_path = File.join(@cache_path, "a.dat")
 end
 
 @a_anchors = Hash.new
@@ -136,7 +139,7 @@ def a(key, option_or_name = nil, name = nil, charset = nil)
 	if @options["a.tlink"] 
 		if defined?(tlink)
 			url.untaint
-			result = tlink(url, value)
+ 			result = tlink(url, value)
 		else
 			result = "tlink is not available."
 		end
@@ -148,5 +151,49 @@ end
 
 def navi_a(name = "a.rb conf")
 	"<span class=\"adminmenu\"><a href=\"a_conf.rb\">#{name}</a></span>\n"
+end
+
+def a_conf_label; "アンカー自動生成プラグイン辞書ファイル編集"; end
+def a_conf_explain; "<p>1行で1つのアンカーになります。フォーマットは、キー URL 名称です。各項目は空白で区切ります。名称は省略可能です。省略した場合はキーが名称として使われます。</p><p>例： bibo http://ponx.s5.xrea.com/bibo/ Linuxビボ〜ろく</p>"; end
+def a_conf_cols; 90; end
+def a_conf_rows; 20; end
+
+def a_conf_html(data)
+%Q[
+<h3>#{a_conf_label}</h3>
+<p>#{a_conf_explain}</p>
+<p><textarea name="anchor_plugin_data" cols="#{a_conf_cols}" rows="#{a_conf_rows}">#{data}</textarea></p>
+]
+end
+
+add_conf_proc( 'a_conf', a_conf_label ) do
+  data = ""
+  if FileTest.exist?( a_path )
+    open( a_path, "r" ) do |i|
+      data = i.readlines.join
+    end
+  end
+
+  if @mode == 'saveconf'
+    if @cgi['anchor_plugin_data']
+       open( a_path, "r" ) do |i|
+        open( a_path + "~", "w" ) do |o|
+          o.print i.readlines
+        end
+      end
+
+      open( a_path, 'w' ) do |o|
+        @cgi["anchor_plugin_data"].each do |v|
+          v.split(/\n/).each do |line|
+            o.print line, "\n" if line =~ /\w/
+          end
+        end
+      end
+      data = @cgi["anchor_plugin_data"]
+
+    end
+  end
+ 
+  a_conf_html(data)
 end
 
