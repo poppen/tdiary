@@ -1,5 +1,5 @@
 #
-# markdown_style.rb: Markdown style for tDiary 2.x format. $Revision: 1.7 $
+# markdown_style.rb: Markdown style for tDiary 2.x format. $Revision: 1.8 $
 #
 # if you want to use this style, add @style into tdiary.conf below:
 #
@@ -38,7 +38,6 @@ module TDiary
       r = ''
       r << "#{@subtitle}\n" if @subtitle
       r << @body
-      r << "\n"
     end
 
     def html4( date, idx, opt )
@@ -162,6 +161,7 @@ module TDiary
       each_section do |section|
         r << section.to_src
       end
+      r << "\n"
       r
     end
 
