@@ -1,4 +1,4 @@
-# comment_mail-smtp.rb $Revision: 1.1 $
+# comment_mail-smtp.rb $Revision: 1.2 $
 #
 # SMTPプロトコルを使ってツッコミをメールで知らせる
 #   入れるだけで動作する
@@ -35,8 +35,8 @@ def comment_mail( text )
 end
 
 if @mode == 'comment' and @comment then
-	@options['comment_mail.smtp_host'] = @conf.smtp_host || 'localhost'
-	@options['comment_mail.smtp_port'] = @conf.smtp_port || 25
+	@options['comment_mail.smtp_host'] ||= @conf.smtp_host || 'localhost'
+	@options['comment_mail.smtp_port'] ||= @conf.smtp_port || 25
 	comment_mail_send
 end
 
