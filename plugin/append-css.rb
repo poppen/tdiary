@@ -13,21 +13,12 @@ add_header_proc do
 	HTML
 end
 
-def append_css_label
-	if @lang == 'en' then
-		'Append CSS'
-	else
+unless @resource_loaded then
+	def append_css_label
 		'CSSの追加'
 	end
-end
 
-def append_css_desc
-	if @lang == 'en' then
-		<<-HTML
-		<h3>CSS elements</h3>
-		<p>If you want to append some elements of style sheet, specify below.</p>
-		HTML
-	else
+	def append_css_desc
 		<<-HTML
 		<h3>CSS断片</h3>
 		<p>現在指定してあるテーマに、スタイルシートを追加設定する場合、

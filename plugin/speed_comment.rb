@@ -1,4 +1,4 @@
-# speed_comment.rb $Revision: 1.4 $
+# speed_comment.rb $Revision: 1.5 $
 #
 # spped_comment: 最新・月毎表示時に簡易なツッコミフォームを表示する
 #                pluginディレクトリに入れるだけで動きます。
@@ -35,19 +35,28 @@ add_body_leave_proc do |date|
 	end
 end
 
-add_conf_proc( 'speed_comment', '簡易ツッコミ' ) do
+unless @resource_loaded then
+	def speed_comment_label
+		'簡易ツッコミ'
+	end
+
+	def speed_comment_html
+		<<-HTML
+		<h3>簡易ツッコミフォームのサイズ</h3>
+		<p>名前欄: <input name="speed_comment.name_size" size="5" value="#{@conf['speed_comment.name_size'] || 20}"></p>
+		<p>本文欄: <input name="speed_comment.body_size" size="5" value="#{@conf['speed_comment.body_size'] || 40}"></p>
+		HTML
+	end
+end
+
+add_conf_proc( 'speed_comment', speed_comment_label ) do
 	if @mode == 'saveconf' then
 		@conf['speed_comment.name_size'] = @cgi.params['speed_comment.name_size'][0].to_i
 		@conf['speed_comment.name_size'] = 20 if @conf['speed_comment.name_size'] < 1
 		@conf['speed_comment.body_size'] = @cgi.params['speed_comment.body_size'][0].to_i
 		@conf['speed_comment.body_size'] = 40 if @conf['speed_comment.body_size'] < 1
 	end
-
-	<<-HTML
-	<h3>簡易ツッコミフォームのサイズ</h3>
-	<p>名前欄: <input name="speed_comment.name_size" size="5" value="#{@conf['speed_comment.name_size'] || 20}"></p>
-	<p>本文欄: <input name="speed_comment.body_size" size="5" value="#{@conf['speed_comment.body_size'] || 40}"></p>
-	HTML
+	speed_comment_html
 end
 
 

@@ -1,4 +1,4 @@
-# tb-send.rb $Revision: 1.11 $
+# tb-send.rb $Revision: 1.12 $
 #
 # Copyright (c) 2003 Junichiro Kita <kita@kitaj.no-ip.com>
 # You can distribute this file under the GPL.
@@ -30,7 +30,7 @@ if /^(append|replace)$/ =~ @mode then
 
 		excerpt = @cgi.params['body'][0] if excerpt.empty?
 		if excerpt.length > 255
-			excerpt = excerpt.gsub(/\r/, '').gsub(/\n/, "\001").shorten(252).gsub(/\001/, "\n")
+			excerpt = @conf.shorten( excerpt.gsub( /\r/, '' ).gsub( /\n/, "\001" ), 252 ).gsub( /\001/, "\n" )
 		end
 
 		my_url = "http://#{ENV['HTTP_HOST']}"

@@ -1,4 +1,4 @@
-# calendar2.rb $Revision: 1.10 $
+# calendar2.rb $Revision: 1.11 $
 #
 # calendar2: どこかで見たようなカレンダーを日記に追加する
 #   パラメタ:
@@ -16,6 +16,9 @@
 # Distributed under the GPL
 #
 =begin ChangeLog
+2003-09-25 TADA Tadashi
+	* use @conf.shorten.
+
 2003-01-10 NT <nt@be.to>
 	* @options['calendar2.erb'] -> @options['apply_plugin']
 	* use Plugin#shorten.
@@ -132,9 +135,9 @@ CALENDAR_HEAD
 						idx = "01"
 						@diaries[date].each_section do |section|
 							if section.subtitle
-								text = shorten( section.subtitle )
+								text = @conf.shorten( section.subtitle )
 							else
-								text = shorten( section.body.split( /\n/ )[0] )
+								text = @conf.shorten( section.body.split( /\n/ )[0] )
 							end
 							if @options['apply_plugin']
 								subtitles <<  %Q|#{idx}. #{apply_plugin( text ).gsub(/<.+?>/, '').gsub( /"/, '&quot;' )}|

@@ -1,4 +1,4 @@
-# my-ex.rb $Revision: 1.3 $
+# my-ex.rb $Revision: 1.4 $
 #
 # my(拡張版): myプラグインを拡張し、title属性に参照先の内容を挿入します。
 #             参照先がセクションの場合は(あれば)サブタイトルを、
@@ -30,7 +30,7 @@ def my( a, str )
 			com = nil
 			@diaries[date].each_comment( frag.to_i ) {|c| com = c}
 			if com then
-				title = CGI::escapeHTML( "[#{com.name}] #{com.shorten}" )
+				title = CGI::escapeHTML( "[#{com.name}] #{com.shorten( @conf.comment_length )}" )
 				result = %Q[<a href="#{@index}#{anchor a}" title="#{title}">#{str}</a>]
 			end
 		end

@@ -1,4 +1,4 @@
-# calendar3.rb $Revision: 1.33 $
+# calendar3.rb $Revision: 1.34 $
 #
 # calendar3: 現在表示している月のカレンダーを表示します．
 #  パラメタ: なし
@@ -54,14 +54,21 @@
 # }
 #
 =begin ChengeLog
+2003-09-25 TADA Tadashi <sho@spc.gr.jp>
+	* use @conf.shorten.
+
 2003-03-25 Junichiro Kita <kita@kitaj.no-ip.com>
 	* add css to navigation links to next, current, prev month.
+
 2003-02-27 Junichiro Kita <kita@kitaj.no-ip.com>
 	* @options['calendar.show_popup']
+
 2003-01-07 Junichiro Kita <kita@kitaj.no-ip.com>
    * append sample css
+
 2003-01-07 MURAI Kensou <murai@dosule.com>
 	* modify javascript for popdown-delay
+
 2002-12-20 TADA Tadashi <sho@spc.gr.jp>
 	* use Plugin#apply_plugin.
 =end
@@ -114,13 +121,7 @@ module Calendar3
 		[year, month]
 	end
 
-	def shorten(str, len = 120)
-		lines = NKF::nkf("-e -m0 -f" + len.to_s, str.gsub(/<.+?>/, '')).split(/\n/)
-		lines[0].concat('...') if lines[0] and lines[1]
-		lines[0]
-	end
-
-	module_function :make_cal, :shorten, :next_month, :prev_month
+	module_function :make_cal, :next_month, :prev_month
 end
 
 # 1.4 -> 1.5
@@ -207,7 +208,7 @@ def calendar3
 						if section.stripped_subtitle
 							text = apply_plugin( section.to_src)
 							subtitle = apply_plugin( section.stripped_subtitle )
-							result << %Q|    <a href="#{@index}#{anchor "%s#p%02d" % [date, i]}" title="#{CGI::escapeHTML(Calendar3.shorten(text))}">#{i}</a>. #{subtitle}<br>\n|
+							result << %Q|    <a href="#{@index}#{anchor "%s#p%02d" % [date, i]}" title="#{CGI::escapeHTML( @conf.shorten( text ) )}">#{i}</a>. #{subtitle}<br>\n|
 						end
 						i += 1
 					end
@@ -216,7 +217,7 @@ def calendar3
 						if section.subtitle
 							text = apply_plugin( section.to_src)
 							subtitle = apply_plugin( section.subtitle )
-							result << %Q|    <a href="#{@index}#{anchor "%s#p%02d" % [date, i]}" title="#{CGI::escapeHTML(Calendar3.shorten(text))}">#{i}</a>. #{subtitle}<br>\n|
+							result << %Q|    <a href="#{@index}#{anchor "%s#p%02d" % [date, i]}" title="#{CGI::escapeHTML( @conf.shorten( text ) )}">#{i}</a>. #{subtitle}<br>\n|
 						end
 						i += 1
 					end

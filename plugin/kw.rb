@@ -1,4 +1,4 @@
-# kw.rb $Revision: 1.5 $
+# kw.rb $Revision: 1.6 $
 #
 # kw: keyword link generator
 #   Parameters:
@@ -91,25 +91,12 @@ end
 #
 # config
 #
-def kw_label
-	if @lang == 'en' then
-		"Keyword plugin"
-	else
+unless @resource_loaded then
+	def kw_label
 		"キーワードプラグイン"
 	end
-end
 
-def kw_desc
-	if @lang == 'en' then
-		<<-HTML
-		<p>kw(KeyWord) plugin generate a Link by simple words. You can specify keywords		
-		as space sepalated value: "keyword URL". For example,</p>
-		<pre>google http://www.google.com/search?q=$1</pre>
-		<p>then you specify in your diary as:</p>
-		<pre>&gt;%=kw 'google:tdiary' %&lt;</pre>
-		<p>so it will be translated to link of seraching 'tdiary' at Google.</p>
-		HTML
-	else
+	def kw_desc
 		<<-HTML
 		<h3>リンクリストの指定</h3>
 		<p>特定のサイトへのリンクを、簡単な記述で生成するためのプラグイン(kw)です。

@@ -1,5 +1,5 @@
 =begin
-= プラグイン選択プラグイン((-$Id: select_plugins.rb,v 1.2 2003-08-28 16:54:54 zunda Exp $-))
+= プラグイン選択プラグイン((-$Id: select_plugins.rb,v 1.3 2003-09-25 02:17:29 tadatadashi Exp $-))
 Please see below for an English description.
 
 == 概要
@@ -417,9 +417,7 @@ if @options["#{Select_plugin_prefix}.path"] then
 			next if /(\/|\\)/ =~ file	# / or \ should not appear
 			path = "#{@options["#{Select_plugin_prefix}.path"]}/#{file}"
 			begin
-				open( path.untaint ) do |src|
-					instance_eval( src.read.untaint )
-				end
+				load_plugin( path.untaint )
 				@plugin_files << path
 			rescue IOError, Errno::ENOENT	# for now, just ignore missing plugins
 			end

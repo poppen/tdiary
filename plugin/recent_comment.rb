@@ -1,4 +1,4 @@
-# recent_comment.rb $Revision: 1.3 $
+# recent_comment.rb $Revision: 1.4 $
 #
 # recent_comment: 最近のツッコミをリストアップする
 #   パラメタ:
@@ -35,7 +35,7 @@ def recent_comment( max = 3, sep = '&nbsp;', form = nil, except = nil )
 		str = ''
 		str << %Q[<strong>#{idx+1}.</strong>]
 	  	str << %Q[<a href="#{@index}#{anchor date[com.date].strftime( '%Y%m%d' )}#c#{'%02d' % index[com.date]}"]
-		str << %Q[ title="#{CGI::escapeHTML( com.shorten( 60 ) )}">]
+		str << %Q[ title="#{CGI::escapeHTML( com.shorten( @conf.comment_length ) )}">]
 		str << %Q[#{CGI::escapeHTML( com.name )}]
 		str << %Q[#{com.date.dup.strftime( form )}</a>]
 		result << str

@@ -33,6 +33,9 @@
 #
 
 =begin ChangeLog
+2003-09-25 TADA Tadashi
+	* use @conf.shorten.
+
 2003-08-24 Junichiro Kita <kita@kitaj.no-ip.com>
 	* use @date
 
@@ -128,7 +131,7 @@ if /^(append|replace|comment|trackbackreceive)$/ =~ @mode then
  <item rdf:about="#{link}">
    <title>#{CGI::escapeHTML(apply_plugin(section.subtitle).gsub(/<.+?>/,'')).chomp}</title>
    <link>#{link}</link>
-   <description>#{CGI::escapeHTML(shorten(apply_plugin(section.body)))}</description>
+   <description>#{CGI::escapeHTML( @conf.shorten( apply_plugin( section.body ) ) )}</description>
  </item>
  		RDF
 		end
@@ -144,7 +147,7 @@ if /^(append|replace|comment|trackbackreceive)$/ =~ @mode then
 		link = "http://#{uri}#{anchor "#{date}\#c#{'%02d' % idx}"}"	
 		r <<<<-RDF
    <link>#{comment_link}</link>
-   <description>#{CGI::escapeHTML( comment.name )}[#{CGI::escapeHTML(shorten(comment.body))}]</description>
+   <description>#{CGI::escapeHTML( comment.name )}[#{CGI::escapeHTML( @conf.shorten( comment.body ) )}]</description>
 		RDF
   		end
 		end

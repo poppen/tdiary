@@ -1,4 +1,4 @@
-# $Revision: 1.17 $
+# $Revision: 1.18 $
 # recent_list: 最近書いた日記のタイトル，サブタイトルを表示する
 #   パラメタ(カッコ内は未指定時の値):
 #     days:            何日分の日記を表示するか(20)
@@ -16,6 +16,9 @@
 # Distributed under the GPL
 #
 =begin ChengeLog
+2003-09-25 TADA Tadashi <sho@spc.gr.jp>
+	* use @conf.shorten.
+
 2003-03-06 Junichiro Kita <kita@kitaj.no-ip.com>
 	* section.shorten -> section.body.shorten. thanks to mput <root@mput.dip.jp>.
 
@@ -73,7 +76,7 @@ def recent_list(days = 30, date_format = nil, title_with_body = nil, show_size =
 						m.diaries[date].each_section do |section|
 							if section.stripped_subtitle
 								result << %Q| <a href="#{@index}#{anchor "%s#p%02d" % [date, i]}"|
-								result << %Q| title="#{CGI::escapeHTML(section.body.shorten)}"| \
+								result << %Q| title="#{CGI::escapeHTML( @conf.shorten( section.body ) )}"| \
 									if title_with_body == true
 								result << %Q|>#{i}</a>. | \
 										<< %Q|#{section.stripped_subtitle}<br>\n|
@@ -84,7 +87,7 @@ def recent_list(days = 30, date_format = nil, title_with_body = nil, show_size =
 						m.diaries[date].each_section do |section|
 							if section.subtitle
 								result << %Q| <a href="#{@index}#{anchor "%s#p%02d" % [date, i]}"|
-								result << %Q| title="#{CGI::escapeHTML(section.body.shorten)}"| \
+								result << %Q| title="#{CGI::escapeHTML( @conf.shorten( section.body ) )}"| \
 									if title_with_body == true
 								result << %Q|>#{i}</a>. | \
 										<< %Q|#{section.subtitle}<br>\n|

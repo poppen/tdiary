@@ -1,4 +1,4 @@
-# image.rb $Revision: 1.12 $
+# image.rb $Revision: 1.13 $
 # -pv-
 # 
 # 名称:
@@ -46,6 +46,9 @@
 #
 
 =begin Changelog
+2003-09-25 TADA Tadashi <sho@spc.gr.jp>
+	* english support.
+
 2003-05-17 TADA Tadashi <sho@spc.gr.jp>
 	* add thumbnail in 3rd parameter of image method.
 	* force image width to 160 in update form.
@@ -72,6 +75,18 @@
 2003-04-22 Yoshimi KURUMA <yoshimik@iris.dti.ne.jp>
 	* version 0.5 first form_proc version.
 =end
+
+unless @resource_loaded then
+	def image_error_num( max ); "画像は1日#{max}枚までです。不要な画像を削除してから追加してください"; end
+	def image_error_size( max ); "画像の最大サイズは#{max}バイトまでです"; end
+	def image_label_list_caption; '絵日記(一覧・削除)'; end
+	def image_label_add_caption; '絵日記(追加)'; end
+	def image_label_description; '画像の説明'; end
+	def image_label_add_plugin; '本文に追加'; end
+	def image_label_delete; 'チェックした画像の削除'; end
+	def image_label_only_jpeg; 'JPEGのみ'; end
+	def image_label_add_image; '画像の追加'; end
+end
 
 def image( id, alt = 'image', thumbnail = nil, width = nil, place = 'photo' )
 	if @conf.secure then
@@ -161,8 +176,8 @@ if /^formplugin$/ =~ @mode then
 	         	size = @cgi.params['plugin_image_file'][0].stat.size
 				end
 				if @conf.secure then
-					raise "画像は1日#{maxnum}枚までです。不要な画像を削除してから追加してください" if images.compact.length >= maxnum
-					raise "画像の最大サイズは#{maxsize}バイトまでです" if size > maxsize
+					raise image_error_num( maxnum ) if images.compact.length >= maxnum
+					raise image_error_size( maxsize ) if size > maxsize
 				end
 	         file = "#{@image_dir}/#{date}_#{images.length}.#{extension}".untaint
 		      File::umask( 022 )
@@ -225,7 +240,7 @@ add_form_proc do |date|
 		end
 	   r << %Q[<div class="form">
 		<div class="caption">
-		絵日記(一覧・削除)
+		#{image_label_list_caption}
 		</div>
 		<form class="update" method="post" action="#{@conf.update}"><div>
 		<table>
@@ -236,34 +251,34 @@ add_form_proc do |date|
 		r << "</tr><tr>"
 	   images.each_with_index do |img,id|
 			next unless img
-			ptag = "#{ptag1}image #{id}, '画像の説明'#{ptag2}"
+			ptag = "#{ptag1}image #{id}, '#{image_label_description}'#{ptag2}"
 	      r << %Q[<td>
 			<input type="checkbox" tabindex="#{tabidx+id*2}" name="plugin_image_id" value="#{id}">#{id}
-			<input type="button" tabindex="#{tabidx+id*2+1}" onclick="ins(&quot;#{ptag}&quot;)" value="本文に追加">
+			<input type="button" tabindex="#{tabidx+id*2+1}" onclick="ins(&quot;#{ptag}&quot;)" value="#{image_label_add_plugin}">
 			</td>]
 	   end
 	   r << %Q[</tr>
 		</table>
 		<input type="hidden" name="plugin_image_delimage" value="true">
 	   <input type="hidden" name="date" value="#{date.strftime( '%Y%m%d' )}">
-	   <input type="submit" tabindex="#{tabidx+97}" name="plugin" value="チェックした画像の削除">
+	   <input type="submit" tabindex="#{tabidx+97}" name="plugin" value="#{image_label_delete}">
 	   </div></form>
 		</div>]
 	end
 
    r << %Q[<div class="form">
 	<div class="caption">
-	絵日記(追加)
+	#{image_label_add_caption}
 	</div>]
 	if @image_message then
 		r << %Q[<p class="message">#{@image_message}</p>]
 	end
    r << %Q[<form class="update" method="post" enctype="multipart/form-data" action="#{@conf.update}"><div>
-	#{@conf.secure ? 'JPEGのみ' : ''}
+	#{@conf.secure ? image_label_only_jpeg : ''}
    <input type="hidden" name="plugin_image_addimage" value="true">
    <input type="hidden" name="date" value="#{date.strftime( '%Y%m%d' )}">
    <input type="file" tabindex="#{tabidx+98}" name="plugin_image_file">
-   <input type="submit" tabindex="#{tabidx+99}" name="plugin" value="画像の追加">
+   <input type="submit" tabindex="#{tabidx+99}" name="plugin" value="#{image_label_add_image}">
    </div></form>
 	</div>]
 end
