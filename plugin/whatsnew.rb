@@ -1,4 +1,4 @@
-# whatsnew.rb $Revision: 1.1 $
+# whatsnew.rb $Revision: 1.2 $
 #
 # 名称：
 # What's Newプラグイン
@@ -7,13 +7,19 @@
 # 未読のセクションに指定したマークをつけることができます．
 #
 # 使い方：
-# tdiary.conf の @section_anchor を以下のようにします．
+# tdiary.conf の @section_anchor の先頭に以下のように <%= whats_new %> を追加します．
 #
-#   @section_anchor = '<span class="sanchor"><%= whats_new %></span>'
+#   @section_anchor = '<%= whats_new %><span class="sanchor">_</span>'
 #
 # セクションの未読/既読によって <%= whats_new %> の部分があらかじめ指
 # 定したマークで置き換えられます．デフォルトでは未読セクションでは
-# "!!!NEW!!!"，既読セクションでは "_" に展開されます．
+# "!!!NEW!!!"，既読セクションでは "" に展開されます．
+#
+# 注：Revision が 1.1 の whats_new.rb の説明では，<span> の中に
+#     <%= whats_new %> を含めるように書いていましたが，sanchorで画像を
+#     表示するようなテーマでは，whats_new の出力と sanchor の画像が重
+#     なってしまうという問題がありました．
+#     この変更に伴い，既読時のデフォルトは '' に変更しました．
 #
 # 置き換えられる文字列を変更したい場合は tdiary.conf 中で
 #
@@ -62,7 +68,7 @@ add_header_proc do
 			@whats_new[:this_time] = @whats_new[:last_time] = "00000000000"
 		end
 		@whats_new[:new_mark] = @options['whats_new.new_mark'] || '!!!new!!!'
-		@whats_new[:read_mark] = @options['whats_new.read_mark'] || '_'
+		@whats_new[:read_mark] = @options['whats_new.read_mark'] || ''
 	end
 	""
 end
