@@ -1,4 +1,7 @@
 2003-04-24 TADA Tadashi <sho@spc.gr.jp>
+	* image: enable running on secure mode.
+
+2003-04-24 TADA Tadashi <sho@spc.gr.jp>
 	* add image.rb.
 
 2003-04-23 TADA Tadashi <sho@spc.gr.jp>

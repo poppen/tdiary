@@ -1,4 +1,4 @@
-# image_plugin.rb
+# image.rb $Revision: 1.2 $
 # -pv-
 # 
 # 名称:
@@ -11,22 +11,28 @@
 # 本文
 #
 # 使い方:
-# image(number,'altword') - 画像を表示します。
+# image( number, 'altword' ) - 画像を表示します。
 #  number - 画像の番号0、1、2等
 #  altword - imgタグの altに入れる文字列
 #
-# image_left(number,'altword') - imageにclass=leftを追加します。
-# image_right(number,'altword') - imageにclass=rightを追加します。
+# image_left( number, 'altword' ) - imageにclass=leftを追加します。
+# image_right( number, 'altword' ) - imageにclass=rightを追加します。
 #
 # その他:
 # tDiary version 1.5.3.20030420以降で動作します。
-# tdiary.confで、
-# 画像ファイルを保存するディレクトリ
+# tdiary.confで指定できるオプション:
 #  @optons['image.dir']
-# 画像ファイルを保存するディレクトリのURL
+#     画像ファイルを保存するディレクトリ。無指定時は'./images/'
+#     Webサーバの権限で書き込めるようにしておく必要があります。
 #  @options['image.url']
-# を設定してください。
-# また、@secure = trueな環境では動作しません。
+#     画像ファイルを保存するディレクトリのURL。無指定時は'./images/'
+#  @options['image.maxnum']
+#     1日あたりの最大画像数。無指定時は10
+#  @options['image.maxsize']
+#     1枚あたりの最大画像バイト数。無指定時は512000
+#
+# @secure = trueな環境で動かす場合は、必ずmaxnumとmaxsizeを適切な
+# 値に制限することを推奨します。
 #
 # ライセンスについて:
 # Copyright (c) 2002,2003 Daisuke Kato <dai@kato-agri.com>
@@ -35,104 +41,149 @@
 # Distributed under the GPL
 
 =begin Changelog
-2003-4-23 Daisuke Kato <dai@kato-agri.com>
-    * tuning around form tag.
-    
-2003-4-23 Yoshimi KURUMA <yoshimik@iris.dti.ne.jp>
-    * Now img tag includes class="photo".
-    * New Option. image.maxnum, image.maxsize.
-    * fine tuning around form tag.
+2003-04-24 TADA Tadashi <sho@spc.gr.jp>
+	* enable running on secure mode.
 
-2003-4-22 Yoshimi KURUMA <yoshimik@iris.dti.ne.jp>
-    * version 0.5 first form_proc version.
+2003-04-23 Daisuke Kato <dai@kato-agri.com>
+	* tuning around form tag.
+
+2003-04-23 Yoshimi KURUMA <yoshimik@iris.dti.ne.jp>
+	* Now img tag includes class="photo".
+	* New Option. image.maxnum, image.maxsize.
+	* fine tuning around form tag.
+
+2003-04-22 Yoshimi KURUMA <yoshimik@iris.dti.ne.jp>
+	* version 0.5 first form_proc version.
 =end
 
-@image_dir = @options && @options['image.dir'] || './images/'
-@image_url = @options && @options['image.url'] || './images/'
+def image( id, alt = 'image', width = nil, place = 'photo' )
+	if @conf.secure then
+		image = "#{@image_date}_#{id}.jpg"
+	else
+   	image = image_list( @image_date )[id.to_i]
+	end
+   %Q[<img class="#{place}" src="#{@image_url}/#{image}" alt="#{alt}">]
+end
 
+def image_left( id, alt = "image", width = nil )
+   image( id, alt, width, "left" )
+end
+
+def image_right( id, alt = "image", width = nil )
+   image( id, alt, width, "right" )
+end
+
+#
+# initialize
+#
+@image_dir = @options && @options['image.dir'] || './images/'
+@image_dir.chop! if /\/$/ =~ @image_dir
+@image_url = @options && @options['image.url'] || './images/'
+@image_url.chop! if /\/$/ =~ @image_url
 
 add_body_enter_proc do |date|	
    @image_date = date.strftime( "%Y%m%d" )
    ""
 end
 
-def image( id, alt = 'image', width = nil, place = 'photo' )
-   list=image_list(@image_date)
-   %Q[<img class="#{place}" src="#{@image_url}#{list[id]}" alt="#{alt}">]
+#
+# service methods below.
+#
+
+def image_ext
+	if @conf.secure then
+		'jpg'
+	else
+		'jpg|jpeg|gif|png'
+	end
 end
 
-def image_left( id, alt = "image", width = nil)
-   image( id, alt, width, "left" )
+def image_list( date )
+	return @image_list if @conf.secure and @image_list
+	list = []
+	reg = /#{date}_(\d+)\.#{image_ext}$/
+	Dir::foreach( @image_dir ) do |file|
+		list[$1.to_i] = file if reg =~ file
+	end
+	list
 end
 
-def image_right( id, alt = "image",width = nil)
-   image( id, alt, width, "right" )
+if @conf.secure and /^(form|edit|formplugin)$/ =~ @mode then
+	@image_list = image_list( @date.strftime( '%Y%m%d' ) )
 end
 
-def image_list(date)
-   image_path=[]
-   Dir.foreach(@image_dir){ |file|
-      if file=~ /(.*)\_(.*)\.(.*)/
-         if $1==date
-            image_path[$2.to_i]=file
-         end
-      end
-   }
-   image_path
-end
+if /^formplugin$/ =~ @mode then
+   maxnum = @options['image.maxnum'] || 10
+   maxsize = @options['image.maxsize'] || 512000
 
-add_form_proc do |date|
-   image_maxnum = @options && @options['image.maxnum'] || 10
-   image_maxsize = @options && @options['image.maxsize'] || 512000
-
+   date = @date.strftime( "%Y%m%d" )
+	images = image_list( date )
    if @cgi.params['plugin_image_addimage'][0]
-      image_filename = ''
-      image_extension = ''
-      image_date = date.strftime("%Y%m%d")
-      image_filename = @cgi.params['plugin_image_file'][0].original_filename
-      if image_filename =~ /(\.jpg|\.jpeg|\.gif|\.png)\z/i
-         image_extension = $1
-         if image_list(image_date).compact.length < image_maxnum
-            image_file = @image_dir + image_date + "_" + image_list(image_date).length.to_s + image_extension
-            image_file.untaint
-            #if @cgi.params['plugin_image_file'][0].size <= image_maxsize
-            File::umask( 022 )
-            File::open( image_file, "wb" ) {|f|
-               f.puts @cgi.params['plugin_image_file'][0].read
-            }
-            #end
+      filename = @cgi.params['plugin_image_file'][0].original_filename
+      if filename =~ /\.(#{image_ext})\z/i
+         extension = $1
+			begin
+         	size = @cgi.params['plugin_image_file'][0].size
+			rescue NameError
+         	size = @cgi.params['plugin_image_file'][0].stat.size
+			end
+         if images.length < maxnum and size <= maxsize then
+            file = "#{@image_dir}/#{date}_#{images.length}.#{extension}".untaint
+	         File::umask( 022 )
+	         File::open( file, "wb" ) do |f|
+	            f.puts @cgi.params['plugin_image_file'][0].read
+	         end
+            images << File::basename( file ) # for secure mode
          end
       end
    elsif @cgi.params['plugin_image_delimage'][0]
-      image_date = date.strftime("%Y%m%d")
-      
       @cgi.params['plugin_image_id'].each do |id|
-         image_file = "#{@image_dir}#{image_list(image_date)[id.to_i]}"
-         image_file.untaint
-         if File::file?(image_file) && File::exist?(image_file)
-            File::delete(image_file)
+         file = "#{@image_dir}/#{images[id.to_i]}".untaint
+         if File::file?( file ) && File::exist?( file )
+            File::delete( file )
          end
+         images[id.to_i] = nil # for secure mode
       end
    end
-   
-   i=%Q[<form method="post" action="#{@conf.update}">]
-   id = 0
-   image_list(date.strftime("%Y%m%d")).each do |img|
-      i<< %Q[(#{id})<input type="checkbox" name="plugin_image_id" value="#{id}"><img class="form" src="#{@image_url}#{img}">] if img
-      id +=1
-   end
-   
-   %Q[<div class="form">
-   <form method="post" enctype="multipart/form-data" action="#{@conf.update}">
+end
+
+add_form_proc do |date|
+	r = ''
+	images = image_list( date.strftime( '%Y%m%d' ) )
+	if images.length > 0 then
+	   r << %Q[<div class="form">
+		<div class="caption">
+		絵日記(一覧・削除)
+		</div>
+		<form class="update" method="post" action="#{@conf.update}"><div>
+		<table>
+		<tr>]
+	   images.each_with_index do |img,id|
+	      r << %Q[<td><img class="form" src="#{@image_url}/#{img}"></td>] if img
+	   end
+		r << "</tr><tr>"
+	   images.each_with_index do |img,id|
+	      r << %Q[<td><input type="checkbox" name="plugin_image_id" value="#{id}">#{id}</td>] if img
+	   end
+	   r << %Q[</tr>
+		</table>
+		<input type="hidden" name="plugin_image_delimage" value="true">
+	   <input type="hidden" name="date" value="#{date.strftime( '%Y%m%d' )}">
+	   <input type="submit" name="plugin" value="選択した画像ファイルの削除">
+	   </div></form>
+		</div>]
+	end
+
+   r << %Q[<div class="form">
+	<div class="caption">
+	絵日記(追加)
+	</div>
+   <form class="update" method="post" enctype="multipart/form-data" action="#{@conf.update}"><div>
    <input type="hidden" name="plugin_image_addimage" value="true">
    <input type="hidden" name="date" value="#{date.strftime( '%Y%m%d' )}">
    <input type="file"	name="plugin_image_file">
    <input type="submit" name="plugin" value="画像ファイルの追加">
-   </form>
-   #{i}<br>
-   <input type="hidden" name="plugin_image_delimage" value="true">
-   <input type="hidden" name="date" value="#{date.strftime( '%Y%m%d' )}">
-   <input type="submit" name="plugin" value="選択した画像ファイルの削除">
-   </form></div>]
+   </div></form>
+	</div>]
 end
 
