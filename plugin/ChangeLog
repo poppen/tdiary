@@ -1,3 +1,6 @@
+2003-05-10 Junichiro Kita <kita@kitaj.no-ip.com>
+	* rescue failure to send TrackBack Ping.
+
 2003-05-09 Junichiro Kita <kita@kitaj.no-ip.com>
 	* calendar3.rb: use bot? to detect bot
 	* trackback/tb-show.rb: use bot? to detect bot

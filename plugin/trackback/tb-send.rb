@@ -1,4 +1,4 @@
-# tb-send.rb $Revision: 1.7 $
+# tb-send.rb $Revision: 1.8 $
 #
 # Copyright (c) 2003 Junichiro Kita <kita@kitaj.no-ip.com>
 # You can distribute this file under the GPL.
@@ -48,12 +48,15 @@ if /^(append|replace)$/ =~ @mode then
 			host, port = $1.split( /:/, 2 )
 			port = '80' unless port
 			Net::HTTP.version_1_1
-			Net::HTTP.start( host.untaint, port.to_i ) do |http|
-				response, = http.post( request, trackback,
-						 "Content-Type" => 'application/x-www-form-urlencoded')
+			begin
+				Net::HTTP.start( host.untaint, port.to_i ) do |http|
+					response, = http.post( request, trackback,
+							 "Content-Type" => 'application/x-www-form-urlencoded')
 # XREA taisaku.
 # how to deal with responce.body?
-#				$stderr.puts response.body
+#					$stderr.puts response.body
+				end
+			rescue
 			end
 		end
 	end
