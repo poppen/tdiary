@@ -29,6 +29,10 @@
 # Distributed under the GPL
 
 =begin ChangeLog
+2003-03-03 Hiroyuki Ikezoe <zoe@kasumi.sakura.ne.jp>
+	* validate by RSS 1.0 <http://www.redland.opensource.ac.uk/rss/>
+	  Thanks Kakutani san. (see http://www.tdiary.net/archive/devel/msg00581.html)
+	
 2003-01-27 Hiroyuki Ikezoe <zoe@kasumi.sakura.ne.jp>
 	* reorder apply_plugin.
 	
@@ -54,6 +58,8 @@ add_update_proc( Proc::new do
 	path  = ENV['REQUEST_URI']
    	path  = path[0..path.rindex("/")]
    	uri   = "#{host}#{path}#{@index}"
+	rdf_file = 't.rdf'
+	rdf_channel_about = "#{host}#{path}#{rdf_file}"
 	r = ""
 	r <<<<-RDF
 <?xml version="1.0" encoding="UTF-8"?>
@@ -61,22 +67,51 @@ add_update_proc( Proc::new do
  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
  xmlns="http://purl.org/rss/1.0/"
  xmlns:dc="http://purl.org/dc/elements/1.1/"
+ xml:lang="ja"
 >
- <channel>
-   <title lang="ja">#{@html_title}</title>
+ <channel rdf:about="http://#{rdf_channel_about}">
+   <title>#{@html_title}</title>
    <link>http://#{uri}</link>
-   <description lang="ja">#{@html_title}</description>
+   <description>#{@html_title}</description>
    <dc:date>#{Time.now.strftime('%Y-%m-%dT%H:%M')}</dc:date>
+   <items>
+     <rdf:Seq>
+	RDF
+	idx = 1
+ 	diary.each_section do |section|
+		if section.subtitle then
+		r <<<<-RDF
+       <rdf:li rdf:resource="http://#{uri}#{anchor "#{date}\#p#{'%02d' % idx}"}" />
+ 		RDF
+		end
+  		idx += 1
+	end
+
+	comment_link = ""
+	if diary.count_comments > 0 then
+  		diary.each_comment_tail( 1 ) do |comment,idx|
+		if comment.visible? then
+		comment_link = %Q[http://#{uri}#{anchor "#{date}\#c#{'%02d' % idx}"}]
+		r <<<<-RDF
+       <rdf:li rdf:resource="#{comment_link}" />
+		RDF
+  		end
+		end
+ 	end
+	r <<<<-RDF
+     </rdf:Seq>
+   </items>
  </channel>
 	RDF
  	idx = 1
  	diary.each_section do |section|
 		if section.subtitle then
+		link = %Q[http://#{uri}#{anchor "#{date}\#p#{'%02d' % idx}"}]
 		r <<<<-RDF
- <item>
- <title lang="ja">#{CGI::escapeHTML(apply_plugin(section.subtitle).gsub(/<.+?>/,''))}</title>
- <link>http://#{uri}#{anchor "#{date}\#p#{'%02d' % idx}"}</link>
- <description>#{CGI::escapeHTML(shorten(apply_plugin(section.body)))}</description>
+ <item rdf:about="#{link}">
+   <title>#{CGI::escapeHTML(apply_plugin(section.subtitle).gsub(/<.+?>/,'')).chomp}</title>
+   <link>#{link}</link>
+   <description>#{CGI::escapeHTML(shorten(apply_plugin(section.body)))}</description>
  </item>
  		RDF
 		end
@@ -84,14 +119,15 @@ add_update_proc( Proc::new do
 	end
 	if diary.count_comments > 0 then
 	   	r <<<<-RDF
- <item>
- <title lang="ja">#{comment_today}#{comment_total(diary.count_comments)}</title>
+ <item rdf:about="#{comment_link}">
+   <title>#{comment_today}#{comment_total(diary.count_comments)}</title>
 		RDF
   		diary.each_comment_tail( 1 ) do |comment,idx|
 		if comment.visible? then
+		link = "http://#{uri}#{anchor "#{date}\#c#{'%02d' % idx}"}"	
 		r <<<<-RDF
- <link>http://#{uri}#{anchor "#{date}\#c#{'%02d' % idx}"}</link>
- <description>#{CGI::escapeHTML( comment.name )}[#{CGI::escapeHTML(shorten(comment.body))}]</description>
+   <link>#{comment_link}</link>
+   <description>#{CGI::escapeHTML( comment.name )}[#{CGI::escapeHTML(shorten(comment.body))}]</description>
 		RDF
   		end
 		end
@@ -99,7 +135,7 @@ add_update_proc( Proc::new do
  	end
 	r << "</rdf:RDF>"
 	r = Uconv.euctou8(r)
-	File::open( "t.rdf", 'w' ) do |o|
+	File::open( rdf_file, 'w' ) do |o|
 		o.puts r
 	end
 end )
