@@ -1,4 +1,4 @@
-# counter.rb $Revision: 1.10 $
+# counter.rb $Revision: 1.11 $
 # -pv-
 #
 # 名称：
@@ -72,84 +72,84 @@
 # 
 =begin ChangeLog
 2002-07-23 MUTOH Masao  <mutoh@highway.ne.jp>
-	* バックアップファイルのファイル名のsuffixを曜日(0-6の数値)にした。
-		従って、1週間毎に古いファイルは上書きされるのでファイルの数は
-		最大7つとなる。数字が新しいものが最新というわけではないので注意。
-		(proposed by Junichiro KITA <kita@kitaj.no-ip.com>)
-	* version 1.5.1
+   * バックアップファイルのファイル名のsuffixを曜日(0-6の数値)にした。
+      従って、1週間毎に古いファイルは上書きされるのでファイルの数は
+      最大7つとなる。数字が新しいものが最新というわけではないので注意。
+      (proposed by Junichiro KITA <kita@kitaj.no-ip.com>)
+   * version 1.5.1
 
 2002-07-19 MUTOH Masao  <mutoh@highway.ne.jp>
-	* 日々単位でデータをバックアップするようにした。
+   * 日々単位でデータをバックアップするようにした。
      @options["counter.dairy_backup"]で指定。falseを指定しない限り
      バックアップする。
-	* Date#==メソッドでnilを渡さないように修正
-	* require 'pstore'追加(tDiary version 1.5.x系対応)
-	* logのフォーマット変更(全て・今日・昨日のデータを出力)
-	* @options["counter.deny_same_src_interval"]のデフォルト値を2時間
+   * Date#==メソッドでnilを渡さないように修正
+   * require 'pstore'追加(tDiary version 1.5.x系対応)
+   * logのフォーマット変更(全て・今日・昨日のデータを出力)
+   * @options["counter.deny_same_src_interval"]のデフォルト値を2時間
      に変更した。
-	* version 1.5.0
+   * version 1.5.0
 
 2002-05-19 MUTOH Masao  <mutoh@highway.ne.jp>
-	* Cookieを使うことのできない同一クライアントからの連続アクセスを、
+   * Cookieを使うことのできない同一クライアントからの連続アクセスを、
      カウントアップしないようにした。
-	* @options["counter.deny_same_src_interval"]追加。連続GETの間隔を指定。
-	  デフォルトで0.1時間(6分)。
-	* version 1.4.0
+   * @options["counter.deny_same_src_interval"]追加。連続GETの間隔を指定。
+     デフォルトで0.1時間(6分)。
+   * version 1.4.0
 
 2002-05-11 MUTOH Masao  <mutoh@highway.ne.jp>
-	* 初期値を与えない場合は5桁としていたが、「前0をなくす」に変更した。
-	  また、前0を無くす場合は0を指定しても良い。
-	* version 1.3.0
+   * 初期値を与えない場合は5桁としていたが、「前0をなくす」に変更した。
+     また、前0を無くす場合は0を指定しても良い。
+   * version 1.3.0
 
 2002-05-05 MUTOH Masao  <mutoh@highway.ne.jp>
-	* @debug = true 削除 :->
-	* コメント変更
-	* version 1.2.1
+   * @debug = true 削除 :->
+   * コメント変更
+   * version 1.2.1
 
 2002-05-04 MUTOH Masao  <mutoh@highway.ne.jp>
-	* tlinkプラグインからのアクセスをカウントしてしまう不具合の修正
-	* @options["counter.deny_user_agents"]追加
-	* @options["counter.deny_remote_addrs"]追加
-	* @options["counter.init_num"]追加。キリ番機能との関係で、counter
-	* メソッドの引数のinit_numはobsoleteとします。
-	* @options["counter.kiriban"], @options["counter.kiriban_today"]追加
-	* キリ番機能追加(kiriban?,kiriban_today?メソッド追加)
-	* version 1.2.0
+   * tlinkプラグインからのアクセスをカウントしてしまう不具合の修正
+   * @options["counter.deny_user_agents"]追加
+   * @options["counter.deny_remote_addrs"]追加
+   * @options["counter.init_num"]追加。キリ番機能との関係で、counter
+   * メソッドの引数のinit_numはobsoleteとします。
+   * @options["counter.kiriban"], @options["counter.kiriban_today"]追加
+   * キリ番機能追加(kiriban?,kiriban_today?メソッド追加)
+   * version 1.2.0
 
 2002-04-27 MUTOH Masao  <mutoh@highway.ne.jp>
-	* add_header_procを使わないようにした
-	* @options["counter.timer"]が有効にならない不具合の修正
-	* @options["counter.log"]追加。trueを指定するとcounter.dat
-	   と同じディレクトリにcounter.logというファイルを作成し
-	   1日前のアクセス数を記録するようにした
-	* cookieの値としてバージョン番号を入れるようにした
-	* version 1.1.0
+   * add_header_procを使わないようにした
+   * @options["counter.timer"]が有効にならない不具合の修正
+   * @options["counter.log"]追加。trueを指定するとcounter.dat
+      と同じディレクトリにcounter.logというファイルを作成し
+      1日前のアクセス数を記録するようにした
+   * cookieの値としてバージョン番号を入れるようにした
+   * version 1.1.0
 
 2002-04-25 MUTOH Masao  <mutoh@highway.ne.jp>
-	* HEADでアクセスがあった場合に再びカウントされるように
-		なってしまっていた不具合の修正(by NT<nt@24i.net>)
-	* version 1.0.4
+   * HEADでアクセスがあった場合に再びカウントされるように
+      なってしまっていた不具合の修正(by NT<nt@24i.net>)
+   * version 1.0.4
 
 2002-04-24 MUTOH Masao  <mutoh@highway.ne.jp>
-	* ツッコミを入れたときにエラーが発生する不具合の修正
-	* version 1.0.3
+   * ツッコミを入れたときにエラーが発生する不具合の修正
+   * version 1.0.3
 
-2002-04-23 MUTOH Masao	<mutoh@highway.ne.jp>
-	* データファイルを削除後、クッキーが有効期間中の端末から
-		アクセスした場合に@todayが0になる不具合の修正
-	* コメント入れたときに数字が表示されない不具合の修正
-	* HEADでアクセスがあった場合はカウントしないようにした
-		(reported by NT<nt@24i.net>, suggested a solution 
-			by TADA Tadashi <sho@spc.gr.jp>)
-	* version 1.0.2
+2002-04-23 MUTOH Masao  <mutoh@highway.ne.jp>
+   * データファイルを削除後、クッキーが有効期間中の端末から
+      アクセスした場合に@todayが0になる不具合の修正
+   * コメント入れたときに数字が表示されない不具合の修正
+   * HEADでアクセスがあった場合はカウントしないようにした
+      (reported by NT<nt@24i.net>, suggested a solution 
+         by TADA Tadashi <sho@spc.gr.jp>)
+   * version 1.0.2
 
-2002-04-21 MUTOH Masao	<mutoh@highway.ne.jp>
-	* CSSで_を使っているところを-に直した(reported by NT<nt@24i.net>)
-	* TDiaryCountData#upで@allが+1されない不具合の修正
-	* version 1.0.1
+2002-04-21 MUTOH Masao  <mutoh@highway.ne.jp>
+   * CSSで_を使っているところを-に直した(reported by NT<nt@24i.net>)
+   * TDiaryCountData#upで@allが+1されない不具合の修正
+   * version 1.0.1
 
-2002-04-14 MUTOH Masao	<mutoh@highway.ne.jp>
-	* version 1.0.0
+2002-04-14 MUTOH Masao  <mutoh@highway.ne.jp>
+   * version 1.0.0
 =end
 
 if ["latest", "month", "day", "comment"].include?(@mode) and 
