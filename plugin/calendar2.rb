@@ -1,4 +1,4 @@
-# calendar2.rb $Revision: 1.9 $
+# calendar2.rb $Revision: 1.10 $
 #
 # calendar2: どこかで見たようなカレンダーを日記に追加する
 #   パラメタ:
@@ -16,6 +16,14 @@
 # Distributed under the GPL
 #
 =begin ChangeLog
+2003-01-10 NT <nt@be.to>
+	* @options['calendar2.erb'] -> @options['apply_plugin']
+	* use Plugin#shorten.
+
+2002-12-23 Hiroyuki Ikezoe <zoe@kasumi.sakura.ne.jp>
+	* use Plugin#apply_plugin.
+	* visible subsubtitle.
+	
 2002-12-06 TADA Tadashi <sho@spc.gr.jp>
 	* without escapeHTML for title attribules.
 =end
@@ -124,7 +132,14 @@ CALENDAR_HEAD
 						idx = "01"
 						@diaries[date].each_section do |section|
 							if section.subtitle
-								subtitles << %Q|#{idx}. #{section.subtitle.gsub(/<.+?>/, '').gsub( /"/, '&quot;' )}|
+								text = shorten( section.subtitle )
+							else
+								text = shorten( section.body.split( /\n/ )[0] )
+							end
+							if @options['apply_plugin']
+								subtitles <<  %Q|#{idx}. #{apply_plugin( text ).gsub(/<.+?>/, '').gsub( /"/, '&quot;' )}|
+							else
+								subtitles <<  %Q|#{idx}. #{text.gsub(/<.+?>/, '').gsub( /"/, '&quot;' )}|
 							end
 							idx.succ!
 						end
