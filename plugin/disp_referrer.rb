@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.27 2003-09-19 11:26:48 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.28 2003-09-25 12:30:44 zunda Exp $-))
 
 == 概要
 アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
@@ -106,14 +106,6 @@ mod_rubyでの動作は今のところ確認していません。
 ((<URL:http://zunda.freeshell.org/d/plugin/disp_referrer2.rb>))
 にあるはずです。
 
-Uconvライブラリがインストールされている場合には、UTF-8でエンコードされて
-いるリンク元のURLを文字化けなしに表示できるかもしれません。Uconvライブラ
-リがなくてもそれなりに動きますが、検索語の文字化けが気になる場合には、
-Uconvライブラリをインストールしてください。Uconvについての詳細は、
-((<URL:http://www.yoshidam.net/Ruby.html>))を参照してください。uconv.so 
-はtDiaryからrequireできる場所に配置するか、Rubyがuconv.soをみつけられる 
-ように$LOAD_PATHを設定してください。
-
 また、Noraライブラリがインストールされている場合には、URLの解釈やHTMLの
 エスケープに、Rubyに標準添付のCGIライブラリの代わりにNoraライブラリを使
 用します。これにより、処理速度が若干速くなります((-手元で試したところ、
@@ -164,6 +156,8 @@ version 2 or later.
 =end
 
 =begin ChangeLog
+* Thu Sep 25, 2003 zunda <zunda at freeshell.org>
+- use to_native instead of to_euc
 * Mon Sep 19, 2003 zunda <zunda at freeshell.org>
 - disp_referrer2.rb,v 1.1.2.104 commited as disp_referrer.rb
 * Mon Sep  1, 2003 zunda <zunda at freeshell.org>
@@ -275,14 +269,8 @@ end
 ンスは作りません。UconvライブラリやNoraライブラリがあればそれを使い、無
 ければ無いなりに処理します。
 
---- DispRef2String::uconv?
-      uconvが使える時にはtrue、そうでないときにはfalseを返します。
-
 --- DispRef2String::nora?
       Noraが使える時にはtrue、そうでないときにはfalseを返します。
-
---- DispRef2String::to_euc( str )
-      UTF-8コードや他のコードの文字列をできる限りEUCコードに変換します。
 
 --- DispRef2String::normalize( str )
       続く空白を取り去ったりsite:...という文字列を消したりして、検索キー
@@ -326,41 +314,6 @@ end
 =end
 # string handling
 class DispRef2String
-
-	# to_euc converts the string in UTF-8 or other code into EUC
-	@@reg_char_utf8 = /&#\d+;/.freeze
-
-	# euc conversion
-	@@have_uconv = false
-	begin
-		require 'uconv'
-		@@have_uconv = true
-		def self::to_euc( str )
-			begin
-				# copied from disp_referrer.rb by
-				# Copyright (C) 2002,2003 MUTOH Masao <mutoh@highway.ne.jp>
-				# and modified
-				done = false
-				r = str.gsub( @@reg_char_utf8 ) { |v|
-					Uconv.u8toeuc( [$1.to_i].pack( "U" ) )
-					done = true
-				}
-				return r if done
-				return Uconv.u8toeuc( str )
-			rescue Uconv::Error
-				return NKF::nkf( '-e', str )
-			end
-		end
-	rescue LoadError
-		def self::to_euc( str )
-			return NKF::nkf( '-e', str )
-		end
-	end
-
-	# uconv?
-	def self::uconv?
-		@@have_uconv
-	end
 
 	# strips site:... portion (google), multiple spaces, and start/end spaces
 	def self::normalize( str )
@@ -508,10 +461,10 @@ end
       このハッシュのkeyの前に「disp_referrer2.」をつけたkeyを使ってくだ
       さい。オプションの詳細はソースのコメントを参照してください。
 
---- DispRef2Setup::new( options = {}, limit = 100, is_long = true, referer_table = [], no_referer = [] )
-      ((|options|))にはtDiaryの@optionsハッシュを、((|limit|))には一項目
-      あたりの表示リンク元数を、((|is_long|))は一日分の表示の場合には
-      trueを、最新の表示の場合にはfalseを設定してください。
+--- DispRef2Setup::new( conf, limit = 100, is_long = true )
+      ((|conf|))にはtDiaryの@confを、((|limit|))には一項目あたりの表示リ
+      ンク元数を、((|is_long|))は一日分の表示の場合にはtrueを、最新の表
+      示の場合にはfalseを設定してください。
 
 --- DispRef2Setup#update!
       tDiaryの@optionsにより自身を更新します。
@@ -522,6 +475,10 @@ end
 --- DispRef2Setup#secure
       それぞれ、一日分の表示かどうか、tDiaryの置換テーブル、tDiaryのリン
       ク元除外リスト、日記のセキュリティ設定を返します。
+
+--- DIspRef2Setup#to_native( str )
+      tDiaryの言語リソースで定義されている文字コードを正規化するメソッド
+      です。
 
 --- DispRef2Setup#[]
       設定されている値を返します。
@@ -658,8 +615,8 @@ class DispRef2Setup < Hash
 		'no_cache' => false,
 			# trueの場合、@secure=falseな日記でもキャッシュを使いません。
 		'normal-unknown.title' => '\Ahttps?:\/\/',
-      # 置換された「その他」のリンク元のタイトル、あるいは置換されていな
-      # いリンク元のタイトルにマッチします。
+			# 置換された「その他」のリンク元のタイトル、あるいは置換されていな
+			# いリンク元のタイトルにマッチします。
 		'configure.use_link' => true,
 			# リンク元置換リストの編集画面で、リンク元へのリンクを作ります。
 		'reflist.ignore_urls' => '',
@@ -669,22 +626,28 @@ class DispRef2Setup < Hash
 
 	attr_reader :is_long, :referer_table, :no_referer, :secure
 
-	def initialize( options = {}, limit = 100, is_long = true, referer_table = [], no_referer = [] )
+	def initialize( conf, limit = 100, is_long = true )
 		super()
+		@conf = conf
+
 		# mode
 		@is_long = is_long
 		@limit = limit
-		@options = options
+		@options = conf.options
 
 		# URL tables
-		@referer_table = referer_table
-		@no_referer = no_referer
+		@referer_table = conf.referer_table
+		@no_referer = conf.no_referer
 
 		# security
 		@secure = Dispref2plugin_secure
 
 		# options from tDiary
 		update!
+	end
+
+	def to_native( str )
+		@conf.to_native( str )
 	end
 
 	# options from tDiary
@@ -910,9 +873,9 @@ class DispRef2URL
 			# format
 			@category = Search
 			@category_label = nil
-			@title = DispRef2String::normalize( DispRef2String::to_euc( DispRef2String::unescape( keyword ) ) )
-			@title_ignored = DispRef2String::to_euc( title )
-			@title_ignored << sprintf( setup['cache_label'], DispRef2String::to_euc( DispRef2String::unescape( cached_url ) ) ) if cached_url
+			@title = DispRef2String::normalize( setup.to_native( DispRef2String::unescape( keyword ) ) )
+			@title_ignored = setup.to_native( title )
+			@title_ignored << sprintf( setup['cache_label'], setup.to_native( DispRef2String::unescape( cached_url ) ) ) if cached_url
 			@title_group = @title
 			@key = @title_group
 
@@ -923,7 +886,7 @@ class DispRef2URL
 
 			# try to convert with referer_table
 			matched = false
-			title = DispRef2String::to_euc( DispRef2String::unescape( @url ) )
+			title = setup.to_native( DispRef2String::unescape( @url ) )
 			setup.referer_table.each do |url, name|
 				unless /\$\d/ =~ name then
 					if title.gsub!( /#{url}/i, name ) then
@@ -1434,25 +1397,13 @@ class DispRef2SetupIF
 		else
 			r = <<-_HTML
 				<h3 class="subtitle">本日のリンク元もうちょっとだけ強化プラグイン</h3>
-				<p>$Revision: 1.27 $</p>
+				<p>$Revision: 1.28 $</p>
 				<p>アンテナからのリンク、サーチエンジンの検索結果を、
 					通常のリンク元の下にまとめて表示します。
 					サーチエンジンの検索結果は、検索語毎にまとめられます。
 					詳しくは、<a href="http://zunda.freeshell.org/d/plugin/disp_referrer2.rb">プラグインのソース</a>のドキュメントをご覧ください。
 					ご意見、ご要望は、<a href="http://tdiary-users.sourceforge.jp/cgi-bin/wiki.cgi?disp_referrer2.rb">こちらのWiki</a>まで。</p>
 			_HTML
-			if DispRef2String.uconv? then
-				r << <<-_HTML
-					<p>Uconvライブラリを使っていますので、
-						リンク元の文字化けは少ないはずです。</p>
-				_HTML
-			else
-				r << <<-_HTML
-					<p>リンク元の文字化けが気になる場合には、
-						<a href="http://raa.ruby-lang.org/list.rhtml?name=Uconv">Uconv</a>
-						ライブラリをインストールしてみてください。</p>
-				_HTML
-			end
 			if DispRef2String.nora? then
 				r << <<-_HTML
 					<p>Noraライブラリを使っていますので、
@@ -1663,7 +1614,7 @@ class DispRef2SetupIF
 				_HTML
 				i = 0
 				urls.sort.each do |url|
-					shown_url = DispRef2String::escapeHTML( DispRef2String::to_euc( DispRef2String::unescape( url ) ) )
+					shown_url = DispRef2String::escapeHTML( @setup.to_native( DispRef2String::unescape( url ) ) )
 					if ENV['AUTH_TYPE'] and ENV['REMOTE_USER'] and @setup['configure.use_link'] then
 						r << "<dt><a href=\"#{url}\">#{shown_url}</a>"
 					else
@@ -1701,9 +1652,9 @@ class DispRef2SetupIF
 					これらの正規表現にマッチするリンク元は「アンテナ」に分類されます。</p>
 				<ul>
 				<li>URL:
-					<input name="dr2.antenna.url" value="#{DispRef2String::escapeHTML( DispRef2String::to_euc( @setup['antenna.url'] ) )}" type="text" size="70">
+					<input name="dr2.antenna.url" value="#{DispRef2String::escapeHTML( @setup.to_native( @setup['antenna.url'] ) )}" type="text" size="70">
 					<input name="dr2.antenna.url.default" value="true" type="checkbox">デフォルトに戻す
-				<li>置換後の文字列:<input name="dr2.antenna.title" value="#{DispRef2String::escapeHTML( DispRef2String::to_euc( @setup['antenna.title'] ) )}" type="text" size="70">
+				<li>置換後の文字列:<input name="dr2.antenna.title" value="#{DispRef2String::escapeHTML( @setup.to_native( @setup['antenna.title'] ) )}" type="text" size="70">
 					<input name="dr2.antenna.title.default" value="true" type="checkbox">デフォルトに戻す
 				</ul>
 				_HTML
@@ -1749,8 +1700,8 @@ class DispRef2SetupIF
 			@cgi.params['dr2.urls'][0].to_i.times do |i|
 				if not @cgi.params["dr2.#{i}.reg"][0].empty? and not @cgi.params["dr2.#{i}.title"][0].empty? then
 					a = [
-						DispRef2String::to_euc( @cgi.params["dr2.#{i}.reg"][0] ).sub( /[\r\n]+/, '' ),
-						DispRef2String::to_euc( @cgi.params["dr2.#{i}.title"][0] ).sub( /[\r\n]+/, '' )
+						@setup.to_native( @cgi.params["dr2.#{i}.reg"][0] ).sub( /[\r\n]+/, '' ),
+						@setup.to_native( @cgi.params["dr2.#{i}.title"][0] ).sub( /[\r\n]+/, '' )
 					]
 					if not a[0].empty? and not a[1].empty? then
 						@conf.referer_table2.unshift( a )
@@ -1762,7 +1713,7 @@ class DispRef2SetupIF
 				end
 				if 'true' == @cgi.params["dr2.#{i}.noref"][0] then
 					unless @cgi.params["dr2.#{i}.reg"][0].empty? then
-						reg = DispRef2String::to_euc( @cgi.params["dr2.#{i}.reg"][0] ).strip
+						reg = @setup.to_native( @cgi.params["dr2.#{i}.reg"][0] ).strip
 						unless reg.empty? then
 							@conf.no_referer2.unshift( reg )
 							@conf.no_referer.unshift( reg	)
@@ -1772,7 +1723,7 @@ class DispRef2SetupIF
 				end
 				if 'true' == @cgi.params["dr2.#{i}.ignore"][0] then
 					unless @cgi.params["dr2.#{i}.reg"][0].empty? then
-						reg = DispRef2String::to_euc( @cgi.params["dr2.#{i}.reg"][0] ).strip
+						reg = @setup.to_native( @cgi.params["dr2.#{i}.reg"][0] ).strip
 						unless reg.empty? then
 							@conf['disp_referrer2.reflist.ignore_urls'] << reg + "\n"
 							dirty = true
@@ -1866,7 +1817,7 @@ end
 
 # for configuration interface
 add_conf_proc( 'disp_referrer2', 'リンク元もうちょっと強化' ) do
-	setup = DispRef2Setup.new( @options, 100, true, @conf.referer_table, @conf.no_referer )
+	setup = DispRef2Setup.new( @conf, @options, 100, true )
 	wwwif = DispRef2SetupIF.new( @cgi, setup, @conf, @mode )
 	wwwif.show_html
 end
@@ -1874,7 +1825,7 @@ end
 # for one-day diary
 def referer_of_today_long( diary, limit = 100 )
 	return '' if bot?
-	setup = DispRef2Setup.new( @options, limit, true, @conf.referer_table, @conf.no_referer )
+	setup = DispRef2Setup.new( @conf, limit, true )
 	DispRef2Refs.new( diary, setup ).to_long_html
 end
 
@@ -1883,7 +1834,7 @@ alias dispref2_original_referer_of_today_short referer_of_today_short
 def referer_of_today_short( diary, limit = 10 )
 	return '' if bot?
 	return dispref2_original_referer_of_today_short( diary, limit ) if @options.has_key?( 'disp_referrer2.short.only_normal' ) and not @options['disp_referrer2.short.only_normal']
-	setup = DispRef2Setup.new( @options, limit, false, @conf.referer_table, @conf.no_referer )
+	setup = DispRef2Setup.new( @conf, limit, false )
 	DispRef2Refs.new( diary, setup ).to_short_html
 end
 
@@ -1894,7 +1845,7 @@ if @conf.secure and (\
 		or ( @cgi.params['dr2.current_mode'] \
 		and DispRef2SetupIF::RefList == @cgi.params['dr2.current_mode'][0] ) )
 then
-	setup = DispRef2Setup.new( @options, 100, true, @conf.referer_table.taint, @conf.no_referer.taint )
+	setup = DispRef2Setup.new( @conf, 100, true )
 	DispRef2Latest_cache = DispRef2Latest.new( @cgi, 'latest.rhtml', @conf, setup )
 else
 	DispRef2Latest_cache = nil
