@@ -1,4 +1,4 @@
-# category.rb $Revision: 1.2 $
+# category.rb $Revision: 1.3 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -52,4 +52,6 @@ def category_anchor(cname)
 		%Q|[<a href="#{@index}?year=#{@date.year};month=#{(@date.month - 1) / 3 + 1}Q;category=#{CGI::escape(cname)}">#{cname}</a>]|
 	end
 end
+
+@category_rb_installed = true
 # vim: ts=3
