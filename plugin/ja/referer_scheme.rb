@@ -1,5 +1,5 @@
 =begin
-= Meta-scheme plugin((-$Id: referer_scheme.rb,v 1.5 2004-02-01 13:30:30 tadatadashi Exp $-))
+= Meta-scheme plugin((-$Id: referer_scheme.rb,v 1.6 2004-02-26 08:09:24 tadatadashi Exp $-))
 本日のリンク元置換リストの記述を楽にします。
 
 == 利用方法
@@ -48,35 +48,31 @@ distribution of modified versions of this work under the terms of GPL
 version 2 or later.
 =end
 
-class << @conf.referer_table
+unless @conf.referer_table.respond_to?( 'scheme_tdiarynet', true ) then
+	class << @conf.referer_table
 	private
-
-	TdiaryNet = '.tdiary.net/'
-	HatenaHost = 'http://d.hatena.ne.jp/'
-
-	def scheme_tdiarynet( url, name )
-		TdiaryDates.each do |a|
-			yield( "http://#{url}#{TdiaryNet}#{a[0]}", name + a[1] )
+		TdiaryNet = '.tdiary.net/'
+	
+		def scheme_tdiarynet( url, name )
+			TdiaryDates.each do |a|
+				yield( "http://#{url}#{TdiaryNet}#{a[0]}", name + a[1] )
+			end
+			yield( "http://#{url}#{TdiaryNet}.*", name )
 		end
-		yield( "http://#{url}#{TdiaryNet}.*", name )
 	end
+end
 
-	def scheme_hatena( url, name )
-		[
-			['(\d{4})(\d{2})(\d{2}).*', '(\1-\2-\3)'],
-			['(\d{4})(\d{2}).*', '(\1-\2)'],
-		].each do |a|
-			yield( "#{HatenaHost}#{url}/#{a[0]}", name + a[1] )
+unless @conf.referer_table.respond_to?( 'scheme_hatena', true ) then
+	class << @conf.referer_table
+		HatenaHost = 'http://d.hatena.ne.jp/'
+		def scheme_hatena( url, name )
+			[
+				['(\d{4})(\d{2})(\d{2}).*', '(\1-\2-\3)'],
+				['(\d{4})(\d{2}).*', '(\1-\2)'],
+			].each do |a|
+				yield( "#{HatenaHost}#{url}/#{a[0]}", name + a[1] )
+			end
+			yield( "#{HatenaHost}#{url}/.*", name )
 		end
-		yield( "#{HatenaHost}#{url}/.*", name )
-	end
-
-	def scheme_cocolog( url, name )
-		[  
-			['(\d{4})/(\d\d)/post_(\d+).html', '(\1-\2[\3])'],
-		].each do |a|
-			yield( "http://[^\.]+\.cocolog-nifty.com/#{url}/#{a[0]}", name + a[1] )
-		end
-		yield( "http://[^\.]+\.cocolog-nifty.com/#{url}/.*", name )
 	end
 end

@@ -1,3 +1,7 @@
+2004-02-26 TADA Tadashi <sho@spc.gr.jp>
+	* ja/referer_scheme.rb: fix mod_ruby's error.
+	* ja/referer_scheme.rb: modify hatena's URL. thanks KAKUTANI Shintaro <shintaro@kakutani.com>
+
 2004-02-25  mput <mput@users.sf.net>
 	* en/disp_referrer.rb (DispRef2SetupIF::show_unknown_list): ditto.
 	* ja/disp_referrer.rb (DispRef2SetupIF::show_unknown_list): add similarity search, answerbus, dogpile.

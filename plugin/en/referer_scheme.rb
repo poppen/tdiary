@@ -1,5 +1,5 @@
 =begin
-= Meta-scheme plugin((-$Id: referer_scheme.rb,v 1.4 2003-12-17 13:48:46 zunda Exp $-))
+= Meta-scheme plugin((-$Id: referer_scheme.rb,v 1.5 2004-02-26 08:09:24 tadatadashi Exp $-))
 Makes it easier to edit the referer table.
 
 == Usage
@@ -39,12 +39,3 @@ Permission is granted for use, copying, modification, distribution, and
 distribution of modified versions of this work under the terms of GPL
 version 2 or later.
 =end
-
-class << @conf.referer_table
-	private
-
-	# add schemes here
-	#def scheme_foo( url, name )
-	#end
-
-end
