@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.28 $
+# amazon.rb $Revision: 1.29 $
 #
 # See document in language resource file: en/amazon.rb
 #
@@ -80,11 +80,9 @@ def get_amazon( asin )
 				end
 			end
 		rescue Net::ProtoRetriableError => err
-			$stderr.puts "1 #$!"
 			item_url = err.response['location']
 			retry
 		rescue
-			$stderr.puts "2 #$!: #{item_url}"
 			raise 'getting item was failed'
 		end
 	end
@@ -140,7 +138,6 @@ def get_amazon_image( position, asin, comment )
 		end
 		r << %Q[</a>]
 	rescue NameError, StandardError
-		$stderr.puts "3 #$!"
 		%Q[<a href="#{item[0].strip}/ref=nosim/">#{asin}</a>]
 	end
 end

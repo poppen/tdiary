@@ -1,3 +1,6 @@
+2005-03-09 TADA Tadashi <sho@spc.gr.jp>
+	* amazon.rb: remove debug print.
+
 2005-03-09 TAHARA Shunichi <jado at flowernet.gr.jp>
 	* calendar2.rb: escape quote in subtitle.
 
