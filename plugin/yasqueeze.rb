@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# yasqueeze.rb $Revision: 1.6 $
+# yasqueeze.rb $Revision: 1.7 $
 #
 # yasqueeze: tDiary-1.3.x以降で標準でついてくるsqueeze.rbの拡張版
 #				 tDiaryのデータベースから日別にHTMLファイルを生成し、
@@ -8,10 +8,10 @@
 #
 #	パラメタ: なし
 #
-#	tdiary.confにて、以下の設定をしてください。
+#	tdiary.confにて、以下の設定をしてください(全て省略可能です)。
 #
 #	----- (ここから) -----
-#	# 出力先ディレクトリ
+#	# 出力先ディレクトリ(省略時: (tdiary.confの@data_path)/cache/html)
 #	@options['yasqueeze.output_path'] = '/home/hoge/tdiary/html/'
 # 
 #	#非表示の日記も対象とするかどうか
@@ -19,14 +19,17 @@
 #	#すでに出力済みのファイルが存在した場合は削除します。
 #	#検索エンジンで使用することを想定した場合、ここをtrueにしてしまうと
 #	#隠しているつもりの日記も検索対象になってしまうので注意が必要です。
+#  #(省略時： false)
 #	@options['yasqueeze.all_data'] = false
 #
 #	#tDiary Text出力互換モード
-#	squeeze.rb、tDiary標準と同じ出力先のディレクトリ構成にする場合はtrue
+#	#squeeze.rb、tDiary標準と同じ出力先のディレクトリ構成にする場合はtrue
+#  #(省略時： false)
 #	@options['yasqueeze.compat_path'] = false
 #	----- (ここまで) -----
 #
-# プラグインとしてではなく、CGIやコマンドベースでも使用できます。
+# プラグインとしてではなく、CGIやコマンドベースとして、一辺に全ての日記を
+# HTML化することもできます。
 # 詳しくは http://home2.highway.ne.jp/mutoh/tools/ruby/ja/yasqueeze.html
 # を参照してください。
 #
@@ -37,6 +40,16 @@
 # version 1.0.4 by TADA Tadashi <sho@spc.gr.jp> with GPL2.
 #
 =begin ChangeLog
+2002-04-14 MUTOH Masao	<mutoh@highway.ne.jp>
+	* @optionsを指定しなくてもデフォルトの動作をするようにした
+		- output_path = (@data_path)/cache/html
+		- all_data = false
+		- compat_path = false
+
+2002-04-01 MUTOH Masao	<mutoh@highway.ne.jp>
+	* ドキュメント削除
+	* 本ファイルのヘッダ部分のドキュメントを充実させた
+
 2002-03-31 MUTOH Masao	<mutoh@highway.ne.jp>
 	* TAB → スペース
 	* ドキュメントチェックイン
@@ -83,7 +96,7 @@ if mode == "CMD" || mode == "CGI"
 
 	if mode == "CMD"
 		def usage
-			puts "yasqueeze $Revision: 1.6 $"
+			puts "yasqueeze $Revision: 1.7 $"
 			puts " Yet Another making html files from tDiary's database."
 			puts " usage: ruby yasqueeze.rb [-p <tDiary path>] [-c <tdiary.conf path>] [-a] [-s] <dest path>"
 			exit
@@ -222,7 +235,7 @@ if mode == "CGI" || mode == "CMD"
 			</head>
 			<body><div style="text-align:center">
 			<h1>Yet Another Squeeze for tDiary</h1>
-			<p>$Revision: 1.6 $</p>
+			<p>$Revision: 1.7 $</p>
 			<p>Copyright (C) 2002 MUTOH Masao&lt;mutoh@highway.ne.jp&gt;</p></div>
 			<br><br>Start!</p><hr>
 		]
@@ -245,8 +258,10 @@ if mode == "CGI" || mode == "CMD"
 else
 	add_update_proc do
 		diary = @diaries[@date.strftime('%Y%m%d')]
-		YATDiarySqueeze.new(diary, @options['yasqueeze.output_path'],
-											@options['yasqueeze.all_data'],
+		dir = @options['yasqueeze.output_path']
+		dir = @cache_path + "/html" unless dir
+		Dir.mkdir(dir, 0755) unless File.directory?(dir)
+		YATDiarySqueeze.new(diary, dir, @options['yasqueeze.all_data'],
 											@options['yasqueeze.compat_path']).execute
 	end
 end
