@@ -1,4 +1,4 @@
-# disp_referrer.rb $Revision: 1.5 $
+# disp_referrer.rb $Revision: 1.6 $
 # -pv-
 #
 # Ì¾¾Î¡§
@@ -21,6 +21,9 @@
 # You can redistribute it and/or modify it under GPL2.
 #
 =begin ChangeLog
+2002-08-22 TADA Tadashi <sho@spc.gr.jp>
+	* support AlltheWeb search.
+
 2002-08-21 TADA Tadashi <sho@spc.gr.jp>
 	* support tDiary 1.5.
 
@@ -103,7 +106,7 @@ def referer_of_today_long( diary, limit )
   search_tables = [
     [["google¸¡º÷","http://www.google.com/"],
 	["^http://216.239.3...../search.*q=([^&]*).*", " \\1"],
-    ["^http://www.google..*/.*q=([^&]*).*", " \\1"]],
+	["^http://www.google..*/.*q=([^&]*).*", " \\1"]],
     [["YahooÆâgoogle¸¡º÷","http://www.yahoo.co.jp/"],
 	["^http://google.yahoo.*/.*?p=([^&]*).*", " \\1"]],
     [["Infoseek¸¡º÷","http://www.infoseek.co.jp/"],
@@ -127,7 +130,9 @@ def referer_of_today_long( diary, limit )
     [["AOL¸¡º÷", "http://www.aol.com/"],
 	["^http://search.*aol.com/.*query=([^&]*).*", " \\1"]],
     [["DION¥µ¡¼¥Á", "http://www.dion.ne.jp/"],
-	["^http://dir.dion.ne.jp/LookSmartSearch.jsp.*(key|QueryString)=([^&]*).*", " \\2"]]
+	["^http://dir.dion.ne.jp/LookSmartSearch.jsp.*(key|QueryString)=([^&]*).*", " \\2"]],
+    [["AlltheWeb¸¡º÷","http://www.alltheweb.com/"],
+	["^http://www.alltheweb.com/.*?q=([^&]*).*", " \\1"]],
   ]
 
   result = %Q[<div class="refererlist"><p class="referertitle">#{referer_today}</p>\n]

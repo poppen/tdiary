@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# yasqueeze.rb $Revision: 1.12 $
+# yasqueeze.rb $Revision: 1.13 $
 # -pv-
 #
 # Ì¾¾Î¡§
@@ -45,6 +45,9 @@
 # version 1.0.4 by TADA Tadashi <sho@spc.gr.jp> with GPL2.
 #
 =begin ChangeLog
+2002-08-22 TADA Tadashi <sho@spc.gr.jp>
+	* add tdiary path to $:.
+
 2002-08-16 TADA Tadashi <sho@spc.gr.jp>
 	* ignore parser cache.
 	* hide comment form.
@@ -116,7 +119,7 @@ if mode == "CMD" || mode == "CGI"
 
 	if mode == "CMD"
 		def usage
-			puts "yasqueeze $Revision: 1.12 $"
+			puts "yasqueeze $Revision: 1.13 $"
 			puts " Yet Another making html files from tDiary's database."
 			puts " usage: ruby yasqueeze.rb [-p <tDiary path>] [-c <tdiary.conf path>] [-a] [-s] <dest path>"
 			exit
@@ -165,6 +168,7 @@ if mode == "CMD" || mode == "CGI"
 
 	begin
 		ARGV << '' # dummy argument against cgi.rb offline mode.
+		$:.unshift tdiary_path
 		require "#{tdiary_path}/tdiary"
 	rescue LoadError
 		$stderr.print "yasqueeze.rb: cannot load tdiary.rb. <#{tdiary_path}/tdiary>\n"
@@ -268,7 +272,7 @@ if mode == "CGI" || mode == "CMD"
 			</head>
 			<body><div style="text-align:center">
 			<h1>Yet Another Squeeze for tDiary</h1>
-			<p>$Revision: 1.12 $</p>
+			<p>$Revision: 1.13 $</p>
 			<p>Copyright (C) 2002 MUTOH Masao&lt;mutoh@highway.ne.jp&gt;</p></div>
 			<br><br>Start!</p><hr>
 		]
