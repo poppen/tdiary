@@ -1,4 +1,4 @@
-# image.rb $Revision: 1.21 $
+# image.rb $Revision: 1.22 $
 # -pv-
 # 
 # Ì¾¾Î:
@@ -292,7 +292,7 @@ add_form_proc do |date|
 			else
 				img_type, img_w, img_h = open(File.join(@image_dir,img).untaint, 'r') {|f| image_info(f)}
 			end
-			r << %Q[<td><img class="form" src="#{@image_url}/#{img}" alt="#{id}" width="#{(img_w && img_w > 160) ? 160 : img_w}"></td>]
+			r << %Q[<td><img class="form" src="#{@image_url}/#{img}" alt="#{id}" width="#{(img_w && img_w > 160) ? 160 : (img_w ? img_w : 160)}"></td>]
 			ptag = "#{ptag1}image #{id}, '#{image_label_description}', nil, #{img_w && img_h ? '['+img_w.to_s+','+img_h.to_s+']' : 'nil'}#{ptag2}"
 			if @conf.secure then
 				img_info = ''

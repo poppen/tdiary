@@ -1,3 +1,6 @@
+2004-05-29 TADA Tadashi <sho@spc.gr.jp>
+	* image.rb: fix bad width attribute in secure mode.
+
 2004-05-28  Masao Mutoh  <mutoh@highway.ne.jp>
 	* a.rb: escape HTML in anchor tag by Akinori MUSHA.
 
