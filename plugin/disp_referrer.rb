@@ -1,4 +1,4 @@
-# disp_referrer.rb $Revision: 1.2 $
+# disp_referrer.rb $Revision: 1.3 $
 # -pv-
 #
 # 名称：
@@ -21,6 +21,10 @@
 # You can redistribute it and/or modify it under GPL2.
 #
 =begin ChangeLog
+2002-08-07  MUTOH Masao <mutoh@highway.ne.jp>
+   * 表示対象のずれの修正
+   * version 2.0.1
+
 2002-08-06  MUTOH Masao <mutoh@highway.ne.jp>
    * google, Yahoo, Infoseek, Lycos, goo, OCN, excite, 
      msn, BIGLOBE, ODN, DIONからの内検索結果を、同アクセス数単位でリンク一覧の
@@ -130,7 +134,6 @@ def referer_of_today_long( diary, limit )
 		  if ref =~ /#{url[0]}/
 			search_table = table
 			before_url = url[0]
-			before_table = search_table
 			break
 		  end
 		end
@@ -143,16 +146,23 @@ def referer_of_today_long( diary, limit )
 		first = false if first
 	  else
 		str.gsub!(/,$/, "")
-		search_result << %Q[<li>#{before_count} x #{num} <a href="#{CGI::escapeHTML(search_table[0][1])}">[#{search_table[0][0]}] #{CGI::escapeHTML( str )}</a></li>\n]
+		search_result << %Q[<li>#{before_count} x #{num} <a href="#{CGI::escapeHTML(before_table[0][1])}">[#{before_table[0][0]}] #{CGI::escapeHTML( str )}</a></li>\n]
 		num = 0
 		str = ""
-	    first = true
       end
 	  str << diary.disp_referer( search_table[1..-1], ref )
 	  str << ","
 	  num += 1
+	  before_table = search_table
 	  before_count = count
     else
+      if str != "" and before_table
+		str.gsub!(/,$/, "")
+		search_result << %Q[<li>#{before_count} x #{num} <a href="#{CGI::escapeHTML(before_table[0][1])}">[#{before_table[0][0]}] #{CGI::escapeHTML( str )}</a></li>\n]
+        num = 0
+        str = ""
+        first = true
+      end
   	  result << %Q[<li>#{count} <a href="#{CGI::escapeHTML( ref )}">#{CGI::escapeHTML( diary.disp_referer( @referer_table, ref ) )}</a></li>\n]
     end
     search_table = nil
