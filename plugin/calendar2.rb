@@ -1,13 +1,16 @@
-# calendar2.rb $Revision: 1.1 $
+# calendar2.rb $Revision: 1.2 $
 #
 # calendar2: どこかで見たようなカレンダーを日記に追加する
 #   パラメタ:
-#     format: 曜日を現すStringから構成されるArray(未指定時:"日月火水木金土".split(//))
+#     days_format: 曜日を現すStringから構成されるArray
+#                  ("日月火水木金土".split(//))
+#     nav_format:  カレンダー上部に表示されるStringから構成されるArray
+#                  (["前", "%d年<br>%d月", "次"])
 #
 # Copyright (c) 2000-2001 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
 #
-def make_cal(year, month)
+def calendar2_make_cal(year, month)
   result = []
   t = Time.local(year, month, 1)
   r = Array.new(t.wday, nil)
@@ -23,43 +26,50 @@ def make_cal(year, month)
   result
 end
 
-def prev_month(year, month)
-  if month == 1
-    [year - 1, 12]
+def calendar2_prev_current_next
+  yyyymm = @date.strftime "%Y%m"
+  yms = [yyyymm]
+  @years.keys.each do |y|
+    yms |= @years[y].collect {|i| y + i}
+  end
+  yms.sort!
+  yms.unshift nil
+  yms.push nil
+  i = yms.index(yyyymm)
+  yms[i - 1, 3]
+end
+
+def calendar2_make_anchor(ym, str)
+  if ym
+    %Q|<a href="#{@index}#{anchor ym}">#{str}</a>|
   else
-    [year, month - 1]
+    str
   end
 end
 
-def next_month(year, month)
-  if month == 12
-    [year + 1, 1]
-  else
-    [year, month + 1]
-  end
-end
-
-def calendar2(format = "日月火水木金土".split(//))
+def calendar2(days_format = "日月火水木金土".split(//),
+              nav_format = ["前", "%d年<br>%d月", "次"])
   return '' if /TAMATEBAKO/ =~ ENV["HTTP_USER_AGENT"]
   year = @date.year
   month = @date.month  
+  p_c_n = calendar2_prev_current_next
 
   result = <<CALENDAR_HEAD
 <table class="calendar" summary="calendar">
 <tr>
- <td class="calendar-prev-month" colspan="2"><a href="#{@index}?date=#{"%04d%02d" % prev_month(year, month)}">先月</a></td>
- <td class="calendar-current-month" colspan="3"><a href="#{@index}?date=#{"%04d%02d" % [year, month]}">#{year}年<br>#{month}月</a></td>
- <td class="calendar-next-month" colspan="2"><a href="#{@index}?date=#{"%04d%02d" % next_month(year, month)}">来月</a></td>
+ <td class="calendar-prev-month" colspan="2">#{calendar2_make_anchor(p_c_n[0], nav_format[0] % [year, month])}</td>
+ <td class="calendar-current-month" colspan="3">#{calendar2_make_anchor(p_c_n[1], nav_format[1] % [year, month])}</td>
+ <td class="calendar-next-month" colspan="2">#{calendar2_make_anchor(p_c_n[2], nav_format[2] % [year, month])}</td>
 </tr>
 CALENDAR_HEAD
   result << "<tr>"
-  result << %Q| <td class="calendar-sunday">#{format[0]}</td>\n|
+  result << %Q| <td class="calendar-sunday">#{days_format[0]}</td>\n|
   1.upto(5) do |i|
-    result << %Q| <td class="calendar-weekday">#{format[i]}</td>\n|
+    result << %Q| <td class="calendar-weekday">#{days_format[i]}</td>\n|
   end
-  result << %Q| <td class="calendar-saturday">#{format[6]}</td>\n|
+  result << %Q| <td class="calendar-saturday">#{days_format[6]}</td>\n|
   result << "</tr>\n"
-  make_cal(year, month).each do |week|
+  calendar2_make_cal(year, month).each do |week|
     result << "<tr>\n"
     week.each do |day|
       if day == nil
@@ -78,7 +88,7 @@ CALENDAR_HEAD
                 idx.succ!
               end
             end
-            %Q|<a href="#{@index}?date=#{date}" title="#{subtitles.join("&#13;&#10;")}">#{day}</a>|
+            %Q|<a href="#{@index}#{anchor date}" title="#{subtitles.join("&#13;&#10;")}">#{day}</a>|
           end
       end
     end
