@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.17 $
+# amazon.rb $Revision: 1.18 $
 #
 # isbn_image_left: 指定したISBNの書影をclass="left"で表示
 #   パラメタ:
@@ -51,6 +51,14 @@
 require 'net/http'
 require 'timeout'
 
+unless @resource_loaded then
+	@amazon_url = 'http://www.amazon.co.jp/exec/obidos/ASIN'
+	@amazon_item_name = /^Amazon.co.jp： (.*)<.*$/
+	@amazon_item_image = %r|(<img src="(http://images-jp\.amazon\.com/images/P/(.*MZZZZZZZ.jpg))".*?>)|i
+	@amazon_label_conf ='Amazonプラグイン'
+	@amazon_label_conf2 = 'AmazonアソシエイトIDの指定'
+end
+
 def getAmazon( asin )
 
 	cache = "#{@cache_path}/amazon"
@@ -81,14 +89,14 @@ def getAmazon( asin )
 	img_width = nil
 
 	timeout( limittime ) do
-		item_url = "http://www.amazon.co.jp/exec/obidos/ASIN/#{asin}"
+		item_url = "#{@amazon_url}/#{asin}/"
 
 		begin
 			if %r|http://([^:/]*):?(\d*)(/.*)| =~ item_url then
 				host = $1
 				port = $2.to_i
 				path = $3
-				raise 'not amazon domain' if host !~ /\.amazon\.(com|co\.uk|co\.jp|de|fr)$/
+				raise 'not amazon domain' if host !~ /\.amazon\.(com|co\.uk|co\.jp|de|fr|ca)$/
 				raise 'bad location was returned.' unless host and path
 				port = 80 if port == 0
 			end
@@ -96,11 +104,11 @@ def getAmazon( asin )
 			Net::HTTP.Proxy( proxy_host.untaint, proxy_port.untaint ).start( host.untaint, port.untaint ) do |http|
 				response, = http.get( path )
 				response.body.each do |line|
-					line = NKF::nkf( "-e", line )
-					if line =~ /^Amazon.co.jp： (.*)<.*$/
+					line = @conf.to_native( line )
+					if line =~ @amazon_item_name
 						item_name = CGI::escapeHTML(CGI::unescapeHTML($1))
 					end
-					if line =~ /(<img src="(http\:\/\/images-jp\.amazon\.com\/images\/P\/(.*MZZZZZZZ.jpg))".*?>)/i
+					if line =~ @amazon_item_image
 						img_tag = $1
 						img_url = $2
 						img_name = $3
@@ -114,9 +122,11 @@ def getAmazon( asin )
 				end
 			end
 		rescue Net::ProtoRetriableError => err
+			$stderr.puts "1 #$!"
 			item_url = err.response['location']
 			retry
 		rescue
+			$stderr.puts "2 #$!: #{item_url}"
 			raise 'getting item was failed'
 		end
 	end
@@ -131,11 +141,13 @@ def getAmazon( asin )
 end
 
 def amazonNoImg(item_url,item_name)
-	%Q[<a href="#{item_url.strip}/ref=nosim/">#{item_name.strip}</a>]
+	%Q[<a href="#{item_url.strip}ref=nosim/">#{item_name.strip}</a>]
 end
 
 
 def getAmazonImg(position,asin,comment)
+	return isbn( asin, comment || asin )  if @conf.secure
+
 	begin
 
 		item = getAmazon(asin)
@@ -155,6 +167,7 @@ def getAmazonImg(position,asin,comment)
 		r << item[1].strip if position == "amazon"
 		r << %Q[</a>]
 	rescue
+		$stderr.puts "3 #$!"
 		asin
 	end
 end
@@ -182,13 +195,13 @@ def isbn( asin, comment )
 end
 
 if not @conf['amazon.hideconf'] then
-	add_conf_proc( 'amazon', 'Amazonプラグイン' ) do
+	add_conf_proc( 'amazon', @amazon_label_conf ) do
 		if @mode == 'saveconf' then
 			@conf['amazon.aid'] = @cgi.params['amazon.aid'][0]
 		end
 	
 		<<-HTML
-		<h3>AmazonアソシエイトIDの指定</h3>
+		<h3>#{@amazon_label_conf2}</h3>
 		<p><input name="amazon.aid" value="#{CGI::escapeHTML( @conf['amazon.aid'] ) if @conf['amazon.aid']}"></p>
 		HTML
 	end
