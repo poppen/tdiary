@@ -1,4 +1,7 @@
 2003-09-29 zunda <zunda at freeshell.org>
+	* weather.rb: Japanese resources divided into  a separate file, English resource created
+
+2003-09-29 zunda <zunda at freeshell.org>
 	* disp_referrer.rb: forgot to change arguments after changing initialize()
 
 2003-09-28 Junichiro Kita <kita@kitaj.no-ip.com>
