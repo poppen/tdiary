@@ -1,4 +1,4 @@
-# $Revision: 1.15 $
+# $Revision: 1.16 $
 # recent_list: 最近書いた日記のタイトル，サブタイトルを表示する
 #   パラメタ(カッコ内は未指定時の値):
 #     days:            何日分の日記を表示するか(20)
@@ -69,7 +69,7 @@ def recent_list(days = 30, date_format = nil, title_with_body = nil, show_size =
 					end
 					result << %Q|</p>\n<div class="recentsubtitles">\n|
 					i = 1
-					if @category_rb_installed and m.diaries[date].categorizable?
+					if !@plugin_files.grep(/category.rb$/).empty? and m.diaries[date].categorizable?
 						m.diaries[date].each_section do |section|
 							if section.stripped_subtitle
 								result << %Q| <a href="#{@index}#{anchor "%s#p%02d" % [date, i]}"|

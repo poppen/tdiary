@@ -1,4 +1,4 @@
-# category.rb $Revision: 1.4 $
+# category.rb $Revision: 1.5 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -53,5 +53,4 @@ def category_anchor(cname)
 	end
 end
 
-@category_rb_installed = true
 # vim: ts=3

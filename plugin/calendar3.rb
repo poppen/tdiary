@@ -1,4 +1,4 @@
-# calendar3.rb $Revision: 1.30 $
+# calendar3.rb $Revision: 1.31 $
 #
 # calendar3: 現在表示している月のカレンダーを表示します．
 #  パラメタ: なし
@@ -179,7 +179,7 @@ def calendar3
 			result << %Q|  <a class="#{Calendar3::STYLE[kind]}" id="title-#{day}" title="|
 			i = 1
 			r = []
-			if @category_rb_installed and @diaries[date].categorizable?
+			if !@plugin_files.grep(/category.rb$/).empty? and @diaries[date].categorizable?
 				@diaries[date].each_section do |section|
 					if section.stripped_subtitle
 						text = apply_plugin( section.stripped_subtitle )
@@ -201,7 +201,7 @@ def calendar3
 			if @calendar3_show_popup
 				result << %Q|  <span class="calendar-popup" id="popup-#{day}">\n|
 				i = 1
-				if @category_rb_installed and @diaries[date].categorizable?
+				if !@plugin_files.grep(/category.rb$/).empty? and @diaries[date].categorizable?
 					@diaries[date].each_section do |section|
 						if section.stripped_subtitle
 							text = apply_plugin( section.to_src)
