@@ -1,4 +1,4 @@
-# pingback.rb: $Revision: 1.2 $
+# pingback.rb: $Revision: 1.3 $
 #
 # Pingback when updating.
 #
@@ -35,7 +35,7 @@ add_update_proc do
           my_url.gsub!( %r|/\./|, '/' )
           if diary.visible?
             html = ''
-            html << section.subtitle_to_html
+            html << section.subtitle_to_html if section.subtitle_to_html
             html << section.body_to_html
             html.scan(/<a\s(.+?)>/i) {
               begin
