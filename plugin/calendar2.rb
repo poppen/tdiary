@@ -1,4 +1,4 @@
-# calendar2.rb $Revision: 1.6 $
+# calendar2.rb $Revision: 1.7 $
 #
 # calendar2: どこかで見たようなカレンダーを日記に追加する
 #   パラメタ:
@@ -72,6 +72,9 @@ def calendar2(days_format = nil, nav_format = nil, show_todo = nil)
 
 	result = <<CALENDAR_HEAD
 <table class="calendar" summary="calendar">
+<tr>
+ <td class="image" colspan="7"></td>
+</tr>
 <tr>
  <td class="calendar-prev-month" colspan="2">#{calendar2_make_anchor(p_c_n[0], nav_format[0] % [year, month])}</td>
  <td class="calendar-current-month" colspan="3">#{calendar2_make_anchor(p_c_n[1], nav_format[1] % [year, month])}</td>
