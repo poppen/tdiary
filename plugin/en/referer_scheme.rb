@@ -1,8 +1,6 @@
 =begin
-= Meta-scheme plugin((-$Id: referer_scheme.rb,v 1.1 2003-12-16 17:26:58 zunda Exp $-))
+= Meta-scheme plugin((-$Id: referer_scheme.rb,v 1.2 2003-12-16 18:32:41 zunda Exp $-))
 Makes it easier to edit the referer table.
-
-Currently, doesn't work with at least ruby 1.6.7 (2002-03-01).
 
 == Usage
 Enable this plug-in by coping into the plugin directory or selecting
@@ -51,11 +49,11 @@ class << @conf.referer_table
 			['(?:\\?date=)?(\d{2})(\d{2})(?:\.html)?.*', '(\1-\2)'],
 	]
 
-	def scheme_tdiary( url, name, block )
+	def scheme_tdiary( url, name )
 		TdiaryDates.each do |a|
-			block.call( url + a[0], name + a[1] )
+			yield( url + a[0], name + a[1] )
 		end
-		block.call( url, name )
+		yield( url, name )
 	end
 
 end

@@ -1,8 +1,6 @@
 =begin
-= Meta-scheme plugin((-$Id: referer_scheme.rb,v 1.1 2003-12-16 17:26:58 zunda Exp $-))
+= Meta-scheme plugin((-$Id: referer_scheme.rb,v 1.2 2003-12-16 18:32:42 zunda Exp $-))
 本日のリンク元置換リストの記述を楽にします。
-
-今のところ、少なくとも ruby 1.6.7 (2002-03-01) ではうまく動きません。
 
 == 利用方法
 このプラグインを、プラグインのディレクトリに入れるかプラグイン選択プラグ
@@ -61,28 +59,28 @@ class << @conf.referer_table
 	TdiaryNet = '.tdiary.net/'
 	HatenaHost = 'http://d.hatena.ne.jp/'
 
-	def scheme_tdiary( url, name, block )
+	def scheme_tdiary( url, name )
 		TdiaryDates.each do |a|
-			block.call( url + a[0], name + a[1] )
+			yield( url + a[0], name + a[1] )
 		end
-		block.call( url, name )
+		yield( url, name )
 	end
 
-	def scheme_tdiarynet( url, name, block )
+	def scheme_tdiarynet( url, name )
 		TdiaryDates.each do |a|
-			block.call( "http://#{url}#{TdiaryNet}/#{a[0]}", name + a[1] )
+			yield( "http://#{url}#{TdiaryNet}/#{a[0]}", name + a[1] )
 		end
-		block.call( "http://#{url}#{TdiaryNet}/", name )
+		yield( "http://#{url}#{TdiaryNet}/", name )
 	end
 
-	def scheme_hatena( url, name, block )
+	def scheme_hatena( url, name )
 		[
 			['(\d{4})(\d{2})(\d{2}).*', '(\1-\2-\3)'],
 			['(\d{4})(\d{2}).*', '(\1-\2)'],
 		].each do |a|
-			block.call( "#{HatenaHost}#{url}/#{a[0]}", name + a[1] )
+			yield( "#{HatenaHost}#{url}/#{a[0]}", name + a[1] )
 		end
-		block.call( "#{HatenaHost}#{url}/", name )
+		yield( "#{HatenaHost}#{url}/", name )
 	end
 
 end
