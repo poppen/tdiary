@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.4 $
+# makerss.rb: $Revision: 1.5 $
 #
 # generate RSS file when updating.
 #
@@ -55,51 +55,54 @@ def makerss_update
 	seq = ''
 	body = ''
 	PStore::new( "#{@cache_path}/makerss.cache" ).transaction do |db|
-		cache = db['cache'] if db.root?( 'cache' )
-
-		if /^append|replace$/ =~ @mode then
-			index = 0
-			diary.each_section do |section|
-				index += 1
-				id = "#{date}p%02d" % index
-				if diary.visible? and !cache[id] then
-					cache[id] = RDFSection::new( id, Time::now, section )
-				elsif !diary.visible? and cache[id]
-					cache.delete( id )
-				elsif diary.visible? and cache[id]
-					if cache[id].section.body_to_html != section.body_to_html then
+		begin
+			cache = db['cache'] if db.root?( 'cache' )
+	
+			if /^append|replace$/ =~ @mode then
+				index = 0
+				diary.each_section do |section|
+					index += 1
+					id = "#{date}p%02d" % index
+					if diary.visible? and !cache[id] then
 						cache[id] = RDFSection::new( id, Time::now, section )
+					elsif !diary.visible? and cache[id]
+						cache.delete( id )
+					elsif diary.visible? and cache[id]
+						if cache[id].section.body_to_html != section.body_to_html then
+							cache[id] = RDFSection::new( id, Time::now, section )
+						end
+					end
+				end
+			elsif /^comment$/ =~ @mode
+				id = "#{date}c%02d" % diary.count_comments
+				cache[id] = RDFSection::new( id, @comment.date, @comment )
+			elsif /^showcomment$/ =~ @mode
+				index = 0
+				diary.each_comment( 100 ) do |comment|
+					index += 1
+					id = "#{date}c%02d" % index
+					if !cache[id] and comment.visible? then
+						cache[id] = RDFSection::new( id, comment.date, comment )
+					elsif cache[id] and !comment.visible?
+						cache.delete( id )
 					end
 				end
 			end
-		elsif /^comment$/ =~ @mode
-			id = "#{date}c%02d" % diary.count_comments
-			cache[id] = RDFSection::new( id, @comment.date, @comment )
-		elsif /^showcomment$/ =~ @mode
-			index = 0
-			diary.each_comment( 100 ) do |comment|
-				index += 1
-				id = "#{date}c%02d" % index
-				if !cache[id] and comment.visible? then
-					cache[id] = RDFSection::new( id, comment.date, comment )
-				elsif cache[id] and !comment.visible?
-					cache.delete( id )
+	
+			xml << makerss_header( uri )
+			seq << "<items><rdf:Seq>\n"
+			cache.values.sort{|a,b| b.time <=> a.time}.each_with_index do |rdfsec, idx|
+				if idx < 15 then
+					seq << makerss_seq( uri, rdfsec )
+					body << makerss_body( uri, rdfsec )
+				elsif idx > 50
+					cache.delete( rdfsec.id )
 				end
 			end
+	
+			db['cache'] = cache
+		rescue PStore::Error
 		end
-
-		xml << makerss_header( uri )
-		seq << "<items><rdf:Seq>\n"
-		cache.values.sort{|a,b| b.time <=> a.time}.each_with_index do |rdfsec, idx|
-			if idx < 15 then
-				seq << makerss_seq( uri, rdfsec )
-				body << makerss_body( uri, rdfsec )
-			elsif idx > 50
-				cache.delete( rdfsec.id )
-			end
-		end
-
-		db['cache'] = cache
 	end
 
 	rdf_image = @options['makerss.image']

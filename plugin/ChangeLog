@@ -1,6 +1,7 @@
 2004-06-15 TADA Tadashi <sho@spc.gr.jp>
 	* makerss.rb: insert time zone into dc:date.
 	* makerss.rb: fix error when section has no subtitle.
+	* output_rdf.rb: remove.
 
 2004-06-14  Kazuhiko  <kazuhiko@fdiary.net>
 	* makerss.rb: CGI::escapeHTML title and description.
