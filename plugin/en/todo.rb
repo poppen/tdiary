@@ -1,6 +1,6 @@
-# ja/todo.rb $Revision: 1.2 $
+# en/todo.rb $Revision: 1.3 $
 #
-# Japanese resources for todo.rb
+# English resources for todo.rb
 #
 # Copyright (c) 2001,2002,2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
