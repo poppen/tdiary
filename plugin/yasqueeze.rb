@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# yasqueeze.rb $Revision: 1.13 $
+# yasqueeze.rb $Revision: 1.14 $
 # -pv-
 #
 # Ì¾¾Î¡§
@@ -119,7 +119,7 @@ if mode == "CMD" || mode == "CGI"
 
 	if mode == "CMD"
 		def usage
-			puts "yasqueeze $Revision: 1.13 $"
+			puts "yasqueeze $Revision: 1.14 $"
 			puts " Yet Another making html files from tDiary's database."
 			puts " usage: ruby yasqueeze.rb [-p <tDiary path>] [-c <tdiary.conf path>] [-a] [-s] <dest path>"
 			exit
@@ -179,83 +179,85 @@ end
 #
 # Dairy Squeeze
 #
-class YATDiarySqueeze < TDiary
-	def initialize(diary, dest, all_data, compat)
-		@ignore_parser_cache = true
-
-		super(nil, 'day.rhtml')
-		@header = ''
-		@footer = ''
-		@show_comment = true
-		@show_referer = false
-		@diary = diary
-		@dest = dest
-		@all_data = all_data
-		@compat = compat
-	end
-
-	def execute
-		if @compat
-			dir = @dest
-			name = @diary.date.strftime('%Y%m%d')
-		else
-			dir = @dest + "/" + @diary.date.strftime('%Y')
-			name = @diary.date.strftime('%m%d')
-			Dir.mkdir(dir, 0755) unless File.directory?(dir)
-		end
-		filename = dir + "/" + name
-		if @diary.visible? or @all_data
-			if not FileTest::exist?(filename) or 
-					File::mtime(filename) < @diary.last_modified
-				File::open(filename, 'w'){|f| f.write(eval_rhtml)}
-			end
-		else
-			if FileTest.exist?(filename) and ! @all_data
-				name = "remove #{name}"
-				File::delete(filename)
-			else
-				name = ""
-			end
-		end
-		name
-	end
+module TDiary
+	class YATDiarySqueeze < TDiaryBase
+		def initialize(diary, dest, all_data, compat, conf)
+			@ignore_parser_cache = true
 	
-	protected
-	def title
-		t = @html_title
-		t += "(#{@diary.date.strftime('%Y-%m-%d')})" if @diary
-		t
+			super(nil, 'day.rhtml', conf)
+			@diary = diary
+			@dest = dest
+			@all_data = all_data
+			@compat = compat
+		end
+	
+		def execute
+			if @compat
+				dir = @dest
+				name = @diary.date.strftime('%Y%m%d')
+			else
+				dir = @dest + "/" + @diary.date.strftime('%Y')
+				name = @diary.date.strftime('%m%d')
+				Dir.mkdir(dir, 0755) unless File.directory?(dir)
+			end
+			filename = dir + "/" + name
+			if @diary.visible? or @all_data
+				if not FileTest::exist?(filename) or 
+						File::mtime(filename) < @diary.last_modified
+					File::open(filename, 'w'){|f| f.write(eval_rhtml)}
+				end
+			else
+				if FileTest.exist?(filename) and ! @all_data
+					name = "remove #{name}"
+					File::delete(filename)
+				else
+					name = ""
+				end
+			end
+			name
+		end
+		
+		protected
+		def title
+			t = @html_title
+			t += "(#{@diary.date.strftime('%Y-%m-%d')})" if @diary
+			t
+		end
+	
+		def cookie_name; ''; end
+		def cookie_mail; ''; end
 	end
-
-	def cookie_name; ''; end
-	def cookie_mail; ''; end
 end
 
 #
 # Main
 #
-class YATDiarySqueezeMain < TDiary
-	def initialize(dest, all_data, compat)
-		@ignore_parser_cache = true
-		eval <<-DIARY_CLASS, TOPLEVEL_BINDING
-			module DiaryBase
-				alias :__eval_rhtml :eval_rhtml
-				def eval_rhtml(opt, path)
-					opt['hide_comment_form'] = true
-					__eval_rhtml(opt, path)
-				end
-			end
-		DIARY_CLASS
-
-		super(nil, 'day.rhtml')
-		calendar
-		@years.keys.sort.each do |year|
-			@years[year.to_s].sort.each do |month|
-				@io.transaction(Time::local(year.to_i, month.to_i)) do |diaries|
-					diaries.sort.each do |day, diary|
-						print YATDiarySqueeze.new(diary, dest, all_data, compat).execute + " "
+module TDiary
+	class YATDiarySqueezeMain < TDiaryBase
+		def initialize(dest, all_data, compat, conf)
+			@ignore_parser_cache = true
+			eval <<-DIARY_CLASS, TOPLEVEL_BINDING
+				module TDiary
+					module DiaryBase
+						alias :__eval_rhtml :eval_rhtml
+						def eval_rhtml(opt, path)
+							opt['hide_comment_form'] = true
+							__eval_rhtml(opt, path)
+						end
 					end
-					false
+				end
+			DIARY_CLASS
+	
+			super(nil, 'day.rhtml', conf)
+			calendar
+			@years.keys.sort.each do |year|
+				@years[year.to_s].sort.each do |month|
+					@io.transaction(Time::local(year.to_i, month.to_i)) do |diaries|
+						diaries.sort.each do |day, diary|
+							print YATDiarySqueeze.new(diary, dest, all_data, compat, conf).execute + " "
+						end
+						false
+					end
 				end
 			end
 		end
@@ -272,14 +274,19 @@ if mode == "CGI" || mode == "CMD"
 			</head>
 			<body><div style="text-align:center">
 			<h1>Yet Another Squeeze for tDiary</h1>
-			<p>$Revision: 1.13 $</p>
+			<p>$Revision: 1.14 $</p>
 			<p>Copyright (C) 2002 MUTOH Masao&lt;mutoh@highway.ne.jp&gt;</p></div>
 			<br><br>Start!</p><hr>
 		]
 	end
 
 	begin
-		YATDiarySqueezeMain.new(output_path, all_data, compat)
+		conf = TDiary::Config::new
+		conf.header = ''
+		conf.footer = ''
+		conf.show_comment = true
+		conf.show_referer = false
+		TDiary::YATDiarySqueezeMain.new(output_path, all_data, compat, conf)
 	rescue
 		print $!, "\n"
 		$@.each do |v|
@@ -294,11 +301,18 @@ if mode == "CGI" || mode == "CMD"
 	end
 else
 	add_update_proc do
+		conf = @conf.clone
+		conf.header = ''
+		conf.footer = ''
+		conf.show_comment = true
+		conf.show_referer = false
+
 		diary = @diaries[@date.strftime('%Y%m%d')]
 		dir = @options['yasqueeze.output_path']
 		dir = @cache_path + "/html" unless dir
 		Dir.mkdir(dir, 0755) unless File.directory?(dir)
-		YATDiarySqueeze.new(diary, dir, @options['yasqueeze.all_data'],
-											@options['yasqueeze.compat_path']).execute
+		TDiary::YATDiarySqueeze.new(diary, dir, @options['yasqueeze.all_data'],
+											@options['yasqueeze.compat_path'], conf).execute
 	end
 end
+

@@ -1,4 +1,4 @@
-# makelirs.rb $Revision: 1.1 $
+# makelirs.rb $Revision: 1.2 $
 #
 # 更新情報をLIRSフォーマットのファイルに吐き出す
 #
@@ -13,6 +13,9 @@
 # Copyright (C) 2002 by Kazuhiro NISHIYAMA
 #
 =begin ChangeLog
+2002-10-06 TADA Tadashi <http://sho.tdiary.net/>
+	* for tDiary 1.5.0.20021003.
+
 2002-05-05 TADA Tadashi <http://sho.tdiary.net/>
 	* support @options.
 
@@ -24,7 +27,7 @@ add_update_proc do
 	file = @options['makelirs.file'] || 'antenna.lirs'
 
 	# create_lirs
-	t = TDiaryLatest::new( @cgi, "latest.rhtml" )
+	t = TDiaryLatest::new( @cgi, "latest.rhtml", @conf )
 	body = t.eval_rhtml
 	# escape comma
 	e = proc{|str| str.gsub(/[,\\]/) { "\\#{$&}" } }

@@ -1,4 +1,4 @@
-# navi_user.rb footnote.rb $Revision: 1.2 $
+# navi_user.rb footnote.rb $Revision: 1.3 $
 #
 # navi_user: 前日，翌日→前の日記，次の日記
 #   modeがday/commentのときに表示される「前日」「翌日」ナビゲーション
@@ -10,9 +10,16 @@
 # Copyright (c) 2002 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
 
+=begin ChangeLog
+2002-10-06 TADA Tadashi <sho@spc.gr.jp>
+	* for tDiary 1.5.0.20021003.
+=end
+
 eval( <<MODIFY_CLASS, TOPLEVEL_BINDING )
-class TDiaryMonth
-  attr_reader :diaries
+module TDiary
+	class TDiaryMonth
+	  attr_reader :diaries
+	end
 end
 MODIFY_CLASS
 
@@ -36,7 +43,7 @@ def navi_user
 		yms[yms.index(this_month) - 1, 3].each do |ym|
 			next unless ym
 			cgi.params['date'] = [ym]
-			m = TDiaryMonth.new(cgi, '')
+			m = TDiaryMonth.new(cgi, '', @conf)
 			days += m.diaries.keys.sort
 		end
 		days |= [today]
