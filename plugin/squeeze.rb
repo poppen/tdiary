@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# squeeze.rb $Revision: 1.2 $
+# squeeze.rb $Revision: 1.3 $
 # -pv-
 #
 # Ì¾¾Î¡§
@@ -45,6 +45,9 @@
 # version 1.0.4 by TADA Tadashi <sho@spc.gr.jp> with GPL2.
 #
 =begin ChangeLog
+2002-11-11 TADA Tadashi <sho@spc.gr.jp>
+	* support TDiary::TDiaryBase#mode for date display in HTML title.
+
 2002-10-23 TADA Tadashi <sho@spc.gr.jp>
 	* support Config#hide_comment_form.
 
@@ -125,7 +128,7 @@ if mode == "CMD" || mode == "CGI"
 
 	if mode == "CMD"
 		def usage
-			puts "squeeze $Revision: 1.2 $"
+			puts "squeeze $Revision: 1.3 $"
 			puts " making html files from tDiary's database."
 			puts " usage: ruby squeeze.rb [-p <tDiary path>] [-c <tdiary.conf path>] [-a] [-s] <dest path>"
 			exit
@@ -192,6 +195,7 @@ module TDiary
 	
 			super(nil, 'day.rhtml', conf)
 			@diary = diary
+			@date = diary.date
 			@dest = dest
 			@all_data = all_data
 			@compat = compat
@@ -224,12 +228,10 @@ module TDiary
 		end
 		
 		protected
-		def title
-			t = @html_title
-			t += "(#{@diary.date.strftime('%Y-%m-%d')})" if @diary
-			t
+		def mode
+			'day'
 		end
-	
+
 		def cookie_name; ''; end
 		def cookie_mail; ''; end
 	end
@@ -269,7 +271,7 @@ if mode == "CGI" || mode == "CMD"
 			</head>
 			<body><div style="text-align:center">
 			<h1>Squeeze for tDiary</h1>
-			<p>$Revision: 1.2 $</p>
+			<p>$Revision: 1.3 $</p>
 			<p>Copyright (C) 2002 MUTOH Masao&lt;mutoh@highway.ne.jp&gt;</p></div>
 			<br><br>Start!</p><hr>
 		]
