@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 =begin
-= その日の天気プラグイン((-$Id: weather.rb,v 1.3 2003-06-03 16:58:23 zunda Exp $-))
+= その日の天気プラグイン((-$Id: weather.rb,v 1.4 2003-06-06 14:56:22 zunda Exp $-))
 その日の天気を、その日の日記を最初に更新する時に取得して保存し、それぞれ
 の日の日記の上部に表示します。
 
@@ -115,6 +115,12 @@ EUC-JPです。
   日付の判定など、天気データの記録以外の時刻の管理には、日記全体のタイム
   ゾーンが用いられます。
 
+: @options.['weather.oldest'] = 21600
+  得られたデータが、このオプション(秒)より古い場合には、天気の取得エラー
+  になり、次の日記の更新で再びデータを取得しようとします。デフォルトは6
+  時間(21600秒)です。このオプションがnilに設定されている場合には、どんな
+  に古いデータでも受け入れます。
+
 : @options['weather.show_error']
   データ取得時にエラーがあった場合にそれを日記に表示したい場合にはtrueに
   します。デフォルトでは表示しません。
@@ -222,6 +228,8 @@ of GPL version 2 or later.
 =end
 
 =begin ChangeLog
+* Thu Jun  5, 2003 zunda <zunda at freeshell.org>
+- checks the age of data
 * Tue Jun  3, 2003 zunda <zunda at freeshell.org>
 - ignores `... in the vicinity', thank you kosaka-san.
 - now tests translations if executed as a stand alone script.
@@ -304,6 +312,8 @@ class Weather
 		[%r|\s*\bthunder( storm)?\b\s*|i, '"雷"'],
 		[%r|\s*\bsand\b\s*|i, '"黄砂"'],
 		[%r|\s*\bcumulonimbus clouds\b\s*|i, '"積乱雲"'],
+		[%r|\s*\bcumulus clouds\b\s*|i, '"積雲"'],
+		[%r|\s*\btowering\b\s*|i, '""'],
 		[%r|\s*\bobserved\b\s*|i, '""'],
 		[%r|\s*\bC\b\s*|, '"℃"'],
 	].freeze
@@ -521,6 +531,14 @@ class Weather
 				@data[t] = htmlitems[f]
 			end
 		end
+		@time = Time::now
+	end
+
+	# check age of data
+	def check_age( oldest_sec = nil )
+		if oldest_sec and @time and @data['timestamp'] and @data['timestamp'].to_i + oldest_sec < @time.to_i then
+			@error = 'data too old'
+		end
 	end
 
 	def initialize( date = nil, tz = nil )
@@ -563,7 +581,6 @@ class Weather
 		rescue
 			@error = NKF::nkf( '-e', $!.message.gsub( /[\t\n]/, ' ' ) )
 		end
-		@time = Time::now
 		self
 	end
 
@@ -717,6 +734,12 @@ def get_weather
 		items = @options['weather.items'] || Weather_default_items
 		w = Weather.new( @date, @options['weather.tz'] )
 		w.get( @options['weather.url'], @options['weather.header'], items )
+		if @options.has_key?( 'weather.oldest' ) then
+			oldest = @options['weather.oldest']
+		else
+			oldest = 21600
+		end
+		w.check_age( oldest )
 		w.store( path, @date )
 	end
 end
