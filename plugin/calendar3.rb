@@ -1,4 +1,4 @@
-# calendar3.rb $Revision: 1.6 $
+# calendar3.rb $Revision: 1.7 $
 #
 # calendar3: 現在表示している月のカレンダーを表示します．
 #  パラメタ: なし
@@ -75,10 +75,9 @@ def calendar3
 		extra_erb = true
 	end
 	result = ''
-	/(\d\d\d\d)(\d\d)(\d\d)/ === @diaries.keys.sort.reverse[0]
-	year = $1.to_i
-	month = $2.to_i
-	day = $3.to_i
+	year = @date.year
+	month = @date.month
+	day = @date.day
 	result << %Q|<a href="#{@index}#{anchor "%04d%02d" % Calendar3.prev_month(year, month)}">&lt;&lt;</a>\n|
 	result << %Q|<a href="#{@index}#{anchor "%04d%02d" % [year, month]}">#{"%04d/%02d" % [year, month]}</a>/\n|
 	#Calendar3.make_cal(year, month)[(day - num >= 0 ? day - num : 0)..(day - 1)].each do |day, kind|
