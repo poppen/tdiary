@@ -1,7 +1,12 @@
-# calendar3.rb $Revision: 1.3 $
+# calendar3.rb $Revision: 1.4 $
 #
 # calendar3: 現在表示している月のカレンダーを表示します．
 #  パラメタ: なし
+#
+# tdiary.confで指定するオプション:
+#   @options['calendar3.erb']
+#     title属性に渡す文字列をERbLightで評価するかどうか (true/false)
+#     (省略時: false) 
 #
 # Copyright (c) 2001,2002 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -83,7 +88,12 @@ def calendar3
 			r = []
 			@diaries[date].each_paragraph do |paragraph|
 				if paragraph.subtitle
-					r << %Q|#{i}. #{paragraph.subtitle.gsub(/<.+?>/, '')}|
+					if @options['calendar3.erb']
+						str = ERbLight.new(paragraph.subtitle.untaint).result(binding)
+					else
+						str = paragraph.subtitle
+					end
+					r << %Q|#{i}. #{str.gsub(/<.+?>/, '')}|
 				end
 				i += 1
 			end
@@ -94,7 +104,12 @@ def calendar3
 				i = 1
 				@diaries[date].each_paragraph do |paragraph|
 					if paragraph.subtitle
-						result << %Q|    <a href="#{@index}#{anchor "%s#p%02d" % [date, i]}" title="#{CGI::escapeHTML(Calendar3.shorten(paragraph.text))}">#{i}</a>. #{paragraph.subtitle}<br>\n|
+						if @options['calendar3.erb']
+							str = ERbLight.new(paragraph.text.untaint).result(binding)
+						else
+							str = paragraph.text
+						end
+						result << %Q|    <a href="#{@index}#{anchor "%s#p%02d" % [date, i]}" title="#{CGI::escapeHTML(Calendar3.shorten(str))}">#{i}</a>. #{paragraph.subtitle}<br>\n|
 					end
 					i += 1
 				end
