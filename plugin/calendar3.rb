@@ -1,4 +1,4 @@
-# calendar3.rb $Revision: 1.8 $
+# calendar3.rb $Revision: 1.9 $
 #
 # calendar3: 現在表示している月のカレンダーを表示します．
 #  パラメタ: なし
@@ -109,10 +109,10 @@ def calendar3
 				@diaries[date].each_section do |section|
 					if section.subtitle
 						if extra_erb
-							text = ERbLight.new(section.text.untaint).result(binding)
+							text = ERbLight.new(section.to_src.untaint).result(binding)
 							subtitle = ERbLight.new(section.subtitle.untaint).result(binding)
 						else
-							text = section.text
+							text = section.to_src
 							subtitle = section.subtitle
 						end
 						result << %Q|    <a href="#{@index}#{anchor "%s#p%02d" % [date, i]}" title="#{CGI::escapeHTML(Calendar3.shorten(text))}">#{i}</a>. #{subtitle}<br>\n|
