@@ -1,5 +1,5 @@
 #
-# markdown_style.rb: Markdown style for tDiary 2.x format. $Revision: 1.8 $
+# markdown_style.rb: Markdown style for tDiary 2.x format. $Revision: 1.9 $
 #
 # if you want to use this style, add @style into tdiary.conf below:
 #
@@ -145,7 +145,10 @@ module TDiary
           section << l
         end
       end
-      @sections << MarkdownSection::new( section, author ) if section
+      if section
+        section << "\n" unless section=~/\n\n\z/
+        @sections << MarkdownSection::new( section, author )
+      end
       @last_modified = Time::now
       self
     end
@@ -161,7 +164,6 @@ module TDiary
       each_section do |section|
         r << section.to_src
       end
-      r << "\n"
       r
     end
 
