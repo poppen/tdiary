@@ -1,5 +1,5 @@
 =begin
-= ここだけ検索プラグイン((-$Id: search_control.rb,v 1.1 2003-08-26 06:46:22 zunda Exp $-))
+= ここだけ検索プラグイン((-$Id: search_control.rb,v 1.2 2003-08-26 10:08:59 zunda Exp $-))
 Please see below for an English description.
 
 == 概要
@@ -48,6 +48,10 @@ You should be able to download the latest version from
 =end
 
 =begin ChangeLog
+* Aug 26, 2003 zunda <zunda at freeshell.org>
+- 1.2
+- no table in configuration view, thanks to Tada-san.
+
 * Aug 26, 2003 zunda <zunda at freeshell.org>
 - no nofollow
 - English translation
@@ -109,13 +113,10 @@ add_conf_proc( Search_control_prefix,
 		r = <<-_HTML
 		<h3 class="subtitle">Search control plugin</h3>
 		<p>Ask the crawlers from external search engines not to index
-			unwanted pages.</p>
-		<p>$Revision: 1.1 $</p>
-		<table>
-		<tr>
-			<th>View
-			<th>Check to be indexed
-		</tr>
+			unwanted pages. Check the viewes you want the search engines to
+			index.</p>
+		<p>$Revision: 1.2 $</p>
+		<ul>
 		_HTML
 		[
 			[ 'Latest', 'latest' ], [ 'One-day', 'day' ], [ 'One-month', 'month' ],
@@ -124,24 +125,18 @@ add_conf_proc( Search_control_prefix,
 			label = a[0]
 			key = "#{Search_control_prefix}.#{a[1]}"
 			r << <<-_HTML
-				<tr>
-					<th>#{label}
-					<td><input name="#{key}.index" value="t" type="checkbox"#{'t' == @conf["#{key}.index"] ? ' checked' : ''}>
-				</tr>
+				<li><input name="#{key}.index" value="t" type="checkbox"#{'t' == @conf["#{key}.index"] ? ' checked' : ''}>#{label}
 			_HTML
 		end
-		r << "\t\t</table>\n"
+		r << "\t\t</ul>\n"
 	else
 		r = <<-_HTML
 		<h3 class="subtitle">ここだけ検索プラグイン</h3>
 		<p>検索エンジンのロボットに、
-			余分なページのインデックスを作らないようにお願いしてみます。</p>
-		<p>$Revision: 1.1 $</p>
-		<table>
-		<tr>
-			<th>日記の表示
-			<th>インデックスを作ってもらう
-		</tr>
+			余分なページのインデックスを作らないようにお願いしてみます。
+			インデックスを作って欲しい表示にチェックをしてください。</p>
+		<p>$Revision: 1.2 $</p>
+		<ul>
 		_HTML
 		[
 			[ '最新', 'latest' ], [ '一日分', 'day' ], [ '一月分', 'month' ],
@@ -150,13 +145,10 @@ add_conf_proc( Search_control_prefix,
 			label = a[0]
 			key = "#{Search_control_prefix}.#{a[1]}"
 			r << <<-_HTML
-				<tr>
-					<th>#{label}
-					<td><input name="#{key}.index" value="t" type="checkbox"#{'t' == @conf["#{key}.index"] ? ' checked' : ''}>
-				</tr>
+				<li><input name="#{key}.index" value="t" type="checkbox"#{'t' == @conf["#{key}.index"] ? ' checked' : ''}>#{label}
 			_HTML
 		end
-		r << "\t\t</table>\n"
+		r << "\t\t</ul>\n"
 	end
 	r
 

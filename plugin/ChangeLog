@@ -1,4 +1,7 @@
 2003-08-26 zunda <zunda at freeshell.org>
+	* search_control.rb: no table in configuration view, thanks to Tada-san.
+
+2003-08-26 zunda <zunda at freeshell.org>
 	* search_control.rb: added
 	* 01_select_plugins.rb: added
 
