@@ -1,4 +1,4 @@
-# $Revision: 1.4 $
+# $Revision: 1.5 $
 # recent_list: 最近書いた日記のタイトル，サブタイトルを表示する
 #   パラメタ(カッコ内は未指定時の値):
 #     days:            何日分の日記を表示するか(20)
@@ -33,6 +33,7 @@ def recent_list(days = 30, date_format = @date_format,
 					title_with_body = false, show_size = false, show_title = false)
 	result = ""
 	cgi = CGI::new
+	def cgi.referer; nil; end
 
 	catch(:exit) {
 		@years.keys.sort.reverse_each do |year|

@@ -1,4 +1,4 @@
-# navi_user.rb footnote.rb $Revision: 1.1 $
+# navi_user.rb footnote.rb $Revision: 1.2 $
 #
 # navi_user: 前日，翌日→前の日記，次の日記
 #   modeがday/commentのときに表示される「前日」「翌日」ナビゲーション
@@ -21,6 +21,7 @@ def navi_user
 	result << %Q[<span class="adminmenu"><a href="#{@index_page}">トップ</a></span>\n] unless @index_page.empty?
 	if /^(day|comment)$/ =~ @mode
 		cgi = CGI.new
+		def cgi.referer; nil; end
 		days = []
 		yms = []
 		today = @date.strftime('%Y%m%d')
