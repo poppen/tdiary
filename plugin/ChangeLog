@@ -1,3 +1,6 @@
+2003-10-23 TADA Tadashi <sho@spc.gr.jp>
+	* disp_referrer.rb: escape a bug of String#tr in ruby 1.6 dose not run in secure mode.
+
 2003-10-23 Junichiro Kita <kita@kitaj.no-ip.com>
 	* tb-show.rb: bug fix. Make <a name="t"> even if there is no trackbacks.
 
@@ -8,7 +11,6 @@
 	* disp_referrer.rb: language resources for ja and en completed (hopefully :)
 
 2003-10-21 Junichiro Kita <kita@kitaj.no-ip.com>
-
 	* output_rdf.rb: follow new @conf.shorten.
 
 2003-10-21  Kazuhiko  <kazuhiko@fdiary.net>
