@@ -1,4 +1,7 @@
 2004-11-29 zunda <zunda at freeshell.org>
+	* zh/search_control.rb: forgot to follow revision of search_control.rb
+
+2004-11-29 zunda <zunda at freeshell.org>
 	* makerss.rb: @conf.icon can be empty
 
 2004-11-29 zunda <zunda at freeshell.org>
