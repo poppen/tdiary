@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# todo.rb $Revision: 1.1 $
+# todo.rb $Revision: 1.2 $
 #
 # todo: ToDoリストを表示します．
 #
@@ -253,6 +253,10 @@ def todo
 	</div>
 </div>
 TODO
+end
+
+def navi_t(name = "ToDo編集")
+	%Q|<span class="adminmenu"><a href="todo.rb">#{name}</a></span>\n|
 end
 # PLUGIN
 end
