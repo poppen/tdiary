@@ -1,3 +1,11 @@
+2004-11-02 MoonWolf <moonwolf@moonwolf.com>
+	* xmlrpc.rb Added
+	* ja/xmlrpc Added
+	* en/xmlrpc.rb Added
+	* zh/xmlrpc.rb Added
+	* xmlrpc/xmlrpc.rb Changed
+	* xmlrpc/README Changed
+
 2004-10-29 MoonWolf <moonwolf@moonwolf.com>
 	* xmlrpc/README Added.
 	* xmlrpc/xmlrpc.rb Added.
