@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.5 2003-10-22 16:17:01 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.6 2003-11-18 16:36:03 zunda Exp $-))
 日本語リソース
 
 == 概要
@@ -251,76 +251,75 @@ class DispRef2SetupIF
 	# show options
 	def show_options
 		r = <<-_HTML
-			<h4>リンク元の分類と表示</h4>
-			<p>
-				<input name="dr2.current_mode" value="#{Options}" type="hidden">
+			<h3>リンク元の分類と表示</h3>
+			<table>
+			<tr>
+				<td><input name="dr2.current_mode" value="#{Options}" type="hidden">
 				リンク元置換リストにないリンク元を
-				<input name="dr2.unknown.divide" value="true" type="radio"#{' checked'if @setup['unknown.divide']}>#{@setup['unknown.label']}として分ける /
-				<input name="dr2.unknown.divide" value="false" type="radio"#{' checked'if not @setup['unknown.divide']}>通常のリンク元と混ぜる。
-			</p>
-			<p>
-				#{@setup['unknown.label']}を
-				<input name="dr2.unknown.hide" value="false" type="radio"#{' checked'if not @setup['unknown.hide']}>表示する /
-				<input name="dr2.unknown.hide" value="true" type="radio"#{' checked'if @setup['unknown.hide']}>隠す。
-			</p>
-			<p>
-				リンク元置換リストの置換後の文字列の最初の[]をカテゴリー分けに
-				<input name="dr2.normal.categorize" value="true" type="radio"#{' checked'if @setup['normal.categorize']}>使う /
-				<input name="dr2.normal.categorize" value="false" type="radio"#{' checked'if not @setup['normal.categorize']}>使わない。
-			</p>
-			<p>
-				一日分の表示で、通常のリンク元以外のリンク元を
-				<input name="dr2.long.only_normal" value="false" type="radio"#{' checked'if not @setup['long.only_normal']}>表示する /
-				<input name="dr2.long.only_normal" value="true" type="radio"#{' checked'if @setup['long.only_normal']}>隠す。
-			</p>
-			<p>
-				最新の表示で、通常のリンク元以外のリンク元を
-				<input name="dr2.short.only_normal" value="false" type="radio"#{' checked'if not @setup['short.only_normal']}>表示する /
-				<input name="dr2.short.only_normal" value="true" type="radio"#{' checked'if @setup['short.only_normal']}>隠す。
-				(表示する場合には、このプラグインが無い場合とまったく同じ表示になります。)
-			</p>
-			<h4>通常のリンク元のグループ化</h4>
-			<p>
-				通常のリンク元を
-				<input name="dr2.normal.group" value="true" type="radio"#{' checked'if @setup['normal.group']}>置換後の文字列でまとめる /
-				<input name="dr2.normal.group" value="false" type="radio"#{' checked'if not @setup['normal.group']}>URL毎に分ける。
-			</p>
-			<p>
-				通常のリンク元を置換後の文字列でまとめる場合に、最後の()を
-				<input name="dr2.normal.ignore_parenthesis" value="true" type="radio"#{' checked'if @setup['normal.ignore_parenthesis']}>無視する /
-				<input name="dr2.normal.ignore_parenthesis" value="false" type="radio"#{' checked'if not @setup['normal.ignore_parenthesis']}>無視しない。
-			</p>
-			<h4>アンテナからのリンクのグループ化</h4>
-			<p>
-				アンテナからのリンクを
-				<input name="dr2.antenna.group" value="true" type="radio"#{' checked'if @setup['antenna.group']}>置換後の文字列でまとめる /
-				<input name="dr2.antenna.group" value="false" type="radio"#{' checked'if not @setup['antenna.group']}>URL毎に分ける。
-			</p>
-			<p>
-				アンテナからのリンクを置換後の文字列でまとめる場合に、最後の()を
-				<input name="dr2.antenna.ignore_parenthesis" value="true" type="radio"#{' checked'if @setup['antenna.ignore_parenthesis']}>無視する /
-				<input name="dr2.antenna.ignore_parenthesis" value="false" type="radio"#{' checked'if not @setup['antenna.ignore_parenthesis']}>無視しない。
-			</p>
-			<h4>検索キーワードの表示</h4>
-			<p>
-				検索エンジン名を
-				<input name="dr2.search.expand" value="true" type="radio"#{' checked'if @setup['search.expand']}>表示する /
-				<input name="dr2.search.expand" value="false" type="radio"#{' checked'if not @setup['search.expand']}>表示しない。
-			</p>
+				<td><input name="dr2.unknown.divide" value="true" type="radio"#{' checked'if @setup['unknown.divide']}>#{@setup['unknown.label']}として分ける
+				<td><input name="dr2.unknown.divide" value="false" type="radio"#{' checked'if not @setup['unknown.divide']}>通常のリンク元と混ぜる。
+			<tr>
+				<td>#{@setup['unknown.label']}を
+				<td><input name="dr2.unknown.hide" value="false" type="radio"#{' checked'if not @setup['unknown.hide']}>表示する
+				<td><input name="dr2.unknown.hide" value="true" type="radio"#{' checked'if @setup['unknown.hide']}>隠す。
+			<tr>
+				<td>リンク元置換リストの置換後の文字列の最初の[]をカテゴリー分けに
+				<td><input name="dr2.normal.categorize" value="true" type="radio"#{' checked'if @setup['normal.categorize']}>使う
+				<td><input name="dr2.normal.categorize" value="false" type="radio"#{' checked'if not @setup['normal.categorize']}>使わない。
+			<tr>
+				<td>一日分の表示で、通常のリンク元以外のリンク元を
+				<td><input name="dr2.long.only_normal" value="false" type="radio"#{' checked'if not @setup['long.only_normal']}>表示する
+				<td><input name="dr2.long.only_normal" value="true" type="radio"#{' checked'if @setup['long.only_normal']}>隠す。
+			<tr>
+				<td>最新の表示で、通常のリンク元以外のリンク元を
+				<td><input name="dr2.short.only_normal" value="false" type="radio"#{' checked'if not @setup['short.only_normal']}>表示する
+				<td><input name="dr2.short.only_normal" value="true" type="radio"#{' checked'if @setup['short.only_normal']}>隠す。
+			</table>
+			<p>最新の表示で、通常のリンク元以外のリンク元を表示する場合には、このプラグインが無い場合とまったく同じ表示になります。</p>
+			<h3>通常のリンク元のグループ化</h3>
+			<table>
+			<tr>
+				<td>通常のリンク元を
+				<td><input name="dr2.normal.group" value="true" type="radio"#{' checked'if @setup['normal.group']}>置換後の文字列でまとめる
+				<td><input name="dr2.normal.group" value="false" type="radio"#{' checked'if not @setup['normal.group']}>URL毎に分ける。
+			<tr>
+				<td>通常のリンク元を置換後の文字列でまとめる場合に、最後の()を
+				<td><input name="dr2.normal.ignore_parenthesis" value="true" type="radio"#{' checked'if @setup['normal.ignore_parenthesis']}>無視する /
+				<td><input name="dr2.normal.ignore_parenthesis" value="false" type="radio"#{' checked'if not @setup['normal.ignore_parenthesis']}>無視しない。
+			</table>
+			<h3>アンテナからのリンクのグループ化</h3>
+			<table>
+			<tr>
+				<td>アンテナからのリンクを
+				<td><input name="dr2.antenna.group" value="true" type="radio"#{' checked'if @setup['antenna.group']}>置換後の文字列でまとめる
+				<td><input name="dr2.antenna.group" value="false" type="radio"#{' checked'if not @setup['antenna.group']}>URL毎に分ける。
+			<tr>
+				<td>アンテナからのリンクを置換後の文字列でまとめる場合に、最後の()を
+				<td><input name="dr2.antenna.ignore_parenthesis" value="true" type="radio"#{' checked'if @setup['antenna.ignore_parenthesis']}>無視する
+				<td><input name="dr2.antenna.ignore_parenthesis" value="false" type="radio"#{' checked'if not @setup['antenna.ignore_parenthesis']}>無視しない。
+			</table>
+			<h3>検索キーワードの表示</h3>
+			<table>
+			<tr>
+				<td>検索エンジン名を
+				<td><input name="dr2.search.expand" value="true" type="radio"#{' checked'if @setup['search.expand']}>表示する
+				<td><input name="dr2.search.expand" value="false" type="radio"#{' checked'if not @setup['search.expand']}>表示しない。
+			</table>
 		_HTML
 		unless @setup.secure then
 		r << <<-_HTML
-			<h4>キャッシュ</h4>
-			<p>
-				キャッシュを
-				<input name="dr2.no_cache" value="false" type="radio"#{' checked'if not @setup['no_cache']}>利用する /
-				<input name="dr2.no_cache" value="true" type="radio"#{' checked'if @setup['no_cache']}>利用しない。
-			</p>
-			<p>今回の設定変更で、キャッシュを
-				<input name="dr2.cache.update" value="force" type="radio">更新する /
-				<input name="dr2.cache.update" value="auto" type="radio" checked>必要なら更新する /
-				<input name="dr2.cache.update" value="never" type="radio">更新しない。
-			</p>
+			<h3>キャッシュ</h3>
+			<table>
+			<tr>
+				<td>キャッシュを
+				<td><input name="dr2.no_cache" value="false" type="radio"#{' checked'if not @setup['no_cache']}>利用する
+				<td><input name="dr2.no_cache" value="true" type="radio"#{' checked'if @setup['no_cache']}>利用しない。
+			<tr>
+				<td>今回の設定変更で、キャッシュを
+				<td><input name="dr2.cache.update" value="force" type="radio">更新する
+				<td><input name="dr2.cache.update" value="auto" type="radio" checked>必要なら更新する
+				<td><input name="dr2.cache.update" value="never" type="radio">更新しない。
+			</table>
 			<p>
 				キャッシュの更新には多少の時間がかかる場合があります。
 				OKボタンを押したらしばらくお待ちください。
@@ -341,7 +340,7 @@ class DispRef2SetupIF
 			urls = DispRef2Cache.new( @setup ).unknown_urls
 		end
 		r = <<-_HTML
-			<h4>リンク元置換リスト</h4>
+			<h3>リンク元置換リスト</h3>
 			<input name="dr2.current_mode" value="#{RefList}" type="hidden">
 		_HTML
 		if @cache then
@@ -433,7 +432,7 @@ class DispRef2SetupIF
 			_HTML
 		end
 		r << <<-_HTML
-			<h4>アンテナのための正規表現</h4>
+			<h3>アンテナのための正規表現</h3>
 			<p>アンテナのURLや置換後の文字列にマッチする正規表現です。
 				これらの正規表現にマッチするリンク元は「アンテナ」に分類されます。</p>
 			<ul>
