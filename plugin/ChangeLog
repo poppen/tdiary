@@ -1,3 +1,6 @@
+2003-10-19 Junichiro Kita <kita@kitaj.no-ip.com>
+	* todo.rb: priority is optional.
+
 2003-10-18  Kazuhiko  <kazuhiko@fdiary.net>
 	* output_rdf.rb: make plain text description. change default file
 	name from 't.rdf' to 'index.rdf'. make an item per comment.

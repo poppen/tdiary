@@ -1,4 +1,4 @@
-# todo.rb $Revision: 1.4 $
+# todo.rb $Revision: 1.5 $
 #
 # todo: show ToDo lists.
 #
@@ -54,13 +54,15 @@ class ToDo
 		r = "#{@deleted}#{@prio}"
 		r << "[#{@limit}]" if @limit
 		r << " #{@todo}"
+		r.sub!(/^\s+/, '')
+		r
 	end
 end
 
 def todo_parse(src)
 	todos = []
 	src.each do |l|
-		deleted, prio, limit, todo = l.scan(/^(#?)(\d{0,2})(?:\[(.*)\])? +(.+)$/)[0]
+		deleted, prio, limit, todo = l.scan(/^(#?)(\d{0,2})(?:\[(.*)\])? *(.+)$/)[0]
 		if (0..99).include? prio.to_i and todo
 			todos.push ToDo.new(prio, todo, limit, deleted)
 		end
