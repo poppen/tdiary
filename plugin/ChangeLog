@@ -1,8 +1,11 @@
-2003-09-17 SAKAMOTO Hideki <hs@on-sky.net>
-	* sn.rb: add add_body_leave_proc
+2003-09-19  Kazuhiko  <kazuhiko@fdiary.net>
+	* trackback/tb.rb: remove '</div>\n<div class="refererlist">'.
 
 2003-09-18 TADA Tadashi <sho@spc.gr.jp>
 	* whatsnew.rb: support apply_plugin.
+
+2003-09-17 SAKAMOTO Hideki <hs@on-sky.net>
+	* sn.rb: add add_body_leave_proc
 
 2003-09-16 TADA Tadashi <sho@spc.gr.jp>
 	* sn.rb: added.

@@ -1,4 +1,4 @@
-# tb-show.rb $Revision: 1.13 $
+# tb-show.rb $Revision: 1.14 $
 #
 # functions:
 #   * show TrackBack ping URL in right of TSUKKOMI label.
@@ -133,7 +133,7 @@ TBSHOW
 			r << %Q|<p>#{CGI::escapeHTML( excerpt ).gsub( /\n/, '<br>' ).gsub( /<br><br>\Z/, '' )}</p>\n| unless excerpt.empty?
 			i = i.succ
 		end
-		r << %Q|	</div>\n</div>\n<div class="refererlist">|
+		r << %Q|	</div>\n|
 	end
 	r << referer_of_today_long_tb_backup( diary, limit )
 end
