@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.25 $
+# amazon.rb $Revision: 1.26 $
 #
 # See document in language resource file: en/amazon.rb
 #
@@ -126,12 +126,14 @@ def get_amazon_image( position, asin, comment )
 		end
 		r = ""
 		r << %Q[<a href="#{item[0].strip}/ref=nosim/">]
-		r << %Q[<img class="#{position}" src="#{item[2].strip}" ]
-		if @conf['amazon.imgsize'] == 0 then
-			r << %Q[width="#{item[4].strip}" ] if item[4]
-			r << %Q[height="#{item[5].strip}" ] if item[5]
+		if @mode != 'categoryview'
+			r << %Q[<img class="#{position}" src="#{item[2].strip}" ]
+			if @conf['amazon.imgsize'] == 0 then
+				r << %Q[width="#{item[4].strip}" ] if item[4]
+				r << %Q[height="#{item[5].strip}" ] if item[5]
+			end
+			r << %Q[alt="#{item[1].strip}">]
 		end
-		r << %Q[alt="#{item[1].strip}">]
 		if !@conf['amazon.hidename']
 			r << item[1].strip if position == "amazon"
 		end

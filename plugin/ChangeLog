@@ -1,4 +1,7 @@
 2004.03.15 Junichiro Kita <kita@kitaj.no-ip.com>
+	* amazon.rb: don't show image when @mode == categoryview.
+
+2004.03.15 Junichiro Kita <kita@kitaj.no-ip.com>
 	* category.rb: cache entire body. Thanks kazuhiko.
 
 2004.03.15 Junichiro Kita <kita@kitaj.no-ip.com>
