@@ -1,4 +1,4 @@
-# category.rb $Revision: 1.19 $
+# category.rb $Revision: 1.20 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -568,7 +568,7 @@ end # module Category
 		ret << "#{@category_conf_label}:\n"
 		@categories.each do |c|
 			e_c = CGI.escapeHTML(c)
-			ret << %Q!| <a href="javascript:inj_c(&quot;[#{e_c}] &quot;)">#{e_c}</a>\n!
+			ret << %Q!| <a href="javascript:inj_c(&quot;[#{e_c}]&quot;)">#{e_c}</a>\n!
 		end
 		ret << "|\n</div>\n<br>\n"
 	end
