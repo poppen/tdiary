@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.36 2003-10-23 10:02:08 tadatadashi Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.37 2003-10-24 04:53:06 tadatadashi Exp $-))
 
 == 概要
 アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
@@ -260,10 +260,7 @@ class DispRef2String
 		end
 	rescue LoadError
 		def self::escapeHTML( str )
-			# escape ruby 1.6 bug.
-			str.gsub(/([^ a-zA-Z0-9_.-]+)/n) do
-				'%' + $1.unpack('H2' * $1.size).join('%').upcase
-			end.gsub(/ /, '+')
+			CGI::escapeHTML( str )
 		end
 		def self::unescape( str )
 			# escape ruby 1.6 bug.

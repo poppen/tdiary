@@ -1,3 +1,6 @@
+2003-10-24 TADA Tadashi <sho@spc.gr.jp>
+	* disp_referrer.rb: fix bug on 23 Oct.
+
 2003-10-23 TADA Tadashi <sho@spc.gr.jp>
 	* disp_referrer.rb: escape a bug of String#tr in ruby 1.6 dose not run in secure mode.
 
