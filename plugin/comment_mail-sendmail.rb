@@ -1,4 +1,4 @@
-# comment_mail_sendmail.rb $Revision: 1.3 $
+# comment_mail_sendmail.rb $Revision: 1.4 $
 #
 # sendmailを使ってツッコミをメールで知らせる
 #   入れるだけで動作する。
@@ -29,7 +29,7 @@
 #
 def comment_mail( text, to )
 	begin
-		sendmail = @conf.options['comment_mail.sendmail'] || '/usr/sbin/sendmail'
+		sendmail = @conf['comment_mail.sendmail'] || '/usr/sbin/sendmail'
 		open( "|#{sendmail} #{to.join(' ')}", 'w' ) do |o|
 			o.write( text )
 		end
