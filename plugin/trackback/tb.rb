@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# tb.rb $Revision: 1.1 $
+# tb.rb $Revision: 1.2 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -148,6 +148,14 @@ RSSFOOT
 				TDiaryTrackBackBase::success_response
 			end
 		end
+
+		class TDiaryTrackBackShow < TDiaryTrackBackBase
+			def eval_rhtml( prefix = '' )
+				@plugin = load_plugins
+				anchor = @plugin.instance_eval(%Q|anchor "#{@date.strftime('%Y%m%d')}"|)
+				raise ForceRedirect::new("../#{@conf.index}#{anchor}#t")
+			end
+		end
 	end
 
 	@cgi = CGI::new
@@ -162,7 +170,7 @@ RSSFOOT
 		end
 	rescue TDiary::TDiaryError
 	end
-	tdiary = TDiary::TDiaryTrackBackShow::new( @cgi, 'trackback.rhtml', conf ) unless tdiary
+	tdiary = TDiary::TDiaryTrackBackShow::new( @cgi, nil, conf ) unless tdiary
 
 	head = {
 		#'type' => 'application/xml'
@@ -185,6 +193,21 @@ RSSFOOT
 		}
 		print @cgi.header( head )
 		print TDiary::TDiaryTrackBackBase::fail_response($!.message)
+	rescue TDiary::ForceRedirect
+		head = {
+			#'Location' => $!.path
+			'type' => 'text/html',
+		}
+		head['cookie'] = tdiary.cookies if tdiary.cookies.size > 0
+		print @cgi.header( head )
+		print %Q[
+			<html>
+			<head>
+			<meta http-equiv="refresh" content="0;url=#{$!.path}">
+			<title>moving...</title>
+			</head>
+			<body>Wait or <a href="#{$!.path}">Click here!</a></body>
+			</html>]
 	end
 rescue Exception
 	puts "Content-Type: text/plain\n\n"
