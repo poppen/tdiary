@@ -1,5 +1,5 @@
 =begin
-= 連番生成プラグイン sn.rb $Revision: 1.2 $
+= 連番生成プラグイン sn.rb $Revision: 1.3 $
 
 == 概要
 	各日付の日記内で通し番号を表示します。
@@ -12,9 +12,9 @@
 	sn()メソッドは日記の各日付ごとに、1から始まる通し番号を表示します。
 
 	sn_anchorid()メソッドは現在のアンカーidの番号を表示します。
-	sn_anchorid()を設定オプション内のセクションアンカーとして指定する
-	ことによって，そのセクションアンカーのURLと結び付いた数値を表示することが
-	できます。
+	sn_anchorid()を設定オプション内のセクション/ツッコミアンカー
+	として指定することによって，そのセクション/ツッコミアンカーの
+	URLと結び付いた数値を表示することができます。
 
 == 参考
 	anchor()はzoe氏作のnumber_anchor.rbを参考に作成しました。
@@ -32,8 +32,9 @@
 		every date.
 
 		The sn_anchorid() method displays a current number of the anchorid.
-		If you use sn_anchorid() as a section anchor in the setup option,
-		you can display the number relevant to URL of the section anchor.
+		If you use sn_anchorid() as a section/comment anchor in the setup
+		option, you can display the number relevant to URL of
+		the section/comment anchor.
 
 == reference
 	Original anchor() appeared in the number_anchor.rb by zoe-san.
@@ -44,6 +45,8 @@
 =end
 
 =begin Changelog
+2003-09-23 SAKAMOTO Hideki <hs@on-sky.net>
+	* document corrected
 2003-09-17 SAKAMOTO Hideki <hs@on-sky.net>
 	* add add_body_leave_proc
 2003-09-13 SAKAMOTO Hideki <hs@on-sky.net>

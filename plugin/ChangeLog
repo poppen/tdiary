@@ -1,3 +1,6 @@
+2003-09-23 SAKAMOTO Hideki <hs@on-sky.net>
+	* sn.rb: document corrected
+
 2003-09-19 zunda <zunda at freeshell.org>
 	* disp_referrer.rb (head): overwritten with disp_referrer2.rb,v 1.1.2.104
 
