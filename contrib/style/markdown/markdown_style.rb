@@ -1,5 +1,5 @@
 #
-# markdown_style.rb: Markdown style for tDiary 2.x format. $Revision: 1.2 $
+# markdown_style.rb: Markdown style for tDiary 2.x format. $Revision: 1.3 $
 #
 # if you want to use this style, add @style into tdiary.conf below:
 #
@@ -36,7 +36,7 @@ module TDiary
 
     def to_src
       r = ''
-      r << @subtitle if @subtitle
+      r << "#{@subtitle}\n" if @subtitle
       r << @body
     end
 
