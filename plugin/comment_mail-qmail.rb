@@ -1,4 +1,4 @@
-# comment_mail_qmail.rb $Revision: 1.4 $
+# comment_mail_qmail.rb $Revision: 1.5 $
 #
 # qmailを使ってツッコミをメールで知らせる
 #   入れるだけで動作する。
@@ -42,10 +42,8 @@ if @mode =~ /^(comment|trackbackreceive)$/ then
 	comment_mail_send
 end
 
-if @mode =~ /^(saveconf|conf)$/ then
-	add_conf_proc( 'comment_mail', 'ツッコミメール' ) do
-		comment_mail_basic_setting if @mode == 'saveconf'
-		comment_mail_basic_html
-	end
+add_conf_proc( 'comment_mail', comment_mail_conf_label ) do
+	comment_mail_basic_setting
+	comment_mail_basic_html
 end
 
