@@ -1,4 +1,4 @@
-# image.rb $Revision: 1.7 $
+# image.rb $Revision: 1.8 $
 # -pv-
 # 
 # Ì¾¾Î:
@@ -232,6 +232,7 @@ add_form_proc do |date|
 		r << %Q[<p class="message">#{@image_message}</p>]
 	end
    r << %Q[<form class="update" method="post" enctype="multipart/form-data" action="#{@conf.update}"><div>
+	#{@conf.secure ? 'JPEG¤Î¤ß' : ''}
    <input type="hidden" name="plugin_image_addimage" value="true">
    <input type="hidden" name="date" value="#{date.strftime( '%Y%m%d' )}">
    <input type="file"	name="plugin_image_file">

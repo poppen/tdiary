@@ -1,3 +1,33 @@
+2003-05-06 TADA Tadashi <sho@spc.gr.jp>
+	* image.rb: add notice 'JPEG only' when secure mode.
+	* trackback/tb-show.rb: fail safe for running on command line.
+
+2003-05-06 Junichiro Kita <kita@kitaj.no-ip.com>
+	* trackback/tb-show.rb: generate anchor for each TrackBack.
+	* recent_comment3.rb: use each_comment rather than count_comments to count comments. (for trackback)
+
+2003-05-05 TADA Tadashi <sho@spc.gr.jp>
+	* trackback/tb-send.rb: modify form layout.
+
+2003-05-04 Junichiro Kita <kita@kitaj.no-ip.com>
+	* trackback/tb-show.rb: antibot.
+	* trackback/tb-show.rb: displaying position changed.
+	* trackback/tb-show.rb: don't use ENV['SERVER_PORT']. (ENV['HTTP_HOST'] includes port number.)
+
+2003-05-03 Junichiro Kita <kita@kitaj.no-ip.com>
+	* trackback/tb-send.rb: Add methods for customizing messages.
+	* trackback/tb.rb: remove classes for TrackBack.
+
+2003-05-01 Junichiro Kita <kita@kitaj.no-ip.com>
+	* trackback/tb-send.rb: shorten excerpt to about 255bytes.
+
+2003-04-30 Junichiro Kita <kita@kitaj.no-ip.com>
+	* trackback/tb-show.rb: show TrackBacked time.
+
+2003-04-29 Junichiro Kita <kita@kitaj.no-ip.com>
+	* trackback/tb-show.rb: make anchor to TrackBack Ping URL.
+	* trackback/tb-send.rb: change separator of CGI parameters from ';' to '&'. now it works with b2.
+
 2003-04-28 TADA Tadashi <sho@spc.gr.jp>
 	* trackback/tb-show.rb, tb.rb: fix some security holes.
 	* trackback/tb-show.rb: show ping url under 'add TSUKKOMI'.
@@ -9,13 +39,13 @@
 	* image.rb: fix bug when comment status change.
 	* sqeeze.rb, output_rdf.rb, makelirs.rb: enable running on secure mode.
 
-2003.04.28 Junichiro Kita <kita@kitaj.no-ip.com>
+2003-04-28 Junichiro Kita <kita@kitaj.no-ip.com>
 	* trackback/tb.rb: GET request is redirected to TrackBacks(?date=yyyymmdd#t).
 
 2003-04-27 TADA Tadashi <sho@spc.gr.jp>
 	* trackback/tb-show.rb: support TrackBack hide and ruby 1.8.
 
-2003.04.27 Junichiro Kita <kita@kitaj.no-ip.com>
+2003-04-27 Junichiro Kita <kita@kitaj.no-ip.com>
 	* add trackback/*.
 
 2003-04-25 TADA Tadashi <sho@spc.gr.jp>
