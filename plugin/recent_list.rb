@@ -1,4 +1,4 @@
-# $Revision: 1.14 $
+# $Revision: 1.15 $
 # recent_list: 最近書いた日記のタイトル，サブタイトルを表示する
 #   パラメタ(カッコ内は未指定時の値):
 #     days:            何日分の日記を表示するか(20)
@@ -16,6 +16,9 @@
 # Distributed under the GPL
 #
 =begin ChengeLog
+2003-03-06 Junichiro Kita <kita@kitaj.no-ip.com>
+	* section.shorten -> section.body.shorten. thanks to mput <root@mput.dip.jp>.
+
 2003-02-11 Junichiro Kita <kita@kitaj.no-ip.com>
 	* support for category. thanks to garsl<garsl@imasy.org> and yoshimi.
 
@@ -30,14 +33,6 @@ eval( <<MODIFY_CLASS, TOPLEVEL_BINDING )
 module TDiary
 	class TDiaryMonth
 		attr_reader :diaries
-	end
-end
-
-class Paragraph
-	def shorten(len = 120)
-		lines = NKF::nkf("-e -m0 -f" + len.to_s, @body.gsub(/<.+?>/, '')).split("\n")
-		lines[0].concat('...') if lines[0] and lines[1]
-		lines[0]
 	end
 end
 MODIFY_CLASS
@@ -78,7 +73,7 @@ def recent_list(days = 30, date_format = nil, title_with_body = nil, show_size =
 						m.diaries[date].each_section do |section|
 							if section.stripped_subtitle
 								result << %Q| <a href="#{@index}#{anchor "%s#p%02d" % [date, i]}"|
-								result << %Q| title="#{CGI::escapeHTML(section.shorten)}"| \
+								result << %Q| title="#{CGI::escapeHTML(section.body.shorten)}"| \
 									if title_with_body == true
 								result << %Q|>#{i}</a>. | \
 										<< %Q|#{section.stripped_subtitle}<br>\n|
@@ -89,7 +84,7 @@ def recent_list(days = 30, date_format = nil, title_with_body = nil, show_size =
 						m.diaries[date].each_section do |section|
 							if section.subtitle
 								result << %Q| <a href="#{@index}#{anchor "%s#p%02d" % [date, i]}"|
-								result << %Q| title="#{CGI::escapeHTML(section.shorten)}"| \
+								result << %Q| title="#{CGI::escapeHTML(section.body.shorten)}"| \
 									if title_with_body == true
 								result << %Q|>#{i}</a>. | \
 										<< %Q|#{section.subtitle}<br>\n|
