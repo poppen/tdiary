@@ -1,4 +1,8 @@
-2003-03-04 TADA Tadashi
+2003-04-16 TADA Tadashi <sho@spc.gr.jp>
+	* dropdown_calendar: fix p.calendar -> div.calendar.
+	* dropdown_calendar: support @options['dropdown_calendar.label'].
+
+2003-03-04 TADA Tadashi <sho@spc.gr.jp>
 	* follow to changing book title style in Amazon's HTML.
 
 2003.03.28 TADA Tadashi <sho@spc.gr.jp>
