@@ -1,3 +1,7 @@
+2004-11-24 zunda <zunda at freeshell.org>
+	* makerss.rb: does not include TSUKKOMI when it is hidden,
+	thanks to Mr. Hiromitsu Takagi (http://takagi-hiromitsu.jp/diary/20041124.html#p02)
+
 2004-11-18 zunda <zunda at freeshell.org>
 	* {en,zh}/makerss.rb: fixed typo, thanks to vette <vette at mail.ne.jp>
 	* {ja,en,zh}/makerss.rb: reflects form values only when OK button has 

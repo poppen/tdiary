@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.19 $
+# makerss.rb: $Revision: 1.20 $
 #
 # generate RSS file when updating.
 #
@@ -86,7 +86,7 @@ def makerss_update
 						end
 					end
 				end
-			elsif /^comment$/ =~ @mode
+			elsif /^comment$/ =~ @mode and @conf.show_comment
 				id = "#{date}c%02d" % diary.count_comments( true )
 				cache[id] = RDFSection::new( id, @comment.date, @comment )
 			elsif /^showcomment$/ =~ @mode
@@ -94,9 +94,9 @@ def makerss_update
 				diary.each_comment( 100 ) do |comment|
 					index += 1
 					id = "#{date}c%02d" % index
-					if !cache[id] and (comment.visible? and /^(TrackBack|Pingback)$/i !~ comment.name) then
+					if !cache[id] and (@conf.show_comment and comment.visible? and /^(TrackBack|Pingback)$/i !~ comment.name) then
 						cache[id] = RDFSection::new( id, comment.date, comment )
-					elsif cache[id] and !(comment.visible? and /^(TrackBack|Pingback)$/i !~ comment.name)
+					elsif cache[id] and !(@conf.show_comment and comment.visible? and /^(TrackBack|Pingback)$/i !~ comment.name)
 						cache.delete( id )
 					end
 				end
