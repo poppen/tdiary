@@ -1,6 +1,7 @@
-# counter.rb $Revision: 1.6 $
+# counter.rb $Revision: 1.7 $
+# -pv-
 #
-# カウンタ表示プラグイン version 1.2.1
+# カウンタ表示プラグイン
 #
 # 訪問者数を「全て」「今日」「昨日」に分けて表示します。
 #
@@ -33,16 +34,19 @@
 # counter_yesterday
 #
 # オプションについて：
-# 訪問間隔の指定
-#   @options["counter.timer"] = 6
-# 初期値の指定
+# 初期値の指定　未指定時：0
 #   @options["counter.init_num"] = 5
-# ログの取得
+# ログの取得　未指定時：false
 #   @options["counter.log"] = true
-# カウントアップ制限
+# 訪問間隔の指定(単位：時間)　未指定時：12
+#   @options["counter.timer"] = 6
+# 同一クライアントからの連続アクセスの非カウントアップ間隔の指定(単位：時間) 
+# 未指定時：0.1(6分)
+#   @options["counter.deny_same_src_interval"] = 0.1
+# カウントアップ制限　未指定時：なし
 #   @options['counter.deny_user_agents'] = ["w3m", "Mozilla/4"]
 #   @options['counter.deny_remote_addrs'] = ["127.0", "10.0.?.1", "192.168.1.2"]
-# キリ番
+# キリ番　未指定時：なし
 #   @options["counter.kiriban"] = [1000, 3000, 5000, 10000, 15000, 20000]
 #   @options["counter.kiriban_today"] = [100, 200, 300, 400, 500, 600]
 #
@@ -64,8 +68,15 @@
 # You can redistribute it and/or modify it under GPL2.
 # 
 =begin ChangeLog
+2002-05-19 MUTOH Masao  <mutoh@highway.ne.jp>
+	* Cookieを使うことのできない同一クライアントからの連続アクセスを、
+     カウントアップしないようにした。
+	* @options["counter.deny_same_src_interval"]追加。連続GETの間隔を指定。
+	  デフォルトで0.1時間(6分)。
+	* version 1.4.0
+
 2002-05-11 MUTOH Masao  <mutoh@highway.ne.jp>
-	* 初期値を与えない場合は5桁としていたが、「前0をなくす」を初期値に変更した。
+	* 初期値を与えない場合は5桁としていたが、「前0をなくす」に変更した。
 	  また、前0を無くす場合は0を指定しても良い。
 	* version 1.3.0
 
@@ -127,7 +138,7 @@ require 'date'
 
 eval(<<TOPLEVEL_CLASS, TOPLEVEL_BINDING)
 class TDiaryCountData
-	attr_reader :today, :yesterday, :all, :newestday, :timer, :ignore_cookie
+	attr_reader :today, :yesterday, :all, :newestday, :ignore_cookie
 	attr_writer :ignore_cookie #means ALWAYS ignore a cookie.
 
 	def initialize
@@ -136,7 +147,7 @@ class TDiaryCountData
 		@ignore_cookie = false
 	end
 
-	def up(now, cache_path, log)
+	def up(now, cache_path, cgi, log)
 		if now == @newestday
 			@today += 1
 		else
@@ -146,6 +157,13 @@ class TDiaryCountData
 			@newestday = now
 		end
 		@all += 1
+	end
+
+	def previous_access_time(remote_addr, user_agent)
+		@users = Hash.new unless @users
+		ret = @users[[remote_addr, user_agent]]
+		@users[[remote_addr, user_agent]] = Time.now
+		ret
 	end
 
 	def log(day, value, path)
@@ -158,7 +176,7 @@ end
 TOPLEVEL_CLASS
 
 module TDiaryCounter
-	@version = "1.3.0"
+	@version = "1.4.0"
 
 	def run(cache_path, cgi, options)
 		timer = options["counter.timer"] if options
@@ -183,12 +201,11 @@ module TDiaryCounter
 			allow = (cgi.user_agent !~ /tlink/ and
 						allow?(cgi.user_agent, options, "user_agents") and
 						allow?(cgi.remote_addr, options, "remote_addrs"))
-			no_cookie = (! cgi.cookies or ! cgi.cookies.keys.include?("tdiary_counter"))
 
 			if allow 
 				changed = false
-				if no_cookie || @cnt.ignore_cookie
-					@cnt.up(Date.today, dir, (options and options["counter.log"]))
+				if new_user?(cgi, options)
+					@cnt.up(Date.today, dir, cgi, (options and options["counter.log"]))
 					cookie = CGI::Cookie.new({"name" => "tdiary_counter", 
 														"value" => @version, 
 														 "expires" => Time.now + timer * 3600})
@@ -231,6 +248,22 @@ module TDiaryCounter
 		allow 
 	end
 
+	def new_user?(cgi, options)
+		if ! cgi.cookies or ! cgi.cookies.keys.include?("tdiary_counter")
+			interval = options["counter.deny_same_src_interval"] if options
+			interval = 0.1 unless interval	# 6 min.
+			previous_access_time = @cnt.previous_access_time(cgi.remote_addr, cgi.user_agent)
+			if previous_access_time
+				ret = Time.now - previous_access_time > interval * 3600
+			else
+				ret = true
+			end
+		else
+			ret = @cnt.ignore_cookie
+		end
+		ret
+	end
+
 	def format(classtype, theme_url, cnt, figure = 0, filetype = "", init_num = 0, &proc)
 		str = "%0#{figure}d" % (cnt + init_num)
 		result = %Q[<span class="counter#{classtype}">]
@@ -256,7 +289,7 @@ module TDiaryCounter
 	def kiriban?; @kiriban; end
 	def kiriban_today?; @kiriban_today; end
 
-	module_function :allow?, :all, :today, :yesterday, :format, :run, :kiriban?, :kiriban_today?
+	module_function :allow?, :new_user?, :all, :today, :yesterday, :format, :run, :kiriban?, :kiriban_today?
 end
 
 #init_num is deprecated.
