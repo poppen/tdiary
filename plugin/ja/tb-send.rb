@@ -1,6 +1,12 @@
 # Japanese resource of tb-send.rb
 
-def trackback_ping_send; "TrackBack送信先URL:"; end
-def trackback_ping_excerpt; "概略(記入しなければ本文の冒頭が使われます):"; end
-def trackback_ping_charset; @conf.encoding; end
-
+@tb_send_ping_charset = @conf.encoding
+@tb_send_label_url = 'TrackBack送信先URL'
+@tb_send_label_section = 'TrackBackするセクション'
+@tb_send_label_no_section = '(セクションを指定しない)'
+@tb_send_label_current_section = '(いま追記したセクション)'
+if @conf['tb.no_section'] then
+	@tb_send_label_excerpt = '概略(記入しなければ本文の冒頭が使われます)'
+else
+	@tb_send_label_excerpt = '概略(記入しなければ選択したセクションの冒頭が使われます)'
+end

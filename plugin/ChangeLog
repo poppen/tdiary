@@ -1,3 +1,7 @@
+2004-03-20 TADA Tadashi <sho@spc.gr.jp>
+	* tb-send.rb: specify section of TrackBack source. thanks yowa <yowaken@cool.ne.jp>.
+	* {ja,en}/tb-send.rb, tb-show.rb: a little modified some labels.
+
 2004-03-16 TADA Tadashi <sho@spc.gr.jp>
 	* referer_scheme.rb: support WiLiKi style.
 

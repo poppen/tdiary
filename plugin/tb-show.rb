@@ -1,4 +1,4 @@
-# tb-show.rb $Revision: 1.12 $
+# tb-show.rb $Revision: 1.13 $
 #
 # functions:
 #   * show TrackBack ping URL in right of TSUKKOMI label.
@@ -181,7 +181,7 @@ end
 
 def trackback_ping_url(add_name = false)
 	if @tb_url and not bot?
-		%Q|Ping URL: <a href="#{@tb_url}"#{add_name ? ' name="t"': ''}>#{@tb_url}</a>|
+		%Q|TrackBack URL: <a href="#{@tb_url}"#{add_name ? ' name="t"': ''}>#{@tb_url}</a>|
 	else
 		''
 	end
