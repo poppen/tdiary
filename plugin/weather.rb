@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 =begin
-= その日の天気プラグイン((-$Id: weather.rb,v 1.2 2003-05-26 11:08:54 zunda Exp $-))
+= その日の天気プラグイン((-$Id: weather.rb,v 1.3 2003-06-03 16:58:23 zunda Exp $-))
 その日の天気を、その日の日記を最初に更新する時に取得して保存し、それぞれ
 の日の日記の上部に表示します。
 
@@ -222,6 +222,9 @@ of GPL version 2 or later.
 =end
 
 =begin ChangeLog
+* Tue Jun  3, 2003 zunda <zunda at freeshell.org>
+- ignores `... in the vicinity', thank you kosaka-san.
+- now tests translations if executed as a stand alone script.
 * Mon May 26, 2003 zunda <zunda at freeshell.org>
 - fix typo on weaHTer.show_mobile and weHTer.show_error, thank you halchan.
 * Thu May  8, 2003 zunda <zunda at freeshell.org>
@@ -275,6 +278,10 @@ class Weather
 		[%r|\s*\b(greater\|more) than (-?[\d.]+\s*\S*)\s*|i, '"#{S.new( $2 ).translate( table )}以上"'],
 		[%r|^(.*?) with (.*)$|i, '"#{S.new( $2 ).translate( table )}ありの#{S.new( $1 ).translate( table )}"'],
 		[%r|^(.*?) during the past hours?$|i, '"直前まで#{S.new( $1 ).translate( table )}"'],
+		#[%r|\s*\b([\w\s]+?) in the vicinity|i, '"近辺で#{S.new( $1).translate( table )}"'],
+		[%r|\s*\bin the vicinity\b\s*|i, '""'],
+		# ... in the vicinityは無視されるようになっています。訳語が欲しい方は、
+		# 上のコメントアウトされている行のコメントを外してください。
 		[%r|\s*\bdirection variable\b\s*|i, '"不定"'],
 		[%r|\s*(-?[\d.]+)\s*\(?F\)?|, '"華氏#{$1}度"'],
 		[%r|\s*\bmile(\(?s\)?)?\s*|i, '"マイル"'],
@@ -714,6 +721,16 @@ def get_weather
 	end
 end
 
-# register to tDiary
-add_body_enter_proc do |date| weather( date ) end
-add_update_proc do get_weather end
+unless __FILE__ == $0 then
+# register to tDiary if executed as a plugin
+	add_body_enter_proc do |date| weather( date ) end
+	add_update_proc do get_weather end
+else
+# translation test cases
+	[
+		'Thunder, Showers in the vicinity',
+		'Thunder and Showers in the vicinity',
+	].each do |orig|
+		puts "#{orig} -> #{WeatherTranslator::S.new( orig ).translate( Weather::Words_ja )}"
+	end
+end

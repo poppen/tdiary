@@ -1,3 +1,6 @@
+2003-06-03 zunda <zunda at freeshell.org>
+	* weather.rb: ignores `... in the vicinity' Thank you kosaka-san.
+
 2003-05-26 zunda <zunda at freeshell.org>
 	* weather.rb: fix typo on option names (thank you haluchan).
 
