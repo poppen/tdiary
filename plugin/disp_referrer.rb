@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.40 2004-11-10 05:38:13 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.41 2004-11-10 19:42:44 zunda Exp $-))
 
 == 概要
 アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
@@ -388,7 +388,7 @@ class DispRef2Setup < Hash
 		'short.only_normal' => true,
 			# trueの場合、最新の表示で、通常のリンク元以外を隠します。
 			# falseの場合は、プラグインの無い場合と全くおなじ表示になります。
-		'antenna.url' => '(\/a\/|(?!.*\/diary\/)antenna[\/\.]|\/tama\/|http:\/\/www\.tdiary\.net\/?(i\/)?(\?|$)|links?|http:\/\/kitaj\.no-ip\.com\/iraira\/|http:\/\/i-know\.jp\/|http:\/\/bloglines\.com\/myblogs_display)',
+		'antenna.url' => '(\/a\/|(?!.*\/diary\/)antenna[\/\.]|\/tama\/|http:\/\/www\.tdiary\.net\/?(i\/)?(\?|$)|links?|http:\/\/kitaj\.no-ip\.com\/iraira\/|http:\/\/i-know\.jp\/|http:\/\/(www\.)?bloglines\.com\/(myblogs|public)_display)',
 			# アンテナのURLに一致する正規表現の文字列です。
 		'antenna.title' => '(アンテナ|links?|あんてな)',
 			# アンテナの置換後の文字列に一致する正規表現の文字列です。

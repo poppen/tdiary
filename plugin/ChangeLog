@@ -1,3 +1,6 @@
+2004-11-10 zunda <zunda at freeshell.org>
+	* disp_referrer.rb: better handles links from bloglines.com as an antenna
+
 2004-11-09 zunda <zunda at freeshell.org>
 	* disp_referrer.rb: shows unknown referrers when the diary is edited
 	Thanks to akira yamada (http://arika.org/diary/20041011#p01)
