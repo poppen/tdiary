@@ -1,4 +1,4 @@
-# calendar2.rb $Revision: 1.8 $
+# calendar2.rb $Revision: 1.9 $
 #
 # calendar2: どこかで見たようなカレンダーを日記に追加する
 #   パラメタ:
@@ -15,6 +15,11 @@
 # Copyright (c) 2001,2002 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
 #
+=begin ChangeLog
+2002-12-06 TADA Tadashi <sho@spc.gr.jp>
+	* without escapeHTML for title attribules.
+=end
+
 def calendar2_make_cal(year, month)
 	result = []
 	t = Time.local(year, month, 1)
@@ -107,7 +112,7 @@ CALENDAR_HEAD
 								end
 							end
 							if todos.size != 0
-								%Q|<a title="#{CGI::escapeHTML(todos.join "\n")}"><span class="calendar-todo">#{day}</span></a>|
+								%Q|<a title="#{todos.join( "\n" ).gsub( /"/, '&quot;' )}"><span class="calendar-todo">#{day}</span></a>|
 							else
 								day.to_s
 							end
@@ -119,7 +124,7 @@ CALENDAR_HEAD
 						idx = "01"
 						@diaries[date].each_section do |section|
 							if section.subtitle
-								subtitles << %Q|#{idx}. #{CGI::escapeHTML(section.subtitle.gsub(/<.+?>/, ''))}|
+								subtitles << %Q|#{idx}. #{section.subtitle.gsub(/<.+?>/, '').gsub( /"/, '&quot;' )}|
 							end
 							idx.succ!
 						end
