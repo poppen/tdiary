@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.12 2004-10-13 05:41:35 kazuhiko Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.13 2004-11-09 10:13:11 zunda Exp $-))
 日本語リソース
 
 == 概要
@@ -482,8 +482,8 @@ DispReferrer2_Engines = {
 	'lycos' => [[%r{\Ahttp://.*?\.lycos\.([^/]+)}i, '".#{$1}のLycos"', ['query', 'q', 'qt'], nil ]],
 	'fresheye' => [[%r{\Ahttp://.*?\.fresheye}i, '"フレッシュアイ"', ['kw'], nil ]],
 	'goo' => [
-		[%r{\Ahttp://.*?\.goo\.ne\.jp}i, '"goo"', ['MT'], nil ],
-		[%r{\Ahttp://.*?\.goo\.ne\.jp}i, '"goo"', [], nil ],
+		[%r{\Ahttp://((www|dictionary|kids|eco|oshiete|search|community|machi|bb|bsearch|dir|channel)\.)?\.goo\.ne\.jp}i, '"goo"', ['MT'], nil ],
+		[%r{\Ahttp://((www|dictionary|kids|eco|oshiete|search|community|machi|bb|bsearch|dir|channel)\.)?\.goo\.ne\.jp}i, '"goo"', [], nil ],
 	],
 	'nifty' => [
 		[%r{\Ahttp://search\.nifty\.com}i, '"@nifty/@search"', ['q', 'Text'], DispReferrer2_Google_cache],
@@ -500,7 +500,7 @@ DispReferrer2_Engines = {
 	'webcrawler' => [[%r{\Ahttp://.*?\.webcrawler\.com}i, '"WebCrawler"', ['qkw'], nil ]],
 	'euroseek' => [[%r{\Ahttp://.*?\.euroseek\.com}i, '"Euroseek.com"', ['string'], nil ]],
 	'aol' => [
-		[%r{\Ahttp://.*?\.aol\.}i, '"AOLサーチ"', ['query'], nil ],
+		[%r{\Ahttp://.*?\.aol\.}i, '"AOLサーチ"', ['query', 'query_contain'], nil ],
 		[%r{\Ahttp://aolsearch\..+\.aol\.com/redir_convert.adp}i, '"AOLサーチ"', ['query_contain'], nil]
 	],
 	'alltheweb' => [
@@ -560,6 +560,9 @@ DispReferrer2_Engines = {
 	'comcast' => [[%r{\Ahttp://www\.comcast\.net/qry/websearch}i, '"COMCAST"', ['query'], nil]],
 	'mywebsearch' => [[%r{\Ahttp://www\.mywebsearch\.com/jsp/GGmain.jsp}i, '"My Web Search"', ['seachfor'], nil]],
 	'wisenut' => [[%r{\Ahttp://www\.wisenut\.com/search/query.dll}, '"WiseNut"', ['q'], nil]],
+	'livedoor' => [[%r{\Ahttp://.*?\.livedoor\.}i, '"Livedoor"', ['q'], nil ]],
+	'tkensaku' => [[%r{\Ahttp://www\.tkensaku\.com/sclient\.cgi}i, '"TKENSAKU"', ['value'], nil]],
+	'yahoofs' => [[%r{\Ahttp://cache\.yahoofs\.jp/(?:search/)?cache}i, '"Yahoo! cache"', ['p', 'w'], nil]],
 	'googlie' => [[%r{\Ahttp://www\.googlie\.com/search}i, '"Google検索(へのリダイレクタ)"', ['as_q', 'q'], DispReferrer2_Google_cache]],
 	'toppg' => [[%r{\Ahttp://g\.toppg\.to/search}i, '"Google検索(へのリダイレクタ)"', ['as_q', 'q'], DispReferrer2_Google_cache]],
 	'210' => [[%r{\Ahttp://210\.174\.160\.70/se_root.phtml}i, '"JWord（日本語キーワード）"', ['name'], nil]],

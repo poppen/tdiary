@@ -1,3 +1,8 @@
+2004-11-09 zunda <zunda at freeshell.org>
+	* disp_referrer.rb: delete cache when it is broken
+	* disp_referrer.rb: i-know.jp and bloglines.com added as antenna
+	* ja/disp_referrer.rb: added and modified DispReferrer2_Engines
+
 2004-11-04 MoonWolf <moonwolf@moonwolf.com>
 	* category.rb: remove TDiaryMonth::attr_reader
 	* xmlrpc/xmlrpc.rb remove eval's
