@@ -8,7 +8,7 @@
 # You can distribute/modify this program under the terms of
 # the GNU GPL, General Public License version 2.
 #
-# $originalId: search.rb,v 1.10 2004/05/22 12:17:21 aamine Exp $
+# $originalId: search.rb,v 1.11 2004/05/22 12:31:52 aamine Exp $
 #
 # Project home page: http://i.loveruby.net/w/tdiarysearch.html
 #
@@ -301,7 +301,10 @@ def new_diary(header, body)
       raise "unexpected tdiary format: Date=nil:\n#{header.strip}"
   format = header.slice(/^Format:\s*(\S+)/, 1) or
       raise "unexpected tdiary format: Format=nil:\n#{header.strip}"
-  diary_class(format.untaint).new(ymd, '', body)
+  visible = (header.slice(/^Visible: (\w+)/, 1) == 'true' ? true : false)
+  diary = diary_class(format.untaint).new(ymd, '', body)
+  diary.show visible
+  diary
 end
 
 DIARY_CLASS_CACHE = {}
