@@ -1,3 +1,6 @@
+2003-11-05 zunda <zunda at freesehll.org>
+	* ja/weather.rb: added `(partial )?(freezing )?' to `fog', ignore `patches of'
+
 2003-10-30 TADA Tadashi <sho@spc.gr.jp>
 	* tb-show.rb: fix bug in mod_ruby environment.
 

@@ -1,5 +1,5 @@
 =begin
-= その日の天気プラグイン((-$Id: weather.rb,v 1.1 2003-09-30 08:09:25 zunda Exp $-))
+= その日の天気プラグイン((-$Id: weather.rb,v 1.2 2003-11-05 08:52:03 zunda Exp $-))
 その日の天気を、その日の日記を最初に更新する時に取得して保存し、それぞれ
 の日の日記の上部に表示します。
 
@@ -235,6 +235,7 @@ class Weather
 		[%r[\s*\bin the vicinity\b\s*]i, '""'],
 		# ... in the vicinityは無視されるようになっています。訳語が欲しい方は、
 		# 上のコメントアウトされている行のコメントを外してください。
+		[%r[\s*\bpatches of\b\s*]i, '""'],
 		[%r[\s*\bdirection variable\b\s*]i, '"不定"'],
 		[%r[\s*(-?[\d.]+)\s*\(?F\)?], '"華氏#{$1}度"'],
 		[%r[\s*\bmile(\(?s\)?)?\s*]i, '"マイル"'],
@@ -253,7 +254,7 @@ class Weather
 		[%r[\s*\brain\b\s*]i, '"雨"'],
 		[%r[\s*\bmist\b\s*]i, '"靄"'],
 		[%r[\s*\bhaze\b\s*]i, '"霞"'],
-		[%r[\s*\bfog\b\s*]i, '"霧"'],
+		[%r[\s*\b(partial )?(freezing )?fog\b\s*]i, '"霧"'],
 		[%r[\s*\bsnow\b\s*]i, '"雪"'],
 		[%r[\s*\bthunder( storm)?\b\s*]i, '"雷"'],
 		[%r[\s*\blightning\b\s*]i, '"稲光"'],
