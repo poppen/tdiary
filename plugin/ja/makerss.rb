@@ -34,8 +34,8 @@ add_conf_proc('makerss', 'RSSの作成') do
 	<ul>
 	<li>RSSに<select name="makerss.hidecomment">
 		<option value="f"#{@conf['makerss.hidecomment'] ? '' : ' selected'}>ツッコミの全体を含める</option>
-		<option value="text"#{@conf['makerss.hidecomment'] == 'text' ? ' selected' : ''}>ツッコミの文章を含めない</option>
-		<option value="any"#{@conf['makerss.hidecomment'] == 'any' ? ' selected' : ''}>ツッコミがあったことを含めない</option></select>
+		<option value="text"#{@conf['makerss.hidecomment'] == 'text' ? ' selected' : ''}>ツッコミの日付と投稿者だけを含める</option>
+		<option value="any"#{@conf['makerss.hidecomment'] == 'any' ? ' selected' : ''}>ツッコミを含めない</option></select>
 	<li>RSSに本文全体を<select name="makerss.hidecontent">
 		<option value="f"#{@conf['makerss.hidecontent'] ? '' : ' selected'}>含める</option>
 		<option value="t"#{@conf['makerss.hidecontent'] ? ' selected' : ''}>含めない</option></select>
