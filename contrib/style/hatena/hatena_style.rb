@@ -18,7 +18,7 @@
 # OUT OF  OR IN CONNECTION WITH  THE CODE OR THE  USE OR OTHER  DEALINGS IN THE
 # CODE.
 
-# $Id: hatena_style.rb,v 1.4 2004-03-12 13:37:25 mput Exp $
+# $Id: hatena_style.rb,v 1.5 2004-03-17 05:01:11 mput Exp $
 # Hatena::Diary compatible style
 # Works only under ruby 1.8.1 or later
 
@@ -586,7 +586,7 @@ class Hatena::Verbatim
     else
       template = "<pre>%s</pre>"
     end
-    sprintf(template,@str)
+    sprintf(template,CGI.escapeHTML(@str))
   end
 end
 
