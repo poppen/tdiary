@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.10 $
+# amazon.rb $Revision: 1.11 $
 #
 # isbn_image_left: 指定したISBNの書影をclass="left"で表示
 #   パラメタ:
@@ -46,6 +46,9 @@
 #              dai<dai@kato-agri.com>
 #
 =begin ChangeLog
+2003-03-04 TADA Tadashi
+	* follow to changing book title style in Amazon's HTML.
+
 2003-02-09 Junichiro Kita <kita@kitaj.no-ip.com>
 	* merge from amazon2.rb. see http://kuwa.s26.xrea.com/b/20030211.html
 
@@ -105,7 +108,7 @@ def getAmazon( asin )
 				response , = http.get(path)
 				response.body.each do |line|
 					line = NKF::nkf("-e",line)
-					if line =~ /^Amazon.co.jp： (.*)$/
+					if line =~ /^Amazon.co.jp： (.*)<.*$/
 						item_name = CGI::escapeHTML(CGI::unescapeHTML($1))
 					end
 					if line =~ /(<img src="(http\:\/\/images-jp\.amazon\.com\/images\/P\/(.*MZZZZZZZ.jpg))".*?>)/i
