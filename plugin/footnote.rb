@@ -1,4 +1,4 @@
-# footnote.rb $Revision: 1.6 $
+# footnote.rb $Revision: 1.7 $
 #
 # fn: 脚注plugin
 #   パラメタ:
@@ -34,7 +34,9 @@ def fn(text, mark = '*')
 	if @footnote_name
 		@footnote_index[0] += 1
 		@footnotes << [@footnote_index[0], text, mark]
-		%Q|<span class="footnote"><a name="#{@footnote_mark_name % @footnote_index[0]}" href="#{@footnote_url % @footnote_index[0]}" title="#{CGI::escapeHTML text}">#{mark}#{@footnote_index[0]}</a></span>|
+		r = %Q|<span class="footnote"><a |
+		r << %Q|name="#{@footnote_mark_name % @footnote_index[0]}" | if @mode == 'day'
+		r << %Q|href="#{@footnote_url % @footnote_index[0]}" title="#{CGI::escapeHTML text}">#{mark}#{@footnote_index[0]}</a></span>|
 	else
  		""
 	end
@@ -55,10 +57,13 @@ add_body_leave_proc(Proc.new do |date|
 	if @footnote_name and @footnotes.size > 0
 		%Q|<div class="footnote">\n| +
 		@footnotes.collect do |fn|
-			%Q|  <p class="footnote"><a name="#{@footnote_name % fn[0]}" href="#{@footnote_mark_url % fn[0]}">#{fn[2]}#{fn[0]}</a>&nbsp;#{fn[1]}</p>|
+			r = %Q|  <p class="footnote"><a |
+			r << %Q|name="#{@footnote_name % fn[0]}" | if @mode == 'day'
+			r << %Q|href="#{@footnote_mark_url % fn[0]}">#{fn[2]}#{fn[0]}</a>&nbsp;#{fn[1]}</p>|
 		end.join("\n") +
 		%Q|\n</div>\n|
 	else
 		""
 	end
 end)
+# vim: ts=3
