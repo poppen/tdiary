@@ -1,4 +1,4 @@
-# todo.rb $Revision: 1.3 $
+# todo.rb $Revision: 1.4 $
 #
 # todo: show ToDo lists.
 #
@@ -60,8 +60,8 @@ end
 def todo_parse(src)
 	todos = []
 	src.each do |l|
-		deleted, prio, limit, todo = l.scan(/^(#?)(\d{1,2})(?:\[(.*)\])? +(.+)$/)[0]
-		if /^\d+$/ === prio and (1..99).include? prio.to_i and todo
+		deleted, prio, limit, todo = l.scan(/^(#?)(\d{0,2})(?:\[(.*)\])? +(.+)$/)[0]
+		if (0..99).include? prio.to_i and todo
 			todos.push ToDo.new(prio, todo, limit, deleted)
 		end
 	end
@@ -80,7 +80,7 @@ def todo_pretty_print(todos)
 		break if idx >= @conf['todo.n']
 		s << "<li>"
 		s << %Q|<del>| if x.deleted?
-		s << %Q|<span class="todo-priority">#{'%02d' % x.prio}</span> #{apply_plugin x.todo}|
+		s << %Q|<span class="todo-priority">#{if x.prio != '' then '%02d' % x.prio else '' end}</span> #{apply_plugin x.todo}|
 		if x.limit
 			s << "(¡Á#{x.limit}"
 			y, m, d = ParseDate.parsedate(x.limit)

@@ -1,3 +1,7 @@
+2003-10-16  Kazuhiko  <kazuhiko@fdiary.net>
+
+	* plugin.rb: 'priority' is also optional.
+
 2003.10.14 zunda <zunda at freeshell.org>
 	* disp_referrer.rb: search engine list in lang. resources (still more to do)
 

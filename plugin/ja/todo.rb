@@ -1,4 +1,4 @@
-# ja/todo.rb $Revision: 1.1 $
+# ja/todo.rb $Revision: 1.2 $
 #
 # Japanese resources for todo.rb
 #
@@ -22,7 +22,7 @@ add_conf_proc('ToDo', 'ToDoプラグイン') do
 	<p>一行に一つずつToDoを記述します．ToDoの形式は</p>
 	<pre>優先度[期限] すること</pre>
 	<p>です．「優先度」と「すること」の間は1つ以上のスペースで区切ります．</p>
-	<p>優先度は1〜99の整数を指定します．それ以外の優先度を指定した場合，そのToDoは無視されます．</p>
+	<p>優先度は省略可能です。優先度を指定する場合は1〜99の整数を指定します．それ以外の優先度を指定した場合，そのToDoは無視されます．</p>
 	<p>期限は省略可能です．期限を指定する場合は'['と']'で囲むようにしてください．期限で指定した文字列をrubyの<a href="http://www.ruby-lang.org/ja/man-1.6/?cmd=view;name=ParseDate">ParseDateモジュール</a>で解析できれば，期限までの日数もあわせて表示します．</p>
 	<p><textarea name="todo.todos" cols="70" rows="15">#{@todos.join("\n")}</textarea></p>
 
