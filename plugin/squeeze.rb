@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# squeeze.rb $Revision: 1.7 $
+# squeeze.rb $Revision: 1.8 $
 # -pv-
 #
 # 名称：
@@ -26,9 +26,15 @@
 #	@options['squeeze.all_data'] = false
 #
 #	#tDiary Text出力互換モード
-#	#squeeze.rb、tDiary標準と同じ出力先のディレクトリ構成にする場合はtrue
+#	#tDiary 1.4までのsqueeze.rb、tDiary標準と同じ出力先のディレクトリ構成に
+#  #する場合はtrue
 #  #(省略時： false)
 #	@options['squeeze.compat_path'] = false
+#
+#  #サフィックス(拡張子)指定
+#  #出力するファイルに指定したサフィックスをつけます。
+#  #無指定時には何も付きません。
+#  @options['squeeze.suffix'] = '.html'  # 「.html」を付加します
 #	----- (ここまで) -----
 #
 # その他：
@@ -45,6 +51,9 @@
 # version 1.0.4 by TADA Tadashi <sho@spc.gr.jp> with GPL2.
 #
 =begin ChangeLog
+2003-02-17 TADA Tadashi <sho@spc.gr.jp>
+	* add suffix option.
+
 2002-11-20 TADA Tadashi <sho@spc.gr.jp>
 	* make CGI object in YATDiarySqueeze and YATDiarySqueezeMain.
 
@@ -128,15 +137,16 @@ if mode == "CMD" || mode == "CGI"
 	output_path = "./html/"
 	tdiary_path = "."
 	tdiary_conf = "."
+	suffix = ''
 	all_data = false
 	compat = false
 	$stdout.sync = true
 
 	if mode == "CMD"
 		def usage
-			puts "squeeze $Revision: 1.7 $"
+			puts "squeeze $Revision: 1.8 $"
 			puts " making html files from tDiary's database."
-			puts " usage: ruby squeeze.rb [-p <tDiary path>] [-c <tdiary.conf path>] [-a] [-s] <dest path>"
+			puts " usage: ruby squeeze.rb [-p <tDiary path>] [-c <tdiary.conf path>] [-a] [-s] [-x suffix] <dest path>"
 			exit
 		end
 
@@ -144,6 +154,7 @@ if mode == "CMD" || mode == "CGI"
 		parser = GetoptLong::new
 		parser.set_options(['--path', '-p', GetoptLong::REQUIRED_ARGUMENT],
 											 ['--conf', '-c', GetoptLong::REQUIRED_ARGUMENT],
+											 ['--suffix', '-x', GetoptLong::REQUIRED_ARGUMENT],
 											 ['--all', '-a', GetoptLong::NO_ARGUMENT],
 											 ['--squeeze', '-s', GetoptLong::NO_ARGUMENT])
 		begin
@@ -153,6 +164,8 @@ if mode == "CMD" || mode == "CGI"
 					tdiary_path = arg
 				when '--conf'
 					tdiary_conf = arg
+				when '--suffix'
+					suffix = arg
 				when '--all'
 					all_data = true
 				when '--squeeze'
@@ -174,6 +187,7 @@ if mode == "CMD" || mode == "CGI"
 			end
 		}
 		output_path = @options['squeeze.output_path'] || @options['yasqueeze.output_path']
+		suffix = @options['squeeze.suffix'] || ''
 		all_data = @options['squeeze.all_data'] || @options['yasqueeze.all_data']
 		compat = @options['squeeze.compat_path'] || @options['yasqueeze.compat_path']
 	end
@@ -196,7 +210,7 @@ end
 #
 module TDiary
 	class YATDiarySqueeze < TDiaryBase
-		def initialize(diary, dest, all_data, compat, conf)
+		def initialize(diary, dest, all_data, compat, conf, suffix)
 			@ignore_parser_cache = true
 	
 			super(CGI::new, 'day.rhtml', conf)
@@ -206,6 +220,7 @@ module TDiary
 			@dest = dest
 			@all_data = all_data
 			@compat = compat
+			@suffix = suffix
 		end
 	
 		def execute
@@ -217,7 +232,7 @@ module TDiary
 				name = @diary.date.strftime('%m%d')
 				Dir.mkdir(dir, 0755) unless File.directory?(dir)
 			end
-			filename = dir + "/" + name
+			filename = dir + "/" + name + @suffix
 			if @diary.visible? or @all_data
 				if not FileTest::exist?(filename) or 
 						File::mtime(filename) < @diary.last_modified
@@ -249,7 +264,7 @@ end
 #
 module TDiary
 	class YATDiarySqueezeMain < TDiaryBase
-		def initialize(dest, all_data, compat, conf)
+		def initialize(dest, all_data, compat, conf, suffix)
 			@ignore_parser_cache = true
 	
 			super(CGI::new, 'day.rhtml', conf)
@@ -258,7 +273,7 @@ module TDiary
 				@years[year.to_s].sort.each do |month|
 					@io.transaction(Time::local(year.to_i, month.to_i)) do |diaries|
 						diaries.sort.each do |day, diary|
-							print YATDiarySqueeze.new(diary, dest, all_data, compat, conf).execute + " "
+							print YATDiarySqueeze.new(diary, dest, all_data, compat, conf, suffix).execute + " "
 						end
 						false
 					end
@@ -278,7 +293,7 @@ if mode == "CGI" || mode == "CMD"
 			</head>
 			<body><div style="text-align:center">
 			<h1>Squeeze for tDiary</h1>
-			<p>$Revision: 1.7 $</p>
+			<p>$Revision: 1.8 $</p>
 			<p>Copyright (C) 2002 MUTOH Masao&lt;mutoh@highway.ne.jp&gt;</p></div>
 			<br><br>Start!</p><hr>
 		]
@@ -291,7 +306,7 @@ if mode == "CGI" || mode == "CMD"
 		conf.show_comment = true
 		conf.show_referer = false
 		conf.hide_comment_form = true
-		TDiary::YATDiarySqueezeMain.new(output_path, all_data, compat, conf)
+		TDiary::YATDiarySqueezeMain.new(output_path, all_data, compat, conf, suffix)
 	rescue
 		print $!, "\n"
 		$@.each do |v|
@@ -320,6 +335,8 @@ else
 		TDiary::YATDiarySqueeze.new(diary, dir,
 				@options['squeeze.all_data'] || @options['yasqueeze.all_data'],
 				@options['squeeze.compat_path'] || @options['yasqueeze.compat_path'],
-				conf).execute
+				conf,
+				@options['squeeze.suffix'] || ''
+		).execute
 	end
 end
