@@ -1,4 +1,4 @@
-# kw.rb $Revision: 1.3 $
+# kw.rb $Revision: 1.4 $
 #
 # kw: keyword link generator
 #   Parameters:
@@ -62,5 +62,56 @@ def kw( keyword )
 		retry
 	end
 	%Q[<a href="#{@kw_dic[inter][0].sub( /\$1/, key )}">#{keyword}</a>]
+end
+
+#
+# config
+#
+def kw_label
+	if @lang == 'en' then
+		"Keyword plugin"
+	else
+		"キーワードプラグイン"
+	end
+end
+def kw_desc
+	if @lang == 'en' then
+		<<-HTML
+		<p>kw(KeyWord) plugin generate a Link by simple words. You can specify keywords		
+		as space sepalated value: "keyword URL". For example,</p>
+		<pre>google http://www.google.com/search?q=$1</pre>
+		<p>then you specify in your diary as:</p>
+		<pre>&gt;%=kw 'google:tdiary' %&lt;</pre>
+		<p>so it will be translated to link of seraching 'tdiary' at Google.</p>
+		HTML
+	else
+		<<-HTML
+		<h3>リンクリストの指定</h3>
+		<p>特定のサイトへのリンクを、簡単な記述で生成するためのプラグイン(kw)です。
+		「キー URL エンコードスタイル」と空白で区切って指定します。例えば、</p>
+		<pre>google http://www.google.com/search?ie=euc-jp&amp;q=$1 euc-jp</pre>
+		<p>と指定すると、</p>
+		<pre>&lt;%=kw('google:tdiary')%&gt;</pre>
+		<p>と日記に書けばgoogleでtdiaryを検索するリンクになります
+		(記述方法はスタイルによって変わります)。</p>
+		HTML
+	end
+end
+add_conf_proc( 'kw', kw_label ) do
+	if @mode == 'saveconf' then
+		kw_dic = []
+		@cgi.params['kw.dic'][0].to_euc.each do |pair|
+			k, u, s = pair.sub( /[\r\n]+/, '' ).split( /[ \t]+/, 3 )
+			k = nil if k == ''
+			s = nil if s != 'euc-jp' && s != 'sjis' && s != 'jis'
+			kw_dic << [k, u, s] if u
+		end
+		@conf['kw.dic'] = kw_dic
+	end
+	@conf['kw.dic'] = {'google' => ['http://www.google.com/search?ie=euc-jp&amp;q=$1', 'euc-jp']} unless @conf['kw.dic']
+	<<-HTML
+	#{kw_desc}
+	<p><textarea name="kw.dic" cols="70" rows="10">#{@conf['kw.dic'].collect{|a|a.join( " " )}.join( "\n" ) if @conf['kw.dic']}</textarea></p>
+	HTML
 end
 
