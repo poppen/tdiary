@@ -1,6 +1,6 @@
 2003-10-18  Kazuhiko  <kazuhiko@fdiary.net>
 	* output_rdf.rb: make plain text description. change default file
-	name from 't.rdf' to 'index.rdf'. make an item per each comment.
+	name from 't.rdf' to 'index.rdf'. make an item per comment.
 
 2003-10-16  Kazuhiko  <kazuhiko@fdiary.net>
 	* plugin.rb: 'priority' is also optional.
