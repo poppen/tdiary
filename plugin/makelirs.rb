@@ -1,4 +1,4 @@
-# makelirs.rb $Revision: 1.11 $
+# makelirs.rb $Revision: 1.12 $
 #
 # 更新情報をLIRSフォーマットのファイルに吐き出す
 #
@@ -12,28 +12,10 @@
 #
 # Copyright (C) 2002 by Kazuhiro NISHIYAMA
 #
-=begin ChangeLog
-2003-08-03 Junichiro Kita <kita@kitaj.no-ip.com>
-	* make lirs when receiving TrackBack Ping
 
-2003-04-28 TADA Tadashi <sho@spc.gr.jp>
-	* enable running on secure mode.
-
-2003-03-08 Hiroyuki Ikezoe <zoe@kasumi.sakura.ne.jp>
-	* set TD. Thanks koyasu san.
-
-2002-10-28 zoe <zoe@kasumi.sakura.ne.jp>
-	* merge 1.4. Thanks koyasu san.
-
-2002-10-06 TADA Tadashi <http://sho.tdiary.net/>
-	* for tDiary 1.5.0.20021003.
-
-2002-05-05 TADA Tadashi <http://sho.tdiary.net/>
-	* support @options.
-
-2002-05-04 Kazuhiro NISHIYAMA <zn@mbf.nifty.com>
-	* create.
-=end
+add_header_proc do
+	%QX	<!--link rel="alternate" type="application/x-lirs" title="lirs" href="#{File::basename( @options['makelirs.file'] || 'antenna.lirs' )}"-->\nX
+end
 
 add_update_proc do
 	unless Time.method_defined?(:utc_offset)
@@ -81,3 +63,4 @@ add_update_proc do
 	rescue
 	end
 end
+

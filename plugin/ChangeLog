@@ -1,3 +1,6 @@
+2004-05-04 TADA Tadashi <sho@spc.gr.jp>
+	* makelirs.rb: add a comment into HTML header.
+
 2004-05-03 TADA Tadashi <sho@spc.gr.jp>
 	* tb-send.rb: support to specify multiple ping URL.
 	* tb-show.rb: remove to add '...' after shorten.
@@ -590,6 +593,9 @@
 	* trackback/tb-send.rb: change separator of CGI parameters from ';' to '&'. now it works with b2.
 
 2003-04-28 TADA Tadashi <sho@spc.gr.jp>
+	* makelirs.rb: enable running on secure mode.
+
+2003-04-28 TADA Tadashi <sho@spc.gr.jp>
 	* trackback/tb-show.rb, tb.rb: fix some security holes.
 	* trackback/tb-show.rb: show ping url under 'add TSUKKOMI'.
 	* trackback/tb-show.rb: support name based virtual host and root directory.
@@ -644,6 +650,9 @@
 2003-03-22 Minero Aoki <aamine@loveruby.net>
 	* a/a_conf.rb, bq.rb, kw.rb, nazo.rb, recent_comment3.rb, todo/todo.rb: remove warning on ruby 1.8.
 
+2003-03-08 Hiroyuki Ikezoe <zoe@kasumi.sakura.ne.jp>
+	* makelirs.rb: set TD. Thanks koyasu san.
+
 2003-03-04 TADA Tadashi <sho@spc.gr.jp>
 	* support ruby 1.8.0 preview2.
 
@@ -680,11 +689,17 @@
 2002-11-28 TADA Tadashi <sho@spc.gr.jp>
 	* HTML 4.01 Strict support.
 
+2002-10-28 zoe <zoe@kasumi.sakura.ne.jp>
+	* makelirs.rb: merge 1.4. Thanks koyasu san.
+
 2002-10-13 MUTOH Masao <mutoh@highway.ne.jp>
 	* search_form.rb: fix in Google search.
 	* search_form.rb: insert image into Yahoo search.
 	* search_form.rb: remove Lycos search. All of them were pointed out by patagon.
 	* search_form.rb: version 1.0.2
+
+2002-10-06 TADA Tadashi <http://sho.tdiary.net/>
+	* makelirs.rb: for tDiary 1.5.0.20021003.
 
 2002-09-01 Junichiro Kita <kita@kitaj.no-ip.com>
 	* change URL for images.
@@ -695,6 +710,12 @@
 2002-05-19 MUTOH Masao <mutoh@highway.ne.jp>
 	* search_form.rb: document update.
 	* search_form.rb: version 1.0.1
+
+2002-05-05 TADA Tadashi <http://sho.tdiary.net/>
+	* makelirs.rb: support @options.
+
+2002-05-04 Kazuhiro NISHIYAMA <zn@mbf.nifty.com>
+	* makelirs.rb: create.
 
 2002-04-01 MUTOH Masao <mutoh@highway.ne.jp>
 	* search_form.rb: tab = 3, change document format.
