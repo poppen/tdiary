@@ -61,38 +61,6 @@
 # Copyright (c) 2002,2003 MUTOH Masao <mutoh@highway.ne.jp>
 # You can redistribute it and/or modify it under GPL2.
 # 
-=begin ChangeLog
-2003-03-03 MUTOH Masao <mutoh@highway.ne.jp>
-	* "name|key:option"形式対応
-	* my形式対応
-	* 引数,a.dat辞書にcharset導入。optionに日本語指定が可能になった(defaultはeuc)
-	* version 1.3.0
-
-2002-05-19 MUTOH Masao <mutoh@highway.ne.jp>
-	* ドキュメントアップデート
-
-2002-05-08 MUTOH Masao <mutoh@highway.ne.jp>
-	* URLのみ指定で何も表示されない不具合の修正
-	* version 1.2.1
-
-2002-05-05 MUTOH Masao <mutoh@highway.ne.jp>
-	* @options["a.tlink"]追加。trueを指定するとtlinkを使ってtitleを取得
-	  するようになる。
-	* ドキュメントアップデート
-	* version 1.2.0
-
-2002-05-01 MUTOH Masao <mutoh@highway.ne.jp>
-	* コードのクリーンアップ。インスタンス変数にはプリフィクス
-		a_をつけるようにした。
-	* 辞書ファイルを標準で@data_path/cache/a.datにした
-	* 辞書ファイル設定用のCGIであるa_conf.rbを追加した
-	* メソッドnavi_aを追加した
-	* version 1.1.0
-
-2002-03-29 MUTOH Masao <mutoh@highway.ne.jp>
-	* version 1.0.0
-=end
-
 require 'nkf'
 
 A_REG_PIPE = /\|/
