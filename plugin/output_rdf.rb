@@ -1,5 +1,5 @@
 # output_rdf.rb: tDiary plugin to generate RDF file when diary updated.
-# $Revision: 1.21 $
+# $Revision: 1.22 $
 #
 # See document to @lang/output_rdf.rb
 #
@@ -111,7 +111,10 @@ if ( /^(append|replace|trackbackreceive)$/ =~ @mode ) || ( /^comment$/ =~ @mode 
  	end
 	r << "</rdf:RDF>"
 	r = @output_rdf_encoder.call( r )
-	mtime = File::mtime( rdf_file )
+	begin
+		mtime = File::mtime( rdf_file )
+	rescue
+	end
 	File::open( rdf_file, 'w' ) do |o|
 		o.puts r
 	end
