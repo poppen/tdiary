@@ -1,5 +1,6 @@
 2004-05-02 TADA Tadashi <sho@spc.gr.jp>
 	* image.rb: a little modify forms and labels.
+	* tb-send.rb: select section support in append mode.
 
 2004-04-23  mput <root@mput.dip.jp>
 	* recent_comment3.rb (recent_comment3): Sorry the commit I posted yesterday had another problem.  Fixed that.  Thanks to Kitaj.

@@ -1,4 +1,4 @@
-# tb-send.rb $Revision: 1.9 $
+# tb-send.rb $Revision: 1.10 $
 #
 # Copyright (c) 2003 Junichiro Kita <kita@kitaj.no-ip.com>
 # You can distribute this file under the GPL.
@@ -10,28 +10,28 @@ add_edit_proc do |date|
 	section = @cgi.params['plugin_tb_section'][0] || ''
 	select_sections = ''
 	unless @conf['tb.no_section'] then
+		section_titles = ''
+	 	idx = 1
 		diary = @diaries[@date.strftime('%Y%m%d')]
 		if diary then
-			section_titles = ''
-	 		idx = 1
 			diary.each_section do |t|
 				anc = 'p%02d' % idx
 				selected = (section == anc ) ? ' selected' : ''
 				section_titles << %[<option value="#{anc}"#{selected}>#{CGI::escapeHTML( apply_plugin( t.subtitle_to_html, true ) ).chomp}</option>\n\t\t\t]
 				idx += 1
 			end
-			anc = 'p%02d' % idx
-			section_titles << %[<option value="#{anc}"#{(section == anc ) ? ' selected' : ''}>#{@tb_send_label_current_section}</option>]
-	
-			select_sections = <<-FROM
-				<div class="field">
-				#{@tb_send_label_section}: <select name="plugin_tb_section" tabindex="501">
-				<option value="">#{@tb_send_label_no_section}</option>
-				#{section_titles}
-				</select>
-				</div>
-			FROM
 		end
+		anc = 'p%02d' % idx
+		section_titles << %[<option value="#{anc}"#{(section == anc ) ? ' selected' : ''}>#{@tb_send_label_current_section}</option>]
+	
+		select_sections = <<-FROM
+			<div class="field">
+			#{@tb_send_label_section}: <select name="plugin_tb_section" tabindex="501">
+			<option value="">#{@tb_send_label_no_section}</option>
+			#{section_titles}
+			</select>
+			</div>
+		FROM
 	end
 
 	<<-FORM
@@ -64,8 +64,9 @@ def tb_send_trackback
 
 		date = @date.strftime( '%Y%m%d' )
 		if section && !section.empty? then
-			diary = @diaries[date].class.new( date, title, @cgi.params['body'][0] )
+			diary = @diaries[date]
 			ary = []; diary.each_section{|s| ary << s}
+			section = sprintf( 'p%02d', ary.length ) if @mode == 'append'
 			num = section[1..-1].to_i - 1
 			if num < ary.size
 				title = ary[num].subtitle_to_html if ary[num].subtitle && !ary[num].subtitle.empty?
@@ -74,7 +75,7 @@ def tb_send_trackback
 		end
 
 		if excerpt.empty?
-			excerpt = @diaries[date].class.new( date, title, @cgi.params['body'][0] ).to_html({})
+			excerpt = @diaries[date].to_html({})
 		end
 
 		old_apply_plugin = @options['apply_plugin']
@@ -83,7 +84,7 @@ def tb_send_trackback
 		excerpt = apply_plugin( excerpt, true )
 		@options['apply_plugin'] = old_apply_plugin
 
-		if excerpt.length > 255 then
+		if excerpt.length >= 255 then
 			excerpt = @conf.shorten( excerpt.gsub( /\r/, '' ).gsub( /\n/, "\001" ), 252 ).gsub( /\001/, "\n" ) + '...'
 		end
 

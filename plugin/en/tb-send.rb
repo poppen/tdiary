@@ -4,7 +4,7 @@
 @tb_send_label_url = 'Send TrackBack to'
 @tb_send_label_section = 'Section of TrackBack source'
 @tb_send_label_no_section = '(no section specify)'
-@tb_send_label_current_section = '(current added section)'
+@tb_send_label_current_section = '(last added section)'
 if @conf['tb.no_section'] then
 	@tb_send_label_excerpt = 'Excerpt (use article body in default if not specify here)'
 else
