@@ -1,5 +1,5 @@
 #
-# markdown_style.rb: Markdown style for tDiary 2.x format. $Revision: 1.4 $
+# markdown_style.rb: Markdown style for tDiary 2.x format. $Revision: 1.5 $
 #
 # if you want to use this style, add @style into tdiary.conf below:
 #
@@ -28,9 +28,6 @@ module TDiary
       @subtitle_to_html = @subtitle ? to_html(@subtitle).gsub(/\A<h\d>|<\/h\d>\z/io, '') : nil
       @stripped_subtitle_to_html = @stripped_subtitle ? to_html(@stripped_subtitle).gsub(/\A<h\d>|<\/h\d>\z/io, '') : nil
       @body_to_html = to_html(@body)
-      @body_to_html.gsub!(/\{\{(.+?)\}\}/) {
-        "<%=#{$1}%>"
-      }
     end
 
     def body
@@ -51,9 +48,7 @@ module TDiary
 
     def do_html4( date, idx, opt )
       r = ''
-      subtitle = BlueCloth.new(@subtitle).to_html
-      subtitle.sub!(/<h(\d)/) { "<h#{$1.to_i + 2}" }
-      subtitle.sub!(/<\/h(\d)/) { "</h#{$1.to_i + 2}" }
+      subtitle = to_html(@subtitle)
       subtitle = subtitle.sub(/(\[([^\[]+?)\])+/) {
         $&.gsub(/\[(.*?)\]/) {
           $1.split(/,/).collect {|c|
@@ -69,16 +64,13 @@ module TDiary
         subtitle.sub!(/<\/h3>/,%Q|[#{@author}]</h3>|)
       end
       r << subtitle
-      body = @body_to_html.dup
-      body.gsub!(/<h(\d)/) { "<h#{$1.to_i + 2}" }
-      body.gsub!(/<\/h(\d)/) { "</h#{$1.to_i + 2}" }
-      r << body
+      r << @body_to_html
       r
     end
 
     def chtml( date, idx, opt )
       r = ''
-      r << BlueCloth.new(@subtitle).to_html
+      r << to_html(@subtitle)
       r << @body_to_html
       r
     end
@@ -92,6 +84,8 @@ module TDiary
     def to_html(string)
       parser = BlueCloth.new( string )
       r = parser.to_html
+      r.gsub!(/<h(\d)/) { "<h#{$1.to_i + 2}" }
+      r.gsub!(/<\/h(\d)/) { "</h#{$1.to_i + 2}" }
       r.gsub!(/\{\{(.+?)\}\}/) {
         "<%=#{$1}%>"
       }
