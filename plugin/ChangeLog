@@ -1,3 +1,6 @@
+2003-09-25 zunda <zunda at freeshell.org>
+	* disp_referrer.rb: name.untaint to eval name
+
 2003-09-25 TADA Tadashi <sho@spc.gr.jp>
 	* select_plugins.rb: enable running on ruby 1.6.
 

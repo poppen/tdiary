@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.28 2003-09-25 12:30:44 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.29 2003-09-25 17:55:44 zunda Exp $-))
 
 == 概要
 アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
@@ -156,6 +156,8 @@ version 2 or later.
 =end
 
 =begin ChangeLog
+* Thu Sep 25, 2003 zunda <zunda at freeshell.org>
+- name.untaint to eval name
 * Thu Sep 25, 2003 zunda <zunda at freeshell.org>
 - use to_native instead of to_euc
 * Mon Sep 19, 2003 zunda <zunda at freeshell.org>
@@ -894,6 +896,7 @@ class DispRef2URL
 						break
 					end
 				else
+					name.untaint unless setup.secure
 					if title.gsub!( /#{url}/i ) { eval name } then
 						matched = true
 						break
@@ -1397,7 +1400,7 @@ class DispRef2SetupIF
 		else
 			r = <<-_HTML
 				<h3 class="subtitle">本日のリンク元もうちょっとだけ強化プラグイン</h3>
-				<p>$Revision: 1.28 $</p>
+				<p>$Revision: 1.29 $</p>
 				<p>アンテナからのリンク、サーチエンジンの検索結果を、
 					通常のリンク元の下にまとめて表示します。
 					サーチエンジンの検索結果は、検索語毎にまとめられます。
