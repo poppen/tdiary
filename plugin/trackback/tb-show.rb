@@ -1,4 +1,4 @@
-# tb-show.rb $Revision: 1.7 $
+# tb-show.rb $Revision: 1.8 $
 #
 # functions:
 #   * show TrackBack ping URL in right of TSUKKOMI label.
@@ -29,12 +29,12 @@ add_body_enter_proc do |date|
 	''
 end
 
-alias :comment_new_tb_backup :comment_new
-def comment_new
-	cgi = @options['tb.cgi'] || './tb.rb'
-	url = "#{cgi}/#{@tb_date.strftime( '%Y%m%d' )}"
-	%Q|#{comment_new_tb_backup }</a>]<br>[TrackBack to <a href="#{@tb_url}">#{@tb_url}|
-end
+#alias :comment_new_tb_backup :comment_new
+#def comment_new
+#	cgi = @options['tb.cgi'] || './tb.rb'
+#	url = "#{cgi}/#{@tb_date.strftime( '%Y%m%d' )}"
+#	%Q|#{comment_new_tb_backup }</a>]<br>[TrackBack to <a href="#{@tb_url}">#{@tb_url}|
+#end
 
 #
 # make RDF
@@ -83,13 +83,13 @@ MODIFY_CLASS
 alias :referer_of_today_short_tb_backup :referer_of_today_short
 def referer_of_today_short( diary, limit )
 	r = referer_of_today_short_tb_backup( diary, limit )
-	if diary then
+	if diary and !trackback_antibot? then
 		count = 0
 		diary.each_comment( 100 ) do |com, idx|
 			next unless com.visible_true?
 			count += 1 if /^(Track|Ping)Back$/ =~ com.name
 		end
-		r << %Q|<a href="#{@index}#{anchor @tb_date.strftime( '%Y%m%d' )}#t">TrackBacks(#{count})</a>| if count > 0
+		r << %Q|<a href="#{@index}#{anchor @tb_date.strftime( '%Y%m%d' )}#t">TrackBacks(#{count})</a>|
 	end
 	r
 end
@@ -98,7 +98,7 @@ alias :referer_of_today_long_tb_backup :referer_of_today_long
 def referer_of_today_long( diary, limit )
 	r = ''
 	if diary then
-		r << %Q[<div class="caption"><a name="t">TrackBacks</a> (本日へのTrackBack Ping URL: <a href="#{@tb_url}">#{@tb_url}</a>)</div>\n]
+		r << %Q[<div class="caption"><a name="t">TrackBacks</a>#{trackback_ping_url}</div>\n]
 		r << "<ul>\n"
 		diary.each_comment( 100 ) do |com, idx|
 			next unless com.visible_true?
@@ -121,6 +121,19 @@ def referer_of_today_long( diary, limit )
 		r << "</ul>\n"
 	end
 	r << referer_of_today_long_tb_backup( diary, limit )
+end
+
+def trackback_antibot?
+	(respond_to?("referrer_antibot?") and referrer_antibot?) or
+	(respond_to?("disp_referrer_antibot?") and disp_referrer_antibot?)
+end
+
+def trackback_ping_url
+	if trackback_antibot?
+		''
+	else
+		%Q| (TrackBack Ping URL: <a href="#{@tb_url}">#{@tb_url}</a>)|
+	end
 end
 
 # running on only non mobile mode
