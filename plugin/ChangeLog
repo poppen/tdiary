@@ -1,3 +1,6 @@
+2003-10-02 zunda <zunda at freeshell.org>
+	* disp_referrer.rb: refined match for nifty
+
 2003-10-01 Junichiro Kita <kita@kitaj.no-ip.com>
 	* todo/*: removed.
 	* todo.rb, ja/todo.rb, en/todo.rb: ToDo is saved into @conf['todo.todos'].

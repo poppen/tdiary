@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.31 2003-09-30 15:49:28 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.32 2003-10-02 12:12:23 zunda Exp $-))
 
 == 概要
 アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
@@ -524,8 +524,8 @@ class DispRef2Setup < Hash
 			[%r{^http://.*?\.goo\.ne\.jp}i, '"goo"', [], nil ],
 		],
 		'nifty' => [
-			[%r{^http://.*?\.nifty\.com}i, '"@nifty/@search"', ['q', 'Text'], Google_cache],
-			[%r{^http://.*?\.nifty\.com}i, '"@niftyのリダイレクタ"', ['title'], nil ],
+			[%r{^http://search\.nifty\.com}i, '"@nifty/@search"', ['q', 'Text'], Google_cache],
+			[%r{^http://srchnavi\.nifty\.com}i, '"@niftyのリダイレクタ"', ['title'], nil ],
 		],
 		'eniro' => [[%r{^http://.*?\.eniro\.se}i, '"Eniro"', ['q'], Google_cache]],
 		'excite' => [[%r{^http://.*?\.excite\.([^/]+)}i, '".#{$1}のExcite"', ['search', 's', 'query', 'qkw'], nil ]],
@@ -1406,7 +1406,7 @@ class DispRef2SetupIF
 		else
 			r = <<-_HTML
 				<h3 class="subtitle">本日のリンク元もうちょっとだけ強化プラグイン</h3>
-				<p>$Revision: 1.31 $</p>
+				<p>$Revision: 1.32 $</p>
 				<p>アンテナからのリンク、サーチエンジンの検索結果を、
 					通常のリンク元の下にまとめて表示します。
 					サーチエンジンの検索結果は、検索語毎にまとめられます。
