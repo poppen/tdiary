@@ -1,4 +1,4 @@
-# image.rb $Revision: 1.8 $
+# image.rb $Revision: 1.9 $
 # -pv-
 # 
 # 名称:
@@ -21,7 +21,7 @@
 # その他:
 # tDiary version 1.5.3.20030420以降で動作します。
 # tdiary.confで指定できるオプション:
-#  @optons['image.dir']
+#  @options['image.dir']
 #     画像ファイルを保存するディレクトリ。無指定時は'./images/'
 #     Webサーバの権限で書き込めるようにしておく必要があります。
 #  @options['image.url']

@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# squeeze.rb $Revision: 1.9 $
+# squeeze.rb $Revision: 1.10 $
 # -pv-
 #
 # Ì¾¾Î¡§
@@ -51,6 +51,9 @@
 # version 1.0.4 by TADA Tadashi <sho@spc.gr.jp> with GPL2.
 #
 =begin ChangeLog
+2003-05-17 TADA Tadashi <sho@spc.gr.jp>
+	* fix path of theme on CGI or CMD mode.
+
 2003-04-28 TADA Tadashi <sho@spc.gr.jp>
 	* enable running on secure mode.
 
@@ -147,7 +150,7 @@ if mode == "CMD" || mode == "CGI"
 
 	if mode == "CMD"
 		def usage
-			puts "squeeze $Revision: 1.9 $"
+			puts "squeeze $Revision: 1.10 $"
 			puts " making html files from tDiary's database."
 			puts " usage: ruby squeeze.rb [-p <tDiary path>] [-c <tdiary.conf path>] [-a] [-s] [-x suffix] <dest path>"
 			exit
@@ -292,11 +295,11 @@ if mode == "CGI" || mode == "CMD"
 			<html>
 			<head>
 				<title>Squeeze for tDiary</title>
-				<link href="./theme/default.css" type="text/css" rel="stylesheet"/>
+				<link href="./theme/default/default.css" type="text/css" rel="stylesheet"/>
 			</head>
 			<body><div style="text-align:center">
 			<h1>Squeeze for tDiary</h1>
-			<p>$Revision: 1.9 $</p>
+			<p>$Revision: 1.10 $</p>
 			<p>Copyright (C) 2002 MUTOH Masao&lt;mutoh@highway.ne.jp&gt;</p></div>
 			<br><br>Start!</p><hr>
 		]
