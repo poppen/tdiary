@@ -1,4 +1,4 @@
-# counter.rb $Revision: 1.19 $
+# counter.rb $Revision: 1.20 $
 #
 # Access counter plugin.
 #
@@ -26,6 +26,9 @@
 # You can redistribute it and/or modify it under GPL2.
 # 
 =begin ChangeLog
+2004-10-01 MUTOH Masao  <mutoh@highway.ne.jp>
+   * Improved process against bots. @options["bot"] is now supported.
+
 2003-11-15 MUTOH Masao  <mutoh@highway.ne.jp>
    * translate documents to English.
 
@@ -137,9 +140,23 @@
    * version 1.0.0
 =end
 
+def counter_allow?
+	return false if bot?
+	if @options 
+		if @options["counter.deny_user_agents"] 
+			agents = Regexp.new("(tlink|#{@options["counter.deny_user_agents"].uniq.join('|')})", true)
+			return false if agents =~ @cgi.user_agent
+      end
+		if @options["counter.deny_remote_addrs"] 
+			agents = Regexp.new("(tlink|#{@options["counter.deny_remote_addrs"].uniq.join('|')})", true)
+			return false if agents =~ @cgi.remote_addr
+      end
+	end
+	true 
+end
 
 if ["latest", "month", "day"].include?(@mode) and 
-	ENV['REQUEST_METHOD'] == 'GET'
+	ENV['REQUEST_METHOD'] == 'GET' and counter_allow?
 
 require 'date'
 require 'pstore'
@@ -196,7 +213,7 @@ end
 TOPLEVEL_CLASS
 
 module TDiaryCounter
-	@version = "1.6.2"
+	@version = "1.6.3"
 
 	def run(cache_path, cgi, options)
 		timer = options["counter.timer"] if options
@@ -241,42 +258,37 @@ module TDiaryCounter
               @cnt = TDiaryCountData.new
             end
 
-			allow = (cgi.user_agent !~ /tlink/ and
-						allow?(cgi.user_agent, options, "user_agents") and
-						allow?(cgi.remote_addr, options, "remote_addrs"))
-			if allow 
-				changed = false
-				if new_user?(cgi, options)
-					@cnt.up(today, dir, cgi, (options and options["counter.log"]))
-					cookie = CGI::Cookie.new({"name" => "tdiary_counter", 
-														"value" => @version, 
-														 "expires" => Time.now + timer * 3600})
-					changed = true
-				end
-				if options["counter.kiriban"]
-					@kiriban = options["counter.kiriban"].include?(@cnt.all + @init_num) 
-				end
- 				if ! @kiriban and options["counter.kiriban_today"]
-					@kiriban_today = options["counter.kiriban_today"].include?(@cnt.today)
-				end
+			changed = false
+			if new_user?(cgi, options)
+				@cnt.up(today, dir, cgi, (options and options["counter.log"]))
+				cookie = CGI::Cookie.new({"name" => "tdiary_counter", 
+													"value" => @version, 
+													 "expires" => Time.now + timer * 3600})
+				changed = true
+			end
+			if options["counter.kiriban"]
+				@kiriban = options["counter.kiriban"].include?(@cnt.all + @init_num) 
+			end
+ 			if ! @kiriban and options["counter.kiriban_today"]
+				@kiriban_today = options["counter.kiriban_today"].include?(@cnt.today)
+			end
 
-				if @cnt.ignore_cookie
-					@cnt.ignore_cookie = false
-					changed = true
-				end
+			if @cnt.ignore_cookie
+				@cnt.ignore_cookie = false
+				changed = true
+			end
 
-				#when it is kiriban time, ignore the cookie next access time. 
-				if @kiriban or @kiriban_today
-					@cnt.ignore_cookie = true
-					changed = true
-				end
+			#when it is kiriban time, ignore the cookie next access time. 
+			if @kiriban or @kiriban_today
+				@cnt.ignore_cookie = true
+				changed = true
+			end
 
-				if changed
-					if options["counter.daily_backup"] == nil || options["counter.daily_backup"] 
-						copy(path, path + "." + today.wday.to_s)
-					end
-					db["countdata"] = @cnt
+			if changed
+				if options["counter.daily_backup"] == nil || options["counter.daily_backup"] 
+					copy(path, path + "." + today.wday.to_s)
 				end
+				db["countdata"] = @cnt
 			end
 		end
 		cookie
@@ -317,19 +329,6 @@ module TDiaryCounter
 		end
 	end
 		
-	def allow?(cgi_value, options, option_name)
-		allow = true
-		if options and options["counter.deny_" + option_name] 
-			options["counter.deny_" + option_name].each do |deny|
-				if cgi_value =~ /#{deny}/
-					allow = false
-					break
-				end
-			end
-		end
-		allow 
-	end
-
 	def new_user?(cgi, options)
 		if ! cgi.cookies or ! cgi.cookies.keys.include?("tdiary_counter")
 			interval = options["counter.deny_same_src_interval"] if options
@@ -371,7 +370,7 @@ module TDiaryCounter
 	def kiriban?; @kiriban; end
 	def kiriban_today?; @kiriban_today; end
 
-	module_function :allow?, :new_user?, :all, :today, :yesterday, :format, 
+	module_function :new_user?, :all, :today, :yesterday, :format, 
 							:main, :run, :copy, :rm, :kiriban?, :kiriban_today?
 end
 
