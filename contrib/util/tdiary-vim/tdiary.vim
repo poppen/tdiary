@@ -2,7 +2,7 @@
 
 " Author: UECHI Yasumasa <uechi@.potaway.net>
 
-" $Revision: 1.2 $
+" $Revision: 1.3 $
 
 " This program is free software; you can redistribute it and/or
 " modify it under the terms of the GNU General Public License as
@@ -172,7 +172,9 @@ endfunction
 
 
 function! s:SetUser()
-	if s:user == ''
+	if exists("g:tdiary_use_netrc") && g:tdiary_use_netrc
+		let s:user = " --netrc "
+	elseif s:user == ''
 		let s:user = input("User Name: ")
 		let password = inputsecret("Password: ")
 		if s:user != ''

@@ -1,3 +1,6 @@
+2004-02-17 Tue UECHI Yasumasa <uechi@potaway.net>
+	* use .netrc when g:tdiary_use_netrc = 1
+
 2004-02-16 Mon UECHI Yasumasa <uechi@potaway.net>
 	* change editing mode, date, title in diary buffer.
 
