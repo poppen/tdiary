@@ -1,4 +1,4 @@
-# tlink.rb $Revision: 1.6 $
+# tlink.rb $Revision: 1.7 $
 #
 # title Â°À­ÉÕ anchor plugin
 #
@@ -20,6 +20,9 @@
 # Modified: by abbey <inlet@cello.no-ip.org>
 #
 =begin ChangeLog
+2002-05-18 NT <nt@24i.net>
+	* remove "," from %Q[<a href="#{url}", title="#{title}">#{str}</a>].
+
 2002-05-16 MUTOH Masao <mutoh@highway.ne.jp>
 	* cache mechanism support.
 	* code cleanup(remove require 'cgi', 
@@ -129,6 +132,6 @@ def tlink( url, str, title = nil )
     end
   end
 
-  %Q[<a href="#{url}", title="#{title}">#{str}</a>]
+  %Q[<a href="#{url}" title="#{title}">#{str}</a>]
 end
 
