@@ -1,4 +1,4 @@
-# disp_referrer.rb $Revision: 1.10 $
+# disp_referrer.rb $Revision: 1.11 $
 # -pv-
 #
 # 名称：
@@ -27,6 +27,12 @@
 # You can redistribute it and/or modify it under GPL2.
 #
 =begin ChangeLog
+2002-09-09  MUTOH Masao <mutoh@highway.ne.jp>
+   * ロボットよけが効いていない不具合の修正(pointed out by TADA Tadashi<sho@spc.gr.jp>)
+   * 検索キーワードが複数回ある場合の「x2」「x3」を、リンクの外に出した(proposed by TADA Tadashi<sho@spc.gr.jp>)
+   * Web.escapeHTML()の処理が1カ所抜けていたので追加
+   * version 2.2.2
+
 2002-09-08  MUTOH Masao <mutoh@highway.ne.jp>
    * escapeモジュールがweb/ディレクトリ配下にインストールされる場合に対応
    Pointed out by Junichiro KITA <kita@kitaj.no-ip.com>.
@@ -140,10 +146,10 @@ deny_user_agents = ["googlebot", "Hatena Antenna", "moget@goo.ne.jp"]
 if @options['disp_referrer.deny_user_agents']
   deny_user_agents += @options['disp_referrer.deny_user_agents']
 end
-antibots = Regexp::new("(" + deny_user_agents.join("|") + ")")
+@disp_referrer_antibots = Regexp::new("(" + deny_user_agents.join("|") + ")")
 
 def disp_referrer_antibot?
-  antibots =~ @cgi.user_agent
+  @disp_referrer_antibots =~ @cgi.user_agent
 end
 
 # Short referrer
@@ -170,9 +176,9 @@ def disp_referrer_main(diary, refs, reg_table)
 		  query = "<a href=\"#{Web.escapeHTML(item[1])}\">"
 		  str = diary.disp_referer([regval], item[1])
 		  str = "/" if str.size == 0
-		  query << str
+		  query << Web.escapeHTML(str) << "</a>"
 		  query << " x" << item[0].to_s if item[0] > 1
-		  query << "</a>"
+		  query
 		}
 	  end
     end
