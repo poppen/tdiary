@@ -30,9 +30,12 @@
 #
 # Copyright (c) 2003 Hiroyuki Ikezoe <zoe@kasumi.sakura.ne.jp>
 # Distributed under the GPL
-3
+#
 
 =begin ChangeLog
+2003-08-05  Kazuhiko  <kazuhiko@fdiary.net>
+	* make rdf when receiving TrackBack Ping
+
 2003-04-28 TADA Tadashi <sho@spc.gr.jp>
 	* enable running on secure mode.
 	* support non UTF-8 when cannot load uconv.
@@ -62,7 +65,7 @@ rescue LoadError
 	rdf_encoder = Proc::new {|s| s }
 end
 
-if /^(append|replace|comment)$/ =~ @mode then
+if /^(append|replace|comment|trackbackreceive)$/ =~ @mode then
 	if @mode == 'append' || @mode == 'replace' then
 		date = sprintf( "%4d%02d%02d", @cgi.params['year'][0], @cgi.params['month'][0], @cgi.params['day'][0] )
 	else

@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# squeeze.rb $Revision: 1.12 $
+# squeeze.rb $Revision: 1.13 $
 # -pv-
 #
 # Ì¾¾Î¡§
@@ -51,6 +51,9 @@
 # version 1.0.4 by TADA Tadashi <sho@spc.gr.jp> with GPL2.
 #
 =begin ChangeLog
+2003-08-05  Kazuhiko  <kazuhiko@fdiary.net>
+	* make html when receiving TrackBack Ping
+
 2003-07-31 zunda <zunda at freeshell.org>
 	* sets mtime and atime of the output files
 	* exit( 1 ) with an error
@@ -158,7 +161,7 @@ if mode == "CMD" || mode == "CGI"
 
 	if mode == "CMD"
 		def usage
-			puts "squeeze $Revision: 1.12 $"
+			puts "squeeze $Revision: 1.13 $"
 			puts " making html files from tDiary's database."
 			puts " usage: ruby squeeze.rb [-p <tDiary path>] [-c <tdiary.conf path>] [-a] [-s] [-x suffix] <dest path>"
 			exit
@@ -310,7 +313,7 @@ if mode == "CGI" || mode == "CMD"
 			</head>
 			<body><div style="text-align:center">
 			<h1>Squeeze for tDiary</h1>
-			<p>$Revision: 1.12 $</p>
+			<p>$Revision: 1.13 $</p>
 			<p>Copyright (C) 2002 MUTOH Masao&lt;mutoh@highway.ne.jp&gt;</p></div>
 			<br><br>Start!</p><hr>
 		]
@@ -339,7 +342,7 @@ if mode == "CGI" || mode == "CMD"
 	else
 		print "\n\n"
 	end
-elsif /^(append|replace|comment)$/ =~ @mode
+elsif /^(append|replace|comment|trackbackreceive)$/ =~ @mode
 	conf = @conf.clone
 	conf.header = ''
 	conf.footer = ''

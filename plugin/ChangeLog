@@ -1,3 +1,7 @@
+2003-08-05  Kazuhiko  <kazuhiko@fdiary.net>
+	* squeeze.rb: make html when receiving TrackBack Ping
+	* output_rdf.rb: make rdf when receiving TrackBack Ping
+
 2003-08-04 zunda <zunda at freeshell.org>
 	* squeeze.rb: sets mtime of the HTML files, exit(1) when error
 
