@@ -1,3 +1,6 @@
+2004-12-05  Kazuhiko  <kazuhiko@fdiary.net>
+	* category.rb: delete category icon setting if 'none' is selected
+
 2004-11-29 zunda <zunda at freeshell.org>
 	* zh/search_control.rb: forgot to follow revision of search_control.rb
 

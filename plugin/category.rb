@@ -1,4 +1,4 @@
-# category.rb $Revision: 1.25 $
+# category.rb $Revision: 1.26 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -669,7 +669,11 @@ if @mode == 'conf' || @mode == 'saveconf'
 			@cgi.params.keys.each do |key|
 				next unless /\Acategory\.icon\..*\z/ === key
 				category = key.sub(/\Acategory\.icon\./, '')
-				@category_icon[category] = @cgi.params[key][0] if @cgi.params[key][0] != 'none'
+				if @cgi.params[key][0] == 'none'
+					@category_icon.delete(category)
+				else
+					@category_icon[category] = @cgi.params[key][0]
+				end
 			end
 			category_icon_save
 		end
