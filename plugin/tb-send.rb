@@ -1,4 +1,4 @@
-# tb-send.rb $Revision: 1.1 $
+# tb-send.rb $Revision: 1.2 $
 #
 # Copyright (c) 2003 Junichiro Kita <kita@kitaj.no-ip.com>
 # You can distribute this file under the GPL.
@@ -28,7 +28,16 @@ if /^(append|replace)$/ =~ @mode then
 		excerpt = @cgi.params['plugin_tb_excerpt'][0]
 		blog_name = @conf.html_title
 
-		excerpt = @cgi.params['body'][0] if excerpt.empty?
+		if excerpt.empty?
+			date = @date.strftime('%Y%m%d')
+			excerpt = @diaries[date].class.new(date, title, @cgi.params['body'][0]).to_html({})
+		end
+
+		old_apply_plugin = @options['apply_plugin']
+		@options['apply_plugin'] = true
+		excerpt = apply_plugin(excerpt, true)
+		@options['apply_plugin'] = old_apply_plugin
+
 		if excerpt.length > 255
 			excerpt = @conf.shorten( excerpt.gsub( /\r/, '' ).gsub( /\n/, "\001" ), 252 ).gsub( /\001/, "\n" )
 		end
