@@ -1,3 +1,6 @@
+2004-05-14 zunda <zunda at freeshell.org>
+	* ja/weather.rb: correct translation of `rain showers': http://zunda.freeshell.org/d/20040428.html#p02
+
 2004-05-09 TADA Tadashi <sho@spc.gr.jp>
 	* tb-send.rb, tb-show.rb, output_rdf.rb: support absolute path of @conf.index.
 	* tb-show.rb: apply_plugin to dc:title.

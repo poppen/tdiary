@@ -1,5 +1,5 @@
 =begin
-= その日の天気プラグイン((-$Id: weather.rb,v 1.4 2003-12-17 13:54:05 zunda Exp $-))
+= その日の天気プラグイン((-$Id: weather.rb,v 1.5 2004-05-15 05:44:51 zunda Exp $-))
 その日の天気を、その日の日記を最初に更新する時に取得して保存し、それぞれ
 の日の日記の上部に表示します。
 
@@ -249,7 +249,7 @@ class Weather
 		[%r[\s*\blight rain showers?\b\s*]i, '"弱いにわか雨"'],
 		[%r[\s*\bheavy rain showers?\b\s*]i, '"強いにわか雨"'],
 		[%r[\s*\bheavy rain\b\s*]i, '"豪雨"'],
-		[%r[\s*\bshowers?\b\s*]i, '"にわか雨"'],
+		[%r[\s*\b(rain )?showers?\b\s*]i, '"にわか雨"'],
 		[%r[\s*\bdrizzle\b\s*]i, '"こぬか雨"'],
 		[%r[\s*\blight rain\b\s*]i, '"霧雨"'],
 		[%r[\s*\brain\b\s*]i, '"雨"'],
