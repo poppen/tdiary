@@ -1,4 +1,4 @@
-# counter.rb
+# counter.rb $Revision: 1.2 $
 #
 # カウンタ表示プラグイン
 #
@@ -41,8 +41,8 @@
 =begin ChangeLog
 2002-04-27 MUTOH Masao  <mutoh@highway.ne.jp>
 	* add_header_procを使わないようにした
-	* options["counter.timer"]が有効にならない不具合の修正
-	* options["counter.log"]追加。trueを指定するとcounter.dat
+	* @options["counter.timer"]が有効にならない不具合の修正
+	* @options["counter.log"]追加。trueを指定するとcounter.dat
 	   と同じディレクトリにcounter.logというファイルを作成し
 	   1日前のアクセス数を記録するようにした
 	* cookieの値としてバージョン番号を入れるようにした
