@@ -1,4 +1,4 @@
-# calendar3.rb $Revision: 1.1 $
+# calendar3.rb $Revision: 1.2 $
 #
 # calendar3: 現在表示している月のカレンダーを表示します．
 #  パラメタ: なし
@@ -77,7 +77,7 @@ def calendar3
 		if @diaries[date].nil? or !@diaries[date].visible?
 			result << %Q|<span class="#{Calendar3::STYLE[kind]}">#{day}</span>\n|
 		else
-			result << %Q|<span class="calendar-day" onmouseover="popup(this.childNodes(2));" onmouseout="popdown(this.childNodes(2));">\n|
+			result << %Q|<span class="calendar-day" id="target-#{day}" onmouseover="popup(document.getElementById('target-#{day}'),document.getElementById('popup-#{day}'), document.getElementById('title-#{day}'));" onmouseout="popdown(document.getElementById('popup-#{day}'));">\n|
 			result << %Q|  <a class="#{Calendar3::STYLE[kind]}" title="|
 			i = 1
 			r = []
@@ -88,17 +88,17 @@ def calendar3
 				i += 1
 			end
 			result << r.join("&#13;&#10;")
-			result << %Q|" href="#{@index}#{anchor date}">#{day}</a>\n|
+			result << %Q|" href="#{@index}#{anchor date}" id="title-#{day}">#{day}</a>\n|
 			unless /w3m/ === ENV["HTTP_USER_AGENT"]
-				result << %Q|<div class="calendar-popup">\n|
+				result << %Q|  <span class="calendar-popup" id="popup-#{day}">\n|
 				i = 1
 				@diaries[date].each_paragraph do |paragraph|
 					if paragraph.subtitle
-						result << %Q|  <a href="#{@index}#{anchor "%s#p%02d" % [date, i]}" title="#{CGI::escapeHTML(Calendar3.shorten(paragraph.text))}">#{i}</a>. #{paragraph.subtitle}<br>\n|
+						result << %Q|    <a href="#{@index}#{anchor "%s#p%02d" % [date, i]}" title="#{CGI::escapeHTML(Calendar3.shorten(paragraph.text))}">#{i}</a>. #{paragraph.subtitle}<br>\n|
 					end
 					i += 1
 				end
-				result << %Q|</div>\n</span>\n|
+				result << %Q|  </span>\n</span>\n|
 			end
 		end
 	end
@@ -109,13 +109,52 @@ end
 add_header_proc do
     <<JAVASCRIPT
   <script language="javascript">
-  function popup(element) {
-      element.style.display="block";  // ポップアップを表示する
-      element.parentElement.title=""; // titleポップアップを消す
+  // http://www.din.or.jp/~hagi3/JavaScript/JSTips/Mozilla/
+  // _dom : kind of DOM.
+  //        IE4 = 1, IE5+ = 2, NN4 = 3, NN6+ = 4, others = 0
+  _dom = document.all?(document.getElementById?2:1)
+                     :(document.getElementById?4
+                     :(document.layers?3:0));
+
+  function moveDivTo(div,left,top){
+    if(_dom==4){
+      div.style.left=left+'px';
+      div.style.top =top +'px';
+      return;
+    }
+    if(_dom==2 || _dom==1){
+      div.style.pixelLeft=left;
+      div.style.pixelTop =top;
+      return;
+    }
+    if(_dom==3){
+      div.moveTo(left,top);
+      return;
+    }
+  }
+
+  function getDivLeft(div){
+    if(_dom==4 || _dom==2) return div.offsetLeft;
+    if(_dom==1)            return div.style.pixelLeft;
+    if(_dom==3)            return div.left;
+    return 0;
+  }
+
+  function getDivTop(div){
+    if(_dom==4 || _dom==2) return div.offsetTop;
+    if(_dom==1)            return div.style.pixelTop;
+    if(_dom==3)            return div.top;
+    return 0;
+  }
+
+  function popup(target,element,notitle) {
+    element.style.display="block";
+    moveDivTo(element, getDivLeft(target),getDivTop(target));
+    notitle.title="";
   }
 
   function popdown(element) {
-      element.style.display="none";   // ポップアップを消す
+    element.style.display="none";
   }
 </script>
 JAVASCRIPT
