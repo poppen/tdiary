@@ -1,3 +1,6 @@
+2004-07-01 TADA Tadashi <sho@spc.gr.jp>
+	* makerss.rb: enclose subtitle with h3 element.
+
 2004-06-27 TADA Tadashi <sho@spc.gr.jp>
 	* release 2.0.0.
 
