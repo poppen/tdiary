@@ -1,3 +1,6 @@
+2003-09-30 zunda <zunda at freeshell.org>
+	* disp_referrer.rb: refined match for biglobe search, one more search engine
+
 2003-09-29 zunda <zunda at freeshell.org>
 	* weather.rb: Japanese resources divided into  a separate file, English resource created
 

@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.30 2003-09-29 13:36:12 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.31 2003-09-30 15:49:28 zunda Exp $-))
 
 == 概要
 アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
@@ -530,8 +530,8 @@ class DispRef2Setup < Hash
 		'eniro' => [[%r{^http://.*?\.eniro\.se}i, '"Eniro"', ['q'], Google_cache]],
 		'excite' => [[%r{^http://.*?\.excite\.([^/]+)}i, '".#{$1}のExcite"', ['search', 's', 'query', 'qkw'], nil ]],
 		'biglobe' => [
-			[%r{^http://.*?\.biglobe\.ne\.jp}i, '"BIGLOBEサーチ"', ['q'], nil ],
-			[%r{^http://.*?\.biglobe\.ne\.jp}i, '"BIGLOBEサーチ"', [], nil ],
+			[%r{^http://.*?search\.biglobe\.ne\.jp}i, '"BIGLOBEサーチ"', ['q'], nil ],
+			[%r{^http://.*?search\.biglobe\.ne\.jp}i, '"BIGLOBEサーチ"', [], nil ],
 		],
 		'dion' => [[%r{^http://dir\.dion\.ne\.jp}i, '"Dion"', ['QueryString', 'key'], nil ]],
 		'naver' => [[%r{^http://.*?\.naver\.co\.jp}i, '"NAVER Japan"', ['query'], nil ]],
@@ -542,7 +542,10 @@ class DispRef2Setup < Hash
 			[%r{^http://.*?\.alltheweb\.com}i, '"AlltheWeb.com"', ['q'], nil ],
 			[%r{^http://.*?\.alltheweb\.com}i, '"AlltheWeb.com"', [], nil ],
 		],
-		'kobe-u' => [[%r{^http://bach\.scitec\.kobe-u\.ac\.jp/cgi-bin/metcha.cgi}i, '"メッチャ検索エンジン"', ['q'], nil ]],
+		'kobe-u' => [
+			[%r{^http://bach\.scitec\.kobe-u\.ac\.jp/cgi-bin/metcha.cgi}i, '"メッチャ検索エンジン"', ['q'], nil ],
+			[%r{^http://bach\.istc\.kobe-u\.ac\.jp/cgi-bin/metcha.cgi}i, '"メッチャ検索エンジン"', ['q'], nil ],
+		],
 		'tocc' => [[%r{^http://www\.tocc\.co\.jp/search/}i, '"TOCC/Search"', ['QRY'], nil ]],
 		'yappo' => [[%r{^http://i\.yappo\.jp/}i, '"iYappo"', [], nil ]],
 		'suomi24' => [[%r{^http://.*?\.suomi24\.([^/]+)/.*query}i, '"Suomi24"', ['q'], Google_cache]],
@@ -566,6 +569,7 @@ class DispRef2Setup < Hash
 		'hotbot' => [[%r{^http://www\.hotbot\.}i, '"HotBot Web Search"', ['MT'], nil ]],
 		'searchalot' => [[%r{^http://www\.searchalot\.}i, '"Searchalot"', ['q'], nil ]],
 		'www' => [[%r{^http://www\.google/search}i, '"Google検索?"', ['as_q', 'q'], Google_cache]],	# TLD missing
+		'planet' => [[%r{^http://www\.planet\.nl/planet/}i, '"Planet-Zoekpagina"', ['googleq', 'keyword'], Google_cache]], # googleq parameter has a strange prefix
 		'216' => [[%r{^http://(\d+\.){3}\d+/search}i, '"Google検索?"', ['as_q', 'q'], Google_cache]],	# cache servers of google?
 	}
 
@@ -1402,7 +1406,7 @@ class DispRef2SetupIF
 		else
 			r = <<-_HTML
 				<h3 class="subtitle">本日のリンク元もうちょっとだけ強化プラグイン</h3>
-				<p>$Revision: 1.30 $</p>
+				<p>$Revision: 1.31 $</p>
 				<p>アンテナからのリンク、サーチエンジンの検索結果を、
 					通常のリンク元の下にまとめて表示します。
 					サーチエンジンの検索結果は、検索語毎にまとめられます。
