@@ -24,3 +24,4 @@
 *.gif -k 'b'
 *.jpg -k 'b'
 *.png -k 'b'
+*.swf -k 'b'
