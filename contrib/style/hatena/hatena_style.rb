@@ -18,7 +18,7 @@
 # OUT OF  OR IN CONNECTION WITH  THE CODE OR THE  USE OR OTHER  DEALINGS IN THE
 # CODE.
 
-# $Id: hatena_style.rb,v 1.7 2004-04-10 20:09:39 mput Exp $
+# $Id: hatena_style.rb,v 1.8 2004-05-16 14:50:31 mput Exp $
 # Hatena::Diary compatible style
 # Works only under ruby 1.8.1 or later
 
@@ -379,6 +379,9 @@ class Hatena::Title
     if m = /\A\*(\d+)\*/.match(str)
       @time     = Time.at(Integer(m[1]))
       @to_s     = m.post_match.freeze
+    elsif m = /\A\*(\w+)\*/.match(str)
+      @name     = m[1]
+      @to_s     = m.post_match.freeze
     else
       @to_s     = (str[1..-1]||'').freeze
     end
@@ -387,6 +390,7 @@ class Hatena::Title
   end
 
   def convert(mode, date=nil, i=nil, opt=nil, author=nil)
+    id = ('p%02d' % (i || 0))
     h = '%0.32b' % rand(0x100000000)
     case
     when date.nil?
@@ -394,16 +398,18 @@ class Hatena::Title
         "<%=category_anchor <<'#{h}'.chomp\n#{i}\n#{h}\n%>"
       }.join + strip.convert(mode)
     when mode == :CHTML
-      sprintf('<H3><A NAME="p%02d">*</A>%s%s</H3>',
-              i,
+      sprintf('<H3%s><A NAME="%s">*</A>%s%s</H3>',
+              @name ? %Q{ ID"=#@name"} : '',
+              id,
               (opt['multi_user'] && author) ? "[#{author}]" : '',
               strip.convert(mode))
     else
-      sprintf('<h3><a %shref="%s<%%=anchor "%s#p%02d"%%>">%s</a>%s%s%s %s</h3>',
-              opt['anchor'] ? 'name="p%02d" ' % i : '',
+      sprintf('<h3%s><a %shref="%s<%%=anchor "%s"%%>#%s">%s</a>%s%s%s %s</h3>',
+              @name ? %Q{ name="#@name"} : '',
+              opt['anchor'] ? 'id="%s" ' % id : '',
               opt['index'],
               date.strftime('%Y%m%d'),
-              i,
+              @name || id,
               opt['section_anchor'],
               categories.map {|cat|
                 "<%=category_anchor <<'#{h}'.chomp\n#{cat}\n#{h}\n%>"
@@ -656,18 +662,22 @@ class Hatena::Inline
         @elems.push Hatena::AmazonSearch.new(Regexp.last_match[1], true)
       when /\A\[google:(.*?)\]/m
         @elems.push Hatena::Google.new(Regexp.last_match[1], true)
-      when /\A\[keyword:(.*?)\]/m, /\A\[\[(.*?)\]\]/m
-        @elems.push Hatena::Keyword.new(Regexp.last_match[1], true)
-      when /\A\[id:(.*?)\]/m, /\Aid:((?:[\w\d_]+)(?::(?:\d+|about))?)/n
-        @elems.push Hatena::ID.new(Regexp.last_match[1], true)
+      when /\A\[(?:(g:(?:.*?)):)?keyword:(.*?)\]/m, /\A\[\[(.*?)\]\]/m
+        m = Regexp.last_match
+        @elems.push Hatena::Keyword.new(m[1], m[2], true)
+      when /\A\[(?:(g:(?:.*?)|a|d):)?id:(.*?)\]/m, /\A(?:(g:(?:.*?)|a|d):)?id:((?:[\w\d_]+)(?::(?:\d+|about))?)/n
+        m = Regexp.last_match
+        @elems.push Hatena::ID.new(m[1], m[2], true)
       when /\A\[(ISBN|ASIN):(.*?)(:image(:(small|large))?)?\]/m, /(ISBN|ASIN):([\-0-9A-Z]+)(:image(:(small|large))?)?/
         @elems.push Hatena::Amazon.new(Regexp.last_match[2], true)
       when /\A\[tex:(.*?)\]/m
         @elems.push Hatena::TeX.new(Regexp.last_match[1])
+      when /\Ag:[\w\d_]+/n
+        @elems.push Hatena::Group.new(Regexp.last_match[0], true)
       when /\A\[((?:https?|ftp|mailto).*?)\]/m, /\A(#{URI.regexp})/o
         @elems.push Hatena::URI.new(Regexp.last_match[1])
       else
-        /.+?(?=[\[\]\(\)\<\>]|https?|ftp|mailto|id|ISBN|ASIN|$)/m =~ str
+        /.+?(?=[\[\]\(\)\<\>]|https?|ftp|mailto|id|ISBN|ASIN|a:|d:|g:|$)/m =~ str
         if inside_a
           @elems.push Hatena::CDATA.new(Regexp.last_match.to_s)
         else
@@ -784,15 +794,40 @@ class Hatena::Google
   end
 end
 
+# Link to Hatena Group
+class Hatena::Group
+  def initialize(name, tag_p)
+    @name = name[2..-1]
+    @tag_p = tag_p
+  end
+
+  def convert(mode)
+    uri = 'http://%s.g.hatena.ne.jp/' % @name
+    return uri unless @tag_p
+    template=nil
+    if mode == :CHTML
+      template = '<A HREF="%s">g:%s</A>'
+    else
+      template = '<a href="%s">g:%s</a>'
+    end
+    sprintf(template, uri, @name)
+  end
+end
+
 # Link to Hatena keyword
 class Hatena::Keyword
-  def initialize(str, tag_p)
+  def initialize(group, str, tag_p)
+    @group = if group then
+               Hatena::Group.new(group, false).convert(nil)
+             else
+               'http://d.hatena.ne.jp/'
+             end
     @str = str
     @tag_p = tag_p
   end
 
   def convert(mode)
-    uri = 'http://d.hatena.ne.jp/keyword/%s' % URI.escape(@str)
+    uri = '%skeyword/%s' % [@group, URI.escape(@str)]
     return uri unless @tag_p
     template=nil
     if mode == :CHTML
@@ -806,22 +841,28 @@ end
 
 # Link to Hatena hosted diary
 class Hatena::ID
-  def initialize(str, tag_p)
-    @str = str
+  def initialize(type, str, tag_p)
+    @type = type || 'd'
+    @str = type ? type + ":id:" + str : 'id:' + str
     @name, @date = *str.split(/:/,2)
     @tag_p = tag_p
   end
 
   def convert(mode)
-    uri = 'http://d.hatena.ne.jp/'
+    uri = case @type
+          when /\Ag/ then
+            Hatena::Group.new(@type, false).convert(mode)
+          when 'a', 'd' then
+            'http://%s.hatena.ne.jp/' % @type
+          end
     uri << @name << '/'
     uri << @date if @date &&! @date.empty?
     return uri unless @tag_p
     template=nil
     if mode == :CHTML
-      template = '<A HREF="%s">id:%s</A>'
+      template = '<A HREF="%s">%s</A>'
     else
-      template = '<a href="%s">id:%s</a>'
+      template = '<a href="%s">%s</a>'
     end
     sprintf(template, uri, @str)
   end
@@ -885,7 +926,7 @@ class Hatena::Sentence
   def initialize(str)
     @elems = Array.new
     return if str.nil? || str.empty?
-    if kw = Hatena::API.keywords.match(str)
+    if false # kw = Hatena::API.keywords.match(str)
       m = Regexp.new(Regexp.quote(kw)).match(str)
       @elems.push Hatena::CDATA.new(m.pre_match)
       @elems.push Hatena::Keyword.new(kw, true)
