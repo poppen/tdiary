@@ -1,4 +1,4 @@
-# nazo.rb $Revision: 1.4 $
+# nazo.rb $Revision: 1.5 $
 #
 # nazo: ジャンプ先のエレメントをハイライトする。
 #       通称「謎JavaScript。最終形態」
@@ -59,9 +59,9 @@ def nazo( color = '#fff', background = '#f00' )
 		  hiliteElement(document.location.hash.substr(1));
 		}
 		
-		hereURL = document.location.href.split("#")[0];
+		hereURL = document.location.href.split(/\#/)[0];
 		for( var i = 0; i < document.links.length; i++ ){
-		  if( hereURL == document.links[i].href.split("#")[0] ){
+		  if( hereURL == document.links[i].href.split(/\#/)[0] ){
 		    document.links[i].onclick = handleLinkClick;
 		  }
 		}

@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# todo.rb $Revision: 1.4 $
+# todo.rb $Revision: 1.5 $
 #
 # todo: ToDoリストを表示します．
 #
@@ -234,7 +234,7 @@ begin
 	print body if /HEAD/i !~ @cgi.request_method
 rescue Exception
 	puts "Content-Type: text/plain\n\n"
-	puts "#$! (#{$!.type})"
+	puts "#$! (#{$!.class})"
 	puts ""
 	puts $@.join( "\n" )
 end

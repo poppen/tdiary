@@ -1,3 +1,6 @@
+2003.03.22 Minero Aoki <aamine@loveruby.net>
+	* a/a_conf.rb, bq.rb, kw.rb, nazo.rb, recent_comment3.rb, todo/todo.rb: remove warning on ruby 1.8.
+
 2003.03.04 TADA Tadashi <sho@spc.gr.jp>
 	* support ruby 1.8.0 preview2.
 

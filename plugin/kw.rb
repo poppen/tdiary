@@ -1,4 +1,4 @@
-# kw.rb $Revision: 1.1 $
+# kw.rb $Revision: 1.2 $
 #
 # kw: keyword link generator
 #   Parameters:
@@ -28,7 +28,7 @@ def kw( keyword )
 			@kw_dic[dic[0]] = dic[1..-1]
 		end
 	end
-	inter, key = keyword.split( ':', 2 )
+	inter, key = keyword.split( /:/, 2 )
 	unless key then
 		inter = nil
 		key = keyword

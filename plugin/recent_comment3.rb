@@ -1,4 +1,4 @@
-# $Revision: 1.6 $
+# $Revision: 1.7 $
 # recent_comment3: 最近のツッコミをリストアップする
 #   パラメタ:
 #     max:           最大表示数(未指定時:3)
@@ -43,7 +43,7 @@ add_update_proc do
 		name = @cgi.params['name'][0].to_euc
 		body = @cgi.params['body'][0].to_euc
 		comment = Comment.new(name, nil, body)
-		serial = @diaries[@date.strftime '%Y%m%d'].count_comments
+		serial = @diaries[@date.strftime('%Y%m%d')].count_comments
 		if not (name.strip.empty? or body.strip.empty?)
 			PStore.new(RECENT_COMMENT3_CACHE).transaction do |db|
 				db['comments'] = Array.new(RECENT_COMMENT3_NUM) unless db.root?('comments')

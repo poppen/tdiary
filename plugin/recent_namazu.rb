@@ -28,7 +28,7 @@ def recent_namazu(file, namazu, limit = 5, sep='&nbsp;', make_link = true)
 		result = []
 		lines.reverse.each_with_index do |line,idx|
 			break if idx >= limit
-			word = line.split('\t')[0]
+			word = line.split(/\t/)[0]
 			if make_link
 				result << %Q[<a href="#{namazu}?query=#{CGI::escapeHTML(word)}">#{CGI::escapeHTML(word)}</a>]
 			else
@@ -37,6 +37,6 @@ def recent_namazu(file, namazu, limit = 5, sep='&nbsp;', make_link = true)
 		end
 		result.join( sep )
 	rescue
-		%Q[<p class="message">#$! (#{$!.type})<br>cannot read #{file}.</p>]
+		%Q[<p class="message">#$! (#{$!.class})<br>cannot read #{file}.</p>]
 	end
 end

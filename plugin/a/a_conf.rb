@@ -72,7 +72,7 @@ begin
 
 	  open( path, 'w' ) do |o|
 		@cgi["anchor_plugin_data"].each do |v|
-			v.split("\n").each do |line|
+			v.split(/\n/).each do |line|
 		     o.print line, "\n" if line =~ /\w/
 		   end
 		end
@@ -116,7 +116,7 @@ begin
   print body if /HEAD/i !~ @cgi.request_method
 rescue Exception
   puts "Content-Type: text/plain\n\n"
-  puts "#$! (#{$!.type})"
+  puts "#$! (#{$!.class})"
   puts ""
   puts $@.join( "\n" )
 end

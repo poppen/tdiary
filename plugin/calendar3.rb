@@ -1,4 +1,4 @@
-# calendar3.rb $Revision: 1.27 $
+# calendar3.rb $Revision: 1.28 $
 #
 # calendar3: 現在表示している月のカレンダーを表示します．
 #  パラメタ: なし
@@ -113,7 +113,7 @@ module Calendar3
 	end
 
 	def shorten(str, len = 120)
-		lines = NKF::nkf("-e -m0 -f" + len.to_s, str.gsub(/<.+?>/, '')).split("\n")
+		lines = NKF::nkf("-e -m0 -f" + len.to_s, str.gsub(/<.+?>/, '')).split(/\n/)
 		lines[0].concat('...') if lines[0] and lines[1]
 		lines[0]
 	end
