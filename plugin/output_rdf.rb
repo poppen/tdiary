@@ -1,5 +1,5 @@
 # output_rdf.rb: tDiary plugin to generate RDF file when diary updated.
-# $Revision: 1.15 $
+# $Revision: 1.16 $
 #
 # See document to @lang/output_rdf.rb
 #
@@ -31,15 +31,15 @@ if ( /^(append|replace|trackbackreceive)$/ =~ @mode ) || ( /^comment$/ =~ @mode 
  xml:lang="#{@conf.html_lang}"
 >
  <channel rdf:about="http://#{rdf_channel_about}">
-   <title>#{@html_title}</title>
+   <title>#{CGI::escapeHTML( @html_title )}</title>
    <link>http://#{uri}</link>
-   <description>#{@html_title}</description>
+   <description>#{CGI::escapeHTML( @html_title )}</description>
    <dc:date>#{Time.now.strftime('%Y-%m-%dT%H:%M')}</dc:date>
    <items>
      <rdf:Seq>
 	RDF
 	idx = 1
- 	diary.each_section do |section|
+ 	diary.visible? and diary.each_section do |section|
 		if section.subtitle then
 		r <<<<-RDF
        <rdf:li rdf:resource="http://#{uri}#{anchor "#{date}\#p#{'%02d' % idx}"}" />
@@ -49,7 +49,7 @@ if ( /^(append|replace|trackbackreceive)$/ =~ @mode ) || ( /^comment$/ =~ @mode 
 	end
 
 	comment_link = ""
-	if diary.count_comments > 0 then
+	if diary.visible? and diary.count_comments > 0 then
   		diary.each_visible_comment( 100 ) do |comment,idx|
 			comment_link = %Q[http://#{uri}#{anchor "#{date}\#c#{'%02d' % idx}"}]
 			r <<<<-RDF
@@ -63,7 +63,7 @@ if ( /^(append|replace|trackbackreceive)$/ =~ @mode ) || ( /^comment$/ =~ @mode 
  </channel>
 	RDF
  	idx = 1
- 	diary.each_section do |section|
+ 	diary.visible? and diary.each_section do |section|
 		if section.subtitle then
 		link = %Q[http://#{uri}#{anchor "#{date}\#p#{'%02d' % idx}"}]
 		subtitle = section.subtitle_to_html
@@ -84,7 +84,7 @@ if ( /^(append|replace|trackbackreceive)$/ =~ @mode ) || ( /^comment$/ =~ @mode 
 		end
   		idx += 1
 	end
-	if diary.count_comments > 0 then
+	if diary.visible? and diary.count_comments > 0 then
   		diary.each_visible_comment( 100 ) do |comment,idx|
 			link = "http://#{uri}#{anchor "#{date}\#c#{'%02d' % idx}"}"	
 		r <<<<-RDF

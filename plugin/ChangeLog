@@ -1,3 +1,6 @@
+2003-11-19  Kazuhiko  <kazuhiko@fdiary.net>
+	* output_rdf.rb: escape @html_title. support hidden diary.
+
 2003-11-17 TADA Tadashi <sho@spc.gr.jp>
 	* edit.rb: remove.
 
