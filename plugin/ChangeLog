@@ -1,3 +1,6 @@
+2004.01.25 Junichiro Kita <kita@kitaj.no-ip.com>
+	* recent_trackback3.rb: setting via conf.
+
 2004.01.21 Junichiro Kita <kita@kitaj.no-ip.com>
 	* recent_trackback3.rb: Oops. remove debug code.
 

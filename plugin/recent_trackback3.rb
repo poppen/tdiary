@@ -1,4 +1,4 @@
-# $Revision: 1.2 $
+# $Revision: 1.3 $
 # recent_trackback3: 最近のツッコミをリストアップする
 #
 # Options:
@@ -22,28 +22,47 @@
 #
 require 'pstore'
 
-@recent_trackback3_cache = (@options['recent_trackback3.cache'] || "#{@cache_path}/recent_trackbacks")
-@recent_trackback3_cache_size = @options['recent_trackback3.cache_size'] || 50
+
+def recent_trackback3_format(format, *args)
+	format.gsub(/\$(\d)/) {|s| args[$1.to_i - 1]}
+end
+
+def recent_trackback3_init
+	@conf['recent_trackback3.cache'] ||= "#{@cache_path}/recent_trackbacks"
+	@conf['recent_trackback3.cache_size'] ||= 50
+	@conf['recent_trackback3.n'] ||= 3
+	@conf['recent_trackback3.sep'] ||= '&nbsp'
+	@conf['recent_trackback3.date_format'] ||= "(#{@date_format} %H:%M)"
+	@conf['recent_trackback3.format'] ||= '<strong>$1.</strong><a href="$2" title="$3">$4 $5</a>'
+end
 
 def recent_trackback3
-	n = @options['recent_trackback3.n'] || 3
-	sep = @options['recent_trackback3.sep'] || '&nbsp'
-	date_format = @options['recent_trackback3.date_format'] || "(#{@date_format} %H:%M)"
+	recent_trackback3_init
+
+	cache = @conf['recent_trackback3.cache']
+	n = @conf['recent_trackback3.n']
+	sep = @conf['recent_trackback3.sep']
+	date_format = @conf['recent_trackback3.date_format']
+	format = @conf['recent_trackback3.format']
 	result = []
 	idx = 0
-	PStore.new(@recent_trackback3_cache).transaction do |db|
+
+	PStore.new(cache).transaction do |db|
 		break unless db.root?('trackbacks')
 		db['trackbacks'].each do |tb|
 			break if idx >= n or tb == nil
 			trackback, date, serial = tb
 			url, blog_name, title, excerpt = trackback.body.split(/\n/, 4)
 
-			blog_name ||= ''
-			title ||= ''
-			excerpt ||= ''
-
-			result << %Q|<strong>#{idx+1}.</strong><a href="#{@index}#{anchor date.strftime('%Y%m%d')}#t#{'%02d' % serial}" title="#{CGI::escapeHTML(@conf.shorten(excerpt, 60))}">#{CGI::escapeHTML(@conf.shorten([blog_name, title].join(":"),30))}#{trackback.date.strftime(date_format)}</a>\n|
+			a = @index + anchor("#{date.strftime('%Y%m%d')}#t#{'%02d' % serial}")
+			popup = CGI.escapeHTML(@conf.shorten(excerpt, 60))
+			str = [blog_name, title].compact.join(":").sub(/:$/, '')
+			str = url if str == ''
+			str = CGI.escapeHTML(@conf.shorten(str, 30))
+			date_str = trackback.date.strftime(date_format)
 			idx += 1
+
+			result << recent_trackback3_format(format, idx, a, popup, str, date_str)
 		end
 		db.abort
 	end
@@ -56,21 +75,29 @@ end
 
 add_update_proc do
 	if @mode == 'trackbackreceive'
-	begin
+		recent_trackback3_init
+		cache = @conf['recent_trackback3.cache']
+		cache_size = @conf['recent_trackback3.cache_size']
 		name = @conf.to_native(@cgi.params['name'][0])
 		body = @conf.to_native(@cgi.params['body'][0])
 		trackback = Comment.new(name, nil, body)
 		serial = 0
-		@diaries[@date.strftime('%Y%m%d')].each_visible_trackback( 100 ) {|tb| serial += 1}
-		PStore.new(@recent_trackback3_cache).transaction do |db|
-			db['trackbacks'] = Array.new(@recent_trackback3_cache_size) unless db.root?('trackbacks')
+		@diaries[@date.strftime('%Y%m%d')].each_visible_trackback( 100 ) {|tb, idx| serial += 1}
+		PStore.new(cache).transaction do |db|
+			db['trackbacks'] = Array.new(cache_size) unless db.root?('trackbacks')
 			if db['trackbacks'][0].nil? or trackback != db['trackbacks'][0][0]
 				db['trackbacks'].unshift([trackback, @date, serial]).pop
 			end
 		end
-	rescue
-	STDERR.puts $!.message
 	end
-	end
+end
+
+if @mode == 'saveconf'
+def saveconf_recent_trackback3
+	@conf['recent_trackback3.n'] = @cgi.params['recent_trackback3.n'][0].to_i
+	@conf['recent_trackback3.sep'] = @cgi.params['recent_trackback3.sep'][0]
+	@conf['recent_trackback3.date_format'] = @cgi.params['recent_trackback3.date_format'][0]
+	@conf['recent_trackback3.format'] = @cgi.params['recent_trackback3.format'][0]
+end
 end
 # vim: ts=3
