@@ -1,4 +1,4 @@
-# tb-show.rb $Revision: 1.1 $
+# tb-show.rb $Revision: 1.2 $
 #
 # functions:
 #   * show TrackBack ping URL in right of TSUKKOMI label.
@@ -18,14 +18,17 @@
 # Modified: by Junichiro Kita <kita@kitaj.no-ip.com>
 #
  
+# running on only non mobile mode
+unless @conf.mobile_agent? then
+
 #
 # show TrackBack ping URL
 #
 add_body_enter_proc do |date|
 	@tb_date = date
 	cgi = File.basename(@options['tb.cgi'] || './tb.rb')
-	@tb_id_url = %Q|http://#{ENV['SERVER_NAME']}#{ENV['SERVER_PORT'] == '80' ? '' : ':'+ENV['SERVER_PORT']}#{File.dirname(ENV['REQUEST_URI'])}/#{anchor @tb_date.strftime('%Y%m%d')}|
-	@tb_url = %Q|http://#{ENV['SERVER_NAME']}#{ENV['SERVER_PORT'] == '80' ? '' : ':'+ENV['SERVER_PORT']}#{File.dirname(ENV['REQUEST_URI'])}/#{cgi}/#{@tb_date.strftime('%Y%m%d')}|
+	@tb_id_url = %Q|http://#{ENV['SERVER_NAME']}#{ENV['SERVER_PORT'] == '80' ? '' : ':'+ENV['SERVER_PORT']}#{File.dirname(ENV['REQUEST_URI'] + '.')}/#{anchor @tb_date.strftime('%Y%m%d')}|
+	@tb_url = %Q|http://#{ENV['SERVER_NAME']}#{ENV['SERVER_PORT'] == '80' ? '' : ':'+ENV['SERVER_PORT']}#{File.dirname(ENV['REQUEST_URI'] + '.')}/#{cgi}/#{@tb_date.strftime('%Y%m%d')}|
 	if @options['tb.url_position'] != 'lower'
 		%Q|<div class="body-enter"><p><span class="trackback-url">TrackBack Ping URL: #{@tb_url}</span></p></div>\n|
 	else
@@ -76,9 +79,11 @@ module TDiary
 		def visible_true?
 			@show
 		end
-		def visible?
-			@show and /^(Track|Ping)Back$/ !~ name
-		end
+		#{if @mode !~ /^(form|edit)$/ then
+			def visible?
+				@show and /^(Track|Ping)Back$/ !~ name
+			end
+		end}
 	end
 end
 MODIFY_CLASS
@@ -127,3 +132,6 @@ def referer_of_today_long( diary, limit )
 	end
 	r << referer_of_today_long_tb_backup( diary, limit )
 end
+
+# running on only non mobile mode
+end # unless mobile_agent?
