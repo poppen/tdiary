@@ -1,5 +1,5 @@
 #
-# markdown_style.rb: Markdown style for tDiary 2.x format. $Revision: 1.5 $
+# markdown_style.rb: Markdown style for tDiary 2.x format. $Revision: 1.6 $
 #
 # if you want to use this style, add @style into tdiary.conf below:
 #
@@ -94,9 +94,9 @@ module TDiary
 
     def get_categories
       return [] unless @subtitle
-      cat = /(\[([^\[]+?)\])+/.match(@subtitle).to_a[0]
+      cat = /(\\?\[([^\[]+?)\\?\])+/.match(@subtitle).to_a[0]
       return [] unless cat
-      cat.scan(/\[(.*?)\]/).collect do |c|
+      cat.scan(/\\?\[(.*?)\\?\]/).collect do |c|
         c[0].split(/,/)
       end.flatten
     end
