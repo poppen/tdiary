@@ -2,7 +2,7 @@
 
 " Author: UECHI Yasumasa <uechi@.potaway.net>
 
-" $Revision: 1.4 $
+" $Revision: 1.5 $
 
 " This program is free software; you can redistribute it and/or
 " modify it under the terms of the GNU General Public License as
@@ -24,10 +24,11 @@ if !exists("g:tdiary_site1_url")
 	finish
 endif
 
-command! -nargs=0 TDiaryNew call <SID>TDiary_new()
-command! -nargs=0 TDiaryReplace call <SID>TDiary_replace()
-command! -nargs=0 TDiaryUpdate call <SID>TDiary_update()
-command! -nargs=0 TDiarySelect call <SID>TDiary_select()
+command! -nargs=0 TDiaryNew call <SID>TDiaryNew()
+command! -nargs=0 TDiaryReplace call <SID>TDiaryReplace()
+command! -nargs=0 TDiaryUpdate call <SID>TDiaryUpdate()
+command! -nargs=0 TDiarySelect call <SID>TDiarySelect()
+command! -nargs=0 TDiaryTrackback call <SID>EditTrackBackExcerpt()
 
 
 if !exists("g:tdiary_update_script_name")
@@ -37,14 +38,13 @@ endif
 let s:tdiary_url = g:tdiary_site1_url
 let s:curl_cmd = "curl"
 let s:user = ''
-let s:body_start = 4
 
-function! s:TDiary_new()
+function! s:TDiaryNew()
 	call s:CreateBuffer("append")
 	normal G
 endfunction
 
-function! s:TDiary_replace()
+function! s:TDiaryReplace()
 	let mode = "replace"
 	let date = s:CreateBuffer(mode)
 
@@ -83,28 +83,16 @@ function! s:TDiary_replace()
 	let @/ = save_pat
 endfunction
 
-function! s:TDiary_update()
-	" set mode
-	let mode = s:SetParam(1)
-	let data = mode . "=" . mode
-
-	" set date
-	let data = data . s:Date2PostDate(s:SetParam(2), mode)
-
-	" set title
-	let data = data . "&title=" . s:URLencode(s:SetParam(3))
+function! s:TDiaryUpdate()
+	" move to _tdiary_ buffer
+	let n = bufwinnr(substitute(bufname("%"), "_.\\+_", "_tdiary_", ""))
+	execute "normal " . n . "\<C-W>w"
+	
+	" set parameters
+	let data = s:SetParams()
 
 	" set body
-	let body = ''
-	let i = s:body_start
-	let lastline = line("$")
-
-	while i <= lastline
-		let body = body . s:URLencode(getline(i) . "\r\n")
-		let i = i + 1
-	endwhile
-
-	let data = data . "&body=" . body
+	let data = data . "&body=" . s:MultiLineURLencode(s:body_start)
 
 	" debug mode
 	if exists("g:tdiary_vim_debug") && g:tdiary_vim_debug
@@ -130,11 +118,10 @@ function! s:TDiary_update()
 	else
 		echo result
 	endif
-
 endfunction
 
 
-function! s:TDiary_select()
+function! s:TDiarySelect()
 	split tDiary_select
 	set buftype=nofile
 	set nobuflisted
@@ -155,10 +142,86 @@ function! s:TDiary_select()
 endfunction
 
 
-function! s:SetParam(line_number)
-	let r = substitute(getline(a:line_number), '^[^:]\+ *: *\(.*\)', '\1', '')
+function! s:EditTrackBackExcerpt()
+	let save_line = line(".")
+	normal gg
+	call search("^TrackBackURL:")
+	let tb_url = s:ParamValue(getline("."))
+
+	let tb_url = input("TrackBackURL: ", tb_url)
+	delete
+	call append(line(".") - 1, "TrackBackURL: " . tb_url)
+	execute ":" . save_line
+
+	let tb_bufname = substitute(bufname("%"), "_tdiary_", "_trackback_", "")
+	split
+	execute "normal \<C-W>w"
+	execute "edit " . tb_bufname
+	set buftype=nofile
+	set noswapfile
+	set bufhidden=hide
+endfunction
+
+
+function! s:SetParams()
+	let data = ''
+	let i = 1
+
+	while i < s:body_start
+		let l = getline(i)
+		let r = s:ParamValue(l)
+
+		if l =~ "^Editing mode"
+			let mode = r
+			let data = data . "&" . r . "=" . r
+		elseif l =~ "^Date:"
+			let data = data . s:Date2PostDate(r, mode)
+		elseif l =~ "^Title:"
+			let data = data . "&title=" . s:URLencode(r)
+		elseif l =~ "^TrackBackURL:"
+			if r != ""
+				let data = data . "&plugin_tb_url=" . s:URLencode(r)
+				let data = data . s:TrackBackExcerpt()
+			endif
+		endif
+			
+		let i = i + 1
+	endwhile
+
+	return data
+endfunction
+
+
+function! s:ParamValue(str)
+	let r = substitute(a:str, '^[^:]\+ *: *\(.*\)', '\1', '')
 	let r = substitute(r, ' *$', '', '')
 	return r
+endfunction
+
+
+function! s:TrackBackExcerpt()
+	let data = "&plugin_tb_excerpt="
+	let n = bufwinnr(substitute(bufname("%"), "_.\\+_", "_trackback_", ""))
+	if n > 0
+		execute "normal " . n . "\<C-W>w"
+		let data = data . s:MultiLineURLencode(1)
+		execute "normal \<C-W>p"
+	endif
+	return data
+endfunction
+
+
+function! s:MultiLineURLencode(start_line)
+	let i = a:start_line
+	let lastline = line("$")
+	let data = ""
+
+	while i <= lastline
+		let data = data . s:URLencode(getline(i) . "\r\n")
+		let i = i + 1
+	endwhile
+
+	return data
 endfunction
 
 
@@ -168,7 +231,6 @@ function! s:SetURL()
 	let s:usr = ""
 	close
 endfunction
-
 
 
 function! s:SetUser()
@@ -186,15 +248,27 @@ endfunction
 
 function! s:CreateBuffer(mode)
 	let date = input("Date: ", strftime("%Y%m%d", localtime()))
-	execute "edit " date
+	execute "edit _tdiary_" . date
 	set buftype=nofile
 	set noswapfile
 	set bufhidden=hide
 	"set fileformat=dos
 
-	call append(0, "Editing mode (append or replace): " . a:mode)
-	call append(1, "Date: " . date)
-	call append(2, "Title: ")
+	let s:body_start = 0
+	
+	call append(s:body_start, "Editing mode (append or replace): " . a:mode)
+	let s:body_start = s:body_start + 1
+	
+	call append(s:body_start, "TrackBackURL: ")
+	let s:body_start = s:body_start + 1
+
+	call append(s:body_start, "Date: " . date)
+	let s:body_start = s:body_start + 1
+
+	call append(s:body_start, "Title: ")
+	let s:body_start = s:body_start + 1
+
+	let s:body_start = s:body_start + 1
 
 	return date
 endfunction

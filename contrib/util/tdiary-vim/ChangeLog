@@ -1,3 +1,6 @@
+2004-02-25 Wed UECHI Yasumasa <uechi@potaway.net>
+	* support TrackBack
+
 2004-02-19 Thu UECHI Yasumasa <uechi@potaway.net>
 	* quote argument of curl's -u option.
 

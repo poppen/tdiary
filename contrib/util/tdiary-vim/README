@@ -35,6 +35,7 @@ tdiary.vim では次のコマンドが使えます。
 * :TDiaryReplace - 指定した日付の日記を読み込んだバッファを開きます
 * :TDiaryUpdate - 日記を更新します
 * :TDiarySelect - 更新する tDiary サイトを選択するためのバッファを開きます
+* :TDiaryTrackbak - TrackBack の excerpt を編修するためのバッファを開きます
 
 === 日記に追記
 :TDiaryNew すると日付が YYYYMMDD 形式で表示されますので、適宜修正してリターンキーを押してください。日記を書いたら :TDiaryUpdate で更新してください。
@@ -45,3 +46,7 @@ tdiary.vim では次のコマンドが使えます。
 === tDiary サイトの選択
 :TDiarySelect すると日記の一覧が表示されます。日記にカーソルを合わせてリターンキーを押すことで書き込み先が切り替わります。
 
+=== TrackBack
+日記の編修バッファに表示されている TrackBackURL: に TrackBack 先の URL を記
+入することで TrackBack が送られます。excerpt を編修する場合は :TDiaryTrackback
+することで編修用のバッファが開きます。
