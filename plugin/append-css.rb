@@ -9,7 +9,7 @@ add_header_proc do
 	if @conf['append-css.css'] and @conf['append-css.css'].length > 0 then
 		<<-HTML if @conf['append-css.css']
 		<style type="text/css"><!--
-		#{CGI::escapeHTML( @conf['append-css.css'] )}
+		#{@conf['append-css.css']}
 		--></style>
 		HTML
 	else
