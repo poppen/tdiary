@@ -1,5 +1,5 @@
 #
-# markdown_style.rb: Markdown style for tDiary 2.x format. $Revision: 1.9 $
+# markdown_style.rb: Markdown style for tDiary 2.x format. $Revision: 1.10 $
 #
 # if you want to use this style, add @style into tdiary.conf below:
 #
@@ -20,23 +20,48 @@ module TDiary
     def initialize( fragment, author = nil )
       @author = author
       @subtitle, @body = fragment.split( /\n/, 2 )
+      @subtitle.sub!(/^\#\s*/,'')
       @body ||= ''
       
       @categories = get_categories
       @stripped_subtitle = strip_subtitle
 
-      @subtitle_to_html = @subtitle ? to_html(@subtitle).gsub(/\A<h\d>|<\/h\d>\z/io, '') : nil
-      @stripped_subtitle_to_html = @stripped_subtitle ? to_html(@stripped_subtitle).gsub(/\A<h\d>|<\/h\d>\z/io, '') : nil
+      @subtitle_to_html = @subtitle ? to_html('# ' + @subtitle).gsub(/\A<h\d>|<\/h\d>\z/io, '') : nil
+      @stripped_subtitle_to_html = @stripped_subtitle ? to_html('# ' + @stripped_subtitle).gsub(/\A<h\d>|<\/h\d>\z/io, '') : nil
       @body_to_html = to_html(@body)
+    end
+
+    def subtitle=(subtitle)
+      @categories = categories
+      cat_str = ""
+      categories.each {|cat|
+        cat_str << "[#{cat}]"
+      }
+      @subtitle = (subtitle || '').sub(/^# /,"\##{cat_str} ")
+      @strip_subtitle = strip_subtitle
     end
 
     def body
       @body.dup
     end
 
+    def body=(str)
+      @body = str
+    end
+
+    def categories=(categories)
+      @categories = categories
+      cat_str = ""
+      categories.each {|cat|
+        cat_str << "[#{cat}]"
+      }
+      @subtitle = "#{cat_str} " + (strip_subtitle || '')
+      @strip_subtitle = strip_subtitle
+    end
+
     def to_src
       r = ''
-      r << "#{@subtitle}\n" if @subtitle
+      r << "\##{@subtitle}\n" if @subtitle
       r << @body
     end
 
@@ -48,7 +73,7 @@ module TDiary
 
     def do_html4( date, idx, opt )
       r = ''
-      subtitle = to_html(@subtitle)
+      subtitle = to_html('# ' + @subtitle)
       subtitle = subtitle.sub(/(\[([^\[]+?)\])+/) {
         $&.gsub(/\[(.*?)\]/) {
           $1.split(/,/).collect {|c|
@@ -103,7 +128,7 @@ module TDiary
 
     def strip_subtitle
       return nil unless @subtitle
-      r = @subtitle.sub(/^#\s*((\\?\[[^\[]+?\]\\?)+\s+)?/, '# ')
+      r = @subtitle.sub(/^((\\?\[[^\[]+?\]\\?)+\s+)?/, '')
       if r.empty?
         nil
       else
@@ -157,6 +182,18 @@ module TDiary
       @sections.each do |section|
         yield section
       end
+    end
+
+    def add_section(subtitle, body)
+      sec = MarkdownSection::new("\n")
+      sec.subtitle = subtitle
+      sec.body     = body
+      @sections << sec
+      @sections.size
+    end
+
+    def delete_section(index)
+      @sections.delete_at(index - 1)
     end
 
     def to_src
