@@ -1,4 +1,4 @@
-# ja/category.rb $Revision: 1.5 $
+# ja/category.rb $Revision: 1.6 $
 #
 # Copyright (c) 2004 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -128,6 +128,34 @@ HTML
 	end
 	r << <<HTML
 </table>
+HTML
+end
+
+@category_icon_none_label = 'アイコンなし'
+@category_icon_conf_label = 'カテゴリアイコン'
+def category_icon_conf_html
+	str = ''
+	@categories.each do |c|
+		str << %Q|\t<tr>\n\t\t<td>#{c}</td>\n\t\t<td>\n|
+		str << category_icon_select(c)
+		str << %Q|<img src="#{@category_icon_url}#{@category_icon[c]}">| if @category_icon[c]
+		str << %Q|</td>\n\t</tr>\n|
+	end
+	<<HTML
+<h3 class="subtitle">カテゴリアイコン</h3>
+<p>
+<table>
+	<tr><th>カテゴリ</th><th>アイコン</th></tr>
+#{str}
+</table>
+</p>
+<hr>
+<p>
+アイコンサンプル (ディレクトリ: #{@category_icon_dir})
+</p>
+<p>
+#{category_icon_sample}
+</p>
 HTML
 end
 

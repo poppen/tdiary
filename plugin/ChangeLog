@@ -1,3 +1,6 @@
+2004.03.22 Junichiro Kita <kita@kitaj.no-ip.com>
+	* category.rb, */category.rb: category icons can be configured.
+
 2004-03-20 TADA Tadashi <sho@spc.gr.jp>
 	* tb-send.rb: specify section of TrackBack source. thanks yowa <yowaken@cool.ne.jp>.
 	* {ja,en}/tb-send.rb, tb-show.rb: a little modified some labels.

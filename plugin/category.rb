@@ -1,4 +1,4 @@
-# category.rb $Revision: 1.14 $
+# category.rb $Revision: 1.15 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -14,6 +14,20 @@ def category_init
 end
 category_init
 
+def category_icon_init
+	@conf['category.icon'] ||= ''
+	@category_icon_dir = (@conf['category.icon_dir'] || './images/').sub(%r|/*$|, '/')
+	@category_icon_url = (@conf['category.icon_url'] || './images/').sub(%r|/*$|, '/')
+
+	@category_icon = {}
+	@conf['category.icon'].split(/\n/).each do |l|
+		c, i = l.split
+		next if c.nil? or i.nil?
+		@category_icon[c] = i if File.exists?("#{@category_icon_dir}#{i}")
+	end
+end
+category_icon_init
+
 #
 # plugin methods
 #
@@ -21,7 +35,7 @@ def category_form
 	# don't you need this method any more?
 end
 
-def category_anchor(cname)
+def category_anchor(category)
 	period = @conf['category.period'] || 'quarter'
 	period_string = 
 		case period
@@ -36,10 +50,10 @@ def category_anchor(cname)
 		else
 			""
 		end
-	if @options['category.icon'] and @options['category.icon'][cname]
-		%Q|<a href="#{@index}?#{period_string}category=#{CGI::escape(cname)}"><img src="#{@options['category.icon'][cname] }" alt="#{cname}"></a>|
+	if @category_icon[category]
+		%Q|<a href="#{@index}?#{period_string}category=#{CGI::escape(category)}"><img class="category" src="#{@category_icon_dir}#{@category_icon[category]}" alt="#{category}"></a>|
 	else
-		%Q|[<a href="#{@index}?#{period_string}category=#{CGI::escape(cname)}">#{cname}</a>]|
+		%Q|[<a href="#{@index}?#{period_string}category=#{CGI::escape(category)}">#{category}</a>]|
 	end
 end
 
@@ -85,9 +99,14 @@ def category_list_sections
 
 	@categorized.keys.sort.each do |c|
 		info.category = c
+		if @category_icon[c]
+			img = %Q|<img class="category" src="#{@category_icon_dir}#{@category_icon[c]}" alt="#{c}">|
+		else
+			img = ''
+		end
 		r << <<HTML
 <div class="conf day">
-	<h2><span class="title">#{info.make_anchor}</span></h2>
+	<h2><span class="title">#{img}#{info.make_anchor}</span></h2>
 	<div class="body">
 		<p>
 HTML
@@ -142,6 +161,10 @@ end
 #
 ::TDiary::TDiaryMonth.module_eval do
 	attr_reader :diaries
+end
+
+def category_icon_save
+	@conf['category.icon'] = @category_icon.map {|c, i| "#{c} #{i}"}.join("\n")
 end
 
 
@@ -485,7 +508,7 @@ text = apply_plugin(<<'BODY', true)
 BODY
 EVAL
 				shorten = begin
-					CGI.escapeHTML(@conf.shorten(eval(body.untaint, @binding)))
+					@conf.shorten(eval(body.untaint, @binding))
 				rescue NameError
 					""
 				end
@@ -534,6 +557,33 @@ end
 #
 # configuration
 #
+def category_icon_find_icons
+   return if @category_all_icon
+	@category_all_icon = []
+	%w(png jpg gif bmp).each do |e|
+		@category_all_icon += Dir.glob("#{@category_icon_dir}*.#{e}").map {|i| File.basename(i)}
+	end
+	@category_all_icon.sort!
+end
+
+def category_icon_select(category)
+	options = %Q|<\t<option value="none">#{@category_icon_none_label}</option>\n|
+	@category_all_icon.each do |i|
+		options << %Q|\t<option value="#{CGI.escapeHTML(i)}"#{" selected" if @category_icon[category] == i}>#{CGI.escapeHTML(i)}</option>\n|
+	end
+	<<HTML
+<select name="category.icon.#{category}">
+#{options}
+</select>
+HTML
+end
+
+def category_icon_sample
+	@category_all_icon.map do |i|
+		%Q|<img src="#{@category_icon_url}#{i}" alt="#{i}">\n|
+	end.join("/\n")
+end
+
 if @mode == 'conf' || @mode == 'saveconf'
 	add_conf_proc('category', @category_conf_label) do
 		cache = Category::Cache.new(@conf, binding)
@@ -570,6 +620,19 @@ if @mode == 'conf' || @mode == 'saveconf'
 			cache.recreate(@years)
 		end
 		category_conf_html
+	end
+
+	add_conf_proc('category_icon', @category_icon_conf_label) do
+		category_icon_find_icons
+		if @mode == 'saveconf'
+			@cgi.params.keys.each do |key|
+				next unless /\Acategory\.icon\..*\z/ === key
+				category = key.sub(/\Acategory\.icon\./, '')
+				@category_icon[category] = @cgi.params[key][0] if @cgi.params[key][0] != 'none'
+			end
+			category_icon_save
+		end
+		category_icon_conf_html
 	end
 end
 

@@ -1,4 +1,4 @@
-# ja/category.rb $Revision: 1.4 $
+# ja/category.rb $Revision: 1.5 $
 #
 # Copyright (c) 2004 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -129,4 +129,31 @@ HTML
 HTML
 end
 
+@category_icon_none_label = 'no icon'
+@category_icon_conf_label = 'Category Icons'
+def category_icon_conf_html
+	str = ''
+	@categories.each do |c|
+		str << %Q|\t<tr>\n\t\t<td>#{c}</td>\n\t\t<td>\n|
+		str << category_icon_select(c)
+		str << %Q|<img src="#{@category_icon_url}#{@category_icon[c]}">| if @category_icon[c]
+		str << %Q|</td>\n\t</tr>\n|
+	end
+	<<HTML
+<h3 class="subtitle">Category Icons</h3>
+<p>
+<table>
+	<tr><th>Category</th><th>Icon</th></tr>
+#{str}
+</table>
+</p>
+<hr>
+<p>
+Sample icons (Directory: #{@category_icon_dir})
+</p>
+<p>
+#{category_icon_sample}
+</p>
+HTML
+end
 # vim: ts=3
