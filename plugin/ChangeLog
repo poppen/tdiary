@@ -1,3 +1,6 @@
+2003-09-07 Junichiro Kita <kita@kitaj.no-ip.com>
+	* random_google.rb: add
+
 2003-09-01 zunda <zunda at freeshell.org>
 	* todo/todo.rhtml: s/%%>/%>/g for newer version of erb
 
