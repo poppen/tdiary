@@ -1,4 +1,4 @@
-# counter.rb $Revision: 1.13 $
+# counter.rb $Revision: 1.14 $
 # -pv-
 #
 # 名称：
@@ -71,10 +71,13 @@
 # You can redistribute it and/or modify it under GPL2.
 # 
 =begin ChangeLog
+2002-11-13 TADA Tadashi <sho@spc.gr.jp>
+	* for squeeze.rb error.
+
 2002-10-12 MUTOH Masao  <mutoh@highway.ne.jp>
-    * 初めて使うときに動作しなくなっていた不具合の修正。
-    * 1日1回保持しているユーザ情報をクリーンアップするようにした。
-    * version 1.6.1
+	* 初めて使うときに動作しなくなっていた不具合の修正。
+	* 1日1回保持しているユーザ情報をクリーンアップするようにした。
+	* version 1.6.1
 
 2002-08-30 MUTOH Masao  <mutoh@highway.ne.jp>
 	* データファイルが読み込めなくなったとき、1つ前のバックアップデータ
@@ -166,7 +169,7 @@
 =end
 
 if ["latest", "month", "day", "comment"].include?(@mode) and 
-	@cgi.request_method =~ /POST|GET/ 
+	ENV['HTTP_REQUEST_METHOD'] =~ /POST|GET/ 
 
 require 'date'
 require 'pstore'
