@@ -1,4 +1,4 @@
-# makelirs.rb $Revision: 1.13 $
+# makelirs.rb $Revision: 1.14 $
 #
 # 更新情報をLIRSフォーマットのファイルに吐き出す
 #
@@ -51,7 +51,12 @@ add_update_proc do
 	file = @options['makelirs.file'] || 'antenna.lirs'
 
 	# create_lirs
-	t = TDiaryLatest::new( @cgi, "latest.rhtml", @conf )
+	cgi = @cgi.clone
+	conf = @conf.clone
+	def cgi.mobile_agent?; false; end
+	def conf.mobile_agent?; false; end
+
+	t = TDiaryLatest::new( cgi, "latest.rhtml", conf )
 	body = t.eval_rhtml
 	# escape comma
 	e = proc{|str| str.gsub(/[,\\]/) { "\\#{$&}" } }
