@@ -1,4 +1,4 @@
-# calendar2.rb $Revision: 1.5 $
+# calendar2.rb $Revision: 1.6 $
 #
 # calendar2: どこかで見たようなカレンダーを日記に追加する
 #   パラメタ:
@@ -117,8 +117,8 @@ CALENDAR_HEAD
 						@diaries[date].each_paragraph do |paragraph|
 							if paragraph.subtitle
 								subtitles << %Q|#{idx}. #{CGI::escapeHTML(paragraph.subtitle.gsub(/<.+?>/, ''))}|
-								idx.succ!
 							end
+							idx.succ!
 						end
 						%Q|<a href="#{@index}#{anchor date}" title="#{subtitles.join("&#13;&#10;")}">#{day}</a>|
 					end
