@@ -1,6 +1,8 @@
 2003-09-25 TADA Tadashi <sho@spc.gr.jp>
 	* support i18n framework.
 	* english support: append-css, image, kw, speed_comment.
+	* *.rb: remove String#to_euc.
+	* referer-utf8.rb: obsolete.
 
 2003-09-25 Kita Junichiro <kita@kitaj.no-ip.com>
 	* trackback/tb-show.rb: add <div class="trackbacks">. Thanks to mput.

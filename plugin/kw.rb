@@ -1,4 +1,4 @@
-# kw.rb $Revision: 1.6 $
+# kw.rb $Revision: 1.7 $
 #
 # kw: keyword link generator
 #   Parameters:
@@ -113,7 +113,7 @@ end
 
 add_conf_proc( 'kw', kw_label ) do
 	if @mode == 'saveconf' then
-		kw_list = kw_parse( @cgi.params['kw.dic'][0].to_euc )
+		kw_list = kw_parse( @conf.to_native( @cgi.params['kw.dic'][0] ) )
 		if kw_list.empty? then
 			@conf.delete( 'kw.dic' )
 		else

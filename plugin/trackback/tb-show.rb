@@ -1,4 +1,4 @@
-# tb-show.rb $Revision: 1.16 $
+# tb-show.rb $Revision: 1.17 $
 #
 # functions:
 #   * show TrackBack ping URL in right of TSUKKOMI label.
@@ -187,7 +187,7 @@ end # unless mobile_agent?
 
 add_conf_proc( 'TrackBack', 'TrackBack' ) do
 	if @mode == 'saveconf' then
-		@conf['trackback_anchor'] = @cgi.params['trackback_anchor'][0].to_euc
+		@conf['trackback_anchor'] = @conf.to_native( @cgi.params['trackback_anchor'][0] )
 		@conf['trackback_limit']  = @cgi.params['trackback_limit'][0].to_i
 		@conf['trackback_limit'] = 3 if @conf['trackback_limit'] < 1
 	end
