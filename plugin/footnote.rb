@@ -1,4 +1,10 @@
-# $Revision: 1.1 $
+# footnote.rb $Revision: 1.2 $
+#
+# fn: 脚注plugin
+#   パラメタ:
+#     text: 脚注本文
+#     mark: 脚注マーク('*')
+#
 # Copyright (c) 2001,2002 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
 
