@@ -1,4 +1,4 @@
-# tb-send.rb $Revision: 1.13 $
+# tb-send.rb $Revision: 1.14 $
 #
 # Copyright (c) 2003 Junichiro Kita <kita@kitaj.no-ip.com>
 # You can distribute this file under the GPL.
@@ -108,9 +108,9 @@ def tb_send_trackback
 					response, = http.post( request, trackback,
 						"Content-Type" => 'application/x-www-form-urlencoded')
 					
-					error = response.body.scan(%r|<error>(\d)</error>|)[0][0]
+					error, = response.body.scan(%r|<error>(\d)</error>|)[0]
 					if error == '1'
-						reason = response.body.scan(%r|<message>(.*)</message>|m)[0][0]
+						reason, = response.body.scan(%r|<message>(.*)</message>|m)[0]
 						raise TDiaryTrackBackError.new(reason) if urls.length == 1
 					end
 				end
