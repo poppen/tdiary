@@ -1,0 +1,69 @@
+#
+# AntiRefererSpam Plugin
+#
+# Copyright (c) 2004 T.Shimomura <redbug@netlife.gr.jp>
+#
+
+・これはなにをするもの？
+	tDiary で、「本日のリンク元」に、主に海外のアダルトサイトからの
+	大量のアクセス履歴が残ってしまうのを防ぐためのプラグインです。
+
+	リンク元URLが指すページのHTMLに、日記のアドレスが含まれていなければ
+	不正なリンク元であるとみなします。
+	（今のところはこれだけの対処で乗り切れるみたいです。いつまで持つやら）
+
+
+・インストール
+	tDiary をインストールしたディレクトリを $(tdiary_home) とすると、
+	plugin/antirefspam.rb を $(tdiary_home)/plugin に、
+	plugin/ja/antirefspam.rb を $(tdiary_home)/plugin/ja に、
+	filter/antirefspam.rb を $(tdiary_home)/tdiary/filter に、
+	それぞれコピーします。
+	本プラグインの古いバージョンがある場合は上書きしてかまいません。
+
+
+・最低限必要な設定
+	tDiary の設定画面で、"Anti Referer Spam" の "許容するリンク先の指定"
+	を設定してください。
+	ほとんどの場合は、あなたの日記のURL を書けばよいです。
+
+
+・さらに細かい設定
+	一応これで効果があるはずですが、tDiary の設定画面で "Anti Referer Spam"
+	の「信頼するリンク元の指定」を設定することで、負荷が軽くなるはずです。
+
+	信頼するリンク元には、いくつかのサーチエンジンやアンテナ書いておくとよいでしょう。
+	詳細な書式については、設定画面に表示されるヒントを参照してください。
+
+
+・プラグインが生成するファイル
+	このプラグインは、日記データの cache ディレクトリにAntiRefSpamFilter
+	というディレクトリを作って、その下にいくつかのファイルを作成します。
+		spamurls	不正なリンク元とみなした URL の一覧
+		safeurls	問題ないリンク元とみなした URL の一覧
+
+	safeurls に入るべき URL が、spamurls に登録されてしまった場合は、
+	その URL を、「信頼するリンク元の指定」で設定してください。
+
+	spamurls に入るべき URL が、safeurls に登録されてしまった場合は、
+	このプラグインを強化する必要があります。
+	・日記の URL
+	・誤判定されてしまった URL
+	を作者に教えてもらえれば対応するかもしれません。
+
+
+・FAQ
+	以下のページにある FAQ を適宜更新します。
+	http://www.netlife.gr.jp/redbug/diary/?date=20041018#p02
+
+
+・著作権とかライセンスとか
+	著作権は T.Shimomura が保有します。
+	このプログラムを使用したこと、あるいは使用できなかったことによる問題が
+	生じた場合でも、T.Shimomura は一切責任を持ちません。
+	改変、再配布は自由にしてかまいません。
+
+
+・連絡先
+	T.Shimomura <redbug@netlife.gr.jp>
+
