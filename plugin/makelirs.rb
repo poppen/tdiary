@@ -1,8 +1,13 @@
-# makelirs.rb $Revision: 1.2 $
+# makelirs.rb $Revision: 1.3 $
 #
 # 更新情報をLIRSフォーマットのファイルに吐き出す
 #
 #   pluginディレクトリに置くだけで動作します。
+#
+#   サーバのポートが80番以外であったり，SSLを用いてアクセスする場合は
+#   tdiary.conf で @options['makelirs.url'] を設定してください．
+#   例）
+#   @options['makelirs.url'] = 'https://example.net:8080/diary/'
 #
 #   tdiary.confにおいて、@options['makelirs.file']に
 #   ファイル名を指定すると、そのファイルを出力先の
@@ -13,6 +18,9 @@
 # Copyright (C) 2002 by Kazuhiro NISHIYAMA
 #
 =begin ChangeLog
+2002-10-28 zoe <zoe@kasumi.sakura.ne.jp>
+	* merge 1.4. Thanks koyasu san.
+
 2002-10-06 TADA Tadashi <http://sho.tdiary.net/>
 	* for tDiary 1.5.0.20021003.
 
@@ -31,9 +39,14 @@ add_update_proc do
 	body = t.eval_rhtml
 	# escape comma
 	e = proc{|str| str.gsub(/[,\\]/) { "\\#{$&}" } }
-	lirs = "LIRS,#{t.last_modified.tv_sec},#{Time.now.tv_sec},0,#{body.size},#{e[@index_page]},#{e[@html_title]},#{e[@author_name]},,\n"
+
+	host = ENV['HTTP_HOST']
+	path = ENV['REQUEST_URI']
+	path = path[0..path.rindex("/")]
+	url =  @options['makelirs.url'] || "http://#{host}#{path}"
+
+	lirs = "LIRS,#{t.last_modified.tv_sec},#{Time.now.tv_sec},0,#{body.size},#{e[url]},#{e[@html_title]},#{e[@author_name]},,\n"
 	File::open( file, 'w' ) do |o|
 		o.puts lirs
 	end
 end
-
