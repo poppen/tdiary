@@ -1,5 +1,5 @@
 =begin
-= プラグイン選択プラグイン((-$Id: select_plugins.rb,v 1.1 2003-08-27 15:47:34 zunda Exp $-))
+= プラグイン選択プラグイン((-$Id: select_plugins.rb,v 1.2 2003-08-28 16:54:54 zunda Exp $-))
 Please see below for an English description.
 
 == 概要
@@ -101,6 +101,10 @@ You should be able to find the latest version of this pluigin at
 =end
 
 =begin ChangeLog
+* Thu Aug 28, 2003 zunda <zunda at freeshell.org>
+- 1.3
+- simpler configuration display
+
 * Tue Aug 26, 2003 zunda <zunda at freeshell.org>
 - 1.2
 - option defaults are flipped
@@ -133,7 +137,7 @@ if @options["#{Select_plugin_prefix}.path"] then
 
 	# list of plugins
 	def sp_list_plugins
-		r = "<hr>\n"
+		r = ''
 		if false == @options["#{Select_plugin_prefix}.hidemandatory"] then
 			case @conf.lang
 			when 'en'
@@ -186,7 +190,7 @@ if @options["#{Select_plugin_prefix}.path"] then
 			case @conf.lang
 			when 'en'
 				r << <<-_HTML
-					<p>Check the plugins you want to use.</p>
+					<p>Please check the plugins you want to use.</p>
 					<ul>
 				_HTML
 			else
@@ -204,7 +208,7 @@ if @options["#{Select_plugin_prefix}.path"] then
 							#{"<a href=\"#{@conf.update}?conf=#{Select_plugin_prefix};help=o#{CGI::escape( file )}\">comments</a>" if false == @options["#{Select_plugin_prefix}.hidehelp"]}#{', ' if false == @options["#{Select_plugin_prefix}.hidehelp"] and false == @options["#{Select_plugin_prefix}.hidesource"]}
 							#{"<a href=\"#{@conf.update}?conf=#{Select_plugin_prefix};src=o#{CGI::escape( file )}\">source</a>" if false == @options["#{Select_plugin_prefix}.hidesource"]}
 							#{"(#{@sp_ver[ "o#{file}" ]})" if @sp_ver[ "o#{file}" ]}
-							#{'[New! try this.]' unless known.include?( file )}
+							#{'[New! Try this.]' unless known.include?( file )}
 					_HTML
 				else
 					r << <<-_HTML
@@ -326,13 +330,11 @@ if @options["#{Select_plugin_prefix}.path"] then
 		case @conf.lang
 		when 'en'
 			<<-_HTML
-			<h3 class="subtitle">Select-plugins plugin</h3>
-			<p>Select which plugins you want to use. $Revision: 1.1 $</p>
+			<p>Selects which plugins you want to use.</p>
 			_HTML
 		else
 			<<-_HTML
-			<h3 class="subtitle">プラグイン選択プラグイン</h3>
-			<p>どのプラグインを使うか選択します。$Revision: 1.1 $</p>
+			<p>どのプラグインを使うか選択します。</p>
 			_HTML
 		end
 	end

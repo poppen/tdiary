@@ -1,3 +1,7 @@
+2003-08-26 zunda <zunda at freeshell.org>
+	* select_plugins.rb: simpler configuration display
+	* search_control.rb: simpler configuration display
+
 2003-08-27 zunda <zunda at freeshell.org>
 	* 01_select_plugins.rb: renamed as select_plugins.rb
 	* select_plugins.rb: does not show comments and sources in default

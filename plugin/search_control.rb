@@ -1,5 +1,5 @@
 =begin
-= ここだけ検索プラグイン((-$Id: search_control.rb,v 1.2 2003-08-26 10:08:59 zunda Exp $-))
+= ここだけ検索プラグイン((-$Id: search_control.rb,v 1.3 2003-08-28 16:54:54 zunda Exp $-))
 Please see below for an English description.
 
 == 概要
@@ -48,6 +48,10 @@ You should be able to download the latest version from
 =end
 
 =begin ChangeLog
+* Aug 28, 2003 zunda <zunda at freeshell.org>
+- 1.3
+- simpler configuration display
+
 * Aug 26, 2003 zunda <zunda at freeshell.org>
 - 1.2
 - no table in configuration view, thanks to Tada-san.
@@ -111,11 +115,9 @@ add_conf_proc( Search_control_prefix,
 	case @conf.lang
 	when 'en'
 		r = <<-_HTML
-		<h3 class="subtitle">Search control plugin</h3>
-		<p>Ask the crawlers from external search engines not to index
+		<p>Asks the crawlers from external search engines not to index
 			unwanted pages. Check the viewes you want the search engines to
 			index.</p>
-		<p>$Revision: 1.2 $</p>
 		<ul>
 		_HTML
 		[
@@ -131,11 +133,9 @@ add_conf_proc( Search_control_prefix,
 		r << "\t\t</ul>\n"
 	else
 		r = <<-_HTML
-		<h3 class="subtitle">ここだけ検索プラグイン</h3>
 		<p>検索エンジンのロボットに、
 			余分なページのインデックスを作らないようにお願いしてみます。
-			インデックスを作って欲しい表示にチェックをしてください。</p>
-		<p>$Revision: 1.2 $</p>
+			インデックスを作って欲しい表示だけにチェックをしてください。</p>
 		<ul>
 		_HTML
 		[
