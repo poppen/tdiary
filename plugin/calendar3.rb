@@ -1,4 +1,4 @@
-# calendar3.rb $Revision: 1.21 $
+# calendar3.rb $Revision: 1.22 $
 #
 # calendar3: 現在表示している月のカレンダーを表示します．
 #  パラメタ: なし
@@ -169,33 +169,46 @@ def calendar3
 			result << %Q|  <a class="#{Calendar3::STYLE[kind]}" id="title-#{day}" title="|
 			i = 1
 			r = []
-			@diaries[date].each_section do |section|
-				if section.subtitle
-					if section.respond_to?(:stripped_subtitle) and section.stripped_subtitle
+			if @diaries[date].respond_to?(:categorizable?) and @diaries[date].categorizable?
+				@diaries[date].each_section do |section|
+					if section.stripped_subtitle != ""
 						text = apply_plugin( section.stripped_subtitle )
-					else
-						text = apply_plugin( section.subtitle )
+						r << %Q|#{i}. #{text.gsub(/<.+?>/, '')}|
 					end
-					r << %Q|#{i}. #{text.gsub(/<.+?>/, '')}|
+					i += 1
 				end
-				i += 1
+			else
+				@diaries[date].each_section do |section|
+					if section.subtitle
+						text = apply_plugin( section.subtitle )
+						r << %Q|#{i}. #{text.gsub(/<.+?>/, '')}|
+					end
+					i += 1
+				end
 			end
 			result << r.join("&#13;&#10;")
 			result << %Q|" href="#{@index}#{anchor date}">#{day}</a>\n|
 			unless /w3m|MSIE.*Mac/ === ENV["HTTP_USER_AGENT"]
 				result << %Q|  <span class="calendar-popup" id="popup-#{day}">\n|
 				i = 1
-				@diaries[date].each_section do |section|
-					if section.subtitle
-						text = apply_plugin( section.to_src)
-						if section.respond_to?(:stripped_subtitle) and section.stripped_subtitle
+				if @diaries[date].respond_to?(:categorizable?) and @diaries[date].categorizable?
+					@diaries[date].each_section do |section|
+						if section.stripped_subtitle != ""
+							text = apply_plugin( section.to_src)
 							subtitle = apply_plugin( section.stripped_subtitle )
-						else
-							subtitle = apply_plugin( section.subtitle )
+							result << %Q|    <a href="#{@index}#{anchor "%s#p%02d" % [date, i]}" title="#{CGI::escapeHTML(Calendar3.shorten(text))}">#{i}</a>. #{subtitle}<br>\n|
 						end
-						result << %Q|    <a href="#{@index}#{anchor "%s#p%02d" % [date, i]}" title="#{CGI::escapeHTML(Calendar3.shorten(text))}">#{i}</a>. #{subtitle}<br>\n|
+						i += 1
 					end
-					i += 1
+				else
+					@diaries[date].each_section do |section|
+						if section.subtitle
+							text = apply_plugin( section.to_src)
+							subtitle = apply_plugin( section.subtitle )
+							result << %Q|    <a href="#{@index}#{anchor "%s#p%02d" % [date, i]}" title="#{CGI::escapeHTML(Calendar3.shorten(text))}">#{i}</a>. #{subtitle}<br>\n|
+						end
+						i += 1
+					end
 				end
 				result << %Q|  </span>\n</span>\n|
 			end

@@ -1,4 +1,4 @@
-# titile_list.rb $Revision: 1.9 $
+# titile_list.rb $Revision: 1.10 $
 #
 # title_list: 現在表示している月のタイトルリストを表示
 #   パラメタ(カッコ内は未指定時の値):
@@ -18,11 +18,13 @@ def title_list( rev = false, extra_erb = 'obsolete' )
 	keys.each do |date|
 		next unless @diaries[date].visible?
 		result << %Q[<p class="recentitem"><a href="#{@index}#{anchor date}">#{@diaries[date].date.strftime( @date_format )}</a></p>\n<div class="recentsubtitles">\n]
-		@diaries[date].each_section do |section|
-			if section.respond_to?(:stripped_subtitle) and section.stripped_subtitle
-				result << %Q[#{section.stripped_subtitle}<br>\n]
-			elsif section.subtitle
-				result << %Q[#{section.subtitle}<br>\n]
+		if @diaries[date].respond_to?(:categorizable?) and @diaries[date].categorizable?
+			@diaries[date].each_section do |section|
+				result << %Q[#{section.stripped_subtitle}<br>\n] if section.stripped_subtitle != ""
+			end
+		else
+			@diaries[date].each_section do |section|
+				result << %Q[#{section.subtitle}<br>\n] if section.subtitle
 			end
 		end
 		result << "</div>\n"
