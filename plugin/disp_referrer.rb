@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.47 2005-02-22 03:59:45 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.48 2005-02-22 04:27:05 kazuhiko Exp $-))
 
 == 概要
 アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
@@ -177,14 +177,14 @@ unless @conf and @conf.secure then
 		def size
 			r = 0
 			caches.each do |path|
-				r += File.size( path )
+				r += File.size( path.untaint )
 			end
 			r
 		end
 		def clear
 			# current version
 			caches.each do |path|
-				File.unlink( path )
+				File.unlink( path.untaint )
 			end
 			# older version
 			if @setup['cache_path'] then
