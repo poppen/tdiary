@@ -1,4 +1,4 @@
-# ping.rb: $Revision: 1.2 $
+# ping.rb: $Revision: 1.3 $
 #
 # ping to weblog ping servers.
 #
@@ -6,8 +6,10 @@
 # Distributed under the GPL
 #
 add_update_proc do
-	list = @conf['ping.list'].split
-	ping( list ) unless list.empty?
+	if @conf['ping.list'] then
+		list = @conf['ping.list'].split
+		ping( list ) unless list.empty?
+	end
 end
 
 def ping( list )

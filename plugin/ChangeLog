@@ -1,3 +1,6 @@
+2004-06-11 TADA Tadashi <sho@spc.gr.jp>
+	* ping.rb: fix error when no @options['ping.list'].
+
 2004-06-10 TADA Tadashi <sho@spc.gr.jp>
 	* ping.rb: multi threading.
 	* ping.rb: 'Sending ping' checkbox in edit form.
