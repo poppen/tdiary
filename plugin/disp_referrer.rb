@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.42 2005-01-12 00:57:56 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.43 2005-01-23 08:03:31 zunda Exp $-))
 
 == 概要
 アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
@@ -870,7 +870,7 @@ class DispRef2Refs
 		return '' if not @refs[DispRef2URL::Normal] or @refs[DispRef2URL::Normal].size < 1
 		result = %Q[#{@setup['labels'][DispRef2URL::Normal]} | ]
 		@refs[DispRef2URL::Normal].each do |a|
-			result << %Q[<a href="#{DispRef2String::escapeHTML( a[2][0][1].url )}" title="#{DispRef2String::escapeHTML( a[2][0][1].title )}">#{a[0]}</a> | ]
+			result << %Q[<a rel="nofollow" href="#{DispRef2String::escapeHTML( a[2][0][1].url )}" title="#{DispRef2String::escapeHTML( a[2][0][1].title )}">#{a[0]}</a> | ]
 		end
 		result
 	end
@@ -906,12 +906,12 @@ class DispRef2Refs
 			result << '<ul>'
 			@refs[cat_key].each do |a|
 				if a[2].size == 1 then
-					result << %Q[<li><a href="#{DispRef2String::escapeHTML( a[2][0][1].url )}">#{DispRef2String::escapeHTML( a[2][0][1].title )}</a> &times;#{a[0]}</li>\n]
+					result << %Q[<li><a rel="nofollow" href="#{DispRef2String::escapeHTML( a[2][0][1].url )}">#{DispRef2String::escapeHTML( a[2][0][1].title )}</a> &times;#{a[0]}</li>\n]
 				elsif not a[2][0][1].title_ignored then
-					result << %Q[<li><a href="#{DispRef2String::escapeHTML( a[2][0][1].url )}">#{DispRef2String::escapeHTML( a[1] )}</a> &times;#{a[0]} : #{a[2][0][0]}]
+					result << %Q[<li><a rel="nofollow" href="#{DispRef2String::escapeHTML( a[2][0][1].url )}">#{DispRef2String::escapeHTML( a[1] )}</a> &times;#{a[0]} : #{a[2][0][0]}]
 					a[2][1..-1].each do |b|
 						title = (b[1].title != a[1]) ? %Q[ title="#{DispRef2String::escapeHTML( b[1].title )}"] : ''
-						result << %Q[, <a href="#{DispRef2String::escapeHTML( b[1].url )}"#{title}>#{b[0]}</a>]
+						result << %Q[, <a rel="nofollow" href="#{DispRef2String::escapeHTML( b[1].url )}"#{title}>#{b[0]}</a>]
 					end
 					result << "</li>\n"
 				else
@@ -920,7 +920,7 @@ class DispRef2Refs
 					a[2][0..-1].each do |b|
 						title = (b[1].title != a[1]) ? %Q[ title="#{DispRef2String::escapeHTML( b[1].title )}"] : ''
 						result << comma if comma
-						result << %Q[<a href="#{DispRef2String::escapeHTML( b[1].url )}"#{title}>#{b[0]}</a>]
+						result << %Q[<a rel="nofollow" href="#{DispRef2String::escapeHTML( b[1].url )}"#{title}>#{b[0]}</a>]
 						comma = ', '
 					end
 					result << "</li>\n"
@@ -940,18 +940,18 @@ class DispRef2Refs
 					result << '<li>'
 					result << DispRef2String::escapeHTML( a[1] )
 				else
-					result << %Q[<a href="#{DispRef2String::escapeHTML( a[2][0][1].url )}">#{DispRef2String::escapeHTML( a[1] )}</a>]
+					result << %Q[<a rel="nofollow" href="#{DispRef2String::escapeHTML( a[2][0][1].url )}">#{DispRef2String::escapeHTML( a[1] )}</a>]
 				end
 				result << %Q[ &times;#{a[0]} ]
 				if @setup['search.expand'] then
 					result << ' : '
 					if a[2].size < 2 then
-						result << %Q[<a href="#{DispRef2String::escapeHTML( a[2][0][1].url )}">#{DispRef2String::escapeHTML( a[2][0][1].title_ignored )}</a>]
+						result << %Q[<a rel="nofollow" href="#{DispRef2String::escapeHTML( a[2][0][1].url )}">#{DispRef2String::escapeHTML( a[2][0][1].title_ignored )}</a>]
 					else
 						comma = nil
 						a[2].each do |b|
 							result << comma if comma
-							result << %Q[<a href="#{DispRef2String::escapeHTML( b[1].url )}">#{DispRef2String::escapeHTML( b[1].title_ignored )}</a> &times;#{b[0]}]
+							result << %Q[<a rel="nofollow" href="#{DispRef2String::escapeHTML( b[1].url )}">#{DispRef2String::escapeHTML( b[1].title_ignored )}</a> &times;#{b[0]}]
 							comma = ', ' unless comma
 						end
 					end

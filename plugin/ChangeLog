@@ -1,5 +1,6 @@
 2005-01-22 zunda <zunda at freeshell.org>
 	* ja/disp_referrer.rb: Feedback search and blogpeople, thanks to Hahahaha <rin_ne at big.or.jp>
+	* disp_referrer.rb: add rel="nofollow" to links, see http://www.google.com/googleblog/2005/01/preventing-comment-spam.html
 
 2005-01-12 Junichiro Kita <kita@kitaj.no-ip.com>
 	* calendar3.rb: hide 'onmouseover' if @options['calendar3.show_popup'] == false, thanks to Ohiwa-san
