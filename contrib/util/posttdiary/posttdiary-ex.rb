@@ -1,12 +1,12 @@
 #!/usr/bin/env ruby
 $KCODE= 'e'
 #
-# posttdiary-ex: update tDiary via e-mail. $Revision: 1.1 $
+# posttdiary-ex: update tDiary via e-mail. $Revision: 1.2 $
 #
 # Copyright (C) 2002, All right reserved by TADA Tadashi <sho@spc.gr.jp>
 # You can redistribute it and/or modify it under GPL2.
 #
-# 2005.2.28: v.1.53: Modified to posttdiary-ex.rb by K.Sakurai (http://ks.nwr.jp)
+# 2005.3.17: v.1.54: Modified to posttdiary-ex.rb by K.Sakurai (http://ks.nwr.jp)
 #  Acknowledgements:
 #   * Based on posttdiary.rb v1.2 by TADA.
 #   * Some codes partially imported from Enikki Plugin Ex. : 
@@ -21,7 +21,7 @@ $KCODE= 'e'
 def usage( detailed_help )
 	# (if "!" is at the head of the line, it is to be shown only when detailed_help == true (-h option) )
 	text = <<-TEXT
-		#{File::basename __FILE__}: update tDiary via e-mail (v1.53).
+		#{File::basename __FILE__}: update tDiary via e-mail (v1.54).
 		usage: ruby posttdiary-ex.rb [options (without -d)] <url> <user> <passwd>
 		       ruby posttdiary-ex.rb [options (with -d)]
 		arguments:
@@ -212,7 +212,7 @@ def check_local_images( date, path )
 	exist_list = []
 	maxnum = -1
 	Dir.foreach( path ) do |file|
-		if file =~ /(\d{8,})_(\d+)\.(.*)/ then
+		if file =~ /(\d{8,})_(\d+)\.([^\.]*)/ then
 			if $1 == date then
 				serial = $2.to_i
 				maxnum = serial if serial > maxnum
@@ -856,7 +856,7 @@ begin
 	sh = Shell.new
 	for i in 0 .. (tmpimglist.length-1)
 		tmpimgname = tmpimglist[i]
-		raise "posttdiary-ex: program bug found: no extension in tmpimgname" if !(tmpimgname =~ /(\..*?)$/)
+		raise "posttdiary-ex: program bug found: no extension in tmpimgname" if !(tmpimgname =~ /(\.[^\.]*?)$/)
 		image_ext = $1.downcase
 		image_name = now.strftime( "%Y%m%d" ) + "_" + nextnum.to_s + image_ext
 		nextnum += 1
@@ -875,12 +875,12 @@ begin
 		img_in_div = 0
 		for j in 0 .. @image_name.size-1
 			i = @image_name[j]
-			serial = i.sub( /^\d+_(\d+)\..*?$/, '\1' )
+			serial = i.sub( /^\d+_(\d+)\.[^\.]*?$/, '\1' )
 			serial = i if use_image_ex and pass_filename
 			cm = ""
 			cm = exif_comment[i] if read_exif and exif_comment[i].size > 0
 			cm = image_orgname[i] if use_original_name and (!cm or cm.size == 0)
-			cm = i.gsub(/\..*?$/, '') if !cm or cm.size == 0
+			cm = i.gsub(/\.[^\.]*?$/, '') if !cm or cm.size == 0
 			if use_image_ex then
 				# modify <%=image (num),"comment"%> or <%=image (num)%> tags
 				if @body =~ /\<\%\=image[^\s]*\s+#{j}\s*\,\s*[\"\'](.*)[\"\']\s*\%*\>/i then
