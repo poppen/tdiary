@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 =begin
-= その日の天気プラグイン((-$Id: weather.rb,v 1.7 2003-07-24 08:21:47 zunda Exp $-))
+= その日の天気プラグイン((-$Id: weather.rb,v 1.8 2003-08-06 16:47:17 zunda Exp $-))
 その日の天気を、その日の日記を最初に更新する時に取得して保存し、それぞれ
 の日の日記の上部に表示します。
 
@@ -322,6 +322,7 @@ class Weather
 		[%r[\s*\bfog\b\s*]i, '"霧"'],
 		[%r[\s*\bsnow\b\s*]i, '"雪"'],
 		[%r[\s*\bthunder( storm)?\b\s*]i, '"雷"'],
+		[%r[\s*\blightning\b\s*]i, '"稲光"'],
 		[%r[\s*\bsand\b\s*]i, '"黄砂"'],
 		[%r[\s*\bcumulonimbus clouds\b\s*]i, '"積乱雲"'],
 		[%r[\s*\bcumulus clouds\b\s*]i, '"積雲"'],
