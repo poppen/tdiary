@@ -1,3 +1,6 @@
+2003-08-16 zunda <zunda at freeshell.org>
+	* weather.rb: heavy rain showers, thank you halchan-san
+
 2003-08-11 TADA Tadashi <sho@spc.gr.jp>
 	* amazon.rb: fix error when amazon.aid was nil.
 
