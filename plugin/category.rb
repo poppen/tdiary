@@ -1,4 +1,4 @@
-# category.rb $Revision: 1.16 $
+# category.rb $Revision: 1.17 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -626,8 +626,8 @@ if @mode == 'conf' || @mode == 'saveconf'
 		category_conf_html
 	end
 
+	category_icon_find_icons if @cgi.params['conf'][0] == 'category_icon'
 	add_conf_proc('category_icon', @category_icon_conf_label) do
-		category_icon_find_icons
 		if @mode == 'saveconf'
 			unless @conf.secure
 				[
