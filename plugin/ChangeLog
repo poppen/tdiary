@@ -1,3 +1,6 @@
+2004-04-23  mput <root@mput.dip.jp>
+	* recent_comment3.rb (recent_comment3): Sorry the commit I posted yesterday had another problem.  Fixed that.  Thanks to Kitaj.
+
 2004-04-22 mput <root@mput.dip.jp>
 	* recent_comment3.rb (recent_comment3): Bug fix.
 

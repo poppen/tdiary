@@ -1,4 +1,4 @@
-# $Revision: 1.11 $
+# $Revision: 1.12 $
 # recent_comment3: 最近のツッコミをリストアップする
 #   パラメタ:
 #     max:           最大表示数(未指定時:3)
@@ -18,6 +18,7 @@ RECENT_COMMENT3_NUM = 50
 
 def recent_comment3(max = 3, sep = '&nbsp;',
 		date_format = "(#{@date_format + ' %H:%M'})", *except )
+        date_format = "(#{@date_format + ' %H:%M'})" unless date_format.respond_to?(:to_str)
 	result = []
 	idx = 0
 	PStore.new(RECENT_COMMENT3_CACHE).transaction do |db|
@@ -26,7 +27,7 @@ def recent_comment3(max = 3, sep = '&nbsp;',
 			break if idx >= max or c == nil
 			comment, date, serial = c
 			next if except.include?(comment.name)
-			str = %Q|<strong>#{idx+1}.</strong><a href="#{@index}#{anchor date.strftime('%Y%m%d')}#c#{'%02d' % serial}" title="#{CGI::escapeHTML(comment.shorten( @conf.comment_length ))}">#{CGI::escapeHTML(comment.name)}#{comment.date.strftime(@date_format)}</a>\n|
+			str = %Q|<strong>#{idx+1}.</strong><a href="#{@index}#{anchor date.strftime('%Y%m%d')}#c#{'%02d' % serial}" title="#{CGI::escapeHTML(comment.shorten( @conf.comment_length ))}">#{CGI::escapeHTML(comment.name)}#{comment.date.strftime(date_format)}</a>\n|
 			result << str
 			idx += 1
 		end
