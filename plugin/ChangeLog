@@ -1,3 +1,6 @@
+2003-09-25 Kita Junichiro <kita@kitaj.no-ip.com>
+	* trackback/tb-show.rb: add <div class="trackbacks">.
+
 2003-09-24 TADA Tadashi <sho@spc.gr.jp>
 	* speed_comment.rb: support cookie for name, and conf_proc.
 

@@ -1,4 +1,4 @@
-# tb-show.rb $Revision: 1.14 $
+# tb-show.rb $Revision: 1.15 $
 #
 # functions:
 #   * show TrackBack ping URL in right of TSUKKOMI label.
@@ -85,62 +85,94 @@ module TDiary
 	end
 end
 MODIFY_CLASS
- 
+
 #
 # insert TrackBacks above Today's Link.
 #
 alias :referer_of_today_short_tb_backup :referer_of_today_short
 def referer_of_today_short( diary, limit )
 	r = referer_of_today_short_tb_backup( diary, limit )
+	return r unless @plugin_files.grep(/blog_style.rb\z/).empty?
 	if diary and !bot? then
 		count = 0
-		diary.each_comment( 100 ) do |com, idx|
-			next unless com.visible_true?
-			count += 1 if /^(Track|Ping)Back$/ =~ com.name
-		end
+		diary.each_visible_trackback( 128 ) {|t,count|} # count up
 		r << %Q|<a href="#{@index}#{anchor @tb_date.strftime( '%Y%m%d' )}#t">TrackBack#{count > 1 ? 's' : ''}(#{count})</a>| unless count == 0 and @options['tb.hide_if_no_tb']
 	end
 	r
 end
- 
-alias :referer_of_today_long_tb_backup :referer_of_today_long
-def referer_of_today_long( diary, limit )
+
+def trackbacks_of_today_short( diary, limit = @conf['trackback_limit'] || 3 )
+	# for BlogKit only
+	return if @plugin_files.grep(/blog_style.rb\z/).empty?
+
+	fragment = 't%02d'
+	today = anchor( diary.date.strftime( '%Y%m%d' ) )
+	count = 0
+	diary.each_visible_trackback( limit ) {|t,count|} # count up
+
 	r = ''
-	if diary then
-		r << %Q[<div class="caption"><a name="t">TrackBacks</a>#{trackback_ping_url}</div>\n]
-		r << %Q[	<div class="commentbody">\n]
-		i = "01"
-		diary.each_comment( 100 ) do |com, idx|
-			next unless com.visible_true?
-			next unless /^(Track|Ping)Back$/ =~ com.name
-			url, blog_name, title, excerpt = com.body.split(/\n/, 4)
+	r << %Q!\t<div class="comment trackbacks">\n!
 
-			blog_name ||= ''
-			title ||= ''
-			excerpt ||= ''
+	r << %Q!\t\t<div class="caption">\n!
+	r << %Q!\t\t\t<a name="t">#{ trackback_today }#{ trackback_total( count ) }</a>\n! if count > 0
+	r << %Q!\t\t\t[#{ trackback_ping_url }]\n!
+	r << %Q!\t\t</div>\n!
 
-			a = blog_name
-			a += ':' + title unless title.empty?
-			a = url if a.empty?
+	r << %Q!\t\t<div class="commentshort trackbackshort">\n!
+	r << %Q!\t\t\t<p><a href="#{ @index }#{ today }#t01">Before...</a></p>\n! if count > limit
 
-			r << <<TBSHOW
-		<div class="commentator">
-			<a name="t#{i}" href="#{@index}#{anchor @date.strftime("%Y%m%d#t#{i}")}">#{@conf.comment_anchor}
-			<span class="commentator"><a href="#{CGI::escapeHTML( url )}">#{CGI::escapeHTML( a )}</a></span>
-			<span class="commenttime">#{comment_date(com.date)}</span>
-		</div>
-TBSHOW
-			r << %Q|<p>#{CGI::escapeHTML( excerpt ).gsub( /\n/, '<br>' ).gsub( /<br><br>\Z/, '' )}</p>\n| unless excerpt.empty?
-			i = i.succ
-		end
-		r << %Q|	</div>\n|
+	diary.each_visible_trackback_tail( limit ) do |t,i|
+		url, name, title, excerpt = t.body.split( /\n/,4 )
+		a = name || url
+		a += ':' + title if title &&! title.empty?
+
+		r << %Q!\t\t\t<p>\n!
+		r << %Q!\t\t\t\t<a href="#{ @index }#{ today }##{ fragment % i }">#{ @conf['trackback_anchor'] }</a>\n!
+		r << %Q!\t\t\t\t<span class="commentator blog"><a href="#{ CGI::escapeHTML(url)}">#{ a }</a></span>\n!
+		r << %Q!\t\t\t\t[<%= CGI::escapeHTML( excerpt.shorten( 120 ) ) %>]\n! if excerpt
+		r << %Q!\t\t\t</p>\n!
 	end
-	r << referer_of_today_long_tb_backup( diary, limit )
+	r << %Q!\t\t</div>\n!
+	r << %Q!\t</div>\n!
+	r
+end
+
+def trackbacks_of_today_long( diary, limit = 128 )
+	count = 0
+	diary.each_visible_trackback( limit ) {|t,count|} # count up
+	fragment = 't%02d'
+	today = anchor( @date.strftime( '%Y%m%d' ) )
+
+	r = ''
+	r << %Q!\t<div class="comment trackbacks">\n!
+
+	r << %Q!\t\t<div class="caption">\n!
+	r << %Q!\t\t\t<a name="t">#{ trackback_today }#{ trackback_total( count ) }</a>\n! if count > 0
+	r << %Q!\t\t\t[#{ trackback_ping_url }]\n!
+	r << %Q!\t\t</div>\n!
+
+	r << %Q!\t\t<div class="commentbody trackbackbody">\n!
+	diary.each_visible_trackback( limit ) do |t,i|
+		url, name, title, excerpt = t.body.split( /\n/,4 )
+		a = name || url
+		a += ':' + title if title &&! title.empty?
+		f = fragment % i
+
+		r << %Q!\t\t\t<div class="commentator trackback">\n!
+		r << %Q!\t\t\t\t<a name="#{ f }%>" href="#{ @index }#{ today }##{ f }">#{ @conf['trackback_anchor'] }</a>\n!
+		r << %Q!\t\t\t\t<span class="commentator trackbackblog"><a href="#{ CGI::escapeHTML(url) }">#{ a }</a></span>\n!
+		r << %Q!\t\t\t\t<span class="commenttime trackbacktime">#{ comment_date( t.date ) }</span>\n!
+		r << %Q!\t\t\t\t<p>#{ CGI::escapeHTML( excerpt ).strip.gsub( /\n/,'<br>') }</p>\n! if excerpt
+		r << %Q!\t\t\t</div>\n!
+  	end
+	r << %Q!\t\t</div>\n!
+	r << %Q!\t</div>\n!
+	r
 end
 
 def trackback_ping_url
 	if @tb_url and not bot?
-		%Q| (TrackBack Ping URL: <a href="#{@tb_url}">#{@tb_url}</a>)|
+		%Q|TrackBack Ping URL: <a href="#{@tb_url}">#{@tb_url}</a>|
 	else
 		''
 	end
@@ -148,3 +180,23 @@ end
 
 # running on only non mobile mode
 end # unless mobile_agent?
+
+# configurations
+@conf['trackback_anchor'] ||= @conf.comment_anchor
+@conf['trackback_limit']  ||= @conf.comment_limit
+
+add_conf_proc( 'TrackBack', 'TrackBack' ) do
+	if @mode == 'saveconf' then
+		@conf['trackback_anchor'] = @cgi.params['trackback_anchor'][0].to_euc
+		@conf['trackback_limit']  = @cgi.params['trackback_limit'][0].to_i
+		@conf['trackback_limit'] = 3 if @conf['trackback_limit'] < 1
+	end
+	<<-"HTML"
+	<h3 class="subtitle">TrackBack アンカー</h3>
+	#{"<p>他の weblog からの TrackBack の先頭に挿入される、リンク用のアンカー文字列を指定します。なお「&lt;span class=\"tanchor\"&gt;_&lt;/span&gt;」を指定すると、テーマによっては自動的に画像アンカーがつくようになります多分。なってほしいな。そのうちなるに違いない。</p>" unless @conf.mobile_agent?}
+	<p><input name="trackback_anchor" value="#{ CGI::escapeHTML(@conf['trackback_anchor'] || @conf.comment_anchor ) }" size="40"></p>
+	<h3 class="subtitle">TrackBack リスト表示数</h3>
+	#{"<p>最新もしくは月別表示時に表示する、 TrackBack の最大件数を指定します。なお、日別表示時にはここの指定にかかわらずす最大128件の TrackBack が表示されます。</p>" unless @conf.mobile_agent?}
+	<p>最大<input name="trackback_limit" value="#{ @conf['trackback_limit'] || @conf.comment_limit }" size="3">件</p>
+	HTML
+end
