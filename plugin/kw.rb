@@ -1,4 +1,4 @@
-# kw.rb $Revision: 1.2 $
+# kw.rb $Revision: 1.3 $
 #
 # kw: keyword link generator
 #   Parameters:
@@ -17,22 +17,34 @@
 #
 #   if there isn't @options['kw.dic'], the plugin links to google.
 #
+# @options['kw.show_inter']
+#   Show InterWikiName.
+#   If this options is true, the keyword 'google:foo' shows 'google:foo'.
+#   But it is false, that shows only 'foo'.
+#   The default of this option is true.
+#
 # Copyright (C) 2003, TADA Tadashi <sho@spc.gr.jp>
 # You can distribute this under GPL.
 #
 
 def kw( keyword )
 	unless @kw_dic then
-		@kw_dic = {}
-		(@options['kw.dic'] || [[nil,'http://www.google.com/search?ie=euc-jp&amp;q=$1', 'euc-jp']]).each do |dic|
-			@kw_dic[dic[0]] = dic[1..-1]
+		@kw_dic = {nil => ['http://www.google.com/search?ie=euc-jp&amp;q=$1', 'euc-jp']}
+		if @options['kw.dic'] then
+			@options['kw.dic'].each do |dic|
+				@kw_dic[dic[0]] = dic[1..-1]
+			end
 		end
 	end
+
+	show_inter = @options['kw.show_inter'] == nil ? true : @options['kw.show_inter']
+
 	inter, key = keyword.split( /:/, 2 )
 	unless key then
 		inter = nil
 		key = keyword
 	end
+	keyword = key unless show_inter
 	begin
 		key = CGI::escape( case @kw_dic[inter][1]
 			when 'euc-jp'
@@ -51,3 +63,4 @@ def kw( keyword )
 	end
 	%Q[<a href="#{@kw_dic[inter][0].sub( /\$1/, key )}">#{keyword}</a>]
 end
+
