@@ -1,4 +1,4 @@
-# $Revision: 1.5 $
+# $Revision: 1.6 $
 # recent_list: 最近書いた日記のタイトル，サブタイトルを表示する
 #   パラメタ(カッコ内は未指定時の値):
 #     days:            何日分の日記を表示するか(20)
@@ -6,6 +6,7 @@
 #     title_with_body: trueで各パラグラフへのリンクのtitle属性にそのパラグラフの一部を指定(false)
 #     show_size:       trueで日記長を表示(false)
 #     show_title:      trueで各日のタイトルを表示(false)
+#     extra_erb:       タイトルリスト生成後さらにERbを通すか(false)
 #
 #   注意: セキュアモードでは使えません。
 #   備考: タイトルリストを日記に埋め込むは、レイアウトを工夫しなければ
@@ -29,8 +30,10 @@ class Paragraph
 end
 MODIFY_CLASS
 
-def recent_list(days = 30, date_format = @date_format,
-					title_with_body = false, show_size = false, show_title = false)
+def recent_list(days = 30, date_format = nil, title_with_body = nil, show_size = nil, show_title = nil, extra_erb = nil)
+	days = days.to_i
+	date_format ||= @date_format
+
 	result = ""
 	cgi = CGI::new
 	def cgi.referer; nil; end
@@ -73,7 +76,11 @@ def recent_list(days = 30, date_format = @date_format,
 			end
 		end
 	}
-	result
+	if extra_erb and /<%=/ === result
+		ERbLight.new(result.untaint).result(binding)
+	else
+		result
+	end
 end
 
 #@recent_list_cache = Cache.new(:recent_list, method(:recent_list), 10, '%Y/%m/%d', true, true)
