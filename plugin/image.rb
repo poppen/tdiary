@@ -1,4 +1,4 @@
-# image.rb $Revision: 1.5 $
+# image.rb $Revision: 1.6 $
 # -pv-
 # 
 # 名称:
@@ -42,6 +42,7 @@
 =begin Changelog
 2003-04-25 TADA Tadashi <sho@spc.gr.jp>
 	* maxnum and maxsize effective in secure mode.
+	* show message when upload failed.
 
 2003-04-23 Yoshimi KURUMA <yoshimik@iris.dti.ne.jp>
 	* add JavaScript for insert plugin tag into diary.
@@ -107,7 +108,6 @@ def image_list( date )
 	return @image_list if @conf.secure and @image_list
 	list = []
 	reg = /#{date}_(\d+)\.(#{image_ext})$/
-	$stderr.puts reg
 	Dir::foreach( @image_dir ) do |file|
 		list[$1.to_i] = file if reg =~ file
 	end
@@ -122,35 +122,41 @@ if /^formplugin$/ =~ @mode then
    maxnum = @options['image.maxnum'] || 1
    maxsize = @options['image.maxsize'] || 10000
 
-   date = @date.strftime( "%Y%m%d" )
-	images = image_list( date )
-   if @cgi.params['plugin_image_addimage'][0]
-      filename = @cgi.params['plugin_image_file'][0].original_filename
-      if filename =~ /\.(#{image_ext})\z/i
-         extension = $1.downcase
-			begin
-         	size = @cgi.params['plugin_image_file'][0].size
-			rescue NameError
-         	size = @cgi.params['plugin_image_file'][0].stat.size
-			end
-         if not @conf.secure or (images.compact.length < maxnum and size <= maxsize) then
-            file = "#{@image_dir}/#{date}_#{images.length}.#{extension}".untaint
-	         File::umask( 022 )
-	         File::open( file, "wb" ) do |f|
-	            f.puts @cgi.params['plugin_image_file'][0].read
+	begin
+	   date = @date.strftime( "%Y%m%d" )
+		images = image_list( date )
+	   if @cgi.params['plugin_image_addimage'][0]
+	      filename = @cgi.params['plugin_image_file'][0].original_filename
+	      if filename =~ /\.(#{image_ext})\z/i
+	         extension = $1.downcase
+				begin
+	         	size = @cgi.params['plugin_image_file'][0].size
+				rescue NameError
+	         	size = @cgi.params['plugin_image_file'][0].stat.size
+				end
+				if @conf.secure then
+					raise "画像は1日#{maxnum}枚までです。不要な画像を削除してから追加してください" if images.compact.length >= maxnum
+					raise "画像の最大サイズは#{maxsize}バイトまでです" if size > maxsize
+				end
+	         file = "#{@image_dir}/#{date}_#{images.length}.#{extension}".untaint
+		      File::umask( 022 )
+		      File::open( file, "wb" ) do |f|
+		         f.puts @cgi.params['plugin_image_file'][0].read
+		      end
+	         images << File::basename( file ) # for secure mode
+	      end
+	   elsif @cgi.params['plugin_image_delimage'][0]
+	      @cgi.params['plugin_image_id'].each do |id|
+	         file = "#{@image_dir}/#{images[id.to_i]}".untaint
+	         if File::file?( file ) && File::exist?( file )
+	            File::delete( file )
 	         end
-            images << File::basename( file ) # for secure mode
-         end
-      end
-   elsif @cgi.params['plugin_image_delimage'][0]
-      @cgi.params['plugin_image_id'].each do |id|
-         file = "#{@image_dir}/#{images[id.to_i]}".untaint
-         if File::file?( file ) && File::exist?( file )
-            File::delete( file )
-         end
-         images[id.to_i] = nil # for secure mode
-      end
-   end
+	         images[id.to_i] = nil # for secure mode
+	      end
+	   end
+	rescue
+		@image_message = $!.to_s
+	end
 end
 
 add_form_proc do |date|
@@ -221,8 +227,11 @@ add_form_proc do |date|
    r << %Q[<div class="form">
 	<div class="caption">
 	絵日記(追加)
-	</div>
-   <form class="update" method="post" enctype="multipart/form-data" action="#{@conf.update}"><div>
+	</div>]
+	if @image_message then
+		r << %Q[<p class="message">#{@image_message}</p>]
+	end
+   r << %Q[<form class="update" method="post" enctype="multipart/form-data" action="#{@conf.update}"><div>
    <input type="hidden" name="plugin_image_addimage" value="true">
    <input type="hidden" name="date" value="#{date.strftime( '%Y%m%d' )}">
    <input type="file"	name="plugin_image_file">

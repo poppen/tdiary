@@ -1,6 +1,7 @@
 2003-04-25 TADA Tadashi <sho@spc.gr.jp>
 	* image: maxnum and maxsize effective in secure mode.
 	* image: add JavaScript for insert plugin tag into diary. thanks Yoshimi KURUMA <yoshimik@iris.dti.ne.jp>.
+	* image: show message when upload failed.
 
 2003-04-24 TADA Tadashi <sho@spc.gr.jp>
 	* image: enable running on secure mode.
