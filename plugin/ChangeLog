@@ -1,3 +1,6 @@
+2003-12-02  Kazuhiko  <kazuhiko@fdiary.net>
+	* amazon.rb: hide some options in secure mode.
+
 2003-12-02 TADA Tadashi <sho@spc.gr.jp>
 	* amazon.rb: add options amazon.imgsize and amazon.nodefault. thanx KOMORIYA.
 	* amazon.rb: remove options amazon.smallimg.

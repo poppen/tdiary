@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.21 $
+# amazon.rb $Revision: 1.22 $
 #
 # See document in language resource file: en/amazon.rb
 #
@@ -168,15 +168,19 @@ end
 
 add_conf_proc( 'amazon', @amazon_label_conf ) do
 	if @mode == 'saveconf' then
-		@conf['amazon.imgsize'] = @cgi.params['amazon.imgsize'][0].to_i
-		@conf['amazon.hidename'] = (@cgi.params['amazon.hidename'][0] == 'true')
-		@conf['amazon.nodefault'] = (@cgi.params['amazon.nodefault'][0] == 'true')
+		unless @conf.secure then
+			@conf['amazon.imgsize'] = @cgi.params['amazon.imgsize'][0].to_i
+			@conf['amazon.hidename'] = (@cgi.params['amazon.hidename'][0] == 'true')
+			@conf['amazon.nodefault'] = (@cgi.params['amazon.nodefault'][0] == 'true')
+		end
 		if not @conf['amazon.hideconf'] then
 			@conf['amazon.aid'] = @cgi.params['amazon.aid'][0]
 		end
 	end
 
-	<<-HTML
+	result = ''
+	unless @conf.secure then
+		result << <<-HTML
 	<h3>#{@amazon_label_imgsize}</h3>
 	<p><select name="amazon.imgsize">
 		<option value="0"#{if @conf['amazon.imgsize'] == 0 then " selected" end}>#{@amazon_label_large}</option>
@@ -193,10 +197,13 @@ add_conf_proc( 'amazon', @amazon_label_conf ) do
 		<option value="true"#{if @conf['amazon.nodefault'] then " selected" end}>#{@amazon_label_usetitle}</option>
 		<option value="false"#{if not @conf['amazon.nodefault'] then " selected" end}>#{@amazon_label_usedefault}</option>
 	</select></p>
-	#{if not @conf['amazon.hideconf'] then
-		"<h3>#{@amazon_label_aid}</h3>
-		<p><input name=\"amazon.aid\" value=\"#{CGI::escapeHTML( @conf['amazon.aid'] ) if @conf['amazon.aid']}\"></p>"
-	end}
 	HTML
+	end
+	if not @conf['amazon.hideconf'] then
+		result << <<-HTML
+	<h3>#{@amazon_label_aid}</h3>
+	<p><input name="amazon.aid" value="#{CGI::escapeHTML( @conf['amazon.aid'] ) if @conf['amazon.aid']}"></p>
+	HTML
+	end
+	result
 end
-
