@@ -1,4 +1,4 @@
-# calendar3.rb $Revision: 1.36 $
+# calendar3.rb $Revision: 1.37 $
 #
 # calendar3: 現在表示している月のカレンダーを表示します．
 #  パラメタ: なし
@@ -122,19 +122,6 @@ module Calendar3
 	end
 
 	module_function :make_cal, :next_month, :prev_month
-end
-
-# 1.4 -> 1.5
-unless /1\.5\..*/ === TDIARY_VERSION
-eval(<<MODIFY_CLASS, TOPLEVEL_BINDING)
-class Diary
-	alias :each_section :each_paragraph
-end
-
-class Paragraph
-	alias :to_src :text
-end
-MODIFY_CLASS
 end
 
 def calendar3

@@ -1,6 +1,9 @@
 2004-06-27 TADA Tadashi <sho@spc.gr.jp>
 	* release 2.0.0.
 
+2004-06-27 Junichiro Kita <kita@kitaj.no-ip.com>
+	* calendar3.rb: tDiary 1.4 is not supported any more
+
 2004-06-26 Junichiro Kita <kita@kitaj.no-ip.com>
 	* makerss.rb: define RDFSection if @mode == trackbackreceive
 	* my-ex.rb: invalidated if mobile_agent
