@@ -1,4 +1,4 @@
-# calendar3.rb $Revision: 1.19 $
+# calendar3.rb $Revision: 1.20 $
 #
 # calendar3: 現在表示している月のカレンダーを表示します．
 #  パラメタ: なし
@@ -178,7 +178,7 @@ def calendar3
 			end
 			result << r.join("&#13;&#10;")
 			result << %Q|" href="#{@index}#{anchor date}">#{day}</a>\n|
-			unless /w3m/ === ENV["HTTP_USER_AGENT"]
+			unless /w3m|MSIE.*Mac/ === ENV["HTTP_USER_AGENT"]
 				result << %Q|  <span class="calendar-popup" id="popup-#{day}">\n|
 				i = 1
 				@diaries[date].each_section do |section|
