@@ -1,4 +1,4 @@
-# category.rb $Revision: 1.21 $
+# category.rb $Revision: 1.22 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -28,7 +28,7 @@ def category_icon_init
 	@conf['category.icon'].split(/\n/).each do |l|
 		c, i = l.split
 		next if c.nil? or i.nil?
-		@category_icon[c] = i if File.exists?("#{@category_icon_dir}#{i}")
+		@category_icon[c] = i if File.exists?("#{@category_icon_dir}#{i.untaint}")
 	end
 end
 category_icon_init

@@ -1,22 +1,21 @@
+2004-10-12  Kazuhiko  <kazuhiko@fdiary.net>
+	* category.rb: revise for mod_ruby
+
 2004-10-03 Junichiro Kita <kita@kitaj.no-ip.com>
 	* amazon.rb: add new option, @conf['amazon.over18']
 
 2004-10-01  Masao Mutoh  <mutoh@highway.ne.jp>
-
 	* counter.rb: Support @options["bot"]
 
 2004-09-30  Masao Mutoh  <mutoh@highway.ne.jp>
-
 	* a.rb: improve HTML
 
 2004-09-26  Masao Mutoh  <mutoh@highway.ne.jp>
-
 	* a.rb: Support config menu.
 	* en/a.rb: Added.
 	* a/: Removed.
 
 2004-09-15  URABE Shyouhei  <shyouhei@ice.uec.ac.jp>
-
 	* ja/disp_referrer.rb : add some search engines.
 
 2004-08-13 TADA Tadashi <sho@spc.gr.jp>
