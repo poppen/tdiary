@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# squeeze.rb $Revision: 1.10 $
+# squeeze.rb $Revision: 1.11 $
 # -pv-
 #
 # Ì¾¾Î¡§
@@ -51,6 +51,10 @@
 # version 1.0.4 by TADA Tadashi <sho@spc.gr.jp> with GPL2.
 #
 =begin ChangeLog
+2003-06-30 MUTOH Masao	<mutoh@highway.ne.jp>
+	* fix path of default output_path on CGI or CMD mode.
+	  Pointed out by OGAWA KenIchi.
+
 2003-05-17 TADA Tadashi <sho@spc.gr.jp>
 	* fix path of theme on CGI or CMD mode.
 
@@ -150,7 +154,7 @@ if mode == "CMD" || mode == "CGI"
 
 	if mode == "CMD"
 		def usage
-			puts "squeeze $Revision: 1.10 $"
+			puts "squeeze $Revision: 1.11 $"
 			puts " making html files from tDiary's database."
 			puts " usage: ruby squeeze.rb [-p <tDiary path>] [-c <tdiary.conf path>] [-a] [-s] [-x suffix] <dest path>"
 			exit
@@ -276,6 +280,7 @@ module TDiary
 			super(CGI::new, 'day.rhtml', conf)
 			calendar
 			@years.keys.sort.each do |year|
+				print "(#{year.to_s}/) "
 				@years[year.to_s].sort.each do |month|
 					@io.transaction(Time::local(year.to_i, month.to_i)) do |diaries|
 						diaries.sort.each do |day, diary|
@@ -299,7 +304,7 @@ if mode == "CGI" || mode == "CMD"
 			</head>
 			<body><div style="text-align:center">
 			<h1>Squeeze for tDiary</h1>
-			<p>$Revision: 1.10 $</p>
+			<p>$Revision: 1.11 $</p>
 			<p>Copyright (C) 2002 MUTOH Masao&lt;mutoh@highway.ne.jp&gt;</p></div>
 			<br><br>Start!</p><hr>
 		]
@@ -312,6 +317,8 @@ if mode == "CGI" || mode == "CMD"
 		conf.show_comment = true
 		conf.show_referer = false
 		conf.hide_comment_form = true
+		output_path = "#{conf.data_path}/cache/html" unless output_path
+		Dir.mkdir(output_path, 0755) unless File.directory?(output_path)
 		TDiary::YATDiarySqueezeMain.new(output_path, all_data, compat, conf, suffix)
 	rescue
 		print $!, "\n"
