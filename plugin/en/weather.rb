@@ -1,5 +1,5 @@
 =begin
-= Weather-of-today plugin((-$Id: weather.rb,v 1.1 2003-09-30 08:09:25 zunda Exp $-))
+= Weather-of-today plugin((-$Id: weather.rb,v 1.2 2003-11-25 12:41:52 zunda Exp $-))
 Records the weather when the diary is first updated for the date and
 displays it.
 
@@ -66,10 +66,10 @@ class Weather
 		r << %Q|<a href="#{@url}">|
 		has_condition = false
 		if @data['weather'] then
-			r << CGI::escapeHTML( WeatherTranslator::S.new( @data['weather']).translate( Words_en ).capitalize )
+			r << CGI::escapeHTML( WeatherTranslator::S.new( @data['weather']).translate( Words_en ).compact.capitalize )
 			has_condition = true
 		elsif @data['condition'] then
-			r << CGI::escapeHTML( WeatherTranslator::S.new( @data['condition']).translate( Words_en ).capitalize )
+			r << CGI::escapeHTML( WeatherTranslator::S.new( @data['condition']).translate( Words_en ).compact.capitalize )
 			has_condition = true
 		end
 
@@ -107,12 +107,12 @@ class Weather
 		if @data['weather'] then
 			r << "#{I_HTML_START}"
 			r << %Q|<A HREF="#{@url}">|
-			r << CGI::escapeHTML( WeatherTranslator::S.new( @data['weather']).translate( Words_en ))
+			r << CGI::escapeHTML( WeatherTranslator::S.new( @data['weather']).translate( Words_en ).compact.capitalize )
 			r << "</A>#{I_HTML_END}\n"
 		elsif @data['condition'] then
 			r << "#{I_HTML_START}"
 			r << %Q|<A HREF="#{@url}">|
-			r << CGI::escapeHTML( WeatherTranslator::S.new( @data['condition']).translate( Words_en ))
+			r << CGI::escapeHTML( WeatherTranslator::S.new( @data['condition']).translate( Words_en ).compact.capitalize )
 			r << "</A>#{I_HTML_END}\n"
 		end
 

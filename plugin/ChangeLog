@@ -1,3 +1,6 @@
+2003-11-25 zunda <zunda at freeshell.org>
+	* weather.rb: avoid showing duplicated translation like mist/mist, thanks toshi-san.
+
 2003-11-19 Junichiro Kita <kita@kitaj.no-ip.com>
 	* tb-send.rb, tb-show.rb, makelirs.rb, output_rdf.rb: use @conf.base_url
 

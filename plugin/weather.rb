@@ -1,5 +1,5 @@
 =begin
-= その日の天気プラグイン / Weather-of-today plugin((-$Id: weather.rb,v 1.10 2003-09-30 08:09:25 zunda Exp $-))
+= その日の天気プラグイン / Weather-of-today plugin((-$Id: weather.rb,v 1.11 2003-11-25 12:41:52 zunda Exp $-))
 Records the weather when the diary is first updated for the date and
 displays it.
 
@@ -86,10 +86,13 @@ module WeatherTranslator
 			return '' if not self or self.empty?
 			table.each do |x|
 				if x[0] =~ self then
-					return S.new( $` ).translate( table ) + eval( x[1] ) + S.new( $' ).translate( table )
+					return S.new( S.new( $` ).translate( table ) + eval( x[1] ) + S.new( $' ).translate( table ) )
 				end
 			end
 			self
+		end
+		def compact
+			S.new( self.split( /\/+/ ).uniq.join( '/' ) )
 		end
 	end
 end
