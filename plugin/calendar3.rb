@@ -1,4 +1,4 @@
-# calendar3.rb $Revision: 1.35 $
+# calendar3.rb $Revision: 1.36 $
 #
 # calendar3: 現在表示している月のカレンダーを表示します．
 #  パラメタ: なし
@@ -237,6 +237,19 @@ if @options.has_key?('calendar3.show_popup')
 end
 if /w3m|MSIE.*Mac/ === ENV["HTTP_USER_AGENT"]
 	@calendar3_show_popup = false
+	add_header_proc do
+    <<JAVASCRIPT
+  <script type="text/javascript">
+  <!--
+  function popup(target,element,notitle) {
+  }
+
+  function popdown(element) {
+  }
+  // -->
+</script>
+JAVASCRIPT
+	end
 end
 if @calendar3_show_popup
 	add_header_proc do
@@ -252,13 +265,35 @@ if @calendar3_show_popup
   var _calendar3_popElement = null;
   var _calendar3_popCount = 0;
 
+  if (document.compatMode){
+    if (_dom==2 && document.compatMode=="CSS1Compat") _dom = 2.5;
+  } // Win IE6
+
+  function getLeft(div){
+    result = 0;
+    while (1){
+      div = div.offsetParent;
+      result += div.offsetLeft;
+      if (div.tagName=="BODY") return result;
+    }
+  }
+
+  function getTop(div){
+    result = 0;
+    while (1){
+      div = div.offsetParent;
+      result += div.offsetTop;
+      if (div.tagName=="BODY") return result;
+    }
+  }
+
   function moveDivTo(div,left,top){
     if(_dom==4){
       div.style.left=left+'px';
       div.style.top =top +'px';
       return;
     }
-    if(_dom==2 || _dom==1){
+    if(_dom==2.5 || _dom==2 || _dom==1){
       div.style.pixelLeft=left;
       div.style.pixelTop =top;
       return;
@@ -275,7 +310,7 @@ if @calendar3_show_popup
       div.style.top =div.offsetTop +top;
       return;
     }
-    if(_dom==2){
+    if(_dom==2.5 || _dom==2){
       div.style.pixelLeft=div.offsetLeft+left;
       div.style.pixelTop =div.offsetTop +top;
       return;
@@ -292,6 +327,7 @@ if @calendar3_show_popup
   }
 
   function getDivLeft(div){
+    if(_dom==2.5) return div.offsetLeft+getLeft(div);
     if(_dom==4 || _dom==2) return div.offsetLeft;
     if(_dom==1)            return div.style.pixelLeft;
     if(_dom==3)            return div.left;
@@ -299,6 +335,7 @@ if @calendar3_show_popup
   }
 
   function getDivTop(div){
+    if(_dom==2.5) return div.offsetTop+getTop(div);
     if(_dom==4 || _dom==2) return div.offsetTop;
     if(_dom==1)            return div.style.pixelTop;
     if(_dom==3)            return div.top;
@@ -306,14 +343,14 @@ if @calendar3_show_popup
   }
 
   function getDivWidth (div){
-    if(_dom==4 || _dom==2) return div.offsetWidth;
+    if(_dom==4 || _dom==2.5 || _dom==2) return div.offsetWidth;
     if(_dom==1)            return div.style.pixelWidth;
     if(_dom==3)            return div.clip.width;
     return 0;
   }
 
   function getDivHeight(div){
-    if(_dom==4 || _dom==2) return div.offsetHeight;
+    if(_dom==4 || _dom==2.5 || _dom==2) return div.offsetHeight;
     if(_dom==1)            return div.style.pixelHeight;
     if(_dom==3)            return div.clip.height;
     return 0;

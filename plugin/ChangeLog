@@ -1,3 +1,6 @@
+2004.01.26 Junichiro Kita <kita@kitaj.no-ip.com>
+	* calendar3.rb: fix displacement of popup window. thanks sfanla<tdiary@sfanla.com>.
+
 2004.01.25 Junichiro Kita <kita@kitaj.no-ip.com>
 	* recent_trackback3.rb: setting via conf.
 
