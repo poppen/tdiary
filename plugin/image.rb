@@ -1,4 +1,4 @@
-# image.rb $Revision: 1.13 $
+# image.rb $Revision: 1.14 $
 # -pv-
 # 
 # Ì¾¾Î:
@@ -46,6 +46,10 @@
 #
 
 =begin Changelog
+2003-09-28 Junichiro Kita <kita@kitaj.no-ip.com>
+	* write images with print method instead of puts method.
+	* show image size.
+
 2003-09-25 TADA Tadashi <sho@spc.gr.jp>
 	* english support.
 
@@ -182,7 +186,7 @@ if /^formplugin$/ =~ @mode then
 	         file = "#{@image_dir}/#{date}_#{images.length}.#{extension}".untaint
 		      File::umask( 022 )
 		      File::open( file, "wb" ) do |f|
-		         f.puts @cgi.params['plugin_image_file'][0].read
+		         f.print @cgi.params['plugin_image_file'][0].read
 		      end
 	         images << File::basename( file ) # for secure mode
 	      end
@@ -246,7 +250,7 @@ add_form_proc do |date|
 		<table>
 		<tr>]
 	   images.each_with_index do |img,id|
-	      r << %Q[<td><img class="form" src="#{@image_url}/#{img}" alt="#{id}" width="160"></td>] if img
+	      r << %Q[<td><img class="form" src="#{@image_url}/#{img}" alt="#{id}" width="160"><br>#{FileTest.size("#{@image_dir}/#{img}".untaint)}bytes</td>] if img
 	   end
 		r << "</tr><tr>"
 	   images.each_with_index do |img,id|
