@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 =begin
-= その日の天気プラグイン((-$Id: weather.rb,v 1.1 2003-05-09 11:21:13 zunda Exp $-))
+= その日の天気プラグイン((-$Id: weather.rb,v 1.2 2003-05-26 11:08:54 zunda Exp $-))
 その日の天気を、その日の日記を最初に更新する時に取得して保存し、それぞれ
 の日の日記の上部に表示します。
 
@@ -50,7 +50,7 @@ EUC-JPです。
 
 デフォルトでは、携帯端末から閲覧された場合には天気を表示しないようになっ
 ています。携帯からでも天気を表示したい場合には、
-  @options['weahter.show_mobile'] = true
+  @options['weather.show_mobile'] = true
 を指定してください。
 
 === 保存される天気データについて
@@ -96,7 +96,7 @@ EUC-JPです。
   ページから情報を取得しないように注意してください。
 
 ==== 指定しなくてもいい項目
-: @options['weahter.show_mobile'] = false
+: @options['weather.show_mobile'] = false
   trueの場合は、携帯端末からのアクセスの場合に、i_html_stringで生成され
   たCHTMLを表示します。falseの場合は、携帯端末からのアクセスの場合には天
   気を表示しません。
@@ -115,7 +115,7 @@ EUC-JPです。
   日付の判定など、天気データの記録以外の時刻の管理には、日記全体のタイム
   ゾーンが用いられます。
 
-: @options['weahter.show_error']
+: @options['weather.show_error']
   データ取得時にエラーがあった場合にそれを日記に表示したい場合にはtrueに
   します。デフォルトでは表示しません。
 
@@ -166,7 +166,7 @@ Weatherクラスに、Words_jaという配列定数として与えてあります。
   片を作ってください。
 
 携帯端末からの閲覧の際には、
-  @options['weahter.show_mobile'] = true
+  @options['weather.show_mobile'] = true
 の場合には、上記の代わりに、それぞれI_HTML_START、I_HTML_END、
 Weather.i_html_stringが使われます。エラーの表示はできません。
 
@@ -222,6 +222,8 @@ of GPL version 2 or later.
 =end
 
 =begin ChangeLog
+* Mon May 26, 2003 zunda <zunda at freeshell.org>
+- fix typo on weaHTer.show_mobile and weHTer.show_error, thank you halchan.
 * Thu May  8, 2003 zunda <zunda at freeshell.org>
 - A with B, observed,
 * Mon May  5, 2003 zunda <zunda at freeshell.org>
@@ -689,9 +691,9 @@ def weather( date = nil )
 	w = Weather::restore( path, date || @date )
 	if w then
 		unless @cgi.mobile_agent? then
-			w.to_html( @options['weahter.show_error'] )
+			w.to_html( @options['weather.show_error'] )
 		else
-			w.to_i_html if @options['weahter.show_mobile']
+			w.to_i_html if @options['weather.show_mobile']
 		end
 	else
 		''

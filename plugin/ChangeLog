@@ -1,3 +1,6 @@
+2003-05-26 zunda <zunda at freeshell.org>
+	* weather.rb: fix typo on option names (thank you haluchan).
+
 2003-05-19 MUTOH Masao <mutoh@highway.ne.jp>
 
 	* disp_referrer.rb: Support to seperate Antenna similar to 
