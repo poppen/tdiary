@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.7 $
+# makerss.rb: $Revision: 1.8 $
 #
 # generate RSS file when updating.
 #
@@ -13,7 +13,7 @@
 # Copyright (c) 2004 TADA Tadashi <sho@spc.gr.jp>
 # Distributed under the GPL
 #
-if /^append|replace|comment|showcomment$/ =~ @mode then
+if /^append|replace|comment|showcomment|trackbackreceive$/ =~ @mode then
 	eval( <<-TOPLEVEL_CLASS, TOPLEVEL_BINDING )
 		module TDiary
 			class RDFSection

@@ -1,4 +1,4 @@
-# my-ex.rb $Revision: 1.11 $
+# my-ex.rb $Revision: 1.12 $
 #
 # my(拡張版): myプラグインを拡張し、title属性に参照先の内容を挿入します。
 #             参照先がセクションの場合は(あれば)サブタイトルを、
@@ -9,6 +9,8 @@
 #
 # Copyright (c) 2002 TADA Tadashi <sho@spc.gr.jp>
 # Distributed under the GPL
+
+unless @conf.mobile_agent?
 
 def my( a, str, title = nil )
 	date, noise, frag = a.scan( /^(\d{4}|\d{6}|\d{8})([^\d]*)?#?([pct]\d\d)?$/ )[0]
@@ -51,3 +53,4 @@ def my( a, str, title = nil )
 	end
 end
 
+end

@@ -1,3 +1,7 @@
+2004-06-26 Junichiro Kita <kita@kitaj.no-ip.com>
+	* makerss.rb: define RDFSection if @mode == trackbackreceive
+	* my-ex.rb: invalidated if mobile_agent
+
 2004-06-24 Junichiro Kita <kita@kitaj.no-ip.com>
 	* random_google.rb: hide if user agent is bot or modile_agent.
 
