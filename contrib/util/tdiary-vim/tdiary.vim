@@ -2,7 +2,7 @@
 
 " Author: UECHI Yasumasa <uechi@.potaway.net>
 
-" $Revision: 1.1 $
+" $Revision: 1.2 $
 
 " This program is free software; you can redistribute it and/or
 " modify it under the terms of the GNU General Public License as
@@ -35,68 +35,68 @@ if !exists("g:tdiary_update_script_name")
 endif
 
 let s:tdiary_url = g:tdiary_site1_url
-let s:mode = "append"
 let s:curl_cmd = "curl"
-let s:date = ''
 let s:user = ''
-let s:title = ''
+let s:body_start = 4
 
 function! s:TDiary_new()
-	let s:date = ''
-	call s:CreateBuffer()
-	let s:mode = "append"
+	call s:CreateBuffer("append")
+	normal G
 endfunction
 
 function! s:TDiary_replace()
-	let s:date = ''
-	call s:CreateBuffer()
-	let s:mode = "replace"
+	let mode = "replace"
+	let date = s:CreateBuffer(mode)
 
 	let data = ' -d "'
-	let data = data . s:Date2PostDate()
+	let data = data . s:Date2PostDate(date, mode)
 	let data = data . '&edit=edit" '
 
 	call s:SetUser()
 
+	normal G
 	execute 'r !' . s:curl_cmd . ' -s ' . s:user . data . s:tdiary_url . '/'. g:tdiary_update_script_name
 	let save_pat = @/
 	let @/ = 'input.\+name="title"[^>]\+>'
-	execute "normal ggn"
-	let s:title = substitute(getline("."), '.\+value="\(.*\)".\+', '\1', '')
+	normal ggn
+	let title = substitute(getline("."), '.\+value="\(.*\)".\+', '\1', '')
 
 	let @/ = 'textarea \+name="body"[^>]\+>'
-	execute "normal ggdndf>"
+	execute ":" . s:body_start
+	normal dndf>
 	let @/ = '</textarea'
-	execute "normal ndG"
-	execute "%s///"
+	normal ndG
+	silent! %s///
 
 	silent! %s/&amp;/\&/g
 	silent! %s/&quot;/\"/g
 	silent! %s/&gt;/>/g
 	silent! %s/&lt;/</g
 
-	execute "normal G"
-	execute "redraw!"
+	normal gg
+	let @/ = '^Title:'
+	normal n
+	execute "normal A" . title . "\<Esc>"
+
+	normal G
+	redraw!
 	let @/ = save_pat
 endfunction
 
 function! s:TDiary_update()
 	" set mode
-	let s:mode = input("Editing mode (append or replace): ", s:mode)
-	let data = s:mode . "=" . s:mode
+	let mode = s:SetParam(1)
+	let data = mode . "=" . mode
 
 	" set date
-	call s:SetDate()
-	let data = data . s:Date2PostDate()
+	let data = data . s:Date2PostDate(s:SetParam(2), mode)
 
 	" set title
-	let title = input("Title for " . s:date . ": ", s:title)
-	let title = s:URLencode(title)
-	let data = data . "&title=" . title
+	let data = data . "&title=" . s:URLencode(s:SetParam(3))
 
 	" set body
 	let body = ''
-	let i = 1
+	let i = s:body_start
 	let lastline = line("$")
 
 	while i <= lastline
@@ -155,6 +155,13 @@ function! s:TDiary_select()
 endfunction
 
 
+function! s:SetParam(line_number)
+	let r = substitute(getline(a:line_number), '^[^:]\+ *: *\(.*\)', '\1', '')
+	let r = substitute(r, ' *$', '', '')
+	return r
+endfunction
+
+
 function! s:SetURL()
 	let i = line(".")
 	let s:tdiary_url = g:tdiary_site{i}_url
@@ -175,33 +182,30 @@ function! s:SetUser()
 endfunction
 
 
-function! s:CreateBuffer()
-	call s:SetDate()
-	execute "edit " s:date
+function! s:CreateBuffer(mode)
+	let date = input("Date: ", strftime("%Y%m%d", localtime()))
+	execute "edit " date
 	set buftype=nofile
 	set noswapfile
 	set bufhidden=hide
 	"set fileformat=dos
+
+	call append(0, "Editing mode (append or replace): " . a:mode)
+	call append(1, "Date: " . date)
+	call append(2, "Title: ")
+
+	return date
 endfunction
 
 
-function! s:SetDate()
-	if s:date == ''
-		let s:date = strftime("%Y%m%d", localtime())
-	endif
-
-	let s:date = input("Date: ", s:date)
-endfunction
-
-
-function! s:Date2PostDate()
-	let year = strpart(s:date, 0, 4)
-	let month = strpart(s:date, 4, 2)
-	let day = strpart(s:date, 6, 2)
+function! s:Date2PostDate(date, mode)
+	let year = strpart(a:date, 0, 4)
+	let month = strpart(a:date, 4, 2)
+	let day = strpart(a:date, 6, 2)
 
 	let old = ''
-	if s:mode == "replace"
-		let old = "&old=" . s:date
+	if a:mode == "replace"
+		let old = "&old=" . a:date
 	endif
 
 	return  "&year=" . year . "&month=" . month . "&day=" . day . old

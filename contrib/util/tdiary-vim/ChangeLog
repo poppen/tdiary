@@ -1,2 +1,5 @@
+2004-02-16 Mon UECHI Yasumasa <uechi@potaway.net>
+	* change editing mode, date, title in diary buffer.
+
 2004-02-13 Fri UECHI Yasumasa <uechi@potaway.net>
 	* commit to CVS repository
