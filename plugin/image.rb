@@ -1,4 +1,4 @@
-# image.rb $Revision: 1.11 $
+# image.rb $Revision: 1.12 $
 # -pv-
 # 
 # 名称:
@@ -187,6 +187,7 @@ end
 
 add_form_proc do |date|
 	r = ''
+	tabidx = 1200
 	images = image_list( date.strftime( '%Y%m%d' ) )
 	if images.length > 0 then
 		r << %Q[
@@ -237,15 +238,15 @@ add_form_proc do |date|
 			next unless img
 			ptag = "#{ptag1}image #{id}, '画像の説明'#{ptag2}"
 	      r << %Q[<td>
-			<input type="checkbox" name="plugin_image_id" value="#{id}">#{id}
-			<input type="button" onclick="ins(&quot;#{ptag}&quot;)" value="本文に追加">
+			<input type="checkbox" tabindex="#{tabidx+id*2}" name="plugin_image_id" value="#{id}">#{id}
+			<input type="button" tabindex="#{tabidx+id*2+1}" onclick="ins(&quot;#{ptag}&quot;)" value="本文に追加">
 			</td>]
 	   end
 	   r << %Q[</tr>
 		</table>
 		<input type="hidden" name="plugin_image_delimage" value="true">
 	   <input type="hidden" name="date" value="#{date.strftime( '%Y%m%d' )}">
-	   <input type="submit" name="plugin" value="チェックした画像の削除">
+	   <input type="submit" tabindex="#{tabidx+97}" name="plugin" value="チェックした画像の削除">
 	   </div></form>
 		</div>]
 	end
@@ -261,8 +262,8 @@ add_form_proc do |date|
 	#{@conf.secure ? 'JPEGのみ' : ''}
    <input type="hidden" name="plugin_image_addimage" value="true">
    <input type="hidden" name="date" value="#{date.strftime( '%Y%m%d' )}">
-   <input type="file"	name="plugin_image_file">
-   <input type="submit" name="plugin" value="画像の追加">
+   <input type="file" tabindex="#{tabidx+98}" name="plugin_image_file">
+   <input type="submit" tabindex="#{tabidx+99}" name="plugin" value="画像の追加">
    </div></form>
 	</div>]
 end
