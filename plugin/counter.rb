@@ -1,4 +1,4 @@
-# counter.rb $Revision: 1.14 $
+# counter.rb $Revision: 1.15 $
 # -pv-
 #
 # Ì¾¾Î¡§
@@ -71,6 +71,10 @@
 # You can redistribute it and/or modify it under GPL2.
 # 
 =begin ChangeLog
+2002-11-19 TADA Tadashi <sho@spc.gr.jp>
+	* for squeeze.rb error more.
+	* version 1.6.2
+
 2002-11-13 TADA Tadashi <sho@spc.gr.jp>
 	* for squeeze.rb error.
 
@@ -168,8 +172,9 @@
    * version 1.0.0
 =end
 
+
 if ["latest", "month", "day", "comment"].include?(@mode) and 
-	ENV['HTTP_REQUEST_METHOD'] =~ /POST|GET/ 
+	ENV['REQUEST_METHOD'] =~ /POST|GET/ 
 
 require 'date'
 require 'pstore'
@@ -234,7 +239,7 @@ end
 TOPLEVEL_CLASS
 
 module TDiaryCounter
-	@version = "1.6.1"
+	@version = "1.6.2"
 
 	def run(cache_path, cgi, options)
 		timer = options["counter.timer"] if options
