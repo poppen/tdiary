@@ -1,0 +1,23 @@
+<%
+ # a_conf.rhtml
+ # Copyright (C) 2002,2003 MUTOH,Masao <mutoh@highway.ne.jp>
+%>
+<%%=navi%%>
+
+<h1><%= @html_title %> [オプション設定]</h1>
+
+<form method="post" action="a_conf.rb">
+<div class="day">
+<h2><span class="title">アンカー自動生成プラグイン</span></h2>
+<div class="body">
+<h3 class="subtitle">辞書ファイル設定</h3>
+<p>1行で1つのアンカーになります。フォーマットは、キー URL 名称 文字コード です。各項目は空白で区切ります。名称は省略可能です。省略した場合はキーが名称として使われます。また、文字コードはeuc/sjis/jisを指定できます(省略した場合はeucになります)。</p>
+<p>例： bibo http://ponx.s5.xrea.com/bibo/ Linuxビボ〜ろく euc
+<p><textarea name="anchor_plugin_data" cols="80" rows="20"><%= @anchor_plugin_data %></textarea></p>
+<p><input type="submit" name="save_anchor" value="OK"></p>
+</div>
+</div>
+
+</form>
+
+<hr class="sep">

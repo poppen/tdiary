@@ -147,7 +147,7 @@ def a_convert_charset(option, charset)
 	if charset =~ A_REG_CHARSET2
 		ret = CGI.escape(NKF::nkf("-#{charset[0].chr}", option))
 	else
-		ret = option
+		ret = CGI.escape(option)
 	end
 	ret
 end
