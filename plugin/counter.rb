@@ -1,4 +1,4 @@
-# counter.rb $Revision: 1.5 $
+# counter.rb $Revision: 1.6 $
 #
 # カウンタ表示プラグイン version 1.2.1
 #
@@ -10,14 +10,14 @@
 # 利用方法：
 # counter: 全ての訪問者数を表示する
 #	パラメタ：
-#	 figure: 表示桁数。未指定時は5桁。
+#	 figure: 表示桁数(実際の数が表示桁数に満たない場合は前0)。未指定時は前0無し。
 #	 filetype: ファイル種別(拡張子)。jpg, gif, png等。
 #						 未指定時は、""(画像は使わない、CSSで外見を変える)。
 #
 # counter_today: 今日の訪問者数を表示する
 # counter_yesterday: 昨日の訪問者数を表示する
 #	パラメタ：
-#	 figure: 表示桁数。未指定時は5桁。
+#	 figure: 表示桁数(前0が埋められる)。未指定時は前0なし。
 #	 filetype: ファイル種別(拡張子)。jpg, gif, png等。
 #              未指定時は、""(画像は使わない、CSSで外見を変える)。
 #
@@ -64,6 +64,11 @@
 # You can redistribute it and/or modify it under GPL2.
 # 
 =begin ChangeLog
+2002-05-11 MUTOH Masao  <mutoh@highway.ne.jp>
+	* 初期値を与えない場合は5桁としていたが、「前0をなくす」を初期値に変更した。
+	  また、前0を無くす場合は0を指定しても良い。
+	* version 1.3.0
+
 2002-05-05 MUTOH Masao  <mutoh@highway.ne.jp>
 	* @debug = true 削除 :->
 	* コメント変更
@@ -153,7 +158,7 @@ end
 TOPLEVEL_CLASS
 
 module TDiaryCounter
-	@version = "1.2.0"
+	@version = "1.3.0"
 
 	def run(cache_path, cgi, options)
 		timer = options["counter.timer"] if options
@@ -226,7 +231,7 @@ module TDiaryCounter
 		allow 
 	end
 
-	def format(classtype, theme_url, cnt, figure = 5, filetype = "", init_num = 0, &proc)
+	def format(classtype, theme_url, cnt, figure = 0, filetype = "", init_num = 0, &proc)
 		str = "%0#{figure}d" % (cnt + init_num)
 		result = %Q[<span class="counter#{classtype}">]
 		depth = 0
@@ -256,15 +261,15 @@ end
 
 #init_num is deprecated.
 #please replace it to @options["counter.init_num"]
-def counter(figure = 5, filetype = "", init_num = 0, &proc) 
+def counter(figure = 0, filetype = "", init_num = 0, &proc) 
 	TDiaryCounter.format("", theme_url, TDiaryCounter.all, figure, filetype, init_num, &proc)
 end
 
-def counter_today(figure = 5, filetype = "", &proc)
+def counter_today(figure = 0, filetype = "", &proc)
 	TDiaryCounter.format("-today", theme_url, TDiaryCounter.today, figure, filetype, 0, &proc)
 end
 
-def counter_yesterday(figure = 5, filetype = "", &proc)
+def counter_yesterday(figure = 0, filetype = "", &proc)
 	TDiaryCounter.format("-yesterday", theme_url, TDiaryCounter.yesterday, figure, filetype, 0, &proc)
 end
 
