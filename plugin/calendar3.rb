@@ -1,4 +1,4 @@
-# calendar3.rb $Revision: 1.2 $
+# calendar3.rb $Revision: 1.3 $
 #
 # calendar3: 現在表示している月のカレンダーを表示します．
 #  パラメタ: なし
@@ -133,6 +133,28 @@ add_header_proc do
     }
   }
 
+  function moveDivBy(div,left,top){
+    if(_dom==4){
+      div.style.left=div.offsetLeft+left;
+      div.style.top =div.offsetTop +top;
+      return;
+    }
+    if(_dom==2){
+      div.style.pixelLeft=div.offsetLeft+left;
+      div.style.pixelTop =div.offsetTop +top;
+      return;
+    }
+    if(_dom==1){
+      div.style.pixelLeft+=left;
+      div.style.pixelTop +=top;
+      return;
+    }
+    if(_dom==3){
+      div.moveBy(left,top);
+      return;
+    }
+  }
+
   function getDivLeft(div){
     if(_dom==4 || _dom==2) return div.offsetLeft;
     if(_dom==1)            return div.style.pixelLeft;
@@ -147,9 +169,27 @@ add_header_proc do
     return 0;
   }
 
+  function getDivWidth (div){
+    if(_dom==4 || _dom==2) return div.offsetWidth;
+    if(_dom==1)            return div.style.pixelWidth;
+    if(_dom==3)            return div.clip.width;
+    return 0;
+  }
+
+  function getDivHeight(div){
+    if(_dom==4 || _dom==2) return div.offsetHeight;
+    if(_dom==1)            return div.style.pixelHeight;
+    if(_dom==3)            return div.clip.height;
+    return 0;
+  }
+
   function popup(target,element,notitle) {
+    if (navigator.appName=='Microsoft Internet Explorer') {
+      moveDivTo(element,getDivLeft(target)+getDivWidth(target),getDivTop(target)+getDivHeight(target)*13/8);
+    } else {
+      moveDivTo(element,getDivLeft(target)+getDivWidth(target)/2,getDivTop(target)+(getDivHeight(target)*2)/3);
+    }
     element.style.display="block";
-    moveDivTo(element, getDivLeft(target),getDivTop(target));
     notitle.title="";
   }
 
