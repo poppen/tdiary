@@ -1,3 +1,6 @@
+2005-03-16 TADA Tadashi <sho@spc.gr.jp>
+	* tb-send.rb: last section focused in default.
+
 2005-03-10 TADA Tadashi <sho@spc.gr.jp>
 	* tb-send.rb: add some error check and bug fix. thanks Yutaka Oiwa <yutaka at oiwa.jp>.
 	* image.rb: add new option "image.maxwidth", thanks Masaru Yokoi <masaru at masaru.org>.

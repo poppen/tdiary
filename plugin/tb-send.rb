@@ -1,4 +1,4 @@
-# tb-send.rb $Revision: 1.17 $
+# tb-send.rb $Revision: 1.18 $
 #
 # Copyright (c) 2003 Junichiro Kita <kita@kitaj.no-ip.com>
 # You can distribute this file under the GPL.
@@ -12,17 +12,23 @@ add_edit_proc do |date|
 	unless @conf['tb.no_section'] then
 		section_titles = ''
 	 	idx = 1
+		selected = false
 		diary = @diaries[@date.strftime('%Y%m%d')]
 		if diary then
 			diary.each_section do |t|
 				anc = 'p%02d' % idx
-				selected = (section == anc ) ? ' selected' : ''
-				section_titles << %[<option value="#{anc}"#{selected}>#{CGI::escapeHTML( apply_plugin( t.subtitle_to_html, true ) ).chomp}</option>\n\t\t\t]
+				if section == anc then
+					focus = ' selected'
+					selected = true
+				else
+					focus = ''
+				end
+				section_titles << %[<option value="#{anc}"#{fucus}>#{CGI::escapeHTML( apply_plugin( t.subtitle_to_html, true ) ).chomp}</option>\n\t\t\t]
 				idx += 1
 			end
 		end
 		anc = 'p%02d' % idx
-		section_titles << %[<option value="#{anc}"#{(section == anc ) ? ' selected' : ''}>#{@tb_send_label_current_section}</option>]
+		section_titles << %[<option value="#{anc}"#{selected ? '' : ' selected'}>#{@tb_send_label_current_section}</option>]
 	
 		select_sections = <<-FROM
 			<div class="field">
