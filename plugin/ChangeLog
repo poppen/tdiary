@@ -1,3 +1,6 @@
+2004-07-07 TADA Tadashi <sho@spc.gr.jp>
+	* makerss.rb: some HTML tags escaped in description and content:encoded.
+
 2004-07-06 TADA Tadashi <sho@spc.gr.jp>
 	* makerss.rb: add description elements to items.
 

@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.12 $
+# makerss.rb: $Revision: 1.13 $
 #
 # generate RSS file when updating.
 #
@@ -169,9 +169,10 @@ def makerss_body( uri, rdfsec )
 		end
 		desc = apply_plugin( rdfsec.section.subtitle_to_html, true ).strip +
 			apply_plugin( rdfsec.section.body_to_html, true ).strip
-		rdf << %Q|<description>#{@conf.shorten( desc, 500 )}</description>\n|
+		rdf << %Q|<description>#{@conf.shorten( CGI::escapeHTML( desc ), 500 )}</description>\n|
 		text = '<h3>' + apply_plugin( rdfsec.section.subtitle_to_html ).strip + '</h3>' +
 			apply_plugin( rdfsec.section.body_to_html ).strip
+		text.gsub!( /\]\]>/, ']]&gt;' )
 		rdf << %Q|<content:encoded><![CDATA[#{text}]]></content:encoded>\n|
 
 		body_leave_proc( date )
