@@ -1,4 +1,4 @@
-# category.rb $Revision: 1.12 $
+# category.rb $Revision: 1.13 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -18,7 +18,7 @@ category_init
 # plugin methods
 #
 def category_form
-	# define me!
+	# don't you need this method any more?
 end
 
 def category_anchor(cname)
@@ -112,6 +112,28 @@ def category_list
 		info.category = c
 		info.make_anchor
 	end.join(" | \n")
+end
+
+def category_dropdown_list(label = nil, multiple = nil)
+	label ||= 'Categorize!'
+	multiple ||= false
+
+	category = Category::Info.new(@cgi, @years, @conf).category
+	category = ['ALL'] if category.empty?
+
+	options = ''
+	(['ALL'] + @categories).each do |c|
+		options << %Q|\t\t<option value="#{CGI.escapeHTML(c)}"#{" selected" if category.include?(c)}>#{CGI.escapeHTML(c)}</option>\n|
+	end
+
+	<<HTML
+<form method="get" action="#{@conf.index}?#{period_string}">
+	<select name="category"#{" multiple" if multiple}>
+#{options}
+	</select>
+	<input type="submit" value="#{label}">
+</form>
+HTML
 end
 
 

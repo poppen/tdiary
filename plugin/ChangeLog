@@ -1,3 +1,7 @@
+2004.03.15 Junichiro Kita <kita@kitaj.no-ip.com>
+	* category.rb: add category_dropdown_list.
+	* */category.rb: escape category name by CGI.escapeHTML in category_title.
+
 2004.03.15 Masashi Seiki <mass@starshine.jp>
 	* category.rb: category_navi does'nt show buttons who have empty labels.
 

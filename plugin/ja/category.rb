@@ -1,4 +1,4 @@
-# ja/category.rb $Revision: 1.3 $
+# ja/category.rb $Revision: 1.4 $
 #
 # Copyright (c) 2004 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -22,7 +22,7 @@ def category_title
 	end
 	period = "(#{period})" if period
 
-	"[#{info.category.join('|')} #{period}]"
+	"[#{CGI.escapeHTML(info.category.join('|'))} #{period}]"
 end
 
 def category_init_local
@@ -70,6 +70,29 @@ def category_conf_html
 <p>ヘッダ2：H1のすぐ下に表示されます．</p>
 <p><textarea name="category.header2" cols="70" rows="8">#{CGI.escapeHTML(@conf['category.header2'])}</textarea></p>
 
+<h3 class="subtitle">デフォルトの表示期間</h3>
+<p>
+カテゴリ表示モードのデフォルトの表示期間を指定します．
+</p>
+<p>
+<select name="category.period">
+HTML
+	[
+		['月', 'month', false],
+		['四半期', 'quarter', true],
+		['半期', 'half', false],
+		['年', 'year', false],
+		['全日記', 'all', false],
+	].each do |text, value, default|
+		selected = @conf["category.period"] ? @conf["category.period"] == value : default
+		r << <<HTML
+<option value="#{value}"#{" selected" if selected}>#{text}</option>
+HTML
+	end
+	r << <<HTML
+</select>
+</p>
+
 <h3 class="subtitle">ボタンラベル</h3>
 <p>
 ナビゲーションボタンのラベルを指定します．
@@ -104,29 +127,7 @@ HTML
 HTML
 	end
 	r << <<HTML
-
 </table>
-
-<h3 class="subtitle">デフォルトの表示期間</h3>
-<p>
-カテゴリ表示モードのデフォルトの表示期間を指定します．
-</p>
-<p><select name="category.period">
-HTML
-	[
-		['月', 'month', false],
-		['四半期', 'quarter', true],
-		['半期', 'half', false],
-		['年', 'year', false],
-		['全日記', 'all', false],
-	].each do |text, value, default|
-		selected = @conf["category.period"] ? @conf["category.period"] == value : default
-		r << <<HTML
-<option value="#{value}"#{" selected" if selected}>#{text}</option>
-HTML
-	end
-	r << <<HTML
-</select></p>
 HTML
 end
 

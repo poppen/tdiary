@@ -1,4 +1,4 @@
-# ja/category.rb $Revision: 1.2 $
+# ja/category.rb $Revision: 1.3 $
 #
 # Copyright (c) 2004 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -22,7 +22,7 @@ def category_title
 	end
 	period = "(#{period})" if period
 
-	"[#{info.category.join('|')} #{period}]"
+	"[#{CGI.escapeHTML(info.category.join('|'))} #{period}]"
 end
 
 def category_init_local
@@ -70,6 +70,27 @@ You can use plugins and write any HTML tags.
 <p>Header 2: inserted under the &lt;H1&gt;.</p>
 <p><textarea name="category.header2" cols="70" rows="8">#{CGI.escapeHTML(@conf['category.header2'])}</textarea></p>
 
+<h3 class="subtitle">Default period</h3>
+<p>
+Specify the default display period for category view.
+</p>
+<p><select name="category.period">
+HTML
+	[
+		['month', 'month', false],
+		['quarter', 'quarter', true],
+		['half-year', 'half', false],
+		['year', 'year', false],
+		['all', 'all', false],
+	].each do |text, value, default|
+		selected = @conf["category.period"] ? @conf["category.period"] == value : default
+		r << <<HTML
+<option value="#{value}"#{" selected" if selected}>#{text}</option>
+HTML
+	end
+	r << <<HTML
+</select></p>
+
 <h3 class="subtitle">Button labels</h3>
 <p>
 Specify button labels.
@@ -104,29 +125,7 @@ HTML
 HTML
 	end
 	r << <<HTML
-
 </table>
-
-<h3 class="subtitle">Default period</h3>
-<p>
-Specify the default display period for category view.
-</p>
-<p><select name="category.period">
-HTML
-	[
-		['month', 'month', false],
-		['quarter', 'quarter', true],
-		['half-year', 'half', false],
-		['year', 'year', false],
-		['all', 'all', false],
-	].each do |text, value, default|
-		selected = @conf["category.period"] ? @conf["category.period"] == value : default
-		r << <<HTML
-<option value="#{value}"#{" selected" if selected}>#{text}</option>
-HTML
-	end
-	r << <<HTML
-</select></p>
 HTML
 end
 
