@@ -1,4 +1,4 @@
-# disp_referrer.rb $Revision: 1.17 $
+# disp_referrer.rb $Revision: 1.18 $
 # -pv-
 #
 # 名称：
@@ -27,6 +27,9 @@
 # You can redistribute it and/or modify it under GPL2.
 #
 =begin ChangeLog
+2002-10-13 MUTOH Masao <mutoh@highway.ne.jp>
+	* Metcha SearchのURLが間違えていたのを修正。
+	
 2002-10-12 MUTOH Masao <mutoh@highway.ne.jp>
    * 「その他」が付く場合に、検索エンジン名の後ろに「:」が付かない不具合の修正(pointed out by TADA Tadashi <sho@spc.gr.jp>)
    * goo検索改善
