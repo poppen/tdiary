@@ -1,4 +1,4 @@
-# calendar2.rb $Revision: 1.11 $
+# calendar2.rb $Revision: 1.12 $
 #
 # calendar2: どこかで見たようなカレンダーを日記に追加する
 #   パラメタ:
@@ -135,15 +135,11 @@ CALENDAR_HEAD
 						idx = "01"
 						@diaries[date].each_section do |section|
 							if section.subtitle
-								text = @conf.shorten( section.subtitle )
+								text = section.subtitle_to_html
 							else
-								text = @conf.shorten( section.body.split( /\n/ )[0] )
+								text = section.body_to_html
 							end
-							if @options['apply_plugin']
-								subtitles <<  %Q|#{idx}. #{apply_plugin( text ).gsub(/<.+?>/, '').gsub( /"/, '&quot;' )}|
-							else
-								subtitles <<  %Q|#{idx}. #{text.gsub(/<.+?>/, '').gsub( /"/, '&quot;' )}|
-							end
+							subtitles <<  %Q|#{idx}. #{@conf.shorten(apply_plugin( text, true ))}|
 							idx.succ!
 						end
 						%Q|<a href="#{@index}#{anchor date}" title="#{subtitles.join("&#13;&#10;")}">#{day}</a>|

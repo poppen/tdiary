@@ -126,8 +126,8 @@ if ( /^(append|replace|trackbackreceive)$/ =~ @mode ) || ( /^comment$/ =~ @mode 
  	diary.each_section do |section|
 		if section.subtitle then
 		link = %Q[http://#{uri}#{anchor "#{date}\#p#{'%02d' % idx}"}]
-		subtitle = diary.class.new(date, '', section.subtitle).to_html({})
-		desc = diary.class.new(date, '', section.body).to_html({})
+		subtitle = section.subtitle_to_html
+		desc = section.body_to_html
 		old_apply_plugin = @options['apply_plugin']
 		@options['apply_plugin'] = true
 		subtitle = apply_plugin(subtitle, true).strip

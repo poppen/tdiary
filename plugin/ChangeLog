@@ -1,3 +1,7 @@
+2003-10-28 Junichiro Kita <kita@kitaj.no-ip.com>
+	* calendar2.rb, calendar3.rb, my-ex.rb,
+	output_rdf.rb, recent_list.rb, title_list.rb: support new io.
+
 2003-10-24 TADA Tadashi <sho@spc.gr.jp>
 	* disp_referrer.rb: fix bug on 23 Oct.
 

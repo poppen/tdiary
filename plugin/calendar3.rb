@@ -1,4 +1,4 @@
-# calendar3.rb $Revision: 1.34 $
+# calendar3.rb $Revision: 1.35 $
 #
 # calendar3: 現在表示している月のカレンダーを表示します．
 #  パラメタ: なし
@@ -167,7 +167,7 @@ def calendar3
 			if show_todo
 				@diaries[date].each_section do |section|
 					if show_todo === section.subtitle
-						todos << CGI::escapeHTML(section.body).gsub(/\n/, "&#13;&#10;")
+						todos << CGI::escapeHTML(section.body_to_html).gsub(/\n/, "&#13;&#10;")
 					end
 				end
 			end
@@ -184,16 +184,16 @@ def calendar3
 			if !@plugin_files.grep(/\/category.rb$/).empty? and @diaries[date].categorizable?
 				@diaries[date].each_section do |section|
 					if section.stripped_subtitle
-						text = apply_plugin( section.stripped_subtitle )
-						r << %Q|#{i}. #{text.gsub(/<.+?>/, '')}|
+						text = apply_plugin( section.stripped_subtitle_to_html, true )
+						r << %Q|#{i}. #{text}|
 					end
 					i += 1
 				end
 			else
 				@diaries[date].each_section do |section|
 					if section.subtitle
-						text = apply_plugin( section.subtitle )
-						r << %Q|#{i}. #{text.gsub(/<.+?>/, '')}|
+						text = apply_plugin( section.subtitle_to_html, true )
+						r << %Q|#{i}. #{text}|
 					end
 					i += 1
 				end
@@ -206,8 +206,8 @@ def calendar3
 				if !@plugin_files.grep(/\/category.rb$/).empty? and @diaries[date].categorizable?
 					@diaries[date].each_section do |section|
 						if section.stripped_subtitle
-							text = apply_plugin( section.to_src)
-							subtitle = apply_plugin( section.stripped_subtitle )
+							text = apply_plugin( section.body_to_html, true )
+							subtitle = apply_plugin( section.stripped_subtitle_to_html )
 							result << %Q|    <a href="#{@index}#{anchor "%s#p%02d" % [date, i]}" title="#{CGI::escapeHTML( @conf.shorten( text ) )}">#{i}</a>. #{subtitle}<br>\n|
 						end
 						i += 1
@@ -215,8 +215,8 @@ def calendar3
 				else
 					@diaries[date].each_section do |section|
 						if section.subtitle
-							text = apply_plugin( section.to_src)
-							subtitle = apply_plugin( section.subtitle )
+							text = apply_plugin( section.body_to_html, true )
+							subtitle = apply_plugin( section.subtitle_to_html )
 							result << %Q|    <a href="#{@index}#{anchor "%s#p%02d" % [date, i]}" title="#{CGI::escapeHTML( @conf.shorten( text ) )}">#{i}</a>. #{subtitle}<br>\n|
 						end
 						i += 1

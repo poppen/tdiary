@@ -1,4 +1,4 @@
-# $Revision: 1.18 $
+# $Revision: 1.19 $
 # recent_list: 最近書いた日記のタイトル，サブタイトルを表示する
 #   パラメタ(カッコ内は未指定時の値):
 #     days:            何日分の日記を表示するか(20)
@@ -76,10 +76,10 @@ def recent_list(days = 30, date_format = nil, title_with_body = nil, show_size =
 						m.diaries[date].each_section do |section|
 							if section.stripped_subtitle
 								result << %Q| <a href="#{@index}#{anchor "%s#p%02d" % [date, i]}"|
-								result << %Q| title="#{CGI::escapeHTML( @conf.shorten( section.body ) )}"| \
+								result << %Q| title="#{CGI::escapeHTML( @conf.shorten( apply_plugin( section.body_to_html, true) ) )}"| \
 									if title_with_body == true
 								result << %Q|>#{i}</a>. | \
-										<< %Q|#{section.stripped_subtitle}<br>\n|
+										<< %Q|#{section.stripped_subtitle_to_html}<br>\n|
 							end
 							i += 1
 						end
@@ -87,10 +87,10 @@ def recent_list(days = 30, date_format = nil, title_with_body = nil, show_size =
 						m.diaries[date].each_section do |section|
 							if section.subtitle
 								result << %Q| <a href="#{@index}#{anchor "%s#p%02d" % [date, i]}"|
-								result << %Q| title="#{CGI::escapeHTML( @conf.shorten( section.body ) )}"| \
+								result << %Q| title="#{CGI::escapeHTML( @conf.shorten( apply_plugin(section.body_to_html, true) ) )}"| \
 									if title_with_body == true
 								result << %Q|>#{i}</a>. | \
-										<< %Q|#{section.subtitle}<br>\n|
+										<< %Q|#{section.subtitle_to_html}<br>\n|
 							end
 							i += 1
 						end
