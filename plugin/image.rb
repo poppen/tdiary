@@ -1,4 +1,4 @@
-# image.rb $Revision: 1.2 $
+# image.rb $Revision: 1.3 $
 # -pv-
 # 
 # Ì¾¾Î:
@@ -101,7 +101,8 @@ end
 def image_list( date )
 	return @image_list if @conf.secure and @image_list
 	list = []
-	reg = /#{date}_(\d+)\.#{image_ext}$/
+	reg = /#{date}_(\d+)\.(#{image_ext})$/
+	$stderr.puts reg
 	Dir::foreach( @image_dir ) do |file|
 		list[$1.to_i] = file if reg =~ file
 	end
@@ -121,7 +122,7 @@ if /^formplugin$/ =~ @mode then
    if @cgi.params['plugin_image_addimage'][0]
       filename = @cgi.params['plugin_image_file'][0].original_filename
       if filename =~ /\.(#{image_ext})\z/i
-         extension = $1
+         extension = $1.downcase
 			begin
          	size = @cgi.params['plugin_image_file'][0].size
 			rescue NameError
