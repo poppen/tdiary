@@ -1,4 +1,4 @@
-# whatsnew.rb $Revision: 1.3 $
+# whatsnew.rb $Revision: 1.4 $
 #
 # 名称：
 # What's Newプラグイン
@@ -35,18 +35,18 @@
 @whats_new = {}.taint
 
 def whats_new
-	return @whats_new[:read_mark] unless @cgi
+	return apply_plugin( @whats_new[:read_mark] ) unless @cgi
 	@whats_new[:section] += 1
 	t = @whats_new[:current_date] + "%03d" % @whats_new[:section]
 	if t > @whats_new[:this_time]
 		@whats_new[:this_time] = t
 	end
 	# 初回もしくは cookie を使わない設定の場合は機能しない
-	return @whats_new[:read_mark] if @whats_new[:last_time] == "00000000000"
+	return apply_plugin( @whats_new[:read_mark] ) if @whats_new[:last_time] == "00000000000"
 	if t > @whats_new[:last_time]
-		@whats_new[:new_mark]
+		apply_plugin( @whats_new[:new_mark] )
 	else
-		@whats_new[:read_mark]
+		apply_plugin( @whats_new[:read_mark] )
 	end
 end
 

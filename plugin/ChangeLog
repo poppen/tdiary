@@ -1,3 +1,6 @@
+2003-09-18 TADA Tadashi <sho@spc.gr.jp>
+	* whatsnew.rb: support apply_plugin.
+
 2003-09-16 TADA Tadashi <sho@spc.gr.jp>
 	* sn.rb: added.
 	* number_anchor.rb: fix typo.
