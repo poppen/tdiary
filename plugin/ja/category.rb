@@ -1,4 +1,4 @@
-# ja/category.rb $Revision: 1.6 $
+# ja/category.rb $Revision: 1.7 $
 #
 # Copyright (c) 2004 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -134,6 +134,25 @@ end
 @category_icon_none_label = 'アイコンなし'
 @category_icon_conf_label = 'カテゴリアイコン'
 def category_icon_conf_html
+	r = ''
+	unless @conf.secure
+		r << <<HTML
+<h3 class="subtitle">カテゴリアイコンの置き場所</h3>
+<p>
+カテゴリアイコン用の画像が保存されているディレクトリとそのURLを指定します．
+</p>
+<p>
+<dl>
+<dt>ディレクトリ:</dt>
+<dd><input name="category.icon_dir" value="#{@category_icon_dir}" size="30"></dd>
+<dt>URL:</dt>
+<dd><input name="category.icon_url" value="#{@category_icon_url}" size="30"></dd>
+</dl>
+</p>
+<hr>
+HTML
+	end
+
 	str = ''
 	@categories.each do |c|
 		str << %Q|\t<tr>\n\t\t<td>#{c}</td>\n\t\t<td>\n|
@@ -141,8 +160,10 @@ def category_icon_conf_html
 		str << %Q|<img src="#{@category_icon_url}#{@category_icon[c]}">| if @category_icon[c]
 		str << %Q|</td>\n\t</tr>\n|
 	end
-	<<HTML
+	r << <<HTML
 <h3 class="subtitle">カテゴリアイコン</h3>
+<p>
+各カテゴリのアイコンをドロップダウンリストから選択します．
 <p>
 <table>
 	<tr><th>カテゴリ</th><th>アイコン</th></tr>
@@ -150,13 +171,16 @@ def category_icon_conf_html
 </table>
 </p>
 <hr>
+<h3 class="subtitle">アイコンサンプル</h3>
 <p>
-アイコンサンプル (ディレクトリ: #{@category_icon_dir})
+選択可能なアイコン一覧です．
+アイコンにマウスカーソルを合わせるとアイコンのファイル名がポップアップ表示されます．
 </p>
 <p>
 #{category_icon_sample}
 </p>
 HTML
+	r
 end
 
 # vim: ts=3

@@ -1,4 +1,4 @@
-# ja/category.rb $Revision: 1.5 $
+# ja/category.rb $Revision: 1.6 $
 #
 # Copyright (c) 2004 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -132,6 +132,25 @@ end
 @category_icon_none_label = 'no icon'
 @category_icon_conf_label = 'Category Icons'
 def category_icon_conf_html
+	r = ''
+	unless @conf.secure
+		r << <<HTML
+<h3 class="subtitle">Location of category icons</h3>
+<p>
+Specify the directory and url of category icons.
+</p>
+<p>
+<dl>
+<dt>Directory:</dt>
+<dd><input name="category.icon_dir" value="#{@category_icon_dir}" size="30"></dd>
+<dt>URL:</dt>
+<dd><input name="category.icon_url" value="#{@category_icon_url}" size="30"></dd>
+</dl>
+</p>
+<hr>
+HTML
+   end
+
 	str = ''
 	@categories.each do |c|
 		str << %Q|\t<tr>\n\t\t<td>#{c}</td>\n\t\t<td>\n|
@@ -148,8 +167,10 @@ def category_icon_conf_html
 </table>
 </p>
 <hr>
+<h3 class="subtitle">Sample icons</h3>
 <p>
-Sample icons (Directory: #{@category_icon_dir})
+You can take your choice from these icons.
+Move mouse pointer on an icon, the icon's name will pop up.
 </p>
 <p>
 #{category_icon_sample}

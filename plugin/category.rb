@@ -1,4 +1,4 @@
-# category.rb $Revision: 1.15 $
+# category.rb $Revision: 1.16 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -14,10 +14,14 @@ def category_init
 end
 category_init
 
+def category_icon_location_init
+	@category_icon_dir = (@conf['category.icon_dir'] || './icons/').sub(%r|/*$|, '/')
+	@category_icon_url = (@conf['category.icon_url'] || './icons/').sub(%r|/*$|, '/')
+end
+
 def category_icon_init
+	category_icon_location_init
 	@conf['category.icon'] ||= ''
-	@category_icon_dir = (@conf['category.icon_dir'] || './images/').sub(%r|/*$|, '/')
-	@category_icon_url = (@conf['category.icon_url'] || './images/').sub(%r|/*$|, '/')
 
 	@category_icon = {}
 	@conf['category.icon'].split(/\n/).each do |l|
@@ -625,6 +629,15 @@ if @mode == 'conf' || @mode == 'saveconf'
 	add_conf_proc('category_icon', @category_icon_conf_label) do
 		category_icon_find_icons
 		if @mode == 'saveconf'
+			unless @conf.secure
+				[
+					'category.icon_dir',
+					'category.icon_url',
+				].each do |name|
+					@conf[name] = @cgi.params[name][0].sub(%r|/*$|, '/')
+				end
+				category_icon_location_init
+			end
 			@cgi.params.keys.each do |key|
 				next unless /\Acategory\.icon\..*\z/ === key
 				category = key.sub(/\Acategory\.icon\./, '')
