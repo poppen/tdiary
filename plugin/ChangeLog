@@ -1,3 +1,7 @@
+2004-06-23 Junichiro Kita <kita@kitaj.no-ip.com>
+	* recent_comment3.rb: hide invisible comments.
+	* recent_trackback3.rb: hide invisible trackbacks.
+
 2004-06-19 TADA Tadashi <sho@spc.gr.jp>
 	* footnote.rb: suppress making footnote in update mode.
 	* makerss.rb: call body_enter_proc and body_leave_proc before output each section.

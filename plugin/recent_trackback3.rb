@@ -1,4 +1,4 @@
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 # recent_trackback3: 最近のツッコミをリストアップする
 #
 # Options:
@@ -52,6 +52,7 @@ def recent_trackback3
 		db['trackbacks'].each do |tb|
 			break if idx >= n or tb == nil
 			trackback, date, serial = tb
+			next unless trackback.visible_true?
 			url, blog_name, title, excerpt = trackback.body.split(/\n/, 4)
 
 			a = @index + anchor("#{date.strftime('%Y%m%d')}#t#{'%02d' % serial}")
@@ -74,19 +75,44 @@ def recent_trackback3
 end
 
 add_update_proc do
-	if @mode == 'trackbackreceive'
+	if @mode == 'trackbackreceive' and @comment
 		recent_trackback3_init
 		cache = @conf['recent_trackback3.cache']
 		cache_size = @conf['recent_trackback3.cache_size']
-		name = @conf.to_native(@cgi.params['name'][0])
-		body = @conf.to_native(@cgi.params['body'][0])
-		trackback = Comment.new(name, nil, body)
+		trackback = @comment
 		serial = 0
 		@diaries[@date.strftime('%Y%m%d')].each_visible_trackback( 100 ) {|tb, idx| serial += 1}
 		PStore.new(cache).transaction do |db|
 			db['trackbacks'] = Array.new(cache_size) unless db.root?('trackbacks')
 			if db['trackbacks'][0].nil? or trackback != db['trackbacks'][0][0]
 				db['trackbacks'].unshift([trackback, @date, serial]).pop
+			end
+		end
+	end
+end
+
+# fix me!
+# I want to use update_proc, but TDiaryShowComment doesn't call update_proc.
+add_form_proc do |date|
+	if @mode == 'showcomment'
+		recent_trackback3_init
+		cache = @conf['recent_trackback3.cache']
+		cache_size = @conf['recent_trackback3.cache_size']
+		date = date.strftime('%Y%m%d')
+
+		PStore.new(cache).transaction do |db|
+			break unless db.root?('trackbacks')
+
+			@diaries[date].each_comment(100) do |dtrackback|
+				db['trackbacks'].each do |c|
+					break if c.nil?
+					trackback, tbdate, serial = c
+					next if tbdate.strftime('%Y%m%d') != date
+					if trackback == dtrackback and trackback.date == dtrackback.date
+						trackback.show = dtrackback.visible_true?
+						next
+					end
+				end
 			end
 		end
 	end
