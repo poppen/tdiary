@@ -1,3 +1,6 @@
+2003-05-09 zunda <zunda at freeshell.org>
+	* weather.rb: imported from zunda's local revision 1.1.2.32.
+
 2003-05-08 TADA Tadashi <sho@spc.gr.jp>
 	* kw.rb: fix bug when no default in @options['kw.dic']. thenks yowa.
 	* kw.rb: @options['kw.show_inter'] support.
