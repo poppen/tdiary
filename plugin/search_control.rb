@@ -1,40 +1,5 @@
 =begin
-= ここだけ検索プラグイン((-$Id: search_control.rb,v 1.3 2003-08-28 16:54:54 zunda Exp $-))
-Please see below for an English description.
-
-== 概要
-一日表示、最新表示などそれぞれについてGoogleなどの検索エンジンにインデッ
-クスしてもらうかどうかを制御します。
-
-== 使い方
-このプラグインをplugin/ディレクトリに配置してください。
-
-設定画面から「ここだけ検索」をクリックすることで、どの表示モードでどのよ
-うな動作を期待するか設定することができます。デフォルトでは、一日分の表示
-のみ、検索エンジンに登録されるようになっています。
-
-実際に効果があるかどうかは、検索エンジンのロボットがメタタグを解釈して 
-くれるかどうかにかかっています。
-
-secure==trueな日記でも使えます。
-
-= Search control plugin
-== Abstract
-Control whether or not to be indexed by external search engines, such as
-Google, depending upon one-day view, latest view, etc.
-
-== Usage
-Put this file into the plugin/ directory. 
-
-To set up, click `Search control' in the configuration view. You can
-choose if you want crawlers from external search engines to index your
-one-day view, latest view, etc. The default is to ask the crawlers to
-only index one-day view.
-
-To this plugin to take effect, we have to wish that the crawlers regards
-the meta-tag.
-
-This plugin also works in a diary with @secure = true.
+= ここだけ検索プラグイン/search control plugin((-$Id: search_control.rb,v 1.4 2003-10-13 14:55:24 zunda Exp $-))
 
 == 著作権について (Copyright notice)
 Copyright (C) 2003 zunda <zunda at freeshell.org>
@@ -42,12 +7,11 @@ Copyright (C) 2003 zunda <zunda at freeshell.org>
 Permission is granted for use, copying, modification, distribution, and
 distribution of modified versions of this work under the terms of GPL
 version 2 or later.
-
-You should be able to download the latest version from
-((<URL:http://zunda.freeshell.org/d/plugin/search_control.rb>)).
 =end
 
 =begin ChangeLog
+See ChangeLog for changes after this.
+
 * Aug 28, 2003 zunda <zunda at freeshell.org>
 - 1.3
 - simpler configuration display
@@ -88,14 +52,7 @@ Search_control_categories.each_index do |c|
 end
 
 # configuration
-add_conf_proc( Search_control_prefix,
-	case @conf.lang
-	when 'en'
-		'Search control'
-	else
-		'ここだけ検索'
-	end
-) do
+add_conf_proc( Search_control_prefix, @search_control_plugin_name ) do
 
 	# receive the configurations from the form
 	if 'saveconf' == @mode then
@@ -132,16 +89,8 @@ add_conf_proc( Search_control_prefix,
 		end
 		r << "\t\t</ul>\n"
 	else
-		r = <<-_HTML
-		<p>検索エンジンのロボットに、
-			余分なページのインデックスを作らないようにお願いしてみます。
-			インデックスを作って欲しい表示だけにチェックをしてください。</p>
-		<ul>
-		_HTML
-		[
-			[ '最新', 'latest' ], [ '一日分', 'day' ], [ '一月分', 'month' ],
-			[ '長年', 'nyear' ], [ 'カテゴリー', 'category' ]
-		].each do |a|
+		r = @search_control_description_html + "\t\t<ul>\n"
+		@search_control_categorirs.each do |a|
 			label = a[0]
 			key = "#{Search_control_prefix}.#{a[1]}"
 			r << <<-_HTML

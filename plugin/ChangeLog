@@ -1,3 +1,6 @@
+2003-10-13 zunda <zunda at freeshell.org>
+	* search_control.rb: ja and en resources are divided.
+
 2003-10-13 Junichiro Kita <kita@kitaj.no-ip.com>
 	* kw.rb: kw can take 2 args. thanks to yowa.
 
