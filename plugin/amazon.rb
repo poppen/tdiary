@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.4 $
+# amazon.rb $Revision: 1.5 $
 #
 # isbn_image_left: 指定したISBNの書影をclass="left"で表示
 #   パラメタ:
@@ -40,7 +40,7 @@
 #
 # Original: HAL99 <hal99@mtj.biglobe.ne.jp>
 # Modified: by TADA Tadashi<sho@spc.gr.jp>,
-#              kazuhiki<kazuhi@ring.gr.jp>,
+#              kazuhiko<kazuhiko@fdiary.net>,
 #              woods<sodium@da3.so-net.ne.jp>,
 #              munemasa<munemasa@t3.rim.or.jp>,
 #              dai<dai@kato-agri.com>
