@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.6 $
+# amazon.rb $Revision: 1.7 $
 #
 # isbn_image_left: 指定したISBNの書影をclass="left"で表示
 #   パラメタ:
@@ -46,6 +46,9 @@
 #              dai<dai@kato-agri.com>
 #
 =begin ChangeLog
+2002-09-01 Junichiro Kita <kita@kitaj.no-ip.com>
+	* change URL for images.
+
 2002-07-09 TADA Tadashi <sho@spc.gr.jp>
 	* follow chaging of title format in amazon.
 =end
@@ -96,7 +99,7 @@ def getAmazon( asin )
 					if line =~ /^Amazon.co.jp： (.*)$/
 						item_name = CGI::escapeHTML(CGI::unescapeHTML($1))
 					end
-					if line =~ /(<img src="(http\:\/\/images\.amazon\.com\/images\/P\/(.*MZZZZZZZ.jpg))".*?>)/i
+					if line =~ /(<img src="(http\:\/\/images-jp\.amazon\.com\/images\/P\/(.*MZZZZZZZ.jpg))".*?>)/i
 						img_tag = $1
 						img_url = $2
 						img_name = $3
