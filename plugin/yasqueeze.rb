@@ -1,4 +1,5 @@
 #!/usr/bin/ruby
+# yasqueeze.rb $Revision: 1.2 $
 $KCODE= 'e'
 #
 # yasqueeze version 1.1.0
