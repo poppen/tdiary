@@ -1,4 +1,4 @@
-# pb-show.rb $Revision: 1.3 $
+# pb-show.rb $Revision: 1.4 $
 #
 # functions:
 #   * show Pingback ping URL in right of TSUKKOMI label.
@@ -7,7 +7,7 @@
 #
 # options:
 #	@options['pb.cgi']:
-#		the Pingback ping URL. './tb.rb' is default.
+#		the Pingback ping URL. './pb.rb' is default.
 #	@options['pb.hide_if_no_pb']:
 #		If true, hide 'Pingbacks(n)' when there is no Pingbacks.  Default value is false.
 #
@@ -61,7 +61,7 @@ def referer_of_today_short( diary, limit )
 	if diary and !bot? then
 		count = 0
 		diary.each_visible_pingback( 100 ) {|t,count|} # count up
-		r << %Q|<a href="#{@index}#{anchor @pb_date.strftime( '%Y%m%d' )}#b">Pingback#{count > 1 ? 's' : ''}(#{count})</a>| unless count == 0 and @options['tb.hide_if_no_tb']
+		r << %Q|<a href="#{@index}#{anchor @pb_date.strftime( '%Y%m%d' )}#b">Pingback#{count > 1 ? 's' : ''}(#{count})</a>| unless count == 0 and @options['pb.hide_if_no_pb']
 	end
 	r
 end
