@@ -1,5 +1,5 @@
 =begin
-= Weather-of-today plugin((-$Id: weather.rb,v 1.1 2004-06-15 15:19:21 tadatadashi Exp $-))
+= Weather-of-today plugin((-$Id: weather.rb,v 1.2 2004-08-10 18:28:53 zunda Exp $-))
 Records the weather when the diary is first updated for the date and
 displays it.
 
@@ -148,6 +148,14 @@ def weather_configure_html( conf )
 		Show the weather on a mobile browser.
 		<option value="false"#{' selected'unless conf['weather.show_mobile']}>
 		Do not show the weather on a mobile browser.
+	</select></p>
+	<h4>Display to search engine robots</h4>
+	<p>Select from below:</p>
+	<p><select name="weather.show_robot">
+		<option value="true"#{' selected'if conf['weather.show_robot']}>
+		Let robots know the weather.
+		<option value="false"#{' selected'unless conf['weather.show_robot']}>
+		Hide the weather from robots.
 	</select></p>
 	<h4>Other configurations</h4>
 	<p>Other options can be configured by means of the tdiary.conf file.

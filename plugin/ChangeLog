@@ -1,3 +1,6 @@
+2004-08-10 zunda <zunda at freeshell.org>
+	* weather.rb, */weather.rb: show_robot enables to hide weather from robots
+
 2004-08-09 NT <nt@be.to>
 	* tlink.rb: fix typo.
 

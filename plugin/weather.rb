@@ -1,5 +1,5 @@
 =begin
-= その日の天気プラグイン / Weather-of-today plugin((-$Id: weather.rb,v 1.11 2003-11-25 12:41:52 zunda Exp $-))
+= その日の天気プラグイン / Weather-of-today plugin((-$Id: weather.rb,v 1.12 2004-08-10 18:28:41 zunda Exp $-))
 Records the weather when the diary is first updated for the date and
 displays it.
 
@@ -415,6 +415,7 @@ Weather_default_items = {
 
 # shows weather
 def weather( date = nil )
+	return '' if @conf.bot? and not @options['weather.show_robot']
 	path = @options['weather.dir'] || Weather_default_path
 	w = Weather::restore( path, date || @date )
 	if w then
@@ -467,6 +468,13 @@ def configure_weather
 			@conf['weather.show_mobile'] = true
 		when 'false'
 			@conf['weather.show_mobile'] = false
+		end
+		# weather.show_robot
+		case @cgi.params['weather.show_robot'][0]
+		when 'true'
+			@conf['weather.show_robot'] = true
+		when 'false'
+			@conf['weather.show_robot'] = false
 		end
 	end
 	weather_configure_html( @conf )

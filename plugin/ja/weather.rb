@@ -1,5 +1,5 @@
 =begin
-= その日の天気プラグイン((-$Id: weather.rb,v 1.5 2004-05-15 05:44:51 zunda Exp $-))
+= その日の天気プラグイン((-$Id: weather.rb,v 1.6 2004-08-10 18:28:42 zunda Exp $-))
 その日の天気を、その日の日記を最初に更新する時に取得して保存し、それぞれ
 の日の日記の上部に表示します。
 
@@ -369,6 +369,14 @@ def weather_configure_html( conf )
 		携帯電話にも今日の天気を表示する
 		<option value="false"#{' selected'unless conf['weather.show_mobile']}>
 		携帯電話には今日の天気を表示しない
+	</select></p>
+	<h4>検索エンジンなどのロボットへの表示</h4>
+	<p>下記から選んでください。</p>
+	<p><select name="weather.show_robot">
+		<option value="true"#{' selected'if conf['weather.show_robot']}>
+		検索エンジンなどのロボットにも今日の天気を知らせる
+		<option value="false"#{' selected'unless conf['weather.show_robot']}>
+		検索エンジンなどのロボットには今日の天気を知らせない
 	</select></p>
 	<h4>その他の設定</h4>
 	<p>この他にもいくつかtdiary.confから設定できる項目があります。
