@@ -1,4 +1,4 @@
-# tb-send.rb $Revision: 1.10 $
+# tb-send.rb $Revision: 1.11 $
 #
 # Copyright (c) 2003 Junichiro Kita <kita@kitaj.no-ip.com>
 # You can distribute this file under the GPL.
@@ -53,11 +53,15 @@ if /^(append|replace)$/ =~ @mode then
 				Net::HTTP.start( host.untaint, port.to_i ) do |http|
 					response, = http.post( request, trackback,
 							 "Content-Type" => 'application/x-www-form-urlencoded')
-# XREA taisaku.
-# how to deal with responce.body?
-#					$stderr.puts response.body
+					
+					error = response.body.scan(%r|<error>(\d)</error>|)[0][0]
+					if error == '1'
+						reason = response.body.scan(%r|<message>(.*)</message>|)[0][0]
+						raise TDiaryTrackBackError.new(reason)
+					end
 				end
 			rescue
+				raise TDiaryTrackBackError.new("when sending TrackBack Ping: #{$!.message}")
 			end
 		end
 	end

@@ -1,3 +1,6 @@
+2003-08-06 Junichiro Kita <kita@kitaj.no-ip.com>
+	* trackback/tb-send.rb: raise TDiaryTrackBackError if TrackBack Ping fail.
+
 2003-08-05  Kazuhiko  <kazuhiko@fdiary.net>
 	* squeeze.rb: make html when receiving TrackBack Ping
 	* output_rdf.rb: make rdf when receiving TrackBack Ping
