@@ -1,4 +1,4 @@
-# makelirs.rb $Revision: 1.5 $
+# makelirs.rb $Revision: 1.6 $
 #
 # 更新情報をLIRSフォーマットのファイルに吐き出す
 #
@@ -18,6 +18,9 @@
 # Copyright (C) 2002 by Kazuhiro NISHIYAMA
 #
 =begin ChangeLog
+2003-08-03 Junichiro Kita <kita@kitaj.no-ip.com>
+	* make lirs when receiving TrackBack Ping
+
 2003-04-28 TADA Tadashi <sho@spc.gr.jp>
 	* enable running on secure mode.
 
@@ -37,7 +40,7 @@
 	* create.
 =end
 
-if /^(append|replace|comment)$/ =~ @mode then
+if /^(append|replace|comment|trackbackreceive)$/ =~ @mode then
 	file = @options['makelirs.file'] || 'antenna.lirs'
 
 	# create_lirs
