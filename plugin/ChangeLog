@@ -1,3 +1,9 @@
+2003.10.13 Gony <gony@sm.rim.or.jp>
+	* windex.rb: bug fix.
+	* windex.rb: add wikw method.
+	* windex.rb: support kw argument at CGI mode.
+	* windex.rb: support @options['windex.generate_all'] option.
+
 2003-10-13 zunda <zunda at freeshell.org>
 	* search_control.rb: ja and en resources are divided.
 
