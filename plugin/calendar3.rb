@@ -1,4 +1,4 @@
-# calendar3.rb $Revision: 1.26 $
+# calendar3.rb $Revision: 1.27 $
 #
 # calendar3: 現在表示している月のカレンダーを表示します．
 #  パラメタ: なし
@@ -136,6 +136,7 @@ end
 
 def calendar3
 	show_todo = @options['calendar3.show_todo']
+	show_todo = Regexp.new(show_todo) if show_todo
 	result = ''
 	if @options.has_key? 'calendar3.erb'
 		result << %Q|<p class="message">@options['calendar3.erb'] is obsolete!<p>|
