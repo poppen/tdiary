@@ -1,3 +1,6 @@
+2004-03-16 TADA Tadashi <sho@spc.gr.jp>
+	* referer_scheme.rb: support WiLiKi style.
+
 2004.03.16 Junichiro Kita <kita@kitaj.no-ip.com>
 	* category.rb: cache shorten body this time around. sumaso-
 
