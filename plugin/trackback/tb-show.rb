@@ -1,4 +1,4 @@
-# tb-show.rb $Revision: 1.6 $
+# tb-show.rb $Revision: 1.7 $
 #
 # functions:
 #   * show TrackBack ping URL in right of TSUKKOMI label.
@@ -24,8 +24,8 @@ unless @conf.mobile_agent? then
 add_body_enter_proc do |date|
 	@tb_date = date
 	cgi = File.basename(@options['tb.cgi'] || './tb.rb')
-	@tb_id_url = %Q|http:////#{ENV['HTTP_HOST']}#{ENV['SERVER_PORT'] == '80' ? '' : ':'+ENV['SERVER_PORT']}#{File.dirname(ENV['REQUEST_URI'] + '.')}/#{anchor @tb_date.strftime('%Y%m%d')}|.gsub( /\/\.?\//, '/' )
-	@tb_url = %Q|http:////#{ENV['HTTP_HOST']}#{ENV['SERVER_PORT'] == '80' ? '' : ':'+ENV['SERVER_PORT']}#{File.dirname(ENV['REQUEST_URI'] + '.')}/#{cgi}/#{@tb_date.strftime('%Y%m%d')}|.gsub( /\/\.?\//, '/' )
+	@tb_id_url = %Q|http:////#{ENV['HTTP_HOST']}#{File.dirname(ENV['REQUEST_URI'] + '.')}/#{anchor @tb_date.strftime('%Y%m%d')}|.gsub( %r|/\.?/|, '/' )
+	@tb_url = %Q|http:////#{ENV['HTTP_HOST']}#{File.dirname(ENV['REQUEST_URI'] + '.')}/#{cgi}/#{@tb_date.strftime('%Y%m%d')}|.gsub( %r|/\.?/|, '/' )
 	''
 end
 
