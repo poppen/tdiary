@@ -1,4 +1,4 @@
-# todo.rb $Revision: 1.2 $
+# todo.rb $Revision: 1.3 $
 #
 # todo: show ToDo lists.
 #
@@ -110,7 +110,10 @@ def todo_init
 	@conf['todo.n'] ||= 10
 	@conf['todo.title'] ||= 'ToDo:'
 	unless @conf['todo.todos']
-		@conf['todo.todos'] = File.readlines(todo_file).join if FileTest::exist?(todo_file)
+		begin
+			@conf['todo.todos'] = File.readlines(todo_file).join if FileTest::exist?(todo_file)
+		rescue
+		end
 	end
 	@conf['todo.todos'] ||= ''
 	@todos = todo_parse(@conf['todo.todos'].split(/\n/))
