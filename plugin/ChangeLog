@@ -1,4 +1,7 @@
 2004-11-09 zunda <zunda at freeshell.org>
+	* search_control.rb: @cgi.user_agent can be nil
+
+2004-11-09 zunda <zunda at freeshell.org>
 	* search_control.rb, {en,ja}/search_control.rb: multiple user
 	agents are now allowed 
 

@@ -1,5 +1,5 @@
 =begin
-= ここだけ検索プラグイン/search control plugin((-$Id: search_control.rb,v 1.5 2004-11-09 21:07:39 zunda Exp $-))
+= ここだけ検索プラグイン/search control plugin((-$Id: search_control.rb,v 1.6 2004-11-10 00:46:27 zunda Exp $-))
 
 Under revision! TODO: add/remove user agents
 
@@ -183,10 +183,12 @@ end
 add_header_proc do
 	# agent
 	number = ''	# default agent
-	(1...@conf[_sc_nkey]).each do |i|
-		if @cgi.user_agent.include?( @conf[_sc_akey( i )] ) then
-			number = i.to_s
-			break
+	if @cgi.user_agent then
+		(1...@conf[_sc_nkey]).each do |i|
+			if @cgi.user_agent.include?( @conf[_sc_akey( i )] ) then
+				number = i.to_s
+				break
+			end
 		end
 	end
 
