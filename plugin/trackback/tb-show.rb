@@ -1,4 +1,4 @@
-# tb-show.rb $Revision: 1.10 $
+# tb-show.rb $Revision: 1.11 $
 #
 # functions:
 #   * show TrackBack ping URL in right of TSUKKOMI label.
@@ -87,7 +87,7 @@ MODIFY_CLASS
 alias :referer_of_today_short_tb_backup :referer_of_today_short
 def referer_of_today_short( diary, limit )
 	r = referer_of_today_short_tb_backup( diary, limit )
-	if diary and !trackback_antibot? then
+	if diary and !bot? then
 		count = 0
 		diary.each_comment( 100 ) do |com, idx|
 			next unless com.visible_true?
@@ -131,13 +131,8 @@ def referer_of_today_long( diary, limit )
 	r << referer_of_today_long_tb_backup( diary, limit )
 end
 
-def trackback_antibot?
-	(respond_to?("referrer_antibot?") and referrer_antibot?) or
-	(respond_to?("disp_referrer_antibot?") and disp_referrer_antibot?)
-end
-
 def trackback_ping_url
-	if @tb_url and not trackback_antibot?
+	if @tb_url and not bot?
 		%Q| (TrackBack Ping URL: <a href="#{@tb_url}">#{@tb_url}</a>)|
 	else
 		''

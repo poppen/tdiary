@@ -1,4 +1,4 @@
-# calendar3.rb $Revision: 1.32 $
+# calendar3.rb $Revision: 1.33 $
 #
 # calendar3: 現在表示している月のカレンダーを表示します．
 #  パラメタ: なし
@@ -137,6 +137,7 @@ MODIFY_CLASS
 end
 
 def calendar3
+	return '' if bot?
 	show_todo = @options['calendar3.show_todo']
 	show_todo = Regexp.new(show_todo) if show_todo
 	result = ''
