@@ -26,6 +26,7 @@
 #DEFAULT (echo ""; id; echo %{sVv}; date; cat) >> $CVSROOT/CVSROOT/commitlog
 blogkit Mail -s %{sVv} tdiary-cvs-core@lists.sourceforge.net
 core Mail -s %{sVv} tdiary-cvs-core@lists.sourceforge.net
+contrib Mail -s %{sVv} tdiary-cvs-core@lists.sourceforge.net
 theme Mail -s %{sVv} tdiary-cvs-theme@lists.sourceforge.net
 plugin Mail -s %{sVv} tdiary-cvs-plugin@lists.sourceforge.net
 DEFAULT Mail -s %{sVv} sho@spc.gr.jp
