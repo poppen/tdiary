@@ -1,4 +1,4 @@
-# ja/category.rb $Revision: 1.6 $
+# ja/category.rb $Revision: 1.7 $
 #
 # Copyright (c) 2004 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -54,6 +54,17 @@ Press
 <a href="#{@conf.update}?conf=category;category_initialize=1">here</a>
 to create category index.
 It takes several or several tens of second to create it.
+</p>
+
+<h3 class="subtitle">Edit Support</h3>
+<p>
+Category names can be shown under the 'Article' form.
+</p>
+<p>
+<select name="category.edit_support">
+<option value="true"#{" selected" if @conf['category.edit_support']}>Show</option>
+<option value="false"#{" selected" unless @conf['category.edit_support']}>Hide</option>
+</select>
 </p>
 
 <h3 class="subtitle">Header</h3>

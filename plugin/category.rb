@@ -1,4 +1,4 @@
-# category.rb $Revision: 1.17 $
+# category.rb $Revision: 1.18 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -11,6 +11,7 @@ require 'pstore'
 def category_init
 	@conf['category.header1'] ||= %Q[<div class="adminmenu">\n<p>\n<%= category_navi %>\n</p>\n</div>\n]
 	@conf['category.header2'] ||= %Q[<p>Categories |\n<%= category_list %>\n</p>\n]
+	@conf['category.edit_support'] = true if @conf['category.edit_support'].nil?
 end
 category_init
 
@@ -540,6 +541,35 @@ EVAL
 		end
 	end
 end
+
+end # module Category
+
+
+#
+# display categories you use on update form
+#
+@conf['category.edit_support'] and add_edit_proc do |date|
+	ret = ''
+	unless @categories.size == 0 then
+		ret << %Q[
+		<script type="text/javascript">
+		<!--
+		function inj_c(val){
+			target = window.document.forms[0].body
+			target.focus();
+			target.value += val
+		}
+		//-->
+		</script>
+		]
+		ret << '<div class="field title">'
+		ret << "#{@category_conf_label}:\n"
+		@categories.each do |c|
+			e_c = CGI.escapeHTML(c)
+			ret << %Q!| <a href="javascript:inj_c(&quot;[#{e_c}] &quot;)">#{e_c}</a>\n!
+		end
+		ret << "|\n</div>\n<br>\n"
+	end
 end
 
 
@@ -620,6 +650,7 @@ if @mode == 'conf' || @mode == 'saveconf'
 			if ["month", "quearter", "half", "year", "all"].index(@cgi.params["category.period"][0])
 				@conf["category.period"] = @cgi.params["category.period"][0]
 			end
+			@conf['category.edit_support'] = (@cgi.params['category.edit_support'][0] == 'true')
 		elsif @cgi.valid?('category_initialize')
 			cache.recreate(@years)
 		end

@@ -1,4 +1,4 @@
-# ja/category.rb $Revision: 1.7 $
+# ja/category.rb $Revision: 1.8 $
 #
 # Copyright (c) 2004 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -54,6 +54,18 @@ def category_conf_html
 <a href="#{@conf.update}?conf=category;category_initialize=1">ここ</a>
 をクリックしてください．
 日記の量やサーバの性能にもよりますが，数秒から数十秒でインデックスの作成は終了します．
+</p>
+
+<h3 class="subtitle">日記編集サポート</h3>
+<p>
+日記編集画面の「本文」の下にカテゴリ名を一覧表示することができます．
+カテゴリ名をクリックすると「本文」にそのカテゴリ名が挿入されます(要JavaScript)．
+</p>
+<p>
+<select name="category.edit_support">
+<option value="true"#{" selected" if @conf['category.edit_support']}>表示する</option>
+<option value="false"#{" selected" unless @conf['category.edit_support']}>表示しない</option>
+</select>
 </p>
 
 <h3 class="subtitle">ヘッダ</h3>
