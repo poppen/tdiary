@@ -1,5 +1,5 @@
 =begin
-= Meta-scheme plugin((-$Id: referer_scheme.rb,v 1.3 2003-12-17 08:22:56 zunda Exp $-))
+= Meta-scheme plugin((-$Id: referer_scheme.rb,v 1.4 2003-12-17 13:48:46 zunda Exp $-))
 本日のリンク元置換リストの記述を楽にします。
 
 == 利用方法
@@ -51,26 +51,14 @@ version 2 or later.
 class << @conf.referer_table
 	private
 
-	TdiaryDates = [
-			['(?:\\?date=)?(\d{4})(\d{2})(\d{2})(?:\.html)?.*', '(\1-\2-\3)'],
-			['(?:\\?date=)?(\d{4})(\d{2})(?:\.html)?.*', '(\1-\2)'],
-			['(?:\\?date=)?(\d{2})(\d{2})(?:\.html)?.*', '(\1-\2)'],
-	]
 	TdiaryNet = '.tdiary.net/'
 	HatenaHost = 'http://d.hatena.ne.jp/'
 
-	def scheme_tdiary( url, name )
-		TdiaryDates.each do |a|
-			yield( url + a[0], name + a[1] )
-		end
-		yield( url, name )
-	end
-
 	def scheme_tdiarynet( url, name )
 		TdiaryDates.each do |a|
-			yield( "http://#{url}#{TdiaryNet}/#{a[0]}", name + a[1] )
+			yield( "http://#{url}#{TdiaryNet}#{a[0]}", name + a[1] )
 		end
-		yield( "http://#{url}#{TdiaryNet}/", name )
+		yield( "http://#{url}#{TdiaryNet}.*", name )
 	end
 
 	def scheme_hatena( url, name )
@@ -80,7 +68,7 @@ class << @conf.referer_table
 		].each do |a|
 			yield( "#{HatenaHost}#{url}/#{a[0]}", name + a[1] )
 		end
-		yield( "#{HatenaHost}#{url}/", name )
+		yield( "#{HatenaHost}#{url}/.*", name )
 	end
 
 end
