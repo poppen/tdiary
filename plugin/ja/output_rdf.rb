@@ -14,7 +14,8 @@
 #  書き込みができるパーミッションで作成してください
 #
 #  なお、index.rdfは、@options['output_rdf.file']によってファイル名を変
-#  更可能です
+#  更可能です。また、@options['output_rdf.image']によってイメージをURLで
+#  指定できます。
 #
 # 2.
 #  プラグイン選択からout_put.rbを選択するか、pluginディレクトリにコピーしてください

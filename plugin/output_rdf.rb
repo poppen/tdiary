@@ -1,5 +1,5 @@
 # output_rdf.rb: tDiary plugin to generate RDF file when diary updated.
-# $Revision: 1.17 $
+# $Revision: 1.18 $
 #
 # See document to @lang/output_rdf.rb
 #
@@ -32,7 +32,13 @@ if ( /^(append|replace|trackbackreceive)$/ =~ @mode ) || ( /^comment$/ =~ @mode 
    <link>#{uri}</link>
    <description>#{CGI::escapeHTML( @html_title )}</description>
    <dc:date>#{Time.now.strftime('%Y-%m-%dT%H:%M')}</dc:date>
-   <items>
+	RDF
+
+	rdf_image = @options['output_rdf.image']
+	r << %Q[<image rdf:resource="#{rdf_image}" />\n] if rdf_image
+
+	r <<<<-RDF
+	<items>
      <rdf:Seq>
 	RDF
 	idx = 1
@@ -59,7 +65,16 @@ if ( /^(append|replace|trackbackreceive)$/ =~ @mode ) || ( /^comment$/ =~ @mode 
    </items>
  </channel>
 	RDF
- 	idx = 1
+
+	if rdf_image
+		r << %Q[<image rdf:abount="#{rdf_image}">\n]
+		r << %Q[<title>#{@conf.html_title}</title>\n]
+		r << %Q[<url>#{rdf_image}</url>\n]
+		r << %Q[<link>#{path}</link>\n]
+		r << %Q[</image>\n]
+	end
+
+	idx = 1
  	diary.visible? and diary.each_section do |section|
 		if section.subtitle then
 		link = %Q[#{uri}#{anchor "#{date}\#p#{'%02d' % idx}"}]

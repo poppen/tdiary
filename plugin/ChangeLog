@@ -1,3 +1,6 @@
+2003-12-12 TADA Tadashi <sho@spc.gr.jp>
+	* output_rdf.rb: add output_rdf.image option. thanks Kouhei Sutou <kou@cozmixng.org>.
+
 2003-12-11 TADA Tadashi <sho@spc.gr.jp>
 	* squeeze.rb: behave to like a bot.
 

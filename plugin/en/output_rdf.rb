@@ -6,7 +6,8 @@
 #      * or make "index.rdf" file into directory of index.rb existence as
 #        writable by web server.
 #    You can change the file name of "index.rdf" by the option 
-#    @options['output_rdf.file'] in tdiary.conf.
+#    @options['output_rdf.file'] in tdiary.conf. And you can also specify
+#    image URL by @options['output_rdf.image'].
 #
 # 2. Select "output_rdf.rb" in Preferences or copy it into plugin directory.
 #
