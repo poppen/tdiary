@@ -1,4 +1,4 @@
-# tb-send.rb $Revision: 1.16 $
+# tb-send.rb $Revision: 1.17 $
 #
 # Copyright (c) 2003 Junichiro Kita <kita@kitaj.no-ip.com>
 # You can distribute this file under the GPL.
@@ -91,7 +91,7 @@ def tb_send_trackback
 	my_url.gsub!( %r|/\./|, '/' )
  
 	require 'net/http'
-	urls.split.each do |url|
+	urls.each do |url|
 		trackback = "url=#{CGI::escape(my_url)}"
 		trackback << "&charset=#{@tb_send_ping_charset}"
 		trackback << "&title=#{CGI::escape( @conf.to_native( title ) )}" unless title.empty?
