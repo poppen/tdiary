@@ -5,6 +5,7 @@
 #
 # 1. output_rdf.rb
 # 2. uconv <http://www.yoshidam.net/Ruby.html#uconv>
+#    uconvが見つからない場合はEUC-JPのRDFを吐き出します
 #
 # 調理法
 #
@@ -12,6 +13,8 @@
 #  tdiary.rb のあるディレクトリをwebサーバーから書き込みできるようにするか
 #  tdiary.rb のあるディレクトリに t.rdf というファイルをwebサーバーから
 #  書き込みができるパーミッションで作成してください
+#
+#  なお、r.rdfは、@options['output_rdf.file']によってファイル名を変更可能です
 #
 # 2.
 #  忘れずに output_rdf.rb を plugin に ほオリコンでください
@@ -27,8 +30,13 @@
 #
 # Copyright (c) 2003 Hiroyuki Ikezoe <zoe@kasumi.sakura.ne.jp>
 # Distributed under the GPL
+3
 
 =begin ChangeLog
+2003-04-28 TADA Tadashi <sho@spc.gr.jp>
+	* enable running on secure mode.
+	* support non UTF-8 when cannot load uconv.
+
 2003-03-03 Hiroyuki Ikezoe <zoe@kasumi.sakura.ne.jp>
 	* validate by RSS 1.0 <http://www.redland.opensource.ac.uk/rss/>
 	  Thanks Kakutani san. (see http://www.tdiary.net/archive/devel/msg00581.html)
@@ -44,10 +52,17 @@
 	* use Plugin#apply_plugin.
 	* compatible defaultio
 =end
- 
-require 'uconv'
 
-add_update_proc( Proc::new do
+begin
+	require 'uconv'
+	rdf_encode = 'UTF-8'
+	rdf_encoder = Proc::new {|s| Uconv.euctou8( s ) }
+rescue LoadError
+	rdf_encode = charset
+	rdf_encoder = Proc::new {|s| s }
+end
+
+if /^(append|replace|comment)$/ =~ @mode then
 	if @mode == 'append' || @mode == 'replace' then
 		date = sprintf( "%4d%02d%02d", @cgi.params['year'][0], @cgi.params['month'][0], @cgi.params['day'][0] )
 	else
@@ -56,13 +71,13 @@ add_update_proc( Proc::new do
 	diary = @diaries[date]
 	host  = ENV['HTTP_HOST'] 
 	path  = ENV['REQUEST_URI']
-   	path  = path[0..path.rindex("/")]
-   	uri   = "#{host}#{path}#{@index}"
-	rdf_file = 't.rdf'
+	path = path[0..path.rindex( "/" )]
+   uri   = "#{host}#{path}#{@index}".gsub( /\/\.?\//, '/' )
+	rdf_file = @options['output_rdf.file'] || 't.rdf'
 	rdf_channel_about = "#{host}#{path}#{rdf_file}"
 	r = ""
 	r <<<<-RDF
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="#{rdf_encode}"?>
 <rdf:RDF 
  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
  xmlns="http://purl.org/rss/1.0/"
@@ -134,8 +149,8 @@ add_update_proc( Proc::new do
  	r << " </item>\n"
  	end
 	r << "</rdf:RDF>"
-	r = Uconv.euctou8(r)
+	r = rdf_encoder.call( r )
 	File::open( rdf_file, 'w' ) do |o|
 		o.puts r
 	end
-end )
+end

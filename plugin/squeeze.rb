@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# squeeze.rb $Revision: 1.8 $
+# squeeze.rb $Revision: 1.9 $
 # -pv-
 #
 # Ì¾¾Î¡§
@@ -51,6 +51,9 @@
 # version 1.0.4 by TADA Tadashi <sho@spc.gr.jp> with GPL2.
 #
 =begin ChangeLog
+2003-04-28 TADA Tadashi <sho@spc.gr.jp>
+	* enable running on secure mode.
+
 2003-02-17 TADA Tadashi <sho@spc.gr.jp>
 	* add suffix option.
 
@@ -144,7 +147,7 @@ if mode == "CMD" || mode == "CGI"
 
 	if mode == "CMD"
 		def usage
-			puts "squeeze $Revision: 1.8 $"
+			puts "squeeze $Revision: 1.9 $"
 			puts " making html files from tDiary's database."
 			puts " usage: ruby squeeze.rb [-p <tDiary path>] [-c <tdiary.conf path>] [-a] [-s] [-x suffix] <dest path>"
 			exit
@@ -293,7 +296,7 @@ if mode == "CGI" || mode == "CMD"
 			</head>
 			<body><div style="text-align:center">
 			<h1>Squeeze for tDiary</h1>
-			<p>$Revision: 1.8 $</p>
+			<p>$Revision: 1.9 $</p>
 			<p>Copyright (C) 2002 MUTOH Masao&lt;mutoh@highway.ne.jp&gt;</p></div>
 			<br><br>Start!</p><hr>
 		]
@@ -319,24 +322,22 @@ if mode == "CGI" || mode == "CMD"
 	else
 		print "\n\n"
 	end
-else
-	add_update_proc do
-		conf = @conf.clone
-		conf.header = ''
-		conf.footer = ''
-		conf.show_comment = true
-		conf.show_referer = false
-		conf.hide_comment_form = true
+elsif /^(append|replace|comment)$/ =~ @mode
+	conf = @conf.clone
+	conf.header = ''
+	conf.footer = ''
+	conf.show_comment = true
+	conf.show_referer = false
+	conf.hide_comment_form = true
 
-		diary = @diaries[@date.strftime('%Y%m%d')]
-		dir = @options['squeeze.output_path'] || @options['yasqueeze.output_path']
-		dir = @cache_path + "/html" unless dir
-		Dir.mkdir(dir, 0755) unless File.directory?(dir)
-		TDiary::YATDiarySqueeze.new(diary, dir,
-				@options['squeeze.all_data'] || @options['yasqueeze.all_data'],
-				@options['squeeze.compat_path'] || @options['yasqueeze.compat_path'],
-				conf,
-				@options['squeeze.suffix'] || ''
-		).execute
-	end
+	diary = @diaries[@date.strftime('%Y%m%d')]
+	dir = @options['squeeze.output_path'] || @options['yasqueeze.output_path']
+	dir = @cache_path + "/html" unless dir
+	Dir.mkdir(dir, 0755) unless File.directory?(dir)
+	TDiary::YATDiarySqueeze.new(diary, dir,
+			@options['squeeze.all_data'] || @options['yasqueeze.all_data'],
+			@options['squeeze.compat_path'] || @options['yasqueeze.compat_path'],
+			conf,
+			@options['squeeze.suffix'] || ''
+	).execute
 end
