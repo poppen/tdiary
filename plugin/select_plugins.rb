@@ -1,5 +1,5 @@
 =begin
-= プラグイン選択プラグイン((-$Id: select_plugins.rb,v 1.3 2003-09-25 02:17:29 tadatadashi Exp $-))
+= プラグイン選択プラグイン((-$Id: select_plugins.rb,v 1.4 2003-09-25 14:35:28 tadatadashi Exp $-))
 Please see below for an English description.
 
 == 概要
@@ -365,14 +365,14 @@ if @options["#{Select_plugin_prefix}.path"] then
 			# mandatory plugins
 			if false == @options["#{Select_plugin_prefix}.hidemandatory"] then
 				@sp_defs = Hash.new	# path to the plugin
-				def_paths = Dir::glob( "#{( @conf.plugin_path || "#{PATH}/plugin" )}/*.rb" )
+				def_paths = Dir::glob( ( @conf.plugin_path || "#{PATH}/plugin" ) + "/*.rb" )
 				def_paths.each do |path|
 					@sp_defs[ File.basename( path ) ] = path
 				end
 			end
 			# selectable plugins
 			@sp_opt = Hash.new	# path to the plugin
-			opt_paths = Dir::glob( "#{@options["#{Select_plugin_prefix}.path"]}/*.rb" )
+			opt_paths = Dir::glob( @options["#{Select_plugin_prefix}.path"] + "/*.rb" )
 			opt_paths.each do |path|
 				@sp_opt[ File.basename( path ) ] = path
 			end
