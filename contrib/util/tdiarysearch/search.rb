@@ -8,7 +8,7 @@
 # You can distribute/modify this program under the terms of
 # the GNU GPL, General Public License version 2.
 #
-# $originalId: search.rb,v 1.8 2004/02/16 10:34:27 aamine Exp $
+# $originalId: search.rb,v 1.10 2004/05/22 12:17:21 aamine Exp $
 #
 # Project home page: http://i.loveruby.net/w/tdiarysearch.html
 #
@@ -152,7 +152,7 @@ def generate_page(cgi)
     begin
       return search_form_page(theme) unless cgi.valid?('q')
       initialize_tdiary_plugins cgi
-      query = @config.to_native([cgi.params['q']].compact.flatten.join(' '))
+      query = @config.to_native([cgi.params['q']].flatten.compact.join(' ')).to_s
       html = search_result_page(theme, setup_patterns(query))
       save_query(query, query_log()) if LOGGING
       return html
@@ -301,7 +301,7 @@ def new_diary(header, body)
       raise "unexpected tdiary format: Date=nil:\n#{header.strip}"
   format = header.slice(/^Format:\s*(\S+)/, 1) or
       raise "unexpected tdiary format: Format=nil:\n#{header.strip}"
-  diary_class(format).new(ymd, '', body)
+  diary_class(format.untaint).new(ymd, '', body)
 end
 
 DIARY_CLASS_CACHE = {}
@@ -310,8 +310,8 @@ def diary_class(style)
   c = DIARY_CLASS_CACHE[style]
   return c if c
 
-  require "tdiary/#{style.downcase}_style.rb".untaint
-  c = eval("TDiary::#{style.capitalize}Diary".untaint)
+  require "tdiary/#{style.downcase}_style.rb"
+  c = eval("TDiary::#{style.capitalize}Diary")
   DIARY_CLASS_CACHE[style] = c
   c
 end
@@ -341,7 +341,7 @@ end
 
 def initialize_tdiary_plugins(cgi)
   @plugin = TDiary::Plugin.new('conf' => @config,
-                               'mode' => 'day',
+                               'mode' => 'month',
                                'secure' => false,
                                'diaries' => {},
                                'cgi' => cgi,
