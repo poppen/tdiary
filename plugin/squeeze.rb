@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 $KCODE = 'n'
 
-# squeeze.rb $Revision: 1.17 $
+# squeeze.rb $Revision: 1.18 $
 #
 # Create daily HTML file from tDiary database.
 #
@@ -129,7 +129,7 @@ if mode == "CMD" || mode == "CGI"
 
 	if mode == "CMD"
 		def usage
-			puts "squeeze $Revision: 1.17 $"
+			puts "squeeze $Revision: 1.18 $"
 			puts " making html files from tDiary's database."
 			puts " usage: ruby squeeze.rb [-p <tDiary path>] [-c <tdiary.conf path>] [-a] [-s] [-x suffix] <dest path>"
 			exit
@@ -281,7 +281,7 @@ if mode == "CGI" || mode == "CMD"
 			</head>
 			<body><div style="text-align:center">
 			<h1>Squeeze for tDiary</h1>
-			<p>$Revision: 1.17 $</p>
+			<p>$Revision: 1.18 $</p>
 			<p>Copyright (C) 2002 MUTOH Masao&lt;mutoh@highway.ne.jp&gt;</p></div>
 			<br><br>Start!</p><hr>
 		]
@@ -310,24 +310,24 @@ if mode == "CGI" || mode == "CMD"
 	else
 		print "\n\n"
 	end
-end
+else
+	add_update_proc do
+		conf = @conf.clone
+		conf.header = ''
+		conf.footer = ''
+		conf.show_comment = true
+		conf.hide_comment_form = true
+		def conf.bot?; true; end
 
-add_update_proc do
-	conf = @conf.clone
-	conf.header = ''
-	conf.footer = ''
-	conf.show_comment = true
-	conf.hide_comment_form = true
-	def conf.bot?; true; end
-
-	diary = @diaries[@date.strftime('%Y%m%d')]
-	dir = @options['squeeze.output_path'] || @options['yasqueeze.output_path']
-	dir = @cache_path + "/html" unless dir
-	Dir.mkdir(dir, 0755) unless File.directory?(dir)
-	TDiary::YATDiarySqueeze.new(diary, dir,
-			@options['squeeze.all_data'] || @options['yasqueeze.all_data'],
-			@options['squeeze.compat_path'] || @options['yasqueeze.compat_path'],
-			conf,
-			@options['squeeze.suffix'] || ''
-	).execute
+		diary = @diaries[@date.strftime('%Y%m%d')]
+		dir = @options['squeeze.output_path'] || @options['yasqueeze.output_path']
+		dir = @cache_path + "/html" unless dir
+		Dir.mkdir(dir, 0755) unless File.directory?(dir)
+		TDiary::YATDiarySqueeze.new(diary, dir,
+					    @options['squeeze.all_data'] || @options['yasqueeze.all_data'],
+					    @options['squeeze.compat_path'] || @options['yasqueeze.compat_path'],
+					    conf,
+					    @options['squeeze.suffix'] || ''
+					    ).execute
+	end
 end
