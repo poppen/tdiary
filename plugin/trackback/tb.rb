@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# tb.rb $Revision: 1.2 $
+# tb.rb $Revision: 1.3 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -11,19 +11,15 @@ $KCODE= 'e'
 BEGIN { $defout.binmode }
 
 begin
+	if FileTest::symlink?( __FILE__ ) then
+		org_path = File::dirname( File::readlink( __FILE__ ) )
+	else
+		org_path = File::dirname( __FILE__ )
+	end
+	$:.unshift org_path
 	require 'tdiary'
   
 	module TDiary
-		class Comment
-			def visible_true?
-				@show
-			end
-
-			def visible?
-				@show and /^(Track|Ping)Back$/ !~ name
-			end
-		end
-
 		class TDiaryTrackBackError < StandardError
 		end
 
@@ -40,8 +36,8 @@ begin
 			end
 
 			def trackback_url
-				'http://' + ENV['SERVER_NAME'] +
-					(ENV['SERVER_PORT'] == '80' ? '' : ENV['SERVER_PORT']) +
+				'http://' + ENV['HTTP_HOST'] +
+					(ENV['SERVER_PORT'] == '80' ? '' : ":#{ENV['SERVER_PORT']}") +
 					ENV['REQUEST_URI']
 			end
 
@@ -96,14 +92,18 @@ HERE
 <language>ja-jp</language>
 RSSHEAD
 				@diary.each_comment(100) do |com, idx|
-					next unless com.visible_true?
+					begin
+						next unless com.visible_true?
+					rescue NameError, NoMethodError
+						next unless com.visible?
+					end
 					next unless /^(Track|Ping)Back$/ =~ com.name
 					url, blog_name, title, excerpt = com.body.split(/\n/, 4)
 					r << <<RSSITEM
 <item>
-<title>#{title}</title>
-<link>#{url}</link>
-<description>#{excerpt}</description>
+<title>#{CGI::escapeHTML( title )}</title>
+<link>#{CGI::escapeHTML( url )}</link>
+<description>#{CGI::escapeHTML( excerpt )}</description>
 </item>
 RSSITEM
 				end
@@ -173,7 +173,7 @@ RSSFOOT
 	tdiary = TDiary::TDiaryTrackBackShow::new( @cgi, nil, conf ) unless tdiary
 
 	head = {
-		#'type' => 'application/xml'
+		#'type' => 'application/xml',
 		'type' => 'text/xml',
 		'Vary' => 'User-Agent'
 	}
@@ -188,7 +188,7 @@ RSSFOOT
 		print body
 	rescue TDiary::TDiaryTrackBackError
 		head = {
-			#'type' => 'application/xml'
+			#'type' => 'application/xml',
 			'type' => 'text/xml'
 		}
 		print @cgi.header( head )

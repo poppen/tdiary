@@ -1,4 +1,4 @@
-# tb-show.rb $Revision: 1.3 $
+# tb-show.rb $Revision: 1.4 $
 #
 # functions:
 #   * show TrackBack ping URL in right of TSUKKOMI label.
@@ -27,28 +27,24 @@ unless @conf.mobile_agent? then
 add_body_enter_proc do |date|
 	@tb_date = date
 	cgi = File.basename(@options['tb.cgi'] || './tb.rb')
-	@tb_id_url = %Q|http://#{ENV['SERVER_NAME']}#{ENV['SERVER_PORT'] == '80' ? '' : ':'+ENV['SERVER_PORT']}#{File.dirname(ENV['REQUEST_URI'] + '.')}/#{anchor @tb_date.strftime('%Y%m%d')}|
-	@tb_url = %Q|http://#{ENV['SERVER_NAME']}#{ENV['SERVER_PORT'] == '80' ? '' : ':'+ENV['SERVER_PORT']}#{File.dirname(ENV['REQUEST_URI'] + '.')}/#{cgi}/#{@tb_date.strftime('%Y%m%d')}|
-	if @options['tb.url_position'] != 'lower'
-		%Q|<div class="body-enter"><p><span class="trackback-url">TrackBack Ping URL: #{@tb_url}</span></p></div>\n|
-	else
-		''
-	end
+	@tb_id_url = %Q|http:////#{ENV['HTTP_HOST']}#{ENV['SERVER_PORT'] == '80' ? '' : ':'+ENV['SERVER_PORT']}#{File.dirname(ENV['REQUEST_URI'] + '.')}/#{anchor @tb_date.strftime('%Y%m%d')}|.gsub( /\/\.?\//, '/' )
+	@tb_url = %Q|http:////#{ENV['HTTP_HOST']}#{ENV['SERVER_PORT'] == '80' ? '' : ':'+ENV['SERVER_PORT']}#{File.dirname(ENV['REQUEST_URI'] + '.')}/#{cgi}/#{@tb_date.strftime('%Y%m%d')}|.gsub( /\/\.?\//, '/' )
+	''
 end
 
-add_body_leave_proc do |date|
-	if @options['tb.url_position'] == 'lower'
-		%Q|<div class="body-leave"><p><span class="trackback-url">TrackBack Ping URL: #{@tb_url}</span></p></div>\n|
-	else
-		''
-	end
+alias :comment_new_tb_backup :comment_new
+def comment_new
+	cgi = @options['tb.cgi'] || './tb.rb'
+	url = "#{cgi}/#{@tb_date.strftime( '%Y%m%d' )}"
+	%Q|#{comment_new_tb_backup }</a>]<br>[TrackBack to #{@tb_url}|
 end
 
 #
 # make RDF
 #
 add_body_leave_proc do |date|
-	<<TBRDF
+	if @diaries[@tb_date.strftime('%Y%m%d')] then
+		<<-TBRDF
 <!--
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	xmlns:dc="http://purl.org/dc/elements/1.1/"
@@ -60,16 +56,12 @@ add_body_leave_proc do |date|
 	trackback:ping="#{@tb_url}" />
 </rdf:RDF>
 -->
-TBRDF
+		TBRDF
+	else
+		''
+	end
 end
 
-#alias :comment_new_tb_backup :comment_new
-#def comment_new
-#   cgi = @options['tb.cgi'] || './tb.rb'
-#   url = "#{cgi}/#{@tb_date.strftime( '%Y%m%d' )}"
-#   %Q|#{comment_new_tb_backup }</a>] [<a href="#{url}">TrackBack|
-#end
- 
 #
 # hide TrackBacks in TSUKKOMI
 #
@@ -79,7 +71,7 @@ module TDiary
 		def visible_true?
 			@show
 		end
-		#{if @mode !~ /^(form|edit)$/ then
+		#{if @mode !~ /^(form|edit|showcomment)$/ then
 			'def visible?
 				@show and /^(Track|Ping)Back$/ !~ name
 			end'
@@ -121,11 +113,11 @@ def referer_of_today_long( diary, limit )
 			excerpt ||= ''
 
 			a = blog_name
-			a += ':' + title unless title == ''
-			a = url if a == ''
+			a += ':' + title unless title.empty?
+			a = url if a.empty?
 
-			r << %Q|<li><a href="#{url}">#{a}</a><br>|
-			r << excerpt.gsub(/\n/, '<br>').gsub(/<br><br>\Z/,'') unless excerpt == ""
+			r << %Q|<li><a href="#{CGI::escapeHTML( url )}">#{CGI::escapeHTML( a )}</a><br>|
+			r << CGI::escapeHTML( excerpt ).gsub( /\n/, '<br>' ).gsub( /<br><br>\Z/, '' ) unless excerpt.empty?
 			r << %Q|</li>\n|
 		end
 		r << "</ul>\n"
