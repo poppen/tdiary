@@ -18,7 +18,7 @@
 # OUT OF  OR IN CONNECTION WITH  THE CODE OR THE  USE OR OTHER  DEALINGS IN THE
 # CODE.
 
-# $Id: hatena_style.rb,v 1.8 2004-05-16 14:50:31 mput Exp $
+# $Id: hatena_style.rb,v 1.9 2004-05-16 14:53:46 mput Exp $
 # Hatena::Diary compatible style
 # Works only under ruby 1.8.1 or later
 
@@ -405,8 +405,8 @@ class Hatena::Title
               strip.convert(mode))
     else
       sprintf('<h3%s><a %shref="%s<%%=anchor "%s"%%>#%s">%s</a>%s%s%s %s</h3>',
-              @name ? %Q{ name="#@name"} : '',
-              opt['anchor'] ? 'id="%s" ' % id : '',
+              @name ? %Q{ id="#@name"} : '',
+              opt['anchor'] ? 'name="%s" ' % id : '',
               opt['index'],
               date.strftime('%Y%m%d'),
               @name || id,
