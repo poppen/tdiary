@@ -1,4 +1,4 @@
-# calendar3.rb $Revision: 1.25 $
+# calendar3.rb $Revision: 1.26 $
 #
 # calendar3: 現在表示している月のカレンダーを表示します．
 #  パラメタ: なし
@@ -8,6 +8,10 @@
 #     パラグラフのサブサイトルとここで指定した文字列が一致し
 #     かつその日の日記が非表示の場合，そのパラグラフの内容を
 #     予定としてpopupする．
+#
+#   @options['calendar3.show_popup']
+#     JavaScriptによるpopupを表示するかどうか．
+#     省略時の値はtrueなので，表示したくない場合のみfalseを設定する．
 #
 # Copyright (c) 2001,2002 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -50,6 +54,8 @@
 # }
 #
 =begin ChengeLog
+2003-02-27 Junichiro Kita <kita@kitaj.no-ip.com>
+	* @options['calendar.show_popup']
 2003-01-07 Junichiro Kita <kita@kitaj.no-ip.com>
    * append sample css
 2003-01-07 MURAI Kensou <murai@dosule.com>
@@ -134,6 +140,7 @@ def calendar3
 	if @options.has_key? 'calendar3.erb'
 		result << %Q|<p class="message">@options['calendar3.erb'] is obsolete!<p>|
 	end
+
 	if @mode == 'latest'
 		date = Time.now
 	else
@@ -188,7 +195,7 @@ def calendar3
 			end
 			result << r.join("&#13;&#10;")
 			result << %Q|" href="#{@index}#{anchor date}">#{day}</a>\n|
-			unless /w3m|MSIE.*Mac/ === ENV["HTTP_USER_AGENT"]
+			if @calendar3_show_popup
 				result << %Q|  <span class="calendar-popup" id="popup-#{day}">\n|
 				i = 1
 				if @category_rb_installed and @diaries[date].categorizable?
@@ -210,15 +217,24 @@ def calendar3
 						i += 1
 					end
 				end
-				result << %Q|  </span>\n</span>\n|
+				result << %Q|  </span>\n|
 			end
+			result << %Q|</span>\n|
 		end
 	end
 	result << %Q|<a href="#{@index}#{anchor "%04d%02d" % Calendar3.next_month(year, month)}">&gt;&gt;</a>\n|
 	result
 end
 
-add_header_proc do
+@calendar3_show_popup = true
+if @options.has_key?('calendar3.show_popup')
+	@calendar3_show_popup = @options['calendar3.show_popup']
+end
+if /w3m|MSIE.*Mac/ === ENV["HTTP_USER_AGENT"]
+	@calendar3_show_popup = false
+end
+if @calendar3_show_popup
+	add_header_proc do
     <<JAVASCRIPT
   <meta http-equiv="content-script-type" content="text/javascript">
   <script type="text/javascript">
@@ -332,5 +348,6 @@ add_header_proc do
   // -->
 </script>
 JAVASCRIPT
+	end
 end
 # vim: set ts=3:
