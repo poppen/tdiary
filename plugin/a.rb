@@ -1,4 +1,4 @@
-# a.rb $Revision: 1.9 $
+# a.rb $Revision: 1.10 $
 #
 # Create anchor easily.
 #
@@ -162,7 +162,6 @@ end
 
 def a_conf_html(data)
 %Q[
-<h3>#{a_conf_label}</h3>
 <p>#{a_conf_explain}</p>
 <p><textarea name="anchor_plugin_data" cols="#{a_conf_cols}" rows="#{a_conf_rows}">#{data}</textarea></p>
 ]
