@@ -1,3 +1,6 @@
+2004-08-09 NT <nt@be.to>
+	* tlink.rb: fix typo.
+
 2004-08-08 Junichiro Kita <kita@kitaj.no-ip.com>
 	* category.rb: fix bug in category_anchor.
 
