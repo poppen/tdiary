@@ -1,4 +1,4 @@
-# $Revision: 1.11 $
+# $Revision: 1.12 $
 # recent_list: 最近書いた日記のタイトル，サブタイトルを表示する
 #   パラメタ(カッコ内は未指定時の値):
 #     days:            何日分の日記を表示するか(20)
@@ -6,7 +6,6 @@
 #     title_with_body: trueで各パラグラフへのリンクのtitle属性にそのパラグラフの一部を指定(false)
 #     show_size:       trueで日記長を表示(false)
 #     show_title:      trueで各日のタイトルを表示(false)
-#     extra_erb:       タイトルリスト生成後さらにERbを通すか(false)
 #
 #   注意: セキュアモードでは使えません。
 #   備考: タイトルリストを日記に埋め込むは、レイアウトを工夫しなければ
@@ -40,11 +39,15 @@ class Paragraph
 end
 MODIFY_CLASS
 
-def recent_list(days = 30, date_format = nil, title_with_body = nil, show_size = nil, show_title = nil, extra_erb = nil)
+def recent_list(days = 30, date_format = nil, title_with_body = nil, show_size = nil, show_title = nil, extra_erb = 'obsolete')
 	days = days.to_i
 	date_format ||= @date_format
 
 	result = ""
+	if extra_erb != 'obsolete'
+		result << %Q|<p class="message">option 'extra_erb' is obsolete!<p>|
+	end
+
 	cgi = CGI::new
 	def cgi.referer; nil; end
 
@@ -86,10 +89,6 @@ def recent_list(days = 30, date_format = nil, title_with_body = nil, show_size =
 			end
 		end
 	}
-	if extra_erb then
-		apply_plugin( result )
-	else
-		result
-	end
+	apply_plugin( result )
 end
 
