@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# squeeze.rb $Revision: 1.5 $
+# squeeze.rb $Revision: 1.6 $
 # -pv-
 #
 # Ì¾¾Î¡§
@@ -45,8 +45,11 @@
 # version 1.0.4 by TADA Tadashi <sho@spc.gr.jp> with GPL2.
 #
 =begin ChangeLog
+2002-11-20 TADA Tadashi <sho@spc.gr.jp>
+	* make CGI object in YATDiarySqueeze and YATDiarySqueezeMain.
+
 2002-11-13 TADA Tadashi <sho@spc.gr.jp>
-	* set make @diaries in TDiaryYASqueeze.
+	* set make @diaries in TDiaryYAsqueeze.
 
 2002-11-11 TADA Tadashi <sho@spc.gr.jp>
 	* support TDiary::TDiaryBase#mode for date display in HTML title.
@@ -131,7 +134,7 @@ if mode == "CMD" || mode == "CGI"
 
 	if mode == "CMD"
 		def usage
-			puts "squeeze $Revision: 1.5 $"
+			puts "squeeze $Revision: 1.6 $"
 			puts " making html files from tDiary's database."
 			puts " usage: ruby squeeze.rb [-p <tDiary path>] [-c <tdiary.conf path>] [-a] [-s] <dest path>"
 			exit
@@ -196,7 +199,7 @@ module TDiary
 		def initialize(diary, dest, all_data, compat, conf)
 			@ignore_parser_cache = true
 	
-			super(nil, 'day.rhtml', conf)
+			super(CGI::new, 'day.rhtml', conf)
 			@diary = diary
 			@date = diary.date
 			@diaries = {@date.strftime('%Y%m%d') => @diary} if @diaries.size == 0
@@ -249,7 +252,7 @@ module TDiary
 		def initialize(dest, all_data, compat, conf)
 			@ignore_parser_cache = true
 	
-			super(nil, 'day.rhtml', conf)
+			super(CGI::new, 'day.rhtml', conf)
 			calendar
 			@years.keys.sort.each do |year|
 				@years[year.to_s].sort.each do |month|
@@ -275,7 +278,7 @@ if mode == "CGI" || mode == "CMD"
 			</head>
 			<body><div style="text-align:center">
 			<h1>Squeeze for tDiary</h1>
-			<p>$Revision: 1.5 $</p>
+			<p>$Revision: 1.6 $</p>
 			<p>Copyright (C) 2002 MUTOH Masao&lt;mutoh@highway.ne.jp&gt;</p></div>
 			<br><br>Start!</p><hr>
 		]
