@@ -1,3 +1,6 @@
+2004-08-08 Junichiro Kita <kita@kitaj.no-ip.com>
+	* category.rb: fix bug in category_anchor.
+
 2004-08-07 TADA Tadashi <sho@spc.gr.jp>
 	* makerss.rb: watch changing subtitle.
 	* makerss.rb: delete entity references in description.

@@ -1,4 +1,4 @@
-# category.rb $Revision: 1.20 $
+# category.rb $Revision: 1.21 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -45,7 +45,7 @@ def category_anchor(category)
 	period_string = 
 		case period
 		when "month"
-			"year=#{@date.year};month=#{@date.month};"
+			"year=#{@date.year};month=#{'%02d' % @date.month};"
 		when "quarter"
 			"year=#{@date.year};month=#{(@date.month - 1) / 3 + 1}Q;"
 		when "half"
