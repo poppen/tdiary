@@ -1,4 +1,4 @@
-# tb-send.rb $Revision: 1.8 $
+# tb-send.rb $Revision: 1.9 $
 #
 # Copyright (c) 2003 Junichiro Kita <kita@kitaj.no-ip.com>
 # You can distribute this file under the GPL.
@@ -25,7 +25,7 @@ add_edit_proc do |date|
 	
 			select_sections = <<-FROM
 				<div class="field">
-				#{@tb_send_label_section}: <select name="plugin_tb_section">
+				#{@tb_send_label_section}: <select name="plugin_tb_section" tabindex="501">
 				<option value="">#{@tb_send_label_no_section}</option>
 				#{section_titles}
 				</select>
@@ -42,7 +42,7 @@ add_edit_proc do |date|
 			</div>
 			#{select_sections}
 			<div class="textarea">
-			#{@tb_send_label_excerpt}: <textarea tabindex="501" style="height: 4em;" name="plugin_tb_excerpt" cols="70" rows="4">#{CGI::escapeHTML( excerpt )}</textarea>
+			#{@tb_send_label_excerpt}: <textarea tabindex="502" style="height: 4em;" name="plugin_tb_excerpt" cols="70" rows="4">#{CGI::escapeHTML( excerpt )}</textarea>
 			</div>
 		</div>
 	FORM
@@ -62,21 +62,19 @@ def tb_send_trackback
 		section = @cgi.params['plugin_tb_section'][0]
 		blog_name = @conf.html_title
 
-		if excerpt.empty?
-			date = @date.strftime( '%Y%m%d' )
-			if section && !section.empty? then
-				diary = @diaries[date].class.new( date, title, @cgi.params['body'][0] )
-				ary = []; diary.each_section{|s| ary << s}
-				num = section[1..-1].to_i - 1
-				if num < ary.size
-					excerpt = ary[num].body_to_html
-					title = ary[num].subtitle_to_html if ary[num].subtitle && !ary[num].subtitle.empty?
-				end
+		date = @date.strftime( '%Y%m%d' )
+		if section && !section.empty? then
+			diary = @diaries[date].class.new( date, title, @cgi.params['body'][0] )
+			ary = []; diary.each_section{|s| ary << s}
+			num = section[1..-1].to_i - 1
+			if num < ary.size
+				title = ary[num].subtitle_to_html if ary[num].subtitle && !ary[num].subtitle.empty?
+				excerpt = ary[num].body_to_html if excerpt.empty?
 			end
+		end
 
-			if excerpt.empty?
-				excerpt = @diaries[date].class.new( date, title, @cgi.params['body'][0] ).to_html({})
-			end
+		if excerpt.empty?
+			excerpt = @diaries[date].class.new( date, title, @cgi.params['body'][0] ).to_html({})
 		end
 
 		old_apply_plugin = @options['apply_plugin']
