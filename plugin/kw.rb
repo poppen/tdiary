@@ -1,4 +1,4 @@
-# kw.rb $Revision: 1.4 $
+# kw.rb $Revision: 1.5 $
 #
 # kw: keyword link generator
 #   Parameters:
@@ -27,16 +27,40 @@
 # You can distribute this under GPL.
 #
 
-def kw( keyword )
-	unless @kw_dic then
-		@kw_dic = {nil => ['http://www.google.com/search?ie=euc-jp&amp;q=$1', 'euc-jp']}
-		if @options['kw.dic'] then
-			@options['kw.dic'].each do |dic|
-				@kw_dic[dic[0]] = dic[1..-1]
-			end
-		end
+def kw_parse( str )
+	kw_list = []
+	str.each do |pair|
+		k, u, s = pair.sub( /[\r\n]+/, '' ).split( /[ \t]+/, 3 )
+		k = nil if k == '' or k == 'nil'
+		s = nil if s != 'euc-jp' && s != 'sjis' && s != 'jis'
+		kw_list << [k, u, s] if u
+	end
+	kw_list
+end
+
+def kw_generate_dic
+	case @lang
+	when 'en'
+		kw_dic = {nil => ['http://www.google.com/search?q=$1', nil]}
+	else
+		kw_dic = {nil => ['http://www.google.com/search?ie=euc-jp&amp;q=$1', 'euc-jp']}
 	end
 
+	kw_list = []
+	case @conf['kw.dic'].class.to_s
+	when "String"
+		kw_list = kw_parse( @conf['kw.dic'] )
+	when "Array"
+		kw_list = @conf['kw.dic']
+	end
+	kw_list.each do |pair|
+		kw_dic[pair[0]] = pair[1..-1]
+	end
+	kw_dic
+end
+
+def kw( keyword )
+	@kw_dic = kw_generate_dic unless @kw_dic
 	show_inter = @options['kw.show_inter'] == nil ? true : @options['kw.show_inter']
 
 	inter, key = keyword.split( /:/, 2 )
@@ -74,6 +98,7 @@ def kw_label
 		"キーワードプラグイン"
 	end
 end
+
 def kw_desc
 	if @lang == 'en' then
 		<<-HTML
@@ -92,26 +117,30 @@ def kw_desc
 		<pre>google http://www.google.com/search?ie=euc-jp&amp;q=$1 euc-jp</pre>
 		<p>と指定すると、</p>
 		<pre>&lt;%=kw('google:tdiary')%&gt;</pre>
-		<p>と日記に書けばgoogleでtdiaryを検索するリンクになります
-		(記述方法はスタイルによって変わります)。</p>
+		<p>のように日記に書けばgoogleでtdiaryを検索するリンクになります
+		(記述方法はスタイルによって変わります)。なお、キーにnilを指定すると、
+		「google:」の部分を書かない場合の指定ができます。</p>
 		HTML
 	end
 end
+
 add_conf_proc( 'kw', kw_label ) do
 	if @mode == 'saveconf' then
-		kw_dic = []
-		@cgi.params['kw.dic'][0].to_euc.each do |pair|
-			k, u, s = pair.sub( /[\r\n]+/, '' ).split( /[ \t]+/, 3 )
-			k = nil if k == ''
-			s = nil if s != 'euc-jp' && s != 'sjis' && s != 'jis'
-			kw_dic << [k, u, s] if u
+		kw_list = kw_parse( @cgi.params['kw.dic'][0].to_euc )
+		if kw_list.empty? then
+			@conf.delete( 'kw.dic' )
+		else
+			@conf['kw.dic'] = kw_list.collect{|a|a.join( ' ' )}.join( "\n" )
 		end
-		@conf['kw.dic'] = kw_dic
 	end
-	@conf['kw.dic'] = {'google' => ['http://www.google.com/search?ie=euc-jp&amp;q=$1', 'euc-jp']} unless @conf['kw.dic']
+	dic = kw_generate_dic
+	if dic[nil] then
+		dic['nil'] = dic[nil]
+		dic.delete( nil )
+	end
 	<<-HTML
 	#{kw_desc}
-	<p><textarea name="kw.dic" cols="70" rows="10">#{@conf['kw.dic'].collect{|a|a.join( " " )}.join( "\n" ) if @conf['kw.dic']}</textarea></p>
+	<p><textarea name="kw.dic" cols="70" rows="10">#{dic.collect{|a|a.flatten.join( " " )}.join( "\n" )}</textarea></p>
 	HTML
 end
 
