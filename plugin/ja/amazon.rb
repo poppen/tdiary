@@ -1,5 +1,5 @@
 #
-# English resource of amazon plugin $Revision: 1.1 $
+# English resource of amazon plugin $Revision: 1.2 $
 #
 
 #
@@ -64,4 +64,5 @@
 @amazon_label_notfound = 'イメージが見つからないときは'
 @amazon_label_usetitle = '商品名を表示する'
 @amazon_label_usedefault = 'デフォルトのイメージを使う'
-
+@amazon_label_clearcache = 'キャッシュの削除'
+@amazon_label_clearcache_desc = 'イメージ関連情報のキャッシュを削除する(Amazon上の表示と矛盾がある場合に試して下さい)'

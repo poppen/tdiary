@@ -1,5 +1,5 @@
 #
-# English resource of amazon plugin $Revision: 1.3 $
+# English resource of amazon plugin $Revision: 1.4 $
 #
 
 #
@@ -48,3 +48,5 @@
 @amazon_label_notfound = 'If book image dose not found'
 @amazon_label_usetitle = 'Show book title'
 @amazon_label_usedefault = 'Use default image'
+@amazon_label_clearcache = 'Clear Cache'
+@amazon_label_clearcache_desc = 'Delete local cache file about book images'

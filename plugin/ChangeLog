@@ -1,3 +1,6 @@
+2003-12-10 TADA Tadashi <sho@spc.gr.jp>
+	* amazon.rb: add 'clear cache' switch in prefenrences page.
+
 2003-12-05 TADA Tadashi <sho@spc.gr.jp>
 	* amazon.rb: hide conf menu when secure mode and amazon.hideconf.
 

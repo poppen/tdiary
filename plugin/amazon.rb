@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.23 $
+# amazon.rb $Revision: 1.24 $
 #
 # See document in language resource file: en/amazon.rb
 #
@@ -177,6 +177,11 @@ def amazon_conf_proc
 			@conf['amazon.imgsize'] = @cgi.params['amazon.imgsize'][0].to_i
 			@conf['amazon.hidename'] = (@cgi.params['amazon.hidename'][0] == 'true')
 			@conf['amazon.nodefault'] = (@cgi.params['amazon.nodefault'][0] == 'true')
+			if @cgi.params['amazon.clearcache'][0] == 'true' then
+				Dir["#{@cache_path}/amazon/*"].each do |cache|
+					File::delete( cache.untaint )
+				end
+			end
 		end
 		if not @conf['amazon.hideconf'] then
 			@conf['amazon.aid'] = @cgi.params['amazon.aid'][0]
@@ -186,29 +191,31 @@ def amazon_conf_proc
 	result = ''
 	unless @conf.secure then
 		result << <<-HTML
-	<h3>#{@amazon_label_imgsize}</h3>
-	<p><select name="amazon.imgsize">
-		<option value="0"#{if @conf['amazon.imgsize'] == 0 then " selected" end}>#{@amazon_label_large}</option>
-		<option value="1"#{if @conf['amazon.imgsize'] == 1 then " selected" end}>#{@amazon_label_regular}</option>
-		<option value="2"#{if @conf['amazon.imgsize'] == 2 then " selected" end}>#{@amazon_label_small}</option>
-	</select></p>
-	<h3>#{@amazon_label_title}</h3>
-	<p><select name="amazon.hidename">
-		<option value="true"#{if @conf['amazon.hidename'] then " selected" end}>#{@amazon_label_hide}</option>
-		<option value="false"#{if not @conf['amazon.hidename'] then " selected" end}>#{@amazon_label_show}</option>
-	</select></p>
-	<h3>#{@amazon_label_notfound}</h3>
-	<p><select name="amazon.nodefault">
-		<option value="true"#{if @conf['amazon.nodefault'] then " selected" end}>#{@amazon_label_usetitle}</option>
-		<option value="false"#{if not @conf['amazon.nodefault'] then " selected" end}>#{@amazon_label_usedefault}</option>
-	</select></p>
-	HTML
+			<h3>#{@amazon_label_imgsize}</h3>
+			<p><select name="amazon.imgsize">
+				<option value="0"#{if @conf['amazon.imgsize'] == 0 then " selected" end}>#{@amazon_label_large}</option>
+				<option value="1"#{if @conf['amazon.imgsize'] == 1 then " selected" end}>#{@amazon_label_regular}</option>
+				<option value="2"#{if @conf['amazon.imgsize'] == 2 then " selected" end}>#{@amazon_label_small}</option>
+			</select></p>
+			<h3>#{@amazon_label_title}</h3>
+			<p><select name="amazon.hidename">
+				<option value="true"#{if @conf['amazon.hidename'] then " selected" end}>#{@amazon_label_hide}</option>
+				<option value="false"#{if not @conf['amazon.hidename'] then " selected" end}>#{@amazon_label_show}</option>
+			</select></p>
+			<h3>#{@amazon_label_notfound}</h3>
+			<p><select name="amazon.nodefault">
+				<option value="true"#{if @conf['amazon.nodefault'] then " selected" end}>#{@amazon_label_usetitle}</option>
+				<option value="false"#{if not @conf['amazon.nodefault'] then " selected" end}>#{@amazon_label_usedefault}</option>
+			</select></p>
+			<h3>#{@amazon_label_clearcache}</h3>
+			<p><input type="checkbox" name="amazon.clearcache" value="true">#{@amazon_label_clearcache_desc}</input></p>
+		HTML
 	end
 	if not @conf['amazon.hideconf'] then
 		result << <<-HTML
-	<h3>#{@amazon_label_aid}</h3>
-	<p><input name="amazon.aid" value="#{CGI::escapeHTML( @conf['amazon.aid'] ) if @conf['amazon.aid']}"></p>
-	HTML
+			<h3>#{@amazon_label_aid}</h3>
+			<p><input name="amazon.aid" value="#{CGI::escapeHTML( @conf['amazon.aid'] ) if @conf['amazon.aid']}"></p>
+		HTML
 	end
 	result
 end
