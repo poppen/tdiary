@@ -1,3 +1,6 @@
+2003-08-11 TADA Tadashi <sho@spc.gr.jp>
+	* amazon.rb: fix error when amazon.aid was nil.
+
 2003-08-08 TADA Tadashi <sho@spc.gr.jp>
 	* amazon.rb: support conf_proc, and add an option 'amazon.hideconf'.
 

@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.16 $
+# amazon.rb $Revision: 1.17 $
 #
 # isbn_image_left: 指定したISBNの書影をclass="left"で表示
 #   パラメタ:
@@ -189,7 +189,7 @@ if not @conf['amazon.hideconf'] then
 	
 		<<-HTML
 		<h3>AmazonアソシエイトIDの指定</h3>
-		<p><input name="amazon.aid" value="#{CGI::escapeHTML( @conf['amazon.aid'] )}"></p>
+		<p><input name="amazon.aid" value="#{CGI::escapeHTML( @conf['amazon.aid'] ) if @conf['amazon.aid']}"></p>
 		HTML
 	end
 end
