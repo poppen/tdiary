@@ -1,6 +1,8 @@
 2004-02-26 TADA Tadashi <sho@spc.gr.jp>
 	* ja/referer_scheme.rb: fix mod_ruby's error.
 	* ja/referer_scheme.rb: modify hatena's URL. thanks KAKUTANI Shintaro <shintaro@kakutani.com>
+	* output_rdf.rb: add <dc:creator> into RDF.
+	* output_rdf.rb: remove path name from @options['outout_rdf.file']. Kazuhiro NISHIYAMA <zn@mbf.nifty.com>.
 
 2004-02-25  mput <mput@users.sf.net>
 	* en/disp_referrer.rb (DispRef2SetupIF::show_unknown_list): ditto.

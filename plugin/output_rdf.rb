@@ -1,5 +1,5 @@
 # output_rdf.rb: tDiary plugin to generate RDF file when diary updated.
-# $Revision: 1.22 $
+# $Revision: 1.23 $
 #
 # See document to @lang/output_rdf.rb
 #
@@ -9,7 +9,7 @@
 
 add_header_proc {
   fname = @options['output_rdf.file'] || 'index.rdf'
-  %Q'\t<link rel="alternate" type="application/rss+xml" title="RSS" href="#{fname}">\n'
+  %Q'\t<link rel="alternate" type="application/rss+xml" title="RSS" href="#{@conf.base_url}#{File::basename( fname )}">\n'
 }
 
 if ( /^(append|replace|trackbackreceive)$/ =~ @mode ) || ( /^comment$/ =~ @mode and @comment ) then
@@ -17,7 +17,7 @@ if ( /^(append|replace|trackbackreceive)$/ =~ @mode ) || ( /^comment$/ =~ @mode 
 	diary = @diaries[date]
 	uri = "#{@conf.base_url}#{@conf.index}".gsub(%r|/\./|, '/')
 	rdf_file = @options['output_rdf.file'] || 'index.rdf'
-	rdf_channel_about = "#{@conf.base_url}#{rdf_file}"
+	rdf_channel_about = "#{@conf.base_url}#{File::basename( rdf_file )}"
 	r = ""
 	r <<<<-RDF
 <?xml version="1.0" encoding="#{@output_rdf_encode}"?>
@@ -31,6 +31,7 @@ if ( /^(append|replace|trackbackreceive)$/ =~ @mode ) || ( /^comment$/ =~ @mode 
    <title>#{CGI::escapeHTML( @html_title )}</title>
    <link>#{uri}</link>
    <description>#{CGI::escapeHTML( @html_title )}</description>
+   <dc:creator>#{CGI::escapeHTML( @conf.author_name )}</dc:creator>
    <dc:date>#{Time.now.strftime('%Y-%m-%dT%H:%M')}</dc:date>
 	RDF
 
@@ -90,6 +91,7 @@ if ( /^(append|replace|trackbackreceive)$/ =~ @mode ) || ( /^comment$/ =~ @mode 
  <item rdf:about="#{link}">
    <title>#{CGI::escapeHTML( subtitle )}</title>
    <link>#{link}</link>
+   <dc:creator>#{CGI::escapeHTML( @conf.author_name )}</dc:creator>
    <description>#{CGI::escapeHTML( desc )}</description>
  </item>
  		RDF
@@ -105,6 +107,7 @@ if ( /^(append|replace|trackbackreceive)$/ =~ @mode ) || ( /^comment$/ =~ @mode 
    <link>#{link}</link>
    <description>#{CGI::escapeHTML( @conf.shorten( comment.body ) )}</description>
    <dc:date>#{comment.date.strftime('%Y-%m-%dT%H:%M')}</dc:date>
+   <dc:creator>#{CGI::escapeHTML( comment.name )}</dc:creator>
  </item>
 			RDF
 		end
