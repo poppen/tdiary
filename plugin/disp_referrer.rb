@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.49 2005-02-23 00:32:21 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.50 2005-03-01 02:20:32 zunda Exp $-))
 
 == 概要
 アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
@@ -185,7 +185,10 @@ unless @conf and @conf.secure then
 		def clear
 			# current version
 			caches.each do |path|
-				File.unlink( path )
+				begin
+					File.unlink( path )
+				rescue Errno::ENOENT
+				end
 			end
 			# older version
 			if @setup['cache_path'] then
@@ -201,7 +204,10 @@ unless @conf and @conf.secure then
 				if size < @setup['cache_max_size'] then
 					size += File.size( path )
 				else
-					File.unlink( path )
+					begin
+						File.unlink( path )
+					rescue Errno::ENOENT
+					end
 				end
 			end
 		end
