@@ -1,3 +1,9 @@
+2004-09-26  Masao Mutoh  <mutoh@highway.ne.jp>
+
+	* a.rb: Support config menu.
+	* en/a.rb: Added.
+	* a/: Removed.
+
 2004-09-15  URABE Shyouhei  <shyouhei@ice.uec.ac.jp>
 
 	* ja/disp_referrer.rb : add some search engines.
