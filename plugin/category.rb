@@ -1,4 +1,4 @@
-# category.rb $Revision: 1.6 $
+# category.rb $Revision: 1.7 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -76,8 +76,8 @@ def category_list_sections
 HTML
 		categorized[c].keys.sort.each do |ymd|
 			text = Time.local(ymd[0,4], ymd[4,2], ymd[6,2]).strftime(@conf.date_format)
-			categorized[c][ymd].sort.each do |idx, title, excerpt|
-				r << %Q|\t\t\t<a href="#{@conf.index}#{anchor "#{ymd}#p#{'%02d' % idx}"}" title="#{CGI.escapeHTML(apply_plugin(excerpt, true))}">#{text}#p#{'%02d' % idx}</a> #{apply_plugin(title)}<br>\n|
+			categorized[c][ymd].sort.each do |idx, title, content|
+				r << %Q|\t\t\t<a href="#{@conf.index}#{anchor "#{ymd}#p#{'%02d' % idx}"}" title="#{CGI.escapeHTML(apply_plugin(content, true))}">#{text}#p#{'%02d' % idx}</a> #{apply_plugin(title)}<br>\n|
 			end
 		end
 		r << <<HTML
@@ -346,7 +346,7 @@ class Cache
 			s.categories.each do |c|
 				categorized[c] = {} if categorized[c].nil?
 				categorized[c][ymd] = [] if categorized[c][ymd].nil?
-				categorized[c][ymd] << [idx, s.stripped_subtitle_to_html, @conf.shorten(s.body_to_html)]
+				categorized[c][ymd] << [idx, s.stripped_subtitle_to_html, s.body_to_html]
 			end
 			idx +=1
 		end
