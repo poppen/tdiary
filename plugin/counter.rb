@@ -1,4 +1,4 @@
-# counter.rb $Revision: 1.4 $
+# counter.rb $Revision: 1.5 $
 #
 # カウンタ表示プラグイン version 1.2.1
 #
@@ -115,9 +115,6 @@
 	* version 1.0.0
 =end
 
-@debug = true
-
-	
 if ["latest", "month", "day", "comment"].include?(@mode) and 
 	@cgi.request_method =~ /POST|GET/ 
 
