@@ -1,3 +1,6 @@
+2004.01.27 mput <mput@users.sf.net>
+	* ja/disp_referrer.rb: add Bulkfeeds to search engine.
+
 2004.01.26 Junichiro Kita <kita@kitaj.no-ip.com>
 	* calendar3.rb: fix displacement of popup window. thanks sfanla<tdiary@sfanla.com>.
 

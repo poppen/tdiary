@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.6 2003-11-18 16:36:03 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.7 2004-01-27 07:30:07 tadatadashi Exp $-))
 日本語リソース
 
 == 概要
@@ -523,6 +523,7 @@ DispReferrer2_Engines = {
 	'hotbot' => [[%r{^http://www\.hotbot\.}i, '"HotBot Web Search"', ['MT'], nil ]],
 	'searchalot' => [[%r{^http://www\.searchalot\.}i, '"Searchalot"', ['q'], nil ]],
 	'cometsystems' => [[%r{^http://search\.cometsystems\.com}i, '"Comet Web Search"', ['qry'], nil ]],
+	'bulkfeeds' => [[%r{^http://bulkfeeds\.net/app/search2}i, '"Bulkfeeds: RSS Directory & Search"', ['q'], nil ]],
 	'www' => [[%r{^http://www\.google/search}i, '"Google検索?"', ['as_q', 'q'], DispReferrer2_Google_cache]],	# TLD missing
 	'planet' => [[%r{^http://www\.planet\.nl/planet/}i, '"Planet-Zoekpagina"', ['googleq', 'keyword'], DispReferrer2_Google_cache]], # googleq parameter has a strange prefix
 	'216' => [[%r{^http://(\d+\.){3}\d+/search}i, '"Google検索?"', ['as_q', 'q'], DispReferrer2_Google_cache]],	# cache servers of google?
