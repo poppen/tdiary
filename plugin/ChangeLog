@@ -1,3 +1,6 @@
+2004-10-28 TADA Tadashi <sho@spc.gr.jp>
+	* makerss.rb: exclude 'Pingback'.
+
 2004-10-13  Kazuhiko  <kazuhiko@fdiary.net>
 	* category.rb: more revise for mod_ruby. add 'title' attribute in
 	categor_icon_sample. correct icon url in category_anchor
