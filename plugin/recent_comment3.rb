@@ -1,4 +1,4 @@
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 # recent_comment3: 最近のツッコミをリストアップする
 #   パラメタ:
 #     max:           最大表示数(未指定時:3)
@@ -11,6 +11,7 @@
 # Copyright (c) 2002 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
 #
+require 'pstore'
 
 RECENT_COMMENT3_CACHE = "#{@cache_path}/recent_comments"
 RECENT_COMMENT3_NUM = 50
@@ -41,7 +42,7 @@ add_update_proc(Proc::new do
 	if @mode == 'comment'
 		name = @cgi['name'][0].to_euc
 		body = @cgi['body'][0].to_euc
-		comment = Comment.new(name, nil, body)
+		comment = TDiary::Comment.new(name, nil, body)
 		serial = @diaries[@date.strftime '%Y%m%d'].count_comments
 		if not (name.strip.empty? or body.strip.empty?)
 			PStore.new(RECENT_COMMENT3_CACHE).transaction do |db|
