@@ -1,12 +1,12 @@
-2003-03-03  MUTOH Masao <mutoh@highway.ne.jp>
+2003.03.04 TADA Tadashi <sho@spc.gr.jp>
+	* support ruby 1.8.0 preview2.
 
+2003.03.03 MUTOH Masao <mutoh@highway.ne.jp>
 	* a.rb: Added.
 
-2003-01-09  MUTOH Masao <mutoh@highway.ne.jp>
-
+2003.01.09 MUTOH Masao <mutoh@highway.ne.jp>
 	* my-ex.rb: Improve to show the anchor's title of section.subtitle.
 
-2003-01-02  Kazuhiko  <kazuhiko@fdiary.net>
-
+2003.01.02 Kazuhiko  <kazuhiko@fdiary.net>
 	* nazo.rb (nazo): Add 'type="text/javascript"' for valid html output.
 	Revise URI of FAQ.

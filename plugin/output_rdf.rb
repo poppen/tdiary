@@ -49,9 +49,9 @@ require 'uconv'
 
 add_update_proc( Proc::new do
 	if @mode == 'append' || @mode == 'replace' then
-		date = sprintf( "%4d%02d%02d", @cgi['year'][0], @cgi['month'][0],@cgi['day'][0] )
+		date = sprintf( "%4d%02d%02d", @cgi.params['year'][0], @cgi.params['month'][0], @cgi.params['day'][0] )
 	else
-		date=@cgi['date'][0]
+		date = @cgi.params['date'][0]
 	end
 	diary = @diaries[date]
 	host  = ENV['HTTP_HOST'] 

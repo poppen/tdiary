@@ -1,4 +1,4 @@
-# category.rb $Revision: 1.3 $
+# category.rb $Revision: 1.4 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -24,7 +24,7 @@ def category_form
 		<select name="month">
 	FORM
 	if @cgi.valid?('month')
-		month = @cgi['month'][0]
+		month = @cgi.params['month'][0]
 	else
 		month = "#{(@date.month - 1) / 3 + 1}Q"
 	end

@@ -1,4 +1,4 @@
-# $Revision: 1.5 $
+# $Revision: 1.6 $
 # recent_comment3: 最近のツッコミをリストアップする
 #   パラメタ:
 #     max:           最大表示数(未指定時:3)
@@ -40,8 +40,8 @@ end
 
 add_update_proc do
 	if @mode == 'comment'
-		name = @cgi['name'][0].to_euc
-		body = @cgi['body'][0].to_euc
+		name = @cgi.params['name'][0].to_euc
+		body = @cgi.params['body'][0].to_euc
 		comment = Comment.new(name, nil, body)
 		serial = @diaries[@date.strftime '%Y%m%d'].count_comments
 		if not (name.strip.empty? or body.strip.empty?)

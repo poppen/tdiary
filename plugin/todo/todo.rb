@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# todo.rb $Revision: 1.3 $
+# todo.rb $Revision: 1.4 $
 #
 # todo: ToDoリストを表示します．
 #
@@ -186,7 +186,7 @@ begin
 			end
 
 			def todo_save
-				todos = @cgi['todos'][0]
+				todos = @cgi.params['todos'][0]
 				todo_parse todos.split(/\n/) if todos
 				if @todos.size > 0
 					backup = todo_file + "~"
