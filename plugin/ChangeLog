@@ -1,3 +1,6 @@
+2003.10.14 zunda <zunda at freeshell.org>
+	* disp_referrer.rb: search engine list in lang. resources (still more to do)
+
 2003.10.13 Gony <gony@sm.rim.or.jp>
 	* windex.rb: bug fix.
 	* windex.rb: add wikw method.

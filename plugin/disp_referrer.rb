@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.32 2003-10-02 12:12:23 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.33 2003-10-14 17:38:18 zunda Exp $-))
 
 == 概要
 アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
@@ -450,16 +450,6 @@ end
       文字列の最初の[]の中身が$1に、その後の文字列が$2に設定される正規表
       現です。
 
---- DispRef2Setup::Engines
-      検索エンジンからのキーワードの取得方法のハッシュです。keyには
-      googleやyahooといった、検索エンジンのURLの一部(ピリオドで区切った
-      ものの、最後から2番目と3番目、最初のものと一致を試します)を小文字
-      で指定します。値は、その検索エンジンの置換用の正規表現と置換後の
-      文字列、検索キーワードを含むURLのパラメータ名(あるいはquery文字列
-      をレシーバとしてinstance_evalされ、キーワードとキャッシュのURLある
-      いはnilを返すコード)、キャッシュ元のURL をとりだす正規表現を、この
-      順番で配列にしたものの、配列です。詳細はソースを参照してください。
-
 --- DispRef2Setup::Defaults
       オプションのデフォルト値です。tDiary本体から@optionsで設定するには、
       このハッシュのkeyの前に「disp_referrer2.」をつけたkeyを使ってくだ
@@ -492,86 +482,6 @@ class DispRef2Setup < Hash
 	# useful regexps
 	Last_parenthesis = /\((.*?)\)\Z/m
 	First_bracket = /\A\[(.*?)\](.+)/m
-	Google_cache = /cache:[^:]+:([^+]+)+/
-
-	# Hash table of search engines
-	# key: company name
-	# value: array of:
-	# [0]:url regexp [1]:title [2]:keys for search keyword [3]:cache regexp
-	Engines = {
-		'google' => [
-			[%r{^http://.*?\bgoogle\.([^/]+)/(search|custom|ie)}i, '".#{$1}のGoogle検索"', ['as_q', 'q', 'as_epq'], Google_cache],
-			[%r{^http://.*?\bgoogle\.([^/]+)/.*url}i, '".#{$1}のGoogleのURL検索?"', ['as_q', 'q'], Google_cache],
-			[%r{^http://.*?\bgoogle/search}i, '"たぶんGoogle検索"', ['as_q', 'q'], Google_cache],
-			[%r{^http://eval.google\.([^/]+)}i, '".#{$1}のGoogle Accounts"', [], nil],
-			[%r{^http://.*?\bgoogle\.([^/]+)}i, '".#{$1}のGoogle検索"', [], nil],
-		],
-		'yahoo' => [
-			[%r{^http://.*?\.rd\.yahoo\.([^/]+)}i, '".#{$1}のYahooのリダイレクタ"', 'split(/\*/)[1]', nil],
-			[%r{^http://.*?\.yahoo\.([^/]+)}i, '".#{$1}のYahoo!検索"', ['p', 'va', 'vp'], Google_cache],
-		],
-		'netscape' => [[%r{^http://.*?\.netscape\.([^/]+)}i, '".#{$1}のNetscape検索"', ['search', 'query'], Google_cache]],
-		'msn' => [[%r{^http://.*?\.MSN\.([^/]+)}i, '".#{$1}のMSNサーチ"', ['q', 'MT'], nil ]],
-		'metacrawler' => [[%r{^http://.*?.metacrawler.com}i, '"MetaCrawler"', ['q'], nil ]],
-		'metabot' => [[%r{^http://.*?\.metabot\.ru}i, '"MetaBot.ru"', ['st'], nil ]],
-		'altavista' => [[%r{^http://.*?\.altavista\.([^/]+)}i, '".#{$1}のAltaVista検索"', ['q'], nil ]],
-		'infoseek' => [[%r{^http://(www\.)?infoseek\.co\.jp}i, '"インフォシーク"', ['qt'], nil ]],
-		'odn' => [[%r{^http://.*?\.odn\.ne\.jp}i, '"ODN検索"', ['QueryString', 'key'], nil ]],
-		'lycos' => [[%r{^http://.*?\.lycos\.([^/]+)}i, '".#{$1}のLycos"', ['query', 'q', 'qt'], nil ]],
-		'fresheye' => [[%r{^http://.*?\.fresheye}i, '"フレッシュアイ"', ['kw'], nil ]],
-		'goo' => [
-			[%r{^http://.*?\.goo\.ne\.jp}i, '"goo"', ['MT'], nil ],
-			[%r{^http://.*?\.goo\.ne\.jp}i, '"goo"', [], nil ],
-		],
-		'nifty' => [
-			[%r{^http://search\.nifty\.com}i, '"@nifty/@search"', ['q', 'Text'], Google_cache],
-			[%r{^http://srchnavi\.nifty\.com}i, '"@niftyのリダイレクタ"', ['title'], nil ],
-		],
-		'eniro' => [[%r{^http://.*?\.eniro\.se}i, '"Eniro"', ['q'], Google_cache]],
-		'excite' => [[%r{^http://.*?\.excite\.([^/]+)}i, '".#{$1}のExcite"', ['search', 's', 'query', 'qkw'], nil ]],
-		'biglobe' => [
-			[%r{^http://.*?search\.biglobe\.ne\.jp}i, '"BIGLOBEサーチ"', ['q'], nil ],
-			[%r{^http://.*?search\.biglobe\.ne\.jp}i, '"BIGLOBEサーチ"', [], nil ],
-		],
-		'dion' => [[%r{^http://dir\.dion\.ne\.jp}i, '"Dion"', ['QueryString', 'key'], nil ]],
-		'naver' => [[%r{^http://.*?\.naver\.co\.jp}i, '"NAVER Japan"', ['query'], nil ]],
-		'webcrawler' => [[%r{^http://.*?\.webcrawler\.com}i, '"WebCrawler"', ['qkw'], nil ]],
-		'euroseek' => [[%r{^http://.*?\.euroseek\.com}i, '"Euroseek.com"', ['string'], nil ]],
-		'aol' => [[%r{^http://.*?\.aol\.}i, '"AOLサーチ"', ['query'], nil ]],
-		'alltheweb' => [
-			[%r{^http://.*?\.alltheweb\.com}i, '"AlltheWeb.com"', ['q'], nil ],
-			[%r{^http://.*?\.alltheweb\.com}i, '"AlltheWeb.com"', [], nil ],
-		],
-		'kobe-u' => [
-			[%r{^http://bach\.scitec\.kobe-u\.ac\.jp/cgi-bin/metcha.cgi}i, '"メッチャ検索エンジン"', ['q'], nil ],
-			[%r{^http://bach\.istc\.kobe-u\.ac\.jp/cgi-bin/metcha.cgi}i, '"メッチャ検索エンジン"', ['q'], nil ],
-		],
-		'tocc' => [[%r{^http://www\.tocc\.co\.jp/search/}i, '"TOCC/Search"', ['QRY'], nil ]],
-		'yappo' => [[%r{^http://i\.yappo\.jp/}i, '"iYappo"', [], nil ]],
-		'suomi24' => [[%r{^http://.*?\.suomi24\.([^/]+)/.*query}i, '"Suomi24"', ['q'], Google_cache]],
-		'earthlink' => [[%r{^http://search\.earthlink\.net/search}i, '"EarthLink Search"', ['as_q', 'q', 'query'], Google_cache]],
-		'infobee' => [[%r{^http://infobee\.ne\.jp/}i, '"新鮮情報検索"', ['MT'], nil ]],
-		't-online' => [[%r{^http://brisbane\.t-online\.de/}i, '"T-Online"', ['q'], Google_cache]],
-		'walla' => [[%r{^http://find\.walla\.co\.il/}i, '"Walla! Channels"', ['q'], nil ]],
-		'mysearch' => [[%r{^http://.*?\.mysearch\.com/}i, '"My Search"', ['searchfor'], nil ]],
-		'jword' => [[%r{^http://search\.jword.jp/}i, '"JWord"', ['name'], nil ]],
-		'nytimes' => [[%r{^http://query\.nytimes\.com/search}i, '"New York Times: Search"', ['as_q', 'q', 'query'], Google_cache]],
-		'aaacafe' => [[%r{^http://search\.aaacafe\.ne\.jp/search}i, '"AAA!CAFE"', ['key'], nil]],
-		'virgilio' => [[%r{^http://search\.virgilio\.it/search}i, '"VIRGILIO Ricerca"', ['qs'], nil]],
-		'ceek' => [[%r{^http://www\.ceek\.jp}i, '"ceek.jp"', ['q'], nil]],
-		'cnn' => [[%r{^http://websearch\.cnn\.com}i, '"CNN.com"', ['query', 'as_q', 'q', 'as_epq'], Google_cache]],
-		'webferret' => [[%r{^http://webferret\.search\.com}i, '"WebFerret"', 'split(/,/)[1]', nil]],
-		'eniro' => [[%r{^http://www\.eniro\.se}i, '"Eniro"', ['query', 'as_q', 'q'], Google_cache]],
-		'passagen' => [[%r{^http://search\.evreka\.passagen\.se}i, '"Eniro"', ['q', 'as_q', 'query'], Google_cache]],
-		'redbox' => [[%r{^http://www\.redbox\.cz}i, '"RedBox"', ['srch'], nil]],
-		'odin' => [[%r{^http://odin\.ingrid\.org}i, '"ODiN検索"', ['key'], nil]],
-		'kensaku' => [[%r{^http://www\.kensaku\.}i, '"kensaku.jp検索"', ['key'], nil]],
-		'hotbot' => [[%r{^http://www\.hotbot\.}i, '"HotBot Web Search"', ['MT'], nil ]],
-		'searchalot' => [[%r{^http://www\.searchalot\.}i, '"Searchalot"', ['q'], nil ]],
-		'www' => [[%r{^http://www\.google/search}i, '"Google検索?"', ['as_q', 'q'], Google_cache]],	# TLD missing
-		'planet' => [[%r{^http://www\.planet\.nl/planet/}i, '"Planet-Zoekpagina"', ['googleq', 'keyword'], Google_cache]], # googleq parameter has a strange prefix
-		'216' => [[%r{^http://(\d+\.){3}\d+/search}i, '"Google検索?"', ['as_q', 'q'], Google_cache]],	# cache servers of google?
-	}
 
 	# default options
 	Defaults = {
@@ -614,7 +524,7 @@ class DispRef2Setup < Hash
 			# falseの場合、回数のみを表示します。
 		'search.unknown_keyword' => 'キーワード不明',
 			# キーワードがわからない検索エンジンからのリンクに使う文字列です。
-		'search_engines' => Engines,
+		'search_engines' => DispReferrer2_Engines,
 			# 検索エンジンのハッシュです。
 		'cache_label' => '(%sのキャッシュ)',
 			# 検索エンジンのキャッシュのURLを表示する文字列です。
@@ -1406,7 +1316,7 @@ class DispRef2SetupIF
 		else
 			r = <<-_HTML
 				<h3 class="subtitle">本日のリンク元もうちょっとだけ強化プラグイン</h3>
-				<p>$Revision: 1.32 $</p>
+				<p>$Revision: 1.33 $</p>
 				<p>アンテナからのリンク、サーチエンジンの検索結果を、
 					通常のリンク元の下にまとめて表示します。
 					サーチエンジンの検索結果は、検索語毎にまとめられます。
