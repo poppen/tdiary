@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# todo.rb $Revision: 1.2 $
+# todo.rb $Revision: 1.3 $
 #
 # todo: ToDoリストを表示します．
 #
@@ -55,10 +55,10 @@
 #  	font-weight: bold;
 #  }
 #
-# 	span.todo-in-time {
-# 	}
+#  span.todo-in-time {
+#  }
 #
-# 	span.todo-today {
+#  span.todo-today {
 #  	color: blue;
 #  }
 #
@@ -75,8 +75,12 @@ require 'parsedate'
 module ToDo
 	class ToDo
 		attr_reader :prio, :todo, :limit
-		def initialize(prio, todo, limit)
-			@prio, @todo, @limit = prio, todo, limit
+		def initialize(prio, todo, limit, deleted = nil)
+			@prio, @todo, @limit, @deleted = prio, todo, limit, deleted
+		end
+
+		def deleted?
+			@deleted != ""
 		end
 
 		def <=>(other)
@@ -84,7 +88,7 @@ module ToDo
 		end
 
 		def to_s
-			r = "#{@prio}"
+			r = "#{@deleted}#{@prio}"
 			if @limit
 				r << "[#{@limit}]"
 			end
@@ -98,9 +102,9 @@ module ToDo
 
 	def todo_parse(src)
 		src.each do |l|
-			prio, limit, todo = l.scan(/^(\d{1,2})(?:\[(.*)\])? +(.+)$/)[0]
+			deleted, prio, limit, todo = l.scan(/^(#?)(\d{1,2})(?:\[(.*)\])? +(.+)$/)[0]
 			if /^\d+$/ === prio and (1..99).include? prio.to_i and todo
-				@todos.push ToDo.new(prio, todo, limit)
+				@todos.push ToDo.new(prio, todo, limit, deleted)
 			end
 		end
 		if @todos.size > 0
@@ -116,6 +120,7 @@ module ToDo
 		@todos.each_with_index do |x, idx|
 			break if idx >= n
 			s << "<li>"
+			s << %Q|<del>| if x.deleted?
 			s << %Q|<span class="todo-priority">#{'%02d' % x.prio}</span> #{apply_plugin x.todo}|
 			if x.limit
 				s << "(〜#{x.limit}"
@@ -134,13 +139,14 @@ module ToDo
 				end
 				s << ")"
 			end
+			s << %Q|</del>| if x.deleted?
 			s << "</li>\n"
 		end
 		s << %Q|</ul>\n|
 	end
 end
 
-if $0 == __FILE__
+if File.basename($0) == File.basename(__FILE__)
 # CGI
 
 $KCODE= 'e'
