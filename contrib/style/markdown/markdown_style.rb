@@ -1,5 +1,5 @@
 #
-# markdown_style.rb: Markdown style for tDiary 2.x format. $Revision: 1.1 $
+# markdown_style.rb: Markdown style for tDiary 2.x format. $Revision: 1.2 $
 #
 # if you want to use this style, add @style into tdiary.conf below:
 #
@@ -26,7 +26,7 @@ module TDiary
       @stripped_subtitle = strip_subtitle
 
       @subtitle_to_html = @subtitle ? to_html(@subtitle) : nil
-      @stripped_subtitle_to_html = @stripped_subtitle ? to_html(@stripped_subtitle) : nil
+      @stripped_subtitle_to_html = @stripped_subtitle ? to_html(@stripped_subtitle).sub(/\A<p>(.*)<\/p>\z/, "\\1") : nil
       @body_to_html = to_html(@body)
     end
 
@@ -80,7 +80,7 @@ module TDiary
       r = ''
       r << BlueCloth.new(@subtitle).to_html
       r << BlueCloth.new(@body).to_html
-      r.gsub!(/{{(.+?)}}/) {
+      r.gsub!(/\{\{(.+?)\}\}/) {
         "<%=#{$1}%>"
       }
       r
@@ -94,7 +94,11 @@ module TDiary
     
     def to_html(string)
       parser = BlueCloth.new( string )
-      parser.to_html
+      r = parser.to_html
+      r.gsub!(/\{\{(.+?)\}\}/) {
+        "<%=#{$1}%>"
+      }
+      r
     end
 
     def get_categories
@@ -108,7 +112,7 @@ module TDiary
 
     def strip_subtitle
       return nil unless @subtitle
-      r = @subtitle.sub(/^(\[[^\[]+?\])+\s*/,'')
+      r = @subtitle.sub(/^#\s*((\\?\[[^\[]+?\]\\?)+\s+)?/,'')
       if r == ""
         nil
       else
