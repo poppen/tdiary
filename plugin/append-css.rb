@@ -1,4 +1,4 @@
-# append-css.rb: $Revision%
+# append-css.rb: $Revision: 1.5 $
 #
 # Append CSS fragment via Preferences Page.
 #
