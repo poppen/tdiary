@@ -1,4 +1,4 @@
-# list.rb $Revision: 1.2 $
+# list.rb $Revision: 1.3 $
 #
 # <ol> 順番付きリスト生成
 #   <%= ol l %>
@@ -19,11 +19,11 @@
 =end
 
 def ol( l, t = nil, s = nil )
-	%Q[<ol>#{li l}</ol>]
+	apply_plugin( %Q[<ol>#{li l}</ol>] )
 end
 
 def ul( l, t = nil)
-	%Q[<ul>#{li l}</ul>]
+	apply_plugin( %Q[<ul>#{li l}</ul>] )
 end
 
 def li( text )
