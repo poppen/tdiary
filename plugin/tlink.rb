@@ -1,4 +1,4 @@
-# tlink.rb $Revision: 1.11 $
+# tlink.rb $Revision: 1.12 $
 #
 # title Â°À­ÉÕ anchor plugin
 #
@@ -20,6 +20,9 @@
 # Modified: by abbey <inlet@cello.no-ip.org>
 #
 =begin ChangeLog
+2003-03-03 NT <nt@be.to>
+	* add the function to try regetting a subtitle.
+
 2003-01-29 NT <nt@be.to>
 	* fix a critical bug.
 
@@ -136,7 +139,7 @@ tlink_initialize
 
 def tlink( url, str, title = nil )
   unless title
-    if @tlink_dic[url]
+    if @tlink_dic[url] && %r[#(p|c)\d\d$] =~ url && @tlink_dic[url] != ''
       title = @tlink_dic[url]
     else
       if url =~ ENV["REDIRECT_URL"] && url =~ @date.strftime('%Y%m%d')
