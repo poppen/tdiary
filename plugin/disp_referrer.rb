@@ -1,4 +1,4 @@
-# disp_referrer.rb $Revision: 1.11 $
+# disp_referrer.rb $Revision: 1.12 $
 # -pv-
 #
 # Ì¾¾Î¡§
@@ -219,7 +219,7 @@ def referer_of_today_long(diary, limit)
     [["Netscape¸¡º÷", "http://google.netscape.com/"],
 	["^http://.*.netscape.com/.*(q|search)=([^&]*).*", "\\2"]],
     [["AOL¸¡º÷", "http://www.aol.com/"],
-	["^http://search.*aol.com/.*query=([^&]*).*", "\\1"]],
+	["^http://(?:aol)?search.*aol.com/.*query=([^&]*).*", "\\1"]],
     [["Fresheye¸¡º÷", "http://www.fresheye.com/"],
 	["^http://.*fresheye.*/.*kw=([^&]*).*", "\\1"]],
 	[["AlltheWeb¸¡º÷","http://www.alltheweb.com/"],
