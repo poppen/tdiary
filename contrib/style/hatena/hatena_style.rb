@@ -18,7 +18,7 @@
 # OUT OF  OR IN CONNECTION WITH  THE CODE OR THE  USE OR OTHER  DEALINGS IN THE
 # CODE.
 
-# $Id: hatena_style.rb,v 1.5 2004-03-17 05:01:11 mput Exp $
+# $Id: hatena_style.rb,v 1.6 2004-03-21 10:02:25 mput Exp $
 # Hatena::Diary compatible style
 # Works only under ruby 1.8.1 or later
 
@@ -67,7 +67,10 @@ class TDiary::HatenaDiary
     j = 0
     @sections.inject('') {|r, i|
       j += 1
+      r << '<div class="section">' if mode != :CHTML
       r << i.convert(mode, date, j, opt)
+      r << '</div>' if mode != :CHTML
+      r
     }
   end
 
@@ -86,7 +89,6 @@ module Hatena
     ObjectSpace.each_object do |diary|
       next unless diary.kind_of?(TDiary::TDiaryBase)
       return diary.instance_eval { @conf }
-      break
     end
   end
 
@@ -198,20 +200,20 @@ class Hatena::Trie
     h = @hash1
     a = str.split(//e)
     i = 0
-    f = true
-    while c = a[i]
+    j = 0
+    while c = a[i + j]
       if h[c]
         h = h[c]
         if @hash2[h]
           ret = @hash2[h]
         end
         f = false
-        i += 1
+        j += 1
       else
         return ret if ret
         h = @hash1 # reset
-        i += 1 if f
-        f = !f
+        i += 1
+        j = 0
       end
     end
     return ret
@@ -629,6 +631,7 @@ class Hatena::Inline
   def initialize(str)
     @elems = Array.new
     inside_a = false
+    return if str == "\n"
     until str.empty?
       case str
       when /\A\[\](.*?)\[\]/m
