@@ -1,4 +1,4 @@
-# disp_referrer.rb $Revision: 1.18 $
+# disp_referrer.rb $Revision: 1.19 $
 # -pv-
 #
 # 名称：
@@ -278,7 +278,7 @@ def referer_of_today_long(diary, limit)
 	["^http://.*.netscape.com/.*(query|q|search)=([^&]*).*", "\\2"]],
     [["DIONサーチ", "http://www.dion.ne.jp/"],
 	["^http://dir.dion.ne.jp/LookSmartSearch.jsp.*(key|QueryString)=([^&]*).*", "\\2"]],
-	[["Metcha Search","http:/bach.scitec.kobe-u.ac.jp/"],
+	[["Metcha Search","http://bach.scitec.kobe-u.ac.jp/"],
 	["^http://bach.scitec.kobe-u.ac.jp/cgi-bin/metcha.cgi?q=([^&]*).*", "\\1"]],
     [["AOL検索", "http://www.aol.com/"],
 	["^http://.*aol.com/.*query=([^&]*).*", "\\1"]],
