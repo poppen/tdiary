@@ -1,4 +1,4 @@
-# disp_referrer.rb $Revision: 1.12 $
+# disp_referrer.rb $Revision: 1.13 $
 # -pv-
 #
 # 名称：
@@ -27,6 +27,9 @@
 # You can redistribute it and/or modify it under GPL2.
 #
 =begin ChangeLog
+2002-10-07 TADA Tadashi <sho@spc.gr.jp>
+	* for tDiary 1.5.0.20021003.
+
 2002-09-09  MUTOH Masao <mutoh@highway.ne.jp>
    * ロボットよけが効いていない不具合の修正(pointed out by TADA Tadashi<sho@spc.gr.jp>)
    * 検索キーワードが複数回ある場合の「x2」「x3」を、リンクの外に出した(proposed by TADA Tadashi<sho@spc.gr.jp>)
@@ -112,32 +115,34 @@ def Uconv.unknown_unicode_handler(unicode)
       raise Uconv::Error
    end
 end
-module DiaryBase
-  REG_CHAR_UTF8 = /&#[0-9]+;/
-  def referers
-	newer_referer
-	@referers
-  end
-  def disp_referer(table, ref)
-	ret = Web.unescape(ref)
-	if REG_CHAR_UTF8 =~ ref
-	  ret.gsub!(REG_CHAR_UTF8){|v|
-		Uconv.u8toeuc([$1.to_i].pack("U"))
-	  }
-	else
-	  begin
-		ret = Uconv.u8toeuc(ret)
-	  rescue Uconv::Error
-		ret = NKF::nkf('-e', ret)
+module TDiary
+	module DiaryBase
+	  REG_CHAR_UTF8 = /&#[0-9]+;/ unless defined?( REG_CHAR_UTF8 )
+	  def referers
+		newer_referer
+		@referers
+	  end
+	  def disp_referer(table, ref)
+		ret = Web.unescape(ref)
+		if REG_CHAR_UTF8 =~ ref
+		  ret.gsub!(REG_CHAR_UTF8){|v|
+			Uconv.u8toeuc([$1.to_i].pack("U"))
+		  }
+		else
+		  begin
+			ret = Uconv.u8toeuc(ret)
+		  rescue Uconv::Error
+			ret = NKF::nkf('-e', ret)
+		  end
+		end
+		
+		table.each do |url, name|
+		  regexp = Regexp.new(url, Regexp::IGNORECASE)
+		  break if ret.gsub!(regexp, name)
+		end
+		ret
 	  end
 	end
-	
-	table.each do |url, name|
-	  regexp = Regexp.new(url, Regexp::IGNORECASE)
-	  break if ret.gsub!(regexp, name)
-	end
-	ret
-  end
 end
 TOPLEVEL_CLASS
 
