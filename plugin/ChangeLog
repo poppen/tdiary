@@ -1,5 +1,6 @@
 2003-12-17 zunda <zunda at freeshell.org>
 	* referer_scheme.rb: updated documentation in the lang. resources
+	* referer_scheme.rb: avoid finite call of aliased `each' when the plug-in is eval'ed more than once.
 
 2003-12-16 zunda <zunda at freeshell.org>
 	* referer_scheme.rb: new plug-in to expand referer_table. Idea by akira yamada <akira at akira.org>, doesn't work with ruby 1.6.7 ;(
