@@ -1,4 +1,4 @@
-# calendar3.rb $Revision: 1.14 $
+# calendar3.rb $Revision: 1.15 $
 #
 # calendar3: 現在表示している月のカレンダーを表示します．
 #  パラメタ: なし
@@ -121,9 +121,15 @@ def calendar3
 	end
 	show_todo = @options['calendar3.show_todo']
 	result = ''
-	year = @date.year
-	month = @date.month
-	day = @date.day
+	if @mode == 'latest'
+		date = Time.now
+	else
+		date = @date
+	end
+	year = date.year
+	month = date.month
+	day = date.day
+
 	result << %Q|<a href="#{@index}#{anchor "%04d%02d" % Calendar3.prev_month(year, month)}">&lt;&lt;</a>\n|
 	result << %Q|<a href="#{@index}#{anchor "%04d%02d" % [year, month]}">#{"%04d/%02d" % [year, month]}</a>/\n|
 	#Calendar3.make_cal(year, month)[(day - num >= 0 ? day - num : 0)..(day - 1)].each do |day, kind|
