@@ -1,4 +1,4 @@
-# comment_mail-smtp.rb $Revision: 1.6 $
+# comment_mail-smtp.rb $Revision: 1.7 $
 #
 # SMTPプロトコルを使ってツッコミをメールで知らせる
 #   入れるだけで動作する
@@ -34,7 +34,7 @@ def comment_mail( text, to )
 		host = @conf['comment_mail.smtp_host'] || 'localhost'
 		port = @conf['comment_mail.smtp_port'] || 25
 		Net::SMTP.start( host, port ) do |smtp|
-			smtp.send_mail( text, @conf.author_mail, to )
+			smtp.send_mail( text, @conf.author_mail.untaint, to )
 		end
 	rescue
 		$stderr.puts $!

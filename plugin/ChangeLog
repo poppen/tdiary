@@ -1,3 +1,7 @@
+2003-10-06  Kazuhiko  <kazuhiko@fdiary.net>
+
+	* comment_mail-smtp.rb: untaint 'From address' for mod_ruby.
+
 2003-10-02 zunda <zunda at freeshell.org>
 	* disp_referrer.rb: refined match for nifty
 
