@@ -1,8 +1,5 @@
-#!/usr/bin/ruby
-# yasqueeze.rb $Revision: 1.2 $
-$KCODE= 'e'
-#
-# yasqueeze version 1.1.0
+#!/usr/bin/env ruby
+# yasqueeze.rb $Revision: 1.3 $
 #
 # Yet Another make HTML text files from tDiary's database.
 #
@@ -10,33 +7,78 @@ $KCODE= 'e'
 # You can redistribute it and/or modify it under GPL2.
 #
 # The original version of this file was distributed with squeeze 
-# version 1.0.3 by TADA Tadashi <sho@spc.gr.jp> with GPL2.
+# version 1.0.4 by TADA Tadashi <sho@spc.gr.jp> with GPL2.
+$KCODE= 'e'
 
-###########################################################
-# CGI、あるいは、tDiaryのPluginと使う場合は出力先のディレクトリを指定してください。
-###########################################################
-#SQUEEZE_OUTPUT_PATH = "/home/hoge/text/"  #出力先ディレクトリ
-SQUEEZE_TDIARY_PATH = "."     #tDiaryのパス 
-SQUEEZE_TDIARY_CONF = "."     #tdiary.confが存在するパス
-SQUEEZE_ALL_DATA    = false   #非表示の日記も対象とする
-SQUEEZE_COMPAT_PATH = false   #squeeze.rbと同じディレクトリ構成にする場合はtrue
-
-##########################################################
-# 以下は編集しないでください。
-###########################################################
+mode = ""
 if $0 == __FILE__
-  nohtml = false
-  nohtml = true if ARGV[0] == "--nohtml"
+  mode = ENV["REQUEST_METHOD"]? "CGI" : "CMD"
+else
+  mode = "PLUGIN"
+end
 
+if mode == "CMD" || mode == "CGI"
+  output_path = "./html/"
+  tdiary_path = "."
+  tdiary_conf = "."
+  all_data = false
+  compat = false
   $stdout.sync = true
 
-  Dir.chdir(SQUEEZE_TDIARY_CONF)
+  if mode == "CMD"
+	def usage
+	  puts "yasqueeze $Revision: 1.3 $: 
+      puts " Yet Another making html files from tDiary's database."
+	  puts " usage: ruby yasqueeze.rb [-p <tDiary path>] [-c <tdiary.conf path>] [-a] [-s] <dest path>"
+	  exit
+	end
+
+	require 'getoptlong'
+	parser = GetoptLong::new
+	parser.set_options(['--path', '-p', GetoptLong::REQUIRED_ARGUMENT],
+					   ['--conf', '-c', GetoptLong::REQUIRED_ARGUMENT],
+					   ['--all', '-a', GetoptLong::NO_ARGUMENT],
+					   ['--squeeze', '-s', GetoptLong::NO_ARGUMENT])
+	begin
+	  parser.each do |opt, arg|
+		case opt
+		when '--path'
+		  tdiary_path = arg
+		when '--conf'
+		  tdiary_conf = arg
+		when '--all'
+		  all_data = true
+		when '--squeeze'
+		  compat = true
+		end
+	  end
+	rescue
+	  usage
+	end
+	output_path = ARGV.shift
+	usage unless output_path
+	output_path = File::expand_path(output_path)
+	output_path += '/' if /\/$/ !~ output_path
+  else
+	@options = Hash.new
+	File::readlines("tdiary.conf").each {|item| 
+	  if item =~ /@options/
+		eval(item)
+	  end
+	}
+	output_path = @options['yasqueeze.output_path']
+	all_data = @options['yasqueeze.all_data']
+	compat = @options['yasqueeze.compat_path']
+  end
+
+  tdiary_conf = tdiary_path unless tdiary_conf
+  Dir::chdir( tdiary_conf )
 
   begin
 	ARGV << '' # dummy argument against cgi.rb offline mode.
-	require "#{SQUEEZE_TDIARY_PATH}/tdiary"
+	require "#{tdiary_path}/tdiary"
   rescue LoadError
-	$stderr.puts 'yasqueeze.rb: cannot load tdiary.rb. SQUEEZE_TDIARY_PATH is wrong.'
+	$stderr.print "yasqueeze.rb: cannot load tdiary.rb. <#{tdiary_path}/tdiary>\n"
 	exit
   end
 end
@@ -45,7 +87,7 @@ end
 # Dairy Squeeze
 #
 class YATDiarySqueeze < TDiary
-  def initialize(diary, dest)
+  def initialize(diary, dest, all_data, compat)
     super(nil, 'day.rhtml')
     @header = ''
     @footer = ''
@@ -53,11 +95,12 @@ class YATDiarySqueeze < TDiary
 	@show_referer = false
 	@diary = diary
 	@dest = dest
+	@all_data = all_data
+	@compat = compat
   end
 
   def execute
-	return "" unless @diary.visible? || SQUEEZE_ALL_DATA
-	if SQUEEZE_COMPAT_PATH
+	if @compat
 	  dir = @dest
 	  name = @diary.date.strftime('%Y%m%d')
 	else
@@ -66,9 +109,18 @@ class YATDiarySqueeze < TDiary
 	  Dir.mkdir(dir, 0755) unless File.directory?(dir)
 	end
 	filename = dir + "/" + name
-	if not FileTest::exist?(filename) or 
-		File::mtime(filename) < @diary.last_modified
-	  File::open(filename, 'w'){|f| f.write(eval_rhtml)}
+	if @diary.visible? or @all_data
+	  if not FileTest::exist?(filename) or 
+		  File::mtime(filename) < @diary.last_modified
+		File::open(filename, 'w'){|f| f.write(eval_rhtml)}
+	  end
+	else
+	  if FileTest.exist?(filename) and ! @all_data
+		name = "remove #{name}"
+		File::delete(filename)
+	  else
+		name = ""
+	  end
 	end
 	name
   end
@@ -88,14 +140,14 @@ end
 # Main
 #
 class YATDiarySqueezeMain < TDiary
-  def initialize(dest)
+  def initialize(dest, all_data, compat)
 	super(nil, 'day.rhtml')
 	make_years
 	@years.keys.sort.each do |year|
 	  @years[year.to_s].sort.each do |month|
 		transaction(Time::local(year.to_i, month.to_i)) do |diaries|
-		  diaries.each do |day, diary|
-			$stdout.print YATDiarySqueeze.new(diary, dest).execute + " "
+		  diaries.sort.each do |day, diary|
+			print YATDiarySqueeze.new(diary, dest, all_data, compat).execute + " "
 		  end
 		  false
 		end
@@ -104,14 +156,24 @@ class YATDiarySqueezeMain < TDiary
   end
 end
 
-if $0 == __FILE__
-  unless nohtml
-	print "Content-type:text/html\n\n"
-    print "<html><head><title>Yet Another Squeeze for tDiary</title></head>\n"
-    print "<body><p>Yet Another Squeeze for tDiary<BR><BR>Start!</p><hr>\n"
+if mode == "CGI" || mode == "CMD"
+  if mode == "CGI"
+	print %Q[Content-type:text/html\n\n
+	  <html>
+      <head>
+        <title>Yet Another Squeeze for tDiary</title>
+        <link href="./theme/default.css" type="text/css" rel="stylesheet"/>
+      </head>
+      <body><div style="text-align:center">
+      <h1>Yet Another Squeeze for tDiary</h1>
+      <p>$Revision: 1.3 $</p>
+      <p>Copyright (C) 2002 MUTOH Masao&lt;mutoh@highway.ne.jp&gt;</p></div>
+      <br><br>Start!</p><hr>
+    ]
   end
+
   begin
-	YATDiarySqueezeMain.new(SQUEEZE_OUTPUT_PATH)
+	YATDiarySqueezeMain.new(output_path, all_data, compat)
   rescue
 	print $!, "\n"
 	$@.each do |v|
@@ -119,12 +181,16 @@ if $0 == __FILE__
 	end
   end
 
-  unless nohtml
+  if mode == "CGI"
 	print "<hr><p>End!</p></body></html>\n"
+  else
+	print "\n\n"
   end
 else
-  add_update_proc(Proc.new{
+  add_update_proc do
 	diary = @diaries[@date.strftime('%Y%m%d')]
-	YATDiarySqueeze.new(diary, SQUEEZE_OUTPUT_PATH).execute if diary.visible?
-  })
+	YATDiarySqueeze.new(diary, @options['yasqueeze.output_path'],
+						@options['yasqueeze.all_data'],
+						@options['yasqueeze.compat_path']).execute
+  end
 end
