@@ -1,7 +1,7 @@
-#!/usr/bin/env ruby
+#!/usr/bin/env ruby-1.6
 $KCODE = 'n'
 
-# windex.rb $Revision: 1.3 $
+# windex.rb $Revision: 1.4 $
 #
 # windex: 索引を生成する
 #   パラメタ:
@@ -88,6 +88,7 @@ class WIWordIndex
 
 	def load(dir)
 		@windex = {}
+		Dir.mkdir(dir) unless File.directory?(dir)
 		PStore.new(dir + "/windex").transaction do |pstore|
 			@dates = pstore.roots
 			@dates.each do |key|
