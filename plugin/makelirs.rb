@@ -1,4 +1,4 @@
-# makelirs.rb $Revision: 1.8 $
+# makelirs.rb $Revision: 1.9 $
 #
 # 更新情報をLIRSフォーマットのファイルに吐き出す
 #
@@ -41,6 +41,31 @@
 =end
 
 if /^(append|replace|comment|trackbackreceive)$/ =~ @mode then
+	unless Time.method_defined?(:utc_offset)
+		class Time
+			def utc_offset
+				l = self.dup.localtime
+				u = self.dup.utc
+
+				if l.year != u.year
+					off = l.year < u.year ? -1 : 1
+				elsif l.mon != u.mon
+					off = l.mon < u.mon ? -1 : 1
+				elsif l.mday != u.mday
+					off = l.mday < u.mday ? -1 : 1
+				else    
+					off = 0
+				end
+
+				off = off * 24 + l.hour - u.hour
+				off = off * 60 + l.min - u.min
+				off = off * 60 + l.sec - u.sec
+
+				return off
+			end
+		end
+	end
+
 	file = @options['makelirs.file'] || 'antenna.lirs'
 
 	# create_lirs
@@ -51,7 +76,7 @@ if /^(append|replace|comment|trackbackreceive)$/ =~ @mode then
 
 	url =  @options['makelirs.url'] || @conf.base_url
 	now = Time.now
-	utc_offset = (now.hour - now.utc.hour) * 3600
+	utc_offset = now.utc_offset
 
 	lirs = "LIRS,#{t.last_modified.tv_sec},#{Time.now.tv_sec},#{utc_offset},#{body.size},#{e[url]},#{e[@html_title]},#{e[@author_name]},,\n"
 	File::open( file, 'w' ) do |o|

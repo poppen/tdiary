@@ -1,3 +1,6 @@
+2004.01.14 Junichiro Kita <kita@kitaj.no-ip.com>
+	* makelirs.rb: define Time#utc_offset if not defined.
+
 2004.01.12 Junichiro Kita <kita@kitaj.no-ip.com>
 	* my-ex.rb: this time, my can handle 'yyyymmdd#txx'.
 
