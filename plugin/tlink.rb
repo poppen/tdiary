@@ -1,4 +1,4 @@
-# tlink.rb $Revision: 1.2 $
+# tlink.rb $Revision: 1.3 $
 #
 # title Â°À­ÉÕ anchor plugin
 #
@@ -57,7 +57,7 @@ def getcomment( url )
     response , = http.get( "/#{path}", agent )
       response.body.each { |line|
         if %r[<A NAME="#{frag}] =~ line
-            if %r[<P><A NAME="p\d\d">(?:.*?)</A> (.*?)</P>] =~ line.toeuc
+            if %r[<P><A NAME="p#?\d+">(?:.*?)</A> (.*?)</P>] =~ line.toeuc
               result = $1
 	      break
             else
