@@ -1,4 +1,4 @@
-# makelirs.rb $Revision: 1.12 $
+# makelirs.rb $Revision: 1.13 $
 #
 # 更新情報をLIRSフォーマットのファイルに吐き出す
 #
@@ -14,34 +14,39 @@
 #
 
 add_header_proc do
-	%QX	<!--link rel="alternate" type="application/x-lirs" title="lirs" href="#{File::basename( @options['makelirs.file'] || 'antenna.lirs' )}"-->\nX
+	<<-LINK
+	<!--link rel="alternate" type="application/x-lirs" title="lirs" href="#{File::basename( @options['makelirs.file'] || 'antenna.lirs' )}"-->
+	LINK
 end
 
+
 add_update_proc do
-	unless Time.method_defined?(:utc_offset)
-		class Time
-			def utc_offset
-				l = self.dup.localtime
-				u = self.dup.utc
-
-				if l.year != u.year
-					off = l.year < u.year ? -1 : 1
-				elsif l.mon != u.mon
-					off = l.mon < u.mon ? -1 : 1
-				elsif l.mday != u.mday
-					off = l.mday < u.mday ? -1 : 1
-				else    
-					off = 0
+	eval( <<-MODIFY_CLASS, TOPLEVEL_BINDING )
+		unless Time.method_defined?(:utc_offset)
+			class Time
+				def utc_offset
+					l = self.dup.localtime
+					u = self.dup.utc
+	
+					if l.year != u.year
+						off = l.year < u.year ? -1 : 1
+					elsif l.mon != u.mon
+						off = l.mon < u.mon ? -1 : 1
+					elsif l.mday != u.mday
+						off = l.mday < u.mday ? -1 : 1
+					else    
+						off = 0
+					end
+	
+					off = off * 24 + l.hour - u.hour
+					off = off * 60 + l.min - u.min
+					off = off * 60 + l.sec - u.sec
+	
+					return off
 				end
-
-				off = off * 24 + l.hour - u.hour
-				off = off * 60 + l.min - u.min
-				off = off * 60 + l.sec - u.sec
-
-				return off
 			end
 		end
-	end
+	MODIFY_CLASS
 
 	file = @options['makelirs.file'] || 'antenna.lirs'
 
