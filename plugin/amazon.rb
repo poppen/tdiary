@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.15 $
+# amazon.rb $Revision: 1.16 $
 #
 # isbn_image_left: 指定したISBNの書影をclass="left"で表示
 #   パラメタ:
@@ -29,6 +29,9 @@
 # tdiary.confにおける設定:
 #   @options['amazon.aid']:   アソシエイトIDを指定することで、自分のア
 #                             ソシエイトプログラムを利用できます
+#                             このオプションは設定画面から変更可能です
+#   @options['amazon.hideconf']: 設定画面上でアソシエイトIDを入力不可能
+#                             にしたい場合、trueに設定します
 #   @options['amazon.proxy']: 「host:post」形式でHTTP proxyを指定すると
 #                             Proxy経由でAmazonの情報を取得します
 #
@@ -45,26 +48,6 @@
 #              munemasa<munemasa@t3.rim.or.jp>,
 #              dai<dai@kato-agri.com>
 #
-=begin ChangeLog
-2003-03-04 TADA Tadashi
-	* follow to changing book title style in Amazon's HTML.
-
-2003-02-09 Junichiro Kita <kita@kitaj.no-ip.com>
-	* merge from amazon2.rb. see http://kuwa.s26.xrea.com/b/20030211.html
-
-2003-01-13 TADA Tadashi <sho@spc.gr.jp>
-	* for ruby 1.6.8. thanks woods <sodium@da2.so-net.ne.jp>.
-
-2002-11-28 TADA Tadashi <sho@spc.gr.jp>
-	* HTML 4.01 Strict support.
-
-2002-09-01 Junichiro Kita <kita@kitaj.no-ip.com>
-	* change URL for images.
-
-2002-07-09 TADA Tadashi <sho@spc.gr.jp>
-	* follow chaging of title format in amazon.
-=end
-
 require 'net/http'
 require 'timeout'
 
@@ -197,3 +180,17 @@ def isbn( asin, comment )
 	item_url << @options['amazon.aid'] if @options['amazon.aid']
 	amazonNoImg( item_url, comment )
 end
+
+if not @conf['amazon.hideconf'] then
+	add_conf_proc( 'amazon', 'Amazonプラグイン' ) do
+		if @mode == 'saveconf' then
+			@conf['amazon.aid'] = @cgi.params['amazon.aid'][0]
+		end
+	
+		<<-HTML
+		<h3>AmazonアソシエイトIDの指定</h3>
+		<p><input name="amazon.aid" value="#{CGI::escapeHTML( @conf['amazon.aid'] )}"></p>
+		HTML
+	end
+end
+
