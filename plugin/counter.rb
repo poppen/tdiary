@@ -1,4 +1,4 @@
-# counter.rb $Revision: 1.15 $
+# counter.rb $Revision: 1.16 $
 # -pv-
 #
 # Ì¾¾Î¡§
@@ -173,8 +173,8 @@
 =end
 
 
-if ["latest", "month", "day", "comment"].include?(@mode) and 
-	ENV['REQUEST_METHOD'] =~ /POST|GET/ 
+if ["latest", "month", "day"].include?(@mode) and 
+	ENV['REQUEST_METHOD'] == 'GET'
 
 require 'date'
 require 'pstore'
