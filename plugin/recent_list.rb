@@ -1,4 +1,4 @@
-# $Revision: 1.10 $
+# $Revision: 1.11 $
 # recent_list: 最近書いた日記のタイトル，サブタイトルを表示する
 #   パラメタ(カッコ内は未指定時の値):
 #     days:            何日分の日記を表示するか(20)
@@ -17,6 +17,9 @@
 # Distributed under the GPL
 #
 =begin ChengeLog
+2002-12-20 TADA Tadashi <sho@spc.gr.jp>
+	* use Plugin#apply_plugin.
+
 2002-10-06 TADA Tadashi <sho@spc.gr.jp>
 	* for tDiary 1.5.0.20021003.
 =end
@@ -83,13 +86,10 @@ def recent_list(days = 30, date_format = nil, title_with_body = nil, show_size =
 			end
 		end
 	}
-	if extra_erb and /<%=/ === result
-		ERbLight.new(result.untaint).result(binding)
+	if extra_erb then
+		apply_plugin( result )
 	else
 		result
 	end
 end
-
-#@recent_list_cache = Cache.new(:recent_list, method(:recent_list), 10, '%Y/%m/%d', true, true)
-#add_update_proc @recent_list_cache.writer
 

@@ -1,4 +1,4 @@
-# calendar3.rb $Revision: 1.15 $
+# calendar3.rb $Revision: 1.16 $
 #
 # calendar3: 現在表示している月のカレンダーを表示します．
 #  パラメタ: なし
@@ -43,6 +43,11 @@
 #         border-width: 1px;
 # }
 #
+=begin ChengeLog
+2002-12-20 TADA Tadashi <sho@spc.gr.jp>
+	* use Plugin#apply_plugin.
+=end
+
 module Calendar3
 	WEEKDAY = 0
 	SATURDAY = 1
@@ -159,7 +164,7 @@ def calendar3
 			@diaries[date].each_section do |section|
 				if section.subtitle
 					if extra_erb
-						text = ERbLight.new(section.subtitle.untaint).result(binding)
+						text = apply_plugin( section.subtitle )
 					else
 						text = section.subtitle
 					end
@@ -175,8 +180,8 @@ def calendar3
 				@diaries[date].each_section do |section|
 					if section.subtitle
 						if extra_erb
-							text = ERbLight.new(section.to_src.untaint).result(binding)
-							subtitle = ERbLight.new(section.subtitle.untaint).result(binding)
+							text = apply_plugin( section.to_src)
+							subtitle = apply_plugin( section.subtitle )
 						else
 							text = section.to_src
 							subtitle = section.subtitle

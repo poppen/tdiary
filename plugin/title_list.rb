@@ -1,4 +1,4 @@
-# titile_list.rb $Revision: 1.6 $
+# titile_list.rb $Revision: 1.7 $
 #
 # title_list: 現在表示している月のタイトルリストを表示
 #   パラメタ(カッコ内は未指定時の値):
@@ -21,9 +21,8 @@ def title_list( rev = false, extra_erb = false )
 		end
 		result << "</div>\n"
 	end
-	if extra_erb and /<%=/ === result
-		result.untaint if $SAFE < 3
-		ERbLight.new( result ).result( binding )
+	if extra_erb then
+		apply_plugin( result )
 	else
 		result
 	end
