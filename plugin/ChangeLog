@@ -1,3 +1,6 @@
+2004-05-16  mput <root@mput.dip.jp>
+	* title_tag.rb : New file.
+
 2004-05-14 zunda <zunda at freeshell.org>
 	* ja/weather.rb: correct translation of `rain showers': http://zunda.freeshell.org/d/20040428.html#p02
 
