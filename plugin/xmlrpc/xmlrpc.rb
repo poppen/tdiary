@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# xmlrpc.rb $Revision: 1.3 $
+# xmlrpc.rb $Revision: 1.4 $
 #
 # Copyright (c) 2004 MoonWolf <moonwolf@moonwolf.com>
 # Distributed under the GPL
@@ -19,19 +19,6 @@ $:.unshift org_path.untaint
 require 'tdiary'
 require 'uconv'
 require 'uri'
-
-eval( <<MODIFY_CLASS, TOPLEVEL_BINDING )
-module TDiary
-  class TDiaryBase
-    attr_reader :date
-    public :[]
-    public :calendar
-  end
-  class TDiaryLatest
-    public :latest
-  end
-end
-MODIFY_CLASS
 
 require 'xmlrpc/server'
 if defined?(MOD_RUBY)

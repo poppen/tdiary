@@ -1,5 +1,10 @@
+2004-11-04 MoonWolf <moonwolf@moonwolf.com>
+	* category.rb: remove TDiaryMonth::attr_reader
+	* xmlrpc/xmlrpc.rb remove eval's
+
 2004-11-03 MoonWolf <moonwolf@moonwolf.com>
 	* xmlrpc/xmlrpc.rb some changed
+
 2004-11-02 MoonWolf <moonwolf@moonwolf.com>
 	* xmlrpc.rb Added
 	* ja/xmlrpc Added

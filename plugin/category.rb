@@ -1,4 +1,4 @@
-# category.rb $Revision: 1.24 $
+# category.rb $Revision: 1.25 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -164,9 +164,6 @@ end
 #
 # misc
 #
-::TDiary::TDiaryMonth.module_eval do
-	attr_reader :diaries
-end
 
 def category_icon_save
 	@conf['category.icon'] = @category_icon.map {|c, i| "#{c} #{i}"}.join("\n")
