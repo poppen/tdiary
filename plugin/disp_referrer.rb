@@ -1,4 +1,4 @@
-# disp_referrer.rb $Revision: 1.16 $
+# disp_referrer.rb $Revision: 1.17 $
 # -pv-
 #
 # 名称：
@@ -27,6 +27,11 @@
 # You can redistribute it and/or modify it under GPL2.
 #
 =begin ChangeLog
+2002-10-12 MUTOH Masao <mutoh@highway.ne.jp>
+   * 「その他」が付く場合に、検索エンジン名の後ろに「:」が付かない不具合の修正(pointed out by TADA Tadashi <sho@spc.gr.jp>)
+   * goo検索改善
+   * version 2.3.1
+
 2002-10-11 MUTOH Masao <mutoh@highway.ne.jp>
    * @options['disp_referrer.cols']追加。１つの検索エンジンで表示するカラム数を指定できるようにした(デフォルト10件)。
      カラムを超えた場合は、その他にまとめて表示される。
@@ -228,7 +233,6 @@ def disp_referrer_main(diary, refs, reg_table)
 	if etc_sum > 0
 	  if all_num > 0
 		a_row << [0, "<span class=\"disp-referrer-etc\">その他</span> x#{etc_sum}"]
-		div = ""
 	  else
 		a_row << [0, " "]
 		div = ""
@@ -254,7 +258,7 @@ def referer_of_today_long(diary, limit)
     [["Lycos検索","http://www.lycos.co.jp/"],
 	["^http://.*lycos.*/.*?(query|q)=([^&]*).*", "\\2"]],
     [["goo検索","http://www.goo.ne.jp/"],
-	["^http://(www|search).goo.ne.jp/.*?MT=([^&]*).*", "\\2"]],
+	["^http://.*goo.ne.jp/.*?MT=([^&]*).*", "\\1"]],
     [["@nifty検索", "http://www.nifty.com/"],
 	["^http://(search|asearch|www).nifty.com/.*?(q|Text)=([^&]*).*", "\\3"]],
     [["OCN検索", "http://www.ocn.ne.jp/"],
