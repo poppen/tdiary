@@ -4,16 +4,17 @@
 # 		 namazi.cgiが作成する検索キーワードログ(NMZ.slog)から
 #		 最新xx件分の検索語を表示します。
 # パラメタ:
-#   file:   検索キーワードログファイル名(絶対パス表記) 
-#   namazu: なまずcgi名 
-#   limit:  表示件数(未指定時:5) 
-#   sep:    セパレータ(未指定時:空白)
+#   file:       検索キーワードログファイル名(絶対パス表記) 
+#   namazu:     なまずcgi名 
+#   limit:      表示件数(未指定時:5) 
+#   sep:        セパレータ(未指定時:空白)
+#   make_link:  <a>を生成するか?(未指定時:生成する)    
 #
 #
 # Copyright (c) 2002 Hiroyuki Ikezoe <zoe@kasumi.sakura.ne.jp>
 # Distributed under the GPL
 
-def recent_namazu(file, namazu, limit = 5, sep='&nbsp;')
+def recent_namazu(file, namazu, limit = 5, sep='&nbsp;', make_link = true)
 	begin
 		lines = []
 		log = open(file)
@@ -28,7 +29,11 @@ def recent_namazu(file, namazu, limit = 5, sep='&nbsp;')
 		lines.reverse.each_with_index do |line,idx|
 			break if idx >= limit
 			word = line.split('\t')[0]
-			result << %Q[<a href="#{namazu}?query=#{CGI::escapeHTML(word)}">#{CGI::escapeHTML(word)}</a>]
+			if make_link
+				result << %Q[<a href="#{namazu}?query=#{CGI::escapeHTML(word)}">#{CGI::escapeHTML(word)}</a>]
+			else
+				result << CGI::escapeHTML(word)
+			end
 		end
 		result.join( sep )
 	rescue
