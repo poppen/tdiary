@@ -145,11 +145,11 @@ def a_convert_charset(option, charset)
 	return "" unless option
 	return option unless charset
 	if charset =~ A_REG_CHARSET2
-		ret = NKF::nkf("-#{charset[0].chr}", option)
+		ret = CGI.escape(NKF::nkf("-#{charset[0].chr}", option))
 	else
 		ret = option
 	end
-	CGI.escape(ret)
+	ret
 end
 
 def a_anchor(key)
