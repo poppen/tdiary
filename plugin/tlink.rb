@@ -1,4 +1,4 @@
-# tlink.rb $Revision: 1.13 $
+# tlink.rb $Revision: 1.14 $
 #
 # title Â°À­ÉÕ anchor plugin
 #
@@ -96,9 +96,7 @@ end
 
 def tlink_getcomment( url )
   result = ""
-  myhost = ENV["HTTP_HOST"]
-  myurl = ENV["REDIRECT_URL"]
-  ref = "http://#{myhost}#{myurl}"
+  ref = @conf.base_url
   agent = { "User-Agent" => "DoCoMo (compatible; tDiary plugin; tlink; #{ref})" }
   host, path, frag = url.scan( %r[http://(.*?)/(.*)#((?:p|c)\d\d)] )[0]
   if /p0/ =~ frag
