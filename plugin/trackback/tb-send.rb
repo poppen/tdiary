@@ -1,4 +1,4 @@
-# tb-send.rb $Revision: 1.1 $
+# tb-send.rb $Revision: 1.2 $
 #
 # Copyright (c) 2003 Junichiro Kita <kita@kitaj.no-ip.com>
 # You can distribute this file under the GPL.
@@ -25,7 +25,7 @@ add_update_proc do
 		blog_name = @conf.html_title
 
 		my_url = "http://#{ENV['SERVER_NAME']}"
-		my_url << ENV['REQUEST_URI'].sub(Regexp.new(Regexp.escape(@conf.update)), '')
+		my_url << ENV['REQUEST_URI'].sub(Regexp.new(Regexp.escape(@conf.update.sub(%r|^\./|, ''))), '')
 		my_url << @conf.index.sub(%r|^\./|, '')
 		my_url << anchor(@date.strftime('%Y%m%d'))
 
