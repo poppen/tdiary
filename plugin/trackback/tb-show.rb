@@ -1,4 +1,4 @@
-# tb-show.rb $Revision: 1.4 $
+# tb-show.rb $Revision: 1.5 $
 #
 # functions:
 #   * show TrackBack ping URL in right of TSUKKOMI label.
@@ -8,9 +8,6 @@
 # options:
 #	@options['tb.cgi']:
 #		the TrackBack ping URL. './tb.rb' is default.
-#	@options['tb.url_position']:
-#		where to show TrackBack Ping URL. 'upper' or 'lower'.
-#		'upper' is default.
 #
 # Copyright (c) 2003 TADA Tadashi <sho@spc.gr.jp>
 # You can distribute this file under the GPL.
@@ -36,7 +33,7 @@ alias :comment_new_tb_backup :comment_new
 def comment_new
 	cgi = @options['tb.cgi'] || './tb.rb'
 	url = "#{cgi}/#{@tb_date.strftime( '%Y%m%d' )}"
-	%Q|#{comment_new_tb_backup }</a>]<br>[TrackBack to #{@tb_url}|
+	%Q|#{comment_new_tb_backup }</a>]<br>[TrackBack to <a href="#{@tb_url}">#{@tb_url}|
 end
 
 #
@@ -101,7 +98,7 @@ alias :referer_of_today_long_tb_backup :referer_of_today_long
 def referer_of_today_long( diary, limit )
 	r = ''
 	if diary then
-		r << %Q[<div class="caption"><a name="t">TrackBacks</a></div>\n]
+		r << %Q[<div class="caption"><a name="t">TrackBacks</a> (本日へのTrackBack Ping URL: <a href="#{@tb_url}">#{@tb_url}</a>)</div>\n]
 		r << "<ul>\n"
 		diary.each_comment( 100 ) do |com, idx|
 			next unless com.visible_true?
