@@ -8,7 +8,7 @@
 # You can distribute/modify this program under the terms of
 # the GNU GPL, General Public License version 2.
 #
-# $originalId: search.rb,v 1.11 2004/05/22 12:31:52 aamine Exp $
+# $originalId: search.rb,v 1.12 2004/05/22 18:31:47 aamine Exp $
 #
 # Project home page: http://i.loveruby.net/w/tdiarysearch.html
 #
@@ -65,19 +65,26 @@ SEARCH_PAGE = unindent(<<-"EOS", 2)
   #{SEARCH_FORM}
 EOS
 
+TOO_MANY_HITS = 50
+
 SEARCH_RESULT = unindent(<<-"EOS", 2)
   <h1>tDiary Search: Search Result</h1>
   #{SEARCH_FORM}
   <%
       nhits = 0
-      toomanyhits = match_sections(patterns) {|section, diary, num|
+      toomanyhits = false
+      match_components(patterns) {|diary, fragment, component|
         nhits += 1
+        if nhits > TOO_MANY_HITS
+          toomanyhits = true
+          break
+        end
   %>
   <div class="day">
-  <h2><a href="<%= @config.index %>?date=<%= diary.date.strftime('%Y%m%d') %>#<%= sprintf('p%02d', num) %>"><%= diary.date.strftime('%Y-%m-%d') %></a></h2>
+  <h2><a href="<%= @config.index %>?date=<%= diary.ymd %>#<%= fragment %>"><%= diary.y_m_d %></a></h2>
   <div class="body">
   <div class="section">
-  <p><%= short_html(section) %></p>
+  <p><%= short_html(component) %></p>
   </div>
   </div>
   </div><%
@@ -116,6 +123,7 @@ else
 end
 $:.unshift tdiarylib
 require 'tdiary'
+require 'tdiary/defaultio'
 begin
   require 'erb'
 rescue LoadError
@@ -152,12 +160,13 @@ def generate_page(cgi)
     begin
       return search_form_page(theme) unless cgi.valid?('q')
       initialize_tdiary_plugins cgi
-      query = @config.to_native([cgi.params['q']].flatten.compact.join(' ')).to_s
-      html = search_result_page(theme, setup_patterns(query))
+      query = @config.to_native([cgi.params['q']].flatten.compact.join(' '))
+      patterns = setup_patterns(query)
+      html = search_result_page(theme, patterns)
       save_query(query, query_log()) if LOGGING
       return html
     rescue WrongQuery => err
-      return search_error_page(theme, query, err.message)
+      return search_error_page(theme, (patterns || []), err.message)
     end
   rescue Exception => err
     html = ''
@@ -251,60 +260,57 @@ def recent_queries
   }
 end
 
-TOO_MANY_HITS = 50
+INF = 1 / 0.0
 
-def match_sections(patterns)
-  hit = 0
-  match_sections0(patterns) do |section, diary, num|
-    yield section, diary, num
-    hit += 1
-    return true if hit > TOO_MANY_HITS
-  end
-  false
-end
-
-def match_sections0(patterns)
-  foreach_data_file(@config.data_path.sub(%r</+\z>, '')) do |path|
-    read_diaries(path).sort_by {|diary| diary.date }.reverse_each do |diary|
-      next unless diary.visible?
-      num = 1
-      diary.each_section do |section|
-        yield section, diary, num if patterns.all? {|re| re =~ section.to_src }
-        num += 1
+def match_components(patterns)
+  foreach_diary_from_latest do |diary|
+    next unless diary.visible?
+    num = 1
+    diary.each_section do |sec|
+      if patterns.all? {|re| re =~ sec.to_src }
+        yield diary, fragment('p', num), sec
+      end
+      num += 1
+    end
+    diary.each_visible_comment(INF) do |cmt, num|
+      if patterns.all? {|re| re =~ cmt.body }
+        yield diary, fragment('c', num), cmt
       end
     end
   end
+end
+
+def fragment(type, num)
+  sprintf('%s%02d', type, num)
 end
 
 #
 # tDiary Implementation Dependent
 #
 
+def foreach_diary_from_latest(&block)
+  foreach_data_file(@config.data_path.sub(%r</+\z>, '')) do |path|
+    read_diaries(path).sort_by {|diary| diary.date }.reverse_each(&block)
+  end
+end
+
 def foreach_data_file(data_path, &block)
-  Dir.glob("#{data_path}/[0-9]*/*.td2").sort.reverse_each(&block)
+  Dir.glob("#{data_path}/[0-9]*/*.td2").sort.reverse_each do |path|
+    yield path.untaint
+  end
 end
 
 def read_diaries(path)
-  diaries = []
-  File.open(path.untaint) {|f|
-    f.each('') do |header|
-      d = new_diary(header, f.gets("\n.\n").chomp(".\n"))
-      diaries.push d
-      (Years[sprintf('%04d', d.date.year)] ||= []).push sprintf('%02d', d.date.month)
-    end
-  }
-  diaries
-end
-
-def new_diary(header, body)
-  ymd = header.slice(/^Date:\s*(\d{4}\d{2}\d{2})/, 1) or
-      raise "unexpected tdiary format: Date=nil:\n#{header.strip}"
-  format = header.slice(/^Format:\s*(\S+)/, 1) or
-      raise "unexpected tdiary format: Format=nil:\n#{header.strip}"
-  visible = (header.slice(/^Visible: (\w+)/, 1) == 'true' ? true : false)
-  diary = diary_class(format.untaint).new(ymd, '', body)
-  diary.show visible
-  diary
+  d = nil
+  diaries = {}
+  load_tdiary_textdb(path) do |header, body|
+    d = diary_class(header['Format']).new(header['Date'], '', body)
+    d.show(header['Visible'] != 'false')
+    diaries[d.ymd] = d
+  end
+  (Years[d.y] ||= []).push(d.m) if d
+  load_comments diaries, path
+  diaries.values
 end
 
 DIARY_CLASS_CACHE = {}
@@ -312,20 +318,75 @@ DIARY_CLASS_CACHE = {}
 def diary_class(style)
   c = DIARY_CLASS_CACHE[style]
   return c if c
-
   require "tdiary/#{style.downcase}_style.rb"
   c = eval("TDiary::#{style.capitalize}Diary")
+  c.__send__(:include, DiaryClassDelta)
   DIARY_CLASS_CACHE[style] = c
   c
 end
 
-def short_html(section)
-  if section.subtitle
-    sprintf('%s<br>%s',
-            tdiary2text(section.subtitle_to_html),
-            tdiary2text(section.body_to_html))
+module DiaryClassDelta
+  def ymd
+    date().strftime('%Y%m%d')
+  end
+
+  def y_m_d
+    date().strftime('%Y-%m-%d')
+  end
+
+  def y
+    '%04d' % date().year
+  end
+
+  def m
+    '%02d' % date().month
+  end
+end
+
+def load_comments(diaries, path)
+  cmtfile = path.sub(/2\z/, 'c')
+  return unless File.file?(cmtfile)
+  load_tdiary_textdb(cmtfile) do |header, body|
+    c = TDiary::Comment.new(header['Name'], header['Mail'], body,
+                            Time.at(header['Last-Modified'].to_i))
+    c.show = (header['Visible'] != 'false')
+    d = diaries[header['Date']]
+    d.add_comment c if d
+  end
+end
+
+def load_tdiary_textdb(path)
+  File.open(path) {|f|
+    ver = f.gets.strip
+    raise "unkwnown format: #{ver}" unless ver == 'TDIARY2.00.00'
+    f.each('') do |header|
+      h = {}
+      header.untaint.strip.each do |line|
+        n, v = *line.split(':', 2)
+        h[n.strip] = v.strip
+      end
+      yield h, f.gets("\n.\n").chomp(".\n").untaint
+    end
+  }
+end
+
+def short_html(component)
+  # Section classes do not have common superclass, we can't use class here.
+  case component.class.name
+  when /Section/
+    section = component
+    if section.subtitle
+      sprintf('%s<br>%s',
+              tdiary2text(section.subtitle_to_html),
+              tdiary2text(section.body_to_html))
+    else
+      tdiary2text(section.body_to_html)
+    end
+  when /Comment/
+    cmt = component
+    escape((cmt.name + ': ' + cmt.body).slice(/\A.{0,120}/me))
   else
-    tdiary2text(section.body_to_html)
+    raise "must not happen: #{component.class}"
   end
 end
 
