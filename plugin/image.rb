@@ -1,4 +1,4 @@
-# image.rb $Revision: 1.17 $
+# image.rb $Revision: 1.18 $
 # -pv-
 # 
 # 名称:
@@ -134,41 +134,39 @@ end
 # service methods below.
 #
 
-def image_info( path )
+def image_info( f )
 	image_type = nil
 	image_height = nil
 	image_width = nil
 
-	File.open( path, 'r' ) do |f|
-		sig = f.read( 24 )
-		if /\A\x89PNG\x0D\x0A\x1A\x0A(....)IHDR(........)/on =~ sig
-			image_type = 'png'
-			image_height, image_width = $2.unpack( 'NN' )
+	sig = f.read( 24 )
+	if /\A\x89PNG\x0D\x0A\x1A\x0A(....)IHDR(........)/on =~ sig
+		image_type = 'png'
+		image_height, image_width = $2.unpack( 'NN' )
 
-		elsif /\AGIF8[79]a(....)/on =~ sig
-			image_type   = 'gif'
-			image_height, image_width = $1.unpack( 'vv' )
+	elsif /\AGIF8[79]a(....)/on =~ sig
+		image_type   = 'gif'
+		image_height, image_width = $1.unpack( 'vv' )
 
-		elsif /\A\xFF\xD8/on =~ sig
-			image_type = 'jpg'
-			data = $'
-			until data.empty?
-				break if data[0] != 0xFF
-				break if data[1] == 0xD9
+	elsif /\A\xFF\xD8/on =~ sig
+		image_type = 'jpg'
+		data = $'
+		until data.empty?
+			break if data[0] != 0xFF
+			break if data[1] == 0xD9
 
-				data_size = data[2,2].unpack( 'n' ).first + 2
-				if data[1] == 0xC0
-					image_width, image_height = data[5,4].unpack('nn')
-					break
+			data_size = data[2,2].unpack( 'n' ).first + 2
+			if data[1] == 0xC0
+				image_width, image_height = data[5,4].unpack('nn')
+				break
+			else
+				if data.size < data_size
+					f.seek(data_size - data.size, IO::SEEK_CUR)
+					data = ''
 				else
-					if data.size < data_size
-						f.seek(data_size - data.size, IO::SEEK_CUR)
-						data = ''
-					else
-						data = data[data_size .. -1]
-					end
-					data << f.read( 128 ) if data.size < 4
+					data = data[data_size .. -1]
 				end
+				data << f.read( 128 ) if data.size < 4
 			end
 		end
 	end
@@ -207,7 +205,8 @@ if /^formplugin$/ =~ @mode then
 		images = image_list( date )
 	   if @cgi.params['plugin_image_addimage'][0]
 	      filename = @cgi.params['plugin_image_file'][0].original_filename
-			extension, = image_info( @cgi.params['plugin_image_file'][0].path )
+			extension, = image_info( @cgi.params['plugin_image_file'][0] )
+			@cgi.params['plugin_image_file'][0].rewind
 			if extension =~ /\A(#{image_ext})\z/i
 				begin
 	         	size = @cgi.params['plugin_image_file'][0].size
@@ -287,7 +286,7 @@ add_form_proc do |date|
 		tmp = ''
 	   images.each_with_index do |img,id|
 			next unless img
-			img_type, img_w, img_h = image_info(File.join(@image_dir,img).untaint)
+			img_type, img_w, img_h = open(File.join(@image_dir,img).untaint, 'r') {|f| image_info(f)}
 			r << %Q[<td><img class="form" src="#{@image_url}/#{img}" alt="#{id}" width="#{(img_w && img_w > 160) ? 160 : img_w}"></td>]
 			ptag = "#{ptag1}image #{id}, '画像の説明', nil, #{img_w && img_h ? '['+img_w.to_s+','+img_h.to_s+']' : 'nil'}#{ptag2}"
 			img_info = "#{File.size(File.join(@image_dir,img).untaint).to_s.reverse.gsub( /\d{3}/, '\0,' ).sub( /,$/, '' ).reverse} bytes"

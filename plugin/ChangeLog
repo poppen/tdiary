@@ -1,3 +1,6 @@
+2003-10-13 Junichiro Kita <kita@kitaj.no-ip.com>
+	* image.rb: support ruby1.8.
+
 2003-10-12 TADA Tadashi <sho@spc.gr.jp>
 	* image.rb: comma separated image size by 3digs.
 
