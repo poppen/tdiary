@@ -1,4 +1,4 @@
-# my-ex.rb $Revision: 1.5 $
+# my-ex.rb $Revision: 1.6 $
 #
 # my(拡張版): myプラグインを拡張し、title属性に参照先の内容を挿入します。
 #             参照先がセクションの場合は(あれば)サブタイトルを、
@@ -10,9 +10,10 @@
 # Copyright (c) 2002 TADA Tadashi <sho@spc.gr.jp>
 # Distributed under the GPL
 
-def my( a, str )
-	result = %Q[<a href="#{@index}#{anchor a}">#{str}</a>]
-	date, place, frag = a.scan( /(\d{8})#?([cp])(\d\d)/ )[0]
+def my( a, str, title = nil )
+	date, noise, frag = a.scan( /^(\d{8}|\d{6}|\d{4})([^\dcp]*)?([cpt]\d\d)?/ )[0]
+	anc = frag ? "#{date}#{frag}" : date
+	place, frag = frag.scan( /([cpt])(\d\d)/ )[0] if frag
 	if date and frag and @diaries[date] then
 		if place[0] == ?p then
 			section = nil
@@ -24,16 +25,19 @@ def my( a, str )
 			end
 			if section and section.subtitle then
 				title = CGI::escapeHTML( "#{apply_plugin(section.subtitle_to_html, true)}" )
-				result = %Q[<a href="#{@index}#{anchor a}" title="#{title}">#{str}</a>]
 			end
 		else # comment
 			com = nil
 			@diaries[date].each_comment( frag.to_i ) {|c| com = c}
 			if com then
 				title = CGI::escapeHTML( "[#{com.name}] #{com.shorten( @conf.comment_length )}" )
-				result = %Q[<a href="#{@index}#{anchor a}" title="#{title}">#{str}</a>]
 			end
 		end
 	end
-	result
+	if title then
+		%Q[<a href="#{@index}#{anchor anc}" title="#{title}">#{str}</a>]
+	else
+		%Q[<a href="#{@index}#{anchor anc}">#{str}</a>]
+	end
 end
+
