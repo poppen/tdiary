@@ -1,3 +1,6 @@
+2005-02-10 zunda <zunda at freeshell.org>
+	* makerss.rb: escape comment body, thanks to Kouhei Sutou <kou at cozmixng.org>
+
 2005-02-01 zunda <zunda at freeshell.org>
 	* disp_referrer.rb: added del.icio.us to antenna regexp
 	* ja/disp_referrer.rb: gw.mobile.goo.ne.jp and msearch.mobile.goo.ne.jp added to search engines
