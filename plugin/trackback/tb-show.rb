@@ -1,4 +1,4 @@
-# tb-show.rb $Revision: 1.5 $
+# tb-show.rb $Revision: 1.6 $
 #
 # functions:
 #   * show TrackBack ping URL in right of TSUKKOMI label.
@@ -113,7 +113,8 @@ def referer_of_today_long( diary, limit )
 			a += ':' + title unless title.empty?
 			a = url if a.empty?
 
-			r << %Q|<li><a href="#{CGI::escapeHTML( url )}">#{CGI::escapeHTML( a )}</a><br>|
+			r << %Q|<li><a href="#{CGI::escapeHTML( url )}">#{CGI::escapeHTML( a )}</a>|
+			r << %Q| #{comment_date(com.date)}<br>|
 			r << CGI::escapeHTML( excerpt ).gsub( /\n/, '<br>' ).gsub( /<br><br>\Z/, '' ) unless excerpt.empty?
 			r << %Q|</li>\n|
 		end
