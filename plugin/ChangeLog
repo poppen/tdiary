@@ -1,3 +1,6 @@
+2005-03-03 zunda <zunda at freeshell.org>
+	* disp_referrer.rb: handle rush conditions more properly when removing cache
+
 2005-03-02  Tatsuki Sugiura <sugi@nemui.org>
 	* tb-show.rb, ja/tb-show.rb, en/tb-show.rb: trackbacks_of_today_short is now selectable when in non-BlogKit mode from the config page
 
