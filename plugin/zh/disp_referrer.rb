@@ -1,5 +1,5 @@
 =begin
-= A little bit more powerful display of referrers((-$Id: disp_referrer.rb,v 1.1 2004-06-15 15:19:21 tadatadashi Exp $-))
+= A little bit more powerful display of referrers((-$Id: disp_referrer.rb,v 1.2 2004-10-13 05:41:35 kazuhiko Exp $-))
 English resource
 
 == Copyright notice
@@ -239,7 +239,7 @@ class DispRef2SetupIF
 					a script fragment like &quot;sprintf('[tdiary:%d]', $1.to_i+1)&quot;.
 				</p>
 			_HTML
-			if ENV['AUTH_TYPE'] and ENV['REMOTE_USER'] and @setup['configure.use_link'] then
+			if @cgi.auth_type and @cgi.remote_user and @setup['configure.use_link'] then
 				r << <<-_HTML
 					<p>
 						[NOTE] Be aware that by clicking the URLs below, the author
@@ -258,7 +258,7 @@ class DispRef2SetupIF
 			i = 0
 			urls.sort.each do |url|
 				shown_url = DispRef2String::escapeHTML( @setup.to_native( DispRef2String::unescape( url ) ) )
-				if ENV['AUTH_TYPE'] and ENV['REMOTE_USER'] and @setup['configure.use_link'] then
+				if @cgi.auth_type and @cgi.remote_user and @setup['configure.use_link'] then
 					r << "<dt><a href=\"#{url}\">#{shown_url}</a>"
 				else
 					r << "<dt>#{shown_url}"

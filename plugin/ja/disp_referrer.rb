@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.11 2004-09-15 02:21:06 mput Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.12 2004-10-13 05:41:35 kazuhiko Exp $-))
 日本語リソース
 
 == 概要
@@ -385,7 +385,7 @@ class DispRef2SetupIF
 					スクリプト片も利用できます。
 				</p>
 			_HTML
-			if ENV['AUTH_TYPE'] and ENV['REMOTE_USER'] and @setup['configure.use_link'] then
+			if @cgi.auth_type and @cgi.remote_user and @setup['configure.use_link'] then
 				r << <<-_HTML
 					<p>
 						それぞれのURLはリンクになっていますが、これをクリックすることで、
@@ -403,7 +403,7 @@ class DispRef2SetupIF
 			i = 0
 			urls.sort.each do |url|
 				shown_url = DispRef2String::escapeHTML( @setup.to_native( DispRef2String::unescape( url ) ) )
-				if ENV['AUTH_TYPE'] and ENV['REMOTE_USER'] and @setup['configure.use_link'] then
+				if @cgi.auth_type and @cgi.remote_user and @setup['configure.use_link'] then
 					r << "<dt><a href=\"#{url}\">#{shown_url}</a>"
 				else
 					r << "<dt>#{shown_url}"
