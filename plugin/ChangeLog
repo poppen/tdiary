@@ -1,3 +1,11 @@
+2004-11-16 zunda <zunda at freeshell.org>
+  * makerss.rb, {ja,en,zh}/makerss.rb: more options:
+		- hidecomment, hidecontent, shortdescription: configurable thru. browser
+		- @conf.icon @conf.description: configurable thru. browser in the future
+		- file, url, partial: configurable in tdiary.conf
+	* makerss.rb: includes copyright notice, shortened text as title when
+	there is no subtitle.
+
 2004-11-12 zunda <zunda at freeshell.org>
 	* search_control.rb: config form remembers number of agents.
 	Works properly even when the user delets an agent and

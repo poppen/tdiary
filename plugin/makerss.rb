@@ -1,11 +1,19 @@
-# makerss.rb: $Revision: 1.18 $
+# makerss.rb: $Revision: 1.19 $
 #
 # generate RSS file when updating.
 #
-# options:
-#   @options['makerss.file']  : local file name of RSS file. default: 'index.rdf'.
-#   @options['makerss.url']   : URL of RSS file.
-#   @options['makerss.image'] : URL of site banner image.
+# options configurable through settings:
+#   @conf['makerss.hidecomment'] : hide tsukkomi's. default: false
+#   @conf['makerss.hidecontent'] : hide full-text content. default: false
+#   @conf['makerss.shortdesc'] : shorter description. default: false
+#
+# options to be edited in tdiary.conf:
+#   @conf['makerss.file']  : local file name of RSS file. default: 'index.rdf'.
+#   @conf['makerss.url']   : URL of RSS file.
+#   @conf.icon             : URL of site icon image (can be relative)
+#   @conf.description      : desciption of the diary
+#   @conf['makerss.partial'] : how much portion of body to be in description
+#                              used when makerss.shortdesc, default: 0.25
 #
 #   CAUTION: Before using, make 'index.rdf' file into the directory of your diary,
 #            and permit writable to httpd.
@@ -13,16 +21,20 @@
 # Copyright (c) 2004 TADA Tadashi <sho@spc.gr.jp>
 # Distributed under the GPL
 #
+
 if /^append|replace|comment|showcomment|trackbackreceive|pingbackreceive$/ =~ @mode then
+	unless @conf.description
+		@conf.description = @conf['whatsnew_list.rdf.description']
+	end
 	eval( <<-TOPLEVEL_CLASS, TOPLEVEL_BINDING )
 		module TDiary
 			class RDFSection
-				attr_reader :id, :time, :section
+				attr_reader :id, :time, :section, :diary_title
 
 				# 'id' has 'YYYYMMDDpNN' format (p or c).
 				# 'time' is Last-Modified this section as a Time object.
 				def initialize( id, time, section )
-					@id, @time, @section = id, time, section
+					@id, @time, @section, @diary_title = id, time, section, diary_title
 				end
 		
 				def time_string
@@ -111,14 +123,20 @@ def makerss_update
 		end
 	end
 
-	rdf_image = @options['makerss.image']
-	xml << %Q[<image rdf:resource="#{rdf_image}" />\n] if rdf_image
+	if @conf.icon
+		if /^http/ =~ @conf.icon
+			rdf_image = @conf.icon
+		else
+			rdf_image = @conf.base_url + @conf.icon
+		end
+		xml << %Q[<image rdf:resource="#{rdf_image}" />\n]
+	end
 
 	xml << seq << "</rdf:Seq></items>\n</channel>\n"
 	xml << makerss_image( uri, rdf_image ) if rdf_image
 	xml << body
 	xml << makerss_footer
-	rdf_file = @options['makerss.file'] || 'index.rdf'
+	rdf_file = @conf['makerss.file'] || 'index.rdf'
 	rdf_file = 'index.rdf' if rdf_file.length == 0
 	File::open( rdf_file, 'w' ) do |f|
 		f.write( @makerss_encoder.call( xml ) )
@@ -126,18 +144,23 @@ def makerss_update
 end
 
 def makerss_header( uri )
-	rdf_url = @options['makerss.url'] || "#{@conf.base_url}index.rdf"
+	rdf_url = @conf['makerss.url'] || "#{@conf.base_url}index.rdf"
 	rdf_url = "#{@conf.base_url}index.rdf" if rdf_url.length == 0
 
-	desc = @options['whatsnew_list.rdf.description'] || @conf.html_title
+	desc = @conf.description || ''
+
+	copyright = Time::now.strftime( "Copyright %Y #{@conf.author_name}" )
+	copyright += " <#{@conf.author_mail}>" if @conf.author_mail and not @conf.author_mail.empty?
+	copyright += ", copyright of comments by respective authors"
 
 	xml = %Q[<?xml version="1.0" encoding="#{@makerss_encode}"?>
 <rdf:RDF xmlns="http://purl.org/rss/1.0/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xml:lang="#{@conf.html_lang}">
 	<channel rdf:about="#{rdf_url}">
 	<title>#{CGI::escapeHTML( @conf.html_title )}</title>
 	<link>#{uri}</link>
-	<description>#{CGI::escapeHTML( desc )}</description>
+	<description>#{desc ? CGI::escapeHTML( desc ) : ''}</description>
 	<dc:creator>#{CGI::escapeHTML( @conf.author_name )}</dc:creator>
+	<copyright>#{CGI::escapeHTML( copyright )}</copyright>
 	]
 end
 
@@ -154,6 +177,17 @@ def makerss_image( uri, rdf_image )
 	]
 end
 
+def makerss_desc_shorten( text )
+	if @conf['makerss.shortdesc'] then
+		@conf['makerss.partial'] = 0.25 unless @conf['makerss.partial']
+		len = ( text.size.to_f * @conf['makerss.partial'] ).ceil.to_i
+		len = 500 if len > 500
+	else
+		len = 500
+	end
+	@conf.shorten( text, len )
+end
+
 def makerss_body( uri, rdfsec )
 	rdf = %Q|<item rdf:about="#{uri}#{anchor rdfsec.id}">\n|
 	rdf << %Q|<link>#{uri}#{anchor rdfsec.id}</link>\n|
@@ -162,10 +196,14 @@ def makerss_body( uri, rdfsec )
 		a = rdfsec.id.scan( /(\d{4})(\d\d)(\d\d)/ ).flatten.map{|s| s.to_i}
 		date = Time::local( *a )
 		body_enter_proc( date )
-		old_apply_plugin = @options['apply_plugin']
-		@options['apply_plugin'] = true
+		old_apply_plugin = @conf['apply_plugin']
+		@conf['apply_plugin'] = true
 
 		subtitle = apply_plugin( rdfsec.section.subtitle_to_html, true ).strip
+		if subtitle.empty?
+			subtitle = apply_plugin( rdfsec.section.body_to_html, true ).strip
+			subtitle = CGI::escapeHTML( @conf.shorten( subtitle.gsub( /&.*?;/, '' ), 20 ) ) unless subtitle.empty?
+		end
 		rdf << %Q|<title>#{subtitle}</title>\n|
 		rdf << %Q|<dc:creator>#{CGI::escapeHTML( @conf.author_name )}</dc:creator>\n|
 		if ! rdfsec.section.categories.empty?
@@ -173,23 +211,31 @@ def makerss_body( uri, rdfsec )
 				rdf << %Q|<dc:subject>#{CGI::escapeHTML( category )}</dc:subject>\n|
 			end
 		end
-		desc = apply_plugin( rdfsec.section.subtitle_to_html, true ).strip +
-			apply_plugin( rdfsec.section.body_to_html, true ).strip
+		desc = apply_plugin( rdfsec.section.body_to_html, true ).strip
 		desc.gsub!( /&.*?;/, '' )
-		rdf << %Q|<description>#{CGI::escapeHTML( @conf.shorten( desc, 500 ) )}</description>\n|
-		text = '<h3>' + apply_plugin( rdfsec.section.subtitle_to_html ).strip + '</h3>' +
-			apply_plugin( rdfsec.section.body_to_html ).strip
-		text.gsub!( /\]\]>/, ']]&gt;' )
-		rdf << %Q|<content:encoded><![CDATA[#{text}]]></content:encoded>\n|
+		rdf << %Q|<description>#{CGI::escapeHTML( makerss_desc_shorten( desc ) )}</description>\n|
+		unless @conf['makerss.hidecontent']
+			text = ''
+			text += '<h3>' + apply_plugin( rdfsec.section.subtitle_to_html ).strip + '</h3>' if rdfsec.section.subtitle_to_html and not rdfsec.section.subtitle_to_html.empty?
+			text += apply_plugin( rdfsec.section.body_to_html ).strip
+			unless text.empty?
+				text.gsub!( /\]\]>/, ']]&gt;' )
+				rdf << %Q|<content:encoded><![CDATA[#{text}]]></content:encoded>\n|
+			end
+		end
 
 		body_leave_proc( date )
-		@options['apply_plugin'] = old_apply_plugin
+		@conf['apply_plugin'] = old_apply_plugin
 	else # TSUKKOMI
 		rdf << %Q|<title>#{makerss_tsukkomi_label( rdfsec.id )} (#{CGI::escapeHTML( rdfsec.section.name )})</title>\n|
 		rdf << %Q|<dc:creator>#{CGI::escapeHTML( rdfsec.section.name )}</dc:creator>\n|
-		text = CGI::escapeHTML( rdfsec.section.body )
-		rdf << %Q|<description>#{@conf.shorten( text, 500 )}</description>\n|
-		rdf << %Q|<content:encoded><![CDATA[#{text.gsub( /\n/, '<br>' )}]]></content:encoded>\n|
+		unless @conf['makerss.hidecomment']
+			text = CGI::escapeHTML( rdfsec.section.body )
+			rdf << %Q|<description>#{makerss_desc_shorten( text )}</description>\n|
+			unless @conf['makerss.hidecontent']
+				rdf << %Q|<content:encoded><![CDATA[#{text.gsub( /\n/, '<br>' )}]]></content:encoded>\n|
+			end
+		end
 	end
 	rdf << "</item>\n"
 end
@@ -207,7 +253,7 @@ if /^showcomment$/ =~ @mode then
 end
 
 add_header_proc {
-	rdf_url = @options['makerss.url'] || "#{@conf.base_url}index.rdf"
+	rdf_url = @conf['makerss.url'] || "#{@conf.base_url}index.rdf"
 	rdf_url = "#{@conf.base_url}index.rdf" if rdf_url.length == 0
 	%Q|\t<link rel="alternate" type="application/rss+xml" title="RSS" href="#{rdf_url}">\n|
 }
