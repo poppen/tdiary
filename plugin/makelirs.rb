@@ -1,4 +1,4 @@
-# makelirs.rb $Revision: 1.3 $
+# makelirs.rb $Revision: 1.4 $
 #
 # 更新情報をLIRSフォーマットのファイルに吐き出す
 #
@@ -18,6 +18,9 @@
 # Copyright (C) 2002 by Kazuhiro NISHIYAMA
 #
 =begin ChangeLog
+2003-03-08 Hiroyuki Ikezoe <zoe@kasumi.sakura.ne.jp>
+	* set TD. Thanks koyasu san.
+
 2002-10-28 zoe <zoe@kasumi.sakura.ne.jp>
 	* merge 1.4. Thanks koyasu san.
 
@@ -44,8 +47,10 @@ add_update_proc do
 	path = ENV['REQUEST_URI']
 	path = path[0..path.rindex("/")]
 	url =  @options['makelirs.url'] || "http://#{host}#{path}"
+	now = Time.now
+	utc_offset = (now.hour - now.utc.hour) * 3600
 
-	lirs = "LIRS,#{t.last_modified.tv_sec},#{Time.now.tv_sec},0,#{body.size},#{e[url]},#{e[@html_title]},#{e[@author_name]},,\n"
+	lirs = "LIRS,#{t.last_modified.tv_sec},#{Time.now.tv_sec},#{utc_offset},#{body.size},#{e[url]},#{e[@html_title]},#{e[@author_name]},,\n"
 	File::open( file, 'w' ) do |o|
 		o.puts lirs
 	end
