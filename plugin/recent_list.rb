@@ -1,4 +1,4 @@
-# $Revision: 1.7 $
+# $Revision: 1.8 $
 # recent_list: 最近書いた日記のタイトル，サブタイトルを表示する
 #   パラメタ(カッコ内は未指定時の値):
 #     days:            何日分の日記を表示するか(20)
@@ -23,7 +23,7 @@ end
 
 class Paragraph
 	def shorten(len = 120)
-		lines = NKF::nkf("-e -m0 -f#{len}", @body.gsub(/<.+?>/, '')).split("\n")
+		lines = NKF::nkf("-e -m0 -f" + len.to_s, @body.gsub(/<.+?>/, '')).split("\n")
 		lines[0].concat('...') if lines[0] and lines[1]
 		lines[0]
 	end
