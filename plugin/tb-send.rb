@@ -1,4 +1,4 @@
-# tb-send.rb $Revision: 1.15 $
+# tb-send.rb $Revision: 1.16 $
 #
 # Copyright (c) 2003 Junichiro Kita <kita@kitaj.no-ip.com>
 # You can distribute this file under the GPL.
@@ -53,7 +53,7 @@ add_update_proc do
 end
 
 def tb_send_trackback
-	urls = @cgi.params['plugin_tb_url'][0] || ''
+	urls = (@cgi.params['plugin_tb_url'][0] || '').split
 	title = @cgi.params['title'][0]
 	excerpt = @cgi.params['plugin_tb_excerpt'][0]
 	section = @cgi.params['plugin_tb_section'][0]
@@ -107,7 +107,6 @@ def tb_send_trackback
 				Net::HTTP.start( host.untaint, port.to_i ) do |http|
 					response, = http.post( request, trackback,
 						"Content-Type" => 'application/x-www-form-urlencoded')
-					
 					error, = response.body.scan(%r|<error>(\d)</error>|)[0]
 					if error == '1'
 						reason, = response.body.scan(%r|<message>(.*)</message>|m)[0]
@@ -117,6 +116,8 @@ def tb_send_trackback
 			rescue
 				raise TDiaryTrackBackError.new( "when sending TrackBack Ping: #{$!.message}" ) if urls.length == 1
 			end
+		else
+			raise TDiaryTrackBackError.new( "unknown URL: #{url}" ) if urls.length == 1
 		end
 	end
 end
