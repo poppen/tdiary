@@ -1,4 +1,4 @@
-# $Revision: 1.12 $
+# $Revision: 1.13 $
 # recent_list: 最近書いた日記のタイトル，サブタイトルを表示する
 #   パラメタ(カッコ内は未指定時の値):
 #     days:            何日分の日記を表示するか(20)
@@ -16,6 +16,9 @@
 # Distributed under the GPL
 #
 =begin ChengeLog
+2003-02-11 Junichiro Kita <kita@kitaj.no-ip.com>
+	* support for category. thanks to garsl<garsl@imasy.org> and yoshimi.
+
 2002-12-20 TADA Tadashi <sho@spc.gr.jp>
 	* use Plugin#apply_plugin.
 
@@ -70,17 +73,29 @@ def recent_list(days = 30, date_format = nil, title_with_body = nil, show_size =
 						result << ":#{s}"
 					end
 					result << %Q|</p>\n<div class="recentsubtitles">\n|
-
 					i = 1
-					m.diaries[date].each_section do |section|
-						if section.subtitle
-							result << %Q| <a href="#{@index}#{anchor "%s#p%02d" % [date, i]}"|
-							result << %Q| title="#{CGI::escapeHTML(section.shorten)}"| \
-								if title_with_body == true
-							result << %Q|>#{i}</a>. | \
-									<< %Q|#{section.subtitle}<br>\n|
+					if m.diaries[date].respond_to?(:categorizable?) and m.diaries[date].categorizable?
+						m.diaries[date].each_section do |section|
+							if section.stripped_subtitle
+								result << %Q| <a href="#{@index}#{anchor "%s#p%02d" % [date, i]}"|
+								result << %Q| title="#{CGI::escapeHTML(section.shorten)}"| \
+									if title_with_body == true
+								result << %Q|>#{i}</a>. | \
+										<< %Q|#{section.stripped_subtitle}<br>\n|
+							end
+							i += 1
 						end
-						i += 1
+					else
+						m.diaries[date].each_section do |section|
+							if section.subtitle
+								result << %Q| <a href="#{@index}#{anchor "%s#p%02d" % [date, i]}"|
+								result << %Q| title="#{CGI::escapeHTML(section.shorten)}"| \
+									if title_with_body == true
+								result << %Q|>#{i}</a>. | \
+										<< %Q|#{section.subtitle}<br>\n|
+							end
+							i += 1
+						end
 					end
 					result << "</div>\n"
 					days -= 1
@@ -91,4 +106,4 @@ def recent_list(days = 30, date_format = nil, title_with_body = nil, show_size =
 	}
 	apply_plugin( result )
 end
-
+# vim: ts=3

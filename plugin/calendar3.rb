@@ -1,4 +1,4 @@
-# calendar3.rb $Revision: 1.23 $
+# calendar3.rb $Revision: 1.24 $
 #
 # calendar3: 現在表示している月のカレンダーを表示します．
 #  パラメタ: なし
@@ -171,7 +171,7 @@ def calendar3
 			r = []
 			if @diaries[date].respond_to?(:categorizable?) and @diaries[date].categorizable?
 				@diaries[date].each_section do |section|
-					if section.stripped_subtitle != ""
+					if section.stripped_subtitle
 						text = apply_plugin( section.stripped_subtitle )
 						r << %Q|#{i}. #{text.gsub(/<.+?>/, '')}|
 					end
@@ -193,7 +193,7 @@ def calendar3
 				i = 1
 				if @diaries[date].respond_to?(:categorizable?) and @diaries[date].categorizable?
 					@diaries[date].each_section do |section|
-						if section.stripped_subtitle != ""
+						if section.stripped_subtitle
 							text = apply_plugin( section.to_src)
 							subtitle = apply_plugin( section.stripped_subtitle )
 							result << %Q|    <a href="#{@index}#{anchor "%s#p%02d" % [date, i]}" title="#{CGI::escapeHTML(Calendar3.shorten(text))}">#{i}</a>. #{subtitle}<br>\n|
