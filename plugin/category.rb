@@ -1,4 +1,4 @@
-# category.rb $Revision: 1.13 $
+# category.rb $Revision: 1.14 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -93,8 +93,8 @@ def category_list_sections
 HTML
 		@categorized[c].keys.sort.each do |ymd|
 			text = Time.local(ymd[0,4], ymd[4,2], ymd[6,2]).strftime(@conf.date_format)
-			@categorized[c][ymd].sort.each do |idx, title, content|
-				r << %Q|\t\t\t<a href="#{@conf.index}#{anchor "#{ymd}#p#{'%02d' % idx}"}" title="#{CGI.escapeHTML(@conf.shorten(apply_plugin(content, true)))}">#{text}#p#{'%02d' % idx}</a> #{apply_plugin(title)}<br>\n|
+			@categorized[c][ymd].sort.each do |idx, title, excerpt|
+				r << %Q|\t\t\t<a href="#{@conf.index}#{anchor "#{ymd}#p#{'%02d' % idx}"}" title="#{excerpt}">#{text}#p#{'%02d' % idx}</a> #{apply_plugin(title)}<br>\n|
 			end
 		end
 		r << <<HTML
@@ -485,7 +485,7 @@ text = apply_plugin(<<'BODY', true)
 BODY
 EVAL
 				shorten = begin
-					eval(body.untaint, @binding)
+					CGI.escapeHTML(@conf.shorten(eval(body.untaint, @binding)))
 				rescue NameError
 					""
 				end

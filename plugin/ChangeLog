@@ -1,3 +1,6 @@
+2004.03.16 Junichiro Kita <kita@kitaj.no-ip.com>
+	* category.rb: cache shorten body this time around. sumaso-
+
 2004.03.15 Junichiro Kita <kita@kitaj.no-ip.com>
 	* category.rb: add category_dropdown_list.
 	* */category.rb: escape category name by CGI.escapeHTML in category_title.
