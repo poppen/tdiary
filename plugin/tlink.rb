@@ -1,4 +1,4 @@
-# tlink.rb $Revision: 1.7 $
+# tlink.rb $Revision: 1.8 $
 #
 # title Â°À­ÉÕ anchor plugin
 #
@@ -20,6 +20,9 @@
 # Modified: by abbey <inlet@cello.no-ip.org>
 #
 =begin ChangeLog
+2002-07-01 NT <nt@24i.net>
+	* change some regular expressions.
+
 2002-05-18 NT <nt@24i.net>
 	* remove "," from %Q[<a href="#{url}", title="#{title}">#{str}</a>].
 
@@ -86,7 +89,7 @@ def tlink_getcomment( url )
   agent = { "User-Agent" => "DoCoMo (compatible; tDiary plugin; tlink; #{ref})" }
   host, path, frag = url.scan( %r[http://(.*?)/(.*)#((?:p|c)\d\d)] )[0]
   if /p0/ =~ frag
-    frag = "(" + frag + "|" + frag.sub( /p/, "p#" ).sub( /#0/, "#" ) + ")"
+    frag = "(?:" + frag + "|" + frag.sub( /p/, "p#" ).sub( /#0/, "#" ) + ")"
   end
   port = 80
   if /(.*):(\d+)/ =~ host
@@ -100,7 +103,7 @@ def tlink_getcomment( url )
     response , = http.get( "/#{path}", agent )
     response.body.each { |line|
       if %r[<A NAME="#{frag}] =~ line
-        if %r[<P><A NAME="p#?\d+">(?:.*?)</A> (.*?)</P>] =~ line.toeuc
+        if %r[<P><A NAME="#{frag}">(?:.*?)</A> (.*?)</P>] =~ line.toeuc
           result = $1
           break
         else
