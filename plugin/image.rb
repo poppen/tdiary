@@ -1,4 +1,4 @@
-# image.rb $Revision: 1.23 $
+# image.rb $Revision: 1.24 $
 # -pv-
 # 
 # Ì¾¾Î:
@@ -267,7 +267,7 @@ add_form_proc do |date|
 		</script>
 		]
 		case @conf.style.sub( /^blog/i, '' )
-		when /^wiki$/i
+                when /^wiki|markdown$/i
 			ptag1 = "{{"
 			ptag2 = "}}"
 		when /^rd$/i
