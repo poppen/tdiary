@@ -1,3 +1,7 @@
+2003-09-10 zunda <zunda at freeshell.org>
+	* disp_referrer.rb: Branch_disp_referrer-1 made on disp_referrer.rb.
+	* disp_referrer.rb: use -r Branch_disp_referrer-1 option for MUTOH-san's
+
 2003-09-07 Junichiro Kita <kita@kitaj.no-ip.com>
 	* random_google.rb: add
 
