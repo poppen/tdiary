@@ -1,4 +1,4 @@
-# nazo.rb $Revision: 1.1 $
+# nazo.rb $Revision: 1.2 $
 #
 # nazo: ジャンプ先のエレメントをハイライトする。
 #       通称「謎JavaScript。最終形態」
@@ -6,12 +6,12 @@
 #     color:      ハイライトの文字色(省略時:白)
 #     background: ハイライトの背景色(省略時:赤)
 #
-# See: http://kitaj.no-ip.com/rwiki/rw-cgi.rb?cmd=view;name=tDiary-FAQ-Tips-nazo
+# See: http://kitaj.no-ip.com/tDiary-FAQ/rw-cgi.rb?cmd=view;name=tDiary-FAQ-Tips-nazo
 #
 
 def nazo( color = '#fff', background = '#f00' )
 	<<-SCRIPT
-		<script language="JavaScript"><!--
+		<script language="JavaScript" type="text/javascript"><!--
 		var hiliteStyle = new Object();
 		hiliteStyle.color = "#{color}";
 		hiliteStyle.backgroundColor = "#{background}";
