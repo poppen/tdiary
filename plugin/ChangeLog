@@ -1,4 +1,7 @@
 2003-08-08 TADA Tadashi <sho@spc.gr.jp>
+	* search_form.rb: to valid HTML. thanks Kakutani.
+
+2003-08-08 TADA Tadashi <sho@spc.gr.jp>
 	* kw.rb: save as String to conf.
 
 2003-08-08 TADA Tadashi <sho@spc.gr.jp>
@@ -218,8 +221,26 @@
 2002-11-28 TADA Tadashi <sho@spc.gr.jp>
 	* HTML 4.01 Strict support.
 
+2002-10-13 MUTOH Masao <mutoh@highway.ne.jp>
+	* search_form.rb: Google検索で検索結果が文字化けする不具合の修正
+	* search_form.rb: Yahoo検索で検索ボックスの左側に画像を表示するようにした
+	* search_form.rb: Lycos検索削除（日本語の文字化けへの対応方法がわからなかったため）
+     All of them were pointed out by patagon.
+	* search_form.rb: version 1.0.2
+
 2002-09-01 Junichiro Kita <kita@kitaj.no-ip.com>
 	* change URL for images.
 
 2002-07-09 TADA Tadashi <sho@spc.gr.jp>
 	* follow chaging of title format in amazon.
+
+2002-05-19 MUTOH Masao <mutoh@highway.ne.jp>
+	* search_form.rb: ドキュメントアップデート
+	* search_form.rb: version 1.0.1
+
+2002-04-01 MUTOH Masao <mutoh@highway.ne.jp>
+	* search_form.rb: tab = 3, 文書の体裁を整えた
+
+2002-03-24 MUTOH Masao <mutoh@highway.ne.jp>
+	* search_form.rb: Namazu, Google, Yahoo!, Lycosの検索フォームをサポート
+	* search_form.rb: version 1.0.0
