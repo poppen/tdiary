@@ -27,4 +27,4 @@
 core Mail -s %{sVv} tdiary-cvs-core@lists.sourceforge.net
 theme Mail -s %{sVv} tdiary-cvs-theme@lists.sourceforge.net
 plugin Mail -s %{sVv} tdiary-cvs-plugin@lists.sourceforge.net
-DEFAULT Mail -s %{sVv} tdiary-cvs@lists.sourceforge.net
+DEFAULT Mail -s %{sVv} sho@spc.gr.jp
