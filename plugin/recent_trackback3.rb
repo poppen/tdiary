@@ -1,4 +1,4 @@
-# $Revision: 1.1 $
+# $Revision: 1.2 $
 # recent_trackback3: 最近のツッコミをリストアップする
 #
 # Options:
@@ -62,12 +62,8 @@ add_update_proc do
 		trackback = Comment.new(name, nil, body)
 		serial = 0
 		@diaries[@date.strftime('%Y%m%d')].each_visible_trackback( 100 ) {|tb| serial += 1}
-STDERR.puts trackback
-STDERR.puts @recent_trackback3_cache
 		PStore.new(@recent_trackback3_cache).transaction do |db|
-STDERR.puts db.root?('trackbacks')
 			db['trackbacks'] = Array.new(@recent_trackback3_cache_size) unless db.root?('trackbacks')
-STDERR.puts db['trackbacks'][0].nil?
 			if db['trackbacks'][0].nil? or trackback != db['trackbacks'][0][0]
 				db['trackbacks'].unshift([trackback, @date, serial]).pop
 			end
