@@ -1,4 +1,4 @@
-# calendar3.rb $Revision: 1.4 $
+# calendar3.rb $Revision: 1.5 $
 #
 # calendar3: 現在表示している月のカレンダーを表示します．
 #  パラメタ: なし
@@ -6,7 +6,7 @@
 # tdiary.confで指定するオプション:
 #   @options['calendar3.erb']
 #     title属性に渡す文字列をERbLightで評価するかどうか (true/false)
-#     (省略時: false) 
+#     (省略時: true) 
 #
 # Copyright (c) 2001,2002 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -69,6 +69,11 @@ module Calendar3
 end
 
 def calendar3
+	if @options.has_key? 'calendar3.erb'
+		extra_erb = @options['calendar3.erb']
+	else
+		extra_erb = true
+	end
 	result = ''
 	/(\d\d\d\d)(\d\d)(\d\d)/ === @diaries.keys.sort.reverse[0]
 	year = $1.to_i
@@ -88,12 +93,12 @@ def calendar3
 			r = []
 			@diaries[date].each_paragraph do |paragraph|
 				if paragraph.subtitle
-					if @options['calendar3.erb']
-						str = ERbLight.new(paragraph.subtitle.untaint).result(binding)
+					if extra_erb
+						text = ERbLight.new(paragraph.subtitle.untaint).result(binding)
 					else
-						str = paragraph.subtitle
+						text = paragraph.subtitle
 					end
-					r << %Q|#{i}. #{str.gsub(/<.+?>/, '')}|
+					r << %Q|#{i}. #{text.gsub(/<.+?>/, '')}|
 				end
 				i += 1
 			end
@@ -104,12 +109,14 @@ def calendar3
 				i = 1
 				@diaries[date].each_paragraph do |paragraph|
 					if paragraph.subtitle
-						if @options['calendar3.erb']
-							str = ERbLight.new(paragraph.text.untaint).result(binding)
+						if extra_erb
+							text = ERbLight.new(paragraph.text.untaint).result(binding)
+							subtitle = ERbLight.new(paragraph.subtitle.untaint).result(binding)
 						else
-							str = paragraph.text
+							text = paragraph.text
+							subtitle = paragraph.subtitle
 						end
-						result << %Q|    <a href="#{@index}#{anchor "%s#p%02d" % [date, i]}" title="#{CGI::escapeHTML(Calendar3.shorten(str))}">#{i}</a>. #{paragraph.subtitle}<br>\n|
+						result << %Q|    <a href="#{@index}#{anchor "%s#p%02d" % [date, i]}" title="#{CGI::escapeHTML(Calendar3.shorten(text))}">#{i}</a>. #{subtitle}<br>\n|
 					end
 					i += 1
 				end
