@@ -1,4 +1,4 @@
-# calendar2.rb $Revision: 1.12 $
+# calendar2.rb $Revision: 1.13 $
 #
 # calendar2: どこかで見たようなカレンダーを日記に追加する
 #   パラメタ:
@@ -76,7 +76,7 @@ def calendar2(days_format = nil, nav_format = nil, show_todo = nil)
  	days_format ||= "日月火水木金土".split(//)
 	nav_format ||= ["前", "%d年<br>%d月", "次"]
 
-	return '' if /TAMATEBAKO/ =~ ENV["HTTP_USER_AGENT"]
+	return '' if /TAMATEBAKO/ =~ @cgi.user_agent
 	date = if @mode == "latest"
 				Time.now
 			else

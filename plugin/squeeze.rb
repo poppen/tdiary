@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 $KCODE = 'n'
 
-# squeeze.rb $Revision: 1.18 $
+# squeeze.rb $Revision: 1.19 $
 #
 # Create daily HTML file from tDiary database.
 #
@@ -113,7 +113,9 @@ $KCODE= 'e'
 
 mode = ""
 if $0 == __FILE__
-	mode = ENV["REQUEST_METHOD"]? "CGI" : "CMD"
+	require 'cgi'
+	@cgi = CGI::new
+	mode = @cgi.request_method ? "CGI" : "CMD"
 else
 	mode = "PLUGIN"
 end
@@ -129,7 +131,7 @@ if mode == "CMD" || mode == "CGI"
 
 	if mode == "CMD"
 		def usage
-			puts "squeeze $Revision: 1.18 $"
+			puts "squeeze $Revision: 1.19 $"
 			puts " making html files from tDiary's database."
 			puts " usage: ruby squeeze.rb [-p <tDiary path>] [-c <tdiary.conf path>] [-a] [-s] [-x suffix] <dest path>"
 			exit
@@ -281,14 +283,16 @@ if mode == "CGI" || mode == "CMD"
 			</head>
 			<body><div style="text-align:center">
 			<h1>Squeeze for tDiary</h1>
-			<p>$Revision: 1.18 $</p>
+			<p>$Revision: 1.19 $</p>
 			<p>Copyright (C) 2002 MUTOH Masao&lt;mutoh@highway.ne.jp&gt;</p></div>
 			<br><br>Start!</p><hr>
 		]
 	end
 
 	begin
-		conf = TDiary::Config::new
+		require 'cgi'
+		cgi = CGI.new
+		conf = TDiary::Config::new(cgi)
 		conf.header = ''
 		conf.footer = ''
 		conf.show_comment = true

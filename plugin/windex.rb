@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby-1.6
 $KCODE = 'n'
 
-# windex.rb $Revision: 1.4 $
+# windex.rb $Revision: 1.5 $
 #
 # windex: 索引を生成する
 #   パラメタ:
@@ -475,7 +475,7 @@ if mode != "CGI"
 	end
 else
 	cgi = CGI.new
-	conf = TDiary::Config.new
+	conf = TDiary::Config.new(cgi)
 	cache_path = conf.data_path + "cache"
 	plugin = WITDiary.new(cgi,"day.rhtml",conf).load_plugins
 

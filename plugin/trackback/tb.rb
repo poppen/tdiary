@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# tb.rb $Revision: 1.9 $
+# tb.rb $Revision: 1.10 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -20,7 +20,7 @@ begin
 	require 'tdiary'
   
 	@cgi = CGI::new
-	conf = TDiary::Config::new
+	conf = TDiary::Config::new(@cgi)
 	tdiary = nil
 
 	begin

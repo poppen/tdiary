@@ -1,4 +1,4 @@
-# calendar3.rb $Revision: 1.37 $
+# calendar3.rb $Revision: 1.38 $
 #
 # calendar3: 現在表示している月のカレンダーを表示します．
 #  パラメタ: なし
@@ -222,7 +222,7 @@ end
 if @options.has_key?('calendar3.show_popup')
 	@calendar3_show_popup = @options['calendar3.show_popup']
 end
-if /w3m|MSIE.*Mac/ === ENV["HTTP_USER_AGENT"]
+if /w3m|MSIE.*Mac/ === @cgi.user_agent
 	@calendar3_show_popup = false
 	add_header_proc do
     <<JAVASCRIPT

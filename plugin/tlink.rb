@@ -1,4 +1,4 @@
-# tlink.rb $Revision: 1.15 $
+# tlink.rb $Revision: 1.16 $
 #
 # title Â°À­ÉÕ anchor plugin
 #
@@ -142,7 +142,7 @@ def tlink( url, str, title = nil )
     elsif @tlink_dic[url] && %r[#(p|c)\d\d$] !~ url
       title = @tlink_dic[url]
     else
-      if url =~ ENV["REDIRECT_URL"] && url =~ @date.strftime('%Y%m%d')
+      if url =~ @cgi.redirect_url && url =~ @date.strftime('%Y%m%d')
       else
         title = tlink_getcomment( url )
         @tlink_dic[url] = title

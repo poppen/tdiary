@@ -1,4 +1,4 @@
-# counter.rb $Revision: 1.20 $
+# counter.rb $Revision: 1.21 $
 #
 # Access counter plugin.
 #
@@ -156,7 +156,7 @@ def counter_allow?
 end
 
 if ["latest", "month", "day"].include?(@mode) and 
-	ENV['REQUEST_METHOD'] == 'GET' and counter_allow?
+	@cgi.request_method == 'GET' and counter_allow?
 
 require 'date'
 require 'pstore'
