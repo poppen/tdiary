@@ -1,4 +1,4 @@
-# counter.rb $Revision: 1.16 $
+# counter.rb $Revision: 1.17 $
 # -pv-
 #
 # Ì¾¾Î¡§
@@ -71,6 +71,9 @@
 # You can redistribute it and/or modify it under GPL2.
 # 
 =begin ChangeLog
+2002-11-26 Junichiro Kita <kita@kitaj.no-ip.com>
+	* remove 'cgi.cookies = nil' in TDiaryCounter::main
+
 2002-11-19 TADA Tadashi <sho@spc.gr.jp>
 	* for squeeze.rb error more.
 	* version 1.6.2
@@ -282,7 +285,6 @@ module TDiaryCounter
 			end
             unless @cnt
               @cnt = TDiaryCountData.new
-              cgi.cookies = nil
             end
 
 			allow = (cgi.user_agent !~ /tlink/ and
