@@ -1,3 +1,7 @@
+2004-07-27 zunda <zunda at freeshell.org>
+	* ja/referer_scheme.rb: HatenaHost remended, thanks to Kakutani-san
+	<shintaro at kakutani.com>.
+
 2004-07-19 Junichiro Kita <kita@kitaj.no-ip.com>
 	* makelirs.rb: fix errors when user agent is mobile.
 

@@ -1,5 +1,5 @@
 =begin
-= Meta-scheme plugin((-$Id: referer_scheme.rb,v 1.6 2004-02-26 08:09:24 tadatadashi Exp $-))
+= Meta-scheme plugin((-$Id: referer_scheme.rb,v 1.7 2004-07-27 18:54:47 zunda Exp $-))
 本日のリンク元置換リストの記述を楽にします。
 
 == 利用方法
@@ -64,7 +64,7 @@ end
 
 unless @conf.referer_table.respond_to?( 'scheme_hatena', true ) then
 	class << @conf.referer_table
-		HatenaHost = 'http://d.hatena.ne.jp/'
+		HatenaHost = 'http://d(?:iary)?.hatena.ne.jp/'
 		def scheme_hatena( url, name )
 			[
 				['(\d{4})(\d{2})(\d{2}).*', '(\1-\2-\3)'],
