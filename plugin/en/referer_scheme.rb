@@ -1,5 +1,5 @@
 =begin
-= Meta-scheme plugin((-$Id: referer_scheme.rb,v 1.2 2003-12-16 18:32:41 zunda Exp $-))
+= Meta-scheme plugin((-$Id: referer_scheme.rb,v 1.3 2003-12-17 08:22:56 zunda Exp $-))
 Makes it easier to edit the referer table.
 
 == Usage
@@ -24,9 +24,9 @@ For URLs with tdiary:,
 == How to make a meta-scheme
 Meta-schems are extracted from the user's Rule with a Regexp: /^(\w+):/.
 Define singleton methods of @conf.referer_table as iterators:
-  def scheme_<scheme>( url, name, block )
+  def scheme_<scheme>( url, name )
     :
-    block.call( url_variants, name_variants )
+    yield( url_variants, name_variants )
     :
   end
 The singleton methods are called according to the user's Rule with the

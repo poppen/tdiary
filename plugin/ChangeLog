@@ -1,3 +1,6 @@
+2003-12-17 zunda <zunda at freeshell.org>
+	* referer_scheme.rb: updated documentation in the lang. resources
+
 2003-12-16 zunda <zunda at freeshell.org>
 	* referer_scheme.rb: new plug-in to expand referer_table. Idea by akira yamada <akira at akira.org>, doesn't work with ruby 1.6.7 ;(
 	* referer_scheme.rb: now works on ruby 1.6.7. thanks Minero Aoki <aamine at loveruby.net>

@@ -1,5 +1,5 @@
 =begin
-= Meta-scheme plugin((-$Id: referer_scheme.rb,v 1.2 2003-12-16 18:32:42 zunda Exp $-))
+= Meta-scheme plugin((-$Id: referer_scheme.rb,v 1.3 2003-12-17 08:22:56 zunda Exp $-))
 本日のリンク元置換リストの記述を楽にします。
 
 == 利用方法
@@ -31,9 +31,9 @@ tdiarynet:やhatena:で始まるURLは、
 == メタ・スキームの作り方
 リンク元置換リストのURLの正規表現の文字列に対して、/^(\w+):/という正規表
 現で一致する文字列がメタ・スキームとして検出されます。
-  def scheme_スキーム名( url, name, block )
+  def scheme_スキーム名( url, name )
     :
-    block.call( url_variants, name_variants )
+    yield( url_variants, name_variants )
     :
   end
 という@conf.referer_tableの特異メソッドをイテレータとして定義しておけば、
