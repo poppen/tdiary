@@ -1,4 +1,4 @@
-# $Revision: 1.6 $
+# $Revision: 1.7 $
 # recent_list: 最近書いた日記のタイトル，サブタイトルを表示する
 #   パラメタ(カッコ内は未指定時の値):
 #     days:            何日分の日記を表示するか(20)
@@ -45,7 +45,7 @@ def recent_list(days = 30, date_format = nil, title_with_body = nil, show_size =
 				m = TDiaryMonth::new(cgi, '')
 				m.diaries.keys.sort.reverse_each do |date|
 					next unless m.diaries[date].visible?
-					result << %Q|<p class="recentitem"><a href="#{@index}?date=#{date}">#{m.diaries[date].date.strftime(date_format)}</a>\n|
+					result << %Q|<p class="recentitem"><a href="#{@index}#{anchor date}">#{m.diaries[date].date.strftime(date_format)}</a>\n|
 					if show_title and m.diaries[date].title
 						result << %Q| #{m.diaries[date].title}|
 					end
@@ -61,7 +61,7 @@ def recent_list(days = 30, date_format = nil, title_with_body = nil, show_size =
 					i = 1
 					m.diaries[date].each_paragraph do |paragraph|
 						if paragraph.subtitle
-							result << %Q| <a href="#{@index}?date=#{date}#p#{'%02d' % i}"|
+							result << %Q| <a href="#{@index}#{anchor "%s#p%02d" % [date, i]}"|
 							result << %Q| title="#{CGI::escapeHTML(paragraph.shorten)}"| \
 								if title_with_body == true
 							result << %Q|>#{i}</a>. | \
