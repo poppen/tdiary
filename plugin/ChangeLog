@@ -1,3 +1,6 @@
+2004-02-24 TADA Tadashi <sho@spc.gr.jp>
+	* referer_scheme.rb: a little modify about wiki scheme.
+
 2004-02-22  Kazuhiko  <kazuhiko@fdiary.net>
 	* output_rdf.rb: catch exception of 'File::mtime( rdf_file )'
 

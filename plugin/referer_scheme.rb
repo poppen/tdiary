@@ -1,5 +1,5 @@
 =begin
-= Meta-scheme plugin((-$Id: referer_scheme.rb,v 1.5 2003-12-17 15:59:22 zunda Exp $-))
+= Meta-scheme plugin((-$Id: referer_scheme.rb,v 1.6 2004-02-24 10:25:48 tadatadashi Exp $-))
 Enables to prefix `meta' schemes to URL regexp of the refer_table. See
 #{lang}/referer_scheme.rb for a documentation.
 
@@ -49,7 +49,7 @@ unless @conf.referer_table.respond_to?( 'scheme_wiki', true ) then
 	class << @conf.referer_table
 		private
 		def scheme_wiki( url, name )
-			['\?(.*)$', '([^/]+)\/$'].each do |p|
+			['\?(.*)$', '([^/]+)\/?$'].each do |p|
 				yield( "#{url}#{p}", '\1 - ' + name )
 			end
 			yield( url, name )
