@@ -1,13 +1,8 @@
-# makelirs.rb $Revision: 1.9 $
+# makelirs.rb $Revision: 1.10 $
 #
 # 更新情報をLIRSフォーマットのファイルに吐き出す
 #
 #   pluginディレクトリに置くだけで動作します。
-#
-#   サーバのポートが80番以外であったり，SSLを用いてアクセスする場合は
-#   tdiary.conf で @options['makelirs.url'] を設定してください．
-#   例）
-#   @options['makelirs.url'] = 'https://example.net:8080/diary/'
 #
 #   tdiary.confにおいて、@options['makelirs.file']に
 #   ファイル名を指定すると、そのファイルを出力先の
@@ -74,11 +69,10 @@ if /^(append|replace|comment|trackbackreceive)$/ =~ @mode then
 	# escape comma
 	e = proc{|str| str.gsub(/[,\\]/) { "\\#{$&}" } }
 
-	url =  @options['makelirs.url'] || @conf.base_url
 	now = Time.now
 	utc_offset = now.utc_offset
 
-	lirs = "LIRS,#{t.last_modified.tv_sec},#{Time.now.tv_sec},#{utc_offset},#{body.size},#{e[url]},#{e[@html_title]},#{e[@author_name]},,\n"
+	lirs = "LIRS,#{t.last_modified.tv_sec},#{Time.now.tv_sec},#{utc_offset},#{body.size},#{e[@conf.base_url]},#{e[@html_title]},#{e[@author_name]},,\n"
 	File::open( file, 'w' ) do |o|
 		o.puts lirs
 	end
