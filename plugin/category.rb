@@ -1,4 +1,4 @@
-# category.rb $Revision: 1.1 $
+# category.rb $Revision: 1.2 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -9,19 +9,20 @@ def category_form_month_label; "月"; end
 def category_form_submit_label; "カテゴリ別表示"; end
 
 def category_form
-	r = <<FORM
-<form method="get" action="#{@index}">
-<select name="year">
-FORM
+	r = <<-FORM
+		<div class="adminmenu">
+		<form method="get" action="#{@index}"><div><span class="adminmenu">
+		<select name="year">
+	FORM
 	year = @year || @date.year
 	@years.keys.sort.each do |y|
 		r << %Q|<option value="#{y}"#{(y == year.to_s) ? " selected" : ""}>#{y}</option>\n|
 	end
-	r << <<FORM
-</select>
-#{category_form_year_label}
-<select name="month">
-FORM
+	r << <<-FORM
+		</select>
+		#{category_form_year_label}
+		<select name="month">
+	FORM
 	if @cgi.valid?('month')
 		month = @cgi['month'][0]
 	else
@@ -34,13 +35,14 @@ FORM
 		m = '%02d' % m
 		r << %Q|<option value="#{m}"#{(m == month) ? " selected" : ""}>#{m}</option>\n|
 	end
-	r << <<FORM
-</select>
-#{category_form_month_label}
-<input type="hidden" name="category" value="ALL">
-<input type="submit" value="#{category_form_submit_label}">
-</form>
-FORM
+	r << <<-FORM
+		</select>
+		#{category_form_month_label}
+		<input type="hidden" name="category" value="ALL">
+		<input type="submit" value="#{category_form_submit_label}">
+		</span></div></form>
+		</div>
+	FORM
 end
 
 def category_anchor(cname)
