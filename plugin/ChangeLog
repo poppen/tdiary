@@ -1,3 +1,6 @@
+2003-10-09  Kazuhiko  <kazuhiko@fdiary.net>
+	* comment_mail-qmail.rb: add "-f #{@conf.author_mail.untaint}"
+
 2003-10-09 TADA Tadashi <sho@spc.gr.jp>
 	* referer-antibot.rb: support 'bot?' method and English document.
 
