@@ -1,4 +1,4 @@
-# tb-show.rb $Revision: 1.17 $
+# tb-show.rb $Revision: 1.18 $
 #
 # functions:
 #   * show TrackBack ping URL in right of TSUKKOMI label.
@@ -48,6 +48,7 @@ end
 #
 # make RDF
 #
+if @mode == 'day'
 add_body_leave_proc do |date|
 	if @tb_url and @diaries[@tb_date.strftime('%Y%m%d')] then
 		<<-TBRDF
@@ -66,6 +67,7 @@ add_body_leave_proc do |date|
 	else
 		''
 	end
+end
 end
 
 #

@@ -1,3 +1,6 @@
+2003-09-27 Junichiro Kita <kita@kitaj.no-ip.com>
+	* trackback/tb-show.rb: make RDF only when @mode == 'day'.
+
 2003-09-26 TADA Tadashi <sho@spc.gr.jp>
 	* select_plugins.rb: enable running on ruby 1.6.5. again.
 
