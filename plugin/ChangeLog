@@ -1,3 +1,7 @@
+2004-05-28  Masao Mutoh  <mutoh@highway.ne.jp>
+	* search_form.rb: Fix a wrong anchor for Yahoo Japan.
+	Reported by michieru.
+
 2004-06-02 zunda <zunda at freeshell.org>
 	* ja/disp_referrer.rb, en/disp_referrer.rb: constants tainted to be used under secure diaries and ruby-1.6.x. Thanks Kazuhiko.
 

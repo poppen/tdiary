@@ -1,4 +1,4 @@
-# search_form.rb $Revision: 1.7 $
+# search_form.rb $Revision: 1.8 $
 #
 # Show a form for search engines.
 #
@@ -42,7 +42,7 @@ def googlej_form(button_name = "Google ¸¡º÷", size = 20, default_text = "")
 end
 
 def yahooj_form(button_name = "Yahoo! ¸¡º÷", size = 20, default_text = "")
-	first = %Q[<a href="http://www.google.com/">
+	first = %Q[<a href="http://www.yahoo.co.jp/">
 		<img src="http://img.yahoo.co.jp/images/yahoojp_sm.gif" 
 			style="border-width: 0px; vertical-align: middle;" alt="Yahoo! JAPAN"></a>]
 	search_form("http://search.yahoo.co.jp/bin/search", "p", button_name, size, default_text, first, "")
