@@ -1,4 +1,4 @@
-# image.rb $Revision: 1.18 $
+# image.rb $Revision: 1.19 $
 # -pv-
 # 
 # 名称:
@@ -286,10 +286,18 @@ add_form_proc do |date|
 		tmp = ''
 	   images.each_with_index do |img,id|
 			next unless img
-			img_type, img_w, img_h = open(File.join(@image_dir,img).untaint, 'r') {|f| image_info(f)}
+			if @conf.secure then
+				img_type, img_w, img_h = 'jpg', nil, nil
+			else
+				img_type, img_w, img_h = open(File.join(@image_dir,img).untaint, 'r') {|f| image_info(f)}
+			end
 			r << %Q[<td><img class="form" src="#{@image_url}/#{img}" alt="#{id}" width="#{(img_w && img_w > 160) ? 160 : img_w}"></td>]
 			ptag = "#{ptag1}image #{id}, '画像の説明', nil, #{img_w && img_h ? '['+img_w.to_s+','+img_h.to_s+']' : 'nil'}#{ptag2}"
-			img_info = "#{File.size(File.join(@image_dir,img).untaint).to_s.reverse.gsub( /\d{3}/, '\0,' ).sub( /,$/, '' ).reverse} bytes"
+			if @conf.secure then
+				img_info = ''
+			else
+				img_info = "#{File.size(File.join(@image_dir,img).untaint).to_s.reverse.gsub( /\d{3}/, '\0,' ).sub( /,$/, '' ).reverse} bytes"
+			end
 			if img_type && img_w && img_h
 				img_info << "<br>#{img_w} x #{img_h} (#{img_type})"
 			end

@@ -1,3 +1,7 @@
+2003-10-13  Kazuhiko  <kazuhiko@fdiary.net>
+
+	* image.rb: revise for @conf.secure.
+
 2003-10-13 Junichiro Kita <kita@kitaj.no-ip.com>
 	* image.rb: support ruby1.8.
 
