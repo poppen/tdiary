@@ -1,3 +1,6 @@
+2003-05-11 TADA Tadashi <sho@spc.gr.jp>
+	* amazon.rb: escapeHTML strings from amazon.
+
 2003-05-11 Junichiro Kita <kita@kitaj.no-ip.com>
 	* tb.rb: use day.rhtml to do some plugin task.
 
