@@ -1,4 +1,4 @@
-# ping.rb: $Revision: 1.3 $
+# ping.rb: $Revision: 1.4 $
 #
 # ping to weblog ping servers.
 #
@@ -13,7 +13,7 @@ add_update_proc do
 end
 
 def ping( list )
-	return unless @cgi['plugin_ping_send'][0] == 'true'
+	return unless @cgi.params['plugin_ping_send'][0] == 'true'
 
 	xml = @ping_encoder.call( <<-XML )
 <?xml version="1.0" encoding="#{@ping_encode}"?>

@@ -1,3 +1,6 @@
+2004-06-12  Kazuhiko  <kazuhiko@fdiary.net>
+	* ping.rb: use cgi.params['key'][0] instead of cgi['key'][0]
+
 2004-06-11 TADA Tadashi <sho@spc.gr.jp>
 	* ping.rb: fix error when no @options['ping.list'].
 
