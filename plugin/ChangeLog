@@ -1,3 +1,7 @@
+2003-11-13 TADA Tadashi <sho@spc.gr.jp>
+	* nazo.rb: removed.
+	* highlight.rb: nazo.rb modified and added. thanks to ZnZ <zn@mbf.nifty.com>
+
 2003-11-11  Kazuhiko  <kazuhiko@fdiary.net>
 	* comment_rank.rb: fix XSS.
 
