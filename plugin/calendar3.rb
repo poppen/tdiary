@@ -1,4 +1,4 @@
-# calendar3.rb $Revision: 1.17 $
+# calendar3.rb $Revision: 1.18 $
 #
 # calendar3: 現在表示している月のカレンダーを表示します．
 #  パラメタ: なし
@@ -41,6 +41,8 @@
 # }
 #
 =begin ChengeLog
+2003-01-07 MURAI Kensou <murai@dosule.com>
+	* modify javascript for popdown-delay
 2002-12-20 TADA Tadashi <sho@spc.gr.jp>
 	* use Plugin#apply_plugin.
 =end
@@ -193,6 +195,8 @@ add_header_proc do
   _dom = document.all?(document.getElementById?2:1)
                      :(document.getElementById?4
                      :(document.layers?3:0));
+  var _calendar3_popElement = null;
+  var _calendar3_popCount = 0;
 
   function moveDivTo(div,left,top){
     if(_dom==4){
@@ -262,6 +266,8 @@ add_header_proc do
   }
 
   function popup(target,element,notitle) {
+    _calendar3_popCount++;
+    popdownNow();
     if (navigator.appName=='Microsoft Internet Explorer') {
       moveDivTo(element,getDivLeft(target)+getDivWidth(target),getDivTop(target)+getDivHeight(target)*13/8);
     } else {
@@ -272,7 +278,22 @@ add_header_proc do
   }
 
   function popdown(element) {
-    element.style.display="none";
+    _calendar3_popElement=element;
+    setTimeout('popdownDelay()', 2000);
+  }
+
+  function popdownDelay() {
+    _calendar3_popCount--;
+    if (_calendar3_popCount==0) {
+      popdownNow();
+    }
+  }
+
+  function popdownNow() {
+    if (_calendar3_popElement!=null) {
+      _calendar3_popElement.style.display="none";
+      _calendar3_popElement=null;
+    }
   }
 </script>
 JAVASCRIPT
