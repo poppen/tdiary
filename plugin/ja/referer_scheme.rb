@@ -1,5 +1,5 @@
 =begin
-= Meta-scheme plugin((-$Id: referer_scheme.rb,v 1.4 2003-12-17 13:48:46 zunda Exp $-))
+= Meta-scheme plugin((-$Id: referer_scheme.rb,v 1.5 2004-02-01 13:30:30 tadatadashi Exp $-))
 本日のリンク元置換リストの記述を楽にします。
 
 == 利用方法
@@ -71,4 +71,12 @@ class << @conf.referer_table
 		yield( "#{HatenaHost}#{url}/.*", name )
 	end
 
+	def scheme_cocolog( url, name )
+		[  
+			['(\d{4})/(\d\d)/post_(\d+).html', '(\1-\2[\3])'],
+		].each do |a|
+			yield( "http://[^\.]+\.cocolog-nifty.com/#{url}/#{a[0]}", name + a[1] )
+		end
+		yield( "http://[^\.]+\.cocolog-nifty.com/#{url}/.*", name )
+	end
 end
