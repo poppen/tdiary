@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.3 $
+# amazon.rb $Revision: 1.4 $
 #
 # isbn_image_left: 指定したISBNの書影をclass="left"で表示
 #   パラメタ:
@@ -49,7 +49,6 @@
 require 'net/http'
 require 'timeout'
 
-private :getAmazon
 def getAmazon( asin )
 
 	cache = "#{@cache_path}/amazon"
@@ -136,7 +135,6 @@ def amazonNoImg(item_url,item_name)
 	%Q[<a href="#{item_url.strip}">#{item_name.strip}</a>]
 end
 
-private :getAmazonImg
 def getAmazonImg(position,asin,comment)
 	begin
 
