@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# xmlrpc.rb $Revision: 1.4 $
+# xmlrpc.rb $Revision: 1.5 $
 #
 # Copyright (c) 2004 MoonWolf <moonwolf@moonwolf.com>
 # Distributed under the GPL
@@ -144,6 +144,43 @@ server.add_handler('blogger.editPost') do |appkey, postid, username, password, c
 end
 
 server.add_handler('blogger.deletePost') do |appkey, postid, username, password, publish|
+  ENV['REQUEST_METHOD'] = 'POST'
+  @cgi = CGI::new
+  conf = ::TDiary::Config::new(@cgi)
+  unless username==euctou8(conf['xmlrpc.username']) && password==euctou8(conf['xmlrpc.password'])
+    raise XMLRPC::FaultException.new(1,'userid or password incorrect')
+  end
+  begin
+    year, month, day, index = postid.scan(/(\d{4})(\d\d)(\d\d)(\d\d)/)[0]
+    index = index.to_i
+    @cgi.params['date']  = [postid[0,8]]
+    tdiary = ::TDiary::TDiaryDay::new( @cgi, "day.rhtml", conf )
+    time = Time::local( year, month, day ) + 12*60*60
+    diary = tdiary[time]
+    
+    diary.delete_section(index)
+    src = diary.to_src
+    
+    ENV['REQUEST_METHOD'] = 'POST'
+    @cgi.params.delete 'date'
+    @cgi.params['old']   = [postid[0,8]]
+    @cgi.params['hide']  = diary.visible? ? [] : ['true']
+    @cgi.params['title'] = [diary.title]
+    @cgi.params['year']  = [postid[0..3]]
+    @cgi.params['month'] = [postid[4..5]]
+    @cgi.params['day']   = [postid[6..7]]
+    @cgi.params['body']  = [src]
+    tdiary = ::TDiary::TDiaryReplace::new( @cgi, 'show.rhtml', conf )
+    body = tdiary.eval_rhtml
+    true
+  rescue ::TDiary::ForceRedirect => redirect
+    true
+  rescue Exception
+    raise XMLRPC::FaultException.new(1,$!.to_s + "\n" + $!.backtrace.join("\n"))
+  end
+end
+
+server.add_handler('blogger.deletePost') do |appkey, postid, username, password|
   ENV['REQUEST_METHOD'] = 'POST'
   @cgi = CGI::new
   conf = ::TDiary::Config::new(@cgi)
@@ -520,6 +557,7 @@ server.add_handler('mt.getPostCategories') do |postid, username, password|
 end
 
 server.add_handler('mt.setPostCategories') do |postid, username, password, categories|
+  STDERR.puts categories.inspect
   @cgi = CGI::new
   conf = ::TDiary::Config::new(@cgi)
   unless username==euctou8(conf['xmlrpc.username']) && password==euctou8(conf['xmlrpc.password'])
