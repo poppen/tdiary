@@ -1,4 +1,4 @@
-# footnote.rb $Revision: 1.3 $
+# footnote.rb $Revision: 1.4 $
 #
 # fn: 脚注plugin
 #   パラメタ:
@@ -43,6 +43,8 @@ add_body_enter_proc(Proc.new do |date|
 	@footnote_url.replace "#{@index}#{anchor date}##{@footnote_name}"
 	@footnote_mark_name.replace "fm%02d"
 	@footnote_mark_url.replace "#{@index}#{anchor date}##{@footnote_mark_name}"
+	@footnotes.clear
+	@footnote_index[0] = 0
 	""
 end)
 
