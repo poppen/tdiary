@@ -1,3 +1,7 @@
+2003-08-26 zunda <zunda at freeshell.org>
+	* search_control.rb: added
+	* 01_select_plugins.rb: added
+
 2003-08-24 Junichiro Kita <kita@kitaj.no-ip.com>
         * output_rdf.rb: use @date
 
