@@ -1,3 +1,6 @@
+2003-11-10 Junichiro Kita <kita@kitaj.no-ip.com>
+	* tb-show.rb: fix XSS.
+
 2003-11-10 TADA Tadashi <sho@spc.gr.jp>
 	* tb-send.rb: i18n, but not support UTF-8.
 	* tb-show.rb, trackback/tb.rb: i18n.
