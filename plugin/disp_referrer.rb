@@ -1,4 +1,4 @@
-# disp_referrer.rb $Revision: 1.25 $
+# disp_referrer.rb $Revision: 1.26 $
 # -pv-
 #
 # 名称：
@@ -33,6 +33,7 @@
    * はてなアンテナはデフォルトでリファラを解析するようにした。
    * @options["disp_referrer.no_antenna"]導入。アンテナを別カテゴリにしない
      従来通りの表示方法にしたい場合はtrueを指定する。
+   * @options["disp_referrer.antenna_table"]導入。
    * version 2.4.0
 
 2003-05-06 MUTOH Masao <mutoh@highway.ne.jp>
