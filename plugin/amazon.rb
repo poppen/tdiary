@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.14 $
+# amazon.rb $Revision: 1.15 $
 #
 # isbn_image_left: 指定したISBNの書影をclass="left"で表示
 #   パラメタ:
@@ -83,10 +83,6 @@ def getAmazon( asin )
 
 	limittime = 10
 
-	host = 'www.amazon.co.jp'
-	path = "/exec/obidos/ASIN/#{asin}"
-	port = '80'
-
 	proxy_host = nil
 	proxy_port = 8080
 	if /^([^:]+):(\d+)$/ =~ @options['amazon.proxy'] then
@@ -102,12 +98,22 @@ def getAmazon( asin )
 	img_width = nil
 
 	timeout( limittime ) do
-		begin
-			Net::HTTP.Proxy( proxy_host.untaint, proxy_port.untaint ).start( host.untaint, port.untaint ) do |http|
+		item_url = "http://www.amazon.co.jp/exec/obidos/ASIN/#{asin}"
 
-				response , = http.get(path)
+		begin
+			if %r|http://([^:/]*):?(\d*)(/.*)| =~ item_url then
+				host = $1
+				port = $2.to_i
+				path = $3
+				raise 'not amazon domain' if host !~ /\.amazon\.(com|co\.uk|co\.jp|de|fr)$/
+				raise 'bad location was returned.' unless host and path
+				port = 80 if port == 0
+			end
+			Net::HTTP.version_1_1
+			Net::HTTP.Proxy( proxy_host.untaint, proxy_port.untaint ).start( host.untaint, port.untaint ) do |http|
+				response, = http.get( path )
 				response.body.each do |line|
-					line = NKF::nkf("-e",line)
+					line = NKF::nkf( "-e", line )
 					if line =~ /^Amazon.co.jp： (.*)<.*$/
 						item_name = CGI::escapeHTML(CGI::unescapeHTML($1))
 					end
@@ -121,21 +127,12 @@ def getAmazon( asin )
 						if img_tag =~ / height="?(\d+)"?/i
 							img_height = $1
 						end
-
 					end
 				end
 			end
 		rescue Net::ProtoRetriableError => err
 			item_url = err.response['location']
-			if %r|http://([^:/]*):?(\d*)(/.*)| =~ item_url then
-				host = $1
-				port = $2.to_i
-				path = $3
-				raise 'not amazon domain' if host !~ /\.amazon\.(com|co\.uk|co\.jp|de|fr)$/				 
-				raise 'bad location was returned.' unless host and path
-				port = 80 if port == 0
-				retry
-			end
+			retry
 		rescue
 			raise 'getting item was failed'
 		end
