@@ -1,3 +1,6 @@
+2003-08-24 Junichiro Kita <kita@kitaj.no-ip.com>
+        * output_rdf.rb: use @date
+
 2003-08-20 TADA Tadashi <sho@spc.gr.jp>
 	* append-css.rb: add.
 

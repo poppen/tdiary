@@ -33,6 +33,9 @@
 #
 
 =begin ChangeLog
+2003-08-24 Junichiro Kita <kita@kitaj.no-ip.com>
+	* use @date
+
 2003-08-05  Kazuhiko  <kazuhiko@fdiary.net>
 	* make rdf when receiving TrackBack Ping
 
@@ -66,11 +69,7 @@ rescue LoadError
 end
 
 if /^(append|replace|comment|trackbackreceive)$/ =~ @mode then
-	if @mode == 'append' || @mode == 'replace' then
-		date = sprintf( "%4d%02d%02d", @cgi.params['year'][0], @cgi.params['month'][0], @cgi.params['day'][0] )
-	else
-		date = @cgi.params['date'][0]
-	end
+	date = @date.strftime("%Y%m%d")
 	diary = @diaries[date]
 	host  = ENV['HTTP_HOST'] 
 	path  = ENV['REQUEST_URI']
