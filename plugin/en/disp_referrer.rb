@@ -1,5 +1,5 @@
 =begin
-= A little bit more powerful display of referrers((-$Id: disp_referrer.rb,v 1.8 2004-06-03 02:01:54 zunda Exp $-))
+= A little bit more powerful display of referrers((-$Id: disp_referrer.rb,v 1.9 2004-06-12 10:45:28 zunda Exp $-))
 English resource
 
 == Copyright notice
@@ -72,8 +72,11 @@ Disp_referrer2_without_Nora = <<'_END'.taint
 <p>
 	Please install the 
 	<a href="http://raa.ruby-lang.org/list.rhtml?name=Nora">Nora</a>
-	library if you feel the page shows too slowly.
+	library if you feel the pages show too slowly.
 </p>
+_END
+Disp_referrer2_scanned_urls = <<-'_END'.taint
+<p>%d URL(s) in the diary are added to the cache.</p>
 _END
 Disp_referrer2_updated_urls = <<-'_END'.taint
 <p>%d URL(s) in the cache are updated.</p>
@@ -314,82 +317,82 @@ end
 DispReferrer2_Google_cache = /cache:[^:]+:([^+]+)+/
 DispReferrer2_Engines = {
 	'google' => [
-		[%r{^http://.*?\bgoogle\.([^/]+)/(search|custom|ie)}i, '"Google in .#{$1}"', ['as_q', 'q', 'as_epq'], DispReferrer2_Google_cache],
-		[%r{^http://.*?\bgoogle\.([^/]+)/.*url}i, '"Google URL search in .#{$1}"', ['as_q', 'q'], DispReferrer2_Google_cache],
-		[%r{^http://.*?\bgoogle/search}i, '"Google?"', ['as_q', 'q'], DispReferrer2_Google_cache],
-		[%r{^http://eval.google\.([^/]+)}i, '"Google Accounts in .#{$1}"', [], nil],
-		[%r{^http://.*?\bgoogle\.([^/]+)}i, '"Google in .#{$1}"', [], nil],
+		[%r{\Ahttp://(?:[^./]+\.)*?google\.([^/]+)/(search|custom|ie)}i, '"Google in .#{$1}"', ['as_q', 'q', 'as_epq'], DispReferrer2_Google_cache],
+		[%r{\Ahttp://(?:[^./]+\.)*?google\.([^/]+)/.*url}i, '"Google URL search in .#{$1}"', ['as_q', 'q'], DispReferrer2_Google_cache],
+		[%r{\Ahttp://(?:[^./]+\.)*?google/search}i, '"Google?"', ['as_q', 'q'], DispReferrer2_Google_cache],
+		[%r{\Ahttp://eval.google\.([^/]+)}i, '"Google Accounts in .#{$1}"', [], nil],
+		[%r{\Ahttp://(?:[^./]+\.)*?google\.([^/]+)}i, '"Google in .#{$1}"', [], nil],
 	],
 	'yahoo' => [
-		[%r{^http://.*?\.rd\.yahoo\.([^/]+)}i, '"Yahoo! redirector.#{$1}"', 'split(/\*/)[1]', nil],
-		[%r{^http://.*?\.yahoo\.([^/]+)}i, '"Yahoo! search in .#{$1}"', ['p', 'va', 'vp'], DispReferrer2_Google_cache],
+		[%r{\Ahttp://.*?\.rd\.yahoo\.([^/]+)}i, '"Yahoo! redirector.#{$1}"', 'split(/\*/)[1]', nil],
+		[%r{\Ahttp://.*?\.yahoo\.([^/]+)}i, '"Yahoo! search in .#{$1}"', ['p', 'va', 'vp'], DispReferrer2_Google_cache],
 	],
-	'netscape' => [[%r{^http://.*?\.netscape\.([^/]+)}i, '"Netscape search in .#{$1}"', ['search', 'query'], DispReferrer2_Google_cache]],
-	'msn' => [[%r{^http://.*?\.MSN\.([^/]+)}i, '"MSN search in .#{$1}"', ['q', 'MT'], nil ]],
-	'metacrawler' => [[%r{^http://.*?.metacrawler.com}i, '"MetaCrawler"', ['q'], nil ]],
-	'metabot' => [[%r{^http://.*?\.metabot\.ru}i, '"MetaBot.ru"', ['st'], nil ]],
-	'altavista' => [[%r{^http://.*?\.altavista\.([^/]+)}i, '"Altavista in .#{$1}"', ['q'], nil ]],
-	'infoseek' => [[%r{^http://(www\.)?infoseek\.co\.jp}i, '"Infoseek"', ['qt'], nil ]],
-	'odn' => [[%r{^http://.*?\.odn\.ne\.jp}i, '"ODN¸¡º÷"', ['QueryString', 'key'], nil ]],
-	'lycos' => [[%r{^http://.*?\.lycos\.([^/]+)}i, '"Lycos in .#{$1}"', ['query', 'q', 'qt'], nil ]],
-	'fresheye' => [[%r{^http://.*?\.fresheye}i, '"Fresheye"', ['kw'], nil ]],
+	'netscape' => [[%r{\Ahttp://.*?\.netscape\.([^/]+)}i, '"Netscape search in .#{$1}"', ['search', 'query'], DispReferrer2_Google_cache]],
+	'msn' => [[%r{\Ahttp://.*?\.MSN\.([^/]+)}i, '"MSN search in .#{$1}"', ['q', 'MT'], nil ]],
+	'metacrawler' => [[%r{\Ahttp://.*?.metacrawler.com}i, '"MetaCrawler"', ['q'], nil ]],
+	'metabot' => [[%r{\Ahttp://.*?\.metabot\.ru}i, '"MetaBot.ru"', ['st'], nil ]],
+	'altavista' => [[%r{\Ahttp://.*?\.altavista\.([^/]+)}i, '"Altavista in .#{$1}"', ['q'], nil ]],
+	'infoseek' => [[%r{\Ahttp://(www\.)?infoseek\.co\.jp}i, '"Infoseek"', ['qt'], nil ]],
+	'odn' => [[%r{\Ahttp://.*?\.odn\.ne\.jp}i, '"ODN¸¡º÷"', ['QueryString', 'key'], nil ]],
+	'lycos' => [[%r{\Ahttp://.*?\.lycos\.([^/]+)}i, '"Lycos in .#{$1}"', ['query', 'q', 'qt'], nil ]],
+	'fresheye' => [[%r{\Ahttp://.*?\.fresheye}i, '"Fresheye"', ['kw'], nil ]],
 	'goo' => [
-		[%r{^http://.*?\.goo\.ne\.jp}i, '"goo"', ['MT'], nil ],
-		[%r{^http://.*?\.goo\.ne\.jp}i, '"goo"', [], nil ],
+		[%r{\Ahttp://.*?\.goo\.ne\.jp}i, '"goo"', ['MT'], nil ],
+		[%r{\Ahttp://.*?\.goo\.ne\.jp}i, '"goo"', [], nil ],
 	],
 	'nifty' => [
-		[%r{^http://search\.nifty\.com}i, '"@nifty/@search"', ['q', 'Text'], DispReferrer2_Google_cache],
-		[%r{^http://srchnavi\.nifty\.com}i, '"@nifty redirector"', ['title'], nil ],
+		[%r{\Ahttp://search\.nifty\.com}i, '"@nifty/@search"', ['q', 'Text'], DispReferrer2_Google_cache],
+		[%r{\Ahttp://srchnavi\.nifty\.com}i, '"@nifty redirector"', ['title'], nil ],
 	],
-	'eniro' => [[%r{^http://.*?\.eniro\.se}i, '"Eniro"', ['q'], DispReferrer2_Google_cache]],
-	'excite' => [[%r{^http://.*?\.excite\.([^/]+)}i, '"Excite in .#{$1}"', ['search', 's', 'query', 'qkw'], nil ]],
+	'eniro' => [[%r{\Ahttp://.*?\.eniro\.se}i, '"Eniro"', ['q'], DispReferrer2_Google_cache]],
+	'excite' => [[%r{\Ahttp://.*?\.excite\.([^/]+)}i, '"Excite in .#{$1}"', ['search', 's', 'query', 'qkw'], nil ]],
 	'biglobe' => [
-		[%r{^http://.*?search\.biglobe\.ne\.jp}i, '"BIGLOBE search"', ['q'], nil ],
-		[%r{^http://.*?search\.biglobe\.ne\.jp}i, '"BIGLOBE search"', [], nil ],
+		[%r{\Ahttp://.*?search\.biglobe\.ne\.jp}i, '"BIGLOBE search"', ['q'], nil ],
+		[%r{\Ahttp://.*?search\.biglobe\.ne\.jp}i, '"BIGLOBE search"', [], nil ],
 	],
-	'dion' => [[%r{^http://dir\.dion\.ne\.jp}i, '"Dion"', ['QueryString', 'key'], nil ]],
-	'naver' => [[%r{^http://.*?\.naver\.co\.jp}i, '"NAVER Japan"', ['query'], nil ]],
-	'webcrawler' => [[%r{^http://.*?\.webcrawler\.com}i, '"WebCrawler"', ['qkw'], nil ]],
-	'euroseek' => [[%r{^http://.*?\.euroseek\.com}i, '"Euroseek.com"', ['string'], nil ]],
-	'aol' => [[%r{^http://.*?\.aol\.}i, '"AOL search"', ['query'], nil ]],
+	'dion' => [[%r{\Ahttp://dir\.dion\.ne\.jp}i, '"Dion"', ['QueryString', 'key'], nil ]],
+	'naver' => [[%r{\Ahttp://.*?\.naver\.co\.jp}i, '"NAVER Japan"', ['query'], nil ]],
+	'webcrawler' => [[%r{\Ahttp://.*?\.webcrawler\.com}i, '"WebCrawler"', ['qkw'], nil ]],
+	'euroseek' => [[%r{\Ahttp://.*?\.euroseek\.com}i, '"Euroseek.com"', ['string'], nil ]],
+	'aol' => [[%r{\Ahttp://.*?\.aol\.}i, '"AOL search"', ['query'], nil ]],
 	'alltheweb' => [
-		[%r{^http://.*?\.alltheweb\.com}i, '"AlltheWeb.com"', ['q'], nil ],
-		[%r{^http://.*?\.alltheweb\.com}i, '"AlltheWeb.com"', [], nil ],
+		[%r{\Ahttp://.*?\.alltheweb\.com}i, '"AlltheWeb.com"', ['q'], nil ],
+		[%r{\Ahttp://.*?\.alltheweb\.com}i, '"AlltheWeb.com"', [], nil ],
 	],
 	'kobe-u' => [
-		[%r{^http://bach\.scitec\.kobe-u\.ac\.jp/cgi-bin/metcha.cgi}i, '"Metcha search engine"', ['q'], nil ],
-		[%r{^http://bach\.istc\.kobe-u\.ac\.jp/cgi-bin/metcha.cgi}i, '"Metcha search engine"', ['q'], nil ],
+		[%r{\Ahttp://bach\.scitec\.kobe-u\.ac\.jp/cgi-bin/metcha.cgi}i, '"Metcha search engine"', ['q'], nil ],
+		[%r{\Ahttp://bach\.istc\.kobe-u\.ac\.jp/cgi-bin/metcha.cgi}i, '"Metcha search engine"', ['q'], nil ],
 	],
-	'tocc' => [[%r{^http://www\.tocc\.co\.jp/search/}i, '"TOCC/Search"', ['QRY'], nil ]],
-	'yappo' => [[%r{^http://i\.yappo\.jp/}i, '"iYappo"', [], nil ]],
-	'suomi24' => [[%r{^http://.*?\.suomi24\.([^/]+)/.*query}i, '"Suomi24"', ['q'], DispReferrer2_Google_cache]],
-	'earthlink' => [[%r{^http://search\.earthlink\.net/search}i, '"EarthLink Search"', ['as_q', 'q', 'query'], DispReferrer2_Google_cache]],
-	'infobee' => [[%r{^http://infobee\.ne\.jp/}i, '"Infobee"', ['MT'], nil ]],
-	't-online' => [[%r{^http://brisbane\.t-online\.de/}i, '"T-Online"', ['q'], DispReferrer2_Google_cache]],
-	'walla' => [[%r{^http://find\.walla\.co\.il/}i, '"Walla! Channels"', ['q'], nil ]],
-	'mysearch' => [[%r{^http://.*?\.mysearch\.com/}i, '"My Search"', ['searchfor'], nil ]],
-	'jword' => [[%r{^http://search\.jword.jp/}i, '"JWord"', ['name'], nil ]],
-	'nytimes' => [[%r{^http://query\.nytimes\.com/search}i, '"New York Times: Search"', ['as_q', 'q', 'query'], DispReferrer2_Google_cache]],
-	'aaacafe' => [[%r{^http://search\.aaacafe\.ne\.jp/search}i, '"AAA!CAFE"', ['key'], nil]],
-	'virgilio' => [[%r{^http://search\.virgilio\.it/search}i, '"VIRGILIO Ricerca"', ['qs'], nil]],
-	'ceek' => [[%r{^http://www\.ceek\.jp}i, '"ceek.jp"', ['q'], nil]],
-	'cnn' => [[%r{^http://websearch\.cnn\.com}i, '"CNN.com"', ['query', 'as_q', 'q', 'as_epq'], DispReferrer2_Google_cache]],
-	'webferret' => [[%r{^http://webferret\.search\.com}i, '"WebFerret"', 'split(/,/)[1]', nil]],
-	'eniro' => [[%r{^http://www\.eniro\.se}i, '"Eniro"', ['query', 'as_q', 'q'], DispReferrer2_Google_cache]],
-	'passagen' => [[%r{^http://search\.evreka\.passagen\.se}i, '"Eniro"', ['q', 'as_q', 'query'], DispReferrer2_Google_cache]],
-	'redbox' => [[%r{^http://www\.redbox\.cz}i, '"RedBox"', ['srch'], nil]],
-	'odin' => [[%r{^http://odin\.ingrid\.org}i, '"ODiN"', ['key'], nil]],
-	'kensaku' => [[%r{^http://www\.kensaku\.}i, '"kensaku.jp"', ['key'], nil]],
-	'hotbot' => [[%r{^http://www\.hotbot\.}i, '"HotBot Web Search"', ['MT'], nil ]],
-	'searchalot' => [[%r{^http://www\.searchalot\.}i, '"Searchalot"', ['q'], nil ]],
-	'cometsystems' => [[%r{^http://search\.cometsystems\.com}i, '"Comet Web Search"', ['qry'], nil ]],
+	'tocc' => [[%r{\Ahttp://www\.tocc\.co\.jp/search/}i, '"TOCC/Search"', ['QRY'], nil ]],
+	'yappo' => [[%r{\Ahttp://i\.yappo\.jp/}i, '"iYappo"', [], nil ]],
+	'suomi24' => [[%r{\Ahttp://.*?\.suomi24\.([^/]+)/.*query}i, '"Suomi24"', ['q'], DispReferrer2_Google_cache]],
+	'earthlink' => [[%r{\Ahttp://search\.earthlink\.net/search}i, '"EarthLink Search"', ['as_q', 'q', 'query'], DispReferrer2_Google_cache]],
+	'infobee' => [[%r{\Ahttp://infobee\.ne\.jp/}i, '"Infobee"', ['MT'], nil ]],
+	't-online' => [[%r{\Ahttp://brisbane\.t-online\.de/}i, '"T-Online"', ['q'], DispReferrer2_Google_cache]],
+	'walla' => [[%r{\Ahttp://find\.walla\.co\.il/}i, '"Walla! Channels"', ['q'], nil ]],
+	'mysearch' => [[%r{\Ahttp://.*?\.mysearch\.com/}i, '"My Search"', ['searchfor'], nil ]],
+	'jword' => [[%r{\Ahttp://search\.jword.jp/}i, '"JWord"', ['name'], nil ]],
+	'nytimes' => [[%r{\Ahttp://query\.nytimes\.com/search}i, '"New York Times: Search"', ['as_q', 'q', 'query'], DispReferrer2_Google_cache]],
+	'aaacafe' => [[%r{\Ahttp://search\.aaacafe\.ne\.jp/search}i, '"AAA!CAFE"', ['key'], nil]],
+	'virgilio' => [[%r{\Ahttp://search\.virgilio\.it/search}i, '"VIRGILIO Ricerca"', ['qs'], nil]],
+	'ceek' => [[%r{\Ahttp://www\.ceek\.jp}i, '"ceek.jp"', ['q'], nil]],
+	'cnn' => [[%r{\Ahttp://websearch\.cnn\.com}i, '"CNN.com"', ['query', 'as_q', 'q', 'as_epq'], DispReferrer2_Google_cache]],
+	'webferret' => [[%r{\Ahttp://webferret\.search\.com}i, '"WebFerret"', 'split(/,/)[1]', nil]],
+	'eniro' => [[%r{\Ahttp://www\.eniro\.se}i, '"Eniro"', ['query', 'as_q', 'q'], DispReferrer2_Google_cache]],
+	'passagen' => [[%r{\Ahttp://search\.evreka\.passagen\.se}i, '"Eniro"', ['q', 'as_q', 'query'], DispReferrer2_Google_cache]],
+	'redbox' => [[%r{\Ahttp://www\.redbox\.cz}i, '"RedBox"', ['srch'], nil]],
+	'odin' => [[%r{\Ahttp://odin\.ingrid\.org}i, '"ODiN"', ['key'], nil]],
+	'kensaku' => [[%r{\Ahttp://www\.kensaku\.}i, '"kensaku.jp"', ['key'], nil]],
+	'hotbot' => [[%r{\Ahttp://www\.hotbot\.}i, '"HotBot Web Search"', ['MT'], nil ]],
+	'searchalot' => [[%r{\Ahttp://www\.searchalot\.}i, '"Searchalot"', ['q'], nil ]],
+	'cometsystems' => [[%r{\Ahttp://search\.cometsystems\.com}i, '"Comet Web Search"', ['qry'], nil ]],
 	'bulkfeeds' => [
-	    [%r{^http://bulkfeeds\.net/app/search2}i, '"Bulkfeeds: RSS Directory & Search"', ['q'], nil ],
-	    [%r{^http://bulkfeeds\.net/app/similar}i, '"Bulkfeeds Similarity Search"', ['url'], nil ],
+	    [%r{\Ahttp://bulkfeeds\.net/app/search2}i, '"Bulkfeeds: RSS Directory & Search"', ['q'], nil ],
+	    [%r{\Ahttp://bulkfeeds\.net/app/similar}i, '"Bulkfeeds Similarity Search"', ['url'], nil ],
 	],
-	'answerbus' => [[%r{^http://www\.answerbus\.com}i, '"AnswerBus"', [], nil ]],
-	'dogplile' => [[%r{^http://www.\dogpile\.com/info\.dogpl/search/web/}i, '"AnswerBus"', [], nil ]],
-	'www' => [[%r{^http://www\.google/search}i, '"Google?"', ['as_q', 'q'], DispReferrer2_Google_cache]],	# TLD missing
-	'planet' => [[%r{^http://www\.planet\.nl/planet/}i, '"Planet-Zoekpagina"', ['googleq', 'keyword'], DispReferrer2_Google_cache]], # googleq parameter has a strange prefix
-	'216' => [[%r{^http://(\d+\.){3}\d+/search}i, '"Google?"', ['as_q', 'q'], DispReferrer2_Google_cache]],	# cache servers of google?
+	'answerbus' => [[%r{\Ahttp://www\.answerbus\.com}i, '"AnswerBus"', [], nil ]],
+	'dogplile' => [[%r{\Ahttp://www.\dogpile\.com/info\.dogpl/search/web/}i, '"AnswerBus"', [], nil ]],
+	'www' => [[%r{\Ahttp://www\.google/search}i, '"Google?"', ['as_q', 'q'], DispReferrer2_Google_cache]],	# TLD missing
+	'planet' => [[%r{\Ahttp://www\.planet\.nl/planet/}i, '"Planet-Zoekpagina"', ['googleq', 'keyword'], DispReferrer2_Google_cache]], # googleq parameter has a strange prefix
+	'216' => [[%r{\Ahttp://(\d+\.){3}\d+/search}i, '"Google?"', ['as_q', 'q'], DispReferrer2_Google_cache]],	# cache servers of google?
 }

@@ -1,11 +1,25 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.37 2003-10-24 04:53:06 tadatadashi Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.38 2004-06-12 10:45:28 zunda Exp $-))
 
 == 概要
 アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
 とめて表示します。サーチエンジンの検索結果は、検索語毎にまとめられます。
 
 最新の日記の表示では、通常のリンク元以外のリンク元を隠します。
+
+== ベンチマークテスト
+ベンチマークテスト用のオプションを用意しました。キャッシュを使うように設
+定して、日記のデータに書き込み権限のあるユーザーで
+  echo 'conf=disp_referrer2;dr2.cache.update=scan' | ./update.rb
+などとすると、キャッシュに、検索エンジン((-通常はキャッシュしない-))も含
+めた日記データから全てのリンク元URLをキャッシュ書き出します。その直後に、
+  echo 'conf=disp_referrer2;dr2.cache.update=force' | (time ./update.rb) >| $log 2>&1
+などと実行することで、キャッシュにある全てのURLについて、リンク元置換リ
+ストやプラグインに含まれている検索エンジンのリストを持ちいてリンク元の置
+換をします。
+
+これによって、このプラグインの速度の改善ができる*かも*しれません。どうぞ
+よろしくお願いします←おいおい。
 
 == Acknowledgements
 This plugin uses
@@ -423,11 +437,12 @@ class DispRef2Setup < Hash
 			# \n区切で並べます
 	}
 
-	attr_reader :is_long, :referer_table, :no_referer, :secure
+	attr_reader :is_long, :referer_table, :no_referer, :secure, :years, :conf
 
-	def initialize( conf, limit = 100, is_long = true )
+	def initialize( conf, limit = 100, is_long = true, years = nil )
 		super()
 		@conf = conf
+		@years = years
 
 		# mode
 		@is_long = is_long
@@ -979,6 +994,10 @@ end
       キャッシュされているURLのうち、置換できなかったもののURLの配列を 
       返します。置換できなかったURLが無い場合には空の配列を返します。
 
+--- DispRef2Cache#scan
+      現在あるすべての日記から、URLを抽出してキャッシュに記録します。
+      置換はしません。
+
 =end
 # cache management
 class DispRef2Cache
@@ -988,12 +1007,11 @@ class DispRef2Cache
 
 	# updates the cache according to the current setup
 	def update
-		return 0 if @setup.secure or @setup['no_cache'] or not FileTest::exist?( @setup['cache_path'] )
-
-		h = Hash.new
-		r = 0
+		return 0 if @setup.secure or @setup['no_cache']
 		db = DispRef2PStore.new( @setup['cache_path'] )
+		r = 0
 		db.transaction do
+			db[Root_DispRef2URL] = Hash.new unless db[Root_DispRef2URL]
 			begin
 				db[Root_DispRef2URL].each_key do |url|
 					ref = DispRef2URL::new( url )
@@ -1003,6 +1021,39 @@ class DispRef2Cache
 					if orig != new then
 						r += 1
 						ref.store( db )
+					end
+				end
+			rescue PStore::Error
+			end
+		end
+		db = nil
+		r
+	end
+
+	# scan the diary
+	def scan
+		return 0 unless @setup.years
+
+		cgi = CGI::new
+		def cgi.referer; nil; end
+		
+		db = DispRef2PStore.new( @setup['cache_path'] )
+		r = 0
+		db.transaction do
+			db[Root_DispRef2URL] = Hash.new unless db[Root_DispRef2URL]
+			begin
+				@setup.years.each do |y, ms|
+					ms.each do |m|
+						ym = "#{y}#{m}"
+						cgi.params['date'] = [ym]
+						TDiaryMonth.new( cgi, '', @setup.conf ).diaries.each do |ymd, diary|
+							diary.each_referer( diary.count_referers ) do |count, url|
+								unless db[Root_DispRef2URL].has_key?( url ) then
+									db[Root_DispRef2URL][url] = nil
+									r += 1
+								end
+							end
+						end
 					end
 				end
 			rescue PStore::Error
@@ -1118,6 +1169,7 @@ class DispRef2SetupIF
 		@conf['disp_referrer2.reflist.ignore_urls'] ||= ''
 		@mode = mode
 		@updated_url = nil
+		@scanned_url = nil
 		@need_cache_update = false
 		if @cgi.params['dr2.change_mode'] and @cgi.params['dr2.change_mode'][0] then
 			case @cgi.params['dr2.new_mode'][0]
@@ -1168,6 +1220,8 @@ class DispRef2SetupIF
 				end
 				if not 'never' == @cgi.params['dr2.cache.update'][0] and ('force' == @cgi.params['dr2.cache.update'][0] or @need_cache_update) then
 					@updated_url = @cache.update
+				elsif 'scan' == @cgi.params['dr2.cache.update'][0] then
+					@scanned_url = @cache.scan
 				end
 			else
 				if @setup['no_cache'] then
@@ -1196,6 +1250,7 @@ class DispRef2SetupIF
 			r << Disp_referrer2_without_Nora
 		end
 		if @cache then
+			r << sprintf( Disp_referrer2_scanned_urls, @scanned_url ) if @scanned_url
 			r << sprintf( Disp_referrer2_updated_urls, @updated_url ) if @updated_url
 			r << sprintf( Disp_referrer2_cache_info, DispRef2String::bytes( @cache.size ), DispRef2String::comma( @cache.entries ) )
 			r << sprintf( Disp_referrer2_update_info, "#{@conf.update}?conf=referer", "#{@conf.update}?conf=disp_referrer2;dr2.cache.update=force;dr2.current_mode=#{@current_mode}" )
@@ -1367,7 +1422,7 @@ end
 
 # for configuration interface
 add_conf_proc( 'disp_referrer2', Disp_referrer2_name ) do
-	setup = DispRef2Setup.new( @conf, 100, true )
+	setup = DispRef2Setup.new( @conf, 100, true, @years )
 	wwwif = DispRef2SetupIF.new( @cgi, setup, @conf, @mode )
 	wwwif.show_html
 end

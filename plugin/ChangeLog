@@ -1,3 +1,7 @@
+2004-06-12 zunda <zunda at freeshell.org>
+	* disp_referer.rb: option added for command-line executed benchmark
+	* {en,ja}/disp_referer.rb: better regexp, thanks to Aoki-san http://i.loveruby.net/d/20040530.html#p02
+
 2004-06-12  Kazuhiko  <kazuhiko@fdiary.net>
 	* ping.rb: use cgi.params['key'][0] instead of cgi['key'][0]
 
