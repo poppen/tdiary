@@ -18,7 +18,7 @@
 # OUT OF  OR IN CONNECTION WITH  THE CODE OR THE  USE OR OTHER  DEALINGS IN THE
 # CODE.
 
-# $Id: hatena_style.rb,v 1.1 2004-02-23 20:22:13 mput Exp $
+# $Id: hatena_style.rb,v 1.2 2004-02-26 11:25:34 mput Exp $
 # Hatena::Diary compatible style
 # Works only under ruby 1.8.1 or later
 
@@ -798,11 +798,14 @@ end
 class Hatena::ID
   def initialize(str, tag_p)
     @str = str
+    @name, @date = *str.split(/:/,2)
     @tag_p = tag_p
   end
 
   def convert(mode)
-    uri = 'http://d.hatena.ne.jp/%s' % @str.sub(/:/,'/')
+    uri = 'http://d.hatena.ne.jp/'
+    uri << @name << '/'
+    uri << @date if @date &&! @date.empty?
     return uri unless @tag_p
     template=nil
     if mode == :CHTML
