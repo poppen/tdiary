@@ -1,4 +1,4 @@
-# calendar3.rb $Revision: 1.29 $
+# calendar3.rb $Revision: 1.30 $
 #
 # calendar3: 現在表示している月のカレンダーを表示します．
 #  パラメタ: なし
@@ -239,7 +239,6 @@ end
 if @calendar3_show_popup
 	add_header_proc do
     <<JAVASCRIPT
-  <meta http-equiv="content-script-type" content="text/javascript">
   <script type="text/javascript">
   <!--
   // http://www.din.or.jp/~hagi3/JavaScript/JSTips/Mozilla/
