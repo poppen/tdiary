@@ -72,13 +72,13 @@ rescue LoadError
 	rdf_encoder = Proc::new {|s| s }
 end
 
-if /^(append|replace|comment|trackbackreceive)$/ =~ @mode then
+if ( /^(append|replace|trackbackreceive)$/ =~ @mode ) || ( /^comment$/ =~ @mode and @comment ) then
 	date = @date.strftime("%Y%m%d")
 	diary = @diaries[date]
-	host  = ENV['HTTP_HOST'] 
-	path  = ENV['REQUEST_URI']
+	host = ENV['HTTP_HOST'] 
+	path = ENV['REQUEST_URI']
 	path = path[0..path.rindex( "/" )]
-   uri   = "#{host}#{path}#{@index}".gsub( /\/\.?\//, '/' )
+	uri = "#{host}#{path}#{@index}".gsub( /\/\.?\//, '/' )
 	rdf_file = @options['output_rdf.file'] || 'index.rdf'
 	rdf_channel_about = "#{host}#{path}#{rdf_file}"
 	r = ""
@@ -126,16 +126,19 @@ if /^(append|replace|comment|trackbackreceive)$/ =~ @mode then
  	diary.each_section do |section|
 		if section.subtitle then
 		link = %Q[http://#{uri}#{anchor "#{date}\#p#{'%02d' % idx}"}]
+		subtitle = diary.class.new(date, '', section.subtitle).to_html({})
 		desc = diary.class.new(date, '', section.body).to_html({})
 		old_apply_plugin = @options['apply_plugin']
 		@options['apply_plugin'] = true
-		desc = apply_plugin(desc, true)
+		subtitle = apply_plugin(subtitle, true).strip
+		desc = apply_plugin(desc, true).strip
 		@options['apply_plugin'] = old_apply_plugin
+		desc = @conf.shorten( desc ) || ''
 		r <<<<-RDF
  <item rdf:about="#{link}">
-   <title>#{CGI::escapeHTML(apply_plugin(section.subtitle).gsub(/<.+?>/,'')).chomp}</title>
+   <title>#{CGI::escapeHTML( subtitle )}</title>
    <link>#{link}</link>
-   <description>#{CGI::escapeHTML( @conf.shorten( desc ) )}</description>
+   <description>#{CGI::escapeHTML( desc )}</description>
  </item>
  		RDF
 		end
@@ -149,6 +152,7 @@ if /^(append|replace|comment|trackbackreceive)$/ =~ @mode then
    <title>#{comment_today}-#{idx} (#{CGI::escapeHTML( comment.name )})</title>
    <link>#{link}</link>
    <description>#{CGI::escapeHTML( @conf.shorten( comment.body ) )}</description>
+   <dc:date>#{comment.date.strftime('%Y-%m-%dT%H:%M')}</dc:date>
  </item>
 			RDF
 		end

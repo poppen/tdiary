@@ -1,3 +1,7 @@
+2003-10-21  Kazuhiko  <kazuhiko@fdiary.net>
+	* outpur_rdf.rb: make plain text title. ignore empty comment. add
+	'dc:date' to each comment.
+
 2003-10-20 zunda <zunda at freeshell.org>
 	* disp_referrer.rb: syntax error fixed. su ma so...
 
