@@ -18,7 +18,7 @@
 # CODE.
 
 # title_tag2.rb to enhance <title> element of generating HTML
-# $Id: title_tag.rb,v 1.2 2004-05-16 15:07:31 kazuhiko Exp $
+# $Id: title_tag.rb,v 1.3 2004-05-16 15:27:19 kazuhiko Exp $
 # To use, just put this file into plugin folder.
 
 alias :title_tag2 :title_tag
@@ -49,7 +49,7 @@ def title_tag
 	if @mode == 'day' and diary = @diaries[@date.strftime('%Y%m%d')] then
 		title = @html_title + ' - '
 		if  !diary.title.empty? then
-			title << diary.title << ' - '
+			title << apply_plugin(diary.title, true) << ' - '
 		end
 		t2 = ''
 		if @plugin_files.grep(/\/category.rb$/).empty? then

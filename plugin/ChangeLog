@@ -1,4 +1,5 @@
 2004-05-17  Kazuhiko  <kazuhiko@fdiary.net>
+	* title_tag.rb: apply_plugin in a day's title.
 	* title_tag.rb: escape diary's title and day's title.
 
 2004-05-16  mput <root@mput.dip.jp>
