@@ -1,4 +1,4 @@
-# tlink.rb $Revision: 1.10 $
+# tlink.rb $Revision: 1.11 $
 #
 # title Â°À­ÉÕ anchor plugin
 #
@@ -20,8 +20,11 @@
 # Modified: by abbey <inlet@cello.no-ip.org>
 #
 =begin ChangeLog
+2003-01-29 NT <nt@be.to>
+	* fix a critical bug.
+
 2003-01-28 NT <nt@be.to>
-	* corresponded to change in PDA mode.
+	* correspond to change in movile mode.
 
 2002-11-19 NT <nt@24i.net>
 	* add require 'pstore'.
@@ -136,9 +139,12 @@ def tlink( url, str, title = nil )
     if @tlink_dic[url]
       title = @tlink_dic[url]
     else
-      title = tlink_getcomment( url )
-      @tlink_dic[url] = title
-      tlink_finalize
+      if url =~ ENV["REDIRECT_URL"] && url =~ @date.strftime('%Y%m%d')
+      else
+        title = tlink_getcomment( url )
+        @tlink_dic[url] = title
+        tlink_finalize
+      end
     end
   end
 
