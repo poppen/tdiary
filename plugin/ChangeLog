@@ -3,6 +3,7 @@
 	* referer_scheme.rb: avoid infinite call of aliased `each' when the plug-in is eval'ed more than once.
 	* referer_scheme.rb: scheme_tdiary moved to the plugin-body
 	* referer_scheme.rb: bug fixed for scheme_tdiarynet. thanks to kosaka http://tnat.net/diary/?date=20031217#p01
+	* ja/weather.rb: translation for heavy rain added. thanks to kosaka http://tnat.net/diary/?date=20031217
 
 2003-12-16 zunda <zunda at freeshell.org>
 	* referer_scheme.rb: new plug-in to expand referer_table. Idea by akira yamada <akira at akira.org>, doesn't work with ruby 1.6.7 ;(
