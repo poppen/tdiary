@@ -1,3 +1,6 @@
+2003-10-20 zunda <zunda at freeshell.org>
+	* disp_referrer.rb: search engine added: Comet Web Search
+
 2003-10-19 Junichiro Kita <kita@kitaj.no-ip.com>
 	* todo.rb: priority is optional.
 
