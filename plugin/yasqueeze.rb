@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# yasqueeze.rb $Revision: 1.7 $
+# yasqueeze.rb $Revision: 1.8 $
 #
 # yasqueeze: tDiary-1.3.x以降で標準でついてくるsqueeze.rbの拡張版
 #				 tDiaryのデータベースから日別にHTMLファイルを生成し、
@@ -45,6 +45,7 @@
 		- output_path = (@data_path)/cache/html
 		- all_data = false
 		- compat_path = false
+	* version 1.3.0
 
 2002-04-01 MUTOH Masao	<mutoh@highway.ne.jp>
 	* ドキュメント削除
@@ -96,7 +97,7 @@ if mode == "CMD" || mode == "CGI"
 
 	if mode == "CMD"
 		def usage
-			puts "yasqueeze $Revision: 1.7 $"
+			puts "yasqueeze $Revision: 1.8 $"
 			puts " Yet Another making html files from tDiary's database."
 			puts " usage: ruby yasqueeze.rb [-p <tDiary path>] [-c <tdiary.conf path>] [-a] [-s] <dest path>"
 			exit
@@ -235,7 +236,7 @@ if mode == "CGI" || mode == "CMD"
 			</head>
 			<body><div style="text-align:center">
 			<h1>Yet Another Squeeze for tDiary</h1>
-			<p>$Revision: 1.7 $</p>
+			<p>$Revision: 1.8 $</p>
 			<p>Copyright (C) 2002 MUTOH Masao&lt;mutoh@highway.ne.jp&gt;</p></div>
 			<br><br>Start!</p><hr>
 		]
