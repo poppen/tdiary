@@ -1,4 +1,4 @@
-# disp_referrer.rb $Revision: 1.15 $
+# disp_referrer.rb $Revision: 1.16 $
 # -pv-
 #
 # 名称：
@@ -35,6 +35,7 @@
    * TOCC/Search、Metcha Search、metacrawler検索、DOGPILE検索、NAXEARCH、overture検索、
      looksmart検索、i won_Search、EarthLink検索、About検索追加
    * Yahoo!、AOL、Google、 Biglobe、Infoseek、Fresheye、Netscape検索改善
+   * version 2.3.0
 
 2002-10-07 Junichiro Kita <kita@kitaj.no-ip.com>
 	* add @options['disp_referrer.search_table']
