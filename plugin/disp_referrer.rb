@@ -1,25 +1,11 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.45 2005-02-02 02:45:45 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.46 2005-02-21 08:20:51 zunda Exp $-))
 
 == 概要
 アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
 とめて表示します。サーチエンジンの検索結果は、検索語毎にまとめられます。
 
 最新の日記の表示では、通常のリンク元以外のリンク元を隠します。
-
-== ベンチマークテスト
-ベンチマークテスト用のオプションを用意しました。キャッシュを使うように設
-定して、日記のデータに書き込み権限のあるユーザーで
-  echo 'conf=disp_referrer2;dr2.cache.update=scan' | ./update.rb
-などとすると、キャッシュに、検索エンジン((-通常はキャッシュしない-))も含
-めた日記データから全てのリンク元URLをキャッシュ書き出します。その直後に、
-  echo 'conf=disp_referrer2;dr2.cache.update=force' | (time ./update.rb) >| $log 2>&1
-などと実行することで、キャッシュにある全てのURLについて、リンク元置換リ
-ストやプラグインに含まれている検索エンジンのリストを持ちいてリンク元の置
-換をします。
-
-これによって、このプラグインの速度の改善ができる*かも*しれません。どうぞ
-よろしくお願いします←おいおい。
 
 == Acknowledgements
 This plugin uses
@@ -35,7 +21,7 @@ kazuhiko.
 The author of this plugin  appreciates them.
 
 == Copyright notice
-Copyright (C) 2003, 2004 zunda <zunda at freeshell.org>
+Copyright (C) 2003-2005 zunda <zunda at freeshell.org>
 
 Please note that some methods in this plugin are written by other
 authors as written in the comments.
@@ -92,7 +78,7 @@ See ChangeLog for changes after this.
 Array#values_at()が無い場合、追加します。
 =end
 # 1.8 feature
-unless [].respond_to?( 'values_at' ) then
+unless [].respond_to?( :values_at ) then
 	eval( <<-MODIFY_CLASS, TOPLEVEL_BINDING )
 		class Array
 			alias values_at indices
@@ -103,6 +89,7 @@ end
 # to be visible from inside classes
 Dispref2plugin = self
 Dispref2plugin_cache_path = @cache_path
+Dispref2plugin_cache_dir = @cache_dir
 Dispref2plugin_secure = @conf.secure
 
 # cache format
@@ -125,7 +112,37 @@ class DispRef2DummyPStore
 	end
 end
 
+class DispRef2CachePathDummy
+	def initialize( setup )
+		@setup = setup
+	end
+	def size
+		0
+	end
+	def caches( include_backup = true )
+		[]
+	end
+	def method_missing( name, *args )
+		nil
+	end
+end
+
 =begin
+=== Tdiary::Plugin::DispRef2CachePath
+DispRef2Storeのパスの管理をします。
+
+--- DispRef2CachePath::new( setup )
+
+--- DispRef2CachePath#cache( date )
+     その日の日記のためのキャッシュのパスを返します。
+
+--- DispRef2CachePath#caches
+      現在存在するそれぞれのキャッシュファイルのパスの配列を返します。
+
+--- DispRef2CachePath#shrink
+      最近使われていないキャッシュを削除することで、
+      キャッシュの大きさを設定値程度に抑えます。
+
 === Tdiary::Plugin::DispRef2PStore
 @secure=falseな日記ではPStoreと同等のメソッドを、@secure=trueな日記では
 何もしないメソッドを提供します。
@@ -137,7 +154,58 @@ end
 --- DispRef2PSTore#real?
       本物のPSToreが使える時はtrue、そうでない時はfalseを返します。
 =end
+
 unless @conf and @conf.secure then
+	class DispRef2CachePath
+		def initialize( setup )
+			@setup = setup
+		end
+		def cache( date )
+			begin
+				Dir.mkdir( @setup['cache_dir'] )
+			rescue Errno::EEXIST
+			end
+			File.join( @setup['cache_dir'], date.strftime( '%Y%m.tdr2.cache' ) )
+		end
+		def caches( include_backup = true )
+			if include_backup then
+				Dir.glob( File.join( @setup['cache_dir'], '??????.tdr2.cache*' ) )
+			else
+				Dir.glob( File.join( @setup['cache_dir'], '??????.tdr2.cache' ) )
+			end
+		end
+		def size
+			r = 0
+			caches.each do |path|
+				r += File.size( path )
+			end
+			r
+		end
+		def clear
+			# current version
+			caches.each do |path|
+				File.unlink( path )
+			end
+			# older version
+			if @setup['cache_path'] then
+				[ @setup['cache_path'], @setup['cache_path']+'~' ].each do |f|
+					File.unlink( f ) if FileTest::exist?( f )
+				end
+			end
+		end
+		def shrink
+			return if @setup['cache_max_size'] <= 0
+			size = 0
+			caches.sort{ |a,b| File.atime( b.untaint ) <=> File.atime( a.untaint ) }.each do |path|
+				if size < @setup['cache_max_size'] then
+					size += File.size( path.untaint )
+				else
+					File.unlink( path.untaint )
+				end
+			end
+		end
+	end
+
 	require 'pstore'
 	class DispRef2PStore < PStore
 		def real?
@@ -159,6 +227,8 @@ else
 		def real?
 			false
 		end
+	end
+	class DispRef2CachePath < DispRef2CachePathDummy
 	end
 end
 
@@ -428,6 +498,12 @@ class DispRef2Setup < Hash
 			# 検索エンジンのキャッシュのURLを表示する文字列です。
 		'cache_path' => "#{Dispref2plugin_cache_path}/disp_referrer2.cache",
 			# このプラグインで使うキャッシュファイルのパスです。
+			# このオプションは現在は使われていません。
+		'cache_dir' => "#{Dispref2plugin_cache_path}/disp_referrer2.d",
+			# このプラグインで使うキャッシュファイルのディレクトリです。
+		'cache_max_size' => 10485760,	# 10MB
+			# キャッシュの合計量の制限(バイト)です。時々越えます。
+			# 0未満なら制限しません。
 		'no_cache' => false,
 			# trueの場合、@secure=falseな日記でもキャッシュを使いません。
 		'normal-unknown.title' => '\Ahttps?:\/\/',
@@ -575,7 +651,6 @@ class DispRef2URL
 		normal.categorize
 		normal.group
 		normal.ignore_parenthesis
-		cache_path
 	)
 
 	def initialize( unescaped_url, setup = nil )
@@ -612,11 +687,7 @@ class DispRef2URL
 				db[Root_DispRef2URL] = Hash.new
 			end
 		) then
-			 unless @category == DispRef2URL::Search then
-				db[Root_DispRef2URL]["#{@url}"] = [ @category, @category_label, @title, @title_ignored, @title_group, @key ]
-			else
-				db[Root_DispRef2URL].delete( @url )
-			end
+			db[Root_DispRef2URL]["#{@url}"] = [ @category, @category_label, @title, @title_ignored, @title_group, @key ]
 			self
 		else
 			nil
@@ -810,9 +881,8 @@ class DispRef2Refs
 			done_flag[c] = (@setup['limit'][c] < 1)
 		end
 
-		db = @setup['no_cache'] ? DispRef2DummyPStore.new( @setup['cache_path'] ) : DispRef2PStore.new( @setup['cache_path'] )
-
 		h = Hash.new
+		db = DispRef2PStore.new( DispRef2CachePath.new( setup ).cache( diary.date ) )
 		db.transaction do
 			diary.each_referer( diary.count_referers ) do |count, url|
 				ref = DispRef2URL.new( url )
@@ -854,9 +924,14 @@ class DispRef2Refs
 
 	# urls in the diary as a hash
 	def urls( category = nil )
+		if category then
+			category = [ category ] unless category.respond_to?( :each )
+		else
+			category = @refs.keys
+		end
 		h = Hash.new
-		category = [ category ] unless category.class == Array
-		(category ? category : @refs.keys).each do |cat|
+		category.each do |cat|
+$stderr.puts cat
 			next unless @refs[cat]
 			@refs[cat].each do |a|
 				a[2].each do |b|
@@ -974,20 +1049,12 @@ end
       リンク元のキャッシュを、DispRef2Setupのインスタンス((|setup|))にした
       がって管理します。
 
---- DispRef2Cache#update
-      キャッシュの内容を現在の設定に従って更新します。更新されたURLの数
-      を返します。
-
---- DispRef2Cache#size
-      キャッシュファイルの大きさをバイト単位で返します。
-
---- DispRef2Cache#entries
-      キャッシュされているURLの数を返します。
-
---- DispRef2Cache#urls( category = nil )
+--- DispRef2Cache#urls( category = nil, nmonth = 2 )
       キャッシュされているURLの情報のうち、カテゴリーが((|category|))に
       一致するものを、URLをキー、下記の配列を値としたハッシュとして返し
       ます。((|category|))がnilの場合は全てのURLの情報を返します。
+      ((|nmonth|))がnilではない場合は、最近NMONTH分のキャッシュだけから
+      検索します。
       * カテゴリー
       * カテゴリーのラベル(あるいはnil)
       * 置換後の文字列
@@ -995,147 +1062,34 @@ end
       * グループ全体の文字列
       * グループする際のキー
 
---- DispRef2Cache#unknown_urls
-      キャッシュされているURLのうち、置換できなかったもののURLの配列を 
-      返します。置換できなかったURLが無い場合には空の配列を返します。
-
---- DispRef2Cache#scan
-      現在あるすべての日記から、URLを抽出してキャッシュに記録します。
-      置換はしません。
-
 =end
 # cache management
 class DispRef2Cache
 	def initialize( setup )
 		@setup = setup
-	end
-
-	# updates the cache according to the current setup
-	def update
-		return 0 if @setup.secure or @setup['no_cache']
-		db = DispRef2PStore.new( @setup['cache_path'] )
-		r = 0
-		db.transaction do
-			begin
-				db[Root_DispRef2URL] ||= Hash.new
-			rescue PStore::Error
-				db[Root_DispRef2URL] = Hash.new
-			end
-			begin
-				db[Root_DispRef2URL].each_key do |url|
-					ref = DispRef2URL::new( url )
-					t = ref.restore( db )
-					orig = t ? t.dup : nil
-					new = ref.parse( @setup )
-					if orig != new then
-						r += 1
-						ref.store( db )
-					end
-				end
-			rescue PStore::Error
-			end
-		end
-		db = nil
-		r
-	end
-
-	# scan the diary
-	def scan
-		return 0 unless @setup.years
-
-		cgi = CGI::new
-		def cgi.referer; nil; end
-		
-		db = DispRef2PStore.new( @setup['cache_path'] )
-		r = 0
-		db.transaction do
-			begin
-				db[Root_DispRef2URL] ||= Hash.new
-			rescue PStore::Error
-				db[Root_DispRef2URL] = Hash.new
-			end
-			begin
-				@setup.years.each do |y, ms|
-					ms.each do |m|
-						ym = "#{y}#{m}"
-						cgi.params['date'] = [ym]
-						TDiaryMonth.new( cgi, '', @setup.conf ).diaries.each do |ymd, diary|
-							diary.each_referer( diary.count_referers ) do |count, url|
-								unless db[Root_DispRef2URL].has_key?( url ) then
-									db[Root_DispRef2URL][url] = nil
-									r += 1
-								end
-							end
-						end
-					end
-				end
-			rescue PStore::Error
-			end
-		end
-		db = nil
-		r
-	end
-
-	# size of cache in bytes
-	def size
-		return 0 if @setup.secure or @setup['no_cache'] or not FileTest::exist?( @setup['cache_path'] )
-
-		FileTest.size( @setup['cache_path'] )
-	end
-
-	# number of urls in the cache
-	def entries
-		return 0 if @setup.secure or @setup['no_cache'] or not FileTest::exist?( @setup['cache_path'] )
-
-		r = 0
-		db = DispRef2PStore.new( @setup['cache_path'] )
-		db.transaction( true ) do
-			begin
-				r = db[Root_DispRef2URL].size
-			rescue PStore::Error, NoMethodError
-				r = 0
-			end
-		end
-		db = nil
-		r
+		@cache = DispRef2CachePath.new( @setup )
 	end
 
 	# cached urls as a hash
-	def urls( category = nil )
-		return {} if @setup.secure or @setup['no_cache'] or not FileTest::exist?( @setup['cache_path'] )
-
+	def urls( category = nil, nmonth = 2 )
 		h = Hash.new
-		db = DispRef2PStore.new( @setup['cache_path'] )
-		db.transaction( true ) do
-			begin
-				db[Root_DispRef2URL].each_pair do |url, data|
-					h[url] = data if not category or category == data[0]
+    if nmonth then
+			caches = @cache.caches( false ).sort{ |a,b| b<=>a }[0...nmonth]
+		else
+			caches = @cache.caches( false )
+		end
+		caches.each do |path|
+			db = DispRef2PStore.new( path )
+			db.transaction( true ) do
+				begin
+					db[Root_DispRef2URL].each_pair do |url, data|
+						h[url] = data if not category or category == data[0]
+					end
+				rescue PStore::Error
 				end
-			rescue PStore::Error
 			end
 		end
-		db = nil
 		h
-	end
-
-	# cached unknown urls as an array
-	def unknown_urls
-		return [] if @setup.secure or @setup['no_cache'] or not FileTest::exist?( @setup['cache_path'] )
-
-		r = Array.new
-		db = DispRef2PStore.new( @setup['cache_path'] )
-		db.transaction( true ) do
-			begin
-				db[Root_DispRef2URL].each_pair do |url, data|
-					next if DispRef2String::url_match?( url, @setup.no_referer )
-					next if DispRef2String::url_match?( url, @setup['reflist.ignore_urls'] )
-					r << url if DispRef2URL::Unknown == data[0] or @setup['normal-unknown.title.regexp'] =~ data[2]
-				end
-			rescue PStore::Error
-			end
-		end
-		db = nil
-		r
 	end
 
 end
@@ -1181,8 +1135,6 @@ class DispRef2SetupIF
 		@conf = conf
 		@conf['disp_referrer2.reflist.ignore_urls'] ||= ''
 		@mode = mode
-		@updated_url = nil
-		@scanned_url = nil
 		@need_cache_update = false
 		if @cgi.params['dr2.change_mode'] and @cgi.params['dr2.change_mode'][0] then
 			case @cgi.params['dr2.new_mode'][0]
@@ -1206,7 +1158,7 @@ class DispRef2SetupIF
 			@current_mode = Options
 		end
 		if not @setup.secure and not @setup['no_cache'] then
-			@cache = DispRef2Cache.new( @setup )
+			@cache = DispRef2CachePath.new( @setup )
 		else
 			@cache = nil
 		end
@@ -1224,17 +1176,15 @@ class DispRef2SetupIF
 			end
 		end
 
-		# update cache
+		# clear cache
 		if not @setup.secure then
 			if not @setup['no_cache'] then
 				unless @cache then
 					@need_cache_update = true
-					@cache = DispRef2Cache.new( @setup )
+					@cache = DispRef2CachePath.new( @setup )
 				end
 				if not 'never' == @cgi.params['dr2.cache.update'][0] and ('force' == @cgi.params['dr2.cache.update'][0] or @need_cache_update) then
-					@updated_url = @cache.update
-				elsif 'scan' == @cgi.params['dr2.cache.update'][0] then
-					@scanned_url = @cache.scan
+					@cache.clear
 				end
 			else
 				if @setup['no_cache'] then
@@ -1263,9 +1213,7 @@ class DispRef2SetupIF
 			r << Disp_referrer2_without_Nora
 		end
 		if @cache then
-			r << sprintf( Disp_referrer2_scanned_urls, @scanned_url ) if @scanned_url
-			r << sprintf( Disp_referrer2_updated_urls, @updated_url ) if @updated_url
-			r << sprintf( Disp_referrer2_cache_info, DispRef2String::bytes( @cache.size ), DispRef2String::comma( @cache.entries ) )
+			r << sprintf( Disp_referrer2_cache_info, DispRef2String::bytes( @cache.size ) )
 			r << sprintf( Disp_referrer2_update_info, "#{@conf.update}?conf=referer", "#{@conf.update}?conf=disp_referrer2;dr2.cache.update=force;dr2.current_mode=#{@current_mode}" )
 		end
 		r << "<p>\n"
@@ -1398,7 +1346,7 @@ class DispRef2Latest < TDiary::TDiaryLatest
 		@setup = setup
 	end
 
-	# correct unknown URLs from the newest diaries
+	# collect unknown URLs from the newest diaries
 	def unknown_urls
 		r = Array.new
 		self.latest( @conf.latest_limit ) do |diary|
@@ -1444,7 +1392,9 @@ end
 def referer_of_today_long( diary, limit = 100 )
 	return '' if bot?
 	setup = DispRef2Setup.new( @conf, limit, true, nil, @mode )
-	DispRef2Refs.new( diary, setup ).to_long_html
+	r = DispRef2Refs.new( diary, setup ).to_long_html
+	DispRef2CachePath.new( setup ).shrink
+	r
 end
 
 # for newest diary

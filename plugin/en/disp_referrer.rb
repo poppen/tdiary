@@ -1,5 +1,5 @@
 =begin
-= A little bit more powerful display of referrers((-$Id: disp_referrer.rb,v 1.10 2004-10-13 05:41:35 kazuhiko Exp $-))
+= A little bit more powerful display of referrers((-$Id: disp_referrer.rb,v 1.11 2005-02-21 08:20:52 zunda Exp $-))
 English resource
 
 == Copyright notice
@@ -75,20 +75,14 @@ Disp_referrer2_without_Nora = <<'_END'.taint
 	library if you feel the pages show too slowly.
 </p>
 _END
-Disp_referrer2_scanned_urls = <<-'_END'.taint
-<p>%d URL(s) in the diary are added to the cache.</p>
-_END
-Disp_referrer2_updated_urls = <<-'_END'.taint
-<p>%d URL(s) in the cache are updated.</p>
-_END
 Disp_referrer2_cache_info = <<'_END'.taint
 <p>
-	The cache has %2$s URL(s) in %1$s byte(s).
+	Total size of the caches is %1$s byte(s).
 </p>
 _END
 Disp_referrer2_update_info = <<'_END'.taint
 <p>
-	Please <a href="%2$s">update the cache</a>
+	Please <a href="%2$s">clear the cache</a>
 	after editing the <a href="%1$s">today's link</a> lists.
 </p>
 _END
@@ -178,17 +172,11 @@ class DispRef2SetupIF
 			</table>
 			<table>
 			<tr>
-				<td><input name="dr2.cache.update" value="force" type="radio">update
-				<td><input name="dr2.cache.update" value="auto" type="radio" checked>update if needed
-				<td><input name="dr2.cache.update" value="never" type="radio">don't update
+				<td><input name="dr2.cache.update" value="force" type="radio">clear
+				<td><input name="dr2.cache.update" value="auto" type="radio" checked>clear if needed
+				<td><input name="dr2.cache.update" value="never" type="radio">don't clear
 				the cache at this time.
 			</table>
-			<p>
-				Updating the cache sometimes takes time.
-				Please wait after clicking the OK button.
-				On the other hand, referrers might not shown correctly when
-				the cache is not updated.
-			</p>
 		_HTML
 		end # unless @setup.secure
 		r
@@ -197,22 +185,17 @@ class DispRef2SetupIF
 	# shows URL list to be added to the referer_table or no_referer
 	def show_unknown_list
 		if @setup.secure then
-			urls = DispRef2Latest_cache.unknown_urls
-		elsif @setup['no_cache'] then
 			urls = DispRef2Latest.new( @cgi, 'latest.rhtml', @conf, @setup ).unknown_urls
 		else
-			urls = DispRef2Cache.new( @setup ).unknown_urls
+			urls = DispRef2Cache.new( @setup ).urls( DispRef2URL::Unknown ).keys
+			if urls.size == 0 then
+				urls = DispRef2Latest.new( @cgi, 'latest.rhtml', @conf, @setup ).unknown_urls
+			end
 		end
 		r = <<-_HTML
 			<h3>URL Conversion</h3>
 			<input name="dr2.current_mode" value="#{RefList}" type="hidden">
-		_HTML
-		if @cache then
-			r << "<p>Picking up #{@setup['unknown.label']} from the cache."
-		else
-			r << "<p>Picking up #{@setup['unknown.label']} from the latest view."
-		end
-		r << <<-_HTML
+			<p>#{@setup['unknown.label']} are picked up from recent diaries.
 			URLs that match the Excluding list or the Ignore list are not
 			listed here.
 		</p>
@@ -280,14 +263,6 @@ class DispRef2SetupIF
 				<input name="dr2.urls" type="hidden" value="#{i}">
 				</dl>
 			_HTML
-			unless @setup.secure or @setup['no_cache'] then
-				r << <<-_HTML
-					<p>
-						Updating the cache might take some time. Please wait after
-						clicking the OK button.
-					</p>
-				_HTML
-			end
 		else
 			r << <<-_HTML
 				<p>Currently there is no #{@setup['unknown.label']}.</p>

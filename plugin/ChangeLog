@@ -1,3 +1,6 @@
+2005-02-20 zunda <zunda at freeshell.org>
+	* disp_referrer.rb, {ja,en,zh}/disp_referrer.rb: cache URLs of search engines, cache files are divided into each month, thanks to Aoki-san and kazuhiko-san.
+
 2005-02-10 zunda <zunda at freeshell.org>
 	* makerss.rb: escape comment body, thanks to Kouhei Sutou <kou at cozmixng.org>
 
@@ -6,7 +9,7 @@
 	* ja/disp_referrer.rb: gw.mobile.goo.ne.jp and msearch.mobile.goo.ne.jp added to search engines
 
 2005-01-26 zunda <zunda at freeshell.org>
-	* ja/disp_referrer.rb: better key for Feedback search, more URLs for livedorr and goo, thanks to Hahahaha <rin_ne at big.or.jp>
+	* ja/disp_referrer.rb: better key for Feedback search, more URLs for livedoor and goo, thanks to Hahahaha <rin_ne at big.or.jp>
 	* disp_referrer.rb, ja/disp_referrer.rb: can get search keyword from URL for Matome-search, thanks to Hahahaha <rin_ne at big.or.jp>
 
 2005-01-25 zunda <zunda at freeshell.org>

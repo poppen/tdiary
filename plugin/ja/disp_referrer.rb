@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.20 2005-02-02 02:52:37 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.21 2005-02-21 08:20:53 zunda Exp $-))
 日本語リソース
 
 == 概要
@@ -216,22 +216,15 @@ Disp_referrer2_without_Nora = <<'_END'.taint
 	ライブラリをインストールしてみてください。
 </p>
 _END
-Disp_referrer2_scanned_urls = <<'_END'.taint
-<p>日記にある%d個のURLがキャッシュのエントリーに追加されました。</p>
-_END
-Disp_referrer2_updated_urls = <<'_END'.taint
-<p>キャッシュのうち、%d個のURLが更新されました。</p>
-_END
 Disp_referrer2_cache_info = <<'_END'.taint
 <p>
-	現在、キャッシュの大きさは%1$sバイト、
-	%2$s個のURLがキャッシュされています。
+	現在、キャッシュの大きさは%1$sバイトです。
 </p>
 _END
 Disp_referrer2_update_info = <<'_END'.taint
 <p>
 	「<a href="%1$s">リンク元</a>」の変更の後にも
-	<a href="%2$s">キャッシュの更新</a>が必要かもしれません。
+	<a href="%2$s">キャッシュのクリア</a>が必要かもしれません。
 </p>
 _END
 Disp_referrer2_move_to_refererlist = <<'_END'.taint
@@ -319,15 +312,10 @@ class DispRef2SetupIF
 				<td><input name="dr2.no_cache" value="true" type="radio"#{' checked'if @setup['no_cache']}>利用しない。
 			<tr>
 				<td>今回の設定変更で、キャッシュを
-				<td><input name="dr2.cache.update" value="force" type="radio">更新する
-				<td><input name="dr2.cache.update" value="auto" type="radio" checked>必要なら更新する
-				<td><input name="dr2.cache.update" value="never" type="radio">更新しない。
+				<td><input name="dr2.cache.update" value="force" type="radio">クリアする
+				<td><input name="dr2.cache.update" value="auto" type="radio" checked>必要ならクリアする
+				<td><input name="dr2.cache.update" value="never" type="radio">クリアしない。
 			</table>
-			<p>
-				キャッシュの更新には多少の時間がかかる場合があります。
-				OKボタンを押したらしばらくお待ちください。
-				一方、キャッシュを更新しないと表示に矛盾が生じることがあります。
-			</p>
 		_HTML
 		end # unless @setup.secure
 		r
@@ -336,22 +324,17 @@ class DispRef2SetupIF
 	# shows URL list to be added to the referer_table or no_referer
 	def show_unknown_list
 		if @setup.secure then
-			urls = DispRef2Latest_cache.unknown_urls
-		elsif @setup['no_cache'] then
 			urls = DispRef2Latest.new( @cgi, 'latest.rhtml', @conf, @setup ).unknown_urls
 		else
-			urls = DispRef2Cache.new( @setup ).unknown_urls
+			urls = DispRef2Cache.new( @setup ).urls( DispRef2URL::Unknown ).keys
+			if urls.size == 0 then
+				urls = DispRef2Latest.new( @cgi, 'latest.rhtml', @conf, @setup ).unknown_urls
+			end
 		end
 		r = <<-_HTML
 			<h3>リンク元置換リスト</h3>
 			<input name="dr2.current_mode" value="#{RefList}" type="hidden">
-		_HTML
-		if @cache then
-			r << "<p>#{@setup['unknown.label']}はキャッシュの中から探しています。"
-		else
-			r << "<p>#{@setup['unknown.label']}は最新表示の日記から探しています。"
-		end
-		r << <<-_HTML
+			<p>#{@setup['unknown.label']}は最近の日記から探しています。
 			リンク元除外リストや無視リストに一致するURLはここには表示されません。
 		</p>
 		<p>
@@ -421,14 +404,6 @@ class DispRef2SetupIF
 				<input name="dr2.urls" type="hidden" value="#{i}">
 				</dl>
 			_HTML
-			unless @setup.secure or @setup['no_cache'] then
-				r << <<-_HTML
-					<p>
-						キャッシュの更新には多少の時間がかかる場合があります。
-						OKボタンを押したらしばらくお待ちください。
-					</p>
-				_HTML
-			end
 		else
 			r << <<-_HTML
 				<p>現在、#{@setup['unknown.label']}はありません。</p>
