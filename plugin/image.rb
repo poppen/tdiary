@@ -1,4 +1,4 @@
-# image.rb $Revision: 1.19 $
+# image.rb $Revision: 1.20 $
 # -pv-
 # 
 # Ì¾¾Î:
@@ -266,10 +266,11 @@ add_form_proc do |date|
 		//-->
 		</script>
 		]
-		if @conf.style == "Wiki"
+		case @conf.style.sub( /^blog/i, '' )
+		when /^wiki$/i
 			ptag1 = "{{"
 			ptag2 = "}}"
-		elsif @conf.style == "RD"
+		when /^rd$/i
 			ptag1 = "((%"
 			ptag2 = "%))"
 		else
