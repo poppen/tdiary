@@ -1,4 +1,4 @@
-# image.rb $Revision: 1.6 $
+# image.rb $Revision: 1.7 $
 # -pv-
 # 
 # Ì¾¾Î:
@@ -114,7 +114,7 @@ def image_list( date )
 	list
 end
 
-if @conf.secure and /^(form|edit|formplugin)$/ =~ @mode then
+if @conf.secure and /^(form|edit|formplugin|showcomment)$/ =~ @mode then
 	@image_list = image_list( @date.strftime( '%Y%m%d' ) )
 end
 

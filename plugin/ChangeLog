@@ -1,3 +1,22 @@
+2003-04-28 TADA Tadashi <sho@spc.gr.jp>
+	* trackback/tb-show.rb, tb.rb: fix some security holes.
+	* trackback/tb-show.rb: show ping url under 'add TSUKKOMI'.
+	* trackback/tb-show.rb: support name based virtual host and root directory.
+	* trackback/tb-send.rb: change name attr of fields for edit_proc spec.
+	* trackback/tb-send.rb: independ from net/uri.
+	* trackback/tb.rb: support symlink.
+	* trackback/tb.rb: save TrackBack in visible.
+	* image.rb: fix bug when comment status change.
+
+2003.04.28 Junichiro Kita <kita@kitaj.no-ip.com>
+	* trackback/tb.rb: GET request is redirected to TrackBacks(?date=yyyymmdd#t).
+
+2003-04-27 TADA Tadashi <sho@spc.gr.jp>
+	* trackback/tb-show.rb: support TrackBack hide and ruby 1.8.
+
+2003.04.27 Junichiro Kita <kita@kitaj.no-ip.com>
+	* add trackback/*.
+
 2003-04-25 TADA Tadashi <sho@spc.gr.jp>
 	* image: maxnum and maxsize effective in secure mode.
 	* image: add JavaScript for insert plugin tag into diary. thanks Yoshimi KURUMA <yoshimik@iris.dti.ne.jp>.
