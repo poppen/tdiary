@@ -1,4 +1,4 @@
-# calendar3.rb $Revision: 1.11 $
+# calendar3.rb $Revision: 1.12 $
 #
 # calendar3: 現在表示している月のカレンダーを表示します．
 #  パラメタ: なし
@@ -14,6 +14,38 @@
 #
 # Copyright (c) 2001,2002 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
+#
+#
+# sample CSS for calendar3
+#
+# .calendar-day span a{
+#         color: inherit;
+# }
+#
+# .calendar-sunday {
+#         color: red;
+# }
+#
+# .calendar-saturday {
+#         color: blue;
+# }
+#
+# .calendar-weekday {
+#         color: black;
+# }
+#
+# .calendar-normal {
+# }
+#
+# .calendar-day {
+#         font-weight: bold;
+# }
+#
+# .calendar-todo {
+#         border-style: solid;
+#         border-color: red;
+#         border-width: 1px;
+# }
 #
 module Calendar3
 	WEEKDAY = 0
@@ -89,7 +121,7 @@ def calendar3
 	Calendar3.make_cal(year, month).each do |day, kind|
 		date = "%04d%02d%02d" % [year, month, day]
 		if @diaries[date].nil?
-			result << %Q|<span class="calendar-normal"><a class="#{Calendar3::STYLE[kind]}">#{day}</a></span>\n|
+			result << %Q|<span class="calendar-normal"><span class="#{Calendar3::STYLE[kind]}">#{day}</span></span>\n|
  		elsif !@diaries[date].visible?
 			todos = []
 			if show_todo
@@ -100,13 +132,13 @@ def calendar3
 				end
 			end
 			if todos.size != 0
-				result << %Q|<span class="calendar-todo"><a class="#{Calendar3::STYLE[kind]}" title="#{day}日の予定:&#13;&#10;#{todos.join "&#13;&#10;"}">#{day}</a></span>\n|
+				result << %Q|<span class="calendar-todo"><span class="#{Calendar3::STYLE[kind]}" title="#{day}日の予定:&#13;&#10;#{todos.join "&#13;&#10;"}">#{day}</span></span>\n|
 			else
-				result << %Q|<span class="calendar-normal"><a class="#{Calendar3::STYLE[kind]}">#{day}</a></span>\n|
+				result << %Q|<span class="calendar-normal"><span class="#{Calendar3::STYLE[kind]}">#{day}</span></span>\n|
 			end
 		else
 			result << %Q|<span class="calendar-day" id="target-#{day}" onmouseover="popup(document.getElementById('target-#{day}'),document.getElementById('popup-#{day}'), document.getElementById('title-#{day}'));" onmouseout="popdown(document.getElementById('popup-#{day}'));">\n|
-			result << %Q|  <a class="#{Calendar3::STYLE[kind]}" title="|
+			result << %Q|  <span class="#{Calendar3::STYLE[kind]}" id="title-#{day}" title="|
 			i = 1
 			r = []
 			@diaries[date].each_section do |section|
@@ -121,7 +153,7 @@ def calendar3
 				i += 1
 			end
 			result << r.join("&#13;&#10;")
-			result << %Q|" href="#{@index}#{anchor date}" id="title-#{day}">#{day}</a>\n|
+			result << %Q|"><a href="#{@index}#{anchor date}">#{day}</a></span>\n|
 			unless /w3m/ === ENV["HTTP_USER_AGENT"]
 				result << %Q|  <span class="calendar-popup" id="popup-#{day}">\n|
 				i = 1
