@@ -1,4 +1,4 @@
-# pb-show.rb $Revision: 1.2 $
+# pb-show.rb $Revision: 1.3 $
 #
 # functions:
 #   * show Pingback ping URL in right of TSUKKOMI label.
@@ -79,7 +79,7 @@ def pingbacks_of_today_short( diary, limit = @conf['pingback_limit'] || 3 )
 	r << %Q!\t<div class="comment pingbacks">\n!
 
 	r << %Q!\t\t<div class="caption">\n!
-	r << %Q!\t\t\t#{ pingback_today }#{ pingback_total( count ) }\n! if count > 0
+        r << %Q!\t\t\t#{ pingback_today }#{ pingback_total( count ) }\n!
 	r << %Q!\t\t</div>\n!
 
 	r << %Q!\t\t<div class="commentshort pingbackshort">\n!
@@ -107,7 +107,7 @@ def pingbacks_of_today_long( diary, limit = 100 )
 	r << %Q!\t<div class="comment pingbacks">\n!
 
 	r << %Q!\t\t<div class="caption">\n!
-	r << %Q!\t\t\t#{ pingback_today }#{ pingback_total( count ) }\n! if count > 0
+	r << %Q!\t\t\t#{ pingback_today }#{ pingback_total( count ) }\n!
 	r << %Q!\t\t</div>\n!
 
 	r << %Q!\t\t<div class="commentbody pingbackbody">\n!
