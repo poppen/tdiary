@@ -1,4 +1,4 @@
-# image.rb $Revision: 1.9 $
+# image.rb $Revision: 1.10 $
 # -pv-
 # 
 # 名称:
@@ -11,12 +11,13 @@
 # 本文
 #
 # 使い方:
-# image( number, 'altword' ) - 画像を表示します。
-#  number - 画像の番号0、1、2等
-#  altword - imgタグの altに入れる文字列
+# image( number, 'altword', thumbnail ) - 画像を表示します。
+#    number - 画像の番号0、1、2等
+#    altword - imgタグの altに入れる文字列
+#    thumbnail - サムネイル(小さな画像)を指定する(省略可)
 #
-# image_left( number, 'altword' ) - imageにclass=leftを追加します。
-# image_right( number, 'altword' ) - imageにclass=rightを追加します。
+# image_left( number, 'altword', thumbnail ) - imageにclass=leftを追加します。
+# image_right( number, 'altword', thumbnail ) - imageにclass=rightを追加します。
 #
 # その他:
 # tDiary version 1.5.3.20030420以降で動作します。
@@ -38,8 +39,13 @@
 # Copyright (c) 2002 Toshi Okada <toshi@neverland.to>
 # Copyright (c) 2003 Yoshimi KURUMA <yoshimik@iris.dti.ne.jp>
 # Distributed under the GPL
+#
 
 =begin Changelog
+2003-05-17 TADA Tadashi <sho@spc.gr.jp>
+	* add thumbnail in 3rd parameter of image method.
+	* force image width to 160 in update form.
+
 2003-04-25 TADA Tadashi <sho@spc.gr.jp>
 	* maxnum and maxsize effective in secure mode.
 	* show message when upload failed.
@@ -62,21 +68,27 @@
 	* version 0.5 first form_proc version.
 =end
 
-def image( id, alt = 'image', width = nil, place = 'photo' )
+def image( id, alt = 'image', thumbnail = nil, width = nil, place = 'photo' )
 	if @conf.secure then
 		image = "#{@image_date}_#{id}.jpg"
+		image_t = "#{@image_date}_#{thumbnail}.jpg" unless thumbnail
 	else
    	image = image_list( @image_date )[id.to_i]
+   	image_t = image_list( @image_date )[thumbnail.to_i]
 	end
-   %Q[<img class="#{place}" src="#{@image_url}/#{image}" alt="#{alt}">]
+	if thumbnail then
+   	%Q[<a href="#{@image_url}/#{image}"><img class="#{place}" src="#{@image_url}/#{image_t}" alt="#{alt}"></a>]
+	else
+   	%Q[<img class="#{place}" src="#{@image_url}/#{image}" alt="#{alt}">]
+	end
 end
 
-def image_left( id, alt = "image", width = nil )
-   image( id, alt, width, "left" )
+def image_left( id, alt = "image", thumbnail = nil, width = nil )
+   image( id, alt, thumbnail, width, "left" )
 end
 
-def image_right( id, alt = "image", width = nil )
-   image( id, alt, width, "right" )
+def image_right( id, alt = "image", thumbnail = nil, width = nil )
+   image( id, alt, thumbnail, width, "right" )
 end
 
 #
@@ -204,7 +216,7 @@ add_form_proc do |date|
 		<table>
 		<tr>]
 	   images.each_with_index do |img,id|
-	      r << %Q[<td><img class="form" src="#{@image_url}/#{img}"></td>] if img
+	      r << %Q[<td><img class="form" src="#{@image_url}/#{img}" alt="#{id}" width="160"></td>] if img
 	   end
 		r << "</tr><tr>"
 	   images.each_with_index do |img,id|
