@@ -1,4 +1,4 @@
-# my-ex.rb $Revision: 1.1 $
+# my-ex.rb $Revision: 1.2 $
 #
 # my(拡張版): myプラグインを拡張し、title属性に参照先の内容を挿入します。
 #             参照先がセクションの場合は(あれば)サブタイトルを、
@@ -15,15 +15,15 @@ def my( a, str )
 	date, place, frag = a.scan( /(\d{8})#?([cp])(\d\d)/ )[0]
 	if date and frag and @diaries[date] then
 		if place[0] == ?p then
-			para = nil
+			section = nil
 			idx = 1
-			@diaries[date].each_paragraph do |p|
-				para = p
+			@diaries[date].each_section do |s|
+				section = s
 				break if idx == frag.to_i 
 				idx += 1
 			end
-			if para and para.subtitle then
-				title = CGI::escapeHTML( "#{para.subtitle}" )
+			if section and section.subtitle then
+				title = CGI::escapeHTML( "#{section.subtitle}" )
 				result = %Q[<a href="#{@index}#{anchor a}" title="#{title}">#{str}</a>]
 			end
 		else # comment

@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# yasqueeze.rb $Revision: 1.10 $
+# yasqueeze.rb $Revision: 1.11 $
 # -pv-
 #
 # 名称：
@@ -45,6 +45,9 @@
 # version 1.0.4 by TADA Tadashi <sho@spc.gr.jp> with GPL2.
 #
 =begin ChangeLog
+2002-08-13 TADA Tadashi <sho@spc.gr.jp>
+	* for tDiary 1.5. thanks NISHIO Mizuho <gha@intrastore.cdc.com>.
+
 2002-05-19 MUTOH Masao	<mutoh@highway.ne.jp>
 	* ドキュメントアップデート
 
@@ -109,7 +112,7 @@ if mode == "CMD" || mode == "CGI"
 
 	if mode == "CMD"
 		def usage
-			puts "yasqueeze $Revision: 1.10 $"
+			puts "yasqueeze $Revision: 1.11 $"
 			puts " Yet Another making html files from tDiary's database."
 			puts " usage: ruby yasqueeze.rb [-p <tDiary path>] [-c <tdiary.conf path>] [-a] [-s] <dest path>"
 			exit
@@ -224,10 +227,10 @@ end
 class YATDiarySqueezeMain < TDiary
 	def initialize(dest, all_data, compat)
 		super(nil, 'day.rhtml')
-		make_years
+		calendar
 		@years.keys.sort.each do |year|
 			@years[year.to_s].sort.each do |month|
-				transaction(Time::local(year.to_i, month.to_i)) do |diaries|
+				@io.transaction(Time::local(year.to_i, month.to_i)) do |diaries|
 					diaries.sort.each do |day, diary|
 						print YATDiarySqueeze.new(diary, dest, all_data, compat).execute + " "
 					end
@@ -248,7 +251,7 @@ if mode == "CGI" || mode == "CMD"
 			</head>
 			<body><div style="text-align:center">
 			<h1>Yet Another Squeeze for tDiary</h1>
-			<p>$Revision: 1.10 $</p>
+			<p>$Revision: 1.11 $</p>
 			<p>Copyright (C) 2002 MUTOH Masao&lt;mutoh@highway.ne.jp&gt;</p></div>
 			<br><br>Start!</p><hr>
 		]

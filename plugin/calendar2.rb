@@ -1,4 +1,4 @@
-# calendar2.rb $Revision: 1.7 $
+# calendar2.rb $Revision: 1.8 $
 #
 # calendar2: どこかで見たようなカレンダーを日記に追加する
 #   パラメタ:
@@ -101,9 +101,9 @@ CALENDAR_HEAD
 					elsif ! @diaries[date].visible?
 						if show_todo
 							todos = []
-							@diaries[date].each_paragraph do |paragraph|
-								if show_todo === paragraph.subtitle
-									todos << paragraph.body
+							@diaries[date].each_section do |section|
+								if show_todo === section.subtitle
+									todos << section.body
 								end
 							end
 							if todos.size != 0
@@ -117,9 +117,9 @@ CALENDAR_HEAD
 					else
 						subtitles = []
 						idx = "01"
-						@diaries[date].each_paragraph do |paragraph|
-							if paragraph.subtitle
-								subtitles << %Q|#{idx}. #{CGI::escapeHTML(paragraph.subtitle.gsub(/<.+?>/, ''))}|
+						@diaries[date].each_section do |section|
+							if section.subtitle
+								subtitles << %Q|#{idx}. #{CGI::escapeHTML(section.subtitle.gsub(/<.+?>/, ''))}|
 							end
 							idx.succ!
 						end

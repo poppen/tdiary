@@ -1,4 +1,4 @@
-# $Revision: 1.8 $
+# $Revision: 1.9 $
 # recent_list: 最近書いた日記のタイトル，サブタイトルを表示する
 #   パラメタ(カッコ内は未指定時の値):
 #     days:            何日分の日記を表示するか(20)
@@ -51,21 +51,21 @@ def recent_list(days = 30, date_format = nil, title_with_body = nil, show_size =
 					end
 					if show_size == true
 						s = 0
-						m.diaries[date].each_paragraph do |paragraph|
-							s = s + paragraph.to_s.size.to_i
+						m.diaries[date].each_section do |section|
+							s = s + section.to_s.size.to_i
 						end
 						result << ":#{s}"
 					end
 					result << %Q|</p>\n<div class="recentsubtitles">\n|
 
 					i = 1
-					m.diaries[date].each_paragraph do |paragraph|
-						if paragraph.subtitle
+					m.diaries[date].each_section do |section|
+						if section.subtitle
 							result << %Q| <a href="#{@index}#{anchor "%s#p%02d" % [date, i]}"|
-							result << %Q| title="#{CGI::escapeHTML(paragraph.shorten)}"| \
+							result << %Q| title="#{CGI::escapeHTML(section.shorten)}"| \
 								if title_with_body == true
 							result << %Q|>#{i}</a>. | \
-									<< %Q|#{paragraph.subtitle}<br>\n|
+									<< %Q|#{section.subtitle}<br>\n|
 						end
 						i += 1
 					end

@@ -1,4 +1,4 @@
-# calendar3.rb $Revision: 1.7 $
+# calendar3.rb $Revision: 1.8 $
 #
 # calendar3: 現在表示している月のカレンダーを表示します．
 #  パラメタ: なし
@@ -90,12 +90,12 @@ def calendar3
 			result << %Q|  <a class="#{Calendar3::STYLE[kind]}" title="|
 			i = 1
 			r = []
-			@diaries[date].each_paragraph do |paragraph|
-				if paragraph.subtitle
+			@diaries[date].each_section do |section|
+				if section.subtitle
 					if extra_erb
-						text = ERbLight.new(paragraph.subtitle.untaint).result(binding)
+						text = ERbLight.new(section.subtitle.untaint).result(binding)
 					else
-						text = paragraph.subtitle
+						text = section.subtitle
 					end
 					r << %Q|#{i}. #{text.gsub(/<.+?>/, '')}|
 				end
@@ -106,14 +106,14 @@ def calendar3
 			unless /w3m/ === ENV["HTTP_USER_AGENT"]
 				result << %Q|  <span class="calendar-popup" id="popup-#{day}">\n|
 				i = 1
-				@diaries[date].each_paragraph do |paragraph|
-					if paragraph.subtitle
+				@diaries[date].each_section do |section|
+					if section.subtitle
 						if extra_erb
-							text = ERbLight.new(paragraph.text.untaint).result(binding)
-							subtitle = ERbLight.new(paragraph.subtitle.untaint).result(binding)
+							text = ERbLight.new(section.text.untaint).result(binding)
+							subtitle = ERbLight.new(section.subtitle.untaint).result(binding)
 						else
-							text = paragraph.text
-							subtitle = paragraph.subtitle
+							text = section.text
+							subtitle = section.subtitle
 						end
 						result << %Q|    <a href="#{@index}#{anchor "%s#p%02d" % [date, i]}" title="#{CGI::escapeHTML(Calendar3.shorten(text))}">#{i}</a>. #{subtitle}<br>\n|
 					end
