@@ -1,4 +1,4 @@
-# a.rb $Revision: 1.6 $
+# a.rb $Revision: 1.7 $
 #
 # Create anchor easily.
 #
@@ -141,7 +141,7 @@ def a(key, option_or_name = nil, name = nil, charset = nil)
 			result = "tlink is not available."
 		end
 	else
-		result = %Q[<a href="#{url}">#{value}</a>]
+		result = %Q[<a href="#{CGI.escapeHTML(url)}">#{value}</a>]
 	end
 	result
 end
