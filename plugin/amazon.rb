@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.18 $
+# amazon.rb $Revision: 1.19 $
 #
 # isbn_image_left: 指定したISBNの書影をclass="left"で表示
 #   パラメタ:
@@ -141,7 +141,7 @@ def getAmazon( asin )
 end
 
 def amazonNoImg(item_url,item_name)
-	%Q[<a href="#{item_url.strip}ref=nosim/">#{item_name.strip}</a>]
+	%Q[<a href="#{item_url.strip}/ref=nosim/">#{item_name.strip}</a>]
 end
 
 
