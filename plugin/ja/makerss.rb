@@ -13,8 +13,10 @@ def makerss_tsukkomi_label( id )
 end
 
 add_conf_proc('makerss', 'RSS§Œ∫Ó¿Æ') do
-	%w( makerss.hidecomment makerss.hidecontent makerss.shortdesc ).each do |item|
-		@conf[item] = ( 't' == @cgi.params[item][0] )
+	if @mode == 'saveconf'
+		%w( makerss.hidecomment makerss.hidecontent makerss.shortdesc ).each do |item|
+			@conf[item] = ( 't' == @cgi.params[item][0] )
+		end
 	end
 
 	<<-_HTML

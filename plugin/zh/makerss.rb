@@ -7,8 +7,10 @@ def makerss_tsukkomi_label( id )
 end
 
 add_conf_proc('makerss', 'RSS publication') do
-	%w( makerss.hidecomment makerss.hidecontent makerss.shortdesc ).each do |item|
-		@conf[item] = ( 't' == @cgi.params[item][0] )
+	if @mode == 'saveconf'
+		%w( makerss.hidecomment makerss.hidecontent makerss.shortdesc ).each do |item|
+			@conf[item] = ( 't' == @cgi.params[item][0] )
+		end
 	end
 
 	<<-_HTML
@@ -24,7 +26,7 @@ add_conf_proc('makerss', 'RSS publication') do
 		<option value="f"#{@conf['makerss.hidecontent'] ? '' : ' selected'}>Include</option>
 		<option value="t"#{@conf['makerss.hidecontent'] ? ' selected' : ''}>Hide</option></select>
 		encoded contents of your diary in RSS.
-	<li>Include summary of your contens<select name="makerss.shortdesc">
+	<li>Include summary of your contents<select name="makerss.shortdesc">
 		<option value="f"#{@conf['makerss.shortdesc'] ? '' : ' selected'}>as long as possible</option>
 		<option value="t"#{@conf['makerss.shortdesc'] ? ' selected' : ''}>only some portion</option></select>
 		in RSS.

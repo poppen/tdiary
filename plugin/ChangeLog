@@ -1,3 +1,8 @@
+2004-11-18 zunda <zunda at freeshell.org>
+	* {en,zh}/makerss.rb: fixed typo, thanks to vette <vette at mail.ne.jp>
+	* {ja,en,zh}/makerss.rb: reflects form values only when OK button has 
+	been pushed, thanks to vette <vette at mail.ne.jp>
+
 2004-11-16 zunda <zunda at freeshell.org>
   * makerss.rb, {ja,en,zh}/makerss.rb: more options:
 		- hidecomment, hidecontent, shortdescription: configurable thru. browser
