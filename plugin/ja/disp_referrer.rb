@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.16 2004-11-11 02:11:03 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.17 2005-01-23 07:53:44 zunda Exp $-))
 日本語リソース
 
 == 概要
@@ -476,14 +476,14 @@ DispReferrer2_Engines = {
 	'msn' => [[%r{\Ahttp://.*?\.MSN\.([^/]+)}i, '".#{$1}のMSNサーチ"', ['q', 'MT'], nil ]],
 	'metacrawler' => [[%r{\Ahttp://.*?.metacrawler.com}i, '"MetaCrawler"', ['q'], nil ]],
 	'metabot' => [[%r{\Ahttp://.*?\.metabot\.ru}i, '"MetaBot.ru"', ['st'], nil ]],
-	'altavista' => [[%r{\Ahttp://.*?\.altavista\.([^/]+)}i, '".#{$1}のAltaVista検索"', ['q'], nil ]],
+	'altavista' => [[%r{\Ahttp://.*altavista\.([^/]+)}i, '".#{$1}のAltaVista検索"', ['q'], nil ]],
 	'infoseek' => [[%r{\Ahttp://(www\.)?infoseek\.co\.jp}i, '"インフォシーク"', ['qt'], nil ]],
 	'odn' => [[%r{\Ahttp://.*?\.odn\.ne\.jp}i, '"ODN検索"', ['QueryString', 'key'], nil ]],
 	'lycos' => [[%r{\Ahttp://.*?\.lycos\.([^/]+)}i, '".#{$1}のLycos"', ['query', 'q', 'qt'], nil ]],
 	'fresheye' => [[%r{\Ahttp://.*?\.fresheye}i, '"フレッシュアイ"', ['kw'], nil ]],
 	'goo' => [
-		[%r{\Ahttp://((www|dictionary|kids|eco|oshiete|search|community|machi|bb|bsearch|dir|channel|ocnsearch)\.)?goo\.ne\.jp}i, '"goo"', ['MT'], nil ],
-		[%r{\Ahttp://((www|dictionary|kids|eco|oshiete|search|community|machi|bb|bsearch|dir|channel|ocnsearch)\.)?goo\.ne\.jp}i, '"goo"', [], nil ],
+		[%r{\Ahttp://((www|ocn|dictionary|kids|eco|oshiete|search|community|machi|bb|bsearch|dir|channel|ocnsearch)\.)?goo\.ne\.jp}i, '"goo"', ['MT'], nil ],
+		[%r{\Ahttp://((www|ocn|dictionary|kids|eco|oshiete|search|community|machi|bb|bsearch|dir|channel|ocnsearch)\.)?goo\.ne\.jp}i, '"goo"', [], nil ],
 	],
 	'nifty' => [
 		[%r{\Ahttp://search\.nifty\.com}i, '"@nifty/@search"', ['q', 'Text'], DispReferrer2_Google_cache],
@@ -519,7 +519,7 @@ DispReferrer2_Engines = {
 	't-online' => [[%r{\Ahttp://brisbane\.t-online\.de/}i, '"T-Online"', ['q'], DispReferrer2_Google_cache]],
 	'walla' => [[%r{\Ahttp://find\.walla\.co\.il/}i, '"Walla! Channels"', ['q'], nil ]],
 	'mysearch' => [[%r{\Ahttp://.*?\.mysearch\.com/}i, '"My Search"', ['searchfor'], nil ]],
-	'jword' => [[%r{\Ahttp://search\.jword.jp/}i, '"JWord"', ['name'], nil ]],
+	'jword' => [[%r{\Ahttp://.*\.jword.jp/}i, '"JWord"', ['name'], nil ]],
 	'nytimes' => [[%r{\Ahttp://query\.nytimes\.com/search}i, '"New York Times: Search"', ['as_q', 'q', 'query'], DispReferrer2_Google_cache]],
 	'aaacafe' => [[%r{\Ahttp://search\.aaacafe\.ne\.jp/search}i, '"AAA!CAFE"', ['key'], nil]],
 	'virgilio' => [[%r{\Ahttp://search\.virgilio\.it/search}i, '"VIRGILIO Ricerca"', ['qs'], nil]],
@@ -565,6 +565,8 @@ DispReferrer2_Engines = {
 	'yahoofs' => [[%r{\Ahttp://cache\.yahoofs\.jp/(?:search/)?cache}i, '"Yahoo! cache"', ['p', 'w'], nil]],
 	'googlie' => [[%r{\Ahttp://www\.googlie\.com/search}i, '"Google検索(へのリダイレクタ)"', ['as_q', 'q'], DispReferrer2_Google_cache]],
 	'toppg' => [[%r{\Ahttp://g\.toppg\.to/search}i, '"Google検索(へのリダイレクタ)"', ['as_q', 'q'], DispReferrer2_Google_cache]],
+	'dyndns' => [[%r{\Ahttp://naoya\.dyndns\.org/feedback/app/search}i, '"FeedBack"', ['keyword'], nil]],
+	'blogpeople' => [[%r{\Ahttp://bst\.blogpeople\.net/search_result\.jsp}i, '"blogpeople"', ['keyword'], nil]],
 	'210' => [[%r{\Ahttp://210\.174\.160\.70/se_root.phtml}i, '"JWord（日本語キーワード）"', ['name'], nil]],
 	# % whois 64.233.160
 	# NetRange:   64.233.160.0 - 64.233.191.255
