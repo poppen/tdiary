@@ -1,3 +1,6 @@
+2003-09-17 SAKAMOTO Hideki <hs@on-sky.net>
+	* sn.rb: add add_body_leave_proc
+
 2003-09-18 TADA Tadashi <sho@spc.gr.jp>
 	* whatsnew.rb: support apply_plugin.
 

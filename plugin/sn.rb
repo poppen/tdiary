@@ -1,5 +1,5 @@
 =begin
-= 連番生成プラグイン sn.rb $Revision: 1.1 $
+= 連番生成プラグイン sn.rb $Revision: 1.2 $
 
 == 概要
 	各日付の日記内で通し番号を表示します。
@@ -44,6 +44,8 @@
 =end
 
 =begin Changelog
+2003-09-17 SAKAMOTO Hideki <hs@on-sky.net>
+	* add add_body_leave_proc
 2003-09-13 SAKAMOTO Hideki <hs@on-sky.net>
 	* change @sn_section initialization: nil -> 0
 	* delete @sn_section  clear line in sn()
@@ -57,6 +59,12 @@
 =end
 
 add_body_enter_proc do |date|   
+	@sn_count = 1
+	@sn_idx = 0
+	""
+end
+
+add_body_leave_proc do |date|   
 	@sn_count = 1
 	@sn_idx = 0
 	""
