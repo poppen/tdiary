@@ -1,4 +1,4 @@
-# counter.rb $Revision: 1.8 $
+# counter.rb $Revision: 1.9 $
 # -pv-
 #
 # 名称：
@@ -50,6 +50,9 @@
 #   @options["counter.kiriban"] = [1000, 3000, 5000, 10000, 15000, 20000]
 #   @options["counter.kiriban_today"] = [100, 200, 300, 400, 500, 600]
 #
+# 日々バックアップ　未指定時：有効
+#   @options['counter.daily_backup'] = true
+# 
 # CSSについて:
 #	 counter: 対象文字列全体(全て)
 #	 counter-today: 対象文字列全体(今日)
@@ -68,6 +71,17 @@
 # You can redistribute it and/or modify it under GPL2.
 # 
 =begin ChangeLog
+2002-07-19 MUTOH Masao  <mutoh@highway.ne.jp>
+	* 日々単位でデータをバックアップするようにした。
+     @options["counter.dairy_backup"]で指定。falseを指定しない限り
+     バックアップする。
+	* Date#==メソッドでnilを渡さないように修正
+	* require 'pstore'追加(tDiary version 1.5.x系対応)
+	* logのフォーマット変更(全て・今日・昨日のデータを出力)
+	* @options["counter.deny_same_src_interval"]のデフォルト値を2時間
+     に変更した。
+	* version 1.5.0
+
 2002-05-19 MUTOH Masao  <mutoh@highway.ne.jp>
 	* Cookieを使うことのできない同一クライアントからの連続アクセスを、
      カウントアップしないようにした。
@@ -135,6 +149,7 @@ if ["latest", "month", "day", "comment"].include?(@mode) and
 	@cgi.request_method =~ /POST|GET/ 
 
 require 'date'
+require 'pstore'
 
 eval(<<TOPLEVEL_CLASS, TOPLEVEL_BINDING)
 class TDiaryCountData
@@ -148,11 +163,17 @@ class TDiaryCountData
 	end
 
 	def up(now, cache_path, cgi, log)
-		if now == @newestday
-			@today += 1
+		if @newestday
+			if now == @newestday
+				@today += 1
+			else
+				log(@newestday, cache_path) if log
+				@yesterday = ((now - 1) == @newestday) ? @today : 0
+				@today = 1
+				@newestday = now
+			end
 		else
-			log(@newestday, @today, cache_path) if log
-			@yesterday = ((now - 1) == @newestday) ? @today : 0
+			@yesterday = 0
 			@today = 1
 			@newestday = now
 		end
@@ -166,17 +187,17 @@ class TDiaryCountData
 		ret
 	end
 
-	def log(day, value, path)
+	def log(day, path)
 		return unless day
 		open(path + "/counter.log", "a") do |io|
-			io.print day, " : ", value, "\n"
+			io.print day, " : ", @all, ",", @today, ",", @yesterday, "\n"
 		end
 	end
 end
 TOPLEVEL_CLASS
 
 module TDiaryCounter
-	@version = "1.4.0"
+	@version = "1.5.0"
 
 	def run(cache_path, cgi, options)
 		timer = options["counter.timer"] if options
@@ -186,6 +207,7 @@ module TDiaryCounter
 		dir = cache_path + "/counter"
 		path = dir + "/counter.dat"
 		cookie = nil
+		today = Date.today
 	
 		Dir.mkdir(dir, 0700) unless FileTest.exist?(dir)
 	
@@ -205,7 +227,7 @@ module TDiaryCounter
 			if allow 
 				changed = false
 				if new_user?(cgi, options)
-					@cnt.up(Date.today, dir, cgi, (options and options["counter.log"]))
+					@cnt.up(today, dir, cgi, (options and options["counter.log"]))
 					cookie = CGI::Cookie.new({"name" => "tdiary_counter", 
 														"value" => @version, 
 														 "expires" => Time.now + timer * 3600})
@@ -229,7 +251,24 @@ module TDiaryCounter
 					changed = true
 				end
 
-				db["countdata"] = @cnt if changed
+				if changed
+					if options["counter.daily_backup"] == nil || options["counter.daily_backup"] 
+						if FileTest.exist?(path)
+							File.open(path,  'rb' ) {|r|
+								File.open(path + "_" + today.to_s, 'wb' ) {|w|
+									st = r.stat
+									begin
+										while true do
+											w.write r.sysread(st.blksize)
+										end
+									rescue EOFError
+									end
+								} 
+							}
+						end
+					end
+					db["countdata"] = @cnt
+				end
 			end
 		end
 		cookie
@@ -251,7 +290,7 @@ module TDiaryCounter
 	def new_user?(cgi, options)
 		if ! cgi.cookies or ! cgi.cookies.keys.include?("tdiary_counter")
 			interval = options["counter.deny_same_src_interval"] if options
-			interval = 0.1 unless interval	# 6 min.
+			interval = 2 unless interval	# 2 hour.
 			previous_access_time = @cnt.previous_access_time(cgi.remote_addr, cgi.user_agent)
 			if previous_access_time
 				ret = Time.now - previous_access_time > interval * 3600
