@@ -1,4 +1,4 @@
-# disp_referrer.rb $Revision: 1.3 $
+# disp_referrer.rb $Revision: 1.4 $
 # -pv-
 #
 # 名称：
@@ -21,6 +21,14 @@
 # You can redistribute it and/or modify it under GPL2.
 #
 =begin ChangeLog
+2002-08-08  MUTOH Masao <mutoh@highway.ne.jp>
+   * 検索結果の表示方法を変更。各検索エンジン毎に検索文字列を表示するようにした
+   * 更新時は整形しないようにした(smbdさん要望)
+   * 出力HTMLを改善
+   * AOL検索追加
+   * Lycos検索改善
+   * version 2.1.0
+
 2002-08-07  MUTOH Masao <mutoh@highway.ne.jp>
    * 表示対象のずれの修正
    * version 2.0.1
@@ -53,6 +61,10 @@ def Uconv.unknown_unicode_handler(unicode)
    end
 end
 class Diary
+   def referers
+     newer_referer
+     @referers
+   end
    def disp_referer( table, ref )
       ref = CGI::unescape( ref )
       if /((e|cs)=utf-?8|jp.aol.com)/i =~ ref
@@ -80,7 +92,7 @@ class Diary
 end
 TOPLEVEL_CLASS
 
-unless @options['disp_referrer.old'] #NEW VERSION
+unless (@options['disp_referrer.old'] or @mode == "edit") #NEW VERSION
 
 def referer_of_today_long( diary, limit )
   return '' if not diary or diary.count_referers == 0
@@ -94,7 +106,7 @@ def referer_of_today_long( diary, limit )
     [["Infoseek検索","http://www.infoseek.co.jp/"],
 	["^http://www.infoseek.co.jp/.*?qt=([^&]*).*", " \\1"]],
     [["Lycos検索","http://www.lycos.co.jp/"],
-	["^http://.*lycos.*/.*?query=([^&]*).*", " \\1"]],
+	["^http://.*lycos.*/.*?(query|q)=([^&]*).*", " \\2"]],
     [["goo検索","http://www.goo.ne.jp/"],
 	["^http://(www|search).goo.ne.jp/.*?MT=([^&]*).*", " \\2"]],
     [["@nifty検索", "http://www.nifty.com/"],
@@ -109,68 +121,53 @@ def referer_of_today_long( diary, limit )
 	["^http://cgi.search.biglobe.ne.jp/cgi-bin/search.*?q=([^&]*).*", " \\1"]],
     [["テレコムサーチ", "http://www.odn.ne.jp/"],
 	["^http://search.odn.ne.jp/LookSmartSearch.jsp.*(key|QueryString)=([^&]*).*", " \\2"]],
+    [["AOL検索", "http://www.aol.com/"],
+	["^http://search.*aol.com/.*query=([^&]*).*", " \\1"]],
     [["DIONサーチ", "http://www.dion.ne.jp/"],
 	["^http://dir.dion.ne.jp/LookSmartSearch.jsp.*(key|QueryString)=([^&]*).*", " \\2"]]
   ]
 
   result = %Q[<div class="refererlist"><p class="referertitle">#{referer_today}</p>\n]
   result << %Q[<ul class="referer">\n]
-  data = Array.new
-  num = 0
-  str = ""
-  before_count = 0
-  before_url = "aaaaaa"
-  before_table = nil
-  search_table = nil
-  first = true
-  search_result = ""
-  diary.each_referer( limit ) do |count, ref|
-	if ref =~ /#{before_url}/
-	  search_table = before_table
-	  same_before = true
-	else
-	  search_tables.each do |table|
-		table[1..-1].each do |url|
-		  if ref =~ /#{url[0]}/
-			search_table = table
-			before_url = url[0]
-			break
-		  end
-		end
-	  end
-	  same_before = false
-	end
 
-	if search_table
-	  if (same_before and before_count == count) or first
-		first = false if first
-	  else
-		str.gsub!(/,$/, "")
-		search_result << %Q[<li>#{before_count} x #{num} <a href="#{CGI::escapeHTML(before_table[0][1])}">[#{before_table[0][0]}] #{CGI::escapeHTML( str )}</a></li>\n]
-		num = 0
-		str = ""
-      end
-	  str << diary.disp_referer( search_table[1..-1], ref )
-	  str << ","
-	  num += 1
-	  before_table = search_table
-	  before_count = count
-    else
-      if str != "" and before_table
-		str.gsub!(/,$/, "")
-		search_result << %Q[<li>#{before_count} x #{num} <a href="#{CGI::escapeHTML(before_table[0][1])}">[#{before_table[0][0]}] #{CGI::escapeHTML( str )}</a></li>\n]
-        num = 0
-        str = ""
-        first = true
-      end
-  	  result << %Q[<li>#{count} <a href="#{CGI::escapeHTML( ref )}">#{CGI::escapeHTML( diary.disp_referer( @referer_table, ref ) )}</a></li>\n]
-    end
-    search_table = nil
+  regexp = Regexp.new(search_tables.collect{|item| 
+						item[1..-1].collect{|v| v[0]}
+					  }.join("|"), Regexp::IGNORECASE)
+
+  refs = diary.referers
+  search_refs = refs.select {|item| regexp.match(item.to_a[1][1])}.collect{|item| item[1..2].flatten}.sort.reverse
+
+  refs = refs.collect{|item| item[1..2].flatten} - search_refs
+
+  refs.sort.reverse.each do |cnt, ref|
+	result << %Q[<li>#{cnt} <a href="#{CGI::escapeHTML(ref)}">#{CGI::escapeHTML(diary.disp_referer(@referer_table, ref))}</a></li>\n]
   end
-  result << "<br />"
-  result << search_result
-  result + '</ul></div>'
+  result << "</ul>\n<ul class=\"referer\">"
+
+  search_result = Array.new
+  search_tables.each do |title, *table|
+	array = nil
+	table.each do |regval, val|
+	  array = search_refs.select{|item| /#{regval}/i =~ item[1]
+	  }.collect{|item| [item[0], diary.disp_referer([[regval, val]], item[1])]}
+	end
+	if array and array.size > 0
+	  sum = 0
+	  query = ""
+	  array.each do |cnt, str|
+		sum += cnt
+		query << str
+		query << " x" << cnt.to_s if cnt > 1
+		query << ", "
+	  end
+	  query.gsub!(/, $/, "")
+	  query = CGI::escapeHTML(query)
+	  result << %Q[<li>#{sum} <a href="#{CGI::escapeHTML(title[1])}">#{title[0]}</a> : #{query}</li>\n]
+      search_refs -= array
+    end
+  end
+
+  result << "</ul></div>"
 end
 
 end
-
