@@ -1,4 +1,4 @@
-# calendar3.rb $Revision: 1.20 $
+# calendar3.rb $Revision: 1.21 $
 #
 # calendar3: 現在表示している月のカレンダーを表示します．
 #  パラメタ: なし
@@ -171,7 +171,11 @@ def calendar3
 			r = []
 			@diaries[date].each_section do |section|
 				if section.subtitle
-					text = apply_plugin( section.subtitle )
+					if section.respond_to?(:stripped_subtitle) and section.stripped_subtitle
+						text = apply_plugin( section.stripped_subtitle )
+					else
+						text = apply_plugin( section.subtitle )
+					end
 					r << %Q|#{i}. #{text.gsub(/<.+?>/, '')}|
 				end
 				i += 1
@@ -184,7 +188,11 @@ def calendar3
 				@diaries[date].each_section do |section|
 					if section.subtitle
 						text = apply_plugin( section.to_src)
-						subtitle = apply_plugin( section.subtitle )
+						if section.respond_to?(:stripped_subtitle) and section.stripped_subtitle
+							subtitle = apply_plugin( section.stripped_subtitle )
+						else
+							subtitle = apply_plugin( section.subtitle )
+						end
 						result << %Q|    <a href="#{@index}#{anchor "%s#p%02d" % [date, i]}" title="#{CGI::escapeHTML(Calendar3.shorten(text))}">#{i}</a>. #{subtitle}<br>\n|
 					end
 					i += 1
@@ -199,7 +207,7 @@ end
 
 add_header_proc do
     <<JAVASCRIPT
-  <script language="javascript">
+  <script type="text/javascript">
   // http://www.din.or.jp/~hagi3/JavaScript/JSTips/Mozilla/
   // _dom : kind of DOM.
   //        IE4 = 1, IE5+ = 2, NN4 = 3, NN6+ = 4, others = 0
