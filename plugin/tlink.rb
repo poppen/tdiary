@@ -1,4 +1,4 @@
-# tlink.rb $Revision: 1.4 $
+# tlink.rb $Revision: 1.5 $
 #
 # title Â°À­ÉÕ anchor plugin
 #
@@ -20,6 +20,9 @@
 # Modified: by abbey <inlet@cello.no-ip.org>
 #
 =begin ChangeLog
+2002-05-05 NT <nt@24i.net>
+	* add URL to User-Agent
+
 2002-04-21 abbey <inlet@cello.no-ip.org>
 	* add error shori
 
@@ -45,7 +48,10 @@ require 'kconv'
 
 def getcomment( url )
   result = ""
-  agent = { "User-Agent" => "DoCoMo (compatible; tDiary plugin; tlink;)" }
+  myhost = ENV["HTTP_HOST"]
+  myurl = ENV["REDIRECT_URL"]
+  ref = "http://#{myhost}#{myurl}"
+  agent = { "User-Agent" => "DoCoMo (compatible; tDiary plugin; tlink; #{ref})" }
   host, path, frag = url.scan( %r[http://(.*?)/(.*)#((?:p|c)\d\d)] )[0]
   if /p0/ =~ frag
     frag = "(" + frag + "|" + frag.sub( /p/, "p#" ).sub( /#0/, "#" ) + ")"
