@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# squeeze.rb $Revision: 1.1 $
+# squeeze.rb $Revision: 1.2 $
 # -pv-
 #
 # Ì¾¾Î¡§
@@ -45,6 +45,9 @@
 # version 1.0.4 by TADA Tadashi <sho@spc.gr.jp> with GPL2.
 #
 =begin ChangeLog
+2002-10-23 TADA Tadashi <sho@spc.gr.jp>
+	* support Config#hide_comment_form.
+
 2002-10-22 TADA Tadashi <sho@spc.gr.jp>
 	* rename to squeeze.rb.
 
@@ -122,7 +125,7 @@ if mode == "CMD" || mode == "CGI"
 
 	if mode == "CMD"
 		def usage
-			puts "squeeze $Revision: 1.1 $"
+			puts "squeeze $Revision: 1.2 $"
 			puts " making html files from tDiary's database."
 			puts " usage: ruby squeeze.rb [-p <tDiary path>] [-c <tdiary.conf path>] [-a] [-s] <dest path>"
 			exit
@@ -239,17 +242,6 @@ module TDiary
 	class YATDiarySqueezeMain < TDiaryBase
 		def initialize(dest, all_data, compat, conf)
 			@ignore_parser_cache = true
-			eval <<-DIARY_CLASS, TOPLEVEL_BINDING
-				module TDiary
-					module DiaryBase
-						alias :__eval_rhtml :eval_rhtml
-						def eval_rhtml(opt, path)
-							opt['hide_comment_form'] = true
-							__eval_rhtml(opt, path)
-						end
-					end
-				end
-			DIARY_CLASS
 	
 			super(nil, 'day.rhtml', conf)
 			calendar
@@ -272,12 +264,12 @@ if mode == "CGI" || mode == "CMD"
 		print %Q[Content-type:text/html\n\n
 			<html>
 			<head>
-				<title>Yet Another Squeeze for tDiary</title>
+				<title>Squeeze for tDiary</title>
 				<link href="./theme/default.css" type="text/css" rel="stylesheet"/>
 			</head>
 			<body><div style="text-align:center">
-			<h1>Yet Another Squeeze for tDiary</h1>
-			<p>$Revision: 1.1 $</p>
+			<h1>Squeeze for tDiary</h1>
+			<p>$Revision: 1.2 $</p>
 			<p>Copyright (C) 2002 MUTOH Masao&lt;mutoh@highway.ne.jp&gt;</p></div>
 			<br><br>Start!</p><hr>
 		]
@@ -289,6 +281,7 @@ if mode == "CGI" || mode == "CMD"
 		conf.footer = ''
 		conf.show_comment = true
 		conf.show_referer = false
+		conf.hide_comment_form = true
 		TDiary::YATDiarySqueezeMain.new(output_path, all_data, compat, conf)
 	rescue
 		print $!, "\n"
@@ -309,13 +302,16 @@ else
 		conf.footer = ''
 		conf.show_comment = true
 		conf.show_referer = false
+		conf.hide_comment_form = true
 
 		diary = @diaries[@date.strftime('%Y%m%d')]
 		dir = @options['squeeze.output_path'] || @options['yasqueeze.output_path']
 		dir = @cache_path + "/html" unless dir
 		Dir.mkdir(dir, 0755) unless File.directory?(dir)
-		TDiary::YATDiarySqueeze.new(diary, dir, @options['squeeze.all_data'] || @options['yasqueeze.all_data'],
-											@options['squeeze.compat_path'] || @options['yasqueeze.compat_path'], conf).execute
+		TDiary::YATDiarySqueeze.new(diary, dir,
+				@options['squeeze.all_data'] || @options['yasqueeze.all_data'],
+				@options['squeeze.compat_path'] || @options['yasqueeze.compat_path'],
+				conf).execute
 	end
 end
 
