@@ -1,4 +1,4 @@
-# tlink.rb $Revision: 1.5 $
+# tlink.rb $Revision: 1.6 $
 #
 # title Â°À­ÉÕ anchor plugin
 #
@@ -20,6 +20,11 @@
 # Modified: by abbey <inlet@cello.no-ip.org>
 #
 =begin ChangeLog
+2002-05-16 MUTOH Masao <mutoh@highway.ne.jp>
+	* cache mechanism support.
+	* code cleanup(remove require 'cgi', 
+		getcomment rename to tlink_getcomment).
+
 2002-05-05 NT <nt@24i.net>
 	* add URL to User-Agent
 
@@ -43,10 +48,34 @@
 =end
 
 require 'net/http'
-require 'cgi'
 require 'kconv'
 
-def getcomment( url )
+def tlink_initialize 
+  dir = @cache_path + "/tlink"
+  @tlink_path = dir + "/tlink.dat"
+
+  Dir.mkdir(dir, 0700) unless FileTest.exist?(dir)
+  db = PStore.new(@tlink_path)
+  db.transaction do
+    begin
+      @tlink_dic = db["tlinkdata"]
+    rescue PStore::Error
+      @tlink_dic = Hash.new
+    end
+  end
+end
+
+def tlink_finalize
+  db = PStore.new(@tlink_path)
+  db.transaction do
+    begin
+      db["tlinkdata"] = @tlink_dic
+    rescue PStore::Error
+    end
+  end
+end
+
+def tlink_getcomment( url )
   result = ""
   myhost = ENV["HTTP_HOST"]
   myurl = ENV["REDIRECT_URL"]
@@ -87,9 +116,17 @@ def getcomment( url )
   result = CGI::escapeHTML( result.gsub( %r[</?[aA](.*?)>], "" ) ).gsub( /&amp;nbsp;/, " " )
 end
 
+tlink_initialize
+
 def tlink( url, str, title = nil )
   unless title
-    title = getcomment( url )
+    if @tlink_dic[url]
+      title = @tlink_dic[url]
+    else
+        title = tlink_getcomment( url )
+      @tlink_dic[url] = title
+      tlink_finalize
+    end
   end
 
   %Q[<a href="#{url}", title="#{title}">#{str}</a>]
