@@ -1,0 +1,22 @@
+!機能
+
+blogger API/metaWeblog API/MovableType APIでのtDiaryの更新ができます。
+
+!インストール方法
+xmlrpc.rbをtDiaryのインストールされているディレクトリ(index.rbなどと同じディレクトリ)にコピーします。xmlrpc.rbのパーミッションは、755などに変更する必要があります。
+
+tdiary.confにユーザID/パスワードの設定を追加します。
+@options['xmlrpc.blogid']    = 'blogid'   # ブログのID
+@options['xmlrpc.username']  = 'username' # ユーザの名前
+@options['xmlrpc.password']  = 'password' # パスワード
+@options['xmlrpc.lastname']  = 'lastname' # 姓
+@options['xmlrpc.firstname'] = 'firstname'# 名
+@options['xmlrpc.userid']    = 'username' # ユーザID
+
+!使用方法
+
+blogger API/metaWeblog API/MovableType APIに対応したツールからアクセスします。
+たとえばubicast BloggerだとXMl-RPCエンドポイントという設定にはxmlrpc.rbのURLを指定します。
+
+  (MovableTypeの場合) http://<youdomain>/<path>/mt-xmlrpc.cgi
+  (xmlrpc.rbの場合)   http://<youdomain>/<path>/xmlrpc.rb
