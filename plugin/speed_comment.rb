@@ -1,4 +1,4 @@
-# speed_comment.rb $Revision: 1.3 $
+# speed_comment.rb $Revision: 1.4 $
 #
 # spped_comment: 最新・月毎表示時に簡易なツッコミフォームを表示する
 #                pluginディレクトリに入れるだけで動きます。
@@ -7,6 +7,10 @@
 # Distributed under the GPL
 #
 =begin ChangeLog
+2003-09-24 TADA Tadashi <sho@spc.gr.jp>
+	* support cookie for name.
+	* support conf_proc.
+
 2002-03-24 TADA Tadashi <sho@spc.gr.jp>
 	* suppress output in mobile mode. 
 
@@ -14,18 +18,36 @@
 	* support insert into @header.
 =end
 
-add_body_leave_proc( Proc::new do |date|
+add_body_leave_proc do |date|
 	if /latest|month/ =~ @mode and not @cgi.mobile_agent? then
+		@conf['speed_comment.name_size'] = 20 unless @conf['speed_comment.name_size']
+		@conf['speed_comment.body_size'] = 40 unless @conf['speed_comment.body_size']
 		r = ""
 		r << %Q[<div class="form"><form method="post" action="] + @index + %Q["><p>]
 		r << %Q[<input type="hidden" name="date" value="] + date.strftime( '%Y%m%d' ) + %Q[">]
 		r << %Q[<input type="hidden" name="mail" value="">]
-		r << comment_name_label + %Q[: <input class="field" name="name" value="">]
-		r << comment_body_label + %Q[: <input class="field" name="body" size="40">]
+		r << comment_name_label + %Q[: <input class="field" name="name" size="#{@conf['speed_comment.name_size']}" value="#{@cgi.cookies['tdiary'][0]}">]
+		r << comment_body_label + %Q[: <input class="field" name="body" size="#{@conf['speed_comment.body_size']}">]
 		r << %Q[<input type="submit" name="comment" value="] + comment_submit_label + %Q[">]
 		r << %Q[</p></form></div>]
 	else
 		''
 	end
-end )
+end
+
+add_conf_proc( 'speed_comment', '簡易ツッコミ' ) do
+	if @mode == 'saveconf' then
+		@conf['speed_comment.name_size'] = @cgi.params['speed_comment.name_size'][0].to_i
+		@conf['speed_comment.name_size'] = 20 if @conf['speed_comment.name_size'] < 1
+		@conf['speed_comment.body_size'] = @cgi.params['speed_comment.body_size'][0].to_i
+		@conf['speed_comment.body_size'] = 40 if @conf['speed_comment.body_size'] < 1
+	end
+
+	<<-HTML
+	<h3>簡易ツッコミフォームのサイズ</h3>
+	<p>名前欄: <input name="speed_comment.name_size" size="5" value="#{@conf['speed_comment.name_size'] || 20}"></p>
+	<p>本文欄: <input name="speed_comment.body_size" size="5" value="#{@conf['speed_comment.body_size'] || 40}"></p>
+	HTML
+end
+
 

@@ -1,3 +1,6 @@
+2003-09-24 TADA Tadashi <sho@spc.gr.jp>
+	* speed_comment.rb: support cookie for name, and conf_proc.
+
 2003-09-23 SAKAMOTO Hideki <hs@on-sky.net>
 	* sn.rb: document corrected
 
