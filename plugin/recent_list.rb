@@ -1,10 +1,11 @@
-#
+# $Revision: 1.2 $
 # recent_list: 最近書いた日記のタイトル，サブタイトルを表示する
 #   パラメタ(カッコ内は未指定時の値):
 #     days:            何日分の日記を表示するか(20)
 #     date_format:     日付表示フォーマット(日記の日付フォーマット)
 #     title_with_body: trueで各パラグラフへのリンクのtitle属性にそのパラグラフの一部を指定(false)
-#     show_size:       trueで日記帳を表示(false)
+#     show_size:       trueで日記長を表示(false)
+#     show_title:      trueで各日のタイトルを表示(false)
 #
 #   注意: セキュアモードでは使えません。
 #   備考: タイトルリストを日記に埋め込むは、レイアウトを工夫しなければ
@@ -29,7 +30,7 @@ end
 MODIFY_CLASS
 
 def recent_list(days = 30, date_format = @date_format,
-                title_with_body = false, show_size = false)
+                title_with_body = false, show_size = false, show_title = false)
   result = ""
   cgi = CGI::new
 
@@ -40,7 +41,9 @@ def recent_list(days = 30, date_format = @date_format,
         m = TDiaryMonth::new(cgi, '')
         m.diaries.keys.sort.reverse_each do |date|
           result << %Q|<p class="recentitem"><a href="#{@index}?date=#{date}">#{m.diaries[date].date.strftime(date_format)}</a>\n|
-          #result << %Q| #{m.diaries[date].title}| if m.diaries[date].title
+          if show_title and m.diaries[date].title
+            result << %Q| #{m.diaries[date].title}|
+          end
           if show_size == true
             s = 0
             m.diaries[date].each_paragraph do |paragraph|
