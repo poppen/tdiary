@@ -1,4 +1,4 @@
-# disp_referrer.rb $Revision: 1.14 $
+# disp_referrer.rb $Revision: 1.15 $
 # -pv-
 #
 # 名称：
@@ -27,6 +27,15 @@
 # You can redistribute it and/or modify it under GPL2.
 #
 =begin ChangeLog
+2002-10-11 MUTOH Masao <mutoh@highway.ne.jp>
+   * @options['disp_referrer.cols']追加。１つの検索エンジンで表示するカラム数を指定できるようにした(デフォルト10件)。
+     カラムを超えた場合は、その他にまとめて表示される。
+   * 検索時の繰り返し処理で全てのリンク元を走査し終わったらループを抜けるようなロジックを追加。
+     これにより、頻度の低い検索エンジンを追加しても速度的にさほど差が出ないようになった。
+   * TOCC/Search、Metcha Search、metacrawler検索、DOGPILE検索、NAXEARCH、overture検索、
+     looksmart検索、i won_Search、EarthLink検索、About検索追加
+   * Yahoo!、AOL、Google、 Biglobe、Infoseek、Fresheye、Netscape検索改善
+
 2002-10-07 Junichiro Kita <kita@kitaj.no-ip.com>
 	* add @options['disp_referrer.search_table']
 
@@ -120,15 +129,15 @@ def Uconv.unknown_unicode_handler(unicode)
 end
 module TDiary
 	module DiaryBase
-	  REG_CHAR_UTF8 = /&#[0-9]+;/ unless defined?( REG_CHAR_UTF8 )
+	  @reg_char_utf8 = /&#[0-9]+;/
 	  def referers
 		newer_referer
 		@referers
 	  end
 	  def disp_referer(table, ref)
 		ret = Web.unescape(ref)
-		if REG_CHAR_UTF8 =~ ref
-		  ret.gsub!(REG_CHAR_UTF8){|v|
+		if @reg_char_utf8 =~ ref
+		  ret.gsub!(@reg_char_utf8){|v|
 			Uconv.u8toeuc([$1.to_i].pack("U"))
 		  }
 		else
@@ -170,28 +179,62 @@ end
 # Long referrer
 unless (@options['disp_referrer.old'] or @mode == "edit") #NEW VERSION
 
+@options['disp_referrer.cols'] = 10 unless @options['disp_referrer.cols']
 def disp_referrer_main(diary, refs, reg_table)
   result = Array.new
   reg_table.each do |title, *table|
 	a_row = Array.new
 	sum = 0
+	etc_sum = 0 
+
+    #ロジック的には１つの検索エンジンで複数の検索用正規表現が合った場合の事を
+	#考慮して若干無駄なこと(一度all_numでそれぞれの部分配列を取得後、再度ソート
+    #と再度部分配列の取得)をしているので注意
+	all_num = @options['disp_referrer.cols']
 	table.each do |regval|
+	  break if refs.size < 1
 	  a_row_ref = refs.select{|item| /#{regval[0]}/i =~ item[1]}
 	  if a_row_ref and a_row_ref.size > 0
+		if all_num < 0 or all_num > a_row_ref.size
+		  a_row_max = a_row_ref.size
+		else
+		  a_row_max = all_num
+		end
+		
 		refs -= a_row_ref
-		a_row << a_row_ref.collect{|item|
+		a_row += a_row_ref[0...a_row_max].collect{|item|
 		  sum += item[0]
 		  query = "<a href=\"#{Web.escapeHTML(item[1])}\">"
 		  str = diary.disp_referer([regval], item[1])
 		  str = "/" if str.size == 0
 		  query << Web.escapeHTML(str) << "</a>"
 		  query << " x" << item[0].to_s if item[0] > 1
-		  query
+		  [item[0], query]
 		}
+		if a_row_ref.size >= a_row_max 
+		  a_row_ref[a_row_max...a_row_ref.size].each {|item|
+			sum += item[0]
+			etc_sum += item[0]
+		  }
+		end
 	  end
-    end
+	end
+
+	a_row.sort!{|a, b| -(a[0] <=> b[0])}
+
+	a_row = a_row[0...all_num] if a_row and a_row.size > all_num and all_num > 0
+	div = ":"
+	if etc_sum > 0
+	  if all_num > 0
+		a_row << [0, "<span class=\"disp-referrer-etc\">その他</span> x#{etc_sum}"]
+		div = ""
+	  else
+		a_row << [0, " "]
+		div = ""
+	  end
+	end
 	if a_row and a_row.size > 0
-	  result << [sum, %Q[<li>#{sum} <a href="#{Web.escapeHTML(title[1])}">#{Web.escapeHTML(title[0])}</a> : #{a_row.join(", ")}</li>\n]]
+	  result << [sum, %Q[<li>#{sum} <a href="#{Web.escapeHTML(title[1])}">#{Web.escapeHTML(title[0])}</a> #{div} #{a_row.collect{|item| item[1]}.join(", ")}</li>\n]]
     end
   end
   [result, refs]
@@ -202,12 +245,11 @@ def referer_of_today_long(diary, limit)
 
   search_table = [
     [["Google検索","http://www.google.com/"],
-	["^http://216.239.*/search.*q=([^&]*).*", "\\1"],
-    ["^http://www.google..*/.*q=([^&]*).*", "\\1"]],
+	["^http://.*(216.239|google).*q=([^&]*).*", "\\2"]],
     [["Yahoo検索","http://www.yahoo.co.jp/"],
-	["^http://google.yahoo.*/.*?p=([^&]*).*", "\\1"]],
+	["^http://.*.yahoo.*?p=([^&]*).*", "\\1"]],
     [["Infoseek検索","http://www.infoseek.co.jp/"],
-	["^http://www.infoseek.co.jp/.*?qt=([^&]*).*", "\\1"]],
+	["^http://.*infoseek.*?qt=([^&]*).*", "\\1"]],
     [["Lycos検索","http://www.lycos.co.jp/"],
 	["^http://.*lycos.*/.*?(query|q)=([^&]*).*", "\\2"]],
     [["goo検索","http://www.goo.ne.jp/"],
@@ -217,24 +259,45 @@ def referer_of_today_long(diary, limit)
     [["OCN検索", "http://www.ocn.ne.jp/"],
 	["^http://ocn.excite.co.jp/search.gw.*search=([^&]*).*", "\\1"]],
     [["excite検索", "http://www.excite.co.jp/"],
-	["^http://.*excite.*/.*?(search|s)=([^&]*).*", "\\2"]],
+	["^http://.*excite.*?(search|s)=([^&]*).*", "\\2"]],
     [["msn検索", "http://www.msn.co.jp/home.htm"],
 	["^http://.*search.msn.*?(q|MT)=([^&]*).*", "\\2"]],
     [["BIGLOBE検索", "http://www.biglobe.ne.jp/"],
-	["^http://cgi.search.biglobe.ne.jp/cgi-bin/search.*?q=([^&]*).*", "\\1"]],
+	["^http://cgi.search.biglobe.ne.jp/cgi-bin/search.*?(q|key)=([^&]*).*", "\\2"]],
     [["テレコムサーチ", "http://www.odn.ne.jp/"],
 	["^http://search.odn.ne.jp/LookSmartSearch.jsp.*(key|QueryString)=([^&]*).*", "\\2"]],
     [["Netscape検索", "http://google.netscape.com/"],
-	["^http://.*.netscape.com/.*(q|search)=([^&]*).*", "\\2"]],
+	["^http://.*.netscape.com/.*(query|q|search)=([^&]*).*", "\\2"]],
+    [["DIONサーチ", "http://www.dion.ne.jp/"],
+	["^http://dir.dion.ne.jp/LookSmartSearch.jsp.*(key|QueryString)=([^&]*).*", "\\2"]],
+	[["Metcha Search","http:/bach.scitec.kobe-u.ac.jp/"],
+	["^http://bach.scitec.kobe-u.ac.jp/cgi-bin/metcha.cgi?q=([^&]*).*", "\\1"]],
     [["AOL検索", "http://www.aol.com/"],
-	["^http://(?:aol)?search.*aol.com/.*query=([^&]*).*", "\\1"]],
+	["^http://.*aol.com/.*query=([^&]*).*", "\\1"]],
     [["Fresheye検索", "http://www.fresheye.com/"],
-	["^http://.*fresheye.*/.*kw=([^&]*).*", "\\1"]],
+	["^http://.*fresheye.*kw=([^&]*).*", "\\1"]],
 	[["AlltheWeb検索","http://www.alltheweb.com/"],
 	["^http://www.alltheweb.com/.*?q=([^&]*).*", "\\1"]],
-    [["DIONサーチ", "http://www.dion.ne.jp/"],
-	["^http://dir.dion.ne.jp/LookSmartSearch.jsp.*(key|QueryString)=([^&]*).*", "\\2"]]
+	[["TOCC/Search","http://www.tocc.co.jp/"],
+	["^http://www.tocc.co.jp.*QRY=([^&]*).*", "\\1"]],
+	[["EarthLink検索","http://www.earthlink.net/"],
+	["^http://.*earthlink.*q=([^&]*).*", "\\1"]],
+	[["i won_Search","http://home.iwon.com/"],
+	["^http://.*iwon.*searchfor=([^&]*).*", "\\1"]],
+	[["metacrawler検索","http://www.metacrawler.com/"],
+	["^http://.*metacrawler.com/texis/search?q=([^&]*).*", "\\1"]],
+	[["DOGPILE検索","http://www.dogpile.com/"],
+	["^http://search.dogpile.com/texis/search.q=([^&]*).*", "\\1"]],
+	[["NEXEARCH","http://www.naver.co.jp/"],
+	["^http://search.naver.*query=([^&]*).*", "\\1"]],
+	[["overture検索","http://www.overture.com/"],
+	["^http://overture.*Keywords=([^&]*).*", "\\1"]],
+	[["About検索","http://www.about.com/"],
+	["^http://.*about.*terms=([^&]*).*", "\\1"]],
+	[["looksmart検索","http://www.looksmart.com/"],
+	["^http://www.looksmart.com.*key=([^&]*).*", "\\1"]]
   ]
+
   if @options["disp_referrer.search_table"]
 	search_table += @options["disp_referrer.search_table"]
   end
@@ -243,7 +306,9 @@ def referer_of_today_long(diary, limit)
   result << %Q[<ul>\n]
 
   #search part.
-  refs = diary.referers.collect{|item| item[1..2].flatten}.sort.reverse
+  refs = diary.referers.collect{|item| item[1..2].flatten}
+  refs.sort!{|a,b| -(a[0] <=> b[0])} if refs
+	
   search_result, refs = disp_referrer_main(diary, refs, search_table)
 
   #optional part.
@@ -259,9 +324,15 @@ def referer_of_today_long(diary, limit)
 
   #show normal part.
   normal_result += opt_result if opt_result
-  result << normal_result.sort{|a,b| - (a[0] <=> b[0])}.collect{|item| item[1]}.join << "</ul>\n<ul>\n"
+  normal_result.sort!{|a,b| - (a[0] <=> b[0])}
+  normal_result.collect!{|item| item[1]} if normal_result
+  result << normal_result.join if normal_result 
+  result << "</ul>\n<ul>"
   #show search part.
-  result << search_result.sort{|a,b| - (a[0] <=> b[0])}.collect{|item| item[1]}.join << "</ul>"
+  search_result.sort!{|a,b| - (a[0] <=> b[0])}
+  search_result.collect!{|item| item[1]} if search_result
+  result << search_result.join if search_result
+  result << "</ul>"
 end
 
 end
