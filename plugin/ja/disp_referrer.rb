@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.8 2004-02-25 01:45:46 kazuhiko Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.9 2004-06-03 02:01:54 zunda Exp $-))
 日本語リソース
 
 == 概要
@@ -198,53 +198,53 @@ See ../ChangeLog for changes after this.
 =end
 
 # Message strings
-Disp_referrer2_name = 'リンク元もうちょっと強化'
-Disp_referrer2_abstract = <<'_END'
+Disp_referrer2_name = 'リンク元もうちょっと強化'.taint
+Disp_referrer2_abstract = <<'_END'.taint
 	アンテナからのリンク、サーチエンジンの検索結果を、
 	通常のリンク元の下にまとめて表示します。
 	サーチエンジンの検索結果は、検索語毎にまとめられます。
 _END
-Disp_referrer2_with_Nora = <<'_END'
+Disp_referrer2_with_Nora = <<'_END'.taint
 <p>
 	Noraライブラリを使っていますので、表示が少し速いはずです。
 </p>
 _END
-Disp_referrer2_without_Nora = <<'_END'
+Disp_referrer2_without_Nora = <<'_END'.taint
 <p>
 	表示速度が気になる場合は、
 	<a href="http://raa.ruby-lang.org/list.rhtml?name=Nora">Nora</a>
 	ライブラリをインストールしてみてください。
 </p>
 _END
-Disp_referrer2_updated_urls = <<'_END'
+Disp_referrer2_updated_urls = <<'_END'.taint
 <p>キャッシュのうち、%d個のURLが更新されました。</p>
 _END
-Disp_referrer2_cache_info = <<'_END'
+Disp_referrer2_cache_info = <<'_END'.taint
 <p>
 	現在、キャッシュの大きさは%1$sバイト、
 	%2$s個のURLがキャッシュされています。
 </p>
 _END
-Disp_referrer2_update_info = <<'_END'
+Disp_referrer2_update_info = <<'_END'.taint
 <p>
 	「<a href="%1$s">リンク元</a>」の変更の後にも
 	<a href="%2$s">キャッシュの更新</a>が必要かもしれません。
 </p>
 _END
-Disp_referrer2_move_to_refererlist = <<'_END'
+Disp_referrer2_move_to_refererlist = <<'_END'.taint
 	その他のリンク元の置換リストの編集に<a href="%s">移る</a>。
 _END
-Disp_referrer2_move_to_config = <<'_END'
+Disp_referrer2_move_to_config = <<'_END'.taint
 	基本的な設定に<a href="%s">移る</a>。
 _END
-Disp_referrer2_also_todayslink = <<'_END'
+Disp_referrer2_also_todayslink = <<'_END'.taint
 	リンク元置換リストは「<a href="%s">リンク元</a>」からも編集できます。
 _END
-Disp_referrer2_antenna_label = 'アンテナ'
-Disp_referrer2_unknown_label = 'その他のリンク元'
-Disp_referrer2_search_label = '検索'
-Disp_referrer2_search_unknown_keyword = 'キーワード不明'
-Disp_referrer2_cache_label = '(%sのキャッシュ)'
+Disp_referrer2_antenna_label = 'アンテナ'.taint
+Disp_referrer2_unknown_label = 'その他のリンク元'.taint
+Disp_referrer2_search_label = '検索'.taint
+Disp_referrer2_search_unknown_keyword = 'キーワード不明'.taint
+Disp_referrer2_cache_label = '(%sのキャッシュ)'.taint
 
 class DispRef2SetupIF
 

@@ -1,5 +1,5 @@
 =begin
-= A little bit more powerful display of referrers((-$Id: disp_referrer.rb,v 1.7 2004-02-25 01:45:46 kazuhiko Exp $-))
+= A little bit more powerful display of referrers((-$Id: disp_referrer.rb,v 1.8 2004-06-03 02:01:54 zunda Exp $-))
 English resource
 
 == Copyright notice
@@ -55,54 +55,54 @@ See ../ChangeLog for changes after this.
 =end
 
 # Message strings
-Disp_referrer2_name = 'Referrer classification'
-Disp_referrer2_abstract = <<'_END'
+Disp_referrer2_name = 'Referrer classification'.taint
+Disp_referrer2_abstract = <<'_END'.taint
 <p>
 	This plugin distinguishes the URLs from antennas and search engines
 	and shows them separately. Search keywords from different engines are
 	compound together.
 </p>
 _END
-Disp_referrer2_with_Nora = <<'_END'
+Disp_referrer2_with_Nora = <<'_END'.taint
 <p>
 	Pages are displayed a little bit faster with the Nora library.
 </p>
 _END
-Disp_referrer2_without_Nora = <<'_END'
+Disp_referrer2_without_Nora = <<'_END'.taint
 <p>
 	Please install the 
 	<a href="http://raa.ruby-lang.org/list.rhtml?name=Nora">Nora</a>
 	library if you feel the page shows too slowly.
 </p>
 _END
-Disp_referrer2_updated_urls = <<-'_END'
+Disp_referrer2_updated_urls = <<-'_END'.taint
 <p>%d URL(s) in the cache are updated.</p>
 _END
-Disp_referrer2_cache_info = <<'_END'
+Disp_referrer2_cache_info = <<'_END'.taint
 <p>
 	The cache has %2$s URL(s) in %1$s byte(s).
 </p>
 _END
-Disp_referrer2_update_info = <<'_END'
+Disp_referrer2_update_info = <<'_END'.taint
 <p>
 	Please <a href="%2$s">update the cache</a>
 	after editing the <a href="%1$s">today's link</a> lists.
 </p>
 _END
-Disp_referrer2_move_to_refererlist = <<'_END'
+Disp_referrer2_move_to_refererlist = <<'_END'.taint
 	<a href="%s">Follow this link</a> to edit the referer lists.
 _END
-Disp_referrer2_move_to_config = <<'_END'
+Disp_referrer2_move_to_config = <<'_END'.taint
 	<a href="%s">Follow this link</a> to configure the plug-in.
 _END
-Disp_referrer2_also_todayslink = <<'_END'
+Disp_referrer2_also_todayslink = <<'_END'.taint
 	Referer list can also be edited via &quot;<a href="%s">Today's link</a>&quot;.
 _END
-Disp_referrer2_antenna_label = 'Antennae'
-Disp_referrer2_unknown_label = 'Others'
-Disp_referrer2_search_label = 'Search engines'
-Disp_referrer2_search_unknown_keyword = 'Unknown keyword'
-Disp_referrer2_cache_label = '(cache from %s)'
+Disp_referrer2_antenna_label = 'Antennae'.taint
+Disp_referrer2_unknown_label = 'Others'.taint
+Disp_referrer2_search_label = 'Search engines'.taint
+Disp_referrer2_search_unknown_keyword = 'Unknown keyword'.taint
+Disp_referrer2_cache_label = '(cache from %s)'.taint
 
 class DispRef2SetupIF
 
