@@ -1,4 +1,8 @@
 2004-11-10 zunda <zunda at freeshell.org>
+	* ja/disp_refrrer.rb: better handles links from goo.ne.jp.
+	Thanks to Michitaka Ohno (http://bigfield.ddo.jp/diary/20041111.html#p01)
+
+2004-11-10 zunda <zunda at freeshell.org>
 	* disp_referrer.rb: better handles links from bloglines.com as an antenna
 
 2004-11-09 zunda <zunda at freeshell.org>
