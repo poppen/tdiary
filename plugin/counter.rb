@@ -1,101 +1,59 @@
-# counter.rb $Revision: 1.18 $
-# -pv-
+# counter.rb $Revision: 1.19 $
 #
-# 名称：
-# カウンタ表示プラグイン
+# Access counter plugin.
 #
-# 概要：
-# 訪問者数を「全て」「今日」「昨日」に分けて表示します。
+# 1. Usage
+# counter(figure, filetype = ""): Show number of all visitors.
+# counter_today(figure, filetype = ""): Show number of visitors for today.
+# counter_today(figure, filetype = ""): Show number of visitors for yesterday.
+#	 filetype: jpg, gif, png ... .
 #
-# 使う場所：
-# ヘッダ、もしくはフッタ
-# 
-# 使い方：
-# counter(figure, filetype): 全ての訪問者数を表示する
-# counter_today(figure, filetype): 今日の訪問者数を表示する
-# counter_yesterday(figure, filetype): 昨日の訪問者数を表示する
-#	 figure: 表示桁数(実際の数が表示桁数に満たない場合は前0)。未指定時は前0無し。
-#	 filetype: ファイル種別(拡張子)。jpg, gif, png等。
-#						 未指定時は、""(画像は使わない、CSSで外見を変える)。
+# kiriban?: Return true when the number is a kiriban.
+# kiriban_today?: Return true when the number is a kiriban(for today's couner).
 #
-# kiriban?: キリ番の時にtrueを返す(全て)。
-# kiriban_today?: キリ番の時にtrueを返す(今日)。
-#
-# 使用例：
 # counter
 # counter 3
 # coutner 3, "jpg"
 # counter_today 4, "jpg"
 # counter_yesterday
 #
-# オプションについて：
-# 初期値の指定　未指定時：0
-#   @options["counter.init_num"] = 5
+# 2. Documents
+# See URLs below for more details.
+#   http://ponx.s5.xrea.com/hiki/counter.rb.html (English) 
+#   http://ponx.s5.xrea.com/hiki/ja/counter.rb.html (Japanese) 
 #
-# ログの取得　未指定時：false
-#   @options["counter.log"] = true
-#
-# 訪問間隔の指定(単位：時間)　未指定時：12
-#   @options["counter.timer"] = 6
-#
-# 同一クライアントからの連続アクセスの非カウントアップ間隔の指定(単位：時間) 
-# 未指定時：0.1(6分)
-#   @options["counter.deny_same_src_interval"] = 0.1
-#
-# カウントアップ制限　未指定時：なし
-#   @options['counter.deny_user_agents'] = ["w3m", "Mozilla/4"]
-#   @options['counter.deny_remote_addrs'] = ["127.0", "10.0.?.1", "192.168.1.2"]
-#
-# キリ番　未指定時：なし
-#   @options["counter.kiriban"] = [1000, 3000, 5000, 10000, 15000, 20000]
-#   @options["counter.kiriban_today"] = [100, 200, 300, 400, 500, 600]
-#
-# 日々バックアップ　未指定時：有効
-#   @options['counter.daily_backup'] = true
-# 
-# CSSについて:
-#	 counter: 対象文字列全体(全て)
-#	 counter-today: 対象文字列全体(今日)
-#	 counter-yesterday: 対象文字列全体(昨日)
-#	 counter-0, ... : 1桁分(左から)
-#	 counter-num-0, ... 9: 数字
-#	 counter-kiriban: キリ番の数字の部分(全て)
-#	 counter-kiriban-today: キリ番の数字の部分(今日)
-#
-# その他：
-#   http://home2.highway.ne.jp/mutoh/tools/ruby/ja/counter.html
-# を参照してください。
-#
-# 著作権について：
 # Copyright (c) 2002 MUTOH Masao <mutoh@highway.ne.jp>
 # You can redistribute it and/or modify it under GPL2.
 # 
 =begin ChangeLog
+2003-11-15 MUTOH Masao  <mutoh@highway.ne.jp>
+   * translate documents to English.
+
 2003-02-15 MUTOH Masao  <mutoh@highway.ne.jp>
    * counter.datが大きくなる不具合の修正
-	* version 1.6.3
+   * version 1.6.3
 
 2002-11-26 Junichiro Kita <kita@kitaj.no-ip.com>
-	* remove 'cgi.cookies = nil' in TDiaryCounter::main
+   * remove 'cgi.cookies = nil' in TDiaryCounter::main
 
 2002-11-19 TADA Tadashi <sho@spc.gr.jp>
-	* for squeeze.rb error more.
-	* version 1.6.2
+   * for squeeze.rb error more.
+   * version 1.6.2
 
 2002-11-13 TADA Tadashi <sho@spc.gr.jp>
-	* for squeeze.rb error.
+   * for squeeze.rb error.
 
 2002-10-12 MUTOH Masao  <mutoh@highway.ne.jp>
-	* 初めて使うときに動作しなくなっていた不具合の修正。
-	* 1日1回保持しているユーザ情報をクリーンアップするようにした。
-	* version 1.6.1
+   * 初めて使うときに動作しなくなっていた不具合の修正。
+   * 1日1回保持しているユーザ情報をクリーンアップするようにした。
+   * version 1.6.1
 
 2002-08-30 MUTOH Masao  <mutoh@highway.ne.jp>
-	* データファイルが読み込めなくなったとき、1つ前のバックアップデータ
-	  を用いて復旧するようにした(その際に、1つ前のバックアップデータは
-	  counter.dat.?.bakという名前でバックアップされる)。さらに1つ前の
-	  バックアップデータからも復旧できなかった場合は全てのカウンタ値を
-	  0にしてエラー画面が表示されないようにした。
+   * データファイルが読み込めなくなったとき、1つ前のバックアップデータ
+     を用いて復旧するようにした(その際に、1つ前のバックアップデータは
+     counter.dat.?.bakという名前でバックアップされる)。さらに1つ前の
+     バックアップデータからも復旧できなかった場合は全てのカウンタ値を
+     0にしてエラー画面が表示されないようにした。
    * version 1.6.0
 
 2002-07-23 MUTOH Masao  <mutoh@highway.ne.jp>

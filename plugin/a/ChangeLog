@@ -1,3 +1,8 @@
+2003-11-15  Masao Mutoh  <mutoh@highway.ne.jp>
+
+	* a.rb: Translate documents of header part to English.
+	* README.rd: Removed. 
+
 2003-03-07 MUTOH Masao <mutoh@highway.ne.jp>
 
 	* README.rd: Revised.

@@ -1,49 +1,12 @@
 #!/usr/bin/env ruby
-# squeeze.rb $Revision: 1.13 $
-# -pv-
+# squeeze.rb $Revision: 1.14 $
 #
-# 名称：
-# squeeze.rb(旧yasqueeze.rb)
-# 
-# 概要：
-# tDiaryのデータベースから日別にHTMLファイルを生成し、
-# 任意のディレクトリに保存します。
-# 検索エンジン(主にNamazu)での使用を想定しています。
+# Create daily HTML file from tDiary database.
 #
-# 使い方:
-# 必要に応じて、tdiary.confに以下の設定を追加してください(全て省略可能です)。
+# See URLs below for more details.
+#   http://ponx.s5.xrea.com/hiki/squeeze.rb.html (English) 
+#   http://ponx.s5.xrea.com/hiki/ja/squeeze.rb.html (Japanese) 
 #
-#	----- (ここから) -----
-#	# 出力先ディレクトリ(省略時: (tdiary.confの@data_path)/cache/html)
-#	@options['squeeze.output_path'] = '/home/hoge/tdiary/html/'
-# 
-#	#非表示の日記も対象とするかどうか
-#	#対象とする場合はtrue。falseにした場合は非表示の日記は出力せず、かつ、
-#	#すでに出力済みのファイルが存在した場合は削除します。
-#	#検索エンジンで使用することを想定した場合、ここをtrueにしてしまうと
-#	#隠しているつもりの日記も検索対象になってしまうので注意が必要です。
-#  #(省略時： false)
-#	@options['squeeze.all_data'] = false
-#
-#	#tDiary Text出力互換モード
-#	#tDiary 1.4までのsqueeze.rb、tDiary標準と同じ出力先のディレクトリ構成に
-#  #する場合はtrue
-#  #(省略時： false)
-#	@options['squeeze.compat_path'] = false
-#
-#  #サフィックス(拡張子)指定
-#  #出力するファイルに指定したサフィックスをつけます。
-#  #無指定時には何も付きません。
-#  @options['squeeze.suffix'] = '.html'  # 「.html」を付加します
-#	----- (ここまで) -----
-#
-# その他：
-# プラグインとしてではなく、CGIやコマンドベースとして、一辺に全ての日記を
-# HTML化することもできます。
-# 詳しくは http://tdiary-users.sourceforge.jp/cgi-bin/wiki.cgi?squeeze%2Erb
-# を参照してください。
-#
-# 著作権について：
 # Copyright (C) 2002 MUTOH Masao <mutoh@highway.ne.jp>
 # You can redistribute it and/or modify it under GPL2.
 #
@@ -51,6 +14,9 @@
 # version 1.0.4 by TADA Tadashi <sho@spc.gr.jp> with GPL2.
 #
 =begin ChangeLog
+2003-11-15  Masao Mutoh <mutoh@highway.ne.jp>
+        * Replace header documents to URLs.
+
 2003-08-05  Kazuhiko  <kazuhiko@fdiary.net>
 	* make html when receiving TrackBack Ping
 
@@ -161,7 +127,7 @@ if mode == "CMD" || mode == "CGI"
 
 	if mode == "CMD"
 		def usage
-			puts "squeeze $Revision: 1.13 $"
+			puts "squeeze $Revision: 1.14 $"
 			puts " making html files from tDiary's database."
 			puts " usage: ruby squeeze.rb [-p <tDiary path>] [-c <tdiary.conf path>] [-a] [-s] [-x suffix] <dest path>"
 			exit
@@ -313,7 +279,7 @@ if mode == "CGI" || mode == "CMD"
 			</head>
 			<body><div style="text-align:center">
 			<h1>Squeeze for tDiary</h1>
-			<p>$Revision: 1.13 $</p>
+			<p>$Revision: 1.14 $</p>
 			<p>Copyright (C) 2002 MUTOH Masao&lt;mutoh@highway.ne.jp&gt;</p></div>
 			<br><br>Start!</p><hr>
 		]

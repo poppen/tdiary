@@ -1,41 +1,17 @@
-# search_form.rb $Revision: 1.6 $
-# -pv-
+# search_form.rb $Revision: 1.7 $
 #
-# 名称：
-# 検索フォーム表示プラグイン
+# Show a form for search engines.
 #
-# 概要：
-# Namazu, Google, Yahoo!用の検索フォームを表示します。
+# 1. Usage
+# namazu_form(url, button_name, size, default_text
+# googlej_form(button_name, size, default_text)
+# yahooj_form(button_name, size, default_text)
 #
-# 使う場所：
-# ヘッダ、もしくはフッタ
+# 2. Documents
+# See URLs below for more details.
+#   http://ponx.s5.xrea.com/hiki/search_form.rb.html (English) 
+#   http://ponx.s5.xrea.com/hiki/ja/search_form.rb.html (Japanese) 
 #
-# 使い方：
-# namazu_form(url, button_name, size, default_text): Namazu用
-# 			url:				検索エンジンのURL(例：/namazu/namazu.cgi)
-# 			button_name:	ボタン名称(省略可)
-# 			size:				テキストボックスの幅(省略可)
-# 			default_text:	テキストボックスの初期表示文字(省略可)
-#
-# googlej_form(button_name, size, default_text): Google用
-# 			button_name:	ボタン名称(省略可)
-# 			size:				テキストボックスの幅(省略可)
-# 			default_text:	テキストボックスの初期表示文字(省略可)
-#
-# yahooj_form(button_name, size, default_text): Yahoo!用
-# 			button_name:	ボタン名称(省略可)
-# 			size:				テキストボックスの幅(省略可)
-# 			default_text:	テキストボックスの初期表示文字(省略可)
-#
-# 注意：
-# 各社検索エンジンをご利用になる際は、それぞれのサイトでライセンス等を
-# 確認してください。
-# 
-# その他：
-# 詳しくは、http://home2.highway.ne.jp/mutoh/tools/ruby/ja/search_form.html
-# を参照してください。
-#
-# 著作権について：
 # Copyright (c) 2002 MUTOH Masao <mutoh@highway.ne.jp>
 # Distributed under the same license terms as tDiary.
 # 

@@ -1,62 +1,32 @@
-# a.rb
-# -pv-
+# a.rb $Revision: 1.6 $
 #
-# 名称：
-# アンカー自動生成プラグイン
+# Create anchor easily.
 #
-# 概要：
-# 引数に基づきアンカーを自動生成します。
-# または、辞書ファイルに基づきアンカーを自動生成します(tDiary-1.4.1以降)。
+# 1. Usage
+# a(url, name)
 #
-# 使う場所：
-# 本文、ヘッダ、もしくはフッタ
+#   a "http://www.hoge.com/diary/", "Hoge Diary"
 #
-# 使い方：
-# 1. a(key, option_or_name = "", name = nil)
-#	  key - アンカーのキー名称(キーが一致しない場合はそれ自身がURLになる)
-#	  option_or_name - 一時的に追加する任意の文字列（省略可能）
-#									 キーが一致しない場合は表示文字列になる
-#    name - 表示文字列。辞書ファイルとは違う名前を付けたいときに使う（省略可能）
+# a(key, option_or_name = "", name = nil)
+#   Use dictionary file. You need to create the dictionary 
+#   file with a CGI.
+#   a "home"
+#   a "home", "20020329.html", "Here"
 #
-# a "home"
-# a "home", "20020329.html", "こちら"
-# a "http://www.hoge.com/diary/", "Hoge Diary"
+# a("name|key:option")
+#   Use dictionary file. You need to create the dictionary 
+#   file with a CGI.
 #
-# 2. a("name|key:option")
-#    こちらは1.を1つの文字列にまとめた感じです。入力数が減るので慣れると
-#    使いやすいです。keyとoptionの間は':'を、nameとkeyの間は'|'で区切り
-#    ます。nameとoptionは省略可能です。
-#    また、keyにはキーワードかURLを入れます。YYYYMM...という形式を入れると
-#    myとほぼ同じ動作をします(titleは表示できません)。
-#    (注意) 1.の方法とnameの位置が異なるので混乱しないようにしてください。
+#   a "key"
+#   a "key:20020329.html"
+#   a "key:20020329.html|Here"
+#   a "Hoge Diary|http://www.hoge.com/diary/"
+#   a "Hoge Diary|20020201.html#p01"  #=> Same as "my" plugin
 #
-# a "key"
-# a "key:20020329.html"
-# a "key:20020329.html|こちら"
-# a "Hoge Diary|http://www.hoge.com/diary/"
-# a "Hoge Diary|20020201.html#p01"  #=> myと同じです(引数は逆だけど)。
-#
-# その他のオプション:
-# @options['a.tlink'] = true
-#  trueに指定すると、title属性値としてリンク先の情報を表示します。
-#  ただし、このオプションを有効にした場合、毎回、リンク先へのアクセスが
-#  発生します。レンタルサーバ等で使用して負荷が高くなってしまった
-#  場合はfalseにしてください。指定しない場合はfalseです。
-#
-# @options['a.path'] = "/home/hoge/"
-#  辞書ファイルを使う場合は、辞書ファイルのpathを指定します。
-#  指定しない場合は、@data_path/cache/a.datになります。
-#
-# 辞書ファイル編集用CGI呼び出しボタン:
-# 辞書ファイル編集用CGI呼び出しボタンを指定します。ヘッダ、もしくはフッタに置いて
-# ください。
-#
-# navi_a(name = "a.rb設定") - 辞書ファイル編集CGIを呼び出します。
-#	name - ボタン名称（省略した場合は、"a.rb設定"になる）
-#
-# その他：
-# その他の情報は http://home2.highway.ne.jp/mutoh/tools/ruby/ja/a.html 
-# を参照してください。
+# 4. Documents
+# See URLs below for more details.
+#   http://ponx.s5.xrea.com/hiki/a.rb.html (English) 
+#   http://ponx.s5.xrea.com/hiki/ja/a.rb.html (Japanese) 
 # 
 # Copyright (c) 2002,2003 MUTOH Masao <mutoh@highway.ne.jp>
 # You can redistribute it and/or modify it under GPL2.
@@ -176,7 +146,7 @@ def a(key, option_or_name = nil, name = nil, charset = nil)
 	result
 end
 
-def navi_a(name = "a.rb設定")
+def navi_a(name = "a.rb conf")
 	"<span class=\"adminmenu\"><a href=\"a_conf.rb\">#{name}</a></span>\n"
 end
 
