@@ -1,4 +1,4 @@
-# disp_referrer.rb $Revision: 1.4 $
+# disp_referrer.rb $Revision: 1.5 $
 # -pv-
 #
 # 名称：
@@ -21,6 +21,9 @@
 # You can redistribute it and/or modify it under GPL2.
 #
 =begin ChangeLog
+2002-08-21 TADA Tadashi <sho@spc.gr.jp>
+	* support tDiary 1.5.
+
 2002-08-08  MUTOH Masao <mutoh@highway.ne.jp>
    * 検索結果の表示方法を変更。各検索エンジン毎に検索文字列を表示するようにした
    * 更新時は整形しないようにした(smbdさん要望)
@@ -60,7 +63,7 @@ def Uconv.unknown_unicode_handler(unicode)
       "?"
    end
 end
-class Diary
+module DiaryBase
    def referers
      newer_referer
      @referers
