@@ -1,4 +1,4 @@
-# a.rb $Revision: 1.8 $
+# a.rb $Revision: 1.9 $
 #
 # Create anchor easily.
 #
@@ -35,6 +35,13 @@
 # You can redistribute it and/or modify it under GPL2.
 # 
 require 'nkf'
+
+# Resources
+def a_conf_label; "アンカー自動生成プラグイン辞書ファイル編集"; end
+def a_conf_explain; "<p>1行で1つのアンカーになります。フォーマットは、キー URL 名称です。各項目は空白で区切ります。名称は省略可能です。省略した場合はキーが名称として使われます。</p><p>例： bibo http://ponx.s5.xrea.com/bibo/ Linuxビボ〜ろく</p>"; end
+def a_conf_cols; 90; end
+def a_conf_rows; 20; end
+
 
 A_REG_PIPE = /\|/
 A_REG_COLON = /\:/
@@ -153,11 +160,6 @@ def navi_a(name = "a.rb conf")
 	"<span class=\"adminmenu\"><a href=\"a_conf.rb\">#{name}</a></span>\n"
 end
 
-def a_conf_label; "アンカー自動生成プラグイン辞書ファイル編集"; end
-def a_conf_explain; "<p>1行で1つのアンカーになります。フォーマットは、キー URL 名称です。各項目は空白で区切ります。名称は省略可能です。省略した場合はキーが名称として使われます。</p><p>例： bibo http://ponx.s5.xrea.com/bibo/ Linuxビボ〜ろく</p>"; end
-def a_conf_cols; 90; end
-def a_conf_rows; 20; end
-
 def a_conf_html(data)
 %Q[
 <h3>#{a_conf_label}</h3>
@@ -176,9 +178,11 @@ add_conf_proc( 'a_conf', a_conf_label ) do
 
   if @mode == 'saveconf'
     if @cgi['anchor_plugin_data']
-       open( a_path, "r" ) do |i|
-        open( a_path + "~", "w" ) do |o|
-          o.print i.readlines
+      if FileTest.exist?( a_path )
+        open( a_path, "r" ) do |i|
+          open( a_path + "~", "w" ) do |o|
+            o.print i.readlines
+          end
         end
       end
 
