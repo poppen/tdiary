@@ -1,10 +1,13 @@
-2003-08-08 TADA Tadashi <sho@spc.gr.jp>
+2003-08-20 TADA Tadashi <sho@spc.gr.jp>
+	* append-css.rb: add.
+
+2003-08-20 TADA Tadashi <sho@spc.gr.jp>
 	* search_form.rb: to valid HTML. thanks Kakutani.
 
-2003-08-08 TADA Tadashi <sho@spc.gr.jp>
+2003-08-20 TADA Tadashi <sho@spc.gr.jp>
 	* kw.rb: save as String to conf.
 
-2003-08-08 TADA Tadashi <sho@spc.gr.jp>
+2003-08-20 TADA Tadashi <sho@spc.gr.jp>
 	* kw.rb: support conf_proc. thanks kazuhiko.
 
 2003-08-16 zunda <zunda at freeshell.org>
