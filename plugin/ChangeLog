@@ -1,3 +1,6 @@
+2005-03-09 TAHARA Shunichi <jado at flowernet.gr.jp>
+	* calendar2.rb: escape quote in subtitle.
+
 2005-03-03 zunda <zunda at freeshell.org>
 	* disp_referrer.rb: handle rush conditions more properly when removing cache
 

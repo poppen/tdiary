@@ -1,4 +1,4 @@
-# calendar2.rb $Revision: 1.13 $
+# calendar2.rb $Revision: 1.14 $
 #
 # calendar2: どこかで見たようなカレンダーを日記に追加する
 #   パラメタ:
@@ -139,7 +139,7 @@ CALENDAR_HEAD
 							else
 								text = section.body_to_html
 							end
-							subtitles <<  %Q|#{idx}. #{@conf.shorten(apply_plugin( text, true ))}|
+							subtitles <<  %Q|#{idx}. #{@conf.shorten(apply_plugin( text, true )).gsub(/"/, '&quot;')}|
 							idx.succ!
 						end
 						%Q|<a href="#{@index}#{anchor date}" title="#{subtitles.join("&#13;&#10;")}">#{day}</a>|
