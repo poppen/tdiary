@@ -1,4 +1,4 @@
-# tb-show.rb $Revision: 1.1 $
+# tb-show.rb $Revision: 1.2 $
 #
 # functions:
 #   * show TrackBack ping URL in right of TSUKKOMI label.
@@ -116,7 +116,7 @@ def trackbacks_of_today_short( diary, limit = @conf['trackback_limit'] || 3 )
 	r << %Q!\t<div class="comment trackbacks">\n!
 
 	r << %Q!\t\t<div class="caption">\n!
-	r << %Q!\t\t\t<a name="t">#{ trackback_today }#{ trackback_total( count ) }</a>\n! if count > 0
+	r << %Q!\t\t\t#{ trackback_today }#{ trackback_total( count ) }\n! if count > 0
 	r << %Q!\t\t\t[#{ trackback_ping_url }]\n!
 	r << %Q!\t\t</div>\n!
 
@@ -149,8 +149,8 @@ def trackbacks_of_today_long( diary, limit = 128 )
 	r << %Q!\t<div class="comment trackbacks">\n!
 
 	r << %Q!\t\t<div class="caption">\n!
-	r << %Q!\t\t\t<a name="t">#{ trackback_today }#{ trackback_total( count ) }</a>\n! if count > 0
-	r << %Q!\t\t\t[#{ trackback_ping_url }]\n!
+	r << %Q!\t\t\t#{ trackback_today }#{ trackback_total( count ) }\n! if count > 0
+	r << %Q!\t\t\t[#{ trackback_ping_url(true) }]\n!
 	r << %Q!\t\t</div>\n!
 
 	r << %Q!\t\t<div class="commentbody trackbackbody">\n!
@@ -161,7 +161,7 @@ def trackbacks_of_today_long( diary, limit = 128 )
 		f = fragment % i
 
 		r << %Q!\t\t\t<div class="commentator trackback">\n!
-		r << %Q!\t\t\t\t<a name="#{ f }%>" href="#{ @index }#{ today }##{ f }">#{ @conf['trackback_anchor'] }</a>\n!
+		r << %Q!\t\t\t\t<a name="#{ f }" href="#{ @index }#{ today }##{ f }">#{ @conf['trackback_anchor'] }</a>\n!
 		r << %Q!\t\t\t\t<span class="commentator trackbackblog"><a href="#{ CGI::escapeHTML(url) }">#{ a }</a></span>\n!
 		r << %Q!\t\t\t\t<span class="commenttime trackbacktime">#{ comment_date( t.date ) }</span>\n!
 		r << %Q!\t\t\t\t<p>#{ CGI::escapeHTML( excerpt ).strip.gsub( /\n/,'<br>') }</p>\n! if excerpt
@@ -172,9 +172,9 @@ def trackbacks_of_today_long( diary, limit = 128 )
 	r
 end
 
-def trackback_ping_url
+def trackback_ping_url(add_name = false)
 	if @tb_url and not bot?
-		%Q|Ping URL: <a href="#{@tb_url}">#{@tb_url}</a>|
+		%Q|Ping URL: <a href="#{@tb_url}"#{add_name ? ' name="t"': ''}>#{@tb_url}</a>|
 	else
 		''
 	end
