@@ -1,15 +1,19 @@
 #!/usr/bin/env ruby
 $KCODE= 'e'
 #
-# posttdiary: update tDiary via e-mail. $Revision: 1.2 $
+# posttdiary: update tDiary via e-mail. $Revision: 1.3 $
 #
 # Copyright (C) 2002, All right reserved by TADA Tadashi <sho@spc.gr.jp>
 # You can redistribute it and/or modify it under GPL2.
+#
+# 2005.1.17: Rev1.3
+#  debugged by K.Sakurai (http://ks.nwr.jp)
+#
 
 def usage
 	text = <<-TEXT
 		#{File::basename __FILE__}: update tDiary via e-mail.
-		usage: ruby posttdiary.rb [options] <url> [user] [passwd]
+		usage: ruby #{File::basename __FILE__} [options] <url> [user] [passwd]
 		arguments:
 		  url:    update.rb's URL of your diary.
 		  user:   user ID of your diary updating.
@@ -111,14 +115,14 @@ begin
 	user = ARGV.shift
 	pass = ARGV.shift
 
-	mail = ARGF.read
-	raise "no mail text." if not mail or mail.length == 0
-	
-	head, body = mail.split( /\n\n/, 2 )
-
 	require 'base64'
 	require 'nkf'
 	image_name = nil
+
+	mail = NKF::nkf( '-m0 -Xed', ARGF.read )
+	raise "#{File::basename __FILE__}: no mail text." if not mail or mail.length == 0
+	
+	head, body = mail.split( /\r*\n\r*\n/, 2 )
 
 	if head =~ /Content-Type:\s*Multipart\/Mixed.*boundary=\"(.*?)\"/im then
 		if not image_dir or not image_url then
@@ -128,12 +132,12 @@ begin
 		bound = "--" + $1
 		body_sub = body.split( Regexp.compile( Regexp.escape( bound ) ) )
 		body_sub.each do |b|
-			sub_head, sub_body = b.split( /\n\n/, 2 )
+			sub_head, sub_body = b.split( /\r*\n\r*\n/, 2 )
 
 			next unless sub_head =~ /Content-Type/
 
 			if sub_head =~ %r[^Content-Type:\s*text/plain]i then
-				@body = NKF::nkf( '-m0 -Xed', sub_body )
+				@body = sub_body
 			elsif sub_head =~ %r[^Content-Type:\s*(image/|application/octet-stream).*name=".*(\..*?)"]im
 				image_ext = $2
 				now = Time::now
@@ -156,7 +160,7 @@ begin
 			end
 		end
 	elsif head =~ /^Content-Type:\s*text\/plain/i 
-		@body = NKF::nkf( '-m0 -Xed', body )
+		@body = body
 	else
 		raise "can not read this mail"
 	end
@@ -195,8 +199,22 @@ begin
 	raise "no passwd." unless pass
 	
 	subject = ''
-	if /^Subject:(.*)$/ =~ head
-		subject = NKF::nkf( '-eXd', $1.strip.sub( /[\r\n]+[^\t ].*/, '' ).gsub( /[\r\n\t]/, '' ) )
+	nextline = false
+	headlines = head.split( /[\r\n]+/ )
+	for n in 0 .. headlines.size-1
+		if nextline then
+			if /^[ \t]/ =~ headlines[n] then
+				s = headlines[n].sub( /^[ \t]/, '' )
+				subject += NKF::nkf( '-eXd', s )
+			else
+				break
+			end
+		end
+		if /^Subject:(.*)$/ =~ headlines[n] then
+			s = $1.sub( /^\s+/, '' )
+			subject = NKF::nkf( '-eXd', s )
+			nextline = true
+		end
 	end
 	if use_subject then
 		title = ''
@@ -222,4 +240,3 @@ rescue
 	File::delete( image_dir + image_name ) if image_dir and image_name and FileTest::exist?( image_dir + image_name )
 	exit 1
 end
-
