@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.22 $
+# amazon.rb $Revision: 1.23 $
 #
 # See document in language resource file: en/amazon.rb
 #
@@ -166,7 +166,12 @@ def isbn( asin, comment )
 	amazonNoImg( item_url, comment )
 end
 
-add_conf_proc( 'amazon', @amazon_label_conf ) do
+unless @conf.secure and @conf['amazon.hideconf'] then
+	add_conf_proc( 'amazon', @amazon_label_conf ) do
+		amazon_conf_proc
+	end
+end
+def amazon_conf_proc
 	if @mode == 'saveconf' then
 		unless @conf.secure then
 			@conf['amazon.imgsize'] = @cgi.params['amazon.imgsize'][0].to_i

@@ -1,3 +1,6 @@
+2003-12-05 TADA Tadashi <sho@spc.gr.jp>
+	* amazon.rb: hide conf menu when secure mode and amazon.hideconf.
+
 2003-12-02  Kazuhiko  <kazuhiko@fdiary.net>
 	* amazon.rb: hide some options in secure mode.
 
