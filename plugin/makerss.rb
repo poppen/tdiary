@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.11 $
+# makerss.rb: $Revision: 1.12 $
 #
 # generate RSS file when updating.
 #
@@ -155,14 +155,11 @@ def makerss_body( uri, rdfsec )
 	if rdfsec.section.respond_to?( :body_to_html ) then
 		a = rdfsec.id.scan( /(\d{4})(\d\d)(\d\d)/ ).flatten.map{|s| s.to_i}
 		date = Time::local( *a )
+		body_enter_proc( date )
 		old_apply_plugin = @options['apply_plugin']
 		@options['apply_plugin'] = true
-		body_enter_proc( date )
+
 		subtitle = apply_plugin( rdfsec.section.subtitle_to_html, true ).strip
-		desc = '<h3>' + apply_plugin( rdfsec.section.subtitle_to_html ).strip + '</h3>' +
-			apply_plugin( rdfsec.section.body_to_html ).strip
-		body_leave_proc( date )
-		@options['apply_plugin'] = old_apply_plugin
 		rdf << %Q|<title>#{subtitle}</title>\n|
 		rdf << %Q|<dc:creator>#{CGI::escapeHTML( @conf.author_name )}</dc:creator>\n|
 		if ! rdfsec.section.categories.empty?
@@ -170,11 +167,21 @@ def makerss_body( uri, rdfsec )
 				rdf << %Q|<dc:subject>#{CGI::escapeHTML( category )}</dc:subject>\n|
 			end
 		end
-		rdf << %Q|<content:encoded><![CDATA[#{desc}]]></content:encoded>\n|
+		desc = apply_plugin( rdfsec.section.subtitle_to_html, true ).strip +
+			apply_plugin( rdfsec.section.body_to_html, true ).strip
+		rdf << %Q|<description>#{@conf.shorten( desc, 500 )}</description>\n|
+		text = '<h3>' + apply_plugin( rdfsec.section.subtitle_to_html ).strip + '</h3>' +
+			apply_plugin( rdfsec.section.body_to_html ).strip
+		rdf << %Q|<content:encoded><![CDATA[#{text}]]></content:encoded>\n|
+
+		body_leave_proc( date )
+		@options['apply_plugin'] = old_apply_plugin
 	else # TSUKKOMI
 		rdf << %Q|<title>#{makerss_tsukkomi_label( rdfsec.id )} (#{CGI::escapeHTML( rdfsec.section.name )})</title>\n|
 		rdf << %Q|<dc:creator>#{CGI::escapeHTML( rdfsec.section.name )}</dc:creator>\n|
-		rdf << %Q|<content:encoded><![CDATA[#{CGI::escapeHTML( rdfsec.section.body ).gsub( /\n/, '<br>' )}]]></content:encoded>\n|
+		text = CGI::escapeHTML( rdfsec.section.body )
+		rdf << %Q|<description>#{@conf.shorten( text, 500 )}</description>\n|
+		rdf << %Q|<content:encoded><![CDATA[#{text.gsub( /\n/, '<br>' )}]]></content:encoded>\n|
 	end
 	rdf << "</item>\n"
 end
