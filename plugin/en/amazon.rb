@@ -1,5 +1,5 @@
 #
-# English resource of amazon plugin $Revision: 1.1 $
+# English resource of amazon plugin $Revision: 1.2 $
 #
 
 #
@@ -27,6 +27,8 @@
 #   @options['amazon.hideconf']: When you want to prohibit changing amazon.aid
 #                                via preferences page, set false.
 #   @options['amazon.proxy']: HTTP proxy in "host:post" style.
+#   @options['amazon.smallimg']: show small image, set true.
+#   @options['amazon.hidename']: hide book name when class="amazon", set true.
 #
 
 @amazon_url = 'http://www.amazon.com/exec/obidos/ASIN'

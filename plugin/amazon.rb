@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.19 $
+# amazon.rb $Revision: 1.20 $
 #
 # isbn_image_left: 指定したISBNの書影をclass="left"で表示
 #   パラメタ:
@@ -27,13 +27,17 @@
 #   コメントが記述されている場合は商品名がコメントの内容に変わります。
 #
 # tdiary.confにおける設定:
-#   @options['amazon.aid']:   アソシエイトIDを指定することで、自分のア
-#                             ソシエイトプログラムを利用できます
-#                             このオプションは設定画面から変更可能です
+#   @options['amazon.aid']:      アソシエイトIDを指定することで、自分のア
+#                                ソシエイトプログラムを利用できます
+#                                このオプションは設定画面から変更可能です
 #   @options['amazon.hideconf']: 設定画面上でアソシエイトIDを入力不可能
-#                             にしたい場合、trueに設定します
-#   @options['amazon.proxy']: 「host:post」形式でHTTP proxyを指定すると
-#                             Proxy経由でAmazonの情報を取得します
+#                                にしたい場合、trueに設定します
+#   @options['amazon.proxy']:    「host:post」形式でHTTP proxyを指定すると
+#                                Proxy経由でAmazonの情報を取得します
+#   @options['amazon.smallimg']: 小さいサイズの書影を表示したい場合、
+#                                trueに設定します
+#   @options['amazon.hidename']: class="amazon"のときに書名を表示したくな
+#                                い場合、trueに設定します
 #
 #
 # 注意：著作権が関連する為、www.amazon.co.jpのアソシエイトプログラムを
@@ -76,7 +80,7 @@ def getAmazon( asin )
 
 	proxy_host = nil
 	proxy_port = 8080
-	if /^([^:]+):(\d+)$/ =~ @options['amazon.proxy'] then
+	if /^([^:]+):(\d+)$/ =~ @conf['amazon.proxy'] then
 		proxy_host = $1
 		proxy_port = $2.to_i
 	end
@@ -151,20 +155,27 @@ def getAmazonImg(position,asin,comment)
 	begin
 
 		item = getAmazon(asin)
-		item[0].sub!( %r|[^/]+$|, @options['amazon.aid'] ) if @options['amazon.aid']
+		item[0].sub!( %r|[^/]+$|, @conf['amazon.aid'] ) if @conf['amazon.aid']
 
 		item_name = item[1]
 		item[1] = comment if comment
-		unless item[2]
+		unless item[2] then
 			return amazonNoImg(item[0],item[1])
+		end
+		if @conf['amazon.smallimg'] then
+			item[2].gsub!(/MZZZZZZZ/, 'TZZZZZZZ')
 		end
 		r = ""
 		r << %Q[<a href="#{item[0].strip}/ref=nosim/">]
 		r << %Q[<img class="#{position}" src="#{item[2].strip}" ]
-		r << %Q[width="#{item[4].strip}" ] if item[4]
-		r << %Q[height="#{item[5].strip}" ] if item[5]
+		unless @conf['amazon.smallimg'] then
+			r << %Q[width="#{item[4].strip}" ] if item[4]
+			r << %Q[height="#{item[5].strip}" ] if item[5]
+		end
 		r << %Q[alt="#{item[1].strip}">]
-		r << item[1].strip if position == "amazon"
+		if !@conf['amazon.hidename']
+			r << item[1].strip if position == "amazon"
+		end
 		r << %Q[</a>]
 	rescue
 		$stderr.puts "3 #$!"
@@ -190,7 +201,7 @@ alias amazon isbnImg
 
 def isbn( asin, comment )
 	item_url = "http://www.amazon.co.jp/exec/obidos/ASIN/#{asin}/"
-	item_url << @options['amazon.aid'] if @options['amazon.aid']
+	item_url << @conf['amazon.aid'] if @conf['amazon.aid']
 	amazonNoImg( item_url, comment )
 end
 
