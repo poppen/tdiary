@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 =begin
-= その日の天気プラグイン((-$Id: weather.rb,v 1.6 2003-07-22 12:43:57 zunda Exp $-))
+= その日の天気プラグイン((-$Id: weather.rb,v 1.7 2003-07-24 08:21:47 zunda Exp $-))
 その日の天気を、その日の日記を最初に更新する時に取得して保存し、それぞれ
 の日の日記の上部に表示します。
 
@@ -234,6 +234,8 @@ of GPL version 2 or later.
 =end
 
 =begin ChangeLog
+* Thu Jul 24, 2003 zunda <zunda at freeshell.org>
+- Syntax error in drizzle fixed
 * Mon Jul 21, 2003 zunda <zunda at freeshell.org>
 - changed regexp literals from %r|..| to %r[..] for Ruby 1.8.x.
 * Fri Jul 17, 2003 zunda <zunda at freeshell.org>
@@ -312,7 +314,7 @@ class Weather
 		[%r[\s*\blight drizzle\b\s*]i, '"小雨"'],
 		[%r[\s*\blight rain showers?\b\s*]i, '"弱いにわか雨"'],
 		[%r[\s*\bshowers?\b\s*]i, '"にわか雨"'],
-		[%r[\s*\bdrizzle\b\s*]i, 'こぬか雨"'],
+		[%r[\s*\bdrizzle\b\s*]i, '"こぬか雨"'],
 		[%r[\s*\blight rain\b\s*]i, '"霧雨"'],
 		[%r[\s*\brain\b\s*]i, '"雨"'],
 		[%r[\s*\bmist\b\s*]i, '"靄"'],
