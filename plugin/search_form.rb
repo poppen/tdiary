@@ -1,4 +1,4 @@
-# search_form.rb $Revision: 1.2 $
+# search_form.rb $Revision: 1.3 $
 #
 # 各種検索エンジンの検索フォーム表示プラグイン
 #
@@ -22,6 +22,13 @@
 # lycosj_form: Lycos用
 # 			button_name:	ボタン名称(省略可)
 # 			size:				テキストボックスの幅(省略可)
+#
+# 注意：
+# 各社検索エンジンをご利用になる際は、それぞれのサイトでライセンス等を
+# 確認してください。
+# 
+# 詳しくは、http://home2.highway.ne.jp/mutoh/tools/ruby/ja/search_form.html
+# を参照してください。
 #
 # Copyright (c) 2002 MUTOH Masao <mutoh@highway.ne.jp>
 # Distributed under the same license terms as tDiary.
