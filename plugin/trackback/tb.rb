@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# tb.rb $Revision: 1.7 $
+# tb.rb $Revision: 1.8 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -8,6 +8,7 @@
 # 
 
 BEGIN { $defout.binmode }
+$KCODE = 'n'
 
 begin
 	if FileTest::symlink?( __FILE__ ) then

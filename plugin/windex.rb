@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
-# windex.rb $Revision: 1.2 $
+$KCODE = 'n'
+
+# windex.rb $Revision: 1.3 $
 #
 # windex: 索引を生成する
 #   パラメタ:

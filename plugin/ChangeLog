@@ -1,3 +1,6 @@
+2003.12.19 TADA Tadashi <sho@spc.gr.jp>
+	* squeeze.rb, windex.rb, trackback/tb.rb: set $KCODE to 'n'.
+
 2003-12-17 zunda <zunda at freeshell.org>
 	* referer_scheme.rb: updated documentation in the lang. resources
 	* referer_scheme.rb: avoid infinite call of aliased `each' when the plug-in is eval'ed more than once.
