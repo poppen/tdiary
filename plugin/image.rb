@@ -1,4 +1,4 @@
-# image.rb $Revision: 1.3 $
+# image.rb $Revision: 1.4 $
 # -pv-
 # 
 # Ì¾¾Î:
@@ -128,7 +128,7 @@ if /^formplugin$/ =~ @mode then
 			rescue NameError
          	size = @cgi.params['plugin_image_file'][0].stat.size
 			end
-         if images.length < maxnum and size <= maxsize then
+         if images.compact.length < maxnum and size <= maxsize then
             file = "#{@image_dir}/#{date}_#{images.length}.#{extension}".untaint
 	         File::umask( 022 )
 	         File::open( file, "wb" ) do |f|
