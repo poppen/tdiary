@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.48 2005-02-22 04:27:05 kazuhiko Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.49 2005-02-23 00:32:21 zunda Exp $-))
 
 == 概要
 アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
@@ -169,22 +169,23 @@ unless @conf and @conf.secure then
 		end
 		def caches( include_backup = true )
 			if include_backup then
-				Dir.glob( File.join( @setup['cache_dir'], '??????.tdr2.cache*' ) )
+				r = Dir.glob( File.join( @setup['cache_dir'], '??????.tdr2.cache*' ) )
 			else
-				Dir.glob( File.join( @setup['cache_dir'], '??????.tdr2.cache' ) )
+				r = Dir.glob( File.join( @setup['cache_dir'], '??????.tdr2.cache' ) )
 			end
+			r.collect{ |p| p.untaint }
 		end
 		def size
 			r = 0
 			caches.each do |path|
-				r += File.size( path.untaint )
+				r += File.size( path )
 			end
 			r
 		end
 		def clear
 			# current version
 			caches.each do |path|
-				File.unlink( path.untaint )
+				File.unlink( path )
 			end
 			# older version
 			if @setup['cache_path'] then
@@ -196,11 +197,11 @@ unless @conf and @conf.secure then
 		def shrink
 			return if @setup['cache_max_size'] <= 0
 			size = 0
-			caches.sort{ |a,b| File.atime( b.untaint ) <=> File.atime( a.untaint ) }.each do |path|
+			caches.sort{ |a,b| File.atime( b ) <=> File.atime( a ) }.each do |path|
 				if size < @setup['cache_max_size'] then
-					size += File.size( path.untaint )
+					size += File.size( path )
 				else
-					File.unlink( path.untaint )
+					File.unlink( path )
 				end
 			end
 		end
