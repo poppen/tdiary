@@ -1,4 +1,7 @@
 2004.01.12 Junichiro Kita <kita@kitaj.no-ip.com>
+	* my-ex.rb: this time, my can handle 'yyyymmdd#txx'.
+
+2004.01.12 Junichiro Kita <kita@kitaj.no-ip.com>
 	* tb-*.rb: if trackback is longer than 255 byte, it will be shorten to 252 byte and '...' will be added.
 
 2004.01.09 RedGecko <redgecko@redgecko.jp>

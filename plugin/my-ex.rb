@@ -1,4 +1,4 @@
-# my-ex.rb $Revision: 1.7 $
+# my-ex.rb $Revision: 1.8 $
 #
 # my(拡張版): myプラグインを拡張し、title属性に参照先の内容を挿入します。
 #             参照先がセクションの場合は(あれば)サブタイトルを、
@@ -15,7 +15,8 @@ def my( a, str, title = nil )
 	anc = frag ? "#{date}#{frag}" : date
 	place, frag = frag.scan( /([cpt])(\d\d)/ )[0] if frag
 	if date and frag and @diaries[date] then
-		if place[0] == ?p then
+		case place
+		when 'p'
 			section = nil
 			idx = 1
 			@diaries[date].each_section do |s|
@@ -26,11 +27,20 @@ def my( a, str, title = nil )
 			if section and section.subtitle then
 				title = CGI::escapeHTML( "#{apply_plugin(section.subtitle_to_html, true)}" )
 			end
-		else # comment
+		when 'c'
 			com = nil
 			@diaries[date].each_comment( frag.to_i ) {|c| com = c}
 			if com then
 				title = CGI::escapeHTML( "[#{com.name}] #{com.shorten( @conf.comment_length )}" )
+			end
+		when 't'
+			if @plugin_files.grep(/tb-show.rb\z/)
+				tb = nil
+				@diaries[date].each_visible_trackback( frag.to_i ) {|t, idx| tb = t}
+				if tb then
+					url, name, tbtitle, excerpt = tb.body.split( /\n/,4 )
+					title = CGI::escapeHTML( "[#{name}] #{@conf.shorten( excerpt, @conf.comment_length )}" )
+				end
 			end
 		end
 	end
