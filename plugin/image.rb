@@ -1,4 +1,4 @@
-# image.rb $Revision: 1.24 $
+# image.rb $Revision: 1.25 $
 # -pv-
 # 
 # Ì¾¾Î:
@@ -156,7 +156,8 @@ def image_info( f )
 			break if data[1] == 0xD9
 
 			data_size = data[2,2].unpack( 'n' ).first + 2
-			if data[1] == 0xC0
+			case data[1]
+			when 0xc0, 0xc1, 0xc2, 0xc3, 0xc5, 0xc6, 0xc7, 0xc9, 0xca, 0xcb, 0xcd, 0xce, 0xcf
 				image_width, image_height = data[5,4].unpack('nn')
 				break
 			else
