@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.5 $
+# amazon.rb $Revision: 1.6 $
 #
 # isbn_image_left: 指定したISBNの書影をclass="left"で表示
 #   パラメタ:
@@ -45,6 +45,10 @@
 #              munemasa<munemasa@t3.rim.or.jp>,
 #              dai<dai@kato-agri.com>
 #
+=begin ChangeLog
+2002-07-09 TADA Tadashi <sho@spc.gr.jp>
+	* follow chaging of title format in amazon.
+=end
 
 require 'net/http'
 require 'timeout'
@@ -89,7 +93,7 @@ def getAmazon( asin )
 				response , = http.get(path)
 				response.body.each do |line|
 					line = NKF::nkf("-e",line)
-					if line =~ /^.*?:.*?:(.*?)<\/title>/i
+					if line =~ /^Amazon.co.jp： (.*)$/
 						item_name = CGI::escapeHTML(CGI::unescapeHTML($1))
 					end
 					if line =~ /(<img src="(http\:\/\/images\.amazon\.com\/images\/P\/(.*MZZZZZZZ.jpg))".*?>)/i
