@@ -1,4 +1,4 @@
-# disp_referrer.rb $Revision: 1.23 $
+# disp_referrer.rb $Revision: 1.24 $
 # -pv-
 #
 # 名称：
@@ -275,7 +275,7 @@ def referer_of_today_long(diary, limit)
     [["excite検索", "http://www.excite.co.jp/"],
 	["^http://.*excite.*?(search|s)=([^&]*).*", "\\2"]],
     [["msn検索", "http://www.msn.co.jp/home.htm"],
-	["^http://.*search.msn.*?([\?&]q|MT)=([^&]*).*", "\\2"]],
+	["^http://.*search.msn.*?[\?&](q|MT)=([^&]*).*", "\\2"]],
     [["BIGLOBE検索", "http://www.biglobe.ne.jp/"],
 	["^http://cgi.search.biglobe.ne.jp/cgi-bin/search.*?(q|key)=([^&]*).*", "\\2"]],
     [["テレコムサーチ", "http://www.odn.ne.jp/"],
