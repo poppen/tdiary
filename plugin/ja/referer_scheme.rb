@@ -1,5 +1,5 @@
 =begin
-= Meta-scheme plugin((-$Id: referer_scheme.rb,v 1.7 2004-07-27 18:54:47 zunda Exp $-))
+= Meta-scheme plugin((-$Id: referer_scheme.rb,v 1.8 2004-07-30 18:38:33 zunda Exp $-))
 本日のリンク元置換リストの記述を楽にします。
 
 == 利用方法
@@ -51,7 +51,7 @@ version 2 or later.
 unless @conf.referer_table.respond_to?( 'scheme_tdiarynet', true ) then
 	class << @conf.referer_table
 	private
-		TdiaryNet = '.tdiary.net/'
+		TdiaryNet = '\.tdiary\.net/'
 	
 		def scheme_tdiarynet( url, name )
 			TdiaryDates.each do |a|
@@ -64,7 +64,7 @@ end
 
 unless @conf.referer_table.respond_to?( 'scheme_hatena', true ) then
 	class << @conf.referer_table
-		HatenaHost = 'http://d(?:iary)?.hatena.ne.jp/'
+		HatenaHost = 'http://d(?:iary)?\.hatena\.ne\.jp/'
 		def scheme_hatena( url, name )
 			[
 				['(\d{4})(\d{2})(\d{2}).*', '(\1-\2-\3)'],

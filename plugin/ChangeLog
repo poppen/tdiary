@@ -1,3 +1,7 @@
+2004-07-30 zunda <zunda at freeshell.org>
+	* ja/referer_scheme.rb: better regexp, thanks to Nishiyama-san
+	<zn at mbf.nifty.com>
+
 2004-07-27 zunda <zunda at freeshell.org>
 	* ja/referer_scheme.rb: HatenaHost remended, thanks to Kakutani-san
 	<shintaro at kakutani.com>.
