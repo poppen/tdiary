@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.29 2003-09-25 17:55:44 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.30 2003-09-29 13:36:12 zunda Exp $-))
 
 == 概要
 アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
@@ -156,6 +156,8 @@ version 2 or later.
 =end
 
 =begin ChangeLog
+* Mon Sep 29, 2003 zunda <zunda at freeshell.org>
+- forgot to change arguments after changing initialize()
 * Thu Sep 25, 2003 zunda <zunda at freeshell.org>
 - name.untaint to eval name
 * Thu Sep 25, 2003 zunda <zunda at freeshell.org>
@@ -1400,7 +1402,7 @@ class DispRef2SetupIF
 		else
 			r = <<-_HTML
 				<h3 class="subtitle">本日のリンク元もうちょっとだけ強化プラグイン</h3>
-				<p>$Revision: 1.29 $</p>
+				<p>$Revision: 1.30 $</p>
 				<p>アンテナからのリンク、サーチエンジンの検索結果を、
 					通常のリンク元の下にまとめて表示します。
 					サーチエンジンの検索結果は、検索語毎にまとめられます。
@@ -1820,7 +1822,7 @@ end
 
 # for configuration interface
 add_conf_proc( 'disp_referrer2', 'リンク元もうちょっと強化' ) do
-	setup = DispRef2Setup.new( @conf, @options, 100, true )
+	setup = DispRef2Setup.new( @conf, 100, true )
 	wwwif = DispRef2SetupIF.new( @cgi, setup, @conf, @mode )
 	wwwif.show_html
 end
