@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.34 2003-10-21 17:45:15 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.35 2003-10-22 16:17:01 zunda Exp $-))
 
 == 概要
 アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
@@ -1195,16 +1195,16 @@ class DispRef2SetupIF
 		if @cache then
 			r << sprintf( Disp_referrer2_updated_urls, @updated_url ) if @updated_url
 			r << sprintf( Disp_referrer2_cache_info, DispRef2String::bytes( @cache.size ), DispRef2String::comma( @cache.entries ) )
-			r << Disp_referrer2_update_info
+			r << sprintf( Disp_referrer2_update_info, "#{@conf.update}?conf=referer", "#{@conf.update}?conf=disp_referrer2;dr2.cache.update=force;dr2.current_mode=#{@current_mode}" )
 		end
 		r << "<p>\n"
 		case @current_mode
 		when Options
-			r << sprintf( Disp_referrer2_move_to_refererlist, @conf.update, RefList )
+			r << sprintf( Disp_referrer2_move_to_refererlist, "#{@conf.update}?conf=disp_referrer2;dr2.new_mode=#{RefList};dr2.change_mode=true" )
 		when RefList
-			r << sprintf( Disp_referrer2_move_to_config, @conf.update, Options )
+			r << sprintf( Disp_referrer2_move_to_config, "#{@conf.update}?conf=disp_referrer2;dr2.new_mode=#{Options};dr2.change_mode=true" )
 		end
-		r << sprintf( Disp_referrer2_also_todayslink, @conf.update )
+		r << sprintf( Disp_referrer2_also_todayslink, "#{@conf.update}?conf=referer" )
 		r << %Q{<input type="hidden" name="saveconf" value="ok"></p><hr>\n}
 		r
 	end

@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.4 2003-10-21 17:45:15 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.5 2003-10-22 16:17:01 zunda Exp $-))
 日本語リソース
 
 == 概要
@@ -227,19 +227,18 @@ Disp_referrer2_cache_info = <<'_END'
 _END
 Disp_referrer2_update_info = <<'_END'
 <p>
-	「<a href="#{@conf.update}?conf=referer">リンク元</a>」の変更の後にも
-	<a href="#{@conf.update}?conf=disp_referrer2;dr2.cache.update=force;dr2.current_mode=#{@current_mode}">キャッシュの更新</a>
-	が必要かもしれません。
+	「<a href="%1$s">リンク元</a>」の変更の後にも
+	<a href="%2$s">キャッシュの更新</a>が必要かもしれません。
 </p>
 _END
 Disp_referrer2_move_to_refererlist = <<'_END'
-	その他のリンク元の置換リストの編集に<a href="#{@conf.update}?conf=disp_referrer2;dr2.new_mode=#{RefList};dr2.change_mode=true">移る</a>。
+	その他のリンク元の置換リストの編集に<a href="%s">移る</a>。
 _END
 Disp_referrer2_move_to_config = <<'_END'
-	基本的な設定に<a href="#{@conf.update}?conf=disp_referrer2;dr2.new_mode=#{Options};dr2.change_mode=true">移る</a>。
+	基本的な設定に<a href="%s">移る</a>。
 _END
 Disp_referrer2_also_todayslink = <<'_END'
-	リンク元置換リストは「<a href="%s?conf=referer">リンク元</a>」からも編集できます。
+	リンク元置換リストは「<a href="%s">リンク元</a>」からも編集できます。
 _END
 Disp_referrer2_antenna_label = 'アンテナ'
 Disp_referrer2_unknown_label = 'その他のリンク元'

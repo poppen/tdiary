@@ -1,5 +1,5 @@
 =begin
-= A little bit more powerful display of referrers((-$Id: disp_referrer.rb,v 1.4 2003-10-21 17:45:15 zunda Exp $-))
+= A little bit more powerful display of referrers((-$Id: disp_referrer.rb,v 1.5 2003-10-22 16:17:01 zunda Exp $-))
 English resource
 
 == Copyright notice
@@ -85,22 +85,18 @@ Disp_referrer2_cache_info = <<'_END'
 _END
 Disp_referrer2_update_info = <<'_END'
 <p>
-	Please <a href="#{@conf.update}?conf=disp_referrer2;dr2.cache.update=force;dr2.current_mode=#{@current_mode}">update the cache</a>
-	after editing the <a href="#{@conf.update}?conf=referer">today's
-	link</a> lists.
+	Please <a href="%2$s">update the cache</a>
+	after editing the <a href="%1$s">today's link</a> lists.
 </p>
 _END
 Disp_referrer2_move_to_refererlist = <<'_END'
-	<a href="%s?conf=disp_referrer2;dr2.new_mode=%s;dr2.change_mode=true">Follow this link</a>
-	to edit the referer lists.
+	<a href="%s">Follow this link</a> to edit the referer lists.
 _END
 Disp_referrer2_move_to_config = <<'_END'
-	<a href="%s?conf=disp_referrer2;dr2.new_mode=%s;dr2.change_mode=true">Follow
-this link</a>
-	to configure the plug-in.
+	<a href="%s">Follow this link</a> to configure the plug-in.
 _END
 Disp_referrer2_also_todayslink = <<'_END'
-	Referer list can also be edited via &quot;<a href="%s?conf=referer">Today's link</a>&quot;.
+	Referer list can also be edited via &quot;<a href="%s">Today's link</a>&quot;.
 _END
 Disp_referrer2_antenna_label = 'Antennae'
 Disp_referrer2_unknown_label = 'Others'
@@ -181,7 +177,7 @@ class DispRef2SetupIF
 			<p>
 				At this time,
 				<input name="dr2.cache.update" value="force" type="radio">update /
-				<input name="dr2.cache.update" value="auto" type="radio" crecked>update if needed
+				<input name="dr2.cache.update" value="auto" type="radio" checked>update if needed
 				<input name="dr2.cache.update" value="never" type="radio">don't update
 				the cache.
 			</p>
@@ -206,60 +202,57 @@ class DispRef2SetupIF
 			urls = DispRef2Cache.new( @setup ).unknown_urls
 		end
 		r = <<-_HTML
-			<h4>リンク元置換リスト</h4>
+			<h4>URL Conversion</h4>
 			<input name="dr2.current_mode" value="#{RefList}" type="hidden">
 		_HTML
 		if @cache then
-			r << "<p>#{@setup['unknown.label']}のリンク元はキャッシュの中から探しています。"
+			r << "<p>Picking up #{@setup['unknown.label']} from the cache."
 		else
-			r << "<p>#{@setup['unknown.label']}のリンク元は最新表示の日記から探しています。"
+			r << "<p>Picking up #{@setup['unknown.label']} from the latest view."
 		end
 		r << <<-_HTML
-			リンク元除外リストや無視リストに一致するURLはここには表示されません。
+			URLs that match the Excluding list or the Ignore list are not
+			listed here.
 		</p>
 		<p>
-			リンク元置換リストや記録除外リストには入れたくないURLは、
-			無視リストに入れておくことで、
-			下記のリストに現れなくなります。
-			無視リストは、
-			下記のリストにURLを表示するかどうかの判断にだけ使われます。
-			<input name="dr2.clear_ignore_urls" value="true" type="checkbox">無視リストを空にする場合はチェックして下さい。
+			If you don't want to see the URLs that you neither put into the
+			Conversion list or the Excluding list can be put in the Ignore
+			list. The Ignore list only affects the list shown here.
+			Please check <input name="dr2.clear_ignore_urls" value="true"
+			type="checkbox">here if you want to reset the Ignore list.
 		</p>
 		_HTML
 		if urls.size > 0 then
 			r << <<-_HTML
-				<p>リンク元置換リストにない下記のURLを、
-					リンク元置換リストに入れる場合は、
-					下段の空白にタイトルを入力してください。
-					また、リンク元記録除外リストに追加するには、
-					チェックボックスをチェックしてください。
+				<p>Please fill in the titles for the URL(s) in the lower text
+					box(es) to put the URL(s) into the Conversion list. Please
+					check the check box(es) if you want to put the URL(s) into the
+					Excluding list.
 				</p>
 				<p>
-					正規表現はリンク元置換リストに追加するのに適当なものになっています。
-					確認して、不具合があれば編集してください。
-					リンク元置換リストにだけ追加する場合には、
-					もう少しマッチの条件が緩いものでもかまいません。
+					Regular expressions are made up automatically. You can edit them
+					if you want.
 				</p>
 				<p>
-					最後の空欄は、リンク元置換リストに追加する際のタイトルです。
-					URL中に現れた「(〜)」は、
-					置換文字列中で「\\1」のような「数字」で利用できます。
-					また、sprintf('[tdiary:%d]', $1.to_i+1) といった、
-					スクリプト片も利用できます。
+					In the titles, you can refer to the strings between
+					parenthesis in the regular expression with something like
+					&quot;\\1&quot; (backslash plus a number). You can also use
+					a script fragment like &quot;sprintf('[tdiary:%d]', $1.to_i+1)&quot;.
 				</p>
 			_HTML
 			if ENV['AUTH_TYPE'] and ENV['REMOTE_USER'] and @setup['configure.use_link'] then
 				r << <<-_HTML
 					<p>
-						それぞれのURLはリンクになっていますが、これをクリックすることで、
-						リンク先に、この日記の更新・設定用のURLが知られることになります。
-						適切なアクセス制限が無い場合にはクリックしないようにしてください。
+						[NOTE] Be aware that by clicking the URLs below, the author
+						of the www site might know the URL of this page to edit and
+						configure your diary.
 					</p>
 				_HTML
 			end
 			r << <<-_HTML
 				<p>
-					ここにないURLは「<a href="#{@conf.update}?conf=referer">リンク元</a>」から修正してください。
+					Please edit URLs not shown here through &quot;<a
+					href="#{@conf.update}?conf=referer">Today's link</a>&quot;
 				</p>
 				<dl>
 			_HTML
@@ -273,8 +266,9 @@ class DispRef2SetupIF
 				end
 				r << <<-_HTML
 					<dd>
-						<input name="dr2.#{i}.noref" value="true" type="checkbox">除外リストに追加
-						<input name="dr2.#{i}.ignore" value="true" type="checkbox">無視リストに追加<br>
+						Add this URL to
+						<input name="dr2.#{i}.noref" value="true" type="checkbox">Excluding list
+						<input name="dr2.#{i}.ignore" value="true" type="checkbox">Ignore list<br>
 						<input name="dr2.#{i}.reg" value="#{DispRef2String::escapeHTML( DispRef2String::url_regexp( url ) )}" type="text" size="70"><br>
 						<input name="dr2.#{i}.title" value="" type="text" size="70">
 				_HTML
@@ -287,26 +281,26 @@ class DispRef2SetupIF
 			unless @setup.secure or @setup['no_cache'] then
 				r << <<-_HTML
 					<p>
-						キャッシュの更新には多少の時間がかかる場合があります。
-						OKボタンを押したらしばらくお待ちください。
+						Updating the cache might take some time. Please wait after
+						clicking the OK button.
 					</p>
 				_HTML
 			end
 		else
 			r << <<-_HTML
-				<p>現在、#{@setup['unknown.label']}のリンク元はありません。</p>
+				<p>Currently there is no #{@setup['unknown.label']}.</p>
 			_HTML
 		end
 		r << <<-_HTML
-			<h4>アンテナのための正規表現</h4>
-			<p>アンテナのURLや置換後の文字列にマッチする正規表現です。
-				これらの正規表現にマッチするリンク元は「アンテナ」に分類されます。</p>
+			<h4>Regular expressions for antennae</h4>
+			<p>URLs or titles matching these expression will be categorized as
+				antennae.</p>
 			<ul>
 			<li>URL:
 				<input name="dr2.antenna.url" value="#{DispRef2String::escapeHTML( @setup.to_native( @setup['antenna.url'] ) )}" type="text" size="70">
-				<input name="dr2.antenna.url.default" value="true" type="checkbox">デフォルトに戻す
-			<li>置換後の文字列:<input name="dr2.antenna.title" value="#{DispRef2String::escapeHTML( @setup.to_native( @setup['antenna.title'] ) )}" type="text" size="70">
-				<input name="dr2.antenna.title.default" value="true" type="checkbox">デフォルトに戻す
+				<input name="dr2.antenna.url.default" value="true" type="checkbox">Use default
+			<li>Title:<input name="dr2.antenna.title" value="#{DispRef2String::escapeHTML( @setup.to_native( @setup['antenna.title'] ) )}" type="text" size="70">
+				<input name="dr2.antenna.title.default" value="true" type="checkbox">Use default
 			</ul>
 			_HTML
 		r
