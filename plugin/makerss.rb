@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.13 $
+# makerss.rb: $Revision: 1.14 $
 #
 # generate RSS file when updating.
 #
@@ -68,22 +68,23 @@ def makerss_update
 					elsif !diary.visible? and cache[id]
 						cache.delete( id )
 					elsif diary.visible? and cache[id]
-						if cache[id].section.body_to_html != section.body_to_html then
+						if cache[id].section.body_to_html != section.body_to_html or
+								cache[id].section.subtitle_to_html != section.subtitle_to_html then
 							cache[id] = RDFSection::new( id, Time::now, section )
 						end
 					end
 				end
 			elsif /^comment$/ =~ @mode
-				id = "#{date}c%02d" % diary.count_comments
+				id = "#{date}c%02d" % diary.count_comments( true )
 				cache[id] = RDFSection::new( id, @comment.date, @comment )
 			elsif /^showcomment$/ =~ @mode
 				index = 0
 				diary.each_comment( 100 ) do |comment|
 					index += 1
 					id = "#{date}c%02d" % index
-					if !cache[id] and comment.visible? then
+					if !cache[id] and (comment.visible? and /^(Track|Ping)Back$/ !~ comment.name) then
 						cache[id] = RDFSection::new( id, comment.date, comment )
-					elsif cache[id] and !comment.visible?
+					elsif cache[id] and !(comment.visible? and /^(Track|Ping)Back$/ !~ comment.name)
 						cache.delete( id )
 					end
 				end
@@ -91,10 +92,15 @@ def makerss_update
 	
 			xml << makerss_header( uri )
 			seq << "<items><rdf:Seq>\n"
+			item_max = 15
 			cache.values.sort{|a,b| b.time <=> a.time}.each_with_index do |rdfsec, idx|
-				if idx < 15 then
-					seq << makerss_seq( uri, rdfsec )
-					body << makerss_body( uri, rdfsec )
+				if idx < item_max then
+					if rdfsec.section.respond_to?( :visible? ) and !rdfsec.section.visible?
+						item_max += 1
+					else
+						seq << makerss_seq( uri, rdfsec )
+						body << makerss_body( uri, rdfsec )
+					end
 				elsif idx > 50
 					cache.delete( rdfsec.id )
 				end
@@ -169,6 +175,7 @@ def makerss_body( uri, rdfsec )
 		end
 		desc = apply_plugin( rdfsec.section.subtitle_to_html, true ).strip +
 			apply_plugin( rdfsec.section.body_to_html, true ).strip
+		desc.gsub!( /&.*?;/, '' )
 		rdf << %Q|<description>#{@conf.shorten( CGI::escapeHTML( desc ), 500 )}</description>\n|
 		text = '<h3>' + apply_plugin( rdfsec.section.subtitle_to_html ).strip + '</h3>' +
 			apply_plugin( rdfsec.section.body_to_html ).strip

@@ -1,4 +1,4 @@
-# image.rb $Revision: 1.22 $
+# image.rb $Revision: 1.23 $
 # -pv-
 # 
 # Ì¾¾Î:
@@ -78,10 +78,10 @@ end
 def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
 	if @conf.secure then
 		image = "#{@image_date}_#{id}.jpg"
-		image_t = "#{@image_date}_#{thumbnail}.jpg" unless thumbnail
+		image_t = "#{@image_date}_#{thumbnail}.jpg" if thumbnail
 	else
    	image = image_list( @image_date )[id.to_i]
-   	image_t = image_list( @image_date )[thumbnail.to_i]
+   	image_t = image_list( @image_date )[thumbnail.to_i] if thumbnail
 	end
 	if size then
 		if size.kind_of?(Array)

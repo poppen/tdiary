@@ -1,4 +1,4 @@
-# tb-send.rb $Revision: 1.14 $
+# tb-send.rb $Revision: 1.15 $
 #
 # Copyright (c) 2003 Junichiro Kita <kita@kitaj.no-ip.com>
 # You can distribute this file under the GPL.
@@ -38,7 +38,7 @@ add_edit_proc do |date|
 		<h3 class="subtitle">TrackBack</h3>
 		<div class="trackback">
 			<div class="field title">
-			#{@tb_send_label_url}: <textarea tabindex="500" style="height: 1em;" name="plugin_tb_url" cols="40" rows="1">#{CGI::escapeHTML( url )}</textarea>
+			#{@tb_send_label_url}: <textarea tabindex="500" style="height: 2em;" name="plugin_tb_url" cols="40" rows="1">#{CGI::escapeHTML( url )}</textarea>
 			</div>
 			#{select_sections}
 			<div class="textarea">
