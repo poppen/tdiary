@@ -18,7 +18,7 @@
 # OUT OF  OR IN CONNECTION WITH  THE CODE OR THE  USE OR OTHER  DEALINGS IN THE
 # CODE.
 
-# $Id: hatena_style.rb,v 1.2 2004-02-26 11:25:34 mput Exp $
+# $Id: hatena_style.rb,v 1.3 2004-03-09 11:04:10 mput Exp $
 # Hatena::Diary compatible style
 # Works only under ruby 1.8.1 or later
 
@@ -650,7 +650,7 @@ class Hatena::Inline
         @elems.push Hatena::Keyword.new(Regexp.last_match[1], true)
       when /\A\[id:(.*?)\]/m, /\Aid:((?:[\w\d_]+)(?::\d+)?)/n
         @elems.push Hatena::ID.new(Regexp.last_match[1], true)
-      when /\A\[(ISBN|ASIN):(.*?)\]/m, /\A(ISBN|ASIN):([x\d-]+)/
+      when /\A\[(ISBN|ASIN):(.*?)\]/m, /(ISBN|ASIN):([\w\d]+)(:image(:(small|large))?)?/
         @elems.push Hatena::Amazon.new(Regexp.last_match[2], true)
       when /\A\[tex:(.*?)\]/m
         @elems.push Hatena::TeX.new(Regexp.last_match[1])
@@ -821,7 +821,7 @@ end
 # amazon.rb is required
 class Hatena::Amazon
   def initialize(str, tag_p)
-    @str = str
+    @str = str.split(/:/)[0]
     @tag_p = tag_p
   end
 
