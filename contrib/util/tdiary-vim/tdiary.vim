@@ -2,7 +2,7 @@
 
 " Author: UECHI Yasumasa <uechi@.potaway.net>
 
-" $Revision: 1.3 $
+" $Revision: 1.4 $
 
 " This program is free software; you can redistribute it and/or
 " modify it under the terms of the GNU General Public License as
@@ -178,7 +178,7 @@ function! s:SetUser()
 		let s:user = input("User Name: ")
 		let password = inputsecret("Password: ")
 		if s:user != ''
-			let  s:user = ' -u ' . s:user . ':' . password . ' '
+			let  s:user = " -u '" . s:user . ":" . password . "' "
 		endif
 	endif
 endfunction
