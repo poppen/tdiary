@@ -1,4 +1,4 @@
-# random_google.rb $Revision: 1.1 $
+# random_google.rb $Revision: 1.2 $
 #
 # random_google: 日記からランダムに抽出した単語をgoogleで検索するリンクを生成する
 #
@@ -76,7 +76,7 @@ if /(latest|day)/ === @mode
 			popup = @conf['random_google.popup'].gsub(/\$1/, rrr)
 			<<-HTML
 			<div class="body-enter">
-			[<a href="http://www.google.com/search?lr=lang_ja&amp;ie=euc-jp&amp;q=#{rr}" target="_blank" title="#{popup}">
+			[<a href="http://www.google.com/search?lr=lang_ja&amp;ie=euc-jp&amp;q=#{rr}" title="#{popup}">
 			#{caption}
 			</a>]
 			</div>
