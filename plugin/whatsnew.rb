@@ -1,4 +1,4 @@
-# whatsnew.rb $Revision: 1.2 $
+# whatsnew.rb $Revision: 1.3 $
 #
 # 名称：
 # What's Newプラグイン
@@ -74,7 +74,7 @@ add_header_proc do
 end
 
 add_footer_proc do
-	if @cgi
+	if @cgi.script_name
 		if @whats_new[:this_time] > @whats_new[:last_time]
 			cookie_path = File::dirname(@cgi.script_name)
 			cookie_path += '/' if cookie_path !~ /\/$/
