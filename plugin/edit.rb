@@ -1,15 +1,5 @@
-# edit.rb $Revision: 1.3 $
+# edit.rb $Revision: 1.4 $
+
 #
-# navi_admin: 日毎表示で「更新」を「編集」に置き換える。その日の日記を
-#             すぐに編集できます。このファイルをpluginにコピーするだけ
-#             で自動的に置き変わります。
+# this plugin is obsolete.
 #
-def navi_admin
-	if @mode == 'day' then
-		result = %Q[<span class="adminmenu"><a href="#{@update}?edit=true;year=#{@date.year};month=#{@date.month};day=#{@date.day}">#{navi_edit}</a></span>\n]
-	else
-		result = %Q[<span class="adminmenu"><a href="#{@update}">#{navi_update}</a></span>\n]
-	end
-	result << %Q[<span class="adminmenu"><a href="#{@update}?conf=OK">#{navi_preference}</a></span>\n] if /^(latest|month|day|comment|conf|nyear|category.*)$/ !~ @mode
-	result
-end
