@@ -1,3 +1,6 @@
+2003-05-15 Junichiro Kita <kita@kitaj.no-ip.com>
+	* tb-send.rb: add charset parameter.
+
 2003-05-13 TADA Tadashi <sho@spc.gr.jp>
 	* amazon.rb: cancel modify on 2003-05-11.
 	* amazon.rb: support ruby 1.8.

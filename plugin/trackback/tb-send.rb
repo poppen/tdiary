@@ -1,4 +1,4 @@
-# tb-send.rb $Revision: 1.8 $
+# tb-send.rb $Revision: 1.9 $
 #
 # Copyright (c) 2003 Junichiro Kita <kita@kitaj.no-ip.com>
 # You can distribute this file under the GPL.
@@ -39,6 +39,7 @@ if /^(append|replace)$/ =~ @mode then
 		my_url << anchor(@date.strftime('%Y%m%d'))
 
 		trackback = "url=#{CGI::escape(my_url)}"
+		trackback << "&charset=EUC-JP"
 		trackback << "&title=#{CGI::escape(title.to_euc)}" unless title.empty?
 		trackback << "&excerpt=#{CGI::escape(excerpt.to_euc)}" unless excerpt.empty?
 		trackback << "&blog_name=#{CGI::escape(blog_name)}"
