@@ -1,5 +1,8 @@
-2003-10-16  Kazuhiko  <kazuhiko@fdiary.net>
+2003-10-18  Kazuhiko  <kazuhiko@fdiary.net>
+	* output_rdf.rb: make plain text description. change default file
+	name from 't.rdf' to 'index.rdf'.
 
+2003-10-16  Kazuhiko  <kazuhiko@fdiary.net>
 	* plugin.rb: 'priority' is also optional.
 
 2003.10.14 zunda <zunda at freeshell.org>
@@ -21,7 +24,6 @@
 	* tb-send.rb: HTMLize excerpt of TrackBack ping. thanks to matz.
 
 2003-10-13  Kazuhiko  <kazuhiko@fdiary.net>
-
 	* image.rb: revise for @conf.secure.
 
 2003-10-13 Junichiro Kita <kita@kitaj.no-ip.com>
@@ -227,7 +229,6 @@
 	* weather.rb: fix typo on option names (thank you haluchan).
 
 2003-05-19 MUTOH Masao <mutoh@highway.ne.jp>
-
 	* disp_referrer.rb: Support to seperate Antenna similar to 
 	disp_referrer2(by zunda).
 

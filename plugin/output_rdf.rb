@@ -11,10 +11,11 @@
 #
 # 1.
 #  tdiary.rb のあるディレクトリをwebサーバーから書き込みできるようにするか
-#  tdiary.rb のあるディレクトリに t.rdf というファイルをwebサーバーから
+#  tdiary.rb のあるディレクトリに index.rdf というファイルをwebサーバーから
 #  書き込みができるパーミッションで作成してください
 #
-#  なお、r.rdfは、@options['output_rdf.file']によってファイル名を変更可能です
+#  なお、index.rdfは、@options['output_rdf.file']によってファイル名を変
+#  更可能です
 #
 # 2.
 #  忘れずに output_rdf.rb を plugin に ほオリコンでください
@@ -23,7 +24,7 @@
 #  日記を書いてください
 #
 # 4.
-#  rdfが見れるブラウザ等から http://日記のURL/t.rdf にアクセスしてください
+#  rdfが見れるブラウザ等から http://日記のURL/index.rdf にアクセスしてください
 #  
 # 5.
 #  なんかでてきたらOKです。おそらく。
@@ -78,7 +79,7 @@ if /^(append|replace|comment|trackbackreceive)$/ =~ @mode then
 	path  = ENV['REQUEST_URI']
 	path = path[0..path.rindex( "/" )]
    uri   = "#{host}#{path}#{@index}".gsub( /\/\.?\//, '/' )
-	rdf_file = @options['output_rdf.file'] || 't.rdf'
+	rdf_file = @options['output_rdf.file'] || 'index.rdf'
 	rdf_channel_about = "#{host}#{path}#{rdf_file}"
 	r = ""
 	r <<<<-RDF
@@ -127,11 +128,17 @@ if /^(append|replace|comment|trackbackreceive)$/ =~ @mode then
  	diary.each_section do |section|
 		if section.subtitle then
 		link = %Q[http://#{uri}#{anchor "#{date}\#p#{'%02d' % idx}"}]
+		date = @date.strftime('%Y%m%d')
+		desc = @diaries[date].class.new(date, '', section.body).to_html({})
+		old_apply_plugin = @options['apply_plugin']
+		@options['apply_plugin'] = true
+		desc = apply_plugin(desc, true)
+		@options['apply_plugin'] = old_apply_plugin
 		r <<<<-RDF
  <item rdf:about="#{link}">
    <title>#{CGI::escapeHTML(apply_plugin(section.subtitle).gsub(/<.+?>/,'')).chomp}</title>
    <link>#{link}</link>
-   <description>#{CGI::escapeHTML( @conf.shorten( apply_plugin( section.body ) ) )}</description>
+   <description>#{CGI::escapeHTML( @conf.shorten( desc ) )}</description>
  </item>
  		RDF
 		end
