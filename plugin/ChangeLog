@@ -1,6 +1,7 @@
 2003-11-14 TADA Tadashi <sho@spc.gr.jp>
 	* append-css.rb: add "type" attr and comment tag.
 	* random_google.rb: remove TARGET attr from A element.
+	* html_anchor.rb: add come comments.
 
 2003-11-13 TADA Tadashi <sho@spc.gr.jp>
 	* nazo.rb: removed.

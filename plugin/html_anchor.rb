@@ -1,4 +1,4 @@
-# html_anchor $Revision: 1.3 $
+# html_anchor $Revision: 1.4 $
 #
 # anchor: アンカーを「YYYYMMDD.html」「YYYYMM.html」形式に置き換える
 #         tDiaryから自動的に呼び出されるので、プラグインファイルを
@@ -10,7 +10,14 @@
 #             参照: http://sho.tdiary.net/20020301.html#p04
 #
 #         (2) ErrorDocumentを利用する
-#             本体付属のdot.htaccessのコメントを参照
+#             .htaccessに以下の設定を追加する(your_URL_of_index.rbはあなた
+#             の日記のindex.rbのURLに)。ただしこの手法は、Webサーバの
+#             エラーログが膨れ上がるので、推奨できません。上のmod_rewriteが
+#             使えない場合のみの最終手段です。
+#
+#               <Files ~ "^([0-9]{4}|[0-9]{6}|[0-9]{8}).html$">
+#                   ErrorDocument 404 your_URL_of_index.rb
+#               </Files>
 #
 # Copyright (c) 2002 TADA Tadashi <sho@spc.gr.jp>
 # Distributed under the GPL
