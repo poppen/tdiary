@@ -1,3 +1,6 @@
+2003-10-07 Junichiro Kita <kita@kitaj.no-ip.com>
+	* tb-send.rb, tb-show.rb: move from trackback/
+
 2003-10-06  Kazuhiko  <kazuhiko@fdiary.net>
 
 	* comment_mail-smtp.rb: untaint 'From address' for mod_ruby.

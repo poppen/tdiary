@@ -1,4 +1,4 @@
-# tb-send.rb $Revision: 1.14 $
+# tb-send.rb $Revision: 1.1 $
 #
 # Copyright (c) 2003 Junichiro Kita <kita@kitaj.no-ip.com>
 # You can distribute this file under the GPL.
