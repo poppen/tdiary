@@ -1,14 +1,17 @@
-# footnote.rb $Revision: 1.5 $
+# footnote.rb $Revision: 1.6 $
 #
-# fn: $B5SCm(Bplugin
-#   $B%Q%i%a%?(B:
-#     text: $B5SCmK\J8(B
-#     mark: $B5SCm%^!<%/(B('*')
+# fn: µÓÃíplugin
+#   ¥Ñ¥é¥á¥¿:
+#     text: µÓÃíËÜÊ¸
+#     mark: µÓÃí¥Þ¡¼¥¯('*')
 #
 # Copyright (c) 2001,2002 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
 #
 =begin ChangeLog
+2002-05-06 MUTOH Masao <mutoh@highway.ne.jp>
+	* change file encoding from ISO-2022-JP to EUC-JP.
+
 2002-03-12 TADA Tadashi <sho@spc.gr.jp>
 	* runable in secure mode.
 =end
