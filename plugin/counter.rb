@@ -1,4 +1,4 @@
-# counter.rb $Revision: 1.17 $
+# counter.rb $Revision: 1.18 $
 # -pv-
 #
 # 名称：
@@ -71,6 +71,10 @@
 # You can redistribute it and/or modify it under GPL2.
 # 
 =begin ChangeLog
+2003-02-15 MUTOH Masao  <mutoh@highway.ne.jp>
+   * counter.datが大きくなる不具合の修正
+	* version 1.6.3
+
 2002-11-26 Junichiro Kita <kita@kitaj.no-ip.com>
 	* remove 'cgi.cookies = nil' in TDiaryCounter::main
 
@@ -191,7 +195,6 @@ class TDiaryCountData
 	  @today, @yesterday, @all = 0, 0, 0
 	  @newestday = nil
 	  @ignore_cookie = false
-	  @clean_time = Time.now
 	end
 
 	def up(now, cache_path, cgi, log)
@@ -203,6 +206,10 @@ class TDiaryCountData
 		  @yesterday = ((now - 1) == @newestday) ? @today : 0
 		  @today = 1
 		  @newestday = now
+        time = Time.now
+		  @users.reject!{|key, val|
+			 time - val > 2 * 3600
+		  }
 		end
 	  else
 		@yesterday = 0
@@ -218,17 +225,6 @@ class TDiaryCountData
 
 	  ret = @users[[remote_addr, user_agent]]
 	  @users[[remote_addr, user_agent]] = now
-
-	  if @clean_time
-		if @clean_time - now > 86400
-		  @users.reject!{|key, val|
-			now - val > interval * 3600
-		  }
-		  @clean_time = now
-		end
-	  else
-		@clean_time = Time.now
-	  end
 	  ret
 	end
 
