@@ -18,7 +18,7 @@
 # OUT OF  OR IN CONNECTION WITH  THE CODE OR THE  USE OR OTHER  DEALINGS IN THE
 # CODE.
 
-# $Id: hatena_style.rb,v 1.10 2004-11-06 18:06:49 mput Exp $
+# $Id: hatena_style.rb,v 1.11 2004-11-06 18:08:13 mput Exp $
 # Hatena::Diary compatible style
 # Works only under ruby 1.8.1 or later
 
@@ -929,7 +929,7 @@ class Hatena::Sentence
     if false # kw = Hatena::API.keywords.match(str)
       m = Regexp.new(Regexp.quote(kw)).match(str)
       @elems.push Hatena::CDATA.new(m.pre_match)
-      @elems.push Hatena::Keyword.new(kw, true)
+      @elems.push Hatena::Keyword.new(nil, kw, true)
       @elems.push Hatena::Sentence.new(m.post_match)
     else
       @elems.push Hatena::CDATA.new(str)
