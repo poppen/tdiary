@@ -1,4 +1,4 @@
-# my-ex.rb $Revision: 1.9 $
+# my-ex.rb $Revision: 1.10 $
 #
 # my(拡張版): myプラグインを拡張し、title属性に参照先の内容を挿入します。
 #             参照先がセクションの場合は(あれば)サブタイトルを、
@@ -45,7 +45,7 @@ def my( a, str, title = nil )
 		end
 	end
 	if title then
-		%Q[<a href="#{@index}#{anchor anc}" title="#{title.sub(/\s+$/, '')}">#{str}</a>]
+		%Q[<a href="#{@index}#{anchor anc}" title="#{title}">#{str}</a>]
 	else
 		%Q[<a href="#{@index}#{anchor anc}">#{str}</a>]
 	end
