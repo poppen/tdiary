@@ -1,10 +1,11 @@
 #!/usr/bin/env ruby
-# pb.rb $Revision: 1.1 $
+# pb.rb $Revision: 1.2 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Copyright (c) 2004 MoonWolf <moonwolf@moonwolf.com>
 # Distributed under the GPL
 #
+# require Ruby1.8 or xml-rpc(http://raa.ruby-lang.org/project/xml-rpc/)
 
 BEGIN { $defout.binmode }
 $KCODE = 'n'
@@ -27,7 +28,7 @@ module TDiary
   #
   # class TDiaryPingBackBase
   #
-  class TDiaryPingBackBase < TDiaryBase
+  class TDiaryPingBackBase < ::TDiary::TDiaryBase
     public :mode
     def initialize( cgi, rhtml, conf )
       super
@@ -95,7 +96,7 @@ server.add_handler("pingback.ping") do |sourceURI,targetURI|
   @cgi.params['targetURI'] = [targetURI]
   conf = TDiary::Config::new(@cgi)
   tdiary = TDiary::TDiaryPingBackReceive::new( @cgi, 'day.rhtml', conf )
-  return "PingBack receive sucess"
+  return "PingBack receive success"
 end
 server.serve
 # vim: ts=3
