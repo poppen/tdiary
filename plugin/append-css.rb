@@ -1,4 +1,4 @@
-# append-css.rb: $Revision: 1.5 $
+# append-css.rb: $Revision: 1.6 $
 #
 # Append CSS fragment via Preferences Page.
 #
@@ -6,7 +6,7 @@
 # Distributed under the GPL
 #
 add_header_proc do
-	if @conf['append-css.css'] and @conf['append-css.css'].length > 0 then
+	if @mode !~ /conf$/ and @conf['append-css.css'] and @conf['append-css.css'].length > 0 then
 		<<-HTML if @conf['append-css.css']
 		<style type="text/css"><!--
 		#{@conf['append-css.css']}

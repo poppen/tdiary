@@ -1,3 +1,6 @@
+2005-04-08 TADA Tadashi <sho@spc.gr.jp>
+	* append-css.rb: not apply in configuration mode.
+
 2005-03-16 TADA Tadashi <sho@spc.gr.jp>
 	* tb-send.rb: last section focused in default.
 
