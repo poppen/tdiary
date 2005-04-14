@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.22 2005-02-22 03:59:46 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.23 2005-04-14 18:52:16 zunda Exp $-))
 日本語リソース
 
 == 概要
@@ -335,6 +335,7 @@ class DispRef2SetupIF
 				urls = DispRef2Latest.new( @cgi, 'latest.rhtml', @conf, @setup ).unknown_urls
 			end
 		end
+		urls.reject!{ |url| DispRef2String::url_match?( url, @setup['reflist.ignore_urls'] ) }
 		r = <<-_HTML
 			<h3>リンク元置換リスト</h3>
 			<input name="dr2.current_mode" value="#{RefList}" type="hidden">

@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.51 2005-03-03 21:31:11 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.52 2005-04-14 18:52:16 zunda Exp $-))
 
 == 概要
 アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
@@ -1315,7 +1315,7 @@ class DispRef2SetupIF
 					unless @cgi.params["dr2.#{i}.reg"][0].empty? then
 						reg = @setup.to_native( @cgi.params["dr2.#{i}.reg"][0] ).strip
 						unless reg.empty? then
-							@conf['disp_referrer2.reflist.ignore_urls'] << reg + "\n"
+							@conf['disp_referrer2.reflist.ignore_urls'] = @conf['disp_referrer2.reflist.ignore_urls'].split( /\n/ ).push( reg ).uniq.join( "\n" )
 							dirty = true
 						end
 					end
@@ -1379,13 +1379,11 @@ class DispRef2Latest < TDiary::TDiaryLatest
 			h.each_key do |url|
 				next unless @setup['normal-unknown.title.regexp'] =~ h[url][2]
 				next if DispRef2String::url_match?( url, @setup.no_referer )
-				next if DispRef2String::url_match?( url, @setup['reflist.ignore_urls'] )
 				r << url
 			end
 			h = nil
 			refs.urls( DispRef2URL::Unknown ).each_key do |url|
 				next if DispRef2String::url_match?( url, @setup.no_referer )
-				next if DispRef2String::url_match?( url, @setup['reflist.ignore_urls'] )
 				r << url
 			end
 		end

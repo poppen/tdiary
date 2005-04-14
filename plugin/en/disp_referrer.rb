@@ -1,5 +1,5 @@
 =begin
-= A little bit more powerful display of referrers((-$Id: disp_referrer.rb,v 1.12 2005-02-22 03:59:45 zunda Exp $-))
+= A little bit more powerful display of referrers((-$Id: disp_referrer.rb,v 1.13 2005-04-14 18:52:16 zunda Exp $-))
 English resource
 
 == Copyright notice
@@ -194,6 +194,7 @@ class DispRef2SetupIF
 				urls = DispRef2Latest.new( @cgi, 'latest.rhtml', @conf, @setup ).unknown_urls
 			end
 		end
+		urls.reject!{ |url| DispRef2String::url_match?( url, @setup['reflist.ignore_urls'] ) }
 		r = <<-_HTML
 			<h3>URL Conversion</h3>
 			<input name="dr2.current_mode" value="#{RefList}" type="hidden">
