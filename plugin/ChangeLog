@@ -1,3 +1,6 @@
+2005-04-14  Kazuhiko  <kazuhiko@fdiary.net>
+	* rast-register.rb: new plugin.
+
 2005-04-08 TADA Tadashi <sho@spc.gr.jp>
 	* append-css.rb: not apply in configuration mode.
 
@@ -17,6 +20,7 @@
 2005-03-03 zunda <zunda at freeshell.org>
 	* disp_referrer.rb: handle rush conditions more properly when removing cache
 
+>>>>>>> 1.311
 2005-03-02  Tatsuki Sugiura <sugi@nemui.org>
 	* tb-show.rb, ja/tb-show.rb, en/tb-show.rb: trackbacks_of_today_short is now selectable when in non-BlogKit mode from the config page
 
