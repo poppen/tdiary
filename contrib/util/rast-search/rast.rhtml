@@ -1,0 +1,64 @@
+<%# rast.rhtml $Revision: 1.1 $ %>
+<div class="adminmenu"><%%=navi_user%></div>
+
+<h1><%= CGI::escapeHTML( @conf.html_title ) %> [全文検索]</h1>
+
+<form action="<%= @cgi.script_name ? _(@cgi.script_name) : '' %>">
+<p>
+<input type="text" name="query" value="<%= _(@query) %>" size="60" />
+<input type="submit" value="検索" />
+<a href="http://www.netlab.jp/rast/query.html.ja">検索方法</a>
+</p>
+<p>
+並べ替え:
+<select name="sort">
+<%= @sort_options %>
+</select>
+<select name="order">
+<%= @order_options %>
+</select>
+
+表示件数:
+<select name="num">
+<%= @num_options %>
+</select>
+</p>
+</form>
+
+<% if @msg %>
+  <p><%= @msg %></p>
+<% else %>
+  <p>
+    <%= _(@query) %> の検索結果
+    <%= @result.hit_count %> 件中 <%= @start + 1 %> - <%= @start + @result.items.length %> 件目
+    (<%= @secs %> 秒)
+  </p>
+  <% for item in @result.items %>
+    <% format_result_item(item) %>
+<div class="day">
+<h2><span class="date"><%= @date.sub(/(\d{4})(\d{2})(\d{2})/, '\1-\2-\3') %></span> <span class="title"> </span></h2>
+<div class="body">
+<div class="section">
+<h3><%= @conf.section_anchor %><a href="<%= @conf.index %><%= @plugin.anchor(@date) %>"><%= _(@conf.to_native(@title)) %></a></h3>
+<p>
+<%= @conf.to_native(@summary) %>
+</p>
+</div>
+</div>
+<div class="comment">
+<div class="commentshort">
+<p><a href="/"><%= @conf.comment_anchor %></a>
+<span class="commentator"></span>&nbsp;(スコア:<%= item.score %>)</p>
+</div>
+</div>
+<div class="referer">
+</div>
+</div>
+  <% end %>
+  <% if @result.hit_count > 0 %>
+    <%= format_links(@result) %>
+  <% end %>
+<% end %>
+
+<div class="footer">
+Powered by <a href="http://www.netlab.jp/rast/">Rast</a> <%= ::Rast::VERSION %></div>
