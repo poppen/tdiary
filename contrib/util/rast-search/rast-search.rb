@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# rast-search.rb $Revision: 1.1 $
+# rast-search.rb $Revision: 1.2 $
 $KCODE= 'e'
 BEGIN { $defout.binmode }
 
@@ -29,12 +29,6 @@ module TDiary
 			["desc", "¹ß½ç"],
 		]
 		NUM_OPTIONS = [10, 20, 30, 50, 100]
-
-		if Rast::const_defined?(:LocalDB)
-			DB = Rast::LocalDB
-		else
-			DB = Rast::DB
-		end
 
 		def initialize( cgi, rhtml, conf )
 			super
@@ -66,7 +60,7 @@ module TDiary
 		end
 
 		def search
-			db = DB.open(@db_path, DB::RDONLY)
+			db = Rast::DB.open(@db_path, Rast::DB::RDONLY)
 			begin
 				options = create_search_options
 				t = Time.now
