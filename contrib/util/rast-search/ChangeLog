@@ -1,5 +1,6 @@
 2005-04-15  Kazuhiko  <kazuhiko@fdiary.net>
-	* rast-search.rb: never use Rast::LocalDB.
+	* rast-search.rb: never use Rast::LocalDB. fix a bug in running
+	from a shell.
 
 2005-04-14  Kazuhiko  <kazuhiko@fdiary.net>
 

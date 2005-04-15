@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# rast-search.rb $Revision: 1.2 $
+# rast-search.rb $Revision: 1.3 $
 $KCODE= 'e'
 BEGIN { $defout.binmode }
 
@@ -118,7 +118,7 @@ module TDiary
 
 		def format_link(label, start, num)
 			return format('<a href="%s?query=%s;start=%d;num=%d;sort=%s;order=%s">%s</a> ',
-				      _(@cgi.script_name), CGI::escape(@query),
+				      _(@cgi.script_name ? @cgi.script_name : ''), CGI::escape(@query),
 				      start, num, _(@sort), _(@order), _(label))
 		end
 
