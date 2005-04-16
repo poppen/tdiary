@@ -1,11 +1,11 @@
-<%# rast.rhtml $Revision: 1.1 $ %>
+<%# rast.rhtml $Revision: 1.2 $ %>
 <div class="adminmenu"><%%=navi_user%></div>
 
 <h1><%= CGI::escapeHTML( @conf.html_title ) %> [全文検索]</h1>
 
 <form action="<%= @cgi.script_name ? _(@cgi.script_name) : '' %>">
 <p>
-<input type="text" name="query" value="<%= _(@query) %>" size="60" />
+<input type="text" name="query" value="<%= _(@conf.to_native(@query)) %>" size="60" />
 <input type="submit" value="検索" />
 <a href="http://www.netlab.jp/rast/query.html.ja">検索方法</a>
 </p>
@@ -29,7 +29,7 @@
   <p><%= @msg %></p>
 <% else %>
   <p>
-    <%= _(@query) %> の検索結果
+    <%= _(@conf.to_native(@query)) %> の検索結果
     <%= @result.hit_count %> 件中 <%= @start + 1 %> - <%= @start + @result.items.length %> 件目
     (<%= @secs %> 秒)
   </p>

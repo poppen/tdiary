@@ -1,3 +1,6 @@
+2005-04-16  Kazuhiko  <kazuhiko@fdiary.net>
+	* rast.rhtml: convert the encoding of @query.
+
 2005-04-15  Kazuhiko  <kazuhiko@fdiary.net>
 	* rast-search.rb: never use Rast::LocalDB. fix a bug in running
 	from a shell.
