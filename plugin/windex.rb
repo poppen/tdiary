@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby-1.6
-$KCODE = 'n'
 
-# windex.rb $Revision: 1.5 $
+# windex.rb $Revision: 1.6 $
 #
 # windex: 索引を生成する
 #   パラメタ:
@@ -29,8 +28,6 @@ $KCODE = 'n'
 # Copyright (c) 2003 Gony <gony@sm.rim.or.jp>
 # Distributed under the GPL
 #
-
-$KCODE= "e"
 
 mode = ""
 if $0 == __FILE__
