@@ -1,5 +1,5 @@
 2005-04-21  Kazuhiko  <kazuhiko@fdiary.net>
-	* rast-register.rb: fix a typo.
+	* rast-register.rb: fix a typo. not set @ignore_parser_cache.
 
 2005-04-21 TADA Tadashi <sho@spc.gr.jp>
 	* squeeze.rb, windex.rb: remove setting of $KCODE.

@@ -19,7 +19,7 @@ if mode == "CMD" || mode == "CGI"
 
 	if mode == "CMD"
 		def usage
-			puts "rast-register.rb $Revision: 1.3 $"
+			puts "rast-register.rb $Revision: 1.4 $"
 			puts " register to rast index files from tDiary's database."
 			puts " usage: ruby rast-regiser.rb [-p <tDiary directory>] [-c <tdiary.conf directory>]"
 			exit
@@ -130,8 +130,6 @@ module TDiary
 	#
 	class RastRegister < TDiaryBase
 		def initialize(rast_db, diary)
-			@ignore_parser_cache = true
-
 			@db = rast_db.db
 			super(CGI::new, 'day.rhtml', rast_db.conf)
 			@diary = diary
@@ -192,7 +190,6 @@ module TDiary
 	#
 	class RastRegisterMain < TDiaryBase
 		def initialize(conf, encoding)
-			@ignore_parser_cache = true
 			super(CGI::new, 'day.rhtml', conf)
 			calendar
 			RastDB.new(conf, encoding).transaction do |rast_db|
@@ -223,7 +220,7 @@ if mode == "CGI" || mode == "CMD"
 			</head>
 			<body><div style="text-align:center">
 			<h1>Rast Register for tDiary</h1>
-			<p>$Revision: 1.3 $</p>
+			<p>$Revision: 1.4 $</p>
 			<p>Copyright (C) 2005 Kazuhiko &lt;kazuhiko@fdiary.net &gt;<br>Copyright (C) 2002 MUTOH Masao &lt;mutoh@highway.ne.jp&gt;</p>
 			<p>Start!</p><hr>
 		]
