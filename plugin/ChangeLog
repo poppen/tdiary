@@ -1,3 +1,6 @@
+2005-04-21  Kazuhiko  <kazuhiko@fdiary.net>
+	* rast-register.rb: fix a typo.
+
 2005-04-21 TADA Tadashi <sho@spc.gr.jp>
 	* squeeze.rb, windex.rb: remove setting of $KCODE.
 	* recent_comment3.rb, recent_trackback3.rb: return emprty string.
