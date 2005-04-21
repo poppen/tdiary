@@ -1,4 +1,4 @@
-# $Revision: 1.4 $
+# $Revision: 1.5 $
 # recent_trackback3: 最近のツッコミをリストアップする
 #
 # Options:
@@ -116,6 +116,7 @@ add_form_proc do |date|
 			end
 		end
 	end
+	''
 end
 
 if @mode == 'saveconf'

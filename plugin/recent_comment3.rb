@@ -1,4 +1,4 @@
-# $Revision: 1.13 $
+# $Revision: 1.14 $
 # recent_comment3: 最近のツッコミをリストアップする
 #   パラメタ:
 #     max:           最大表示数(未指定時:3)
@@ -76,6 +76,7 @@ add_form_proc do |date|
 			end
 		end
 	end
+	''
 end
 
 # vim: ts=3
