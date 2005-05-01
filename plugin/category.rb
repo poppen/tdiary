@@ -1,4 +1,4 @@
-# category.rb $Revision: 1.26 $
+# category.rb $Revision: 1.27 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -105,7 +105,7 @@ def category_list_sections
 	@categorized.keys.sort.each do |c|
 		info.category = c
 		if @category_icon[c]
-			img = %Q|<img class="category" src="#{@category_icon_dir}#{@category_icon[c]}" alt="#{c}">|
+			img = %Q|<img class="category" src="#{@category_icon_url}#{@category_icon[c]}" alt="#{c}">|
 		else
 			img = ''
 		end
