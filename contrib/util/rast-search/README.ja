@@ -72,7 +72,7 @@ rast-search README
      search-form.rb プラグインを有効にしている場合は、以下のように書くこ
      ともできます。
 
-     <%= search_form('rast.rb', 'query') %>
+     <%= search_form('rast-search.rb', 'query') %>
 
   以上です。
 

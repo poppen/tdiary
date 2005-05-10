@@ -1,3 +1,6 @@
+2005-04-10 TADA Tadashi <sho@spc.gr.jp>
+	* README.ja: fix typo.
+
 2005-04-16  Kazuhiko  <kazuhiko@fdiary.net>
 	* rast.rhtml: convert the encoding of @query.
 
@@ -6,5 +9,4 @@
 	from a shell.
 
 2005-04-14  Kazuhiko  <kazuhiko@fdiary.net>
-
 	* initial release of rast-search.
