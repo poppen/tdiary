@@ -1,3 +1,6 @@
+2005-05-10 TADA Tadashi <sho@spc.gr.jp>
+	* rast-resister.rb: get title from h2 element.
+
 2005-05-10  Kazuhiko  <kazuhiko@fdiary.net>
 	* rast-register.rb: use diary's title as 'title' attribute.
 	include 'title' to 'body'.

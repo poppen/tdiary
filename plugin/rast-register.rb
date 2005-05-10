@@ -19,7 +19,7 @@ if mode == "CMD" || mode == "CGI"
 
 	if mode == "CMD"
 		def usage
-			puts "rast-register.rb $Revision: 1.5 $"
+			puts "rast-register.rb $Revision: 1.6 $"
 			puts " register to rast index files from tDiary's database."
 			puts " usage: ruby rast-regiser.rb [-p <tDiary directory>] [-c <tdiary.conf directory>]"
 			exit
@@ -153,8 +153,11 @@ module TDiary
 			end
 			return unless @diary.visible?
 			htree = HTree.parse(convert(eval_rhtml.untaint))
-			title = @diary.title
-			body = "#{title}\n"
+			title = ''
+			body = ''
+			htree.traverse_element('{http://www.w3.org/1999/xhtml}h2') {|i|
+				body << (title = i.extract_text.to_s)
+			}
 			htree.traverse_element('{http://www.w3.org/1999/xhtml}div') {|i|
 				case i.get_attribute('class').to_s
 				when 'section', /commentbody/
@@ -220,7 +223,7 @@ if mode == "CGI" || mode == "CMD"
 			</head>
 			<body><div style="text-align:center">
 			<h1>Rast Register for tDiary</h1>
-			<p>$Revision: 1.5 $</p>
+			<p>$Revision: 1.6 $</p>
 			<p>Copyright (C) 2005 Kazuhiko &lt;kazuhiko@fdiary.net &gt;<br>Copyright (C) 2002 MUTOH Masao &lt;mutoh@highway.ne.jp&gt;</p>
 			<p>Start!</p><hr>
 		]
