@@ -1,3 +1,7 @@
+2005-05-10  Kazuhiko  <kazuhiko@fdiary.net>
+	* rast-register.rb: use diary's title as 'title' attribute.
+	include 'title' to 'body'.
+
 2005-05-01  Kazuhiko  <kazuhiko@fdiary.net>
 	* category.rb (category_list_sections): fix a bug in an image url.
 
