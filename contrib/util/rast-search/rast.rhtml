@@ -1,4 +1,4 @@
-<%# rast.rhtml $Revision: 1.2 $ %>
+<%# rast.rhtml $Revision: 1.3 $ %>
 <div class="adminmenu"><%%=navi_user%></div>
 
 <h1><%= CGI::escapeHTML( @conf.html_title ) %> [¡¥ ∏∏°∫˜]</h1>
@@ -33,13 +33,15 @@
     <%= @result.hit_count %> ∑Ô√Ê <%= @start + 1 %> - <%= @start + @result.items.length %> ∑ÔÃ‹
     (<%= @secs %> …√)
   </p>
+  <% if @result.hit_count > 10 %>
+    <%= format_links(@result) %>
+  <% end %>
   <% for item in @result.items %>
     <% format_result_item(item) %>
 <div class="day">
-<h2><span class="date"><%= @date.sub(/(\d{4})(\d{2})(\d{2})/, '\1-\2-\3') %></span> <span class="title"> </span></h2>
+<h2><span class="date"></span> <span class="title"><a href="<%= @conf.index %><%= @plugin.anchor(@date) %>"><%= _(@conf.to_native(@title)) %></a></span></h2>
 <div class="body">
 <div class="section">
-<h3><%= @conf.section_anchor %><a href="<%= @conf.index %><%= @plugin.anchor(@date) %>"><%= _(@conf.to_native(@title)) %></a></h3>
 <p>
 <%= @conf.to_native(@summary) %>
 </p>
@@ -55,7 +57,7 @@
 </div>
 </div>
   <% end %>
-  <% if @result.hit_count > 0 %>
+  <% if @result.hit_count > 10 %>
     <%= format_links(@result) %>
   <% end %>
 <% end %>
