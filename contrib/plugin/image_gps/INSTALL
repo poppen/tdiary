@@ -1,0 +1,14 @@
+#
+# INSTALL
+#   -- how to install
+#
+
+Instlation
+============
+Just execute install.rb
+
+ex.
+% su
+# ruby install.rb
+# ^D
+%
