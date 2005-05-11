@@ -1,3 +1,7 @@
+2005-05-11  Kazuhiko  <kazuhiko@fdiary.net>
+	* rast-register.rb: set false to show_nyear option in command/cgi
+	mode.
+
 2005-05-11 TADA Tadashi <sho@spc.gr.jp>
 	* rast-resister.rb: set false to show_nyear option.
 

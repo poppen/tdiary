@@ -19,7 +19,7 @@ if mode == "CMD" || mode == "CGI"
 
 	if mode == "CMD"
 		def usage
-			puts "rast-register.rb $Revision: 1.7 $"
+			puts "rast-register.rb $Revision: 1.8 $"
 			puts " register to rast index files from tDiary's database."
 			puts " usage: ruby rast-regiser.rb [-p <tDiary directory>] [-c <tdiary.conf directory>]"
 			exit
@@ -223,7 +223,7 @@ if mode == "CGI" || mode == "CMD"
 			</head>
 			<body><div style="text-align:center">
 			<h1>Rast Register for tDiary</h1>
-			<p>$Revision: 1.7 $</p>
+			<p>$Revision: 1.8 $</p>
 			<p>Copyright (C) 2005 Kazuhiko &lt;kazuhiko@fdiary.net &gt;<br>Copyright (C) 2002 MUTOH Masao &lt;mutoh@highway.ne.jp&gt;</p>
 			<p>Start!</p><hr>
 		]
@@ -243,6 +243,7 @@ if mode == "CGI" || mode == "CMD"
 		conf.footer = ''
 		conf.show_comment = true
 		conf.hide_comment_form = true
+		conf.show_nyear = false
 		def conf.bot?; true; end
 		encoding = conf.options['rast.encoding'] || 'euc_jp'
 		TDiary::RastRegisterMain.new(conf, encoding)
