@@ -1,3 +1,6 @@
+2005-05-11 TADA Tadashi <sho@spc.gr.jp>
+	* rast-resister.rb: set false to show_nyear option.
+
 2005-05-10 TADA Tadashi <sho@spc.gr.jp>
 	* rast-resister.rb: get title from h2 element.
 
