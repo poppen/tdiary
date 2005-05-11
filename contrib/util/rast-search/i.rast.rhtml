@@ -1,4 +1,4 @@
-<%# i.rast.rhtml $Revision: 1.2 $ %>
+<%# i.rast.rhtml $Revision: 1.3 $ %>
 <h1><%= CGI::escapeHTML( @conf.html_title ) %> [全文検索]</h1>
 <form action="<%= _(@cgi.script_name) %>">
 <p>
@@ -30,7 +30,7 @@
     <% format_result_item(item) %>
 <h2><a href="<%= @conf.index %><%= @plugin.anchor(@date) %>"><%= _(@conf.to_native(@title)) %></a>(スコア:<%= item.score %>)</h2>
   <% end %>
-  <% if @result.hit_count > 0 %>
+  <% if @result.hit_count > @num %>
     <%= format_links(@result) %>
   <% end %>
 <% end %>
