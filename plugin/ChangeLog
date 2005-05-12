@@ -1,3 +1,7 @@
+2005-05-12 TADA Tadashi <sho@spc.gr.jp>
+	* makerss.rb, recent_comment3.rb, recent_trackback3.rb: creation
+	RSS file only once when showcomment mode.
+
 2005-05-11  Kazuhiko  <kazuhiko@fdiary.net>
 	* rast-register.rb: set false to show_nyear option in command/cgi
 	mode.

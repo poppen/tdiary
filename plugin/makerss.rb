@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.25 $
+# makerss.rb: $Revision: 1.26 $
 #
 # generate RSS file when updating.
 #
@@ -260,10 +260,6 @@ def makerss_footer
 end
 
 add_update_proc do
-	makerss_update
-end
-
-if /^showcomment$/ =~ @mode then
 	makerss_update
 end
 

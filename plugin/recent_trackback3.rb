@@ -1,4 +1,4 @@
-# $Revision: 1.5 $
+# $Revision: 1.6 $
 # recent_trackback3: 最近のツッコミをリストアップする
 #
 # Options:
@@ -75,30 +75,25 @@ def recent_trackback3
 end
 
 add_update_proc do
+	date = @date.strftime( '%Y%m%d' )
+
 	if @mode == 'trackbackreceive' and @comment
 		recent_trackback3_init
 		cache = @conf['recent_trackback3.cache']
 		cache_size = @conf['recent_trackback3.cache_size']
 		trackback = @comment
 		serial = 0
-		@diaries[@date.strftime('%Y%m%d')].each_visible_trackback( 100 ) {|tb, idx| serial += 1}
+		@diaries[date].each_visible_trackback( 100 ) {|tb, idx| serial += 1}
 		PStore.new(cache).transaction do |db|
 			db['trackbacks'] = Array.new(cache_size) unless db.root?('trackbacks')
 			if db['trackbacks'][0].nil? or trackback != db['trackbacks'][0][0]
 				db['trackbacks'].unshift([trackback, @date, serial]).pop
 			end
 		end
-	end
-end
-
-# fix me!
-# I want to use update_proc, but TDiaryShowComment doesn't call update_proc.
-add_form_proc do |date|
-	if @mode == 'showcomment'
+	elsif @mode == 'showcomment'
 		recent_trackback3_init
 		cache = @conf['recent_trackback3.cache']
 		cache_size = @conf['recent_trackback3.cache_size']
-		date = date.strftime('%Y%m%d')
 
 		PStore.new(cache).transaction do |db|
 			break unless db.root?('trackbacks')
@@ -116,15 +111,14 @@ add_form_proc do |date|
 			end
 		end
 	end
-	''
 end
 
 if @mode == 'saveconf'
-def saveconf_recent_trackback3
-	@conf['recent_trackback3.n'] = @cgi.params['recent_trackback3.n'][0].to_i
-	@conf['recent_trackback3.sep'] = @cgi.params['recent_trackback3.sep'][0]
-	@conf['recent_trackback3.date_format'] = @cgi.params['recent_trackback3.date_format'][0]
-	@conf['recent_trackback3.format'] = @cgi.params['recent_trackback3.format'][0]
-end
+	def saveconf_recent_trackback3
+		@conf['recent_trackback3.n'] = @cgi.params['recent_trackback3.n'][0].to_i
+		@conf['recent_trackback3.sep'] = @cgi.params['recent_trackback3.sep'][0]
+		@conf['recent_trackback3.date_format'] = @cgi.params['recent_trackback3.date_format'][0]
+		@conf['recent_trackback3.format'] = @cgi.params['recent_trackback3.format'][0]
+	end
 end
 # vim: ts=3

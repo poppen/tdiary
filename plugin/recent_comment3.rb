@@ -1,4 +1,4 @@
-# $Revision: 1.14 $
+# $Revision: 1.15 $
 # recent_comment3: 最近のツッコミをリストアップする
 #   パラメタ:
 #     max:           最大表示数(未指定時:3)
@@ -40,30 +40,25 @@ def recent_comment3(max = 3, sep = '&nbsp;',
 end
 
 add_update_proc do
-	if @mode == 'comment' and @comment
-		comment = @comment
-		serial = 0
-		@diaries[@date.strftime('%Y%m%d')].each_comment(100) do
-			serial += 1
-		end
-		PStore.new(RECENT_COMMENT3_CACHE).transaction do |db|
-			db['comments'] = Array.new(RECENT_COMMENT3_NUM) unless db.root?('comments')
+	date = @date.strftime( '%Y%m%d' )
+
+	if @mode == 'comment' and @comment then
+		PStore.new( RECENT_COMMENT3_CACHE ).transaction do |db|
+			comment = @comment
+			serial = 0
+			@diaries[date].each_comment( 100 ) do
+				serial += 1
+			end
+			db['comments'] = Array.new( RECENT_COMMENT3_NUM ) unless db.root?( 'comments' )
 			if db['comments'][0].nil? or comment != db['comments'][0][0]
 				db['comments'].unshift([comment, @date, serial]).pop
 			end
 		end
-	end
-end
-
-# I want to use update_proc, but TDiaryShowComment doesn't call update_proc.
-add_form_proc do |date|
-	if @mode == 'showcomment'
-		date = date.strftime('%Y%m%d')
-
-		PStore.new(RECENT_COMMENT3_CACHE).transaction do |db|
+	elsif @mode == 'showcomment'
+		PStore.new( RECENT_COMMENT3_CACHE ).transaction do |db|
 			break unless db.root?('comments')
-
-			@diaries[date].each_comment(100) do |dcomment|
+	
+			@diaries[date].each_comment( 100 ) do |dcomment|
 				db['comments'].each do |c|
 					break if c.nil?
 					comment, cdate, serial = c
@@ -76,7 +71,6 @@ add_form_proc do |date|
 			end
 		end
 	end
-	''
 end
 
 # vim: ts=3
