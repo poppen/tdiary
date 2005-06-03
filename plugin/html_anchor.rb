@@ -1,4 +1,4 @@
-# html_anchor $Revision: 1.4 $
+# html_anchor $Revision: 1.5 $
 #
 # anchor: アンカーを「YYYYMMDD.html」「YYYYMM.html」形式に置き換える
 #         tDiaryから自動的に呼び出されるので、プラグインファイルを
@@ -24,7 +24,7 @@
 #
 
 def anchor( s )
-	if /^(\d+)#?([pct]\d*)?$/ =~ s then
+	if /^([\-\d]+)#?([pct]\d*)?$/ =~ s then
 		if $2 then
 			"#$1.html##$2"
 		else
