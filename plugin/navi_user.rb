@@ -1,4 +1,4 @@
-# navi_user.rb $Revision: 1.5 $
+# navi_user.rb $Revision: 1.6 $
 #
 # navi_user: 前日，翌日→前の日記，次の日記
 #   modeがday/commentのときに表示される「前日」「翌日」ナビゲーション
@@ -10,14 +10,6 @@
 # Copyright (c) 2002 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
 
-=begin ChangeLog
-2003-01-12 TADA Tadashi <sho@spc.gr.jp>
-	* Change labels. thanks to Shintaro KAKUTANI <shintaro@kakutani.com>.
-
-2002-10-06 TADA Tadashi <sho@spc.gr.jp>
-	* for tDiary 1.5.0.20021003.
-=end
-
 eval( <<MODIFY_CLASS, TOPLEVEL_BINDING )
 module TDiary
 	class TDiaryMonth
@@ -27,9 +19,14 @@ end
 MODIFY_CLASS
 
 def navi_user
-	result = ''
-	result << %Q[<span class="adminmenu"><a href="#{@index_page}">#{navi_index}</a></span>\n] unless @index_page.empty?
-	if /^(day|comment)$/ =~ @mode
+	result = navi_item( @index_page, navi_index ) unless @index_page.empty?
+
+	case @mode
+	when 'latest'
+		result << navi_item( "#{@index}#{anchor( @conf['ndays.prev'] + '-' + @conf.latest_limit.to_s )}", "&laquo;#{navi_prev_ndays}" ) if @conf['ndays.prev']
+		result << navi_item( @index, navi_latest ) if @cgi.params['date'][0]
+		result << navi_item( "#{@index}#{anchor( @conf['ndays.next'] + '-' + @conf.latest_limit.to_s )}", "#{navi_next_ndays}&raquo;" ) if @conf['ndays.next']
+	when 'day'
 		cgi = CGI.new
 		def cgi.referer; nil; end
 		days = []
@@ -54,13 +51,19 @@ def navi_user
 		days.unshift(nil).push(nil)
 		prev_day, cur_day, next_day = days[days.index(today) - 1, 3]
 		if prev_day
-			result << %Q[<span class="adminmenu"><a href="#{@index}#{anchor prev_day}">&lt;#{navi_prev_diary(navi_user_format(prev_day))}</a></span>\n]
+			result << navi_item( "#{@index}#{anchor prev_day}", "&laquo;#{navi_prev_diary(navi_user_format(prev_day))}" )
 		end
+		result << navi_item( @index, navi_latest )
 		if next_day
-			result << %Q[<span class="adminmenu"><a href="#{@index}#{anchor next_day}">#{navi_next_diary(navi_user_format(next_day))}&gt;</a></span>\n]
+			result << navi_item( "#{@index}#{anchor next_day}", "#{navi_next_diary(navi_user_format(next_day))}&raquo;" )
 		end
+	when 'nyear'
+		result << navi_item( "#{@index}#{anchor @prev_day[4,4]}", "&laquo;#{navi_prev_nyear Time::local(*@prev_day.scan(/^(\d{4})(\d\d)(\d\d)$/)[0])}" ) if @prev_day     
+		result << navi_item( @index, navi_latest ) 
+		result << navi_item( "#{@index}#{anchor @next_day[4,4]}", "#{navi_next_nyear Time::local(*@next_day.scan(/^(\d{4})(\d\d)(\d\d)$/)[0])}&raquo;" ) if @next_day
+	else
+		result << navi_item( @index, navi_latest )
 	end
-	result << %Q[<span class="adminmenu"><a href="#{@index}">#{navi_latest}</a></span>\n] unless @mode == 'latest'
 	result
 end
 
