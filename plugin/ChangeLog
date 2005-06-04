@@ -1,5 +1,6 @@
 2005-06-04 TADA Tadashi <sho@spc.gr.jp>
 	* navi_user.rb: support 'n days before/after' mode.
+	* navi_user.rb: change implementation to overwrite navi_user_day.
 
 2005-06-03 TADA Tadashi <sho@spc.gr.jp>
 	* html_anchor.rb, my-ex.rb: support 'n days before/after' mode.
