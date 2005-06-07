@@ -4,7 +4,7 @@
 
 ;; Author: Junichiro Kita <kita@kitaj.no-ip.com>
 
-;; $Id: http.el,v 1.1 2004-05-05 06:43:47 tadatadashi Exp $
+;; $Id: http.el,v 1.2 2005-06-07 01:36:49 tadatadashi Exp $
 ;;
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -58,12 +58,14 @@ At first, encode STR using CODING, then url-hexify."
         (char-to-string char))))
    (encode-coding-string str coding) ""))
 
+(defvar http-fetch-terminator "</body>"
+  "content body end mark.")
 (defun http-fetch (url method &optional user pass data)
   "Fetch via HTTP.
 
 URL is a url to be POSTed.
 METHOD is 'get or 'post.
-USER and PASS must be a valid username and password, if required.  
+USER and PASS must be a valid username and password, if required.
 DATA is an alist, each element is in the form of (FIELD . DATA).
 
 If no error, return a buffer which contains output from the web server.
@@ -109,7 +111,7 @@ If error, return a cons cell (ERRCODE . DESCRIPTION)."
                            str))
                "\r\n"))
       (goto-char (point-min))
-      (while (not (search-forward "</body>" nil t))
+      (while (not (search-forward http-fetch-terminator nil t))
         (unless (accept-process-output connection http-timeout)
           (error "HTTP fetch: Connection timeout!"))
         (goto-char (point-min)))
