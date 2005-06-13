@@ -1,6 +1,10 @@
 2005-06-13 TADA Tadashi <sho@spc.gr.jp>
 	* html_anchor.rb: change description of web server settings to using URL of
 	  tDiary-users wiki.
+	* title_list.rb, recent_list.rb: change HTML to using <ul>.
+	* recent_comment.rb, recent_comment3.rb: change HTML to using <ul>.
+	* recent_trackback3.rb: change HTML to using <ul> and delete
+	  recent_trackback3.sep option.
 
 2005-06-09 TADA Tadashi <sho@spc.gr.jp>
 	* release 2.1.1.

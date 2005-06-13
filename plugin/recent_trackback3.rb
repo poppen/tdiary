@@ -1,4 +1,4 @@
-# $Revision: 1.6 $
+# $Revision: 1.7 $
 # recent_trackback3: 最近のツッコミをリストアップする
 #
 # Options:
@@ -10,9 +10,6 @@
 #
 #	@options['recent_trackback3.n']:
 #		表示するTrackBack件数．(3)
-#
-#	@options['recent_trackback3.sep']:
-#		各TrackBack間に挿入する文字列．(&nbsp)
 #
 #	@options['recent_trackback3.date_format']:
 #		日付フォーマット．("(#{@date_format} %H:%M)")
@@ -31,9 +28,8 @@ def recent_trackback3_init
 	@conf['recent_trackback3.cache'] ||= "#{@cache_path}/recent_trackbacks"
 	@conf['recent_trackback3.cache_size'] ||= 50
 	@conf['recent_trackback3.n'] ||= 3
-	@conf['recent_trackback3.sep'] ||= '&nbsp'
 	@conf['recent_trackback3.date_format'] ||= "(#{@date_format} %H:%M)"
-	@conf['recent_trackback3.format'] ||= '<strong>$1.</strong><a href="$2" title="$3">$4 $5</a>'
+	@conf['recent_trackback3.format'] ||= '<a href="$2" title="$3">$4 $5</a>'
 end
 
 def recent_trackback3
@@ -41,7 +37,6 @@ def recent_trackback3
 
 	cache = @conf['recent_trackback3.cache']
 	n = @conf['recent_trackback3.n']
-	sep = @conf['recent_trackback3.sep']
 	date_format = @conf['recent_trackback3.date_format']
 	format = @conf['recent_trackback3.format']
 	result = []
@@ -63,14 +58,16 @@ def recent_trackback3
 			date_str = trackback.date.strftime(date_format)
 			idx += 1
 
+			result << "<li>"
 			result << recent_trackback3_format(format, idx, a, popup, str, date_str)
+			result << "</li>\n"
 		end
 		db.abort
 	end
 	if result.size == 0
 		''
 	else
-		result.join(sep)
+		%Q|<ol class="recent-trackback">| + result.join( '' ) + "</ol>\n"
 	end
 end
 
@@ -116,7 +113,6 @@ end
 if @mode == 'saveconf'
 	def saveconf_recent_trackback3
 		@conf['recent_trackback3.n'] = @cgi.params['recent_trackback3.n'][0].to_i
-		@conf['recent_trackback3.sep'] = @cgi.params['recent_trackback3.sep'][0]
 		@conf['recent_trackback3.date_format'] = @cgi.params['recent_trackback3.date_format'][0]
 		@conf['recent_trackback3.format'] = @cgi.params['recent_trackback3.format'][0]
 	end

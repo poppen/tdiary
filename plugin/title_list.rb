@@ -1,34 +1,31 @@
-# titile_list.rb $Revision: 1.15 $
+# titile_list.rb $Revision: 1.16 $
 #
 # title_list: 現在表示している月のタイトルリストを表示
 #   パラメタ(カッコ内は未指定時の値):
 #     rev:       逆順表示(false)
 #
-# 備考: タイトルリストを日記に埋め込むは、レイアウトを工夫しなければ
+# 備考: タイトルリストを日記に埋め込むには、レイアウトを工夫しなければ
 # なりません。ヘッダやフッタでtableタグを使ったり、CSSを書き換える必
 # 要があるでしょう。
 #
-def title_list( rev = false, extra_erb = 'obsolete' )
-	result = ''
-	if extra_erb != 'obsolete'
-		result << %Q|<p class="message">option 'extra_erb' is obsolete!<p>|
-	end
+def title_list( rev = false )
+	result = %Q|<ul class="title-list">\n|
 	keys = @diaries.keys.sort
 	keys = keys.reverse if rev
 	keys.each do |date|
 		next unless @diaries[date].visible?
-		result << %Q[<p class="recentitem"><a href="#{@index}#{anchor date}">#{@diaries[date].date.strftime( @date_format )}</a></p>\n<div class="recentsubtitles">\n]
+		result << %Q[<li><a href="#{@index}#{anchor date}">#{@diaries[date].date.strftime( @date_format )}</a>\n<ul class="title-list-item">\n]
 		if !@plugin_files.grep(/\/category.rb$/).empty? and @diaries[date].categorizable?
 			@diaries[date].each_section do |section|
-				result << %Q[#{section.stripped_subtitle_to_html}<br>\n] if section.stripped_subtitle
+				result << %Q[<li>#{section.stripped_subtitle_to_html}</li>\n] if section.stripped_subtitle
 			end
 		else
 			@diaries[date].each_section do |section|
-				result << %Q[#{section.subtitle_to_html}<br>\n] if section.subtitle
+				result << %Q[<li>#{section.subtitle_to_html}</li>\n] if section.subtitle
 			end
 		end
-		result << "</div>\n"
+		result << "</ul></li>\n"
 	end
-	apply_plugin( result )
+	apply_plugin( result << "</ul>\n" )
 end
 

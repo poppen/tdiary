@@ -1,8 +1,8 @@
-# $Revision: 1.15 $
+# $Revision: 1.16 $
 # recent_comment3: 最近のツッコミをリストアップする
 #   パラメタ:
 #     max:           最大表示数(未指定時:3)
-#     sep:           セパレータ(未指定時:空白)
+#     sep:           nil
 #     date_format:   日付のフォーマット(未指定時:日記の日付表記+「時:分」)
 #     except:        無視する名前(いくつもある場合は,で区切って並べる)
 #
@@ -16,8 +16,7 @@ require 'pstore'
 RECENT_COMMENT3_CACHE = "#{@cache_path}/recent_comments"
 RECENT_COMMENT3_NUM = 50
 
-def recent_comment3(max = 3, sep = '&nbsp;',
-		date_format = "(#{@date_format + ' %H:%M'})", *except )
+def recent_comment3(max = 3, sep = 'OBSOLUTE', date_format = "(#{@date_format + ' %H:%M'})", *except )
 	date_format = "(#{@date_format + ' %H:%M'})" unless date_format.respond_to?(:to_str)
 	result = []
 	idx = 0
@@ -28,14 +27,14 @@ def recent_comment3(max = 3, sep = '&nbsp;',
 			comment, date, serial = c
 			next unless comment.visible?
 			next if except.include?(comment.name)
-			str = %Q|<strong>#{idx += 1}.</strong><a href="#{@index}#{anchor date.strftime('%Y%m%d')}#c#{'%02d' % serial}" title="#{CGI::escapeHTML(comment.shorten( @conf.comment_length ))}">#{CGI::escapeHTML(comment.name)}#{comment.date.strftime(date_format)}</a>\n|
+			str = %Q|<li><a href="#{@index}#{anchor date.strftime('%Y%m%d')}#c#{'%02d' % serial}" title="#{CGI::escapeHTML(comment.shorten( @conf.comment_length ))}">#{CGI::escapeHTML(comment.name)}#{comment.date.strftime(date_format)}</a></li>\n|
 			result << str
 		end
 	end
 	if result.size == 0
 		''
 	else
-		result.join( sep )
+		%Q|<ol class="recent-comment">\n| + result.join( '' ) + "</ol>\n"
 	end
 end
 

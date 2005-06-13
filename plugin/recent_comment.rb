@@ -1,9 +1,9 @@
-# recent_comment.rb $Revision: 1.4 $
+# recent_comment.rb $Revision: 1.5 $
 #
 # recent_comment: 最近のツッコミをリストアップする
 #   パラメタ:
 #     max:    最大表示数(未指定時:3)
-#     sep:    セパレータ(未指定時:空白)
+#     sep:    nil
 #     form:   日付のフォーマット(未指定時:(日記の日付表記 時:分))
 #     except: 無視する名前(未指定時:nil)
 #
@@ -13,7 +13,7 @@
 # Modified: by TADA Tadashi <http://sho.tdiary.net/>
 # Modified: by kitaj <http://kitaj.no-ip.com/>
 #
-def recent_comment( max = 3, sep = '&nbsp;', form = nil, except = nil )
+def recent_comment( max = 3, sep = 'OBSOLUTE', form = nil, except = nil )
 	form = "(#{@date_format + ' %H:%M'})" unless form
 	comments = []
 	date = {}
@@ -33,13 +33,12 @@ def recent_comment( max = 3, sep = '&nbsp;', form = nil, except = nil )
 	comments.sort{|a,b| (a.date)<=>(b.date)}.reverse.each_with_index do |com,idx|
 		break if idx >= max
 		str = ''
-		str << %Q[<strong>#{idx+1}.</strong>]
-	  	str << %Q[<a href="#{@index}#{anchor date[com.date].strftime( '%Y%m%d' )}#c#{'%02d' % index[com.date]}"]
+	  	str << %Q[<li><a href="#{@index}#{anchor date[com.date].strftime( '%Y%m%d' )}#c#{'%02d' % index[com.date]}"]
 		str << %Q[ title="#{CGI::escapeHTML( com.shorten( @conf.comment_length ) )}">]
 		str << %Q[#{CGI::escapeHTML( com.name )}]
-		str << %Q[#{com.date.dup.strftime( form )}</a>]
+		str << %Q[#{com.date.dup.strftime( form )}</a></li>\n]
 		result << str
 	end
-	result.join( sep )
+	%Q|<ol class="recent-comment">\n| + result.join( '' ) + "</ol>\n"
 end
 
