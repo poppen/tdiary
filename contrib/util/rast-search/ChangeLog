@@ -1,7 +1,7 @@
 2005-05-11  Kazuhiko  <kazuhiko@fdiary.net>
 	* rast.rhtml, i.rast.rhtml: use @num instead of 10.
 
-2005-05-10 TADA Tadashi <sho@spc.gr.jp>
+2005-05-11 TADA Tadashi <sho@spc.gr.jp>
 	* rast.rhtml, i.rast.rhtml: set title to h2 element, and copy format_links
 	plugin on top of results.
 
