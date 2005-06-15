@@ -1,4 +1,4 @@
-# $Revision: 1.16 $
+# $Revision: 1.17 $
 # recent_comment3: 最近のツッコミをリストアップする
 #   パラメタ:
 #     max:           最大表示数(未指定時:3)
@@ -29,6 +29,7 @@ def recent_comment3(max = 3, sep = 'OBSOLUTE', date_format = "(#{@date_format + 
 			next if except.include?(comment.name)
 			str = %Q|<li><a href="#{@index}#{anchor date.strftime('%Y%m%d')}#c#{'%02d' % serial}" title="#{CGI::escapeHTML(comment.shorten( @conf.comment_length ))}">#{CGI::escapeHTML(comment.name)}#{comment.date.strftime(date_format)}</a></li>\n|
 			result << str
+			idx += 1
 		end
 	end
 	if result.size == 0

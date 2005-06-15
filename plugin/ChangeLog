@@ -1,3 +1,6 @@
+2005-06-15 TADA Tadashi <sho@spc.gr.jp>
+	* recent_comment3.rb: bug fix: enable 'max' parameter.
+
 2005-06-13 TADA Tadashi <sho@spc.gr.jp>
 	* html_anchor.rb: change description of web server settings to using URL of
 	  tDiary-users wiki.
