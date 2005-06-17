@@ -1,4 +1,4 @@
-# tb-send.rb $Revision: 1.18 $
+# tb-send.rb $Revision: 1.19 $
 #
 # Copyright (c) 2003 Junichiro Kita <kita@kitaj.no-ip.com>
 # You can distribute this file under the GPL.
@@ -60,6 +60,8 @@ end
 
 def tb_send_trackback
 	urls = (@cgi.params['plugin_tb_url'][0] || '').split
+	return if urls.size == 0
+
 	title = @cgi.params['title'][0]
 	excerpt = @cgi.params['plugin_tb_excerpt'][0]
 	section = @cgi.params['plugin_tb_section'][0]
