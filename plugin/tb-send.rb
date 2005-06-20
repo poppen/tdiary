@@ -1,4 +1,4 @@
-# tb-send.rb $Revision: 1.19 $
+# tb-send.rb $Revision: 1.20 $
 #
 # Copyright (c) 2003 Junichiro Kita <kita@kitaj.no-ip.com>
 # You can distribute this file under the GPL.
@@ -23,7 +23,7 @@ add_edit_proc do |date|
 				else
 					focus = ''
 				end
-				section_titles << %[<option value="#{anc}"#{fucus}>#{CGI::escapeHTML( apply_plugin( t.subtitle_to_html, true ) ).chomp}</option>\n\t\t\t]
+				section_titles << %[<option value="#{anc}"#{focus}>#{CGI::escapeHTML( apply_plugin( t.subtitle_to_html, true ) ).chomp}</option>\n\t\t\t]
 				idx += 1
 			end
 		end
