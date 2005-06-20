@@ -1,4 +1,4 @@
-# comment_rank.rb $Revision: 1.3 $
+# comment_rank.rb $Revision: 1.4 $
 #
 # comment_rank: ツッコミの数でランキング
 #   パラメタ:
@@ -6,10 +6,9 @@
 #     sep:  セパレータ(未指定時:空白)
 #     except:        無視する名前(いくつもある場合は,で区切って並べる)
 #
-# Copyright (C) 2002 by zoe <http://www.kasumi.sakura.ne.jp/~zoe/tdiary/>
+# Copyright (c) 2005 TADA Tadashi <sho@spc.gr.jp>
+# You can distribute this file under the GPL2.
 #
-# Original: http://www.kasumi.sakura.ne.jp/~zoe/tdiary/?date=20011221#p02
-# Modified: by TADA Tadashi <http://sho.tdiary.net/>
 #
 def comment_rank( max = 5, sep = '&nbsp;', *except )
 	name = Hash::new(0)

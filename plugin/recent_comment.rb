@@ -1,4 +1,4 @@
-# recent_comment.rb $Revision: 1.5 $
+# recent_comment.rb $Revision: 1.6 $
 #
 # recent_comment: 最近のツッコミをリストアップする
 #   パラメタ:
@@ -7,10 +7,9 @@
 #     form:   日付のフォーマット(未指定時:(日記の日付表記 時:分))
 #     except: 無視する名前(未指定時:nil)
 #
-# Copyright (C) 2002 by zoe <http://www.kasumi.sakura.ne.jp/~zoe/tdiary/>
+# Copyright (c) 2005 TADA Tadashi <sho@spc.gr.jp>
+# You can distribute this file under the GPL2.
 #
-# Original: http://www.kasumi.sakura.ne.jp/~zoe/tdiary/?date=20011225#p07
-# Modified: by TADA Tadashi <http://sho.tdiary.net/>
 # Modified: by kitaj <http://kitaj.no-ip.com/>
 #
 def recent_comment( max = 3, sep = 'OBSOLUTE', form = nil, except = nil )
