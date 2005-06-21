@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.52 2005-04-14 18:52:16 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.53 2005-06-21 15:46:49 kazuhiko Exp $-))
 
 == 概要
 アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
@@ -837,7 +837,7 @@ class DispRef2URL
 				@title  = title
 				@title_group = title
 				@title_ignored = nil
-				@key = url
+				@key = @url
 			elsif not ignoring then
 				@title = title
 				@title_group = title

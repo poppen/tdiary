@@ -1,3 +1,6 @@
+2005-06-22  Kazuhiko  <kazuhiko@fdiary.net>
+	* disp_referrer.rb: fix a typo.
+
 2005-06-21 Hiroyuki Ikezoe <poincare@ikezoe.net>
 	* recent_comment.rb, comment_rank.rb: Added GPL2 Licence. 
 	Delegated copy right to TADA-san.
