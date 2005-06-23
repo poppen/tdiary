@@ -1,3 +1,6 @@
+2005-06-23 TADA Tadashi <sho@spc.gr.jp>
+	* jdate.rb: move to contrib/plugin/japanese.
+
 2005-06-22 SHIBATA Hiroshi <h-sbt at nifty.com>
 	* recent_comment3.rb: add a configuration page, and delete all parameters.
 
