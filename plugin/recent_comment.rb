@@ -1,26 +1,38 @@
-# recent_comment.rb $Revision: 1.6 $
+# recent_comment.rb $Revision: 1.7 $
 #
 # recent_comment: 最近のツッコミをリストアップする
-#   パラメタ:
-#     max:    最大表示数(未指定時:3)
-#     sep:    nil
-#     form:   日付のフォーマット(未指定時:(日記の日付表記 時:分))
-#     except: 無視する名前(未指定時:nil)
 #
 # Copyright (c) 2005 TADA Tadashi <sho@spc.gr.jp>
 # You can distribute this file under the GPL2.
 #
-# Modified: by kitaj <http://kitaj.no-ip.com/>
-#
-def recent_comment( max = 3, sep = 'OBSOLUTE', form = nil, except = nil )
-	form = "(#{@date_format + ' %H:%M'})" unless form
-	comments = []
+def recent_comment_format(format, *args)
+	format.gsub(/\$(\d)/) {|s| args[$1.to_i - 1]}
+end
+
+def recent_comment_init
+   @conf['recent_comment.max'] ||= 3
+   @conf['recent_comment.date_format'] ||= "(%m-%d)"
+   @conf['recent_comment.except_list'] ||= ''
+   @conf['recent_comment.format'] ||= '<a href="$2" title="$3">$4 $5</a>'
+
+end
+
+def recent_comment( ob_max = 'OBSOLUTE', sep = 'OBSOLUTE', ob_form = 'OBSOLUTE', ob_except = 'OBSOLUTE' )
+   recent_comment_init
+
+   max = @conf['recent_comment.max']
+   form = @conf['recent_comment.date_format'] 
+   except = @conf['recent_comment.except_list']
+	format = @conf['recent_comment.format']
+
+   comments = []
 	date = {}
 	index = {}
-	@diaries.each_value do |diary|
+
+   @diaries.each_value do |diary|
 		next unless diary.visible?
 		diary.each_comment_tail( max ) do |comment, idx|
-			if except && (/#{except}/ =~ comment.name)
+			if (except != '') && (/#{except}/ =~ comment.name) 
 				next
 			end
 			comments << comment
@@ -31,13 +43,24 @@ def recent_comment( max = 3, sep = 'OBSOLUTE', form = nil, except = nil )
 	result = []
 	comments.sort{|a,b| (a.date)<=>(b.date)}.reverse.each_with_index do |com,idx|
 		break if idx >= max
-		str = ''
-	  	str << %Q[<li><a href="#{@index}#{anchor date[com.date].strftime( '%Y%m%d' )}#c#{'%02d' % index[com.date]}"]
-		str << %Q[ title="#{CGI::escapeHTML( com.shorten( @conf.comment_length ) )}">]
-		str << %Q[#{CGI::escapeHTML( com.name )}]
-		str << %Q[#{com.date.dup.strftime( form )}</a></li>\n]
-		result << str
+      a = @index + anchor("date[com.date].strftime( '%Y%m%d' )}#c#{'%02d' % index[com.date]}")
+      popup = CGI::escapeHTML( com.shorten( @conf.comment_length ) )
+      str = CGI::escapeHTML( com.name )
+      date_str = com.date.dup.strftime( form )
+	  	result << "<li>"
+      result << recent_comment_format(format, idx, a, popup, str, date_str)
+      result << "</li>\n"
+
 	end
 	%Q|<ol class="recent-comment">\n| + result.join( '' ) + "</ol>\n"
 end
 
+if @mode == 'saveconf'
+   def saveconf_recent_comment
+      @conf['recent_comment.max'] = @cgi.params['recent_comment.max'][0].to_i
+      @conf['recent_comment.date_format'] = @cgi.params['recent_comment.date_format'][0]
+      @conf['recent_comment.except_list'] = @cgi.params['recent_comment.except_list'][0]
+      @conf['recent_comment.format'] = @cgi.params['recent_comment.format'][0]
+
+   end
+end
