@@ -1,12 +1,12 @@
 #!/usr/bin/env ruby
 $KCODE= 'e'
 #
-# posttdiary-ex: update tDiary via e-mail. $Revision: 1.2 $
+# posttdiary-ex: update tDiary via e-mail. $Revision: 1.3 $
 #
 # Copyright (C) 2002, All right reserved by TADA Tadashi <sho@spc.gr.jp>
 # You can redistribute it and/or modify it under GPL2.
 #
-# 2005.3.17: v.1.54: Modified to posttdiary-ex.rb by K.Sakurai (http://ks.nwr.jp)
+# 2005.6.25: v.1.56: Modified to posttdiary-ex.rb by K.Sakurai (http://ks.nwr.jp)
 #  Acknowledgements:
 #   * Based on posttdiary.rb v1.2 by TADA.
 #   * Some codes partially imported from Enikki Plugin Ex. : 
@@ -21,7 +21,7 @@ $KCODE= 'e'
 def usage( detailed_help )
 	# (if "!" is at the head of the line, it is to be shown only when detailed_help == true (-h option) )
 	text = <<-TEXT
-		#{File::basename __FILE__}: update tDiary via e-mail (v1.54).
+		#{File::basename __FILE__}: update tDiary via e-mail (v1.55).
 		usage: ruby posttdiary-ex.rb [options (without -d)] <url> <user> <passwd>
 		       ruby posttdiary-ex.rb [options (with -d)]
 		arguments:
@@ -95,6 +95,13 @@ def usage( detailed_help )
 !		  --preserve-local-images,   -P:
 !		          Do not delete local image files.
 !		          Effective only when --remote-mode is enabled.
+!		  --upload-only,     -U:
+!		          Upload the attached images to server, but do not update the diary.
+!		          Also possible by adding "_UPLONLY#" to mail body.
+!		  --group-id,        -G: specify the group name (or GID) of the image file.
+!		          Also makes the file group writable (chmod 664).
+!		          ex1. -G www
+!		          ex2. -G 67
 !		  --class-name,      -n class_name:
 !		          Class name for each photo (default: photo)
 !		          Invalid when --use-image-ex or --wiki-style option is enabled.
@@ -335,7 +342,7 @@ def read_exif_comment( fullpath_imgname )
 	v
 end
 
-def make_thumbnail( idir, iname , newsize )
+def make_thumbnail( idir, iname , newsize , gid )
 	org_full = idir + iname
 	tb_name = "s" + iname
 	tb_full = idir + tb_name
@@ -351,6 +358,12 @@ def make_thumbnail( idir, iname , newsize )
 		system( "#{@convertpath} -size #{newsize}\\\> #{org_full} -geometry #{newsize}\\\> #{tb_full}" )
 	end
 	if FileTest::exist?( tb_full )
+		if gid then
+			require 'shell'
+			sh = Shell.new
+			sh.chown( nil , gid , tb_full )
+			sh.chmod( 00664 , tb_full )
+		end
 		tb_name
 	else
 		iname
@@ -591,7 +604,9 @@ begin
 	remote_image_dir = nil
 	remote_yearly_dir = false
 	preserve_local_images = false
+	upload_only = false
 	class_name = 'photo'
+	group_id = nil
 	add_div_imgnum = 2
 	add_div_imgnum_specified = nil
 	threshold_size = nil
@@ -628,6 +643,8 @@ begin
 		['--remote-image-path', '-D', GetoptLong::REQUIRED_ARGUMENT],
 		['--remote-yearly-dir', '-Y', GetoptLong::REQUIRED_ARGUMENT],
 		['--preserve-local-images', '-P', GetoptLong::NO_ARGUMENT],
+		['--upload-only', '-U', GetoptLong::NO_ARGUMENT],
+		['--group-id', '-G', GetoptLong::REQUIRED_ARGUMENT],
 		['--class-name', '-n', GetoptLong::REQUIRED_ARGUMENT],
 		['--add-div', '-v', GetoptLong::REQUIRED_ARGUMENT],
 		['--threshold-size', '-z', GetoptLong::REQUIRED_ARGUMENT],
@@ -679,6 +696,17 @@ begin
 				remote_yearly_dir = (arg =~ /[1yt]/i)
 			when '--preserve-local-images'
 				preserve_local_images = true
+			when '--upload-only'
+				upload_only = true
+				filter_mode = true
+			when '--group-id'
+				if arg =~ /\D/ then
+					require 'etc'
+					group_id = Etc.getgrnam( arg )['gid']
+				else
+					group_id = arg.to_i
+				end
+				group_id = nil if group_id <= 0 or group_id > 65535
 			when '--add-div'
 				add_div_imgnum_specified = arg.to_i
 			when '--threshold-size'
@@ -756,10 +784,13 @@ begin
 		if wiki_style then
 			image_format = '{{image $0,"$4"}}'
 			image_format_with_thumbnail = image_format
-			add_div_imgnum = 0
 		end
 	end
-	add_div_imgnum = add_div_imgnum_specified if add_div_imgnum_specified
+	if wiki_style then
+		add_div_imgnum = 0
+	else
+		add_div_imgnum = add_div_imgnum_specified if add_div_imgnum_specified
+	end
 	@convertpath = convertpath_specified 	if convertpath_specified
 	@convertpath = add_delimiter( @convertpath ) + "convert" if test( ?d , @convertpath )
 	@magickpath = $1 if @convertpath =~ /(.*[\/\\])[^\/\\]+$/
@@ -814,6 +845,9 @@ begin
 			tmp = Time::local( $1.to_i, $2.to_i, $3.to_i );
 		end
 	end
+	if @body.gsub!( /^\_up[ld]+only\#/i , '' ) then
+		upload_only = true
+	end
 	if tmp >= now + date_margin * 24 * 3600 then
 #		raise "posttdiary-ex: invalid future date"
 #		# use current date (now) instead of specified date(tmp)..
@@ -864,8 +898,12 @@ begin
 		exif_comment[image_name] = (read_exif ? read_exif_comment(image_dir + image_name) : "" )
 		image_orgname[image_name] = orglist[i]
 		change_image_size( image_dir + image_name , image_geometry ) if image_geometry
+		if group_id then
+			sh.chown( nil , group_id , image_dir + image_name )
+			sh.chmod( 00664 , image_dir + image_name )
+		end
 		thumbnail_name[image_name] = ""
-		thumbnail_name[image_name] = make_thumbnail( image_dir, image_name , thumbnail_size ) if thumbnail_size and check_image_size( image_dir + image_name, threshold_size)
+		thumbnail_name[image_name] = make_thumbnail( image_dir, image_name , thumbnail_size , group_id ) if thumbnail_size and check_image_size( image_dir + image_name, threshold_size)
 		@image_name = [] unless @image_name
 		@image_name << image_name
 	end
@@ -934,9 +972,11 @@ begin
 		title = subject
 	end
 
+	if upload_only then
+		exit 0
+	end
 	require 'cgi'
 	require 'nkf'
-
 	if filter_mode then
 		data = title + "\n";
 		data << @body + "\n";
