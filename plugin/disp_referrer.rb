@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.53 2005-06-21 15:46:49 kazuhiko Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.54 2005-06-24 12:09:26 kazuhiko Exp $-))
 
 == 概要
 アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
@@ -1264,7 +1264,7 @@ class DispRef2SetupIF
 		%w( cache_max_size ).each do |key|
 			tdiarykey = 'disp_referrer2.' + key
 			v = @cgi.params['dr2.' + key][0]
-			continue unless v
+			next unless v
 			f = 1
 			if v.gsub!( /M\Z/, '' ) then
 				f = 1024*1024

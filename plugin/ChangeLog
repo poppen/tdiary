@@ -1,3 +1,7 @@
+2005-06-24  Kazuhiko  <kazuhiko@fdiary.net>
+	* disp_referrer.rb (update_options): use 'next' instead of
+	'continue'.
+
 2005-06-23 SHIBATA Hiroshi <h-sbt at nifty.com>
 	* recent_comment.rb: add a configuration page, and delete all parameters.
 
