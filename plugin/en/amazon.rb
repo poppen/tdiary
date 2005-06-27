@@ -1,5 +1,5 @@
 #
-# English resource of amazon plugin $Revision: 1.5 $
+# English resource of amazon plugin $Revision: 1.6 $
 #
 
 #
@@ -35,7 +35,7 @@
 
 @amazon_url = 'http://www.amazon.com/exec/obidos/ASIN'
 @amazon_item_name = /^Amazon\.com: (.*)$/
-@amazon_item_image = %r|(<img src="(http://images\.amazon\.com/images/P/(.*MZZZZZZZ_.jpg))".*?>)|i
+@amazon_item_image = %r|(<img src="(http://images\.amazon\.com/images/P/(.*MZZZZZZZ_?.jpg))".*?>)|i
 @amazon_label_conf = 'Amazon'
 @amazon_label_aid = 'Amazon Assosiate ID'
 @amazon_label_imgsize = 'Image size of the book'
