@@ -1,3 +1,6 @@
+2005-06-29 TADA Tadashi <sho@spc.gr.jp>
+	* squeeze.rb: fix bug: without data updating in command mode.
+
 2005-06-27 TADA Tadashi <sho@spc.gr.jp>
 	* amazon.rb: for a little modified of web site changing.
 

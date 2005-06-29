@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-# squeeze.rb $Revision: 1.20 $
+# squeeze.rb $Revision: 1.21 $
 #
 # Create daily HTML file from tDiary database.
 #
@@ -14,99 +14,6 @@
 # The original version of this file was distributed with squeeze 
 # version 1.0.4 by TADA Tadashi <sho@spc.gr.jp> with GPL2.
 #
-=begin ChangeLog
-2003-11-15  Masao Mutoh <mutoh@highway.ne.jp>
-        * Replace header documents to URLs.
-
-2003-08-05  Kazuhiko  <kazuhiko@fdiary.net>
-	* make html when receiving TrackBack Ping
-
-2003-07-31 zunda <zunda at freeshell.org>
-	* sets mtime and atime of the output files
-	* exit( 1 ) with an error
-
-2003-06-30 MUTOH Masao	<mutoh@highway.ne.jp>
-	* fix path of default output_path on CGI or CMD mode.
-	  Pointed out by OGAWA KenIchi.
-
-2003-05-17 TADA Tadashi <sho@spc.gr.jp>
-	* fix path of theme on CGI or CMD mode.
-
-2003-04-28 TADA Tadashi <sho@spc.gr.jp>
-	* enable running on secure mode.
-
-2003-02-17 TADA Tadashi <sho@spc.gr.jp>
-	* add suffix option.
-
-2002-11-20 TADA Tadashi <sho@spc.gr.jp>
-	* make CGI object in YATDiarySqueeze and YATDiarySqueezeMain.
-
-2002-11-13 TADA Tadashi <sho@spc.gr.jp>
-	* set make @diaries in TDiaryYAsqueeze.
-
-2002-11-11 TADA Tadashi <sho@spc.gr.jp>
-	* support TDiary::TDiaryBase#mode for date display in HTML title.
-
-2002-10-23 TADA Tadashi <sho@spc.gr.jp>
-	* support Config#hide_comment_form.
-
-2002-10-22 TADA Tadashi <sho@spc.gr.jp>
-	* rename to squeeze.rb.
-
-2002-08-22 TADA Tadashi <sho@spc.gr.jp>
-	* add tdiary path to $:.
-
-2002-08-16 TADA Tadashi <sho@spc.gr.jp>
-	* ignore parser cache.
-	* hide comment form.
-
-2002-08-13 TADA Tadashi <sho@spc.gr.jp>
-	* for tDiary 1.5. thanks NISHIO Mizuho <gha@intrastore.cdc.com>.
-
-2002-05-19 MUTOH Masao	<mutoh@highway.ne.jp>
-	* ドキュメントアップデート
-
-2002-04-29 MUTOH Masao	<mutoh@highway.ne.jp>
-	* yasqueeze.rb自身の文字コードがISO-2022-JPだったのでEUC-JPに直した
-	* version 1.3.1
-
-2002-04-14 MUTOH Masao	<mutoh@highway.ne.jp>
-	* @optionsを指定しなくてもデフォルトの動作をするようにした
-		- output_path = (@data_path)/cache/html
-		- all_data = false
-		- compat_path = false
-	* version 1.3.0
-
-2002-04-01 MUTOH Masao	<mutoh@highway.ne.jp>
-	* ドキュメント削除
-	* 本ファイルのヘッダ部分のドキュメントを充実させた
-
-2002-03-31 MUTOH Masao	<mutoh@highway.ne.jp>
-	* TAB → スペース
-	* ドキュメントチェックイン
-
-2002-03-29 MUTOH Masao	<mutoh@highway.ne.jp>
-	* 出力ファイルを日付の昇順でソートするようにした
-	* squeeze.rbと同様のコマンドオプションをサポートした
-	 （ただし --deleteオプションはなく代わりに--allオプションを用意）
-	* コマンドラインオプションを追加したことで不要になった--nohtmlオプション
-	  をなくした
-	* ドキュメント再見直し
-	* tdiary.confの@options対応
-	* add_update_proc do 〜　end 対応
-	* version 1.2.0
-
-2002-03-21 MUTOH Masao	<mutoh@highway.ne.jp>
-	* 非表示の日記を出力対象に含めるかどうかを設定できるようにした
-	* ファイルの保存ディレクトリの構成を、tDiary標準のものとversion 1.0.0
-	  のものを設定できるようにした
-	* ドキュメントをソースから追い出した
-	* version 1.1.0
-
-2002-03-19 MUTOH Masao <mutoh@highway.ne.jp>
-	* version 1.0.0
-=end
-
 
 mode = ""
 if $0 == __FILE__
@@ -128,7 +35,7 @@ if mode == "CMD" || mode == "CGI"
 
 	if mode == "CMD"
 		def usage
-			puts "squeeze $Revision: 1.20 $"
+			puts "squeeze $Revision: 1.21 $"
 			puts " making html files from tDiary's database."
 			puts " usage: ruby squeeze.rb [-p <tDiary path>] [-c <tdiary.conf path>] [-a] [-s] [-x suffix] <dest path>"
 			exit
@@ -262,7 +169,7 @@ module TDiary
 						diaries.sort.each do |day, diary|
 							print YATDiarySqueeze.new(diary, dest, all_data, compat, conf, suffix).execute + " "
 						end
-						false
+						DIRTY_NONE
 					end
 				end
 			end
@@ -280,7 +187,7 @@ if mode == "CGI" || mode == "CMD"
 			</head>
 			<body><div style="text-align:center">
 			<h1>Squeeze for tDiary</h1>
-			<p>$Revision: 1.20 $</p>
+			<p>$Revision: 1.21 $</p>
 			<p>Copyright (C) 2002 MUTOH Masao&lt;mutoh@highway.ne.jp&gt;</p></div>
 			<br><br>Start!</p><hr>
 		]
