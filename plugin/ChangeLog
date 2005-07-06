@@ -1,3 +1,6 @@
+2005-07-06 TADA Tadashi <sho@spc.gr.jp>
+	* recent_list.rb: add </li> to recent-list items.
+
 2005-06-29 TADA Tadashi <sho@spc.gr.jp>
 	* squeeze.rb: fix bug: without data updating in command mode.
 
