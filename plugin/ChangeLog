@@ -1,3 +1,6 @@
+2005-07-07 SHIBATA Hiroshi <h-sbt@nifty.com>
+	* xmlrpc.rb : fix name value(xmlrpc.lastname).
+
 2005-07-06 TADA Tadashi <sho@spc.gr.jp>
 	* recent_list.rb: add </li> to recent-list items.
 
