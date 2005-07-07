@@ -1,4 +1,4 @@
-# xmlrpc.rb: $Revision: 1.1 $
+# xmlrpc.rb: $Revision: 1.2 $
 #
 # XML-RPC API
 #
@@ -24,7 +24,7 @@ add_conf_proc('XMLRPC', 'XML-RPC API') do
 	<h3 class="subtitle">#{label_xmlrpc_password}</h3>
 	<p><input type="password" name="xmlrpc.password" value="#{@conf['xmlrpc.password']}" size="20"></p>
 	<h3 class="subtitle">#{label_xmlrpc_lastname}</h3>
-	<p><input type="text" name="xmlrpc.label_xmlrpc_lastname" value="#{@conf['xmlrpc.lastname']}" size="20"></p>
+	<p><input type="text" name="xmlrpc.lastname" value="#{@conf['xmlrpc.lastname']}" size="20"></p>
 	<h3 class="subtitle">#{label_xmlrpc_firstname}</h3>
 	<p><input type="text" name="xmlrpc.firstname" value="#{@conf['xmlrpc.firstname']}" size="20"></p>
 	<h3 class="subtitle">#{label_xmlrpc_userid}</h3>
