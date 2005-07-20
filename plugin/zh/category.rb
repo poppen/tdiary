@@ -1,4 +1,4 @@
-# ja/category.rb $Revision: 1.1 $
+# ja/category.rb $Revision: 1.2 $
 #
 # Copyright (c) 2004 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -50,9 +50,12 @@ def category_conf_html
 <h3 class="subtitle">Create category index</h3>
 <p>
 To use the category feature, you should create category index.
-Press 
-<a href="#{@conf.update}?conf=category;category_initialize=1">here</a>
-to create category index.
+Check the box below to create category index.
+</p>
+<p>
+<input type="checkbox" name="category_initialize" value="1">Rebuild category Index
+</p>
+<p>
 It takes several or several tens of second to create it.
 </p>
 

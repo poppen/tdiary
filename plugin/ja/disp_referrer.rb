@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.23 2005-04-14 18:52:16 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.24 2005-07-20 08:36:50 tadatadashi Exp $-))
 日本語リソース
 
 == 概要
@@ -223,8 +223,11 @@ Disp_referrer2_cache_info = <<'_END'.taint
 _END
 Disp_referrer2_update_info = <<'_END'.taint
 <p>
-	「<a href="%1$s">リンク元</a>」の変更の後にも
-	<a href="%2$s">キャッシュのクリア</a>が必要かもしれません。
+	「<a href="%1$s">リンク元</a>」の変更の後には、
+	このチェックボックス
+  −<input name="dr2.cache.update" value="force" type="checkbox">キャッシュをクリアする−
+	チェックしてからOKをクリックして、
+	キャッシュのクリアをしてくさい。
 </p>
 _END
 Disp_referrer2_move_to_refererlist = <<'_END'.taint

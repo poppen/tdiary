@@ -1,3 +1,15 @@
+2005-07-20 TADA Tadashi <sho@spc.gr.jp>
+	* release 2.1.2.
+
+2005-07-12 zunda <zunda at freeshell.org>
+	* disp_referer.rb: clear cache only in saveconf mode
+
+2005-07-07 TADA Tadashi <sho@spc.gr.jp>
+	* category.rb: against CSRF attack.
+
+2005-07-07 Yutaka OIWA <y.oiwa at aist.go.jp>
+	* image.rb: against CSRF attack.
+
 2005-07-07 SHIBATA Hiroshi <h-sbt@nifty.com>
 	* xmlrpc.rb : fix name value(xmlrpc.lastname).
 

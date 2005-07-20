@@ -1,5 +1,5 @@
 =begin
-= A little bit more powerful display of referrers((-$Id: disp_referrer.rb,v 1.5 2005-04-14 18:52:16 zunda Exp $-))
+= A little bit more powerful display of referrers((-$Id: disp_referrer.rb,v 1.6 2005-07-20 08:36:50 tadatadashi Exp $-))
 English resource
 
 == Copyright notice
@@ -82,7 +82,9 @@ Disp_referrer2_cache_info = <<'_END'.taint
 _END
 Disp_referrer2_update_info = <<'_END'.taint
 <p>
-	Please <a href="%2$s">clear the cache</a>
+	Please clear the cache by checking this box:
+  <input name="dr2.cache.update" value="force" type="checkbox">clear the cache,
+	and clicking OK
 	after editing the <a href="%1$s">today's link</a> lists.
 </p>
 _END

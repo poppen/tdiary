@@ -1,4 +1,4 @@
-# category.rb $Revision: 1.27 $
+# category.rb $Revision: 1.28 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -621,6 +621,10 @@ if @mode == 'conf' || @mode == 'saveconf'
 	add_conf_proc('category', @category_conf_label) do
 		cache = @category_cache
 		if @mode == 'saveconf'
+			if @cgi.valid?( 'category_initialize' )
+				@category_cache.recreate(@years)
+			end
+
 			[
 				'category.header1',
 				'category.header2',
@@ -678,9 +682,6 @@ if @mode == 'conf' || @mode == 'saveconf'
 			category_icon_save
 		end
 		category_icon_conf_html
-	end
-	if @cgi.valid?('category_initialize')
-		@category_cache.recreate(@years)
 	end
 end
 

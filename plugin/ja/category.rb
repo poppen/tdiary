@@ -1,4 +1,4 @@
-# ja/category.rb $Revision: 1.8 $
+# ja/category.rb $Revision: 1.9 $
 #
 # Copyright (c) 2004 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -49,17 +49,21 @@ def category_conf_html
 	r = <<HTML
 <h3 class="subtitle">カテゴリインデックスの作成</h3>
 <p>
-カテゴリ一の機能を利用するにはカテゴリインデックスをあらかじめ作成しておく必要があります．
+カテゴリ一の機能を利用するにはカテゴリインデックスをあらかじめ作成しておく必要があります。
 カテゴリインデックスを作成するには
-<a href="#{@conf.update}?conf=category;category_initialize=1">ここ</a>
-をクリックしてください．
-日記の量やサーバの性能にもよりますが，数秒から数十秒でインデックスの作成は終了します．
+以下のチェックを入れてからOKボタンを押してください。
+</p>
+<p>
+<input type="checkbox" name="category_initialize" value="1">カテゴリインデックスの作成
+</p>
+<p>
+日記の量やサーバの性能にもよりますが、数秒から数十秒でインデックスの作成は終了します。
 </p>
 
 <h3 class="subtitle">日記編集サポート</h3>
 <p>
-日記編集画面の「本文」の下にカテゴリ名を一覧表示することができます．
-カテゴリ名をクリックすると「本文」にそのカテゴリ名が挿入されます(要JavaScript)．
+日記編集画面の「本文」の下にカテゴリ名を一覧表示することができます。
+カテゴリ名をクリックすると「本文」にそのカテゴリ名が挿入されます(要JavaScript)。
 </p>
 <p>
 <select name="category.edit_support">
@@ -70,21 +74,21 @@ def category_conf_html
 
 <h3 class="subtitle">ヘッダ</h3>
 <p>
-画面上部に表示する文章を指定します．
-「&lt;%= category_navi %&gt;」で，カテゴリに特化したナビゲーションボタンを表示することができます．
-また「&lt;%= category_list%&gt;」でカテゴリ名一覧を表示することができます．
-その他，各種プラグインやHTMLを記述できます．
+画面上部に表示する文章を指定します。
+「&lt;%= category_navi %&gt;」で、カテゴリに特化したナビゲーションボタンを表示することができます。
+また「&lt;%= category_list%&gt;」でカテゴリ名一覧を表示することができます。
+その他，各種プラグインやHTMLを記述できます。
 </p>
 
-<p>ヘッダ1：ナビゲーションボタンのすぐ下に表示されます．</p>
+<p>ヘッダ1：ナビゲーションボタンのすぐ下に表示されます。</p>
 <textarea name="category.header1" cols="70" rows="8">#{CGI.escapeHTML(@conf['category.header1'])}</textarea>
 
-<p>ヘッダ2：H1のすぐ下に表示されます．</p>
+<p>ヘッダ2：H1のすぐ下に表示されます。</p>
 <p><textarea name="category.header2" cols="70" rows="8">#{CGI.escapeHTML(@conf['category.header2'])}</textarea></p>
 
 <h3 class="subtitle">デフォルトの表示期間</h3>
 <p>
-カテゴリ表示モードのデフォルトの表示期間を指定します．
+カテゴリ表示モードのデフォルトの表示期間を指定します。
 </p>
 <p>
 <select name="category.period">
@@ -107,8 +111,8 @@ HTML
 
 <h3 class="subtitle">ボタンラベル</h3>
 <p>
-ナビゲーションボタンのラベルを指定します．
-ラベル中の$1と$2は，それぞれ「年」「月」を表す数値で置換されます．
+ナビゲーションボタンのラベルを指定します。
+ラベル中の$1と$2は，それぞれ「年」「月」を表す数値で置換されます。
 </p>
 <table border="0">
 <tr><th>ボタン名</th><th>ラベル</th><th>サンプル</th></tr>
@@ -151,7 +155,7 @@ def category_icon_conf_html
 		r << <<HTML
 <h3 class="subtitle">カテゴリアイコンの置き場所</h3>
 <p>
-カテゴリアイコン用の画像が保存されているディレクトリとそのURLを指定します．
+カテゴリアイコン用の画像が保存されているディレクトリとそのURLを指定します。
 </p>
 <p>
 <dl>
@@ -175,7 +179,7 @@ HTML
 	r << <<HTML
 <h3 class="subtitle">カテゴリアイコン</h3>
 <p>
-各カテゴリのアイコンをドロップダウンリストから選択します．
+各カテゴリのアイコンをドロップダウンリストから選択します。
 <p>
 <table>
 	<tr><th>カテゴリ</th><th>アイコン</th></tr>
@@ -186,7 +190,7 @@ HTML
 <h3 class="subtitle">アイコンサンプル</h3>
 <p>
 選択可能なアイコン一覧です．
-アイコンにマウスカーソルを合わせるとアイコンのファイル名がポップアップ表示されます．
+アイコンにマウスカーソルを合わせるとアイコンのファイル名がポップアップ表示されます。
 </p>
 <p>
 #{category_icon_sample}

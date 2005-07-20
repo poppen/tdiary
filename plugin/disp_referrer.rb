@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.54 2005-06-24 12:09:26 kazuhiko Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.55 2005-07-20 08:36:48 tadatadashi Exp $-))
 
 == 概要
 アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
@@ -1183,7 +1183,7 @@ class DispRef2SetupIF
 		end
 
 		# clear cache
-		if not @setup.secure then
+		if @mode == 'saveconf' and not @setup.secure then
 			if not @setup['no_cache'] then
 				unless @cache then
 					@need_cache_update = true
@@ -1220,7 +1220,7 @@ class DispRef2SetupIF
 		end
 		if @cache then
 			r << sprintf( Disp_referrer2_cache_info, DispRef2String::bytes( @cache.size ) )
-			r << sprintf( Disp_referrer2_update_info, "#{@conf.update}?conf=referer", "#{@conf.update}?conf=disp_referrer2;dr2.cache.update=force;dr2.current_mode=#{@current_mode}" )
+			r << sprintf( Disp_referrer2_update_info, "#{@conf.update}?conf=referer" )
 		end
 		r << "<p>\n"
 		case @current_mode

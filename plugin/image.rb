@@ -1,4 +1,4 @@
-# image.rb $Revision: 1.26 $
+# image.rb $Revision: 1.27 $
 # -pv-
 # 
 # Ì¾¾Î:
@@ -279,6 +279,7 @@ add_form_proc do |date|
 		#{image_label_list_caption}
 		</div>
 		<form class="update" method="post" action="#{@conf.update}"><div>
+		#{csrf_protection}
 		<table>
 		<tr>]
 		tmp = ''
@@ -325,6 +326,7 @@ add_form_proc do |date|
 	end
    r << %Q[<form class="update" method="post" enctype="multipart/form-data" action="#{@conf.update}"><div>
 	#{@conf.secure ? image_label_only_jpeg : ''}
+	#{csrf_protection}
    <input type="hidden" name="plugin_image_addimage" value="true">
    <input type="hidden" name="date" value="#{date.strftime( '%Y%m%d' )}">
    <input type="file" tabindex="#{tabidx+98}" name="plugin_image_file" size="50">
