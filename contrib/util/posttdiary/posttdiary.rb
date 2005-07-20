@@ -1,13 +1,10 @@
 #!/usr/bin/env ruby
 $KCODE= 'e'
 #
-# posttdiary: update tDiary via e-mail. $Revision: 1.4 $
+# posttdiary: update tDiary via e-mail. $Revision: 1.5 $
 #
 # Copyright (C) 2002, All right reserved by TADA Tadashi <sho@spc.gr.jp>
 # You can redistribute it and/or modify it under GPL2.
-#
-# 2005.1.17: Rev1.3
-#  debugged by K.Sakurai (http://ks.nwr.jp)
 #
 
 def usage
@@ -232,7 +229,15 @@ begin
 	require 'net/http'
 	Net::HTTP.start( host, port ) do |http|
 		auth = ["#{user}:#{pass}"].pack( 'm' ).strip
-		res, = http.post( cgi, data, 'Authorization' => "Basic #{auth}" )
+		res, = http.get( cgi,
+				'Authorization' => "Basic #{auth}",
+				'Referer' => url )
+		if %r|<input type="hidden" name="csrf_protection_key" value="([^"]+)">| =~ res.body then
+			data << "&csrf_protection_key=#{CGI::escape( CGI::unescapeHTML( $1 ) )}"
+		end
+		res, = http.post( cgi, data,
+				'Authorization' => "Basic #{auth}",
+				'Referer' => url )
 	end
 
 rescue

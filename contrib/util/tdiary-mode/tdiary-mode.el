@@ -4,7 +4,7 @@
 
 ;; Author: Junichiro Kita <kita@kitaj.no-ip.com>
 
-;; $Id: tdiary-mode.el,v 1.1 2004-05-05 06:43:47 tadatadashi Exp $
+;; $Id: tdiary-mode.el,v 1.2 2005-07-20 08:39:56 tadatadashi Exp $
 ;;
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -87,6 +87,9 @@ Each element looks like (NAME URL) or (NAME URL INDEX-RB UPDATE-RB).")
 
 (defvar tdiary-update-rb "update.rb"
   "Name of the 'update.rb'.")
+
+(defvar tdiary-csrf-key nil
+  "CSRF protection key.")
 
 (defvar tdiary-coding-system 'euc-japan-dos)
 
@@ -344,6 +347,7 @@ Dangerous!!!"
     (add-to-list 'post-data (cons "year" year))
     (add-to-list 'post-data (cons "month" month))
     (add-to-list 'post-data (cons "day" day))
+    (if tdiary-csrf-key (add-to-list 'post-data (cons "csrf_protection_key" tdiary-csrf-key)))
     (or (equal mode "edit")
 	(add-to-list 'post-data
 		     (cons "title" (http-url-hexify-string
@@ -467,27 +471,30 @@ Otherwise replace all entity references within current buffer."
     (switch-to-buffer buf)
     (tdiary-mode)
     (setq tdiary-edit-mode "append")
-    (if replacep
-	(let (start end body title)
+    (let (start end body title csrf-key)
+      (save-excursion
+	(setq buf (tdiary-post "edit" tdiary-date nil))
+	(when (bufferp buf)
 	  (save-excursion
-	    (setq buf (tdiary-post "edit" tdiary-date nil))
-	    (when (bufferp buf)
-	      (save-excursion
-		(set-buffer buf)
-		(re-search-forward "<input [^>]+name=\"title\" [^>]+value=\"\\([^>\"]*\\)\">" nil t nil)
-		(setq title (match-string 1))
-		(re-search-forward "<textarea [^>]+>" nil t nil)
-		(setq start (match-end 0))
-		(re-search-forward "</textarea>" nil t nil)
-		(setq end (match-beginning 0))
-		(setq body (buffer-substring start end)))
-	      (insert body)))
-	  (setq tdiary-edit-mode "replace")
-	  (setq tdiary-title (tdiary-replace-entity-refs title))
-	  (goto-char (point-min))
-	  (tdiary-replace-entity-refs)
-	  (set-buffer-modified-p nil))
-      (setq tdiary-edit-mode "append"))))
+	    (set-buffer buf)
+	    (if (re-search-forward "<input [^>]+name=\"csrf_protection_key\" [^>]*value=\"\\([^>\"]*\\)\">" nil t nil)
+		(setq csrf-key (match-string 1)))
+	    (re-search-forward "<input [^>]+name=\"title\" [^>]+value=\"\\([^>\"]*\\)\">" nil t nil)
+	    (setq title (match-string 1))
+	    (re-search-forward "<textarea [^>]+>" nil t nil)
+	    (setq start (match-end 0))
+	    (re-search-forward "</textarea>" nil t nil)
+	    (setq end (match-beginning 0))
+	    (setq body (buffer-substring start end))
+	    )
+	  (setq tdiary-csrf-key (and csrf-key (tdiary-replace-entity-refs csrf-key)))
+	  (when replacep
+	    (insert body)
+	    (setq tdiary-edit-mode "replace")
+	    (setq tdiary-title (tdiary-replace-entity-refs title))
+	    (goto-char (point-min))
+	    (tdiary-replace-entity-refs)
+	    (set-buffer-modified-p nil)))))))
 
 (defun tdiary-new (&optional select-url)
   (interactive "P")
@@ -530,6 +537,7 @@ If you want to set up your own key bindings, use `tdiary-mode-hook'."
   (make-local-variable 'tdiary-diary-url)
   (make-local-variable 'tdiary-index-rb)
   (make-local-variable 'tdiary-update-rb)
+  (make-local-variable 'tdiary-csrf-key)
   (setq require-final-newline t
 	indent-tabs-mode nil
 	tdiary-edit-mode "replace"

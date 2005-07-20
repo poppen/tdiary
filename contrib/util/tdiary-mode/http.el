@@ -4,7 +4,7 @@
 
 ;; Author: Junichiro Kita <kita@kitaj.no-ip.com>
 
-;; $Id: http.el,v 1.2 2005-06-07 01:36:49 tadatadashi Exp $
+;; $Id: http.el,v 1.3 2005-07-20 08:39:56 tadatadashi Exp $
 ;;
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -99,6 +99,7 @@ If error, return a cons cell (ERRCODE . DESCRIPTION)."
                " HTTP/1.0\r\n"
                (concat "Host: " server "\r\n")
                "Connection: close\r\n"
+               "Referer: " url "\r\n"
                "Content-type: application/x-www-form-urlencoded\r\n"
                (if (and user pass)
                    (concat "Authorization: Basic "

@@ -1,12 +1,12 @@
 #!/usr/bin/env ruby
 $KCODE= 'e'
 #
-# posttdiary-ex: update tDiary via e-mail. $Revision: 1.3 $
+# posttdiary-ex: update tDiary via e-mail. $Revision: 1.4 $
 #
 # Copyright (C) 2002, All right reserved by TADA Tadashi <sho@spc.gr.jp>
 # You can redistribute it and/or modify it under GPL2.
 #
-# 2005.6.25: v.1.56: Modified to posttdiary-ex.rb by K.Sakurai (http://ks.nwr.jp)
+# 2005.7.18: v.1.58: Modified by K.Sakurai (http://ks.nwr.jp)
 #  Acknowledgements:
 #   * Based on posttdiary.rb v1.2 by TADA.
 #   * Some codes partially imported from Enikki Plugin Ex. : 
@@ -21,7 +21,7 @@ $KCODE= 'e'
 def usage( detailed_help )
 	# (if "!" is at the head of the line, it is to be shown only when detailed_help == true (-h option) )
 	text = <<-TEXT
-		#{File::basename __FILE__}: update tDiary via e-mail (v1.55).
+		#{File::basename __FILE__}: update tDiary via e-mail (v1.58).
 		usage: ruby posttdiary-ex.rb [options (without -d)] <url> <user> <passwd>
 		       ruby posttdiary-ex.rb [options (with -d)]
 		arguments:
@@ -174,9 +174,9 @@ def TDiaryError( msg )
 end
 
 def load_cgi_conf
-	raise TDiaryError, 'posttdiary: No @data_path variable.' unless @data_path
+	raise TDiaryError, 'posttdiary-ex: No @data_path variable.' unless @data_path
 	@data_path = add_delimiter( @data_path )
-	raise TDiaryError, 'posttdiary: Do not set @data_path as same as tDiary system directory.' if @data_path == @tdiary_dirname
+	raise TDiaryError, 'posttdiary-ex: Do not set @data_path as same as tDiary system directory.' if @data_path == @tdiary_dirname
 	
 	variables = [:author_name, :author_mail, :index_page, :hour_offset]
 	begin
@@ -211,7 +211,7 @@ def read_tdiary_conf( dfname )
 	true;
 
 	rescue IOError, Errno::ENOENT
-	raise 'posttdiary: failed to read tdiary configuration file'
+	raise 'posttdiary-ex: failed to read tdiary configuration file'
 end
 
 def check_local_images( date, path )
@@ -400,7 +400,7 @@ def add_delimiter( orgpath )
 	newpath
 end
 
-def make_image_body( imgdata , imgname , remotedir , now , image_boundary)
+def make_image_body( imgdata , imgname , remotedir , now , image_boundary, protection_key )
 	fname = ""
 	extension = ""
 	image_body = ""
@@ -421,6 +421,14 @@ image_body.concat <<END
 content-disposition: form-data; name="plugin_image_dir"\r
 \r
 #{add_delimiter(remotedir)}\r
+END
+	end
+	if protection_key and protection_key.length > 0 then
+image_body.concat <<END
+--#{image_boundary}\r
+content-disposition: form-data; name="csrf_protection_key"\r
+\r
+#{protection_key}\r
 END
 	end
 
@@ -482,16 +490,17 @@ def check_remote_images( http, cgi, user, pass, now )
 	[maxnum, available_list]
 end
 
-def post_image( http, cgi, user, pass, image_dir , imgname, remote_image_dir, now)
+def post_image( http, cgi, user, pass, image_dir , imgname, remote_image_dir, now, protection_key, refurl )
 	auth = ["#{user}:#{pass}"].pack( 'm' ).strip
 	image_boundary = "PosttdiaryMainBoundary"
 	image_data = ( File.open( image_dir + imgname ) { |f| f.read } )
-	image_body = make_image_body(image_data, imgname, remote_image_dir, now , image_boundary) if image_data
+	image_body = make_image_body(image_data, imgname, remote_image_dir, now , image_boundary, protection_key ) if image_data
 	if image_body then
 		image_header = {
 		    'Authorization' => "Basic #{auth}",
 		    'Content-Length' => image_body.length.to_s,
 		    'Content-Type' => "multipart/form-data; boundary=#{image_boundary}",
+		    'Referer' => refurl,
 		}
 		response, = http.post( cgi, image_body, image_header )
 		raise "posttdiary-ex: failed to upload image (#{imgname}) to remote server" if response.code.to_i < 200 or response.code.to_i > 202
@@ -829,7 +838,7 @@ begin
 		user = $1 unless user
 		pass = $2 unless pass
 	end
-	raise "posttdiary: please specify the username for your tdiary system." unless user or filter_mode
+	raise "posttdiary-ex: please specify the username for your tdiary system." unless user or filter_mode
 	if tmpimglist.length > 0 and ( !image_dir or !image_url ) then
 		raise "posttdiary-ex: please specify image-path (-i) and/or image-url (-u)"
 	end
@@ -994,18 +1003,26 @@ begin
 		data << "&year=#{topic_year}"
 		data << "&month=#{topic_month}"
 		data << "&day=#{topic_date}"
+		auth = ["#{user}:#{pass}"].pack( 'm' ).strip
 		Net::HTTP.start( host, port ) do |http|
+			protection_key = nil
+			res, = http.get( cgi,
+	                               'Authorization' => "Basic #{auth}",
+	                               'Referer' => url )
+			if %r|<input type="hidden" name="csrf_protection_key" value="([^"]+)">| =~ res.body then
+				protection_key = $1
+				data << "&csrf_protection_key=#{CGI::escape( CGI::unescapeHTML( protection_key ) )}"
+			end
 			if remote_mode and @image_name then
 				for i in 0 .. (@image_name.length - 1)
 					imagename = @image_name[i]
 					thumbnailname = thumbnail_name[imagename]
-					post_image( http, cgi, user, pass, image_dir, imagename, remote_image_dir, now)
+					post_image( http, cgi, user, pass, image_dir, imagename, remote_image_dir, now, protection_key, url )
 					File.delete( image_dir + imagename ) if !preserve_local_images
 					File.delete( image_dir + thumbnailname ) if !preserve_local_images and test( ?f , image_dir + thumbnailname )
 				end
 			end
-			auth = ["#{user}:#{pass}"].pack( 'm' ).strip
-			response, = http.post( cgi, data, 'Authorization' => "Basic #{auth}" )
+			response, = http.post( cgi, data, 'Authorization' => "Basic #{auth}", 'Referer' => url )
 		end
 	end
 
