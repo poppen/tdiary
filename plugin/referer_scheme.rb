@@ -1,5 +1,5 @@
 =begin
-= Meta-scheme plugin((-$Id: referer_scheme.rb,v 1.8 2004-03-16 08:17:48 tadatadashi Exp $-))
+= Meta-scheme plugin((-$Id: referer_scheme.rb,v 1.9 2005-07-23 08:07:52 zunda Exp $-))
 Enables to prefix `meta' schemes to URL regexp of the refer_table. See
 #{lang}/referer_scheme.rb for a documentation.
 
@@ -31,6 +31,7 @@ end
 unless @conf.referer_table.respond_to?( 'scheme_tdiary', true ) then
 	class << @conf.referer_table
 		TdiaryDates = [ 
+				['(?:\\?date=)?(\d{4})(\d{2})(\d{2})-(\d+)(?:\.html)?.*', '(\1-\2-\3~)'],
 				['(?:\\?date=)?(\d{4})(\d{2})(\d{2})(?:\.html)?.*', '(\1-\2-\3)'],
 				['(?:\\?date=)?(\d{4})(\d{2})(?:\.html)?.*', '(\1-\2)'],
 				['(?:\\?date=)?(\d{2})(\d{2})(?:\.html)?.*', '(\1-\2)'],
