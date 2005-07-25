@@ -1,4 +1,4 @@
-# image_gps.rb $Revision: 1.3 $
+# image_gps.rb $Revision: 1.4 $
 # 
 # 概要:
 # 画像にGPSによる位置情報が含まれている場合は、対応する地図へのリンクを生成する。
@@ -11,6 +11,8 @@
 #
 
 =begin ChangeLog
+2005-07-25 kp
+  * correct link url when access with mobile.
 2005-07-19 kp
   * MapDatum macth to WGS84
 2005-05-25 kp
@@ -45,7 +47,7 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
   eznavi = 'http://walk.eznavi.jp'
   mapion = 'http://www.mapion.co.jp'
 
-  ( detum,nl,el ) = gps_info("#{@image_dir}/#{image}")
+  ( datum,nl,el ) = gps_info("#{@image_dir}/#{image}")
   
   if thumbnail then
     %Q[<a href="#{@image_url}/#{image}"><img class="#{place}" src="#{@image_url}/#{image_t}" alt="#{alt}" title="#{alt}"#{size}></a>]
@@ -55,9 +57,9 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
   	if @conf.mobile_agent?
       lat = "#{sprintf("%d.%d.%.2f",*nl)}"
       lon = "#{sprintf("%d.%d.%.2f",*el)}"
-      href = %Q[<a href="#{eznavi}/map?detum=1&amp;unit=0&amp;lat=+#{lat}&amp;lon=+#{lon}">]
+      href = %Q[<a href="#{eznavi}/map?datum=#{datum=='TOKYO'?'1':'0'}&amp;unit=0&amp;lat=+#{lat}&amp;lon=+#{lon}">]
     else
-      Wgs2Tky.conv!(nl,el) if detum =~ /WGS-?84/
+      Wgs2Tky.conv!(nl,el) if datum =~ /WGS-?84/
       lat ="#{sprintf("%d/%d/%.3f",*nl)}"
       lon ="#{sprintf("%d/%d/%.3f",*el)}"
       href = %Q[<a href="#{mapion}/c/f?el=#{lon}&amp;nl=#{lat}&amp;scl=10000&amp;pnf=1&amp;uc=1&amp;grp=all&amp;size=500,500">]

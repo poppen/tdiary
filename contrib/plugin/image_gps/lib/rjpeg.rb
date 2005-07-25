@@ -3,7 +3,7 @@
 #  -- jpeg handling library
 #
 #  NISHI Takao <zophos@koka-in.org>
-#  $Id: rjpeg.rb,v 1.3 2005-07-20 05:57:24 tadatadashi Exp $
+#  $Id: rjpeg.rb,v 1.4 2005-07-25 12:48:13 tadatadashi Exp $
 #
 class Jpeg
     class ParseError<StandardError
