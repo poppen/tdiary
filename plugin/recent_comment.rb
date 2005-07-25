@@ -1,4 +1,4 @@
-# recent_comment.rb $Revision: 1.7 $
+# recent_comment.rb $Revision: 1.8 $
 #
 # recent_comment: 最近のツッコミをリストアップする
 #
@@ -43,7 +43,7 @@ def recent_comment( ob_max = 'OBSOLUTE', sep = 'OBSOLUTE', ob_form = 'OBSOLUTE',
 	result = []
 	comments.sort{|a,b| (a.date)<=>(b.date)}.reverse.each_with_index do |com,idx|
 		break if idx >= max
-      a = @index + anchor("date[com.date].strftime( '%Y%m%d' )}#c#{'%02d' % index[com.date]}")
+      a = @index + anchor("#{date[com.date].strftime( '%Y%m%d' )}#c#{'%02d' % index[com.date]}")
       popup = CGI::escapeHTML( com.shorten( @conf.comment_length ) )
       str = CGI::escapeHTML( com.name )
       date_str = com.date.dup.strftime( form )
