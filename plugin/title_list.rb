@@ -1,4 +1,4 @@
-# titile_list.rb $Revision: 1.17 $
+# titile_list.rb $Revision: 1.18 $
 #
 # title_list: 現在表示している月のタイトルリストを表示
 #   パラメタ(カッコ内は未指定時の値):
@@ -7,6 +7,9 @@
 # 備考: タイトルリストを日記に埋め込むには、レイアウトを工夫しなければ
 # なりません。ヘッダやフッタでtableタグを使ったり、CSSを書き換える必
 # 要があるでしょう。
+#
+# Copyright (c) 2005 TADA Tadashi <sho@spc.gr.jp>
+# You can distribute this file under the GPL2.
 #
 def title_list( rev = false )
 	result = %Q|<ul class="title-list">\n|
