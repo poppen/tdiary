@@ -1,9 +1,9 @@
-# highlight.rb $Revision: 1.4 $
+# highlight.rb $Revision: 1.5 $
 #
 # Highlighting the element jumped from other pages.
 #
-# Copyright (c) 2005 TADA Tadashi <sho@spc.gr.jp>
-# You can distribute this file under the GPL2.
+# Copyright (C) 2003 by Kazuhiro NISHIYAMA
+# You can redistribute it and/or modify it under GPL2.
 #
 if @mode == 'day' then
 	add_footer_proc do

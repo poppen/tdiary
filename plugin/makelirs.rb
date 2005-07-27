@@ -1,4 +1,4 @@
-# makelirs.rb $Revision: 1.14 $
+# makelirs.rb $Revision: 1.15 $
 #
 # 更新情報をLIRSフォーマットのファイルに吐き出す
 #
@@ -11,6 +11,7 @@
 #   いずれも、Webサーバから書き込める権限が必要です。
 #
 # Copyright (C) 2002 by Kazuhiro NISHIYAMA
+# You can redistribute it and/or modify it under GPL2.
 #
 
 add_header_proc do
