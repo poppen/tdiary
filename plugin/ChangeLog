@@ -1,5 +1,6 @@
 2005-07-27 TADA Tadashi <sho@spc.gr.jp>
 	* doctype-html401tr.rb, src.rb, title_list.rb: add license.
+	* add new plugin: rss-recent.rb.
 
 2005-07-25 SHIBATA Hiroshi <h-sbt@nifty.com>
 	* recent_comment.rb : fix a anchor value.
