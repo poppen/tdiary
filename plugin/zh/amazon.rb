@@ -1,5 +1,8 @@
 #
-# English resource of amazon plugin $Revision: 1.2 $
+# English resource of amazon plugin $Revision: 1.3 $
+#
+# Copyright (C) 2002 HAL99 <hal99@mtj.biglobe.ne.jp>
+# You can redistribute it and/or modify it under GPL2.
 #
 
 #

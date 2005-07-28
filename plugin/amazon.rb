@@ -1,10 +1,11 @@
-# amazon.rb $Revision: 1.29 $
+# amazon.rb $Revision: 1.30 $
 #
 # See document in language resource file: en/amazon.rb
 #
 # ドキュメントはja/amazon.rbを見てください。
 #
-# Copyright (C) 2002 by HAL99 <hal99@mtj.biglobe.ne.jp>
+# Copyright (C) 2002 HAL99 <hal99@mtj.biglobe.ne.jp>
+# You can redistribute it and/or modify it under GPL2.
 #
 # Original: HAL99 <hal99@mtj.biglobe.ne.jp>
 # Modified: by TADA Tadashi<sho@spc.gr.jp>,
