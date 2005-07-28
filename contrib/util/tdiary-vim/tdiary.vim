@@ -1,8 +1,8 @@
 " Copyright (C) 2004 UECHI Yasumasa
 
-" Author: UECHI Yasumasa <uechi@.potaway.net>
+" Author: UECHI Yasumasa <uechi@potaway.net>
 
-" $Revision: 1.6 $
+" $Revision: 1.7 $
 
 " This program is free software; you can redistribute it and/or
 " modify it under the terms of the GNU General Public License as
@@ -35,7 +35,7 @@ if !exists("g:tdiary_update_script_name")
 	let g:tdiary_update_script_name = "update.rb"
 endif
 
-let s:tdiary_url = g:tdiary_site1_url
+let s:tdiary_url = substitute(g:tdiary_site1_url, "/\\+$", "", "") . "/"
 let s:curl_cmd = "curl"
 let s:user = ''
 
@@ -55,7 +55,7 @@ function! s:TDiaryReplace()
 	call s:SetUser()
 
 	normal G
-	execute 'r !' . s:curl_cmd . ' -s ' . s:user . data . s:tdiary_url . '/'. g:tdiary_update_script_name
+	execute 'r !' . s:curl_cmd . ' -s ' . s:user . data . s:tdiary_url . g:tdiary_update_script_name
 	let save_pat = @/
 	let @/ = 'input.\+name="title"[^>]\+>'
 	normal ggn
@@ -109,8 +109,11 @@ function! s:TDiaryUpdate()
 	" set user and password
 	call s:SetUser()
 
+	" set update URL
+	let update_url = s:tdiary_url . g:tdiary_update_script_name
+
 	" update diary
-	let result = system(s:curl_cmd . s:user . " -d @" . tmpfile . " " . s:tdiary_url . "/" . g:tdiary_update_script_name)
+	let result = system(s:curl_cmd . s:user . " -d @" . tmpfile . " -e ". update_url . " " . update_url)
 	call delete(tmpfile)
 	redraw!
 	if match(result, 'Wait or.\+Click here') != -1
@@ -227,7 +230,7 @@ endfunction
 
 function! s:SetURL()
 	let i = line(".")
-	let s:tdiary_url = g:tdiary_site{i}_url
+	let s:tdiary_url = substitute(g:tdiary_site{i}_url, "/\\+$", "", "") . "/"
 	let s:usr = ""
 	close
 endfunction

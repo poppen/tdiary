@@ -1,3 +1,6 @@
+2005-07-28 Thu UECHI Yasumasa <uechi@potaway.net>
+	* send referer when update a diary.
+
 2004-11-08 Mon UECHI Yasumasa <uechi@potaway.net>
 	* change substitution order of character entity in TdiaryReplace(). thanx やえもん.
 
