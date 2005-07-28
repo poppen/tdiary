@@ -1,3 +1,8 @@
+2005-07-28 TADA Tadashi <sho@spc.gr.jp>
+	* dropdown_calendar.rb: add license.
+	* en/recent_trackback3.rb, zh/recent_trackback3.rb: correct label of
+	preference.
+
 2005-07-27 TADA Tadashi <sho@spc.gr.jp>
 	* doctype-html401tr.rb, src.rb, title_list.rb: add license.
 	* add new plugin: rss-recent.rb.

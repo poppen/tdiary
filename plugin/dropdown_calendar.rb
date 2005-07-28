@@ -1,7 +1,10 @@
-# dropdown_calendar.rb $Revision: 1.3 $
+# dropdown_calendar.rb $Revision: 1.4 $
 #
 # calendar: カレンダーをドロップダウンリストに置き換えるプラグイン
 #   パラメタ: なし
+#
+# 	Copyright (C) 2003 TADA Tadashi
+#	You can redistribute it and/or modify it under GPL2.
 #
 
 @dropdown_calendar_label = '過去の日記' unless @resource_loaded
