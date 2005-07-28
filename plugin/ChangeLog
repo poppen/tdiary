@@ -3,6 +3,7 @@
 	* en/recent_trackback3.rb, zh/recent_trackback3.rb: correct label of
 	preference.
 	* rast-register.rb: add license.
+	* windex.rb: move to contrib/plugin.
 
 2005-07-27 TADA Tadashi <sho@spc.gr.jp>
 	* doctype-html401tr.rb, src.rb, title_list.rb: add license.
