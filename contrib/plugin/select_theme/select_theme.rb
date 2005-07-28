@@ -1,3 +1,6 @@
+# Copyright (C) 2005  akira yamada
+# You can redistribute it and/or modify it under GPL2.
+
 THEME_BASE = File.join(::TDiary::PATH, 'theme')
 CACHE_FILE = File.join(@cache_path, 'theme_list')
 
