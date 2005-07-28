@@ -1,5 +1,9 @@
 #!/usr/bin/env ruby
-# rast-search.rb $Revision: 1.3 $
+# rast-search.rb $Revision: 1.4 $
+#
+# Copyright (C) 2005 Kazuhiko <kazuhiko@fdiary.net>
+# You can redistribute it and/or modify it under GPL2.
+#
 $KCODE= 'e'
 BEGIN { $defout.binmode }
 

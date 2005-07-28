@@ -1,8 +1,10 @@
 #
 # Google AdSense plugin for tDiary
 #
-# code by kazuhiko <kazuhiko@fdiary.net>
-# modified by sho <sho@spc.gr.jp>
+# Copyright (C) 2004 Kazuhiko <kazuhiko@fdiary.net>
+# You can redistribute it and/or modify it under GPL2.
+#
+# modified by TADA Tadashi <sho@spc.gr.jp>
 #
 def google_adsense( layout = nil )
 	google_adsense_init( layout )
