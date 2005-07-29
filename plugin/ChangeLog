@@ -1,3 +1,6 @@
+2005-07-29 TADA Tadashi <sho@spc.gr.jp>
+	* bq.rb: add license.
+
 2005-07-28 TADA Tadashi <sho@spc.gr.jp>
 	* dropdown_calendar.rb: add license.
 	* en/recent_trackback3.rb, zh/recent_trackback3.rb: correct label of

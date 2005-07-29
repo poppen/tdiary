@@ -1,4 +1,4 @@
-# bq.rb $Revision: 1.2 $
+# bq.rb $Revision: 1.3 $
 #
 # bq: blockquoteを使った引用を生成する
 #   パラメタ:
@@ -15,17 +15,9 @@
 #          font-size: 90%;
 #       }
 #
-# Copyright (C) 2002 by s.sawada <http://mwave.sppd.ne.jp/diary/>
+# Copyright (C) 2002 s.sawada <moonwave@ba2.so-net.ne.jp>
+# You can redistribute it and/or modify it under GPL2.
 #
-=begin ChangeLog
-2002-04-15 TADA Tadashi <http://sho.tdiary.net/>
-	* omit title or url.
-	* sarround with <p>...</p> by each lines in src.
-
-2002-04-15 s.sawada
-	* create.
-=end
-
 def bq( src, title = nil, url = nil )
 	if url then
 		result = %Q[<blockquote cite="#{url}" title="#{title}">\n]
