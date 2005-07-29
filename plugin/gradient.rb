@@ -1,4 +1,4 @@
-# gradient.rb $Revision: 1.1 $
+# gradient.rb $Revision: 1.2 $
 #
 # gradient.rb: 文字の大きさを変化させながら表示
 #   パラメタ:
@@ -9,10 +9,8 @@
 #   例: 「こんなこともできます」を10ptから30ptに拡大
 #     <%=gradient 'こんなこともできます', 10, 30 %>
 #
-# Copyright (C) 2002 by zoe <http://www.kasumi.sakura.ne.jp/~zoe/tdiary/>
-#
-# Original: http://www.kasumi.sakura.ne.jp/~zoe/tdiary/?date=20020122#p02
-# Modified: by TADA Tadashi <http://sho.tdiary.net/>
+# Copyright (c) 2002 TADA Tadashi <sho@spc.gr.jp>
+# You can distribute this file under the GPL2.
 #
 def gradient( str, first_size, last_size )
 	ary = str.split( // )

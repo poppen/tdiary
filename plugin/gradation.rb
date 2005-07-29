@@ -1,4 +1,4 @@
-# gradation.rb $Revision: 1.1 $
+# gradation.rb $Revision: 1.2 $
 #
 # gradation.rb: 文字列をグラデーション表示
 #   パラメタ:
@@ -6,10 +6,8 @@
 #     first_color: グラデーション開始色(16進 6桁指定)
 #     last_color:  グラデーション終了色(16進 6桁指定)
 #
-# Copyright (C) 2002 by zoe <http://www.kasumi.sakura.ne.jp/~zoe/tdiary/>
-#
-# Original: http://www.kasumi.sakura.ne.jp/~zoe/tdiary/?date=20011229#p07
-# Modified: by TADA Tadashi <http://sho.tdiary.net/>
+# Copyright (c) 2002 TADA Tadashi <sho@spc.gr.jp>
+# You can distribute this file under the GPL2.
 #
 def gradation( str, first_color, last_color )
 	ary = str.split( // )

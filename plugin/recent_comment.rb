@@ -1,8 +1,8 @@
-# recent_comment.rb $Revision: 1.8 $
+# recent_comment.rb $Revision: 1.9 $
 #
 # recent_comment: 最近のツッコミをリストアップする
 #
-# Copyright (c) 2005 TADA Tadashi <sho@spc.gr.jp>
+# Copyright (c) 2002 TADA Tadashi <sho@spc.gr.jp>
 # You can distribute this file under the GPL2.
 #
 def recent_comment_format(format, *args)

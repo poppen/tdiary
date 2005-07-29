@@ -1,5 +1,7 @@
 2005-07-29 TADA Tadashi <sho@spc.gr.jp>
 	* bq.rb: add license.
+	* comment_rank.rb, gradation.rb, gradient.rb, recent_comment.rb: add
+	license.
 
 2005-07-28 TADA Tadashi <sho@spc.gr.jp>
 	* dropdown_calendar.rb: add license.

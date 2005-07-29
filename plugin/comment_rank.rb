@@ -1,4 +1,4 @@
-# comment_rank.rb $Revision: 1.4 $
+# comment_rank.rb $Revision: 1.5 $
 #
 # comment_rank: ツッコミの数でランキング
 #   パラメタ:
@@ -6,7 +6,7 @@
 #     sep:  セパレータ(未指定時:空白)
 #     except:        無視する名前(いくつもある場合は,で区切って並べる)
 #
-# Copyright (c) 2005 TADA Tadashi <sho@spc.gr.jp>
+# Copyright (c) 2002 TADA Tadashi <sho@spc.gr.jp>
 # You can distribute this file under the GPL2.
 #
 #
