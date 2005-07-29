@@ -1,4 +1,8 @@
 #!/usr/bin/env ruby
+#
+# Copyright (C) 2004 Satoru Takabayashi <satoru@namazu.org>
+# You can redistribute it and/or modify it under GPL2.
+#
 puts "Usage: tdiary-referer-clean PATTERN FILE..." if ARGV.length == 0
 pattern = Regexp.new(ARGV.shift)
 file_names = ARGV
