@@ -24,9 +24,10 @@ $HOME/.vimrc で次のように tDiary サイトの URL を設定します。
  let tdiary_site2_url = "http://www.example.net/tdiary/"
  let tdiary_site2_name = "foobar日記"
 
-tDiary を設置するときに update.rb を update.cgi 等に変更している場合は以下も必要です。
+tDiary を設置するときに update.rb を update.cgi 等に変更している場合は以下も追加してください。
 
- let tdiary_update_script_name = "update.cgi"
+ let tdiary_site1_updatescript = "update.cgi"
+ let tdiary_site2_updatescript = "update.cgi"
 
 == パスワードの保存
 cURL は $HOME/.netrc を読めるので、パスワードの保存にその機能を使います。ユーザ名とパスワードを .netrc に保存し、$HOME/.vimrc に

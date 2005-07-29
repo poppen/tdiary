@@ -1,3 +1,8 @@
+2005-07-29 Fri UECHI Yasumasa <uechi@potaway.net>
+	* echo site name and url when select a diary site.
+	* allow to set update script each diary.
+	* use CSRF protection key if exits.
+
 2005-07-28 Thu UECHI Yasumasa <uechi@potaway.net>
 	* send referer when update a diary.
 

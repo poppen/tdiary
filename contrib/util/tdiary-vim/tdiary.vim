@@ -2,7 +2,7 @@
 
 " Author: UECHI Yasumasa <uechi@potaway.net>
 
-" $Revision: 1.7 $
+" $Revision: 1.8 $
 
 " This program is free software; you can redistribute it and/or
 " modify it under the terms of the GNU General Public License as
@@ -30,32 +30,19 @@ command! -nargs=0 TDiaryUpdate call <SID>TDiaryUpdate()
 command! -nargs=0 TDiarySelect call <SID>TDiarySelect()
 command! -nargs=0 TDiaryTrackback call <SID>EditTrackBackExcerpt()
 
-
-if !exists("g:tdiary_update_script_name")
-	let g:tdiary_update_script_name = "update.rb"
-endif
-
-let s:tdiary_url = substitute(g:tdiary_site1_url, "/\\+$", "", "") . "/"
 let s:curl_cmd = "curl"
 let s:user = ''
 
 function! s:TDiaryNew()
 	call s:CreateBuffer("append")
-	normal G
+	execute ":" . (s:body_start + 1)
+	normal dG
+	redraw!
 endfunction
 
 function! s:TDiaryReplace()
-	let mode = "replace"
-	let date = s:CreateBuffer(mode)
+	call s:CreateBuffer("replace")
 
-	let data = ' -d "'
-	let data = data . s:Date2PostDate(date, mode)
-	let data = data . '&edit=edit" '
-
-	call s:SetUser()
-
-	normal G
-	execute 'r !' . s:curl_cmd . ' -s ' . s:user . data . s:tdiary_url . g:tdiary_update_script_name
 	let save_pat = @/
 	let @/ = 'input.\+name="title"[^>]\+>'
 	normal ggn
@@ -91,8 +78,9 @@ function! s:TDiaryUpdate()
 	" set parameters
 	let data = s:SetParams()
 
-	" set body
+	" set body & csrf protection key
 	let data = data . "&body=" . s:MultiLineURLencode(s:body_start)
+	let data = data . s:csrf_protection_key
 
 	" debug mode
 	if exists("g:tdiary_vim_debug") && g:tdiary_vim_debug
@@ -106,14 +94,8 @@ function! s:TDiaryUpdate()
 	silent echo data
 	redir END
 
-	" set user and password
-	call s:SetUser()
-
-	" set update URL
-	let update_url = s:tdiary_url . g:tdiary_update_script_name
-
 	" update diary
-	let result = system(s:curl_cmd . s:user . " -d @" . tmpfile . " -e ". update_url . " " . update_url)
+	let result = system(s:curl_cmd . s:user . " -d @" . tmpfile . " -e ". s:tdiary_update_url . " " . s:tdiary_update_url)
 	call delete(tmpfile)
 	redraw!
 	if match(result, 'Wait or.\+Click here') != -1
@@ -228,11 +210,35 @@ function! s:MultiLineURLencode(start_line)
 endfunction
 
 
-function! s:SetURL()
-	let i = line(".")
+function! s:SetURL(...)
+	if a:0 == 0
+		let i = line(".")
+	else
+		let i = a:1
+	endif
 	let s:tdiary_url = substitute(g:tdiary_site{i}_url, "/\\+$", "", "") . "/"
-	let s:usr = ""
-	close
+	if exists("g:tdiary_site{i}_updatescript")
+		let update_script = g:tdiary_site{i}_updatescript
+	elseif exists("g:tdiary_update_script_name")
+		let update_script = g:tdiary_update_script_name
+	else
+		let update_script = "update.rb"
+	endif
+	let s:tdiary_update_url = s:tdiary_url . update_script
+
+	let s:user = ""
+	call s:SetUser()
+
+	"echo selected site
+	let site_name = ""
+	if exists("g:tdiary_site{i}_name")
+		let site_name = g:tdiary_site{i}_name
+	endif
+	echo site_name s:tdiary_url
+
+	if a:0 == 0
+		close
+	endif
 endfunction
 
 
@@ -250,6 +256,10 @@ endfunction
 
 
 function! s:CreateBuffer(mode)
+	if !exists("s:tdiary_update_url")
+		call s:SetURL(1)
+	endif
+
 	let date = input("Date: ", strftime("%Y%m%d", localtime()))
 	execute "edit _tdiary_" . date
 	set buftype=nofile
@@ -273,7 +283,25 @@ function! s:CreateBuffer(mode)
 
 	let s:body_start = s:body_start + 1
 
-	return date
+
+	let data = ""
+	if a:mode == "replace"
+		let data = ' -d "'
+		let data = data . s:Date2PostDate(date, a:mode)
+		let data = data . '&edit=edit" '
+	endif
+	execute 'r !' . s:curl_cmd . ' -s ' . s:user . data . s:tdiary_update_url
+
+	normal gg
+	let s:csrf_protection_key = ""
+	if search('input.\+name="csrf_protection_key"') > 0
+		silent! s/&quot;/\"/g
+		silent! s/&gt;/>/g
+		silent! s/&lt;/</g
+		silent! s/&amp;/\&/g
+		let k = substitute(getline("."), '.\+value="\(.*\)".\+', '\1', '')
+		let s:csrf_protection_key = "&csrf_protection_key=" . s:URLencode(k)
+	endif
 endfunction
 
 
