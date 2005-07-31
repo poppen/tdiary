@@ -1,3 +1,6 @@
+2005-07-31 TADA Tadashi <sho@spc.gr.jp>
+	* highlight.rb : add copyright.
+
 2005-07-29 TADA Tadashi <sho@spc.gr.jp>
 	* bq.rb: add license.
 	* comment_rank.rb, gradation.rb, gradient.rb, recent_comment.rb: add

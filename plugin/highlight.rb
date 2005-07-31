@@ -1,7 +1,8 @@
-# highlight.rb $Revision: 1.5 $
+# highlight.rb $Revision: 1.6 $
 #
 # Highlighting the element jumped from other pages.
 #
+# Copyright (C) 2003 by Ryuji SAKAI
 # Copyright (C) 2003 by Kazuhiro NISHIYAMA
 # You can redistribute it and/or modify it under GPL2.
 #
