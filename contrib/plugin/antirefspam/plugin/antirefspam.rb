@@ -1,11 +1,14 @@
 #
 # antirefspam.rb 
 #
-# Copyright (c) 2004 T.Shimomura <redbug@netlife.gr.jp>
+# Copyright (c) 2004-2005 T.Shimomura <redbug@netlife.gr.jp>
+# You can redistribute it and/or modify it under GPL2.
+# Please use version 1.0.0 (not 1.0.0G) if GPL doesn't want to be forced on me.
 #
 
 add_conf_proc( 'antirefspam', 'Anti Referer Spam' ) do
 	if @mode == 'saveconf'
+		@conf['antirefspam.disable'] = @cgi.params['antirefspam.disable'][0]
 		@conf['antirefspam.trustedurl'] = @cgi.params['antirefspam.trustedurl'][0]
 		@conf['antirefspam.checkreftable'] = @cgi.params['antirefspam.checkreftable'][0]
 		@conf['antirefspam.myurl'] = @cgi.params['antirefspam.myurl'][0]
@@ -17,6 +20,11 @@ add_conf_proc( 'antirefspam', 'Anti Referer Spam' ) do
 	end
 
 	<<-HTML
+	#{@antispamref_html_antispamref}
+	<p>
+	<input type="checkbox" name="antirefspam.disable" value="true" #{if @conf['antirefspam.disable'].to_s == "true" then "checked" end}>#{@antispamref_html_disable}
+	</p>
+
 	#{@antispamref_html_myurl}
 	<p><input name="antirefspam.myurl" value="#{CGI::escapeHTML( @conf['antirefspam.myurl'].to_s )}" size="70"></p>
 

@@ -1,55 +1,10 @@
 #
 # antirefspamfilter.rb
 #
-# Copyright (c) 2004 T.Shimomura <redbug@netlife.gr.jp>
+# Copyright (c) 2004-2005 T.Shimomura <redbug@netlife.gr.jp>
+# You can redistribute it and/or modify it under GPL2.
+# Please use version 1.0.0 (not 1.0.0G) if GPL doesn't want to be forced on me.
 #
-
-=begin
-
-ver 0.9 2004/11/24
-	リンク元置換リストにマッチするリンク元を信頼する機能を追加 (thanks to Shun-ichi TAHARA)
-	コメントの制限に正規表現を使えるようにした
-	HTTP.version_1_2 系を使えなかった場合に動作がおかしかった不具合を修正
-	spamips に出力される時刻の分/秒部分がおかしかったのを修正
-	その他エラーが起きにくいように処理を変更
-
-ver 0.8 2004/11/15
-	プロキシーサーバーを指定する機能を追加
-	ver 0.6m〜0.71 で、Ruby 1.6 系でエラーが出ることがあった不具合を修正
-
-ver 0.71 2004/11/12
-	ver 0.6m と ver 0.7 で、"信頼するリンク元" の指定が適用されなくなっていた不具合を修正
-
-ver 0.7 2004/11/11
-	一部のアンテナで、設定によって更新日時が取れないことがあった問題に対処
-	コメントスパムに対処するため、コメントに制限をかける機能を追加
-
-ver 0.6m 2004/11/07
-	ソースのインデント変更
-	if not→unlessへの書き換え等
-
-ver 0.6 2004/11/07
-	トップページURL以外の許容するリンク先を指定できるようにした。
-	設定画面の言語リソースを分割した。
-
-ver 0.5 2004/10/31
-	信頼できるURL に正規表現を使えるようにした
-	safeurls, spaurls に、同一の URL が２つ連続で記録される問題に対処した(つもり)
-
-ver 0.4 2004/10/20
-	Ruby 1.8.2 (preview2) で動作しなかった不具合を修正
-	接続するポートを80からuri.portに変更 (thanks to MoonWolf)
-
-ver 0.3 2004/09/30
-	負荷を下げるための修正をちょっとだけ入れた
-
-ver 0.2 2004/09/27
-	信頼できるURLの一覧を設定画面から変更できるようにした
-
-ver 0.1 2004/09/15
-	最初のバージョン
-
-=end
 
 require 'net/http'
 require 'uri'
@@ -58,6 +13,7 @@ module TDiary
   module Filter
 
     class AntirefspamFilter < Filter
+      # 有効にすると指定したファイルにデバッグ情報文字列を追記する
       def debug_out(filename, str)
         if $debug
           filename = File.join(@conf.data_path,"AntiRefSpamFilter",filename)
@@ -68,11 +24,21 @@ module TDiary
       end
 
       # str に指定された文字列が適切なリンク先を含んでいるかをチェック
-      def check(str)
+      def isIncludeMyUrl(str)
+        # str に日記のURLが含まれているかどうか
+        base_url = @conf.base_url
+        unless base_url.empty?
+          if str.include? base_url
+            return true
+          end
+        end
+
         # str にトップページURLが含まれているかどうか
         unless @conf.index_page.empty?
-          if str.include? @conf.index_page
-            return true
+          if /\Ahttps?:\/\// =~ @conf.index_page
+            if str.include? @conf.index_page
+              return true
+            end
           end
         end
 
@@ -88,17 +54,60 @@ module TDiary
             return true
           end
         end
+
         return false
       end
 
       def referer_filter(referer)
-        # リンク元が無い
-        unless referer
+        conf_disable = @conf['antirefspam.disable'] != nil ? @conf['antirefspam.disable'].to_s : ''
+        conf_checkreftable = @conf['antirefspam.checkreftable'] != nil ? @conf['antirefspam.checkreftable'].to_s : ''
+        conf_trustedurl = @conf['antirefspam.trustedurl'] != nil ? @conf['antirefspam.trustedurl'].to_s : ''
+        conf_proxy_server = @conf['antirefspam.proxy_server'] != nil && @conf['antirefspam.proxy_server'].size > 0 ? @conf['antirefspam.proxy_server'].to_s : nil
+        conf_proxy_port = @conf['antirefspam.proxy_port'] != nil && @conf['antirefspam.proxy_port'].size > 0 ? @conf['antirefspam.proxy_port'].to_s : nil
+
+        if conf_disable == 'true'  or    # リンク元チェックが有効ではない場合はスルーする
+           referer == nil          or    # リンク元が無い
+           referer.size <= 1       or    # 一部のアンテナで更新時刻が取れなくなる問題に対応するため、リンク元が１文字以内の場合は許容
+           isIncludeMyUrl(referer)       # 自分の日記内からのリンクは信頼する
+        then
           return true
         end
-        # 一部のアンテナで更新時刻が取れなくなる問題に対応するため、リンク元が１文字以内の場合は許容する
-        if referer.size <= 1
-          return true
+
+        # "信頼できるURL" を１つずつ取り出してrefererと合致するかチェックする
+        conf_trustedurl.each_line do |trusted|
+          trusted.sub!(/\r?\n/,'')
+          next if trusted =~ /\A(\#|\s*)\z/  # #または空白で始まる行は読み飛ばす
+          
+          # まずは "信頼できる URL" が referer に含まれるかどうか
+          if referer.include? trusted
+            debug_out("trusted", trusted+" (include?) "+referer)
+            return true
+          end
+          
+          # 含まれなかった場合は "信頼できる URL" を正規表現とみなして再チェック
+          begin
+            if referer =~ Regexp.new( trusted.gsub("/", "\\/").gsub(":", "\\:") )
+              debug_out("trusted", trusted+" (=~) "+referer)
+              return true
+            end
+          rescue
+            debug_out("error_config", "trustedurl: "+trusted)
+          end
+        end
+
+        # URL置換リストを見る
+        if conf_checkreftable == 'true'
+          # "URL置換リスト" を１つずつ取り出してrefererと合致するかチェックする
+          @conf.referer_table.each do |url, name|
+            begin
+              if /#{url}/i =~ referer && url != '^(.{50}).*$'
+                debug_out("trusted", url+" (=~referer_table)  "+referer)
+                return true
+              end
+            rescue
+              debug_out("error_config", "referer_table: "+url)
+            end
+          end
         end
 
         @work_path = File.join(@conf.data_path,"AntiRefSpamFilter")
@@ -106,55 +115,7 @@ module TDiary
         @spamip_list  = File.join(@work_path,"spamips")   # referer spam のIP一覧
         @safeurl_list = File.join(@work_path,"safeurls")  # おそらくは問題のないリンク元一覧
 
-        # 自分の日記内からのリンクは信頼する
-        if check(referer)
-          return true
-        end
-
-        # 信頼できるURL に合致するか
-        if trustedurls=@conf['antirefspam.trustedurl']
-          trustedurls.to_s.each_line do |trusted|
-            trusted.sub!(/\r?\n/,'')
-            next if trusted=~/\A(\#|\s*)\z/
-            
-            # まずは "信頼できる URL" が referer に含まれるかどうか
-            if referer.include? trusted
-              debug_out("trusted1", trusted+" --- "+referer)
-              return true
-            end
-            
-            # 含まれなかった場合は "信頼できる URL" を正規表現とみなして再チェック
-            begin
-              url = trusted.gsub("/", "\\/").gsub(":", "\\:")
-              exp = Regexp.new(url)
-              
-              if referer =~ exp
-                debug_out("trusted2", trusted+" --- "+referer)
-                return true
-              end
-            rescue
-              debug_out("error_config", trusted)
-            end
-          end
-        end
-
-        # URL置換リストを見る
-        if @conf['antirefspam.checkreftable'] != nil
-          if @conf['antirefspam.checkreftable'].to_s == 'true'
-            @conf.referer_table.each do |url, name|
-              begin
-                if /#{url}/i =~ referer
-                  debug_out("trusted3", url+" --- "+referer)
-                  return true
-                end
-              rescue
-                debug_out("error_config", url)
-              end
-            end
-          end
-        end
-
-        # 前準備
+        # ディレクトリ/ファイルが存在しなければ作る
         unless File.exist? @work_path
           Dir::mkdir(@work_path)
         end
@@ -166,9 +127,10 @@ module TDiary
         end
 
         uri = URI.parse(referer)
+        temp_filename = File.join(@work_path,uri.host)
         # チェック時には対象のドメイン名を持った一時ファイルを作る
         begin
-          File::open(File.join(@work_path,uri.host), File::RDONLY | File::CREAT | File::EXCL).close
+          File::open(temp_filename, File::RDONLY | File::CREAT | File::EXCL).close
 
           # 一度 SPAM URL とみなしたら以後は以後は拒否
           spamurls = IO::readlines(@spamurl_list).map {|url| url.chomp }
@@ -184,15 +146,9 @@ module TDiary
 
           # リンク元 URL の HTML を引っ張ってくる
           Net::HTTP.version_1_2   # おまじないらしい
-          proxy_server = nil
-          proxy_port = nil
-          unless @conf['antirefspam.proxy_server'].empty?
-            proxy_server = @conf['antirefspam.proxy_server']
-            proxy_port = @conf['antirefspam.proxy_port']
-          end
           body = ""
           begin
-            Net::HTTP::Proxy(proxy_server, proxy_port).start(uri.host, uri.port) do |http|
+            Net::HTTP::Proxy(conf_proxy_server, conf_proxy_port).start(uri.host, uri.port) do |http|
               if uri.path == ""
                 response, = http.get("/")
               else
@@ -202,7 +158,7 @@ module TDiary
             end
 
             # body に日記の URL が含まれていなければ SPAM とみなす
-            unless check(body)
+            unless isIncludeMyUrl(body)
               File::open(@spamurl_list, "a+") {|f|
                 f.puts referer
               }
@@ -225,7 +181,7 @@ module TDiary
           return false
         ensure
           begin
-            File::delete(File.join(@work_path,uri.host))
+            File::delete(temp_filename)
           rescue
           end
         end
@@ -233,11 +189,35 @@ module TDiary
         return true
       end
 
+
+
+      def log_spamcomment( diary, comment )
+        @work_path = File.join(@conf.data_path,"AntiRefSpamFilter")
+        @spamcomment_list = File.join(@work_path,"spamcomments")  # comment spam の一覧
+
+        # ディレクトリ/ファイルが存在しなければ作る
+        unless File.exist? @work_path
+          Dir::mkdir(@work_path)
+        end
+        unless File.exist? @spamcomment_list
+          File::open(@spamcomment_list, "a").close
+        end
+
+        File::open(@spamcomment_list, "a+") {|f|
+          f.puts "From: "+comment.name+" <"+comment.mail+">"
+          f.puts "To: "+diary.date.to_s
+          f.puts "Date: "+comment.date.to_s
+          f.puts comment.body
+          f.puts ".\n\n"
+        }
+      end
+
       def comment_filter( diary, comment )
         # ツッコミに日本語(ひらがな/カタカナ)が含まれていなければ不許可
         if @conf['antirefspam.comment_kanaonly'] != nil
           if @conf['antirefspam.comment_kanaonly'].to_s == 'true'
             unless comment.body =~ /[ぁ-んァ-ヴー]/
+              log_spamcomment( diary, comment )
               return false
             end
           end
@@ -247,6 +227,7 @@ module TDiary
         maxsize = @conf['antirefspam.comment_maxsize'].to_i
         if maxsize > 0
           unless comment.body.size <= maxsize
+            log_spamcomment( comment )
             return false
           end
         end
@@ -257,16 +238,18 @@ module TDiary
           ngwords.to_s.each_line do |ngword|
             ngword.sub!(/\r?\n/,'')
             if comment.body.downcase.include? ngword.downcase
+              log_spamcomment( comment )
               return false
             end
 
             # 含まれなかった場合は "NGワード" を正規表現とみなして再チェック
             begin
               if comment.body =~ Regexp.new( ngword, Regexp::MULTILINE )
+                log_spamcomment( comment )
                 return false
               end
             rescue
-              debug_out("error_config2", ngword)
+              debug_out("error_config", "comment_ngwords: "+ngword)
             end
           end
         end

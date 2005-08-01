@@ -1,13 +1,26 @@
 #
 # antirefspam.rb 
 #
-# Copyright (c) 2004 T.Shimomura <redbug@netlife.gr.jp>
+# Copyright (c) 2004-2005 T.Shimomura <redbug@netlife.gr.jp>
+# You can redistribute it and/or modify it under GPL2.
+# Please use version 1.0.0 (not 1.0.0G) if GPL doesn't want to be forced on me.
 #
+
+@antispamref_html_antispamref = <<-TEXT
+	<h3>リンク元に制限をかける</h3>
+	<p>
+	リファラスパムを防ぐために、refererに対して制限をかけることができます。
+	</p>
+	TEXT
+
+@antispamref_html_disable = <<-TEXT
+	refererに対して制限をかけない
+	TEXT
 
 @antispamref_html_myurl = <<-TEXT
 	<h3>許容するリンク先の指定</h3>
 	<p>
-	トップページURL(#{unless @conf.index_page.empty? then @conf.index_page else "未設定" end})以外にリンク先として許容するURLを指定します。
+	トップページURL(#{CGI.escapeHTML(if @conf.index_page.empty? then "未設定" else @conf.index_page end)})と日記のURL(#{CGI.escapeHTML(if @conf.base_url.empty? then "不明" else @conf.base_url end)})以外にリンク先として許容するURLを指定します。
 	正規表現も利用可能です。
 	</p>
 	TEXT
