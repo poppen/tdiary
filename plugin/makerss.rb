@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.26 $
+# makerss.rb: $Revision: 1.27 $
 #
 # generate RSS file when updating.
 #
@@ -167,7 +167,7 @@ def makerss_header( uri )
 	<link>#{uri}</link>
 	<description>#{desc ? CGI::escapeHTML( desc ) : ''}</description>
 	<dc:creator>#{CGI::escapeHTML( @conf.author_name )}</dc:creator>
-	<copyright>#{CGI::escapeHTML( copyright )}</copyright>
+	<dc:rights>#{CGI::escapeHTML( copyright )}</dc:rights>
 	]
 end
 
