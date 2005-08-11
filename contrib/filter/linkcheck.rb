@@ -28,6 +28,7 @@ module TDiary
 				# TrackBack URI is the 1st line of comment.body.
 				src_uri, = comment.body.split( /\n/ )
 				return false unless %r|^https?://|i =~ src_uri # BAD TrackBack
+				return true if src_uri.index( dest_uri ) == 0 # from own site
 
 				begin
 					Timeout::timeout( 10 ) do
@@ -35,12 +36,12 @@ module TDiary
 							if f.read( 100 * 1024 ).include?( dest_uri ) then
 								return true
 							else
-								return false
+								return false # no link to me
 							end
 						end
 					end
 				rescue Timeout::Error
-					return false
+					return false # timeout
 				end
 			end
 		end
