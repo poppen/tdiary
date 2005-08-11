@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-# squeeze.rb $Revision: 1.21 $
+# squeeze.rb $Revision: 1.22 $
 #
 # Create daily HTML file from tDiary database.
 #
@@ -15,14 +15,7 @@
 # version 1.0.4 by TADA Tadashi <sho@spc.gr.jp> with GPL2.
 #
 
-mode = ""
-if $0 == __FILE__
-	require 'cgi'
-	@cgi = CGI::new
-	mode = @cgi.request_method ? "CGI" : "CMD"
-else
-	mode = "PLUGIN"
-end
+mode = defined?(TDiary) ? "PLUGIN" : ENV["REQUEST_METHOD"]? "CGI" : "CMD"
 
 if mode == "CMD" || mode == "CGI"
 	output_path = "./html/"
@@ -35,7 +28,7 @@ if mode == "CMD" || mode == "CGI"
 
 	if mode == "CMD"
 		def usage
-			puts "squeeze $Revision: 1.21 $"
+			puts "squeeze $Revision: 1.22 $"
 			puts " making html files from tDiary's database."
 			puts " usage: ruby squeeze.rb [-p <tDiary path>] [-c <tdiary.conf path>] [-a] [-s] [-x suffix] <dest path>"
 			exit
@@ -71,26 +64,36 @@ if mode == "CMD" || mode == "CGI"
 		usage unless output_path
 		output_path = File::expand_path(output_path)
 		output_path += '/' if /\/$/ !~ output_path
+
+		tdiary_conf = tdiary_path unless tdiary_conf
+		Dir::chdir( tdiary_conf )
+		ARGV << '' # dummy argument against cgi.rb offline mode.
+		$:.unshift tdiary_path
 	else
 		@options = Hash.new
 		File::readlines("tdiary.conf").each {|item| 
 			if item =~ /@options/
-				eval(item)
+				begin
+					eval(item)
+				rescue SyntaxError
+				end
 			end
 		}
 		output_path = @options['squeeze.output_path'] || @options['yasqueeze.output_path']
 		suffix = @options['squeeze.suffix'] || ''
 		all_data = @options['squeeze.all_data'] || @options['yasqueeze.all_data']
 		compat = @options['squeeze.compat_path'] || @options['yasqueeze.compat_path']
+
+		if FileTest::symlink?( __FILE__ ) then
+			org_path = File::dirname( File::readlink( __FILE__ ) )
+		else
+			org_path = File::dirname( __FILE__ )
+		end
+		$:.unshift( org_path.untaint )
 	end
 
-	tdiary_conf = tdiary_path unless tdiary_conf
-	Dir::chdir( tdiary_conf )
-
 	begin
-		ARGV << '' # dummy argument against cgi.rb offline mode.
-		$:.unshift tdiary_path
-		require "#{tdiary_path}/tdiary"
+		require "tdiary"
 	rescue LoadError
 		$stderr.print "squeeze.rb: cannot load tdiary.rb. <#{tdiary_path}/tdiary>\n"
 		exit( 1 )
@@ -187,7 +190,7 @@ if mode == "CGI" || mode == "CMD"
 			</head>
 			<body><div style="text-align:center">
 			<h1>Squeeze for tDiary</h1>
-			<p>$Revision: 1.21 $</p>
+			<p>$Revision: 1.22 $</p>
 			<p>Copyright (C) 2002 MUTOH Masao&lt;mutoh@highway.ne.jp&gt;</p></div>
 			<br><br>Start!</p><hr>
 		]
