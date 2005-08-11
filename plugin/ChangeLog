@@ -1,6 +1,7 @@
 2002-08-11 TADA Tadahi <sho@spc.gr.jp>
 	* sqeeze.rb: fix fatal bug when running on CGI mode.
 	thanks TAKEMURA Masahiro <mas at mstk.que.jp>.
+	* hilight.rb, append-css.rb: suppress action for bot.
 
 2002-08-10 TADA Tadahi <sho@spc.gr.jp>
 	* my-ex.rb: generate absolute URLs.

@@ -1,4 +1,4 @@
-# highlight.rb $Revision: 1.6 $
+# highlight.rb $Revision: 1.7 $
 #
 # Highlighting the element jumped from other pages.
 #
@@ -6,7 +6,7 @@
 # Copyright (C) 2003 by Kazuhiro NISHIYAMA
 # You can redistribute it and/or modify it under GPL2.
 #
-if @mode == 'day' then
+if @mode == 'day' and not bot? then
 	add_footer_proc do
 		<<-SCRIPT
 			<script type="text/javascript"><!--
