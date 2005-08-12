@@ -5,6 +5,9 @@ tDiaryのヘッダに[[Account Auto-Discovery|http://d.hatena.ne.jp/naoya/20050729/11
 tDiaryのプラグインフォルダに入れるだけです。インストール後、プラグイン選択からaccount_ad.rbを選択し、設定画面からAccount NameにはてなIDを設定してください。
 
 ! 更新履歴
+!!20050812
+* add_head_procにブロック引数を渡していたので削除
+* account_nameが未設定のときはRDF埋め込みを抑制
 !!20050810
 *dayモード時にはpermalinkを表示するように変更
 *設定画面を微調整
