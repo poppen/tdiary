@@ -1,4 +1,4 @@
-# $Revision: 1.7 $
+# $Revision: 1.8 $
 # recent_trackback3: 最近のツッコミをリストアップする
 #
 # Options:
@@ -33,6 +33,8 @@ def recent_trackback3_init
 end
 
 def recent_trackback3
+	return '' if @conf.secure
+
 	recent_trackback3_init
 
 	cache = @conf['recent_trackback3.cache']

@@ -1,7 +1,7 @@
-# calendar2.rb $Revision: 1.14 $
+# calendar2.rb $Revision: 1.15 $
 #
-# calendar2: どこかで見たようなカレンダーを日記に追加する
-#   パラメタ:
+# calendar2: add calendar as table layout.
+#   parameter:
 #     days_format: 曜日を現すStringから構成されるArray．
 #                  nilを指定するとデフォルト値が選択される．
 #                  ("日月火水木金土".split(//))
@@ -12,24 +12,19 @@
 #                  予定としてpopupされる．
 #                  (nil)
 #
+#   options:
+#     calendar2.show_image: true or false. show a image that makes by image.rb
+#                  on each date. default is falase, and use only non secure mode.
+#
 # Copyright (c) 2001,2002 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
 #
-=begin ChangeLog
-2003-09-25 TADA Tadashi
-	* use @conf.shorten.
-
-2003-01-10 NT <nt@be.to>
-	* @options['calendar2.erb'] -> @options['apply_plugin']
-	* use Plugin#shorten.
-
-2002-12-23 Hiroyuki Ikezoe <zoe@kasumi.sakura.ne.jp>
-	* use Plugin#apply_plugin.
-	* visible subsubtitle.
-	
-2002-12-06 TADA Tadashi <sho@spc.gr.jp>
-	* without escapeHTML for title attribules.
-=end
+@calendar2_image_dir = @options && @options['image.dir'] || './images/'
+@calendar2_image_dir.chop! if /\/$/ =~ @calendar2_image_dir
+@calendar2_image_url = @options && @options['image.url'] || "#{@conf.base_url}images/"
+@calendar2_image_url.chop! if /\/$/ =~ @calendar2_image_url
+@calendar2_imageex_yearlydir = @options && @options['image_ex.yearlydir'] || 0
+@calendar2_show_image = @options && @options['calendar2.show_image'] || false
 
 def calendar2_make_cal(year, month)
 	result = []
@@ -69,6 +64,27 @@ def calendar2_make_anchor(ym, str)
 		%Q|<a href="#{@index}#{anchor ym}">#{str}</a>|
 	else
 		str
+	end
+end
+
+def calender2_make_image(diary, date)
+	f_list = []
+
+	/[^_]image(?:_left|_right|_gps)?\s*\(?\s*([0-9]*)\s*\,?\s*'[^']*'/ =~ diary.to_s
+	if $1 == nil
+		return nil
+	end
+
+	image_dir = (@calendar2_imageex_yearlydir == 0 ? @calendar2_image_dir : %Q|#{@calendar2_image_dir}/#{date[0,4]}|)
+	image_url = (@calendar2_imageex_yearlydir == 0 ? @calendar2_image_url : %Q|#{@calendar2_image_url}/#{date[0,4]}|)
+
+	f_list = Dir.glob(%Q|#{image_dir}/#{date}_#{$1}*|.untaint)
+	if f_list[0] != nil
+		file = File.basename(f_list[0])
+		file = %Q|s#{file}| if File.exist?(%Q|#{image_dir}/s#{file}|.untaint)
+		%Q|<img src="#{image_url}/#{file}">|
+	else
+		nil
 	end
 end
 
@@ -142,7 +158,9 @@ CALENDAR_HEAD
 							subtitles <<  %Q|#{idx}. #{@conf.shorten(apply_plugin( text, true )).gsub(/"/, '&quot;')}|
 							idx.succ!
 						end
-						%Q|<a href="#{@index}#{anchor date}" title="#{subtitles.join("&#13;&#10;")}">#{day}</a>|
+						day_img = ((@calendar2_show_image and !@conf.secure) ? calender2_make_image(@diaries[date], date) : day.to_s)
+						day_img = day.to_s if day_img == nil
+            %Q|<a href="#{@index}#{anchor date}" title="#{subtitles.join("&#13;&#10;")}">#{day_img}</a>|
 					end
 			end
 		end
