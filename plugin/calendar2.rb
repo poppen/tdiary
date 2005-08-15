@@ -1,20 +1,24 @@
-# calendar2.rb $Revision: 1.15 $
+# calendar2.rb $Revision: 1.16 $
 #
 # calendar2: add calendar as table layout.
 #   parameter:
-#     days_format: 曜日を現すStringから構成されるArray．
-#                  nilを指定するとデフォルト値が選択される．
-#                  ("日月火水木金土".split(//))
-#     nav_format:  カレンダー上部に表示されるStringから構成されるArray
-#                  nilを指定するとデフォルト値が選択される．
-#                  (["前", "%d年<br>%d月", "次"])
-#     show_todo:   ここで指定した文字列が隠された日記中にサブタイトルとして現れると
-#                  予定としてpopupされる．
-#                  (nil)
+#     days_format: Array of weekday name stats with Sunday. (optional)
+#     navi_format: Array of navigation label on top of calendar. (optional)
+#     show_todo:   You can write todo list into future diary as hidden with a
+#                  subtitle. if calendar2 find this parameter string in future
+#                  diary, it popup your todo. (optional)
 #
 #   options:
 #     calendar2.show_image: true or false. show a image that makes by image.rb
 #                  on each date. default is falase, and use only non secure mode.
+#                  and if you want to change image size, add CSS to your theme.
+#                  for example (25x25 pixel image):
+#
+#                      td.calendar-day img {
+#                         width: 25px;
+#                         height: 25px;
+#                         border: 0;
+#                      }
 #
 # Copyright (c) 2001,2002 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -88,9 +92,9 @@ def calender2_make_image(diary, date)
 	end
 end
 
-def calendar2(days_format = nil, nav_format = nil, show_todo = nil)
- 	days_format ||= "日月火水木金土".split(//)
-	nav_format ||= ["前", "%d年<br>%d月", "次"]
+def calendar2(days_format = nil, navi_format = nil, show_todo = nil)
+ 	days_format ||= @calendar2_days_format
+	navi_format ||= @calendar2_navi_format
 
 	return '' if /TAMATEBAKO/ =~ @cgi.user_agent
 	date = if @mode == "latest"
@@ -108,9 +112,9 @@ def calendar2(days_format = nil, nav_format = nil, show_todo = nil)
  <td class="image" colspan="7"></td>
 </tr>
 <tr>
- <td class="calendar-prev-month" colspan="2">#{calendar2_make_anchor(p_c_n[0], nav_format[0] % [year, month])}</td>
- <td class="calendar-current-month" colspan="3">#{calendar2_make_anchor(p_c_n[1], nav_format[1] % [year, month])}</td>
- <td class="calendar-next-month" colspan="2">#{calendar2_make_anchor(p_c_n[2], nav_format[2] % [year, month])}</td>
+ <td class="calendar-prev-month" colspan="2">#{calendar2_make_anchor(p_c_n[0], navi_format[0] % [year, month])}</td>
+ <td class="calendar-current-month" colspan="3">#{calendar2_make_anchor(p_c_n[1], navi_format[1] % [year, month])}</td>
+ <td class="calendar-next-month" colspan="2">#{calendar2_make_anchor(p_c_n[2], navi_format[2] % [year, month])}</td>
 </tr>
 CALENDAR_HEAD
 	result << "<tr>"
