@@ -4,7 +4,7 @@
 
 ;; Author: Junichiro Kita <kita@kitaj.no-ip.com>
 
-;; $Id: tdiary-mode.el,v 1.2 2005-07-20 08:39:56 tadatadashi Exp $
+;; $Id: tdiary-mode.el,v 1.3 2005-08-15 13:38:47 tadatadashi Exp $
 ;;
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -69,7 +69,6 @@
 
 (require 'http)
 (require 'poe)
-(require 'derived)
 (require 'tempo)
 
 (defvar tdiary-diary-list nil
@@ -504,12 +503,16 @@ Otherwise replace all entity references within current buffer."
   (interactive "P")
   (tdiary-new-or-replace t select-url))
 
-(defun tdiary-setup-keys ()
+(defvar tdiary-mode-map (make-sparse-keymap)
   "Set up keymap for tdiary-mode.
-If you want to set up your own key bindings, use `tdiary-mode-hook'."
-  (define-key tdiary-mode-map [(control return)] 'tdiary-complete-plugin)
-  (define-key tdiary-mode-map "\C-c\C-c" 'tdiary-update)
-  )
+If you want to set up your own key bindings, use `tdiary-mode-hook'.")
+
+(define-key tdiary-mode-map [(control return)] 'tdiary-complete-plugin)
+(define-key tdiary-mode-map "\C-c\C-c" 'tdiary-update)
+
+(push (cons 'tdiary-date tdiary-mode-map) minor-mode-map-alist)
+(if (boundp 'minor-mode-list) (push 'tdiary-mode minor-mode-list))
+(push '(tdiary-date " tDiary") minor-mode-alist)
 
 (defun tdiary-load-init-file ()
   "Load init file."
@@ -526,10 +529,22 @@ If you want to set up your own key bindings, use `tdiary-mode-hook'."
       (set-file-modes tmpdir tdiary-text-directory-mode))
     (expand-file-name tdiary-date tmpdir)))
 
-(define-derived-mode tdiary-mode html-mode "tDiary"
-  "Major mode for tDiary editing.
+(defvar tdiary-style-mode 'html-mode)
+
+(defun tdiary-html-mode-init ()
+  (tdiary-tempo-define (append tdiary-plugin-initial-definition
+			       tdiary-plugin-definition))
+  (tempo-use-tag-list 'tdiary-tempo-tags tdiary-completion-finder))
+
+(defun tdiary-rd-mode-init ()
+  )
+
+(defun tdiary-mode ()
+  "Minor mode for tDiary editing.
 
 \\{tdiary-mode-map}"
+  (interactive)
+  (funcall tdiary-style-mode)
   (make-local-variable 'require-final-newline)	
   (make-local-variable 'tdiary-date)
   (make-local-variable 'tdiary-title)
@@ -543,8 +558,6 @@ If you want to set up your own key bindings, use `tdiary-mode-hook'."
 	tdiary-edit-mode "replace"
 	tdiary-date (format-time-string "%Y%m%d" (tdiary-today)))
 
-  (tdiary-setup-keys)
-
   (tdiary-load-init-file)
 
   (tdiary-setup-diary-url (if (boundp 'select-url)
@@ -552,9 +565,6 @@ If you want to set up your own key bindings, use `tdiary-mode-hook'."
 			    t))
 
   (set-buffer-file-coding-system tdiary-coding-system)
-  (tdiary-tempo-define (append tdiary-plugin-initial-definition
-			       tdiary-plugin-definition))
-  (tempo-use-tag-list 'tdiary-tempo-tags tdiary-completion-finder)
 
   (or tdiary-passwd-cache
       (tdiary-passwd-file-load))
@@ -571,6 +581,9 @@ If you want to set up your own key bindings, use `tdiary-mode-hook'."
     (if tdiary-text-save-p
 	(set-visited-file-name (tdiary-make-temp-file-name))
       (rename-buffer tdiary-date t)))
+
+  (let ((init (intern (concat "tdiary-" (symbol-name tdiary-style-mode) "-init"))))
+    (if (fboundp init) (funcall init)))
 
   (run-hooks 'tdiary-mode-hook))
 
