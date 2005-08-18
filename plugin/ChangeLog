@@ -1,3 +1,6 @@
+2005-08-18 zunda <zunda at freeshell.org>
+	* recent_comment3.rb: no longer records comments rejected by filter/spam.rb
+
 2002-08-15 TADA Tadahi <sho@spc.gr.jp>
 	* calendar2.rb: add image mode, thanks KASHIJUKU <n-kashi at whi.m-net.ne.jp>
 	* recent_comment3.rb, recent_trackback3.rb: disable on secure mode.

@@ -1,4 +1,4 @@
-# $Revision: 1.19 $
+# $Revision: 1.20 $
 # recent_comment3: 最近のツッコミをリストアップする
 #
 #   @secure = true な環境では動作しません．
@@ -68,7 +68,7 @@ add_update_proc do
    cache = @conf['recent_comment3.cache']
    size = @conf['recent_comment3.cache_size']
    
-   if @mode == 'comment' and @comment then
+   if @mode == 'comment' and @comment and @comment.visible? then
       PStore.new( cache ).transaction do |db|
          comment = @comment
          serial = 0
