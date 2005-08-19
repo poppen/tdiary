@@ -4,7 +4,7 @@
 
 ;; Author: Junichiro Kita <kita@kitaj.no-ip.com>
 
-;; $Id: tdiary-mode.el,v 1.3 2005-08-15 13:38:47 tadatadashi Exp $
+;; $Id: tdiary-mode.el,v 1.4 2005-08-19 08:36:43 tadatadashi Exp $
 ;;
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -94,6 +94,9 @@ Each element looks like (NAME URL) or (NAME URL INDEX-RB UPDATE-RB).")
 
 (defvar tdiary-title nil
   "Title of diary")
+
+(defvar tdiary-style-mode 'html-mode
+  "Major mode to be used for tDiary editing.")
 
 (defvar tdiary-date nil
   "Date to be updated.")
@@ -529,22 +532,30 @@ If you want to set up your own key bindings, use `tdiary-mode-hook'.")
       (set-file-modes tmpdir tdiary-text-directory-mode))
     (expand-file-name tdiary-date tmpdir)))
 
-(defvar tdiary-style-mode 'html-mode)
-
 (defun tdiary-html-mode-init ()
+  "Initialize tDiary for default style"
   (tdiary-tempo-define (append tdiary-plugin-initial-definition
 			       tdiary-plugin-definition))
   (tempo-use-tag-list 'tdiary-tempo-tags tdiary-completion-finder))
 
 (defun tdiary-rd-mode-init ()
+  "Initialize tDiary for RD style"
   )
 
 (defun tdiary-mode ()
-  "Minor mode for tDiary editing.
+  "tDiary editing mode.
+The value of `tdiary-style-mode' will be used as actual major mode.
 
 \\{tdiary-mode-map}"
   (interactive)
   (funcall tdiary-style-mode)
+  (and (featurep 'font-lock)
+       (font-lock-set-defaults))
+  (tdiary-mode-setup))
+
+(defun tdiary-mode-setup ()
+  "Set tDiary mode up."
+  (interactive)
   (make-local-variable 'require-final-newline)	
   (make-local-variable 'tdiary-date)
   (make-local-variable 'tdiary-title)
@@ -569,25 +580,34 @@ If you want to set up your own key bindings, use `tdiary-mode-hook'.")
   (or tdiary-passwd-cache
       (tdiary-passwd-file-load))
 
-  (and (featurep 'font-lock)
-       (font-lock-set-defaults))
-
   (if buffer-file-name
-      (when (string-match
-	     "\\([0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]\\)"
-	     buffer-file-name)
-	(setq tdiary-date (match-string 1 buffer-file-name)))
+      (let ((buf-name (file-name-nondirectory buffer-file-name)))
+	(when (string-match
+	       "\\([0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]\\)"
+	       buf-name)
+	  (setq tdiary-date (match-string 1 buf-name))))
     (setq tdiary-date (tdiary-read-date nil))
     (if tdiary-text-save-p
 	(set-visited-file-name (tdiary-make-temp-file-name))
-      (rename-buffer tdiary-date t)))
+      (unless (string= (buffer-name) tdiary-date)
+	(rename-buffer tdiary-date t))))
 
   (let ((init (intern (concat "tdiary-" (symbol-name tdiary-style-mode) "-init"))))
     (if (fboundp init) (funcall init)))
 
   (run-hooks 'tdiary-mode-hook))
 
-(put 'tdiary-mode 'font-lock-defaults '(html-font-lock-keywords nil t))
+(defun tdiary-mode-toggle (&optional arg)
+  (interactive "P")
+  (let ((in-tdiary (and (boundp 'tdiary-date) tdiary-date)))
+    (cond ((not arg)
+	   (setq arg (not in-tdiary)))
+	  ((or (eq arg '-) (and (numberp arg) (< arg 0)))
+	   (setq arg nil)))
+    (cond (arg
+	   (tdiary-mode-setup))
+	  (in-tdiary
+	   (setq tdiary-date nil)))))
 
 (provide 'tdiary-mode)
 ;;; tdiary-mode.el ends here
