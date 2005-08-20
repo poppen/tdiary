@@ -1,3 +1,6 @@
+2005-08-20 Taku YASUI <tach at debian.or.jp>
+	* tb-send.rb: support basic authentication for TrackBack ping URL.
+
 2005-08-18 zunda <zunda at freeshell.org>
 	* recent_comment3.rb: no longer records comments rejected by filter/spam.rb
 

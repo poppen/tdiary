@@ -1,4 +1,4 @@
-# tb-send.rb $Revision: 1.20 $
+# tb-send.rb $Revision: 1.21 $
 #
 # Copyright (c) 2003 Junichiro Kita <kita@kitaj.no-ip.com>
 # You can distribute this file under the GPL.
@@ -106,15 +106,20 @@ def tb_send_trackback
 		trackback << "&excerpt=#{CGI::escape( @conf.to_native( excerpt) )}" unless excerpt.empty?
 		trackback << "&blog_name=#{CGI::escape(blog_name)}"
 
-		if %r|^http://([^/]+)(/.*)$| =~ url then
-			request = $2
-			host, port = $1.split( /:/, 2 )
+		if %r|^http://(?:(.+):(.+)@)?([^/]+)(/.*)$| =~ url then
+		   basic_user = $1
+			basic_pass = $2
+			request = Net::HTTP::Post.new($4)
+			request['Content-Type'] = 'application/x-www-form-urlencoded'
+			host, port = $3.split( /:/, 2 )
 			port = '80' unless port
 			Net::HTTP.version_1_1
 			begin
 				Net::HTTP.start( host.untaint, port.to_i ) do |http|
-					response, = http.post( request, trackback,
-						"Content-Type" => 'application/x-www-form-urlencoded')
+				   if basic_user && basic_pass
+					   request.basic_auth(basic_user, basic_pass)
+					end
+					response, = http.request(request, trackback)
 					error, = response.body.scan(%r|<error>(\d)</error>|)[0]
 					if error == '1'
 						reason, = response.body.scan(%r|<message>(.*)</message>|m)[0]
