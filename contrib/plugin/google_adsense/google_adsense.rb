@@ -73,7 +73,7 @@ add_conf_proc( 'google_adsense', 'Google AdSense' ) do
 	<<-HTML
 	<h3>バナーのサイズ(#{@conf['google_adsense.layout']})</h3>
 	<p>広告バナーのサイズは全部で7種類あります。お好きなサイズを選んでください。</p>
-	<select name="google_adsense.layout">
+	<p><select name="google_adsense.layout">
 		<option value="0"#{' selected' if @conf['google_adsense.layout'] == 0}>横長小・広告2つ(468, 60)</option>
 		<option value="2"#{' selected' if @conf['google_adsense.layout'] == 2}>横長大・広告4つ(728, 90)</option>
 		<option value="4"#{' selected' if @conf['google_adsense.layout'] == 4}>方形微小・広告1つ(125, 125)</option>
@@ -84,16 +84,16 @@ add_conf_proc( 'google_adsense', 'Google AdSense' ) do
 		<option value="6"#{' selected' if @conf['google_adsense.layout'] == 6}> 縦長小・広告2つ(120, 240)</option>
 		<option value="1"#{' selected' if @conf['google_adsense.layout'] == 1}> 縦長中・広告4つ(120, 600)</option>
 		<option value="5"#{' selected' if @conf['google_adsense.layout'] == 5}> 縦長大・広告5つ(160, 600)</option>
-	</select>
+	</select></p>
 	<h3>バナーの色</h3>
 	<p>バナーの各パーツの色を指定できます。HTMLやCSSと同じ、6桁の16進数で指定します。</p>
-	<ul>
-		<li>枠: <input name="google_adsense.color.border" size="6" value="#{@conf['google_adsense.color.border']}"></li>
-		<li>背景: <input name="google_adsense.color.bg" size="6" value="#{@conf['google_adsense.color.bg']}"></li>
-		<li>リンク: <input name="google_adsense.color.link" size="6" value="#{@conf['google_adsense.color.link']}"></li>
-		<li>URL: <input name="google_adsense.color.url" size="6" value="#{@conf['google_adsense.color.url']}"></li>
-		<li>テキスト: <input name="google_adsense.color.text" size="6" value="#{@conf['google_adsense.color.text']}"></li>
-	</ul>
+	<table style="margin-left: 2em;">
+		<tr><td>枠</td><td style="background-color: ##{@conf['google_adsense.color.border']};">&nbsp;<input name="google_adsense.color.border" size="7" value="#{@conf['google_adsense.color.border']}">&nbsp;</td></tr>
+		<tr><td>背景</td><td style="background-color: ##{@conf['google_adsense.color.bg']};">&nbsp;<input name="google_adsense.color.bg" size="7" value="#{@conf['google_adsense.color.bg']}">&nbsp;</td></tr>
+		<tr><td>リンク</td><td style="background-color: ##{@conf['google_adsense.color.link']};">&nbsp;<input name="google_adsense.color.link" size="7" value="#{@conf['google_adsense.color.link']}">&nbsp;</td></tr>
+		<tr><td>URL</td><td style="background-color: ##{@conf['google_adsense.color.url']};">&nbsp;<input name="google_adsense.color.url" size="7" value="#{@conf['google_adsense.color.url']}">&nbsp;</td></tr>
+		<tr><td>テキスト</td><td style="background-color: ##{@conf['google_adsense.color.text']};">&nbsp;<input name="google_adsense.color.text" size="7" value="#{@conf['google_adsense.color.text']}">&nbsp;</td></tr>
+	</table>
 	HTML
 end
 
