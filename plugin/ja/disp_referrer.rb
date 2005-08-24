@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.24 2005-07-20 08:36:50 tadatadashi Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.25 2005-08-24 15:12:04 tadatadashi Exp $-))
 日本語リソース
 
 == 概要
@@ -200,9 +200,11 @@ See ../ChangeLog for changes after this.
 # Message strings
 Disp_referrer2_name = 'リンク元もうちょっと強化'.taint
 Disp_referrer2_abstract = <<'_END'.taint
+<p>
 	アンテナからのリンク、サーチエンジンの検索結果を、
 	通常のリンク元の下にまとめて表示します。
 	サーチエンジンの検索結果は、検索語毎にまとめられます。
+</p>
 _END
 Disp_referrer2_with_Nora = <<'_END'.taint
 <p>

@@ -1,4 +1,4 @@
-# en/recent_comment.rb $Revision: 1.1 $
+# en/recent_comment.rb $Revision: 1.2 $
 #
 # English resources for recent_comment.rb
 #
@@ -7,7 +7,7 @@
 #
 
 if @mode == 'conf' || @mode == 'saveconf'
-   add_conf_proc( 'recent_comment', 'Recent comment' ) do
+   add_conf_proc( 'recent_comment', 'Recent TSUKKOMI', 'tsukkomi' ) do
       saveconf_recent_comment
       recent_comment_init
       <<-HTML

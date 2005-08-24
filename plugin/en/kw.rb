@@ -1,5 +1,5 @@
 def kw_label
-	"Keyword plugin"
+	"Keyword"
 end
 
 def kw_desc

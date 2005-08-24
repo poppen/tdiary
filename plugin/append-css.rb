@@ -1,4 +1,4 @@
-# append-css.rb: $Revision: 1.7 $
+# append-css.rb: $Revision: 1.8 $
 #
 # Append CSS fragment via Preferences Page.
 #
@@ -31,7 +31,7 @@ unless @resource_loaded then
 	end
 end
 
-add_conf_proc( 'append-css', append_css_label ) do
+add_conf_proc( 'append-css', append_css_label, 'theme' ) do
 	if @mode == 'saveconf' then
 		@conf['append-css.css'] = @cgi.params['append-css.css'][0]
 	end

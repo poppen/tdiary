@@ -1,4 +1,4 @@
-# category.rb $Revision: 1.28 $
+# category.rb $Revision: 1.29 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -618,7 +618,7 @@ def category_icon_sample
 end
 
 if @mode == 'conf' || @mode == 'saveconf'
-	add_conf_proc('category', @category_conf_label) do
+	add_conf_proc( 'category', @category_conf_label, 'basic' ) do
 		cache = @category_cache
 		if @mode == 'saveconf'
 			if @cgi.valid?( 'category_initialize' )
@@ -659,7 +659,7 @@ if @mode == 'conf' || @mode == 'saveconf'
 	end
 
 	category_icon_find_icons if @cgi.params['conf'][0] == 'category_icon'
-	add_conf_proc('category_icon', @category_icon_conf_label) do
+	add_conf_proc( 'category_icon', @category_icon_conf_label, 'basic' ) do
 		if @mode == 'saveconf'
 			unless @conf.secure
 				[

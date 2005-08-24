@@ -1,5 +1,5 @@
 def label_pingback_exclue; 'Pingback記録除外リスト'; end
-add_conf_proc('Pingback', 'Pingbackプラグイン') do
+add_conf_proc( 'Pingback', 'Pingback') do
 	saveconf_pingback
 	pingback_init
 

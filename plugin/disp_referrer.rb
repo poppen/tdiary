@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.55 2005-07-20 08:36:48 tadatadashi Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.56 2005-08-24 15:12:04 tadatadashi Exp $-))
 
 == 概要
 アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
@@ -1404,7 +1404,7 @@ end
 =end
 
 # for configuration interface
-add_conf_proc( 'disp_referrer2', Disp_referrer2_name ) do
+add_conf_proc( 'disp_referrer2', Disp_referrer2_name, 'referer' ) do
 	setup = DispRef2Setup.new( @conf, 100, true, @years, @mode )
 	wwwif = DispRef2SetupIF.new( @cgi, setup, @conf, @mode )
 	wwwif.show_html

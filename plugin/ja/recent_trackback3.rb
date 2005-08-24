@@ -1,4 +1,4 @@
-# ja/recent_trackback3.rb $Revision: 1.2 $
+# ja/recent_trackback3.rb $Revision: 1.3 $
 #
 # Japanese resources for recent_trackback3.rb
 #
@@ -7,7 +7,7 @@
 #
 
 if @mode == 'conf' || @mode == 'saveconf'
-add_conf_proc('recent_trackback3', '最近のTrackBack') do
+add_conf_proc( 'recent_trackback3', '最近のTrackBack', 'tsukkomi' ) do
 	saveconf_recent_trackback3
 	recent_trackback3_init
 

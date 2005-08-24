@@ -1,4 +1,4 @@
-# kw.rb $Revision: 1.8 $
+# kw.rb $Revision: 1.9 $
 #
 # kw: keyword link generator
 #   Parameters:
@@ -95,7 +95,7 @@ end
 #
 unless @resource_loaded then
 	def kw_label
-		"キーワードプラグイン"
+		"キーワード"
 	end
 
 	def kw_desc

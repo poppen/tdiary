@@ -1,3 +1,6 @@
+2002-08-25 TADA Tadahi <sho@spc.gr.jp>
+	* specify genre of preference to some plugins.
+
 2005-08-20 Taku YASUI <tach at debian.or.jp>
 	* tb-send.rb: support basic authentication for TrackBack ping URL.
 
