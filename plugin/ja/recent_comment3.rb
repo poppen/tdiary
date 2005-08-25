@@ -1,13 +1,13 @@
-# ja/recent_comment3.rb $Revision: 1.1 $
+# ja/recent_comment3.rb $Revision: 1.2 $
 #
 # Japanese resources for recent_comment3.rb
 #
-# Copyright (c) 2005 Hiroshi SHIBATA <h-sbt@nifty.com>
+# Copyright (c) 2005 SHIBATA Hiroshi <h-sbt@nifty.com>
 # Distributed under the GPL
 #
 
 if @mode == 'conf' || @mode == 'saveconf'
-   add_conf_proc( 'recent_comment3', '最近のツッコミ' ) do
+   add_conf_proc( 'recent_comment3', '最近のツッコミ' 'tsukkomi' ) do
       saveconf_recent_comment3
       recent_comment3_init
       <<-HTML
