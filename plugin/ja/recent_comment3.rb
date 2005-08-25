@@ -1,4 +1,4 @@
-# ja/recent_comment3.rb $Revision: 1.2 $
+# ja/recent_comment3.rb $Revision: 1.3 $
 #
 # Japanese resources for recent_comment3.rb
 #
@@ -7,7 +7,7 @@
 #
 
 if @mode == 'conf' || @mode == 'saveconf'
-   add_conf_proc( 'recent_comment3', '最近のツッコミ' 'tsukkomi' ) do
+   add_conf_proc( 'recent_comment3', '最近のツッコミ', 'tsukkomi' ) do
       saveconf_recent_comment3
       recent_comment3_init
       <<-HTML
