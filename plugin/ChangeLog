@@ -1,3 +1,7 @@
+2002-08-28 SHIBATA Hiroshi <h-sbt@nifty.com>
+	* recent_comment3.rb: add Tree view mode. 
+   thanks MORIOKA Toru <vette at mail.ne.jp>.
+
 2002-08-25 TADA Tadahi <sho@spc.gr.jp>
 	* specify genre of preference to some plugins.
 
