@@ -1,0 +1,43 @@
+
+add_bookmark.rb
+
+!概要
+subtitleの右にソーシャルブックマークへのリンクを埋め込みます。
+
+設定画面で埋め込みたいブックマークを選択できます。
+
+!更新履歴
+
+2005-08-28  SHIBATA Hiroshi  <h-sbt@nifty.com>
+
+	* add_subtitle_procに対応
+	* webshots,LiVEMARK,fc2ブックマークを削除
+	* 強制的にアイコンを使用するように設定
+
+2005-06-02  SHIBATA Hiroshi  <h-sbt@nifty.com>
+
+	* はてなブックマークのアイコンの修正 
+	* del.icio.usのURLの修正 
+
+2005-06-01  SHIBATA Hiroshi  <h-sbt@nifty.com>
+
+	* LiVEMARKに対応 
+	* はてなブックマーク、del.icio.us、MM/Memoをアイコンで表示できるようにした。
+
+2005-05-28  SHIBATA Hiroshi  <h-sbt@nifty.com>
+
+	* @confの値とdayモードの判定方法を変更 
+	* 処理でイテレータを使うように変更 
+	* 英語リソースの追加 
+	* webshotsに対応 
+	* fc2ブックマークに対応 
+
+2005-05-25  SHIBATA Hiroshi  <h-sbt@nifty.com>
+
+	* 初版公開
+
+!ライセンス
+GPL
+
+!参考情報
+add_conf_procのチェックボックス処理についてはsearch_control.rb、body_enter_procについてはrandom_google.rbを参考にしました。

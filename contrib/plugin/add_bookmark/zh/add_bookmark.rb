@@ -1,6 +1,6 @@
-# en/add_bookmark.rb $Revision 1.3 $
+# zh/add_bookmark.rb $Revision 1.3 $
 #
-# English resource of add_bookmark.rb
+# Chinaese resource of add_bookmark.rb
 #
 
 @add_bookmark_label = 'add to bookmark'
