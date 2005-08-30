@@ -1,4 +1,4 @@
-# $Revision: 1.21 $
+# $Revision: 1.22 $
 # recent_comment3: 最近のツッコミをリストアップする
 #
 #   @secure = true な環境では動作しません．
@@ -8,6 +8,7 @@
 #
 require 'pstore'
 require 'date'
+require 'parsedate'
 
 def recent_comment3_format(format, *args)
 	format.gsub(/\$(\d)/) {|s| args[$1.to_i - 1]}
@@ -83,7 +84,8 @@ def recent_comment3(ob_max = 'OBSOLUTE' ,sep = 'OBSOLUTE',ob_date_format = 'OBSO
                title = diary.diaries[entry_date].title.gsub( /<[^>]*>/, '' )
             end
             if title == nill || title.length == 0 || title.strip.delete('　').delete(' ').length == 0 then
-               title = "#{entry_date}"
+               y, m, d = ParseDate.parsedate(entry_date)
+               title = "#{'%04d' % y}/#{'%02d' % m}/#{'%02d' % d}"
             end
             
             result << "<li>"

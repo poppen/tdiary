@@ -1,3 +1,6 @@
+2002-08-30 SHIBATA Hiroshi <h-sbt@nifty.com>
+	* recent_comment3.rb: change date format at tree view mode.
+
 2002-08-28 SHIBATA Hiroshi <h-sbt@nifty.com>
 	* recent_comment3.rb: add Tree view mode. 
    thanks MORIOKA Toru <vette at mail.ne.jp>.
