@@ -1,5 +1,5 @@
 #
-# English resource of amazon plugin $Revision: 1.7 $
+# English resource of amazon plugin $Revision: 1.8 $
 #
 # Copyright (C) 2002 HAL99 <hal99@mtj.biglobe.ne.jp>
 # You can redistribute it and/or modify it under GPL2.
@@ -37,6 +37,7 @@
 #
 
 @amazon_url = 'http://www.amazon.com/exec/obidos/ASIN'
+@amazon_ecs_url = 'http://webservices.amazon.com/onca/xml'
 @amazon_item_name = /^Amazon\.com: (.*)$/
 @amazon_item_image = %r|(<img src="(http://images\.amazon\.com/images/P/(.*MZZZZZZZ_?.jpg))".*?>)|i
 @amazon_label_conf = 'Amazon'

@@ -1,3 +1,6 @@
+2002-08-31 TADA Tadahi <sho@spc.gr.jp>
+	* amazon.rb: whole rewrite using Amazon ECS 4.0.
+
 2002-08-30 SHIBATA Hiroshi <h-sbt@nifty.com>
 	* recent_comment3.rb: change date format at tree view mode.
 
