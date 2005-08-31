@@ -1,4 +1,4 @@
-# $Revision: 1.23 $
+# $Revision: 1.24 $
 # recent_comment3: 最近のツッコミをリストアップする
 #
 #   @secure = true な環境では動作しません．
@@ -88,7 +88,7 @@ def recent_comment3(ob_max = 'OBSOLUTE' ,sep = 'OBSOLUTE',ob_date_format = 'OBSO
             end
             
             result << "<li>"
-            result << %Q|<a href="#{anchor(a_entry)}">#{@conf.shorten( title, 20 )}</a><br>|
+            result << %Q|<a href="#{a_entry}">#{@conf.shorten( title, 20 )}</a><br>|
             entries[entry_date].sort.each { | comment_str |
                result << comment_str + "<br>"
             }
