@@ -1,4 +1,4 @@
-# $Revision: 1.24 $
+# $Revision: 1.25 $
 # recent_comment3: 最近のツッコミをリストアップする
 #
 #   @secure = true な環境では動作しません．
@@ -83,8 +83,8 @@ def recent_comment3(ob_max = 'OBSOLUTE' ,sep = 'OBSOLUTE',ob_date_format = 'OBSO
                title = diary.diaries[entry_date].title.gsub( /<[^>]*>/, '' )
             end
             if title == nill || title.length == 0 || title.strip.delete('　').delete(' ').length == 0 then
-               date = Date.parse(entry_date)
-               title = "#{date.strftime "%Y/%m/%d"}"
+               date = Time.parse(entry_date)
+               title = "#{date.strftime @date_format}"
             end
             
             result << "<li>"
