@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-# amazonimg.rb $Revision: 1.2 $: CGI script for tDiary amazon plugin in secure mode.
+# amazonimg.rb $Revision: 1.3 $: CGI script for tDiary amazon plugin in secure mode.
 #
 # set URL of this script to @options['amazon.secure-cgi'] into tdiary.conf.
 #
@@ -57,6 +57,7 @@ def amazon_redirect( cgi, asin, size )
 		xml = File::read( "#{@cache_path}/#{asin}.xml" )
 	rescue Errno::ENOENT
 		xml =  amazon_call_ecs( asin )
+		Dir::mkdir( @cache_path ) unless File::directory?( @cache_path )
 		File::open( "#{@cache_path}/#{asin}.xml", 'wb' ) {|f| f.write( xml )}
 	end
 	doc = REXML::Document::new( xml ).root
@@ -79,7 +80,7 @@ asin, = cgi.params['asin']
 size, = cgi.params['size']
 if asin && /[0-9A-Z]{10}/ =~ asin then
 	size = '1' if !size or size.length == 0
-	amazon_redirect( cgi, asin, size.to_i )
+	amazon_redirect( cgi, asin.untaint, size.to_i )
 else
 	puts "Content-Type: text/plain\n\nBAD REQUEST\nasin:#{asin}\nsize:#{size}"
 end
