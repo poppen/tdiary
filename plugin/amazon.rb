@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.32 $: Making link with image to Amazon using Amazon ECS.
+# amazon.rb $Revision: 1.33 $: Making link with image to Amazon using Amazon ECS.
 #
 # see document: #{@lang}/amazon.rb
 #
@@ -123,7 +123,7 @@ def amazon_get( asin, with_image = true, label = nil, pos = 'amazon' )
 	else
 		begin
 			cache = "#{@cache_path}/amazon"
-			Dir::makedir( cache ) unless File::directory?( cache )
+			Dir::mkdir( cache ) unless File::directory?( cache )
 			begin
 				xml = File::read( "#{cache}/#{asin}.xml" )
 			rescue Errno::ENOENT

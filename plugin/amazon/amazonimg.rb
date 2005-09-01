@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-# amazonimg.rb $Revision: 1.1 $: CGI script for tDiary amazon plugin in secure mode.
+# amazonimg.rb $Revision: 1.2 $: CGI script for tDiary amazon plugin in secure mode.
 #
 # set URL of this script to @options['amazon.secure-cgi'] into tdiary.conf.
 #
@@ -9,7 +9,7 @@
 #
 
 ### modify settings below ###
-@cache_path = 'SPCIFY YOUR CACHE PATH'   # directory for saving cache files
+@cache_path = 'SPECIFY YOUR CACHE PATH'  # directory for saving cache files
 @proxy = nil                             # URL of HTTP proxy server if you need
 @amazon_aid = 'cshs-22'                  # Amazon Association ID
 @amazon_url = 'http://www.amazon.co.jp/exec/obidos/ASIN'
