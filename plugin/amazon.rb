@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.33 $: Making link with image to Amazon using Amazon ECS.
+# amazon.rb $Revision: 1.34 $: Making link with image to Amazon using Amazon ECS.
 #
 # see document: #{@lang}/amazon.rb
 #
@@ -64,7 +64,7 @@ def amazon_to_html( item, with_image = true, label = nil, pos = 'amazon' )
 			src="#{item.elements.to_a( "#{size}Image/URL" )[0].text}"
 			height="#{item.elements.to_a( "#{size}Image/Height" )[0].text}"
 			width="#{item.elements.to_a( "#{size}Image/Width" )[0].text}"
-			alt="#{label}" title="#{label}">
+			alt="#{CGI::escapeHTML(label)}" title="#{CGI::escapeHTML(label)}">
 			HTML
 		rescue
 			unless @conf['amazon.nodefault'] then
@@ -78,7 +78,7 @@ def amazon_to_html( item, with_image = true, label = nil, pos = 'amazon' )
 				src=#{@amazon_default_image}
 				height="#{size[0]}"
 				width="#{size[1]}"
-				alt="#{label}" title="#{label}">
+				alt="#{CGI::escapeHTML(label)}" title="#{CGI::escapeHTML(label)}">
 				HTML
 			end
 		end
@@ -89,7 +89,7 @@ def amazon_to_html( item, with_image = true, label = nil, pos = 'amazon' )
 		label = ''
 	end
 
-	%Q|<a href="#{item.elements.to_a( 'DetailPageURL' )[0].text}">#{image}#{label}</a>|
+	%Q|<a href="#{item.elements.to_a( 'DetailPageURL' )[0].text}">#{image}#{CGI::escapeHTML(label)}</a>|
 end
 
 def amazon_secure_html( asin, with_image, label, pos = 'amazon' )
@@ -100,7 +100,7 @@ def amazon_secure_html( asin, with_image, label, pos = 'amazon' )
 		image = <<-HTML
 		<img
 		src="#{@conf['amazon.secure-cgi']}?asin=#{asin};size=#{@conf['amazon.imgsize']}"
-		alt="#{label}" title="#{label}">
+		alt="#{CGI::escapeHTML(label)}" title="#{CGI::escapeHTML(label)}">
 		HTML
 	end
 	image.gsub!( /\t/, '' )
@@ -112,7 +112,7 @@ def amazon_secure_html( asin, with_image, label, pos = 'amazon' )
 	url =  "#{@amazon_url}/#{asin}"
 	url << "/#{@conf['amazon.aid']}" if @conf['amazon.aid'] and @conf['amazon.aid'].length > 0
 	url << "/ref=nosim/"
-	%Q|<a href="#{url}">#{image}#{label}</a>|
+	%Q|<a href="#{url}">#{image}#{CGI::escapeHTML(label)}</a>|
 end
 
 def amazon_get( asin, with_image = true, label = nil, pos = 'amazon' )

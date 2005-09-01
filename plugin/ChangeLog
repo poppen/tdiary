@@ -1,4 +1,5 @@
 2005-09-01  Kazuhiko  <kazuhiko@fdiary.net>
+	* amazon.rb: escape HTML in labels.
 	* amazon/amazonimg.rb: mkdir @cache_path if not exists. revise for
 	mod_ruby.
 
