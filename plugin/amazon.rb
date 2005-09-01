@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.34 $: Making link with image to Amazon using Amazon ECS.
+# amazon.rb $Revision: 1.35 $: Making link with image to Amazon using Amazon ECS.
 #
 # see document: #{@lang}/amazon.rb
 #
@@ -85,7 +85,7 @@ def amazon_to_html( item, with_image = true, label = nil, pos = 'amazon' )
 		image.gsub!( /\t/, '' )
 	end
 
-	if @conf['amazon.hidename'] and pos == 'amazon' then
+	if with_image and @conf['amazon.hidename'] and pos == 'amazon' then
 		label = ''
 	end
 
@@ -105,7 +105,7 @@ def amazon_secure_html( asin, with_image, label, pos = 'amazon' )
 	end
 	image.gsub!( /\t/, '' )
 
-	if @conf['amazon.hidename'] and pos == 'amazon' then
+	if with_image and @conf['amazon.hidename'] and pos == 'amazon' then
 		label = ''
 	end
 
