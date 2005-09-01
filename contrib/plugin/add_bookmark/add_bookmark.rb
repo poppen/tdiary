@@ -18,7 +18,7 @@ add_subtitle_proc do |date, index, subtitle|
       caption = %Q|#{subtitle} |
       
       if @conf['add.bookmark.hatena'] == "t" then
-         caption += %Q|<a href=\"http://b.hatena.ne.jp/append?url=#{@conf.base_url}#{anchor date.strftime('%Y%m%d')}%23p#{'%02d' % index}\"><img src=\"http://b.hatena.ne.jp/images/append.gif
+         caption += %Q|<a href=\"http://b.hatena.ne.jp/add?mode=confirm&url=#{@conf.base_url}#{anchor date.strftime('%Y%m%d')}%23p#{'%02d' % index}\"><img src=\"http://b.hatena.ne.jp/images/append.gif
 \" width=\"16\" height=\"12\" style =\"border: none;\" alt=\"#{@caption_hatena}\" title=\"#{@caption_hatena}\" /></a> |
       end
       

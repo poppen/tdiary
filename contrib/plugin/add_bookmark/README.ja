@@ -8,6 +8,10 @@ subtitleの右にソーシャルブックマークへのリンクを埋め込みます。
 
 !更新履歴
 
+2005-09-01  SHIBATA Hiroshi  <h-sbt@nifty.com>
+
+	* はてなブックマークのURLを修正
+
 2005-08-28  SHIBATA Hiroshi  <h-sbt@nifty.com>
 
 	* add_subtitle_procに対応
