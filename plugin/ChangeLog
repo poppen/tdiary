@@ -1,3 +1,6 @@
+2005-09-03  Kazuhiko  <kazuhiko@fdiary.net>
+	* amazon.rb: not display images in the category mode.
+
 2005-09-01  Kazuhiko  <kazuhiko@fdiary.net>
 	* amazon.rb: escape HTML in labels.
 	* amazon/amazonimg.rb: mkdir @cache_path if not exists. revise for

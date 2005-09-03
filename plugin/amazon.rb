@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.36 $: Making link with image to Amazon using Amazon ECS.
+# amazon.rb $Revision: 1.37 $: Making link with image to Amazon using Amazon ECS.
 #
 # see document: #{@lang}/amazon.rb
 #
@@ -37,6 +37,7 @@ def amazon_call_ecs( asin )
 end
 
 def amazon_to_html( item, with_image = true, label = nil, pos = 'amazon' )
+	with_image = false if @mode == 'categoryview'
 	begin
 		author = ''
 		item.elements.each( '*/Author' ) do |a|
@@ -93,6 +94,7 @@ def amazon_to_html( item, with_image = true, label = nil, pos = 'amazon' )
 end
 
 def amazon_secure_html( asin, with_image, label, pos = 'amazon' )
+	with_image = false if @mode == 'categoryview'
 	label = asin unless label
 
 	image = ''
