@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.38 $: Making link with image to Amazon using Amazon ECS.
+# amazon.rb $Revision: 1.39 $: Making link with image to Amazon using Amazon ECS.
 #
 # see document: #{@lang}/amazon.rb
 #
@@ -100,7 +100,7 @@ def amazon_secure_html( asin, with_image, label, pos = 'amazon' )
 	image = ''
 	if with_image and @conf['amazon.secure-cgi'] then
 		image = <<-HTML
-		<img
+		<img class="#{pos}"
 		src="#{@conf['amazon.secure-cgi']}?asin=#{asin};size=#{@conf['amazon.imgsize']}"
 		alt="#{CGI::escapeHTML(label)}" title="#{CGI::escapeHTML(label)}">
 		HTML

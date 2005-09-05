@@ -1,5 +1,6 @@
 2002-09-05 TADA Tadahi <sho@spc.gr.jp>
 	* amazon.rb: remove 'over18' option.
+	* amazon.rb: add class into img element in secure html.
 
 2005-09-04  Kazuhiko  <kazuhiko@fdiary.net>
 	* makerss.rb: remove cache files when ArgumentError raises that
