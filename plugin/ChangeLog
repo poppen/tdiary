@@ -1,3 +1,7 @@
+2005-09-04  Kazuhiko  <kazuhiko@fdiary.net>
+	* makerss.rb: remove cache files when ArgumentError raises that
+	may occurs by changing implementation of the Wiki style.
+
 2005-09-03  Kazuhiko  <kazuhiko@fdiary.net>
 	* amazon.rb: not display images in the category mode.
 

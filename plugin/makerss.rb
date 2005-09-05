@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.28 $
+# makerss.rb: $Revision: 1.29 $
 #
 # generate RSS file when updating.
 #
@@ -42,7 +42,7 @@ if /^append|replace|comment|showcomment|trackbackreceive|pingbackreceive$/ =~ @m
 				def initialize( id, time, section )
 					@id, @time, @section, @diary_title = id, time, section, diary_title
 				end
-		
+
 				def time_string
 					g = @time.dup.gmtime
 					l = Time::local( g.year, g.month, g.day, g.hour, g.min, g.sec )
@@ -72,61 +72,66 @@ def makerss_update
 	xml = ''
 	seq = ''
 	body = ''
-	PStore::new( "#{@cache_path}/makerss.cache" ).transaction do |db|
-		begin
-			cache = db['cache'] if db.root?( 'cache' )
-	
-			if /^append|replace$/ =~ @mode then
-				index = 0
-				diary.each_section do |section|
-					index += 1
-					id = "#{date}p%02d" % index
-					if diary.visible? and !cache[id] then
-						cache[id] = RDFSection::new( id, Time::now, section )
-					elsif !diary.visible? and cache[id]
-						cache.delete( id )
-					elsif diary.visible? and cache[id]
-						if cache[id].section.body_to_html != section.body_to_html or
-								cache[id].section.subtitle_to_html != section.subtitle_to_html then
+	begin
+		PStore::new( "#{@cache_path}/makerss.cache" ).transaction do |db|
+			begin
+				cache = db['cache'] if db.root?( 'cache' )
+
+				if /^append|replace$/ =~ @mode then
+					index = 0
+					diary.each_section do |section|
+						index += 1
+						id = "#{date}p%02d" % index
+						if diary.visible? and !cache[id] then
 							cache[id] = RDFSection::new( id, Time::now, section )
+						elsif !diary.visible? and cache[id]
+							cache.delete( id )
+						elsif diary.visible? and cache[id]
+							if cache[id].section.body_to_html != section.body_to_html or
+									cache[id].section.subtitle_to_html != section.subtitle_to_html then
+								cache[id] = RDFSection::new( id, Time::now, section )
+							end
+						end
+					end
+				elsif /^comment$/ =~ @mode and @conf.show_comment
+					id = "#{date}c%02d" % diary.count_comments( true )
+					cache[id] = RDFSection::new( id, @comment.date, @comment )
+				elsif /^showcomment$/ =~ @mode
+					index = 0
+					diary.each_comment( 100 ) do |comment|
+						index += 1
+						id = "#{date}c%02d" % index
+						if !cache[id] and (@conf.show_comment and comment.visible? and /^(TrackBack|Pingback)$/i !~ comment.name) then
+							cache[id] = RDFSection::new( id, comment.date, comment )
+						elsif cache[id] and !(@conf.show_comment and comment.visible? and /^(TrackBack|Pingback)$/i !~ comment.name)
+							cache.delete( id )
 						end
 					end
 				end
-			elsif /^comment$/ =~ @mode and @conf.show_comment
-				id = "#{date}c%02d" % diary.count_comments( true )
-				cache[id] = RDFSection::new( id, @comment.date, @comment )
-			elsif /^showcomment$/ =~ @mode
-				index = 0
-				diary.each_comment( 100 ) do |comment|
-					index += 1
-					id = "#{date}c%02d" % index
-					if !cache[id] and (@conf.show_comment and comment.visible? and /^(TrackBack|Pingback)$/i !~ comment.name) then
-						cache[id] = RDFSection::new( id, comment.date, comment )
-					elsif cache[id] and !(@conf.show_comment and comment.visible? and /^(TrackBack|Pingback)$/i !~ comment.name)
-						cache.delete( id )
+
+				xml << makerss_header( uri )
+				seq << "<items><rdf:Seq>\n"
+				item_max = 15
+				cache.values.sort{|a,b| b.time <=> a.time}.each_with_index do |rdfsec, idx|
+					if idx < item_max then
+						if rdfsec.section.respond_to?( :visible? ) and !rdfsec.section.visible?
+							item_max += 1
+						else
+							seq << makerss_seq( uri, rdfsec )
+							body << makerss_body( uri, rdfsec )
+						end
+					elsif idx > 50
+						cache.delete( rdfsec.id )
 					end
 				end
+
+				db['cache'] = cache
+			rescue PStore::Error
 			end
-	
-			xml << makerss_header( uri )
-			seq << "<items><rdf:Seq>\n"
-			item_max = 15
-			cache.values.sort{|a,b| b.time <=> a.time}.each_with_index do |rdfsec, idx|
-				if idx < item_max then
-					if rdfsec.section.respond_to?( :visible? ) and !rdfsec.section.visible?
-						item_max += 1
-					else
-						seq << makerss_seq( uri, rdfsec )
-						body << makerss_body( uri, rdfsec )
-					end
-				elsif idx > 50
-					cache.delete( rdfsec.id )
-				end
-			end
-	
-			db['cache'] = cache
-		rescue PStore::Error
 		end
+	rescue ArgumentError
+		File.unlink( "#{@cache_path}/makerss.cache" )
+		retry
 	end
 
 	if @conf.icon and not @conf.icon.empty?
