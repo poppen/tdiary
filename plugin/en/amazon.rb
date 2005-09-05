@@ -1,5 +1,5 @@
 #
-# English resource of amazon plugin $Revision: 1.8 $
+# English resource of amazon plugin $Revision: 1.9 $
 #
 # Copyright (C) 2002 HAL99 <hal99@mtj.biglobe.ne.jp>
 # You can redistribute it and/or modify it under GPL2.
@@ -54,5 +54,3 @@
 @amazon_label_usedefault = 'Use default image'
 @amazon_label_clearcache = 'Clear Cache'
 @amazon_label_clearcache_desc = 'Delete local cache file about book images'
-@amazon_label_over18 = 'Images of adult materials'
-@amazon_label_over18_desc = 'Fetch images of adult materials.'

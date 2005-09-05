@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.37 $: Making link with image to Amazon using Amazon ECS.
+# amazon.rb $Revision: 1.38 $: Making link with image to Amazon using Amazon ECS.
 #
 # see document: #{@lang}/amazon.rb
 #
@@ -159,7 +159,6 @@ def amazon_conf_proc
 		unless @conf.secure and not @conf['amazon.secure-cgi'] then
 			@conf['amazon.imgsize'] = @cgi.params['amazon.imgsize'][0].to_i
 			@conf['amazon.hidename'] = (@cgi.params['amazon.hidename'][0] == 'true')
-			@conf['amazon.over18'] = (@cgi.params['amazon.over18'][0] == 'true')
 			unless @conf.secure then
 				@conf['amazon.nodefault'] = (@cgi.params['amazon.nodefault'][0] == 'true')
 				if @cgi.params['amazon.clearcache'][0] == 'true' then
@@ -188,8 +187,6 @@ def amazon_conf_proc
 				<option value="true"#{if @conf['amazon.hidename'] then " selected" end}>#{@amazon_label_hide}</option>
 				<option value="false"#{if not @conf['amazon.hidename'] then " selected" end}>#{@amazon_label_show}</option>
 			</select></p>
-			<h3>#{@amazon_label_over18}</h3>
-			<p><input type="checkbox" name="amazon.over18" value="true"#{@conf['amazon.over18'] ? " checked" : ""}>#{@amazon_label_over18_desc}</input></p>
 		HTML
 		unless @conf.secure then
 			result << <<-HTML
