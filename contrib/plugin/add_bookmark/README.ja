@@ -8,6 +8,11 @@ subtitleの右にソーシャルブックマークへのリンクを埋め込みます。
 
 !更新履歴
 
+2005-09-06  SHIBATA Hiroshi  <h-sbt@nifty.com>
+
+	* HTML4.01 Strictに準拠
+	* セクションのURLをエスケープするように変更
+
 2005-09-01  SHIBATA Hiroshi  <h-sbt@nifty.com>
 
 	* はてなブックマークのURLを修正
