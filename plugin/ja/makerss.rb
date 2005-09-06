@@ -45,3 +45,11 @@ add_conf_proc('makerss', 'RSSの作成') do
 	</ul>
 	_HTML
 end
+add_edit_proc do
+  r = <<-HTML
+  <div class="makerss">
+  <input type="checkbox" name="makerss_update" value="true" checked tabindex="400" />
+  RSSを更新する
+  </div>
+  HTML
+end

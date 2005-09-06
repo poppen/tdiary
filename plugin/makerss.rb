@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.29 $
+# makerss.rb: $Revision: 1.30 $
 #
 # generate RSS file when updating.
 #
@@ -60,6 +60,7 @@ if /^append|replace|comment|showcomment|trackbackreceive|pingbackreceive$/ =~ @m
 end
 
 def makerss_update
+	return unless @cgi.params['makerss_update'][0] == 'true'
 	date = @date.strftime( "%Y%m%d" )
 	diary = @diaries[date]
 

@@ -43,3 +43,11 @@ add_conf_proc('makerss', 'RSS publication') do
 	</ul>
 	_HTML
 end
+add_edit_proc do
+  r = <<-HTML
+  <div class="makerss">
+  <input type="checkbox" name="makerss_update" value="true" checked tabindex="400" />
+  Update RSS
+  </div>
+  HTML
+end
