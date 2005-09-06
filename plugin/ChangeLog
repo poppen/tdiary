@@ -1,3 +1,6 @@
+2002-09-06 TADA Tadahi <sho@spc.gr.jp>
+	* amazon.rb: deny zero length proxy.
+
 2002-09-05 TADA Tadahi <sho@spc.gr.jp>
 	* amazon.rb: remove 'over18' option.
 	* amazon.rb: add class into img element in secure html.
