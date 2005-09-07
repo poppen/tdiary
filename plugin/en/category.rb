@@ -1,4 +1,4 @@
-# ja/category.rb $Revision: 1.8 $
+# ja/category.rb $Revision: 1.9 $
 #
 # Copyright (c) 2004 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -79,10 +79,10 @@ You can use plugins and write any HTML tags.
 </p>
 
 <p>Header 1: inserted under the navigtion buttons.</p>
-<textarea name="category.header1" cols="70" rows="8">#{CGI.escapeHTML(@conf['category.header1'])}</textarea>
+<p><textarea name="category.header1" cols="60" rows="8">#{CGI.escapeHTML(@conf['category.header1'])}</textarea></p>
 
 <p>Header 2: inserted under the &lt;H1&gt;.</p>
-<p><textarea name="category.header2" cols="70" rows="8">#{CGI.escapeHTML(@conf['category.header2'])}</textarea></p>
+<p><textarea name="category.header2" cols="60" rows="8">#{CGI.escapeHTML(@conf['category.header2'])}</textarea></p>
 
 <h3 class="subtitle">Default period</h3>
 <p>

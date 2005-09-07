@@ -1,4 +1,4 @@
-# append-css.rb: $Revision: 1.8 $
+# append-css.rb: $Revision: 1.9 $
 #
 # Append CSS fragment via Preferences Page.
 #
@@ -38,7 +38,7 @@ add_conf_proc( 'append-css', append_css_label, 'theme' ) do
 
 	<<-HTML
 	#{append_css_desc}
-	<p><textarea name="append-css.css" cols="70" rows="15">#{CGI::escapeHTML( @conf['append-css.css'].to_s )}</textarea></p>
+	<p><textarea name="append-css.css" cols="60" rows="15">#{CGI::escapeHTML( @conf['append-css.css'].to_s )}</textarea></p>
 	HTML
 end
 

@@ -1,4 +1,4 @@
-# en/recent_comment3.rb $Revision: 1.3 $
+# en/recent_comment3.rb $Revision: 1.4 $
 #
 # English resources for recent_comment3.rb
 #
@@ -7,7 +7,7 @@
 #
 
 if @mode == 'conf' || @mode == 'saveconf'
-   add_conf_proc( 'recent_comment3', 'Recent comment', 'tsukkomi' ) do
+   add_conf_proc( 'recent_comment3', 'Recent TSUKKOMI', 'tsukkomi' ) do
       saveconf_recent_comment3
       recent_comment3_init
       checked = "t" == @conf['recent_comment3.tree'] ? ' checked' : ''
@@ -33,7 +33,7 @@ if @mode == 'conf' || @mode == 'saveconf'
 
       <h3 class="subtitle">HTML Template for generate</h3>
       <p>Specify how each comment is rendered.</p>
-      <textarea name="recent_comment3.format" cols="70" rows="3">#{CGI.escapeHTML(@conf['recent_comment3.format'])}</textarea>
+      <textarea name="recent_comment3.format" cols="60" rows="3">#{CGI.escapeHTML(@conf['recent_comment3.format'])}</textarea>
       <p><em>$digit</em> in the template is replaced as follows.</p>
       <dl>
       <dt>$2</dt><dd>comment's URL</dd>

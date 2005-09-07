@@ -1,4 +1,4 @@
-# kw.rb $Revision: 1.9 $
+# kw.rb $Revision: 1.10 $
 #
 # kw: keyword link generator
 #   Parameters:
@@ -129,7 +129,7 @@ add_conf_proc( 'kw', kw_label ) do
 	end
 	<<-HTML
 	#{kw_desc}
-	<p><textarea name="kw.dic" cols="70" rows="10">#{dic.collect{|a|a.flatten.join( " " )}.join( "\n" )}</textarea></p>
+	<p><textarea name="kw.dic" cols="60" rows="10">#{dic.collect{|a|a.flatten.join( " " )}.join( "\n" )}</textarea></p>
 	HTML
 end
 

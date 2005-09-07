@@ -1,4 +1,4 @@
-# en/recent_comment.rb $Revision: 1.2 $
+# en/recent_comment.rb $Revision: 1.3 $
 #
 # English resources for recent_comment.rb
 #
@@ -21,7 +21,7 @@ if @mode == 'conf' || @mode == 'saveconf'
       <p><input name="recent_comment.except_list" size="60" value="#{CGI.escapeHTML( @conf['recent_comment.except_list'] )}" /></p>
       <h3 class="subtitle">HTML Template for generate</h3>
       <p>Specify how each comment is rendered.</p>
-      <textarea name="recent_comment.format" cols="70" rows="3">#{CGI.escapeHTML(@conf['recent_comment.format'])}</textarea>
+      <textarea name="recent_comment.format" cols="60" rows="3">#{CGI.escapeHTML(@conf['recent_comment.format'])}</textarea>
       <p><em>$digit</em> in the template is replaced as follows.</p>
       <dl>
       <dt>$2</dt><dd>comment's URL</dd>
