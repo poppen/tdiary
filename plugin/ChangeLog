@@ -1,3 +1,6 @@
+2002-09-06 vette <vette at mail.ne.jp>
+	* recent_trackback3.rb: support tree view mode.
+
 2002-09-06 SHIBATA Hiroshi <h-sbt@nifty.com>
 	* makerss.rb: add update option for edit mode.
 

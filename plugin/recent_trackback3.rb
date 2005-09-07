@@ -1,4 +1,4 @@
-# $Revision: 1.8 $
+# $Revision: 1.9 $
 # recent_trackback3: 最近のツッコミをリストアップする
 #
 # Options:
@@ -18,7 +18,7 @@
 # Distributed under the GPL
 #
 require 'pstore'
-
+require 'date'
 
 def recent_trackback3_format(format, *args)
 	format.gsub(/\$(\d)/) {|s| args[$1.to_i - 1]}
@@ -30,6 +30,8 @@ def recent_trackback3_init
 	@conf['recent_trackback3.n'] ||= 3
 	@conf['recent_trackback3.date_format'] ||= "(#{@date_format} %H:%M)"
 	@conf['recent_trackback3.format'] ||= '<a href="$2" title="$3">$4 $5</a>'
+	@conf['recent_trackback3.tree'] ||= ""
+	@conf['recent_trackback3.titlelen'] ||= 20
 end
 
 def recent_trackback3
@@ -41,7 +43,9 @@ def recent_trackback3
 	n = @conf['recent_trackback3.n']
 	date_format = @conf['recent_trackback3.date_format']
 	format = @conf['recent_trackback3.format']
-	result = []
+	titlelen = @conf['recent_trackback3.titlelen']
+	entries = {}
+	order = []
 	idx = 0
 
 	PStore.new(cache).transaction do |db|
@@ -60,17 +64,63 @@ def recent_trackback3
 			date_str = trackback.date.strftime(date_format)
 			idx += 1
 
-			result << "<li>"
-			result << recent_trackback3_format(format, idx, a, popup, str, date_str)
-			result << "</li>\n"
+			entry_date = "#{date.strftime('%Y%m%d')}"
+			comment_str = entries[entry_date]
+			if comment_str == nill then
+				comment_str = []
+				order << entry_date
+			end
+			comment_str << recent_trackback3_format(format, idx, a, popup, str, date_str)
+			entries[entry_date] = comment_str
+
 		end
 		db.abort
 	end
-	if result.size == 0
-		''
-	else
-		%Q|<ol class="recent-trackback">| + result.join( '' ) + "</ol>\n"
-	end
+
+   if @conf['recent_trackback3.tree'] == "t" then
+      if entries.size == 0
+         ''
+      else
+         cgi = CGI::new
+         def cgi.referer; nil; end
+
+         result = []
+         order.each { | entry_date |
+            a_entry = @index + anchor(entry_date)
+            cgi.params['date'] = [entry_date]
+            diary = TDiaryDay::new(cgi, '', @conf)
+
+            if diary != nill then
+               title = diary.diaries[entry_date].title.gsub( /<[^>]*>/, '' )
+            end
+            if title == nill || title.length == 0 || title.strip.delete('　').delete(' ').length == 0 then
+               date = Time.parse(entry_date)
+               title = "#{date.strftime @date_format}"
+            end
+
+            result << "<li>"
+            result << %Q|<a href="#{a_entry}">#{@conf.shorten( title, 20 )}</a><br>|
+            entries[entry_date].sort.each { | comment_str |
+               result << comment_str + "<br>"
+            }
+            result << "</li>\n"
+         }
+
+         %Q|<ul class="recent-trackback">\n| + result.join( '' ) + "</ul>\n"
+      end
+   else
+      if entries.size == 0
+         ''
+      else
+         result = []
+         order.each do | entry_date |
+            entries[entry_date].each do | comment_str |
+               result << "<li>#{comment_str}</li>\n"
+            end
+         end
+         %Q|<ol class="recent-trackback">\n| + result.join( '' ) + "</ol>\n"
+      end
+   end
 end
 
 add_update_proc do
@@ -117,6 +167,8 @@ if @mode == 'saveconf'
 		@conf['recent_trackback3.n'] = @cgi.params['recent_trackback3.n'][0].to_i
 		@conf['recent_trackback3.date_format'] = @cgi.params['recent_trackback3.date_format'][0]
 		@conf['recent_trackback3.format'] = @cgi.params['recent_trackback3.format'][0]
+		@conf['recent_trackback3.tree'] = @cgi.params['recent_trackback3.tree'][0]
+		@conf['recent_trackback3.titlelen'] = @cgi.params['recent_trackback3.titlelen'][0].to_i
 	end
 end
 # vim: ts=3
