@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.31 $
+# makerss.rb: $Revision: 1.32 $
 #
 # generate RSS file when updating.
 #
@@ -10,7 +10,7 @@
 # options to be edited in tdiary.conf:
 #   @conf['makerss.file']  : local file name of RSS file. default: 'index.rdf'.
 #   @conf['makerss.url']   : URL of RSS file.
-#   @conf.icon             : URL of site icon image (can be relative)
+#   @conf.banner           : URL of site banner image (can be relative)
 #   @conf.description      : desciption of the diary
 #   @conf['makerss.partial'] : how much portion of body to be in description
 #                              used when makerss.shortdesc, default: 0.25
@@ -135,11 +135,11 @@ def makerss_update
 		retry
 	end
 
-	if @conf.icon and not @conf.icon.empty?
-		if /^http/ =~ @conf.icon
-			rdf_image = @conf.icon
+	if @conf.banner and not @conf.banner.empty?
+		if /^http/ =~ @conf.banner
+			rdf_image = @conf.banner
 		else
-			rdf_image = @conf.base_url + @conf.icon
+			rdf_image = @conf.base_url + @conf.banner
 		end
 		xml << %Q[<image rdf:resource="#{rdf_image}" />\n]
 	end

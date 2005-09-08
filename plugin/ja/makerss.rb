@@ -12,7 +12,7 @@ def makerss_tsukkomi_label( id )
 	"#{id[0,4]}-#{id[4,2]}-#{id[6,2]}のツッコミ[#{id[9,2].sub( /^0/, '' )}]"
 end
 
-add_conf_proc('makerss', 'RSSの作成') do
+add_conf_proc( 'makerss', 'RSSの生成', 'update' ) do
 	if @mode == 'saveconf'
 		item = 'makerss.hidecomment'
 		case @cgi.params[item][0]

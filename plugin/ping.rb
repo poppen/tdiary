@@ -1,4 +1,4 @@
-# ping.rb: $Revision: 1.5 $
+# ping.rb: $Revision: 1.6 $
 #
 # ping to weblog ping servers.
 #
@@ -56,7 +56,7 @@ def ping( list )
 	threads.each {|t| t.join }
 end
 
-add_conf_proc( 'ping', @ping_label_conf ) do
+add_conf_proc( 'ping', @ping_label_conf, 'update' ) do
 	ping_conf_proc
 end
 
