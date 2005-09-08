@@ -12,24 +12,11 @@ def makerss_tsukkomi_label( id )
 	"#{id[0,4]}-#{id[4,2]}-#{id[6,2]}のツッコミ[#{id[9,2].sub( /^0/, '' )}]"
 end
 
-add_conf_proc( 'makerss', 'RSSの生成', 'update' ) do
-	if @mode == 'saveconf'
-		item = 'makerss.hidecomment'
-		case @cgi.params[item][0]
-		when 'f'
-			@conf[item] = false
-		when 'text'
-			@conf[item] = 'text'
-		when 'any'
-			@conf[item] = 'any'
-		end
-		%w( makerss.hidecontent makerss.shortdesc ).each do |item|
-			@conf[item] = ( 't' == @cgi.params[item][0] )
-		end
-	end
+@makerss_conf_label = 'RSSの生成'
 
-	<<-_HTML
-	<p>下記の設定でRSSを作ります。</p>
+def makerss_conf_html
+	<<-HTML
+	<h3>RSSの生成</h3>
 	<p>RSSは他のプログラムに読みやすい形で、日記の内容を公開します。RSSに含まれる情報はRSSリーダーで読まれたり、更新通知サイトに転載されたりして利用されています。</p>
 	<ul>
 	<li>RSSに<select name="makerss.hidecomment">
@@ -43,13 +30,7 @@ add_conf_proc( 'makerss', 'RSSの生成', 'update' ) do
 		<option value="f"#{@conf['makerss.shortdesc'] ? '' : ' selected'}>できるだけ長くする</option>
 		<option value="t"#{@conf['makerss.shortdesc'] ? ' selected' : ''}>最初だけにする</option></select>
 	</ul>
-	_HTML
+	HTML
 end
-add_edit_proc do
-  r = <<-HTML
-  <div class="makerss">
-  <input type="checkbox" name="makerss_update" value="true" checked tabindex="400" />
-  RSSを更新する
-  </div>
-  HTML
-end
+
+@makerss_edit_label = 'ちょっとした修正(RSSを更新しない)'

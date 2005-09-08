@@ -6,24 +6,11 @@ def makerss_tsukkomi_label( id )
 	"TSUKKOMI to #{id[0,4]}-#{id[4,2]}-#{id[6,2]}[#{id[9,2].sub( /^0/, '' )}]"
 end
 
-add_conf_proc( 'makerss', 'RSS publication', 'update' ) do
-	if @mode == 'saveconf'
-		item = 'makerss.hidecomment'
-		case @cgi.params[item][0]
-		when 'f'
-			@conf[item] = false
-		when 'text'
-			@conf[item] = 'text'
-		when 'any'
-			@conf[item] = 'any'
-		end
-		%w( makerss.hidecontent makerss.shortdesc ).each do |item|
-			@conf[item] = ( 't' == @cgi.params[item][0] )
-		end
-	end
+@makerss_conf_label = 'RSS feed'
 
-	<<-_HTML
-	<p>Publish RSS according to the following settings.</p>
+def makerss_conf_html
+	<<-HTML
+	<h3>RSS feed settings</h3>
 	<p>RSS provides contents of your diary in a machine-readable format.
 		Information in RSS is read with RSS readers and posted on other web sites.</p>
 	<ul>
@@ -41,13 +28,7 @@ add_conf_proc( 'makerss', 'RSS publication', 'update' ) do
 		<option value="t"#{@conf['makerss.shortdesc'] ? ' selected' : ''}>only some portion</option></select>
 		in RSS.
 	</ul>
-	_HTML
+	HTML
 end
-add_edit_proc do
-  r = <<-HTML
-  <div class="makerss">
-  <input type="checkbox" name="makerss_update" value="true" checked tabindex="400" />
-  Update RSS
-  </div>
-  HTML
-end
+
+@makerss_edit_label = "A little modify (don't update RSS)"

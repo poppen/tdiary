@@ -1,3 +1,6 @@
+2002-09-09 TADA Tadahi <sho@spc.gr.jp>
+	* makerss.rb: invert initial state of update option.
+
 2002-09-08 TADA Tadahi <sho@spc.gr.jp>
 	* makerss.rb, ping.rb: move genre from etc to update.
 

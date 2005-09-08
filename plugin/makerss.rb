@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.32 $
+# makerss.rb: $Revision: 1.33 $
 #
 # generate RSS file when updating.
 #
@@ -78,7 +78,7 @@ def makerss_update
 				cache = db['cache'] if db.root?( 'cache' )
 
 				if /^append|replace$/ =~ @mode then
-               return unless @cgi.params['makerss_update'][0] == 'true'
+               return if @cgi.params['makerss_update'][0] == 'false'
 					index = 0
 					diary.each_section do |section|
 						index += 1
@@ -274,3 +274,31 @@ add_header_proc {
 	rdf_url = "#{@conf.base_url}index.rdf" if rdf_url.length == 0
 	%Q|\t<link rel="alternate" type="application/rss+xml" title="RSS" href="#{rdf_url}">\n|
 }
+
+add_conf_proc( 'makerss', @makerss_conf_label, 'update' ) do
+	if @mode == 'saveconf' then
+		item = 'makerss.hidecomment'
+		case @cgi.params[item][0]
+		when 'f'
+			@conf[item] = false
+		when 'text'
+			@conf[item] = 'text'
+		when 'any'
+			@conf[item] = 'any'
+		end
+		%w( makerss.hidecontent makerss.shortdesc ).each do |item|
+			@conf[item] = ( 't' == @cgi.params[item][0] )
+		end
+	end
+
+	makerss_conf_html
+end
+
+add_edit_proc do
+  r = <<-HTML
+  <div class="makerss">
+  <input type="checkbox" name="makerss_update" value="false" tabindex="400" />
+  #{@makerss_edit_label}
+  </div>
+  HTML
+end
