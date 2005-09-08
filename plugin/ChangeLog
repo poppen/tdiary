@@ -1,6 +1,8 @@
+2002-09-08 TADA Tadahi <sho@spc.gr.jp>
+	* makerss.rb, ping.rb: move genre from etc to update.
+
 2002-09-07 TADA Tadahi <sho@spc.gr.jp>
 	* some plugins: a little adjustment design in English.
-	* makerss.rb, ping.rb: move genre from etc to update.
 
 2002-09-07 vette <vette at mail.ne.jp>
 	* recent_trackback3.rb: support tree view mode.
