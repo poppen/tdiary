@@ -50,7 +50,8 @@ def add_bookmark_conf_proc
    'add.bookmark.del',
    'add.bookmark.mm',
    ]
-   
+
+   r = ''
    r << %Q|<h3 class="subtitle">#{@add_bookmark_label}</h3><p>#{@add_bookmark_desc}</p><ul>|
 
    bookmark_categories.each_with_index do |idx,view|
