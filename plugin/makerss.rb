@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.33 $
+# makerss.rb: $Revision: 1.34 $
 #
 # generate RSS file when updating.
 #
@@ -178,7 +178,11 @@ def makerss_header( uri )
 end
 
 def makerss_seq( uri, rdfsec )
-	%Q|<rdf:li rdf:resource="#{uri}#{anchor rdfsec.id}"/>\n|
+	if rdfsec.section.respond_to?( :body_to_html ) or 'any' != @conf['makerss.hidecomment'] then
+		%Q|<rdf:li rdf:resource="#{uri}#{anchor rdfsec.id}"/>\n|
+	else
+		''
+	end
 end
 
 def makerss_image( uri, rdf_image )

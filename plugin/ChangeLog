@@ -1,3 +1,6 @@
+2002-09-12 Keiichiro SAKURAI <kei-tdiary at ksakurai.nwr.jp>
+	* makerss.rb: suppress making null entry when exclude TSUKKOMI into RSS.
+
 2002-09-12 TADA Tadahi <sho@spc.gr.jp>
 	* recent_comment3.rb, recent_trackback3.rb: insert a message when running
 	on secure mode.
