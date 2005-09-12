@@ -1,4 +1,4 @@
-# $Revision: 1.9 $
+# $Revision: 1.10 $
 # recent_trackback3: 最近のツッコミをリストアップする
 #
 # Options:
@@ -35,7 +35,7 @@ def recent_trackback3_init
 end
 
 def recent_trackback3
-	return '' if @conf.secure
+	return 'DO NOT USE IN SECURE MODE' if @conf.secure
 
 	recent_trackback3_init
 

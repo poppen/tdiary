@@ -1,3 +1,7 @@
+2002-09-12 TADA Tadahi <sho@spc.gr.jp>
+	* recent_comment3.rb, recent_trackback3.rb: insert a message when running
+	on secure mode.
+
 2002-09-09 TADA Tadahi <sho@spc.gr.jp>
 	* makerss.rb: invert initial state of update option.
 

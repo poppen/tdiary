@@ -1,4 +1,4 @@
-# $Revision: 1.25 $
+# $Revision: 1.26 $
 # recent_comment3: 最近のツッコミをリストアップする
 #
 #   @secure = true な環境では動作しません．
@@ -25,7 +25,7 @@ def recent_comment3_init
 end
 
 def recent_comment3(ob_max = 'OBSOLUTE' ,sep = 'OBSOLUTE',ob_date_format = 'OBSOLUTE',*ob_except )
-	return '' if @conf.secure
+	return 'DO NOT USE IN SECURE MODE' if @conf.secure
 
    recent_comment3_init
    
