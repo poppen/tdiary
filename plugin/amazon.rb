@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.40 $: Making link with image to Amazon using Amazon ECS.
+# amazon.rb $Revision: 1.41 $: Making link with image to Amazon using Amazon ECS.
 #
 # see document: #{@lang}/amazon.rb
 #
@@ -138,6 +138,8 @@ def amazon_get( asin, with_image = true, label = nil, pos = 'amazon' )
 			doc = REXML::Document::new( xml ).root
 			item = doc.elements.to_a( '*/Item' )[0]
 			amazon_to_html( item, with_image, label, pos )
+		rescue SocketError
+			asin
 		rescue Timeout::Error
 			asin
 		rescue NoMethodError
