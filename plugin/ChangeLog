@@ -1,5 +1,6 @@
 2002-09-17 FUDAN <joker at comel.or.jp>
 	* amazon.rb: quote image URL when using @amazon_default_image.
+	* category.rb: add div element inside of form element.
 
 2002-09-16 TADA Tadahi <sho@spc.gr.jp>
 	* amazon.rb: return asin when SocketError.

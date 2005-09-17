@@ -1,4 +1,4 @@
-# category.rb $Revision: 1.29 $
+# category.rb $Revision: 1.30 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -151,12 +151,12 @@ def category_dropdown_list(label = nil, multiple = nil)
 	end
 
 	<<HTML
-<form method="get" action="#{@conf.index}?#{period_string}">
+<form method="get" action="#{@conf.index}?#{period_string}"><div>
 	<select name="category"#{" multiple" if multiple}>
 #{options}
 	</select>
 	<input type="submit" value="#{label}">
-</form>
+</div></form>
 HTML
 end
 
