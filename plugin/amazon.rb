@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.41 $: Making link with image to Amazon using Amazon ECS.
+# amazon.rb $Revision: 1.42 $: Making link with image to Amazon using Amazon ECS.
 #
 # see document: #{@lang}/amazon.rb
 #
@@ -79,7 +79,7 @@ def amazon_to_html( item, with_image = true, label = nil, pos = 'amazon' )
 				end
 				image = <<-HTML
 				<img class="#{pos}"
-				src=#{@amazon_default_image}
+				src="#{@amazon_default_image}"
 				height="#{size[0]}"
 				width="#{size[1]}"
 				alt="#{CGI::escapeHTML(label)}" title="#{CGI::escapeHTML(label)}">
