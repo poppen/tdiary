@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.34 $
+# makerss.rb: $Revision: 1.35 $
 #
 # generate RSS file when updating.
 #
@@ -25,7 +25,7 @@
 # backward compatibility
 item = 'makerss.hidecomment'
 if true == @conf[item] then
-  @conf[item] = 'content'
+	@conf[item] = 'content'
 end
 
 if /^append|replace|comment|showcomment|trackbackreceive|pingbackreceive$/ =~ @mode then
@@ -78,7 +78,6 @@ def makerss_update
 				cache = db['cache'] if db.root?( 'cache' )
 
 				if /^append|replace$/ =~ @mode then
-               return if @cgi.params['makerss_update'][0] == 'false'
 					index = 0
 					diary.each_section do |section|
 						index += 1
@@ -270,7 +269,7 @@ def makerss_footer
 end
 
 add_update_proc do
-	makerss_update
+	makerss_update unless @cgi.params['makerss_update'][0] == 'false'
 end
 
 add_header_proc {
@@ -299,10 +298,11 @@ add_conf_proc( 'makerss', @makerss_conf_label, 'update' ) do
 end
 
 add_edit_proc do
-  r = <<-HTML
-  <div class="makerss">
-  <input type="checkbox" name="makerss_update" value="false" tabindex="400" />
-  #{@makerss_edit_label}
-  </div>
-  HTML
+	checked = @cgi.params['makerss_update'][0] == 'false' ? ' checked' : ''
+	r = <<-HTML
+	<div class="makerss">
+	<input type="checkbox" name="makerss_update" value="false"#{checked} tabindex="390" />
+	#{@makerss_edit_label}
+	</div>
+	HTML
 end
