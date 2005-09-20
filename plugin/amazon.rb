@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.42 $: Making link with image to Amazon using Amazon ECS.
+# amazon.rb $Revision: 1.43 $: Making link with image to Amazon using Amazon ECS.
 #
 # see document: #{@lang}/amazon.rb
 #
@@ -13,7 +13,6 @@ require 'nkf'
 # do not change these variables
 @amazon_subscription_id = '1CVA98NEF1G753PFESR2'
 @amazon_require_version = '2005-07-26'
-@amazon_default_image = 'http://images-jp.amazon.com/images/G/09/icons/books/comingsoon_books.gif'
 
 def amazon_call_ecs( asin )
 	aid =  @conf['amazon.aid'] || ''
@@ -72,14 +71,20 @@ def amazon_to_html( item, with_image = true, label = nil, pos = 'amazon' )
 			HTML
 		rescue
 			unless @conf['amazon.nodefault'] then
+				base = @conf['amazon.default_image_base'] || 'http://www.tdiary.org/images/amazondefaults/'
+				name = case @conf['amazon.imgsize']
+				when 0; 'large'
+				when 2; 'small'
+				else;   'medium'
+				end
 				size = case @conf['amazon.imgsize']
-				when 0; [500, 351]
-				when 2; [75, 53]
-				else;   [160, 112]
+				when 0; [500, 380]
+				when 2; [75, 57]
+				else;   [160, 122]
 				end
 				image = <<-HTML
 				<img class="#{pos}"
-				src="#{@amazon_default_image}"
+				src="#{base}#{name}.png"
 				height="#{size[0]}"
 				width="#{size[1]}"
 				alt="#{CGI::escapeHTML(label)}" title="#{CGI::escapeHTML(label)}">

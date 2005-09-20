@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-# amazonimg.rb $Revision: 1.3 $: CGI script for tDiary amazon plugin in secure mode.
+# amazonimg.rb $Revision: 1.4 $: CGI script for tDiary amazon plugin in secure mode.
 #
 # set URL of this script to @options['amazon.secure-cgi'] into tdiary.conf.
 #
@@ -26,7 +26,6 @@
 ### do not change these variables ###
 @amazon_subscription_id = '1CVA98NEF1G753PFESR2'
 @amazon_require_version = '2005-07-26'
-@amazon_default_image = 'http://images-jp.amazon.com/images/G/09/icons/books/comingsoon_books.gif'
 #####################################
 
 require 'cgi'
@@ -70,7 +69,7 @@ def amazon_redirect( cgi, asin, size )
 	begin
 		img_url = item.elements.to_a( "#{s}Image/URL" )[0].text
 	rescue
-		img_url = @amazon_default_image
+		img_url = "http://www.tdiary.org/images/amazondefaults/#{s.downcase}.png"
 	end
 	print cgi.header( {'Location' => img_url} )
 end

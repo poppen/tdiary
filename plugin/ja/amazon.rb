@@ -1,5 +1,5 @@
 #
-# English resource of amazon plugin $Revision: 1.8 $
+# English resource of amazon plugin $Revision: 1.9 $
 #
 # Copyright (C) 2002 HAL99 <hal99@mtj.biglobe.ne.jp>
 # You can redistribute it and/or modify it under GPL2.
@@ -44,6 +44,11 @@
 #                                (0:大  1:中  2:小)
 #   @options['amazon.hidename']: class="amazon"のときに商品名を表示したく
 #                                ない場合、trueに設定します
+#   @options['amazon.default_image_base']: デフォルトのイメージを格納した
+#                                 URLを指定します。無指定時にはtDiary.org
+#                                 にあるものが使われます。自作したい場合には
+#                                 プラグイン集amazonディレクトリにあるPNG
+#                                 ファイルを参考にして下さい
 #   @options['amazon.nodefault']: デフォルトのイメージを表示したくない場合
 #                                 trueに設定します
 #

@@ -1,5 +1,5 @@
 #
-# English resource of amazon plugin $Revision: 1.9 $
+# English resource of amazon plugin $Revision: 1.10 $
 #
 # Copyright (C) 2002 HAL99 <hal99@mtj.biglobe.ne.jp>
 # You can redistribute it and/or modify it under GPL2.
@@ -28,13 +28,17 @@
 #   @options['amazon.aid']: Your Amazon Assosiate ID. This option can be
 #                           changed in preferences page.
 #   @options['amazon.hideconf']: When you want to prohibit changing amazon.aid
-#                                via preferences page, set false.
+#                             via preferences page, set false.
 #   @options['amazon.proxy']: HTTP proxy in "host:post" style.
 #   @options['amazon.imgsize']: specify image size (0:laege, 1:regular, 2:small)
 #   @options['amazon.hidename']: hide book name when class="amazon", set true.
+#   @options['amazon.default_image_base']: URL that include default images.
+#                             amazon.rb uses images on tDiary.org when this
+#                             option not specified. If you want to use your
+#                             original images, modify PNG file in amazon directory.
 #   @options['amazon.nodefault']: If you dosen't want to show default image 
-#                                 when the book image not found, set true.
-#
+#                             when the book image not found, set true.
+
 
 @amazon_url = 'http://www.amazon.com/exec/obidos/ASIN'
 @amazon_ecs_url = 'http://webservices.amazon.com/onca/xml'

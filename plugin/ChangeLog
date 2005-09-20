@@ -1,3 +1,6 @@
+2002-09-20 TADA Tadahi <sho@spc.gr.jp>
+	* amazon.rb: use default images on tDiary.org.
+
 2002-09-19 TADA Tadahi <sho@spc.gr.jp>
 	* makerss.rb: correct tabindex and some fix.
 
