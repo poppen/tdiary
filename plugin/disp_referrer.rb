@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.56 2005-08-24 15:12:04 tadatadashi Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.57 2005-09-25 20:34:11 zunda Exp $-))
 
 == 概要
 アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
@@ -399,7 +399,7 @@ class DispRef2String
 		end
 		r.sub!( /\/(index\.html?)$/, '/' )	# directory index
 		r.sub!( /\/$/, '/?.*' )	# may be also from a lower level
-		"^#{r}"	# always good to put a ^
+		"\\A#{r}"	# always good to put a \A
 	end
 
 	# matchs to the regexp strings?
@@ -467,7 +467,7 @@ class DispRef2Setup < Hash
 			# falseの場合は、プラグインの無い場合と全くおなじ表示になります。
 		'antenna.url' => '(\/a\/|(?!.*\/diary\/)antenna[\/\.]|\/tama\/|\Ahttp:\/\/www\.tdiary\.net\/?(i\/)?(\?|$)|links?|\Ahttp:\/\/kitaj\.no-ip\.com\/iraira\/|\Ahttp:\/\/i-know\.jp\/|\Ahttp:\/\/(www\.)?bloglines\.com\/(myblogs|public)_display|\Ahttp:\/\/del\.icio\.us\/\w+)',
 			# アンテナのURLに一致する正規表現の文字列です。
-		'antenna.title' => '(アンテナ|links?|あんてな)',
+		'antenna.title' => '(アンテナ|links?|あんてな|antenna|entry|entries|リンク集|RSS|ブックマーク)',
 			# アンテナの置換後の文字列に一致する正規表現の文字列です。
 		'normal.label' => Dispref2plugin.referer_today,
 			# 通常のリンク元のタイトルです。デフォルトでは、「本日のリンク元」です。
