@@ -1,46 +1,46 @@
-2002-09-25 zunda <zunda at freeshell.org>
+2005-09-25 zunda <zunda at freeshell.org>
 	* disp_referrer.rb: more titles to be categorized as antennas,
 	generates better regexp for unknown URLs
 
-2002-09-20 TADA Tadahi <sho@spc.gr.jp>
+2005-09-20 TADA Tadahi <sho@spc.gr.jp>
 	* amazon.rb: use default images on tDiary.org.
 
-2002-09-19 TADA Tadahi <sho@spc.gr.jp>
+2005-09-19 TADA Tadahi <sho@spc.gr.jp>
 	* makerss.rb: correct tabindex and some fix.
 
-2002-09-17 FUDAN <joker at comel.or.jp>
+2005-09-17 FUDAN <joker at comel.or.jp>
 	* amazon.rb: quote image URL when using @amazon_default_image.
 	* category.rb: add div element inside of form element.
 
-2002-09-16 TADA Tadahi <sho@spc.gr.jp>
+2005-09-16 TADA Tadahi <sho@spc.gr.jp>
 	* amazon.rb: return asin when SocketError.
 
-2002-09-12 Keiichiro SAKURAI <kei-tdiary at ksakurai.nwr.jp>
+2005-09-12 Keiichiro SAKURAI <kei-tdiary at ksakurai.nwr.jp>
 	* makerss.rb: suppress making null entry when exclude TSUKKOMI into RSS.
 
-2002-09-12 TADA Tadahi <sho@spc.gr.jp>
+2005-09-12 TADA Tadahi <sho@spc.gr.jp>
 	* recent_comment3.rb, recent_trackback3.rb: insert a message when running
 	on secure mode.
 
-2002-09-09 TADA Tadahi <sho@spc.gr.jp>
+2005-09-09 TADA Tadahi <sho@spc.gr.jp>
 	* makerss.rb: invert initial state of update option.
 
-2002-09-08 TADA Tadahi <sho@spc.gr.jp>
+2005-09-08 TADA Tadahi <sho@spc.gr.jp>
 	* makerss.rb, ping.rb: move genre from etc to update.
 
-2002-09-07 TADA Tadahi <sho@spc.gr.jp>
+2005-09-07 TADA Tadahi <sho@spc.gr.jp>
 	* some plugins: a little adjustment design in English.
 
-2002-09-07 vette <vette at mail.ne.jp>
+2005-09-07 vette <vette at mail.ne.jp>
 	* recent_trackback3.rb: support tree view mode.
 
-2002-09-06 SHIBATA Hiroshi <h-sbt@nifty.com>
+2005-09-06 SHIBATA Hiroshi <h-sbt@nifty.com>
 	* makerss.rb: add update option for edit mode.
 
-2002-09-06 TADA Tadahi <sho@spc.gr.jp>
+2005-09-06 TADA Tadahi <sho@spc.gr.jp>
 	* amazon.rb: deny zero length proxy.
 
-2002-09-05 TADA Tadahi <sho@spc.gr.jp>
+2005-09-05 TADA Tadahi <sho@spc.gr.jp>
 	* amazon.rb: remove 'over18' option.
 	* amazon.rb: add class into img element in secure html.
 
@@ -56,18 +56,18 @@
 	* amazon/amazonimg.rb: mkdir @cache_path if not exists. revise for
 	mod_ruby.
 
-2002-08-31 TADA Tadahi <sho@spc.gr.jp>
+2005-08-31 TADA Tadahi <sho@spc.gr.jp>
 	* amazon.rb: whole rewrite using Amazon ECS 4.0.
 	* add amazon/amazonimg.rb: support CGI script for amazon.rb.
 
-2002-08-30 SHIBATA Hiroshi <h-sbt@nifty.com>
+2005-08-30 SHIBATA Hiroshi <h-sbt@nifty.com>
 	* recent_comment3.rb: change date format at tree view mode.
 
-2002-08-28 SHIBATA Hiroshi <h-sbt@nifty.com>
+2005-08-28 SHIBATA Hiroshi <h-sbt@nifty.com>
 	* recent_comment3.rb: add Tree view mode. 
    thanks MORIOKA Toru <vette at mail.ne.jp>.
 
-2002-08-25 TADA Tadahi <sho@spc.gr.jp>
+2005-08-25 TADA Tadahi <sho@spc.gr.jp>
 	* specify genre of preference to some plugins.
 
 2005-08-20 Taku YASUI <tach at debian.or.jp>
@@ -76,30 +76,30 @@
 2005-08-18 zunda <zunda at freeshell.org>
 	* recent_comment3.rb: no longer records comments rejected by filter/spam.rb
 
-2002-08-15 TADA Tadahi <sho@spc.gr.jp>
+2005-08-15 TADA Tadahi <sho@spc.gr.jp>
 	* calendar2.rb: add image mode, thanks KASHIJUKU <n-kashi at whi.m-net.ne.jp>
 	* recent_comment3.rb, recent_trackback3.rb: disable on secure mode.
 	* calendar2.rb: i18n.
 
-2002-08-11 TADA Tadahi <sho@spc.gr.jp>
+2005-08-11 TADA Tadahi <sho@spc.gr.jp>
 	* sqeeze.rb: fix fatal bug when running on CGI mode.
 	thanks TAKEMURA Masahiro <mas at mstk.que.jp>.
 	* hilight.rb, append-css.rb: suppress action for bot.
 
-2002-08-10 TADA Tadahi <sho@spc.gr.jp>
+2005-08-10 TADA Tadahi <sho@spc.gr.jp>
 	* my-ex.rb: generate absolute URLs.
 
 2005-08-10  Kazuhiko  <kazuhiko@fdiary.net>
 	* makerss.rb (makerss_body): output the full text of comments to
 	<content:encoded>.
 
-2002-08-07 TADA Tadahi <sho@spc.gr.jp>
+2005-08-07 TADA Tadahi <sho@spc.gr.jp>
 	* image.rb: default value of @image_url to absolute URL. 
 
-2002-08-07 MORIOKA Toru <vette at mail.ne.jp>
+2005-08-07 MORIOKA Toru <vette at mail.ne.jp>
 	* makerss.rb: change <copyright> to <dc:rights>.
 
-2002-08-07 Kazuhiro NISHIYAMA <zn@mbf.nifty.com>
+2005-08-07 Kazuhiro NISHIYAMA <zn@mbf.nifty.com>
 	* makelirs.rb: fix when update.rb is in different path of index.rb.
 
 2005-07-31 TADA Tadashi <sho@spc.gr.jp>
