@@ -1,3 +1,6 @@
+2005-09-27 TADA Tadahi <sho@spc.gr.jp>
+	* amazon/*.png: add sample of default images.
+
 2005-09-25 zunda <zunda at freeshell.org>
 	* disp_referrer.rb: more titles to be categorized as antennas,
 	generates better regexp for unknown URLs
