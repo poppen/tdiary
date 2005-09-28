@@ -1,3 +1,6 @@
+2005-09-28 TADA Tadahi <sho@spc.gr.jp>
+	* rss-recent.rb: insert a message when running on secure mode.
+
 2005-09-27 TADA Tadahi <sho@spc.gr.jp>
 	* amazon/*.png: add sample of default images.
 
