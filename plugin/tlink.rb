@@ -1,4 +1,4 @@
-# tlink.rb $Revision: 1.17 $
+# tlink.rb $Revision: 1.18 $
 #
 # title Â°À­ÉÕ anchor plugin
 #
@@ -74,11 +74,10 @@ def tlink_initialize
   @tlink_path = dir + "/tlink.dat"
 
   Dir.mkdir(dir, 0700) unless FileTest.exist?(dir)
-  db = PStore.new(@tlink_path)
-  db.transaction do
-    begin
+  db = PStore.new(@tlink_path).transaction do |db|
+    if (db.root?('tlinkdata')) then
       @tlink_dic = db["tlinkdata"]
-    rescue PStore::Error
+    else
       @tlink_dic = Hash.new
     end
   end
@@ -142,7 +141,7 @@ def tlink( url, str, title = nil )
     elsif @tlink_dic[url] && %r[#(p|c)\d\d$] !~ url
       title = @tlink_dic[url]
     else
-      if /#{url}/ =~ @cgi.redirect_url && /#{url}/ =~ @date.strftime('%Y%m%d')
+      if /#{url}/ =~ ENV["REDIRECT_URL"] && /#{url}/ =~ @date.strftime('%Y%m%d')
       else
         title = tlink_getcomment( url )
         @tlink_dic[url] = title
