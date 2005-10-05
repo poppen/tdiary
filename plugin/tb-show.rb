@@ -1,4 +1,4 @@
-# tb-show.rb $Revision: 1.19 $
+# tb-show.rb $Revision: 1.20 $
 #
 # functions:
 #   * show TrackBack ping URL in right of TSUKKOMI label.
@@ -77,7 +77,7 @@ module TDiary
 		def visible_true?
 			@show
 		end
-		#{if @mode !~ /^(form|edit|showcomment)$/ then
+		#{if @mode !~ /^(form|edit|showcomment|trackbackreceive)$/ then
 			'def visible?
 				@show and /^(TrackBack|Pingback)$/ !~ name
 			end'

@@ -1,3 +1,6 @@
+2005-10-05 TADA Tadashi <sho@spc.gr.jp>
+	* tb-show.rb: never hide TrackBack in trackbackreceive mode.
+
 2005-10-04 NT <nt@be.to>
 	* tlink.rb: fix to create a cache file on ruby 1.8.
           thanks Takeshi Miyasaka <miyaken at iname.com>.
