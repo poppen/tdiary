@@ -1,3 +1,6 @@
+2005-10-11 vette <vette at mail.ne.jp>
+	* ping.rb: inherit checkbox status to preview page.
+
 2005-10-11 TADA Tadashi <sho@spc.gr.jp>
 	* tb-send.rb: delete category tags from title.
 
