@@ -1,4 +1,4 @@
-# tb-send.rb $Revision: 1.21 $
+# tb-send.rb $Revision: 1.22 $
 #
 # Copyright (c) 2003 Junichiro Kita <kita@kitaj.no-ip.com>
 # You can distribute this file under the GPL.
@@ -86,6 +86,9 @@ def tb_send_trackback
 	old_apply_plugin = @options['apply_plugin']
 	@options['apply_plugin'] = true
 	title = apply_plugin( title, true )
+	if respond_to?( :category_anchor ) or respond_to?( :blog_category ) then
+		title.sub!( /^(\[([^\[]+?)\])+ */, '' )
+	end
 	excerpt = apply_plugin( excerpt, true )
 	@options['apply_plugin'] = old_apply_plugin
 
