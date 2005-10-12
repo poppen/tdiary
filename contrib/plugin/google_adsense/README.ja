@@ -16,3 +16,10 @@ google_adsense.rb - Googe AdSenseのバナー広告を挿入するプラグイン
 
    google_ad_client = "pub-3317603667498586" 
                        ~~~~~~~~~~~~~~~~~~~~この部分がID 
+
+
+2005-10-12追記
+  セクションターゲット(※)に対応しました。タグは日記の各日付の最初と最後に挿入
+  されます。
+
+  ※https://www.google.com/support/adsense/bin/answer.py?answer=23168&topic=371

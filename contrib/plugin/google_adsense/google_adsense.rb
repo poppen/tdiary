@@ -58,6 +58,14 @@ def google_adsense_init( layout )
 	@conf['google_adsense.color.text'] = '333333' unless @conf['google_adsense.color.text']
 end
 
+# insert section target tags
+add_body_enter_proc do |date|
+	"<!-- google_ad_section_start -->\n"
+end
+add_body_leave_proc do |date|
+	"<!-- google_ad_section_end -->\n"
+end
+
 add_conf_proc( 'google_adsense', 'Google AdSense' ) do
 	if @mode == 'saveconf' then
 		@conf['google_adsense.layout'] = @cgi.params['google_adsense.layout'][0].to_i
