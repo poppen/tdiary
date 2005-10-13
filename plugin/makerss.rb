@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.35 $
+# makerss.rb: $Revision: 1.36 $
 #
 # generate RSS file when updating.
 #
@@ -217,13 +217,14 @@ def makerss_body( uri, rdfsec )
 		@conf['apply_plugin'] = true
 
 		subtitle = apply_plugin( rdfsec.section.subtitle_to_html, true ).strip
+		subtitle.sub!( /^(\[([^\]]+)\])+ */, '' )
 		if subtitle.empty?
 			subtitle = apply_plugin( rdfsec.section.body_to_html, true ).strip
 			subtitle = @conf.shorten( subtitle.gsub( /&.*?;/, '' ), 20 )
 		end
 		rdf << %Q|<title>#{CGI::escapeHTML( subtitle )}</title>\n|
 		rdf << %Q|<dc:creator>#{CGI::escapeHTML( @conf.author_name )}</dc:creator>\n|
-		if ! rdfsec.section.categories.empty?
+		unless rdfsec.section.categories.empty?
 			rdfsec.section.categories.each do |category|
 				rdf << %Q|<dc:subject>#{CGI::escapeHTML( category )}</dc:subject>\n|
 			end
@@ -233,7 +234,7 @@ def makerss_body( uri, rdfsec )
 		rdf << %Q|<description>#{CGI::escapeHTML( makerss_desc_shorten( desc ) )}</description>\n|
 		unless @conf['makerss.hidecontent']
 			text = ''
-			text += '<h3>' + apply_plugin( rdfsec.section.subtitle_to_html ).strip + '</h3>' if rdfsec.section.subtitle_to_html and not rdfsec.section.subtitle_to_html.empty?
+			text += '<h3>' + apply_plugin( rdfsec.section.subtitle_to_html.sub( /^(\[([^\]]+)\])+ */, '' ) ).strip + '</h3>' if rdfsec.section.subtitle_to_html and not rdfsec.section.subtitle_to_html.empty?
 			text += apply_plugin( rdfsec.section.body_to_html ).strip
 			unless text.empty?
 				text.gsub!( /\]\]>/, ']]&gt;' )

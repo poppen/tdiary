@@ -1,4 +1,4 @@
-# my-ex.rb $Revision: 1.15 $
+# my-ex.rb $Revision: 1.16 $
 #
 # my(拡張版): myプラグインを拡張し、title属性に参照先の内容を挿入します。
 #             参照先がセクションの場合は(あれば)サブタイトルを、
@@ -28,6 +28,7 @@ def my( a, str, title = nil )
 			end
 			if section and section.subtitle then
 				title = CGI::escapeHTML( "#{apply_plugin(section.subtitle_to_html, true)}" )
+				title.sub!( /^(\[([^\]]+)\])+ */, '' )
 			end
 		when 'c'
 			com = nil
