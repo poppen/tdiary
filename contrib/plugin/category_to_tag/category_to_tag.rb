@@ -1,5 +1,5 @@
 # category_to_tag.rb - show categories list in end of each section
-# $Revision: 1.1 $
+# $Revision: 1.2 $
 #
 # Copyright (C) 2005, TADA Tadashi <sho@spc.gr.jp>
 # You can redistribute it and/or modify it under GPL2.
@@ -44,7 +44,7 @@ elsif respond_to?( :category_anchor ) # diary
 end
 
 def category_to_tag_list
-	unless @category_to_tag_list.empty? then
+	if @category_to_tag_list and not @category_to_tag_list.empty? then
 		r = '<div class="tags">Tags: '
 		@category_to_tag_list.each do |tag, blog|
 			if blog
