@@ -1,3 +1,7 @@
+2005-10-14 zunda <zunda at freeshell.org>
+	* */disp_referrer.rb: update description about unknown URLs
+	listed on the browser. Thanks to FUDAN <joker at comel.or.jp>.
+
 2005-10-13 TADA Tadashi <sho@spc.gr.jp>
 	* makerss.rb: delte category tags from title.
 	* my-ex.rb: delete category tags from title.

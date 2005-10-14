@@ -1,5 +1,5 @@
 =begin
-= A little bit more powerful display of referrers((-$Id: disp_referrer.rb,v 1.6 2005-07-20 08:36:50 tadatadashi Exp $-))
+= A little bit more powerful display of referrers((-$Id: disp_referrer.rb,v 1.7 2005-10-14 20:07:16 zunda Exp $-))
 English resource
 
 == Copyright notice
@@ -200,10 +200,7 @@ class DispRef2SetupIF
 		r = <<-_HTML
 			<h3>URL Conversion</h3>
 			<input name="dr2.current_mode" value="#{RefList}" type="hidden">
-			<p>#{@setup['unknown.label']} are picked up from recent diaries.
-			URLs that match the Excluding list or the Ignore list are not
-			listed here.
-		</p>
+			<p>URLs that match the Ignore list are not listed here.</p>
 		<p>
 			If you don't want to see the URLs that you neither put into the
 			Conversion list or the Excluding list can be put in the Ignore

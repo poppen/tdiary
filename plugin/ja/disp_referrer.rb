@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.25 2005-08-24 15:12:04 tadatadashi Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.26 2005-10-14 20:07:15 zunda Exp $-))
 日本語リソース
 
 == 概要
@@ -344,9 +344,7 @@ class DispRef2SetupIF
 		r = <<-_HTML
 			<h3>リンク元置換リスト</h3>
 			<input name="dr2.current_mode" value="#{RefList}" type="hidden">
-			<p>#{@setup['unknown.label']}は最近の日記から探しています。
-			リンク元除外リストや無視リストに一致するURLはここには表示されません。
-		</p>
+			<p>リンク元無視リストに一致するURLはここには表示されません。</p>
 		<p>
 			リンク元置換リストや記録除外リストには入れたくないURLは、
 			無視リストに入れておくことで、
