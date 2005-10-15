@@ -1,5 +1,5 @@
 =begin
-= A little bit more powerful display of referrers((-$Id: disp_referrer.rb,v 1.15 2005-10-14 20:07:15 zunda Exp $-))
+= A little bit more powerful display of referrers((-$Id: disp_referrer.rb,v 1.16 2005-10-15 12:27:54 zunda Exp $-))
 English resource
 
 == Copyright notice
@@ -69,11 +69,11 @@ Disp_referrer2_with_Nora = <<'_END'.taint
 </p>
 _END
 Disp_referrer2_without_Nora = <<'_END'.taint
-<p>
+<!-- p>
 	Please install the 
-	<a href="http://raa.ruby-lang.org/list.rhtml?name=Nora">Nora</a>
-	library if you feel the pages show too slowly.
-</p>
+	<a href="http://www.moonwolf.com/ruby/archive/nora-20040830.tar.gz">Nora
+	library</a> if you feel the pages show too slowly.
+</p -->
 _END
 Disp_referrer2_cache_info = <<'_END'.taint
 <p>

@@ -1,3 +1,7 @@
+2005-10-15 zunda <zunda at freeshell.org>
+	* */disp_referrer.rb: update description about Nora.
+	Thanks to yowa <yowa at yowaken.dip.jp>.
+
 2005-10-14 zunda <zunda at freeshell.org>
 	* */disp_referrer.rb: update description about unknown URLs
 	listed on the browser. Thanks to FUDAN <joker at comel.or.jp>.

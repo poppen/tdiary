@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.26 2005-10-14 20:07:15 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.27 2005-10-15 12:27:54 zunda Exp $-))
 日本語リソース
 
 == 概要
@@ -212,11 +212,11 @@ Disp_referrer2_with_Nora = <<'_END'.taint
 </p>
 _END
 Disp_referrer2_without_Nora = <<'_END'.taint
-<p>
+<!-- p>
 	表示速度が気になる場合は、
-	<a href="http://raa.ruby-lang.org/list.rhtml?name=Nora">Nora</a>
-	ライブラリをインストールしてみてください。
-</p>
+	<a href="http://www.moonwolf.com/ruby/archive/nora-20040830.tar.gz">Nora
+	ライブラリ</a>をインストールしてみてください。
+</p -->
 _END
 Disp_referrer2_cache_info = <<'_END'.taint
 <p>
