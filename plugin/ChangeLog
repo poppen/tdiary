@@ -1,5 +1,8 @@
+2005-10-16 TADA Tadashi <sho@spc.gr.jp>
+	* amazon.rb: add notify about amazon associate ID in preference page.
+
 2005-10-15 zunda <zunda at freeshell.org>
-	* */disp_referrer.rb: update description about Nora.
+	*/disp_referrer.rb: update description about Nora.
 	Thanks to yowa <yowa at yowaken.dip.jp>.
 
 2005-10-14 zunda <zunda at freeshell.org>

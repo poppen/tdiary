@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.44 $: Making link with image to Amazon using Amazon ECS.
+# amazon.rb $Revision: 1.45 $: Making link with image to Amazon using Amazon ECS.
 #
 # see document: #{@lang}/amazon.rb
 #
@@ -211,6 +211,7 @@ def amazon_conf_proc
 	unless @conf['amazon.hideconf'] then
 		result << <<-HTML
 			<h3>#{@amazon_label_aid}</h3>
+			<p>#{@amazon_label_aid_desc}</p>
 			<p><input name="amazon.aid" value="#{CGI::escapeHTML( @conf['amazon.aid'] ) if @conf['amazon.aid']}"></p>
 		HTML
 	end

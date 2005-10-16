@@ -1,5 +1,5 @@
 #
-# English resource of amazon plugin $Revision: 1.9 $
+# English resource of amazon plugin $Revision: 1.10 $
 #
 # Copyright (C) 2002 HAL99 <hal99@mtj.biglobe.ne.jp>
 # You can redistribute it and/or modify it under GPL2.
@@ -63,6 +63,7 @@
 @amazon_item_image = %r|(<img src="(http://images-jp\.amazon\.com/images/P/(.*MZZZZZZZ_?.jpg))".*?>)|i
 @amazon_label_conf ='Amazon'
 @amazon_label_aid = 'AmazonアソシエイトIDの指定'
+@amazon_label_aid_desc = '指定しない場合には、tDiary作者の所有するIDが指定されたことになりますのでご注意ください。'
 @amazon_label_imgsize = '表示するイメージのサイズ'
 @amazon_label_large = '大きい'
 @amazon_label_regular = '普通'

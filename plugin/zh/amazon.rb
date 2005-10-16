@@ -1,5 +1,5 @@
 #
-# English resource of amazon plugin $Revision: 1.5 $
+# English resource of amazon plugin $Revision: 1.6 $
 #
 # Copyright (C) 2002 HAL99 <hal99@mtj.biglobe.ne.jp>
 # You can redistribute it and/or modify it under GPL2.
@@ -46,6 +46,7 @@
 @amazon_item_image = %r|(<img src="(http://images\.amazon\.com/images/P/(.*MZZZZZZZ_?.jpg))".*?>)|i
 @amazon_label_conf = 'Amazon'
 @amazon_label_aid = 'Amazon Assosiate ID'
+@amazon_label_aid_desc = "If you don't specified it, this plugin call amazon with ID of tDiary developer."
 @amazon_label_imgsize = 'Image size of the book'
 @amazon_label_large = 'Large'
 @amazon_label_regular = 'Regular'
