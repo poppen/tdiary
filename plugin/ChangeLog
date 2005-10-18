@@ -1,3 +1,6 @@
+2005-10-18 zunda <zunda at freeshell.org>
+	* ja/disp_referrer.rb: added net range 72.14.192.0-239.255 for Google cache
+
 2005-10-18 SHIBATA Hiroshi <h-sbt@nifty.com>
 	* recent_comment3.rb: fix typo.(nill to nil)
 	* recent_trackback3.rb: fix typo.(nill to nil)
