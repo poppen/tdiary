@@ -1,3 +1,8 @@
+2005-10-18 SHIBATA Hiroshi <h-sbt@nifty.com>
+	* recent_comment3.rb: fix typo.(nill to nil)
+	* recent_trackback3.rb: fix typo.(nill to nil)
+	Thanks to yowa <yowa at yowaken.dip.jp>.
+
 2005-10-16 TADA Tadashi <sho@spc.gr.jp>
 	* amazon.rb: add notify about amazon associate ID in preference page.
 

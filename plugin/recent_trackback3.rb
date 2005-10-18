@@ -1,18 +1,5 @@
-# $Revision: 1.10 $
+# $Revision: 1.11 $
 # recent_trackback3: 最近のツッコミをリストアップする
-#
-# Options:
-#	@options['recent_trackback3.cache']:
-#		受信したTrackBackを保存しておくファイル名．(@cache_path/recent_trackbacks)
-#
-#	@options['recent_trackback3.cache_size']:
-#		キャッシュに保存しておくTrackBackの件数．(50)
-#
-#	@options['recent_trackback3.n']:
-#		表示するTrackBack件数．(3)
-#
-#	@options['recent_trackback3.date_format']:
-#		日付フォーマット．("(#{@date_format} %H:%M)")
 #
 # Copyright (c) 2004 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -66,7 +53,7 @@ def recent_trackback3
 
 			entry_date = "#{date.strftime('%Y%m%d')}"
 			comment_str = entries[entry_date]
-			if comment_str == nill then
+			if comment_str == nil then
 				comment_str = []
 				order << entry_date
 			end
@@ -90,10 +77,10 @@ def recent_trackback3
             cgi.params['date'] = [entry_date]
             diary = TDiaryDay::new(cgi, '', @conf)
 
-            if diary != nill then
+            if diary != nil then
                title = diary.diaries[entry_date].title.gsub( /<[^>]*>/, '' )
             end
-            if title == nill || title.length == 0 || title.strip.delete('　').delete(' ').length == 0 then
+            if title == nil || title.length == 0 || title.strip.delete('　').delete(' ').length == 0 then
                date = Time.parse(entry_date)
                title = "#{date.strftime @date_format}"
             end

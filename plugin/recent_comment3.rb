@@ -1,4 +1,4 @@
-# $Revision: 1.26 $
+# $Revision: 1.27 $
 # recent_comment3: 最近のツッコミをリストアップする
 #
 #   @secure = true な環境では動作しません．
@@ -55,7 +55,7 @@ def recent_comment3(ob_max = 'OBSOLUTE' ,sep = 'OBSOLUTE',ob_date_format = 'OBSO
 
          entry_date = "#{date.strftime('%Y%m%d')}"
          comment_str = entries[entry_date]
-         if comment_str == nill then
+         if comment_str == nil then
             comment_str = []
             order << entry_date
          end
@@ -79,10 +79,10 @@ def recent_comment3(ob_max = 'OBSOLUTE' ,sep = 'OBSOLUTE',ob_date_format = 'OBSO
             cgi.params['date'] = [entry_date]
             diary = TDiaryDay::new(cgi, '', @conf)
             
-            if diary != nill then
+            if diary != nil then
                title = diary.diaries[entry_date].title.gsub( /<[^>]*>/, '' )
             end
-            if title == nill || title.length == 0 || title.strip.delete('　').delete(' ').length == 0 then
+            if title == nil || title.length == 0 || title.strip.delete('　').delete(' ').length == 0 then
                date = Time.parse(entry_date)
                title = "#{date.strftime @date_format}"
             end
