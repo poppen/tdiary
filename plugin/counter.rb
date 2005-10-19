@@ -1,4 +1,4 @@
-# counter.rb $Revision: 1.21 $
+# counter.rb $Revision: 1.22 $
 #
 # Access counter plugin.
 #
@@ -160,6 +160,7 @@ if ["latest", "month", "day"].include?(@mode) and
 
 require 'date'
 require 'pstore'
+require 'ftools'
 
 eval(<<TOPLEVEL_CLASS, TOPLEVEL_BINDING)
 class TDiaryCountData
@@ -213,7 +214,7 @@ end
 TOPLEVEL_CLASS
 
 module TDiaryCounter
-	@version = "1.6.3"
+	@version = "1.6.4"
 
 	def run(cache_path, cgi, options)
 		timer = options["counter.timer"] if options
@@ -286,7 +287,10 @@ module TDiaryCounter
 
 			if changed
 				if options["counter.daily_backup"] == nil || options["counter.daily_backup"] 
-					copy(path, path + "." + today.wday.to_s)
+					db_bak = PStore.new(path + "." + today.wday.to_s)
+					db_bak.transaction do
+						db_bak["countdata"] = db["countdata"] if db["countdata"]
+					end
 				end
 				db["countdata"] = @cnt
 			end
@@ -314,19 +318,7 @@ module TDiaryCounter
 	end
 
 	def copy(old, new)
-		if FileTest.exist?(old)
-			File.open(old,  'rb') {|r|
-				File.open(new, 'wb') {|w|
-					st = r.stat
-					begin
-						while true do
-							w.write r.sysread(st.blksize)
-						end
-					rescue EOFError
-					end
-				} 
-			}
-		end
+ 		File.copy(old, new)
 	end
 		
 	def new_user?(cgi, options)
