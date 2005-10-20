@@ -1,12 +1,12 @@
 #!/usr/bin/env ruby
 $KCODE= 'e'
 #
-# posttdiary-ex: update tDiary via e-mail. $Revision: 1.4 $
+# posttdiary-ex: update tDiary via e-mail. $Revision: 1.5 $
 #
 # Copyright (C) 2002, All right reserved by TADA Tadashi <sho@spc.gr.jp>
 # You can redistribute it and/or modify it under GPL2.
 #
-# 2005.7.18: v.1.58: Modified by K.Sakurai (http://ks.nwr.jp)
+# 2005.10.18: v.1.59: Modified by K.Sakurai (http://ks.nwr.jp)
 #  Acknowledgements:
 #   * Based on posttdiary.rb v1.2 by TADA.
 #   * Some codes partially imported from Enikki Plugin Ex. : 
@@ -21,7 +21,7 @@ $KCODE= 'e'
 def usage( detailed_help )
 	# (if "!" is at the head of the line, it is to be shown only when detailed_help == true (-h option) )
 	text = <<-TEXT
-		#{File::basename __FILE__}: update tDiary via e-mail (v1.58).
+		#{File::basename __FILE__}: update tDiary via e-mail (v1.59).
 		usage: ruby posttdiary-ex.rb [options (without -d)] <url> <user> <passwd>
 		       ruby posttdiary-ex.rb [options (with -d)]
 		arguments:
@@ -138,8 +138,8 @@ def usage( detailed_help )
 !		Output format:
 !		  without -e/f, without -t: <img src="$1" class="photo" alt="$4">
 !		  without -e/f, with -t: <A HREF="$1"><img src="$2" class="photo" alt="$4"></a>
-!		  with -e: <%=image $0,"$4"%>
-!		  with -w: {{image $0,"$4"}}  (overrides -e)
+!		  with -e: <%=image $0,'$4'%>
+!		  with -w: {{image $0,'$4'}}  (overrides -e)
 !		  with -f: (specified format) (overrides -e, -w)
 !
 !		Date specification format in mail body text:
@@ -787,11 +787,11 @@ begin
 		image_format_with_thumbnail = image_format
 	else
 		if use_image_ex then
-			image_format = '<%=image $0,"$4"%>'
+			image_format = '<%=image $0,\'$4\'%>'
 			image_format_with_thumbnail = image_format
 		end
 		if wiki_style then
-			image_format = '{{image $0,"$4"}}'
+			image_format = '{{image $0,\'$4\'}}'
 			image_format_with_thumbnail = image_format
 		end
 	end
@@ -919,6 +919,7 @@ begin
 
 	if @image_name then
 		img_src = ""
+		marker = "_posttdiary_ex_temporary_marker_"
 		img_in_div = 0
 		for j in 0 .. @image_name.size-1
 			i = @image_name[j]
@@ -929,15 +930,15 @@ begin
 			cm = image_orgname[i] if use_original_name and (!cm or cm.size == 0)
 			cm = i.gsub(/\.[^\.]*?$/, '') if !cm or cm.size == 0
 			if use_image_ex then
-				# modify <%=image (num),"comment"%> or <%=image (num)%> tags
+				# modify <%=image (num),'comment'%> or <%=image (num)%> tags
 				if @body =~ /\<\%\=image[^\s]*\s+#{j}\s*\,\s*[\"\'](.*)[\"\']\s*\%*\>/i then
 					alttext = $1;
 					alttext = cm if alttext.length < 1
-					@body.gsub!( /\<\%\=(image[^\s]*)\s+#{j}\s*\,\s*[\"\'].*[\"\']\s*\%*\>/i, '<%=\1 '+serial.to_s+',"'+alttext+'"%>' )
+					@body.gsub!( /\<\%\=(image[^\s]*)\s+#{j}\s*\,\s*[\"\'].*[\"\']\s*\%*\>/i, '<%=\1 '+marker+serial.to_s+',\''+alttext+'\'%>' )
 					next
 				elsif @body =~ /\<\%\=image[^\s]*\s+#{j}\s*\%*\>/i then
 					alttext = cm
-					@body.gsub!( /\<\%\=(image[^\s]*)\s+#{j}\s*\%*\>/i, '<%=\1 '+serial.to_s+',"'+alttext+'"%>' )
+					@body.gsub!( /\<\%\=(image[^\s]*)\s+#{j}\s*\%*\>/i, '<%=\1 '+marker+serial.to_s+',\''+alttext+'\'%>' )
 					next
 				end
 			end
@@ -946,11 +947,11 @@ begin
 				if @body =~ /\{\{image[^\s]*\s+#{j}\s*\,\s*[\"\'](.*)[\"\']\s*\}\}/i then
 					alttext = $1;
 					alttext = cm if alttext.length < 1
-					@body.gsub!( /\{\{(image[^\s]*)\s+#{j}\s*\,\s*[\"\'].*[\"\']\s*\}\}/i, '{{\1 '+serial.to_s+',"'+alttext+'"}}' )
+					@body.gsub!( /\{\{(image[^\s]*)\s+#{j}\s*\,\s*[\"\'].*[\"\']\s*\}\}/i, '{{\1 '+marker+serial.to_s+',\''+alttext+'\'}}' )
 					next
 				elsif @body =~ /\{\{image[^\s]*\s+#{j}\s*\}\}/i then
 					alttext = cm
-					@body.gsub!( /\{\{(image[^\s]*)\s+#{j}\s*\}\}/i, '{{\1 '+serial.to_s+',"'+alttext+'"}}' )
+					@body.gsub!( /\{\{(image[^\s]*)\s+#{j}\s*\}\}/i, '{{\1 '+marker+serial.to_s+',\''+alttext+'\'}}' )
 					next
 				end
 			end
@@ -962,6 +963,7 @@ begin
 				img_src += image_format.gsub( /\$0/, serial ).gsub( /\$1/, image_url + i ).gsub( /\$3/, class_name ).gsub( /\$4/, cm )
 			end
 		end
+		@body.gsub!( /#{marker}/ , '' )
 		if add_div_imgnum <= img_in_div and add_div_imgnum > 0 then
 			img_src = "<div class=\"photos\">" + img_src + "</div>"
 		end
