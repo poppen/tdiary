@@ -1,3 +1,6 @@
+2005-10-20 peo <peo at mb.neweb.ne.jp>
+	* rss-recent.rb: support HTTP 304 response.
+
 2005-10-19  Masao Mutoh  <mutoh@highway.ne.jp>
 	* counter.rb: Fixed a problem on Win32. Reported by Ken-ichi Mito
 

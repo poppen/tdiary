@@ -17,6 +17,7 @@
 #
 
 require "rss/rss"
+require "fileutils"
 
 RSS_RECENT_FIELD_SEPARATOR = "\0"
 RSS_RECENT_ENTRY_SEPARATOR = "\1"
@@ -72,6 +73,7 @@ def rss_recent(url, max=5, cache_time=3600)
 end
 
 class InvalidResourceError < StandardError; end
+class RSSNotModified < StandardError; end
 
 def rss_recent_cache_rss(url, cache_file, cache_time)
 
@@ -131,6 +133,8 @@ def rss_recent_cache_rss(url, cache_file, cache_time)
 			])
 			rss_recent_write_to_cache(cache_file, rss_infos)
 
+		rescue RSSNotModified
+			FileUtils.touch(cache_file)
 		rescue URI::InvalidURIError
 			rss_recent_write_to_cache(cache_file, [['Invalid URI', url]])
 		rescue InvalidResourceError, ::RSS::Error
@@ -148,12 +152,17 @@ def rss_recent_fetch_rss(uri, cache_time)
 			when "200"
 				rss = f.read
 				# STDERR.puts "Got RSS of #{uri}"
-			when "304"
-				# not modified
-				# STDERR.puts "#{uri} does not modified"
 			else
 				raise InvalidResourceError
 			end
+		end
+	rescue OpenURI::HTTPError => e
+		if e.io.status.first == "304"
+			# not modified
+			# STDERR.puts "#{uri} does not modified"
+			raise RSSNotModified
+		else
+			raise InvalidResourceError
 		end
 	rescue TimeoutError, SocketError, StandardError,
 		SecurityError # occured in redirect
