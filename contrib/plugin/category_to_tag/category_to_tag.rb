@@ -1,11 +1,11 @@
 # category_to_tag.rb - show categories list in end of each section
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 #
 # Copyright (C) 2005, TADA Tadashi <sho@spc.gr.jp>
 # You can redistribute it and/or modify it under GPL2.
 #
 
-if respond_to?( :categorized_title_of_day ) and !@conf.mobile_agent? then # BlogKit
+if respond_to?( :categorized_title_of_day ) then # BlogKit
 	def categorized_title_of_day( date, title )
 		@category_to_tag_list = {}
 		cats, stripped = title.scan( /^((?:\[[^\]]+\])+)\s*(.*)/ )[0]
@@ -21,7 +21,7 @@ if respond_to?( :categorized_title_of_day ) and !@conf.mobile_agent? then # Blog
 	add_body_leave_proc do |date|
 		category_to_tag_list
 	end
-elsif respond_to?( :category_anchor ) and !@conf.mobile_agent? # diary
+elsif respond_to?( :category_anchor ) # diary
 	add_section_enter_proc do |date, index|
 		@category_to_tag_list = {}
 	end
@@ -44,6 +44,8 @@ elsif respond_to?( :category_anchor ) and !@conf.mobile_agent? # diary
 end
 
 def category_to_tag_list
+	return '' if @conf.mobile_agent?
+
 	if @category_to_tag_list and not @category_to_tag_list.empty? then
 		r = '<div class="tags">Tags: '
 		@category_to_tag_list.each do |tag, blog|
