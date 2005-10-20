@@ -120,11 +120,11 @@ def image( id, alt = "image", id2 = nil, width = nil, place="none" )
 		%Q[<a href="#{image_url}#{list[id.to_i]}"><img class="#{place}" src="#{image_url}#{list[id2.to_i]}" alt="#{alt}"></a>]
 	else
 		if slist[id.to_i]
-			%Q[<a href="#{image_url}#{list[id.to_i]}"><img src="#{image_url}#{slist[id.to_i]}" alt="#{alt}" #{width_tag} class="#{place}"></a>]
+			%Q[<a href="#{image_url}#{list[id.to_i]}"><img src="#{image_url}#{slist[id.to_i]}" alt="#{alt}" title="#{alt}" #{width_tag} class="#{place}"></a>]
 		else
 			if list[id.to_i]
 #				%Q[<a href="#{image_url}#{list[id.to_i]}"><img src="#{image_url}#{list[id.to_i]}" alt="#{alt}" #{width_tag} class="#{place}"></a>]
-				%Q[<img src="#{image_url}#{list[id.to_i]}" alt="#{alt}" #{width_tag} class="#{place}">]
+				%Q[<img src="#{image_url}#{list[id.to_i]}" alt="#{alt}" title="#{alt}" #{width_tag} class="#{place}">]
 			end
 		end
 	end
