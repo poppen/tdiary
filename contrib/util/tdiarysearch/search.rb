@@ -126,6 +126,7 @@ require 'tdiary'
 require 'tdiary/defaultio'
 begin
   require 'erb'
+  ERbLight = ERB
 rescue LoadError
   require 'erb/erbl'
 end
@@ -139,7 +140,7 @@ BEGIN { $defout.binmode }
 def main
   $KCODE = 'EUC'
   cgi = CGI.new
-  @config = TDiary::Config.new
+  @config = TDiary::Config.new( cgi )
   @config.options['apply_plugin'] = true
   html = '<html><head><title></title></head><body><p>error</p></body></html>'
   begin
