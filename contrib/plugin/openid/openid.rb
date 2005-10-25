@@ -1,5 +1,5 @@
 #
-# openid.rb: Insert OpenID delegation information. $Revision: 1.2 $
+# openid.rb: Insert OpenID delegation information. $Revision: 1.3 $
 #
 # Copyright (C) 2005, TADA Tadashi <sho@spc.gr.jp>
 # You can redistribute it and/or modify it under GPL2.
@@ -23,7 +23,7 @@ if /^(latest|conf|saveconf)$/ =~ @mode then
 	end
 end
 
-add_conf_proc( 'openid', @openid_conf_label, 'etc' ) do
+add_conf_proc( 'openid', @openid_conf_label ) do
 	if @mode == 'saveconf' then
 		@conf['openid.service'] = @cgi.params['openid.service'][0]
 		@conf['openid.id'] = @cgi.params['openid.id'][0]
