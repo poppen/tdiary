@@ -23,7 +23,7 @@ if mode == "CMD" || mode == "CGI"
 
 	if mode == "CMD"
 		def usage
-			puts "rast-register.rb $Revision: 1.9 $"
+			puts "rast-register.rb $Revision: 1.10 $"
 			puts " register to rast index files from tDiary's database."
 			puts " usage: ruby rast-regiser.rb [-p <tDiary directory>] [-c <tdiary.conf directory>]"
 			exit
@@ -149,7 +149,7 @@ module TDiary
 			result = @db.search("date = #{date}", options)
 			item, = result.items
 			if item
-				if force || item.properties.first < last_modified
+				if force || item.properties[0] < last_modified
 					@db.delete(item.doc_id)
 				else
 					return
@@ -227,7 +227,7 @@ if mode == "CGI" || mode == "CMD"
 			</head>
 			<body><div style="text-align:center">
 			<h1>Rast Register for tDiary</h1>
-			<p>$Revision: 1.9 $</p>
+			<p>$Revision: 1.10 $</p>
 			<p>Copyright (C) 2005 Kazuhiko &lt;kazuhiko@fdiary.net &gt;<br>Copyright (C) 2002 MUTOH Masao &lt;mutoh@highway.ne.jp&gt;</p>
 			<p>Start!</p><hr>
 		]
