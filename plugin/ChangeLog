@@ -1,3 +1,6 @@
+2005-11-11 SHIBATA Hiroshi <h-sbt@nifty.com>
+	* daily_theme.rb: use css_tag.
+
 2005-11-10 SHIBATA Hiroshi <h-sbt@nifty.com>
 	* daily_theme.rb: add new plugin.
 

@@ -1,25 +1,33 @@
-# daily_theme.rb $Revision: 1.1 $
+# daily_theme.rb $Revision: 1.2 $
 #
 # Copyright (c) 2005 SHIBATA Hiroshi <h-sbt@nifty.com>
 # Distributed under the GPL
 #
 
-if @mode != 'conf' then
-   add_header_proc do
-      if @conf.options.include?('daily_theme.list')
+def css_tag
+   if @mode =~ /conf$/ then
+      css = "#{theme_url}/conf.css"
+   elsif @conf.options.include?('daily_theme.list')
+      if @conf.options['daily_theme.list'].size > 0
          theme_list = @conf.options['daily_theme.list'].split(/\n/)
+         
+         index = Time.now.yday % theme_list.size
+         theme_name = theme_list[index].strip
+         
+         css = "#{theme_url}/#{theme_name}/#{theme_name}.css"
       else
-         theme_list = "default"
+         css = @css
       end
-      
-      index = Time.now.yday % theme_list.size
-      theme_name = theme_list[index].strip
-
-      <<-HTML
-      <link rel="stylesheet" href="theme/#{theme_name}/#{theme_name}.css" title="#{theme_name}" type="text/css" media="all">
-      HTML
-      
+   else
+      css = @css
    end
+      
+   title = CGI::escapeHTML( File::basename( css, '.css' ) )
+   <<-CSS
+   <link rel="stylesheet" href="#{theme_url}/base.css" type="text/css" media="all">
+   <link rel="stylesheet" href="#{css}" title="#{title}" type="text/css" media="all">
+   CSS
+   
 end
 
 add_conf_proc( 'daily_theme', @daily_theme_label, 'theme' ) do
