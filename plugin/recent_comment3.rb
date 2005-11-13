@@ -1,4 +1,4 @@
-# $Revision: 1.27 $
+# $Revision: 1.28 $
 # recent_comment3: 最近のツッコミをリストアップする
 #
 #   @secure = true な環境では動作しません．
@@ -29,7 +29,7 @@ def recent_comment3(ob_max = 'OBSOLUTE' ,sep = 'OBSOLUTE',ob_date_format = 'OBSO
 
    recent_comment3_init
    
-   cache = @conf['recent_comment3.cache']
+   cache = @conf['recent_comment3.cache'].untaint
    max = @conf['recent_comment3.max']
    date_format = @conf['recent_comment3.date_format'] 
    except = @conf['recent_comment3.except_list'].split(/,/)
