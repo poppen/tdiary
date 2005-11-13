@@ -1,4 +1,5 @@
 2005-11-13 Kazuhiko  <kazuhiko@fdiary.net>
+	* recent_trackback3.rb: revise for mod_ruby.
 	* recent_comment3.rb: revise for mod_ruby.
 
 2005-11-11 SHIBATA Hiroshi <h-sbt@nifty.com>

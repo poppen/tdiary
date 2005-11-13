@@ -1,4 +1,4 @@
-# $Revision: 1.11 $
+# $Revision: 1.12 $
 # recent_trackback3: 最近のツッコミをリストアップする
 #
 # Copyright (c) 2004 Junichiro KITA <kita@kitaj.no-ip.com>
@@ -26,7 +26,7 @@ def recent_trackback3
 
 	recent_trackback3_init
 
-	cache = @conf['recent_trackback3.cache']
+	cache = @conf['recent_trackback3.cache'].untaint
 	n = @conf['recent_trackback3.n']
 	date_format = @conf['recent_trackback3.date_format']
 	format = @conf['recent_trackback3.format']
