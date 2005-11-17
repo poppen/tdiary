@@ -1,4 +1,4 @@
-# image.rb $Revision: 1.28 $
+# image.rb $Revision: 1.29 $
 # -pv-
 # 
 # Ì¾¾Î:
@@ -183,8 +183,11 @@ def image_list( date )
 	return @image_list if @conf.secure and @image_list
 	list = []
 	reg = /#{date}_(\d+)\.(#{image_ext})$/
-	Dir::foreach( @image_dir ) do |file|
-		list[$1.to_i] = file if reg =~ file
+	begin
+		Dir::foreach( @image_dir ) do |file|
+			list[$1.to_i] = file if reg =~ file
+		end
+	rescue Errno::ENOENT
 	end
 	list
 end

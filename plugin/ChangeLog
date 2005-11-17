@@ -1,3 +1,6 @@
+2004-11-17 MoonWolf <moonwolf@moonwolf.com>
+	* image.rb: rescue ENOENT.
+
 2005-11-13 Kazuhiko  <kazuhiko@fdiary.net>
 	* recent_trackback3.rb: revise for mod_ruby.
 	* recent_comment3.rb: revise for mod_ruby.
