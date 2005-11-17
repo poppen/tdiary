@@ -1,4 +1,4 @@
-# image.rb $Revision: 1.29 $
+# image.rb $Revision: 1.30 $
 # -pv-
 # 
 # Ì¾¾Î:
@@ -163,7 +163,7 @@ def image_info( f )
 				else
 					data = data[data_size .. -1]
 				end
-				data << f.read( 128 ) if data.size < 4
+				data << f.read( 128 ) if data.size <= 4
 			end
 		end
 	end
@@ -337,4 +337,3 @@ add_form_proc do |date|
    </div></form>
 	</div>]
 end
-

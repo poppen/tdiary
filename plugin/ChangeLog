@@ -1,3 +1,6 @@
+2005-11-18  Kazuhiko  <kazuhiko@fdiary.net>
+	* image.rb (image_info): fix a bug in analysing jpeg files.
+
 2004-11-17 MoonWolf <moonwolf@moonwolf.com>
 	* image.rb: rescue ENOENT.
 
