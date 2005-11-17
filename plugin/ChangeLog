@@ -1,4 +1,6 @@
 2005-11-18  Kazuhiko  <kazuhiko@fdiary.net>
+	* recent_trackback3.rb: revise for mod_ruby.
+	* recent_comment3.rb: revise for mod_ruby.
 	* image.rb (image_info): fix a bug in analysing jpeg files.
 
 2004-11-17 MoonWolf <moonwolf@moonwolf.com>

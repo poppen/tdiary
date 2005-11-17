@@ -1,4 +1,4 @@
-# $Revision: 1.12 $
+# $Revision: 1.13 $
 # recent_trackback3: 最近のツッコミをリストアップする
 #
 # Copyright (c) 2004 Junichiro KITA <kita@kitaj.no-ip.com>
@@ -115,7 +115,7 @@ add_update_proc do
 
 	if @mode == 'trackbackreceive' and @comment
 		recent_trackback3_init
-		cache = @conf['recent_trackback3.cache']
+		cache = @conf['recent_trackback3.cache'].untaint
 		cache_size = @conf['recent_trackback3.cache_size']
 		trackback = @comment
 		serial = 0

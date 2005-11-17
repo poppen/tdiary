@@ -1,4 +1,4 @@
-# $Revision: 1.28 $
+# $Revision: 1.29 $
 # recent_comment3: 最近のツッコミをリストアップする
 #
 #   @secure = true な環境では動作しません．
@@ -116,7 +116,7 @@ add_update_proc do
    recent_comment3_init
    
    date = @date.strftime( '%Y%m%d' )
-   cache = @conf['recent_comment3.cache']
+   cache = @conf['recent_comment3.cache'].untaint
    size = @conf['recent_comment3.cache_size']
    
    if @mode == 'comment' and @comment and @comment.visible? then
