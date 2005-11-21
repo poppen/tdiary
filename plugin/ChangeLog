@@ -1,3 +1,6 @@
+2005-11-21  Kazuhiko  <kazuhiko@fdiary.net>
+	* rast-register.rb: move to contrib/util/rast-search/.
+
 2005-11-18  Kazuhiko  <kazuhiko@fdiary.net>
 	* recent_trackback3.rb: revise for mod_ruby.
 	* recent_comment3.rb: revise for mod_ruby.
