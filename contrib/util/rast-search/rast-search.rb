@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# rast-search.rb $Revision: 1.4 $
+# rast-search.rb $Revision: 1.5 $
 #
 # Copyright (C) 2005 Kazuhiko <kazuhiko@fdiary.net>
 # You can redistribute it and/or modify it under GPL2.
@@ -7,7 +7,7 @@
 $KCODE= 'e'
 BEGIN { $defout.binmode }
 
-require 'rast'
+require 'rast.so'
 
 if FileTest::symlink?( __FILE__ ) then
 	org_path = File::dirname( File::readlink( __FILE__ ) )
@@ -36,9 +36,9 @@ module TDiary
 
 		def initialize( cgi, rhtml, conf )
 			super
-			@db_path = "#{cache_path}/rast"
+			@db_path = conf.options['rast.db_path'] || "#{cache_path}/rast"
 			@encoding = conf.options['rast.encoding'] || 'euc_jp'
-			conf.options['sp.selected'] = ''
+			# conf.options['sp.selected'] = ''
 			parse_args
 			format_form
 			if @query.empty?
@@ -46,6 +46,23 @@ module TDiary
 			else
 				search
 			end
+		end
+
+		def load_plugins
+			super
+			# add a opensearch rss link
+			@plugin.instance_variable_get('@header_procs').unshift Proc.new {
+				cgi_url = @conf.base_url.sub(%r|/[^/]*$|, '/') + (@cgi.script_name ? _(File.basename(@cgi.script_name)) : '')
+				%Q|\t<link rel="alternate" type="application/rss+xml" title="Search Result RSS" href="#{cgi_url}#{format_anchor(@start, @num)};type=rss">\n|
+			}
+			# override some plugins
+			def @plugin.sn(number = nil); ''; end
+		end
+
+		def eval_rxml
+			require 'time'
+			load_plugins
+			ERB::new( File::open( "#{PATH}/skel/rast.rxml" ){|f| f.read }.untaint ).result( binding )
 		end
 
 		private
@@ -78,10 +95,14 @@ module TDiary
 		end
 
 		def format_result_item(item)
-			@title, @date, @last_modified = *item.properties
+			if @conf['rast.with_user_name']
+				@title, @user, @date, @last_modified = *item.properties
+			else
+				@title, @date, @last_modified = *item.properties
+			end
 			@summary = _(item.summary) || ''
 			for term in @result.terms
-				@summary.gsub!(Regexp.new(Regexp.quote(term.term), true, @encoding), "<strong>\\&</strong>")
+				@summary.gsub!(Regexp.new(Regexp.quote(CGI.escapeHTML(term.term)), true, @encoding), "<strong>\\&</strong>")
 			end
 		end
 
@@ -96,7 +117,7 @@ module TDiary
 			if last_page > page_count
 				last_page = page_count
 			end
-			buf = "<p id=\"navi\" class=\"infobar\">\n"
+			buf = "<p class=\"infobar\">\n"
 			if current_page > 1
 				buf.concat(format_link("САЄи", @start - @num, @num))
 			end
@@ -120,10 +141,12 @@ module TDiary
 			return buf
 		end
 
+		def format_anchor(start, num)
+			return format('?query=%s;start=%d;num=%d;sort=%s;order=%s', CGI::escape(@query), start, num, _(@sort), _(@order))
+		end
+
 		def format_link(label, start, num)
-			return format('<a href="%s?query=%s;start=%d;num=%d;sort=%s;order=%s">%s</a> ',
-				      _(@cgi.script_name ? @cgi.script_name : ''), CGI::escape(@query),
-				      start, num, _(@sort), _(@order), _(label))
+			return format('<a href="%s%s">%s</a> ',	_(@cgi.script_name ? @cgi.script_name : ""),  format_anchor(start, num), _(label))
 		end
 
 		def create_search_options
@@ -136,6 +159,7 @@ module TDiary
 				"start_no" => @start,
 				"num_items" => @num
 			}
+			options['properties'] << 'user' if @conf['rast.with_user_name']
 			if SORT_PROPERTIES.include?(@sort)
 				options["sort_method"] = Rast::SORT_METHOD_PROPERTY
 				options["sort_property"] = @sort
@@ -206,7 +230,12 @@ begin
 		head['charset'] = conf.mobile_encoding
 		head['Content-Length'] = body.size.to_s
 	else
-		body = tdiary.eval_rhtml
+		if @cgi['type'] == 'rss'
+			head['type'] = "application/xml; charset=#{conf.encoding}"
+			body = tdiary.eval_rxml
+		else
+			body = tdiary.eval_rhtml
+		end
 		head['charset'] = conf.encoding
 		head['Content-Length'] = body.size.to_s
 		head['Pragma'] = 'no-cache'

@@ -18,31 +18,32 @@ rast-search README
 
   * tDiary 1.5 以降
   * Ruby 1.8.2 以降
-  * Rast 0.0.1 以降
-  * htree <http://cvs.m17n.org/~akr/htree/>
+  * Rast 0.3.1 以降
 
 
 セットアップ
 ------------
 
-  1. rast-search.rb を tDiary の index.rb があるディレクトリにコピーしま
+  1. rast-register.rb を tDiary の プラグインディレクトリにコピーします。
+
+  2. rast-search.rb を tDiary の index.rb があるディレクトリにコピーしま
      す。必要なら index.rb と同じようにシンボリックリンクを張ったり名前を
      変えたりしてください。
 
-  2. CGI として実行可能にします。
+  3. CGI として実行可能にします。
 
      $ chmod a+x rast-search.rb
 
-  3. 必要なら #! のパスを変更します。
+  4. 必要なら #! のパスを変更します。
 
-  4. rast.rhtml と i.rast.rhtml を tDiary の skel/ ディレクトリにコピーし
-     ます。
+  5. rast.rhtml と rast.rxml と i.rast.rhtml を tDiary の skel/ ディレク
+     トリにコピーします。
 
-  5. rast-register.rb プラグインを有効にします。(tDiary の plugin/ ディレ
+  6. rast-register.rb プラグインを有効にします。(tDiary の plugin/ ディレ
      クトリにコピーするか、プラグイン選択のディレクトリにコピーしてブラウ
      ザから有効に設定します)
 
-  6. (オプション) tdiary.conf で以下のように encoding の設定をできます。
+  7. (オプション) tdiary.conf で以下のように encoding の設定をできます。
      Rast の encoding module の名前で設定してください。デフォルトは
      'euc_jp' です。encoding の設定を変更する場合は、Rast のインデックス
      があるディレクトリ (cache ディレクトリの下の /rast) を消して、再度イ
@@ -50,7 +51,7 @@ rast-search README
 
      @options['rast.index'] = 'utf8'
 
-  7. tDiary の CGI の実行権限で以下のように実行して、既存の日記のインデッ
+  8. tDiary の CGI の実行権限で以下のように実行して、既存の日記のインデッ
      クスを作成します。
 
      ruby rast-register.rb [-p tdiary.rbのあるディレクトリ] [-c tdiary.confのあるディレクトリ]
@@ -61,7 +62,7 @@ rast-search README
      かじめ実行属性をつけ、必要なら #! のパスを変更してください。また
      update.rb と同様のアクセス制限をかけることを推奨します。
 
-  8. 自分の tDiary の好きな場所 (例えばヘッダ) に以下のようなフォームを加
+  9. 自分の tDiary の好きな場所 (例えばヘッダ) に以下のようなフォームを加
      えてください。
 
      <form method="get" action="rast-search.rb" class="search">

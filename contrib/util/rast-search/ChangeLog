@@ -1,3 +1,8 @@
+2005-11-21  Kazuhiko  <kazuhiko@fdiary.net>
+	* rast-register.rb: add a plugin file.
+	* rast-search.rb, rast.rxml: support opensearch rss.
+	* rast.rhtml: revise for more valid HTML output.
+
 2005-05-11  Kazuhiko  <kazuhiko@fdiary.net>
 	* rast.rhtml, i.rast.rhtml: use @num instead of 10.
 
