@@ -1,3 +1,6 @@
+2005-11-23  Kazuhiko  <kazuhiko@fdiary.net>
+	* rast-register.rb: use 'require' instead of 'autoload'.
+
 2005-11-21  Kazuhiko  <kazuhiko@fdiary.net>
 	* rast-register.rb: add a plugin file.
 	* rast-search.rb, rast.rxml: support opensearch rss.
