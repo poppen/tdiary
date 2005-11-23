@@ -1,3 +1,7 @@
+2005-11-24  Kazuhiko  <kazuhiko@fdiary.net>
+	* rast-register.rb: support rebuilding index by conf mode. abolish
+	'CGI' mode.
+
 2005-11-23  Kazuhiko  <kazuhiko@fdiary.net>
 	* rast-register.rb: use 'require' instead of 'autoload'.
 

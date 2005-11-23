@@ -10,40 +10,38 @@ if $0 == __FILE__
 	require 'cgi'
 	ARGV << '' # dummy argument against cgi.rb offline mode.
 	@cgi = CGI::new
-	mode = @cgi.request_method ? "CGI" : "CMD"
+	mode = "CMD"
 else
 	mode = "PLUGIN"
 end
 
-if mode == "CMD" || mode == "CGI"
+if mode == "CMD"
 	tdiary_path = "."
 	tdiary_conf = "."
 	$stdout.sync = true
 
-	if mode == "CMD"
-		def usage
-			puts "rast-register.rb $Revision: 1.2 $"
-			puts " register to rast index files from tDiary's database."
-			puts " usage: ruby rast-regiser.rb [-p <tDiary directory>] [-c <tdiary.conf directory>]"
-			exit
-		end
+	def usage
+		puts "rast-register.rb $Revision: 1.3 $"
+		puts " register to rast index files from tDiary's database."
+		puts " usage: ruby rast-regiser.rb [-p <tDiary directory>] [-c <tdiary.conf directory>]"
+		exit
+	end
 
-		require 'getoptlong'
-		parser = GetoptLong::new
-		parser.set_options(['--path', '-p', GetoptLong::REQUIRED_ARGUMENT], ['--conf', '-c', GetoptLong::REQUIRED_ARGUMENT])
-		begin
-			parser.each do |opt, arg|
-				case opt
-				when '--path'
-					tdiary_path = arg
-				when '--conf'
-					tdiary_conf = arg
-				end
+	require 'getoptlong'
+	parser = GetoptLong::new
+	parser.set_options(['--path', '-p', GetoptLong::REQUIRED_ARGUMENT], ['--conf', '-c', GetoptLong::REQUIRED_ARGUMENT])
+	begin
+		parser.each do |opt, arg|
+			case opt
+			when '--path'
+				tdiary_path = arg
+			when '--conf'
+				tdiary_conf = arg
 			end
-		rescue
-			usage
-			exit( 1 )
 		end
+	rescue
+		usage
+		exit( 1 )
 	end
 
 	tdiary_conf = tdiary_path unless tdiary_conf
@@ -232,17 +230,20 @@ module TDiary
 	# Main
 	#
 	class RastRegisterMain < TDiaryBase
-		def initialize(conf, encoding)
+		def initialize(conf)
 			super(CGI::new, 'day.rhtml', conf)
+		end
+
+		def execute(encoding, out = $stdout)
 			calendar
 			RastDB.new(conf, encoding).transaction do |rast_db|
 				@years.keys.sort.each do |year|
-					print "(#{year.to_s}/) "
+					out << "(#{year.to_s}/) "
 					@years[year.to_s].sort.each do |month|
 						@io.transaction(Time::local(year.to_i, month.to_i)) do |diaries|
 							diaries.sort.each do |day, diary|
 								RastRegister.new(rast_db, diary).execute
-								print diary.date.strftime('%m%d ')
+								out << diary.date.strftime('%m%d ')
 							end
 							false
 						end
@@ -253,22 +254,7 @@ module TDiary
 	end
 end
 
-if mode == "CGI" || mode == "CMD"
-	if mode == "CGI"
-		print %Q[Content-type:text/html\n\n
-			<html>
-			<head>
-				<title>Squeeze for tDiary</title>
-				<link href="./theme/default/default.css" type="text/css" rel="stylesheet"/>
-			</head>
-			<body><div style="text-align:center">
-			<h1>Rast Register for tDiary</h1>
-			<p>$Revision: 1.2 $</p>
-			<p>Copyright (C) 2005 Kazuhiko &lt;kazuhiko@fdiary.net &gt;<br>Copyright (C) 2002 MUTOH Masao &lt;mutoh@highway.ne.jp&gt;</p>
-			<p>Start!</p><hr>
-		]
-	end
-
+if mode == "CMD"
 	begin
 		require 'cgi'
 		if TDiary::Config.instance_method(:initialize).arity > 0
@@ -286,7 +272,7 @@ if mode == "CGI" || mode == "CMD"
 		conf.show_nyear = false
 		def conf.bot?; true; end
 		encoding = conf.options['rast.encoding'] || 'euc_jp'
-		TDiary::RastRegisterMain.new(conf, encoding)
+		TDiary::RastRegisterMain.new(conf).execute(encoding)
 	rescue
 		print $!, "\n"
 		$@.each do |v|
@@ -295,11 +281,7 @@ if mode == "CGI" || mode == "CMD"
 		exit( 1 )
 	end
 
-	if mode == "CGI"
-		print "<hr><p>End!</p></body></html>\n"
-	else
-		print "\n\n"
-	end
+	puts
 else
 	add_update_proc do
 		conf = @conf.clone
@@ -315,5 +297,27 @@ else
 		TDiary::RastDB.new(conf, encoding).transaction do |rast_db|
 			TDiary::RastRegister.new(rast_db, diary).execute(true)
 		end
+	end
+end
+
+if @mode == 'conf' || @mode == 'saveconf'
+	add_conf_proc( 'rast_register', 'tDiary-Rast', 'update' ) do
+		str = <<-HTML
+<h3 class="subtitle">Rebuild tDiary-Rast index</h3>
+<p>
+<input type="checkbox" name="rast_register_rebuild" value="1">
+To rebuild tDiary-Rast index, check the box and submit 'OK'.
+</p>
+HTML
+		if @mode == 'saveconf'
+			if @cgi.valid?( 'rast_register_rebuild' )
+				encoding = @conf.options['rast.encoding'] || 'euc_jp'
+				str << '<p>The following diaries were registered.</p>'
+				out = ''
+				TDiary::RastRegisterMain.new(@conf).execute(encoding, out)
+				str << "<p>#{out}</p>"
+			end
+		end
+		str
 	end
 end
