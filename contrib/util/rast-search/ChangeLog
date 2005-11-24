@@ -1,4 +1,7 @@
 2005-11-24  Kazuhiko  <kazuhiko@fdiary.net>
+	* rast-register.rb: fix a bug in command-line mode (reported by
+	YAA).
+
 	* rast-register.rb: support rebuilding index by conf mode. abolish
 	'CGI' mode.
 

@@ -21,7 +21,7 @@ if mode == "CMD"
 	$stdout.sync = true
 
 	def usage
-		puts "rast-register.rb $Revision: 1.4 $"
+		puts "rast-register.rb $Revision: 1.5 $"
 		puts " register to rast index files from tDiary's database."
 		puts " usage: ruby rast-regiser.rb [-p <tDiary directory>] [-c <tdiary.conf directory>]"
 		exit
@@ -298,26 +298,26 @@ else
 			TDiary::RastRegister.new(rast_db, diary).execute(true)
 		end
 	end
-end
 
-if !@conf['rast_register.hideconf'] && (@mode == 'conf' || @mode == 'saveconf')
-	add_conf_proc('rast_register', 'tDiary-Rast', 'update') do
-		str = <<-HTML
+	if !@conf['rast_register.hideconf'] && (@mode == 'conf' || @mode == 'saveconf')
+		add_conf_proc('rast_register', 'tDiary-Rast', 'update') do
+			str = <<-HTML
 <h3 class="subtitle">Rebuild tDiary-Rast index</h3>
 <p>
 <input type="checkbox" name="rast_register_rebuild" value="1">
 To rebuild tDiary-Rast index, check the box and submit 'OK'.
 </p>
 HTML
-		if @mode == 'saveconf'
-			if @cgi.valid?( 'rast_register_rebuild' )
-				encoding = @conf.options['rast.encoding'] || 'euc_jp'
-				str << '<p>The following diaries were registered.</p>'
-				out = ''
-				TDiary::RastRegisterMain.new(@conf).execute(encoding, out)
-				str << "<p>#{out}</p>"
+			if @mode == 'saveconf'
+				if @cgi.valid?( 'rast_register_rebuild' )
+					encoding = @conf.options['rast.encoding'] || 'euc_jp'
+					str << '<p>The following diaries were registered.</p>'
+					out = ''
+					TDiary::RastRegisterMain.new(@conf).execute(encoding, out)
+					str << "<p>#{out}</p>"
+				end
 			end
+			str
 		end
-		str
 	end
 end
