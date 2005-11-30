@@ -1,7 +1,7 @@
 rast-search README
 ===================
 
-  Rast <http://www.netlab.jp/rast/> を用いた tDiary 検索環境です。
+  Rast <http://projects.netlab.jp/rast/> を用いた tDiary 検索環境です。
 
 
 特徴
@@ -83,7 +83,7 @@ rast-search README
 
   rast-search の検索対象は、日記本文、ツッコミ、TrackBack です。
 
-  検索方法については、 http://www.netlab.jp/rast/query.html.ja をご覧くだ
+  検索方法については、 http://projects.netlab.jp/rast/query.html.ja をご覧くだ
   さい。
 
 
