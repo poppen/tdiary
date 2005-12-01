@@ -29,8 +29,11 @@ def makerss_conf_html
 	<li>RSSに含める説明を<select name="makerss.shortdesc">
 		<option value="f"#{@conf['makerss.shortdesc'] ? '' : ' selected'}>できるだけ長くする</option>
 		<option value="t"#{@conf['makerss.shortdesc'] ? ' selected' : ''}>最初だけにする</option></select>
+      <li>「#{ comment_new }」というリンクを挿入<select name="makerss.comment_link">
+		<option value="f"#{@conf['makerss.comment_link'] ? '' : ' selected'}>する</option>
+		<option value="t"#{@conf['makerss.comment_link'] ? ' selected' : ''}>しない</option></select>
 	</ul>
-	HTML
+   HTML
 end
 
 @makerss_edit_label = 'ちょっとした修正(RSSを更新しない)'

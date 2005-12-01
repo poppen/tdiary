@@ -27,6 +27,10 @@ def makerss_conf_html
 		<option value="f"#{@conf['makerss.shortdesc'] ? '' : ' selected'}>as long as possible</option>
 		<option value="t"#{@conf['makerss.shortdesc'] ? ' selected' : ''}>only some portion</option></select>
 		in RSS.
+	<li><select name="makerss.comment_link">
+		<option value="f"#{@conf['makerss.comment_link'] ? '' : ' selected'}>Insert</option>
+		<option value="t"#{@conf['makerss.comment_link'] ? ' selected' : ''}>Don't Insert </option></select>
+		link of Tsukkomi in RSS.
 	</ul>
 	HTML
 end

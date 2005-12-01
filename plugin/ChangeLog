@@ -1,3 +1,6 @@
+2005-12-01  SHIBATA Hiroshi  <h-sbt@nifty.com>
+	* makerss.rb: insert link of Tsukkomi in RSS.
+
 2005-11-21  Kazuhiko  <kazuhiko@fdiary.net>
 	* rast-register.rb: move to contrib/util/rast-search/.
 

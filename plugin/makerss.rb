@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.36 $
+# makerss.rb: $Revision: 1.37 $
 #
 # generate RSS file when updating.
 #
@@ -6,6 +6,7 @@
 #   @conf['makerss.hidecomment'] : hide tsukkomi's. default: false
 #   @conf['makerss.hidecontent'] : hide full-text content. default: false
 #   @conf['makerss.shortdesc'] : shorter description. default: false
+#   @conf['makerss.comment_link'] : insert tsukkomi's link. default: false
 #
 # options to be edited in tdiary.conf:
 #   @conf['makerss.file']  : local file name of RSS file. default: 'index.rdf'.
@@ -238,7 +239,15 @@ def makerss_body( uri, rdfsec )
 			text += apply_plugin( rdfsec.section.body_to_html ).strip
 			unless text.empty?
 				text.gsub!( /\]\]>/, ']]&gt;' )
-				rdf << %Q|<content:encoded><![CDATA[#{text}]]></content:encoded>\n|
+				rdf << %Q|<content:encoded><![CDATA[#{text}|
+            unless @conf['makerss.comment_link']
+               ymd = date.strftime( "%Y%m%d" )
+               uri = @conf.index.dup
+               uri[0, 0] = @conf.base_url unless %r|^https?://|i =~ uri
+               uri.gsub!( %r|/\./|, '/' )
+               rdf << %Q|\n<p><a href="#{uri + anchor( "#{ymd}c" )}">#{ comment_new }</a></p>|
+            end
+            rdf << %Q|]]></content:encoded>\n|
 			end
 		end
 
@@ -290,7 +299,7 @@ add_conf_proc( 'makerss', @makerss_conf_label, 'update' ) do
 		when 'any'
 			@conf[item] = 'any'
 		end
-		%w( makerss.hidecontent makerss.shortdesc ).each do |item|
+		%w( makerss.hidecontent makerss.shortdesc makerss.comment_link ).each do |item|
 			@conf[item] = ( 't' == @cgi.params[item][0] )
 		end
 	end
