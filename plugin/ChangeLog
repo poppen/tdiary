@@ -1,3 +1,6 @@
+2005-12-04 zunda <zunda at freeshell.org>
+	* highlight.rb: apply_plugin before counting sanchor
+
 2005-12-04 Lilia <nursery at s8.xrea.com>
 	* kw.rb: support title attribute and add some escapes in HTML.
 
