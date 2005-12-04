@@ -21,7 +21,7 @@ if mode == "CMD"
 	$stdout.sync = true
 
 	def usage
-		puts "rast-register.rb $Revision: 1.6 $"
+		puts "rast-register.rb $Revision: 1.7 $"
 		puts " register to rast index files from tDiary's database."
 		puts " usage: ruby rast-regiser.rb [-p <tDiary directory>] [-c <tdiary.conf directory>]"
 		exit
@@ -301,12 +301,14 @@ else
 	end
 
 	if !@conf['rast_register.hideconf'] && (@mode == 'conf' || @mode == 'saveconf')
-		add_conf_proc('rast_register', 'tDiary-Rast', 'update') do
+		args = ['rast_register', @rast_register_conf_label]
+		args << 'update' if TDIARY_VERSION > '2.1.3'
+		add_conf_proc(*args) do
 			str = <<-HTML
-<h3 class="subtitle">Rebuild tDiary-Rast index</h3>
+<h3 class="subtitle">#{@rast_register_conf_header}</h3>
 <p>
 <input type="checkbox" name="rast_register_rebuild" value="1">
-To rebuild tDiary-Rast index, check the box and submit 'OK'.
+#{@rast_register_conf_description}
 </p>
 HTML
 			if @mode == 'saveconf'

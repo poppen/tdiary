@@ -1,3 +1,7 @@
+2005-12-04  Kazuhiko  <kazuhiko@fdiary.net>
+	* rast-register.rb: support tDiary-2.0.x.
+	* en/rast-register.rb, ja/rast-register.rb: add resources.
+
 2005-11-24  Kazuhiko  <kazuhiko@fdiary.net>
 	* rast-register.rb: fix a bug in command-line mode (reported by
 	YAA). set 'cache_path' for the 'tlink' plugin (reported by YAA).
