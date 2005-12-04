@@ -1,3 +1,6 @@
+2005-12-04 Lilia <nursery at s8.xrea.com>
+	* kw.rb: support title attribute and add some escapes in HTML.
+
 2005-12-04 Taku YASUI <tach at debian.or.jp>
 	* kw.rb: support UTF-8.
 

@@ -1,9 +1,10 @@
-# kw.rb $Revision: 1.11 $
+# kw.rb $Revision: 1.12 $
 #
 # kw: keyword link generator
 #   Parameters:
 #     keyword: keyword or InterWikiName (separated by ':').
 #     name: anchor string (optional).
+#     title: title attribute (optional).
 #
 # @options['kw.dic']
 #   array of dictionary table array. an item of array is:
@@ -14,7 +15,7 @@
 #          If keyword is 'foo', it has key nil.
 #          If keyword is 'google:foo', it has key 'google'.
 #   URL:   the URL for link. '$1' is replace by keyword.
-#   style: encoding style as: 'euc-jp', 'sjis', 'jis' or nil.
+#   style: encoding style as: 'euc-jp', 'sjis', 'jis', 'utf-8' or nil.
 #
 #   if there isn't @options['kw.dic'], the plugin links to google.
 #
@@ -60,7 +61,7 @@ def kw_generate_dic
 	kw_dic
 end
 
-def kw( keyword, name = nil )
+def kw( keyword, name = nil, title = nil )
 	@kw_dic = kw_generate_dic unless @kw_dic
 	show_inter = @options['kw.show_inter'] == nil ? true : @options['kw.show_inter']
 
@@ -71,6 +72,7 @@ def kw( keyword, name = nil )
 	end
 	keyword = key unless show_inter
 	name = keyword unless name
+	title = title ? %Q[ title="#{title}"] : ''
 	begin
 		key = CGI::escape( case @kw_dic[inter][1]
 			when 'euc-jp'
@@ -89,7 +91,7 @@ def kw( keyword, name = nil )
 		inter = nil
 		retry
 	end
-	%Q[<a href="#{@kw_dic[inter][0].sub( /\$1/, key )}">#{name}</a>]
+	%Q[<a href="#{CGI::escapeHTML( @kw_dic[inter][0].sub( /\$1/, key ) )}"#{title}>#{name}</a>]
 end
 
 #
@@ -131,7 +133,7 @@ add_conf_proc( 'kw', kw_label ) do
 	end
 	<<-HTML
 	#{kw_desc}
-	<p><textarea name="kw.dic" cols="60" rows="10">#{dic.collect{|a|a.flatten.join( " " )}.join( "\n" )}</textarea></p>
+	<p><textarea name="kw.dic" cols="60" rows="10">#{CGI::escapeHTML( dic.collect{|a|a.flatten.join( " " )}.join( "\n" ) )}</textarea></p>
 	HTML
 end
 
