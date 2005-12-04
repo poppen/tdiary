@@ -1,4 +1,4 @@
-# image.rb $Revision: 1.30 $
+# image.rb $Revision: 1.31 $
 # -pv-
 # 
 # Ì¾¾Î:
@@ -138,11 +138,11 @@ def image_info( f )
 	sig = f.read( 24 )
 	if /\A\x89PNG\x0D\x0A\x1A\x0A(....)IHDR(........)/on =~ sig
 		image_type = 'png'
-		image_height, image_width = $2.unpack( 'NN' )
+		image_width, image_height = $2.unpack( 'NN' )
 
 	elsif /\AGIF8[79]a(....)/on =~ sig
 		image_type   = 'gif'
-		image_height, image_width = $1.unpack( 'vv' )
+		image_width, image_height = $1.unpack( 'vv' )
 
 	elsif /\A\xFF\xD8/on =~ sig
 		image_type = 'jpg'
@@ -154,7 +154,7 @@ def image_info( f )
 			data_size = data[2,2].unpack( 'n' ).first + 2
 			case data[1]
 			when 0xc0, 0xc1, 0xc2, 0xc3, 0xc5, 0xc6, 0xc7, 0xc9, 0xca, 0xcb, 0xcd, 0xce, 0xcf
-				image_width, image_height = data[5,4].unpack('nn')
+				image_height, image_width = data[5,4].unpack('nn')
 				break
 			else
 				if data.size < data_size
@@ -168,7 +168,7 @@ def image_info( f )
 		end
 	end
 
-	return image_type, image_height, image_width
+	return image_type, image_width, image_height
 end
 
 def image_ext

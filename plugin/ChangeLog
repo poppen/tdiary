@@ -1,3 +1,6 @@
+2005-12-04 N.KASHIJUKU <n-kashi at whi.m-net.ne.jp>
+	* image.rb: swap width and height in image_info method.
+
 2005-12-01  SHIBATA Hiroshi  <h-sbt@nifty.com>
 	* makerss.rb: insert link of Tsukkomi in RSS.
 
