@@ -1,4 +1,4 @@
-# kw.rb $Revision: 1.10 $
+# kw.rb $Revision: 1.11 $
 #
 # kw: keyword link generator
 #   Parameters:
@@ -33,7 +33,7 @@ def kw_parse( str )
 	str.each do |pair|
 		k, u, s = pair.sub( /[\r\n]+/, '' ).split( /[ \t]+/, 3 )
 		k = nil if k == '' or k == 'nil'
-		s = nil if s != 'euc-jp' && s != 'sjis' && s != 'jis'
+		s = nil if s != 'euc-jp' && s != 'sjis' && s != 'jis' && s != 'utf-8'
 		kw_list << [k, u, s] if u
 	end
 	kw_list
@@ -80,6 +80,8 @@ def kw( keyword, name = nil )
 				NKF::nkf( '-s', key )
 			when 'jis'
 				NKF::nkf( '-j', key )
+			when 'utf-8'
+				NKF::nkf( '-w', key )
 			else # none
 				key
 		end )
