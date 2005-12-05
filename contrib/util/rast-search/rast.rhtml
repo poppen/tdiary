@@ -1,4 +1,4 @@
-<%# rast.rhtml $Revision: 1.6 $ %>
+<%# rast.rhtml $Revision: 1.7 $ %>
 <div class="adminmenu"><%%=navi_user%></div>
 
 <h1><%= CGI::escapeHTML( @conf.html_title ) %> [全文検索]</h1>
@@ -49,7 +49,7 @@
 </div>
 <div class="comment">
 <div class="commentshort">
-<p><a href="/"><%= @conf.comment_anchor %></a>
+<p><%= @conf.comment_anchor %>
 <span class="commentator"></span>&nbsp;(スコア:<%= item.score %>)</p>
 </div>
 </div>
