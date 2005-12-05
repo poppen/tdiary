@@ -41,7 +41,9 @@ rast-search README
 
   6. rast-register.rb プラグインを有効にします。(tDiary の plugin/ ディレ
      クトリにコピーするか、プラグイン選択のディレクトリにコピーしてブラウ
-     ザから有効に設定します)
+     ザから有効に設定します。言語リソースファイルの en/rast-register.rb
+     と ja/rast-register.rb も、プラグインディレクトリの en/ 以下および
+     ja/ 以下にコピーしてください。)
 
   7. (オプション) tdiary.conf で以下のように encoding の設定をできます。
      Rast の encoding module の名前で設定してください。デフォルトは
@@ -51,16 +53,15 @@ rast-search README
 
      @options['rast.index'] = 'utf8'
 
-  8. tDiary の CGI の実行権限で以下のように実行して、既存の日記のインデッ
-     クスを作成します。
+  8. 既存の日記コンテンツに対して検索インデックスを作成します。tDiary の
+     設定画面から「Rast検索」を選び、「Rast検索のインデックスを再構築する
+     場合は、チェックボックスをチェックしてOKを押してください」というメッ
+     セージに従ってチェックしてOKを押すと、
+
+     インデックスの作成は、tDiary の CGI の実行権限で以下のように実行する
+     ことでも可能です。
 
      ruby rast-register.rb [-p tdiary.rbのあるディレクトリ] [-c tdiary.confのあるディレクトリ]
-
-     もしくは、rast-register.rb を tDiary の index.rb があるディレクトリ
-     にコピーして、 http://日記のURI/rast-register.rb にアクセスしてイン
-     デックスを作成することもできます。この場合、rast-register.rb にあら
-     かじめ実行属性をつけ、必要なら #! のパスを変更してください。また
-     update.rb と同様のアクセス制限をかけることを推奨します。
 
   9. 自分の tDiary の好きな場所 (例えばヘッダ) に以下のようなフォームを加
      えてください。
