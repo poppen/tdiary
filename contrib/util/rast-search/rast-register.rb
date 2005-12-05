@@ -21,7 +21,7 @@ if mode == "CMD"
 	$stdout.sync = true
 
 	def usage
-		puts "rast-register.rb $Revision: 1.7 $"
+		puts "rast-register.rb $Revision: 1.8 $"
 		puts " register to rast index files from tDiary's database."
 		puts " usage: ruby rast-regiser.rb [-p <tDiary directory>] [-c <tdiary.conf directory>]"
 		exit
@@ -84,8 +84,8 @@ module TDiary
 				{
 					"name" => "date",
 					"type" => Rast::PROPERTY_TYPE_STRING,
-					"search" => false,
-					"text_search" => true,
+					"search" => true,
+					"text_search" => false,
 					"full_text_search" => false,
 					"unique" => false,
 				},
@@ -154,9 +154,9 @@ module TDiary
 			last_modified = @diary.last_modified.strftime("%FT%T")
 			options = {"properties" => ['last_modified']}
 			if @conf['rast.with_user_name']
-				result = @db.search("date : #{date} & user = #{@conf.user_name}", options)
+				result = @db.search("date = #{date} & user = #{@conf.user_name}", options)
 			else
-				result = @db.search("date : #{date}", options)
+				result = @db.search("date = #{date}", options)
 			end
 			for item in result.items
 				if force || item.properties[0] < last_modified
@@ -236,8 +236,11 @@ module TDiary
 		end
 
 		def execute(encoding, out = $stdout)
+			require 'fileutils'
 			calendar
-			RastDB.new(conf, encoding).transaction do |rast_db|
+			db = RastDB.new(conf, encoding)
+			FileUtils.rm_rf(db.db_path)
+			db.transaction do |rast_db|
 				@years.keys.sort.each do |year|
 					out << "(#{year.to_s}/) "
 					@years[year.to_s].sort.each do |month|

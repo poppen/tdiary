@@ -1,3 +1,7 @@
+2005-12-05  Kazuhiko  <kazuhiko@fdiary.net>
+	* rast-register.rb: revise attributes of the 'date' property.
+	remove indices before rebuilding.
+
 2005-12-04  Kazuhiko  <kazuhiko@fdiary.net>
 	* rast-register.rb: support tDiary-2.0.x.
 	* en/rast-register.rb, ja/rast-register.rb: add resources.
