@@ -1,4 +1,4 @@
-# kw.rb $Revision: 1.12 $
+# kw.rb $Revision: 1.13 $
 #
 # kw: keyword link generator
 #   Parameters:
@@ -45,7 +45,7 @@ def kw_generate_dic
 	when 'en'
 		kw_dic = {nil => ['http://www.google.com/search?q=$1', nil]}
 	else
-		kw_dic = {nil => ['http://www.google.com/search?ie=euc-jp&amp;q=$1', 'euc-jp']}
+		kw_dic = {nil => ['http://www.google.com/search?ie=euc-jp&q=$1', 'euc-jp']}
 	end
 
 	kw_list = []
