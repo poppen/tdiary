@@ -21,7 +21,7 @@ if mode == "CMD"
 	$stdout.sync = true
 
 	def usage
-		puts "rast-register.rb $Revision: 1.9 $"
+		puts "rast-register.rb $Revision: 1.10 $"
 		puts " register to rast index files from tDiary's database."
 		puts " usage: ruby rast-regiser.rb [-p <tDiary directory>] [-c <tdiary.conf directory>]"
 		exit
@@ -142,7 +142,8 @@ module TDiary
 			@plugin = ::TDiary::Plugin::new(
 							'conf' => @conf,
 							'cgi' => @cgi,
-							'cache_path' => cache_path
+							'cache_path' => cache_path,
+							'diaries' => @diaries
 							)
 			def @plugin.apply_plugin_alt( str, remove_tag = false )
 				apply_plugin( str, remove_tag )

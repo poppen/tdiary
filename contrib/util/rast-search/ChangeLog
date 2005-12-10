@@ -1,4 +1,6 @@
 2005-12-10  Kazuhiko  <kazuhiko@fdiary.net>
+	* rast-register.rb: set 'diaries' for the 'my-ex' plugin.
+
 	* rast-register.rb: revise attributes of the 'date' property.
 	rebuilding indices is necessary.
 	* rast-search.rb: revise for mod_ruby.
