@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# rast-search.rb $Revision: 1.5 $
+# rast-search.rb $Revision: 1.6 $
 #
 # Copyright (C) 2005 Kazuhiko <kazuhiko@fdiary.net>
 # You can redistribute it and/or modify it under GPL2.
@@ -21,7 +21,7 @@ require 'tdiary'
 # class TDiaryRast
 #
 module TDiary
-	class TDiaryRast < TDiaryBase
+	class TDiaryRast < ::TDiary::TDiaryBase
 		MAX_PAGES = 20
 		SORT_OPTIONS = [
 			["score", "¥¹¥³¥¢½ç"],
@@ -212,12 +212,12 @@ end
 
 begin
 	@cgi = CGI::new
-	if TDiary::Config.instance_method(:initialize).arity > 0
+	if ::TDiary::Config.instance_method(:initialize).arity > 0
 		# for tDiary 2.1 or later
-		conf = TDiary::Config::new(@cgi)
+		conf = ::TDiary::Config::new(@cgi)
 	else
 		# for tDiary 2.0 or earlier
-		conf = TDiary::Config::new
+		conf = ::TDiary::Config::new
 	end
 	tdiary = TDiary::TDiaryRast::new( @cgi, 'rast.rhtml', conf )
 

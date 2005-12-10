@@ -1,3 +1,8 @@
+2005-12-10  Kazuhiko  <kazuhiko@fdiary.net>
+	* rast-register.rb: revise attributes of the 'date' property.
+	rebuilding indices is necessary.
+	* rast-search.rb: revise for mod_ruby.
+
 2005-12-06  Kazuhiko  <kazuhiko@fdiary.net>
 	* rast.rhtml: remove a dummy link.
 
