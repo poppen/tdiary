@@ -1,5 +1,5 @@
 #
-# dbi_io.rb: DBI IO for tDiary 2.x. $Revision: 1.1 $
+# dbi_io.rb: DBI IO for tDiary 2.x. $Revision: 1.2 $
 #
 # NAME             dbi_io
 #
@@ -8,6 +8,7 @@
 #
 # Copyright        (C) 2003 ma2tak <ma2tak@ma2tak.dyndns.org>
 #                  (C) 2004 moonwolf <moonwolf@mooonwolf.com>
+#                  (C) 2005 Kazuhiko <kazuhiko@fdiary.net>
 #
 # You can distribute this under GPL.
 require 'dbi'
@@ -52,9 +53,7 @@ module TDiary
         begin
           diaries.each {|date, diary_object|
             sql = "SELECT diary_id, count, ref FROM refererdata WHERE author='#{@dbi_author}' AND diary_id=#{date};"
-            num = 0
             @dbh.select_all(sql) {|diary_id, count, ref|
-              num += 1
               diary_object.add_referer(ref.chomp, count.to_i)
             }
           }
@@ -94,14 +93,11 @@ module TDiary
     end
     
     def calendar
-      calendar = {}
-      sql = "SELECT DISTINCT year, month FROM diarydata GROUP BY year, month ORDER BY year, month;"
+      calendar = Hash.new{|hash, key| hash[key] = []}
+      sql = "SELECT year, month FROM diarydata GROUP BY year, month ORDER BY year, month;"
       @dbh.select_all(sql) {|year, month|
-        ary = calendar[year] || Array.new
-        ary << month
-        calendar[year] = ary
+        calendar[year] << month
       }
-      
       calendar
     end
     
@@ -113,12 +109,12 @@ module TDiary
         date_string = date.strftime("%Y%m%d")
         diaries = {}
         cache = @tdiary.restore_parser_cache(date, 'defaultio')
-        unless cache
+        if cache
+          diaries.update(cache)
+        else
           restore(date_string, diaries)
           restore_comment(diaries)
           restore_referer(diaries)
-        else
-          diaries.update(cache)
         end
         dirty = yield(diaries) if iterator?
         store(diaries)  if dirty & TDiary::TDiaryBase::DIRTY_DIARY != 0
