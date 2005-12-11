@@ -1,2 +1,7 @@
+2005-12-11  Kazuhiko  <kazuhiko@fdiary.net>
+	* dbi_io.rb (store_comment): delete possible duplicate comments.
+	(restore_referer): quote diary_id.
+	(calendar): fix a bug in a multi-user environment.
+
 2005-12-10  Kazuhiko  <kazuhiko@fdiary.net>
 	* dbi_io.rb: code cleanup.

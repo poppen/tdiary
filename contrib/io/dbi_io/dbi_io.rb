@@ -1,5 +1,5 @@
 #
-# dbi_io.rb: DBI IO for tDiary 2.x. $Revision: 1.2 $
+# dbi_io.rb: DBI IO for tDiary 2.x. $Revision: 1.3 $
 #
 # NAME             dbi_io
 #
@@ -42,6 +42,7 @@ module TDiary
                 @dbh.execute("INSERT INTO commentdata (name, mail, last_modified, visible, comment, author, diary_id, no) VALUES (?,?,?,?,?,?,?,?);", *param)
               end
             }
+            @dbh.execute("DELETE FROM commentdata where author=? AND diary_id=? AND no>?", @dbi_author, date, no)
           }
         rescue Errno::ENOENT
         end
@@ -52,8 +53,8 @@ module TDiary
       def restore_referer(diaries)
         begin
           diaries.each {|date, diary_object|
-            sql = "SELECT diary_id, count, ref FROM refererdata WHERE author='#{@dbi_author}' AND diary_id=#{date};"
-            @dbh.select_all(sql) {|diary_id, count, ref|
+            sql = "SELECT diary_id, count, ref FROM refererdata WHERE author=? AND diary_id=?;"
+            @dbh.select_all(sql, @dbi_author, date) {|diary_id, count, ref|
               diary_object.add_referer(ref.chomp, count.to_i)
             }
           }
@@ -94,8 +95,8 @@ module TDiary
     
     def calendar
       calendar = Hash.new{|hash, key| hash[key] = []}
-      sql = "SELECT year, month FROM diarydata GROUP BY year, month ORDER BY year, month;"
-      @dbh.select_all(sql) {|year, month|
+      sql = "SELECT year, month FROM diarydata WHERE author=? GROUP BY year, month ORDER BY year, month;"
+      @dbh.select_all(sql, @dbi_author) {|year, month|
         calendar[year] << month
       }
       calendar
