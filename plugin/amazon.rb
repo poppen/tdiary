@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.45 $: Making link with image to Amazon using Amazon ECS.
+# amazon.rb $Revision: 1.46 $: Making link with image to Amazon using Amazon ECS.
 #
 # see document: #{@lang}/amazon.rb
 #
@@ -70,7 +70,9 @@ def amazon_to_html( item, with_image = true, label = nil, pos = 'amazon' )
 			alt="#{CGI::escapeHTML(label)}" title="#{CGI::escapeHTML(label)}">
 			HTML
 		rescue
-			unless @conf['amazon.nodefault'] then
+			if @conf['amazon.nodefault'] then
+				image = CGI::escapeHTML(label)
+			else
 				base = @conf['amazon.default_image_base'] || 'http://www.tdiary.org/images/amazondefaults/'
 				name = case @conf['amazon.imgsize']
 				when 0; 'large'

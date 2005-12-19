@@ -1,3 +1,7 @@
+2005-12-20  Kazuhiko  <kazuhiko@fdiary.net>
+	* amazon.rb: display an item name if no image is found and the
+	'amazon.nodefault' option is true.
+
 2005-12-07 Lilia <nursery at s8.xrea.com>
 	* kw.rb: unescape HTML for google query in default.
 
