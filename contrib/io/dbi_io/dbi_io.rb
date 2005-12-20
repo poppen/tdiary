@@ -1,5 +1,5 @@
 #
-# dbi_io.rb: DBI IO for tDiary 2.x. $Revision: 1.3 $
+# dbi_io.rb: DBI IO for tDiary 2.x. $Revision: 1.4 $
 #
 # NAME             dbi_io
 #
@@ -65,13 +65,23 @@ module TDiary
       def store_referer(diaries)
         begin
           diaries.each {|date, diary|
-            no = 0
-            diary.each_referer(diary.count_referers) {|count,ref|
-              no += 1
-              param = [count, ref, @dbi_author, date, no]
-              sth = @dbh.execute("UPDATE refererdata SET count=?, ref=? WHERE author=? AND diary_id=? AND no=?;", *param)
+            referers_diff = []
+            referers = diary.instance_variable_get('@referers')
+            referers.each_pair {|k, v|
+              begin
+                next if (v - @old_referers[date][k]).empty?
+              rescue
+              end
+              referers_diff << v
+            }
+            next if referers_diff.empty?
+            referers_diff.each {|count,ref|
+              param = [count, @dbi_author, date, ref]
+              sth = @dbh.execute("UPDATE refererdata SET count=? WHERE author=? AND diary_id=? AND ref=?;", *param)
               if sth.rows==0
-                @dbh.execute("INSERT INTO refererdata (count, ref, author, diary_id, no ) VALUES (?,?,?,?,?);", *param)
+                no = @dbh.select_one("SELECT MAX(no) from refererdata where author=? AND diary_id=?", @dbi_author, date).first.to_i + 1
+                param << no
+                @dbh.execute("INSERT INTO refererdata (count, author, diary_id, ref, no ) VALUES (?,?,?,?,?);", *param)
               end
             }
           }
@@ -106,24 +116,29 @@ module TDiary
     # block must be return boolean which dirty diaries.
     #
     def transaction(date)
-      @dbh.transaction {
-        date_string = date.strftime("%Y%m%d")
-        diaries = {}
-        cache = @tdiary.restore_parser_cache(date, 'defaultio')
-        if cache
-          diaries.update(cache)
-        else
-          restore(date_string, diaries)
-          restore_comment(diaries)
-          restore_referer(diaries)
-        end
-        dirty = yield(diaries) if iterator?
-        store(diaries)  if dirty & TDiary::TDiaryBase::DIRTY_DIARY != 0
-        store_comment(diaries)  if dirty & TDiary::TDiaryBase::DIRTY_COMMENT != 0
-        store_referer(diaries)  if dirty & TDiary::TDiaryBase::DIRTY_REFERER != 0
-        if dirty or not cache
-          @tdiary.store_parser_cache(date, 'defaultio', diaries)
-        end
+      File.open("#{@tdiary.conf.data_path}/dbi_io.lock", 'w') {|file|
+        file.flock(File::LOCK_EX)
+        @dbh.transaction {
+          date_string = date.strftime("%Y%m%d")
+          diaries = {}
+          cache = @tdiary.restore_parser_cache(date, 'defaultio')
+          if cache
+            diaries.update(cache)
+          else
+            restore(date_string, diaries)
+            restore_comment(diaries)
+            restore_referer(diaries)
+          end
+          @old_referers = {}
+          diaries.each_pair{|k,v| @old_referers[k] = v.instance_variable_get('@referers').dup}
+          dirty = yield(diaries) if iterator?
+          store(diaries)  if dirty & TDiary::TDiaryBase::DIRTY_DIARY != 0
+          store_comment(diaries)  if dirty & TDiary::TDiaryBase::DIRTY_COMMENT != 0
+          store_referer(diaries)  if dirty & TDiary::TDiaryBase::DIRTY_REFERER != 0
+          if dirty or not cache
+            @tdiary.store_parser_cache(date, 'defaultio', diaries)
+          end
+        }
       }
     end
     

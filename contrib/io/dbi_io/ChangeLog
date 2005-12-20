@@ -1,3 +1,7 @@
+2005-12-20  Kazuhiko  <kazuhiko@fdiary.net>
+	* dbi_io.rb.fast (transaction): lock whole transaction exlusively.
+	(store_referer): update different entries only.
+
 2005-12-11  Kazuhiko  <kazuhiko@fdiary.net>
 	* dbi_io.rb (store_comment): delete possible duplicate comments.
 	(restore_referer): quote diary_id.
