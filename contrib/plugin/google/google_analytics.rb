@@ -4,7 +4,7 @@
 # Copyright (C) 2005 TADA Tadashi <sho@spc.gr.jp>
 # You can redistribute it and/or modify it under GPL2.
 #
-add_header_proc do
+add_footer_proc do
 	google_analytics_insert_code
 end
 
