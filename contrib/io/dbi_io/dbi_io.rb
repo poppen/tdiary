@@ -1,5 +1,5 @@
 #
-# dbi_io.rb: DBI IO for tDiary 2.x. $Revision: 1.4 $
+# dbi_io.rb: DBI IO for tDiary 2.x. $Revision: 1.5 $
 #
 # NAME             dbi_io
 #
@@ -77,11 +77,15 @@ module TDiary
             next if referers_diff.empty?
             referers_diff.each {|count,ref|
               param = [count, @dbi_author, date, ref]
-              sth = @dbh.execute("UPDATE refererdata SET count=? WHERE author=? AND diary_id=? AND ref=?;", *param)
-              if sth.rows==0
-                no = @dbh.select_one("SELECT MAX(no) from refererdata where author=? AND diary_id=?", @dbi_author, date).first.to_i + 1
-                param << no
-                @dbh.execute("INSERT INTO refererdata (count, author, diary_id, ref, no ) VALUES (?,?,?,?,?);", *param)
+              begin
+                sth = @dbh.execute("UPDATE refererdata SET count=? WHERE author=? AND diary_id=? AND ref=?;", *param)
+                if sth.rows==0
+                  no = @dbh.select_one("SELECT MAX(no) from refererdata where author=? AND diary_id=?", @dbi_author, date).first.to_i + 1
+                  param << no
+                  @dbh.execute("INSERT INTO refererdata (count, author, diary_id, ref, no ) VALUES (?,?,?,?,?);", *param)
+                end
+              rescue DBI::ProgrammingError
+                $stderr.puts "invalid referer:#{ref}"
               end
             }
           }

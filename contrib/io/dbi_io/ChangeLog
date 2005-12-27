@@ -1,3 +1,6 @@
+2005-12-27  Kazuhiko  <kazuhiko@fdiary.net>
+	* dbi_io.rb (store_referer): ignore invalid referers.
+
 2005-12-20  Kazuhiko  <kazuhiko@fdiary.net>
 	* dbi_io.rb.fast (transaction): lock whole transaction exlusively.
 	(store_referer): update different entries only.
