@@ -1,4 +1,4 @@
-# $Revision: 1.13 $
+# $Revision: 1.14 $
 # recent_trackback3: 最近のツッコミをリストアップする
 #
 # Copyright (c) 2004 Junichiro KITA <kita@kitaj.no-ip.com>
@@ -128,7 +128,7 @@ add_update_proc do
 		end
 	elsif @mode == 'showcomment'
 		recent_trackback3_init
-		cache = @conf['recent_trackback3.cache']
+		cache = @conf['recent_trackback3.cache'].untaint
 		cache_size = @conf['recent_trackback3.cache_size']
 
 		PStore.new(cache).transaction do |db|
