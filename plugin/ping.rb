@@ -1,4 +1,4 @@
-# ping.rb: $Revision: 1.7 $
+# ping.rb: $Revision: 1.8 $
 #
 # ping to weblog ping servers.
 #
@@ -88,7 +88,7 @@ def ping_edit_proc
 	end
 	r = <<-HTML
 	<div class="ping">
-	<input type="checkbox" name="plugin_ping_send" value="false"#{checked}  tabindex="400" />
+	<input type="checkbox" name="plugin_ping_send" value="true"#{checked}  tabindex="400" />
 	#{@ping_label_send}
 	</div>
 	HTML
