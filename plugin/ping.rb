@@ -1,4 +1,4 @@
-# ping.rb: $Revision: 1.8 $
+# ping.rb: $Revision: 1.9 $
 #
 # ping to weblog ping servers.
 #
@@ -84,7 +84,7 @@ end
 def ping_edit_proc
 	checked = ' checked'
 	if @mode == 'preview' then
-		checked = @cgi.params['plugin_ping_send'][0] == 'false' ? ' checked' : ''
+		checked = @cgi.params['plugin_ping_send'][0] == 'true' ? ' checked' : ''
 	end
 	r = <<-HTML
 	<div class="ping">
