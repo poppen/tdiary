@@ -1,3 +1,20 @@
+2006-01-20 MUTOH Masao  <mutoh@highway.ne.jp>
+	* counter.rb:
+	  + Improves the speed and stability.
+	    - Separate data to counterdata and accessdata.
+	    - counterdata is the target of backup, but accessdata doesn't do backup.
+	    - change a key of an Array of String to a hash.
+	    - Removed "counter.daily_backup" option. Now daily_backup is applied
+	      everyday unless this setting.
+	    - Add a new "counter.max_keep_access_num" option which you can set 
+	      the max number to keep users in the accessdata file to avoid to become
+	      too large the accessdata file.
+	  + Follow tDiary framework.
+	    - Add configuration page.
+	  + Misc
+	    - Removed "counter.deny_remote_addrs" option.
+	    - Added default deny user-agents.
+
 2006-01-23 SHIBATA Hiroshi <h-sbt@nifty.com>
 	* ping.rb: fix update option.
 
