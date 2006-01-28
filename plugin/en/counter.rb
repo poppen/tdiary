@@ -1,4 +1,4 @@
-# counter.rb $Revision: 1.1 $
+# counter.rb $Revision: 1.2 $
 #
 # English resource file for access counter plugin.
 #
@@ -38,4 +38,4 @@
 @counter_conf_kiriban_messages_desc ||= "Describe &lt;%= kiriban %&gt; in the header or footer, this messages will be shown when the counter number reaches to the Kiriban."
 @counter_conf_kiriban_messages_label_all ||= "Kiriban message:"
 @counter_conf_kiriban_messages_label_today ||= "Today's Kiriban message:"
-@counter_conf_kiriban_messages_label_today ||= "Default(Not Kiriban)message:"
+@counter_conf_kiriban_messages_label_nomatch ||= "Default(Not Kiriban)message:"
