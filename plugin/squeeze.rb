@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-# squeeze.rb $Revision: 1.22 $
+# squeeze.rb $Revision: 1.23 $
 #
 # Create daily HTML file from tDiary database.
 #
@@ -28,7 +28,7 @@ if mode == "CMD" || mode == "CGI"
 
 	if mode == "CMD"
 		def usage
-			puts "squeeze $Revision: 1.22 $"
+			puts "squeeze $Revision: 1.23 $"
 			puts " making html files from tDiary's database."
 			puts " usage: ruby squeeze.rb [-p <tDiary path>] [-c <tdiary.conf path>] [-a] [-s] [-x suffix] <dest path>"
 			exit
@@ -108,7 +108,9 @@ module TDiary
 		def initialize(diary, dest, all_data, compat, conf, suffix)
 			@ignore_parser_cache = true
 	
-			super(CGI::new, 'day.rhtml', conf)
+			cgi = CGI::new
+			def cgi.referer; nil; end
+			super( cgi, 'day.rhtml', conf )
 			@diary = diary
 			@date = diary.date
 			@diaries = {@date.strftime('%Y%m%d') => @diary} if @diaries.size == 0
@@ -163,7 +165,9 @@ module TDiary
 		def initialize(dest, all_data, compat, conf, suffix)
 			@ignore_parser_cache = true
 	
-			super(CGI::new, 'day.rhtml', conf)
+			cgi = CGI::new
+			def cgi.referer; nil; end
+			super( cgi, 'day.rhtml', conf )
 			calendar
 			@years.keys.sort.each do |year|
 				print "(#{year.to_s}/) "
@@ -190,7 +194,7 @@ if mode == "CGI" || mode == "CMD"
 			</head>
 			<body><div style="text-align:center">
 			<h1>Squeeze for tDiary</h1>
-			<p>$Revision: 1.22 $</p>
+			<p>$Revision: 1.23 $</p>
 			<p>Copyright (C) 2002 MUTOH Masao&lt;mutoh@highway.ne.jp&gt;</p></div>
 			<br><br>Start!</p><hr>
 		]

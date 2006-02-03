@@ -1,3 +1,6 @@
+2006-02-03 TADA Tadashi <sho@spc.gr.jp>
+	* squeeze.rb: delete referer when generate static HTML files.
+
 2006-02-02 TADA Tadashi <sho@spc.gr.jp>
 	* amazon.rb: acceptable numeric ASIN.
 
