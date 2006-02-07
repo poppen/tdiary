@@ -1,4 +1,4 @@
-# counter.rb $Revision: 1.23 $
+# counter.rb $Revision: 1.24 $
 #
 # Access counter plugin.
 #
@@ -26,7 +26,11 @@
 # You can redistribute it and/or modify it under GPL2.
 # 
 =begin ChangeLog
-2006-01-20 MUTOH Masao  <mutoh@highway.ne.jp>
+2006-02-07 MUTOH Masao
+   * Revert the log file name from counter2.log to counter.log.
+     Reported by Ken-ichi Mito.
+ 
+2006-01-20 MUTOH Masao
    * Improves the speed and stability.
      - Separate data to counterdata and accessdata.
      - counterdata is the target of backup, but accessdata doesn't do backup.
@@ -261,7 +265,7 @@ eval(<<TOPLEVEL_CLASS, TOPLEVEL_BINDING)
 
     def log
       if @newestday
-	open(File.join(@path, "counter2.log"), "a") do |io|
+	open(File.join(@path, "counter.log"), "a") do |io|
 	  io.print @newestday, " : ", @all, ",", @today, ",", @yesterday, "\n"
 	end
 	save("counter2.dat." + @newestday.wday.to_s)
