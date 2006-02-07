@@ -1,4 +1,4 @@
-# counter.rb $Revision: 1.24 $
+# counter.rb $Revision: 1.25 $
 #
 # Access counter plugin.
 #
@@ -29,6 +29,7 @@
 2006-02-07 MUTOH Masao
    * Revert the log file name from counter2.log to counter.log.
      Reported by Ken-ichi Mito.
+   * 2.0.1
  
 2006-01-20 MUTOH Masao
    * Improves the speed and stability.
@@ -277,7 +278,7 @@ TOPLEVEL_CLASS
 
 
   module TDiaryCounter
-    @version = "2.0.0"
+    @version = "2.0.1"
 
     def run(cache_path, cgi, options)
       timer = options["counter.timer"] if options
