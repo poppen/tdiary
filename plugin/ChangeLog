@@ -1,3 +1,7 @@
+2006-02-10 TADA Tadashi <sho@spc.gr.jp>
+	* disp_referrer.rb: support volatile referer and disable cache in
+	default_io.
+
 2006-02-07 MUTOH Masao
 	* Revert the log file name from counter2.log to counter.log.
 	  Reported by Ken-ichi Mito.

@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.57 2005-09-25 20:34:11 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.58 2006-02-10 19:42:19 tadatadashi Exp $-))
 
 == 概要
 アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
@@ -161,6 +161,7 @@ unless @conf and @conf.secure then
 			@setup = setup
 		end
 		def cache( date )
+			return File.join( @setup['cache_dir'], 'volatile.tdr2.cache' ) unless date
 			begin
 				Dir.mkdir( @setup['cache_dir'] )
 			rescue Errno::EEXIST
@@ -561,6 +562,7 @@ class DispRef2Setup < Hash
 			options_key = "disp_referrer2.#{key}"
 			self[key] = @options[options_key] if @options.has_key?( options_key )
 		end
+		self['no_cache'] = true if @conf.io_class == ::TDiary::DefaultIO
 
 		# additions
 		self['labels'] = {
@@ -889,7 +891,8 @@ class DispRef2Refs
 		end
 
 		h = Hash.new
-		db = DispRef2PStore.new( DispRef2CachePath.new( setup ).cache( diary.date ) )
+		date = date.respond_to?( :date ) ? diary.date : nil
+		db = DispRef2PStore.new( DispRef2CachePath.new( setup ).cache( date ) )
 		db.transaction do
 			diary.each_referer( diary.count_referers ) do |count, url|
 				ref = DispRef2URL.new( url )
@@ -957,10 +960,10 @@ class DispRef2Refs
 		result
 	end
 
-	def to_long_html
+	def to_long_html( label )
 		return '' if not @has_ref
 		# we always need a caption
-		result = %Q[<div class="caption">#{@setup['labels'][DispRef2URL::Normal]}</div>\n]
+		result = %Q[<div class="caption">#{label}</div>\n]
 		result << others_to_long_html( DispRef2URL::Normal )
 		if( @setup['normal.categorize'] and special_categories ) then
 			special_categories.each do |cat|
@@ -1414,19 +1417,21 @@ end
 def referer_of_today_long( diary, limit = 100 )
 	return '' if bot?
 	setup = DispRef2Setup.new( @conf, limit, true, nil, @mode )
-	r = DispRef2Refs.new( diary, setup ).to_long_html
+	r = ''
+	r << DispRef2Refs.new( diary, setup ).to_long_html( referer_today )
+	r << DispRef2Refs.new( @referer_volatile, setup ).to_long_html( volatile_referer ) if @referer_volatile
 	DispRef2CachePath.new( setup ).shrink
 	r
 end
 
 # for newest diary
-alias dispref2_original_referer_of_today_short referer_of_today_short
-def referer_of_today_short( diary, limit = 10 )
-	return '' if bot?
-	return dispref2_original_referer_of_today_short( diary, limit ) if @options.has_key?( 'disp_referrer2.short.only_normal' ) and not @options['disp_referrer2.short.only_normal']
-	setup = DispRef2Setup.new( @conf, limit, false, nil, @mode )
-	DispRef2Refs.new( diary, setup ).to_short_html
-end
+#alias dispref2_original_referer_of_today_short referer_of_today_short
+#def referer_of_today_short( diary, limit = 10 )
+#	return '' if bot?
+#	return dispref2_original_referer_of_today_short( diary, limit ) if @options.has_key?( 'disp_referrer2.short.only_normal' ) and not @options['disp_referrer2.short.only_normal']
+#	setup = DispRef2Setup.new( @conf, limit, false, nil, @mode )
+#	DispRef2Refs.new( diary, setup ).to_short_html
+#end
 
 # we have to know the unknown urls at this moment in a secure diary
 if @conf.secure and (\
