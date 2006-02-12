@@ -1,3 +1,6 @@
+2006-02-12 TADA Tadashi <sho@spc.gr.jp>
+	* disp_referrer.rb: fix bug: hide volatile referer in old diaries.
+
 2006-02-11 SHIBATA Hiroshi <h-sbt@nifty.com>
 	* ja/amazon.rb: fix typo.
 

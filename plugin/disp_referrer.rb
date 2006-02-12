@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.58 2006-02-10 19:42:19 tadatadashi Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.59 2006-02-12 12:01:24 tadatadashi Exp $-))
 
 == 概要
 アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
@@ -1419,7 +1419,7 @@ def referer_of_today_long( diary, limit = 100 )
 	setup = DispRef2Setup.new( @conf, limit, true, nil, @mode )
 	r = ''
 	r << DispRef2Refs.new( diary, setup ).to_long_html( referer_today )
-	r << DispRef2Refs.new( @referer_volatile, setup ).to_long_html( volatile_referer ) if @referer_volatile
+	r << DispRef2Refs.new( @referer_volatile, setup ).to_long_html( volatile_referer ) if @referer_volatile and latest_day?( diary )
 	DispRef2CachePath.new( setup ).shrink
 	r
 end
