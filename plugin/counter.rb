@@ -1,4 +1,4 @@
-# counter.rb $Revision: 1.25 $
+# counter.rb $Revision: 1.26 $
 #
 # Access counter plugin.
 #
@@ -26,12 +26,19 @@
 # You can redistribute it and/or modify it under GPL2.
 # 
 =begin ChangeLog
-2006-02-07 MUTOH Masao
+2006-02-14 Masao Mutoh
+   * Add some user-agents.
+   * 2.0.2
+
+2006-02-14 mitty
+   * Fixed a problem when counter2_access.dat is broken.
+   
+2006-02-07 Masao Mutoh
    * Revert the log file name from counter2.log to counter.log.
      Reported by Ken-ichi Mito.
    * 2.0.1
  
-2006-01-20 MUTOH Masao
+2006-01-20 Masao Mutoh
    * Improves the speed and stability.
      - Separate data to counterdata and accessdata.
      - counterdata is the target of backup, but accessdata doesn't do backup.
@@ -160,8 +167,9 @@
    * version 1.0.0
 =end
 
-@counter_default_user_agents = "tlink|WWWOFFLE|^WWWC|^Wget|WWWD|fetch|Antenna|antenna|Bulkfeeds|Infoseek SideWinderBlogRanking|^ichiro|CaptainNAMAAN|Download Ninja|ping.blogger.jp|ia_archiver|Nutch|^Mediapartners.Google|lwp.trivial|nomadscafe_ra|rawler|KMHTTP|Tarantula|Pockey|Microsoft URL Control|Livedoor SF|^Blogline|Yahoo|^Y.J|Ask Jeeves|^Commerobo|^livedoorCheckers|^voyager|^findlinks|^\-$|FunWebProducts|^Headline|lmspider|^FreshReader|^FeedChecker|^FyberSpider|^Hatena|^intraVnews|^Nandemorss|^Nutch|^1.0$|^Blogshares|Crawl|Feed..Find|Gigabot|MSNPTC|MS Search|^Pompos|^Portsurvey|^RSS_READER|^gooRSSreader|^kinja|^larbin|^research\-spider|bot|^HTTP$|SBIder|StackRambler|Wavefire|samidare|MarkAgent"
+@counter_default_user_agents = "feed|tlink|WWWOFFLE|^WWWC|^Wget|WWWD|fetch|Antenna|antenna|Infoseek SideWinderBlogRanking|^ichiro|CaptainNAMAAN|Download Ninja|ping.blogger.jp|ia_archiver|Nutch|^Mediapartners.Google|lwp.trivial|nomadscafe_ra|rawler|KMHTTP|Tarantula|Pockey|Microsoft URL Control|Livedoor SF|^Blogline|Yahoo|^Y.J|Ask Jeeves|^Commerobo|^livedoorCheckers|^voyager|^findlinks|^\-$|FunWebProducts|^Headline|lmspider|^FreshReader|^FyberSpider|^Hatena|^intraVnews|^Nandemorss|^Nutch|^1.0$|^Blogshares|Crawl|MSNPTC|MS Search|^Pompos|^Portsurvey|^RSS_READER|^gooRSSreader|^kinja|^larbin|^research\-spider|bot|^HTTP$|SBIder|StackRambler|Wavefire|samidare|MarkAgent|^Java|NewsWire|libwww|ping.blo.gs|wish.lim|Mozilla.4.76|rAntenna|PEAR|Blogslive|edgeio.retriever|^Jakarta"
 
+#not bot: RssBar, AppleSyndication
 
 def counter_allow?
   return false if bot?
@@ -278,7 +286,7 @@ TOPLEVEL_CLASS
 
 
   module TDiaryCounter
-    @version = "2.0.1"
+    @version = "2.0.2"
 
     def run(cache_path, cgi, options)
       timer = options["counter.timer"] if options
@@ -295,10 +303,16 @@ TOPLEVEL_CLASS
 	cookie = main(cache_path, cgi, options, timer, dir, path, today)
       rescue => e
 	@cnt = TDiaryCountData.new(dir).load
+	if e.message =~ /marshal|dump|load|referred|depth|io needed|size/i
+	  begin
+	    File.unlink path
+	  rescue
+	  end
+      	end
       end
       cookie
     end
-
+    
     def main(cache_path, cgi, options, timer, dir, path, today)
       cookie = nil
       if FileTest.exist?(File.join(dir, "counter.dat"))
