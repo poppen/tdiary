@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.59 2006-02-12 12:01:24 tadatadashi Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.60 2006-02-24 15:40:00 tadatadashi Exp $-))
 
 == 概要
 アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
@@ -593,6 +593,21 @@ class DispRef2Setup < Hash
 		self
 	end
 
+	def open_cache( path )
+		if self['no_cache'] then
+			DispRef2DummyPStore::new( path )
+		else
+			DispRef2PStore::new( path )
+		end
+	end
+
+	def cache_path
+		if self['no_cache'] then
+			DispRef2CachePathDummy::new( self )
+		else
+			DispRef2CachePath::new( self )
+		end
+	end
 end
 
 =begin
@@ -891,8 +906,8 @@ class DispRef2Refs
 		end
 
 		h = Hash.new
-		date = date.respond_to?( :date ) ? diary.date : nil
-		db = DispRef2PStore.new( DispRef2CachePath.new( setup ).cache( date ) )
+		date = diary.respond_to?( :date ) ? diary.date : nil
+		db = setup.open_cache( setup.cache_path.cache( date ) )
 		db.transaction do
 			diary.each_referer( diary.count_referers ) do |count, url|
 				ref = DispRef2URL.new( url )
@@ -1076,7 +1091,7 @@ end
 class DispRef2Cache
 	def initialize( setup )
 		@setup = setup
-		@cache = DispRef2CachePath.new( @setup )
+		@cache = @setup.cache_path
 	end
 
 	# cached urls as a hash
@@ -1088,7 +1103,7 @@ class DispRef2Cache
 			caches = @cache.caches( false )
 		end
 		caches.each do |path|
-			db = DispRef2PStore.new( path )
+			db = @setup.open_cache( path )
 			db.transaction( true ) do
 				begin
 					db[Root_DispRef2URL].each_pair do |url, data|
@@ -1167,7 +1182,7 @@ class DispRef2SetupIF
 			@current_mode = Options
 		end
 		if not @setup.secure and not @setup['no_cache'] then
-			@cache = DispRef2CachePath.new( @setup )
+			@cache = @setup.cache_path
 		else
 			@cache = nil
 		end
@@ -1190,7 +1205,7 @@ class DispRef2SetupIF
 			if not @setup['no_cache'] then
 				unless @cache then
 					@need_cache_update = true
-					@cache = DispRef2CachePath.new( @setup )
+					@cache = @setup.cache_path
 				end
 				if not 'never' == @cgi.params['dr2.cache.update'][0] and ('force' == @cgi.params['dr2.cache.update'][0] or @need_cache_update) then
 					@cache.clear
@@ -1420,7 +1435,7 @@ def referer_of_today_long( diary, limit = 100 )
 	r = ''
 	r << DispRef2Refs.new( diary, setup ).to_long_html( referer_today )
 	r << DispRef2Refs.new( @referer_volatile, setup ).to_long_html( volatile_referer ) if @referer_volatile and latest_day?( diary )
-	DispRef2CachePath.new( setup ).shrink
+	setup.cache_path.shrink
 	r
 end
 
