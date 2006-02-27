@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.37 $
+# makerss.rb: $Revision: 1.38 $
 #
 # generate RSS file when updating.
 #
@@ -79,10 +79,11 @@ def makerss_update
 				cache = db['cache'] if db.root?( 'cache' )
 
 				if /^append|replace$/ =~ @mode then
+					format = "#{date}p%02d"
 					index = 0
 					diary.each_section do |section|
 						index += 1
-						id = "#{date}p%02d" % index
+						id = format % index
 						if diary.visible? and !cache[id] then
 							cache[id] = RDFSection::new( id, Time::now, section )
 						elsif !diary.visible? and cache[id]
@@ -92,6 +93,16 @@ def makerss_update
 									cache[id].section.subtitle_to_html != section.subtitle_to_html then
 								cache[id] = RDFSection::new( id, Time::now, section )
 							end
+						end
+					end
+
+					loop do
+						index += 1
+						id = format % index
+						if cache[id] then
+							cache.delete( id )
+						else
+							break
 						end
 					end
 				elsif /^comment$/ =~ @mode and @conf.show_comment
