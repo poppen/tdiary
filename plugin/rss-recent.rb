@@ -97,7 +97,7 @@ def rss_recent_cache_rss(url, cache_file, cache_time)
 		begin
 			uri = URI.parse(url)
 
-			raise URI::InvalidURIError if uri.scheme != "http"
+			raise URI::InvalidURIError unless uri.is_a?(URI::HTTP)
 
 			rss_source = rss_recent_fetch_rss(uri, cached_time)
 			

@@ -1,3 +1,6 @@
+2006-03-06 Kouhei Sutou <kou at cozmixng.org>
+	* rss-recent.rb: support HTTPS.
+
 2006-02-27 Kouhei Sutou <kou at cozmixng.org>
 	* makerss.rb: erase deleted sections from cache.
 
