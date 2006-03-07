@@ -71,6 +71,7 @@ def rss_recent(url, max=5, cache_time=3600)
 
 	rv
 end
+alias recent_rss rss_recent
 
 class InvalidResourceError < StandardError; end
 class RSSNotModified < StandardError; end
