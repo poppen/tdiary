@@ -1,3 +1,6 @@
+2006-03-13 TADA Tadashi <sho@spc.gr.jp>
+	* rename {ja,en,zh}rss-recent.rb to recent_rss.rb.
+
 2006-03-07 TADA Tadashi <sho@spc.gr.jp>
 	* rename rss-recent.rb to recent_rss.rb, and make method alias to recent_rss.
 
