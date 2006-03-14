@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.28 2005-10-18 20:57:33 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.29 2006-03-14 15:58:21 tadatadashi Exp $-))
 日本語リソース
 
 == 概要
@@ -452,7 +452,7 @@ DispReferrer2_Engines = {
 		[%r{\Ahttp://.*?\.rd\.yahoo\.([^/]+)}i, '".#{$1}のYahooのリダイレクタ"', 'split(/\*/)[1]', nil],
 		[%r{\Ahttp://srd\.yahoo\.co\.jp}i, '"Yahooのリダイレクタ"', [], nil],
 		[%r{\Ahttp://rd.+\.yahoo\.com}i, '"Yahooのリダイレクタ"', [], nil], # エンジンは inktomi 製と見た。
-		[%r{\Ahttp://.*?\.yahoo\.([^/]+)}i, '".#{$1}のYahoo!検索"', ['p', 'va', 'vp'], DispReferrer2_Google_cache],
+		[%r{\Ahttp://[^bm]*?\.yahoo\.([^/]+)}i, '".#{$1}のYahoo!検索"', ['p', 'va', 'vp'], DispReferrer2_Google_cache],
 	],
 	'yahoofs' => [[%r{\Ahttp://cache\.yahoofs\.jp/}i, '"Yahoo!検索"', ['w'], DispReferrer2_Yahoofs]],
 	'netscape' => [[%r{\Ahttp://.*?\.netscape\.([^/]+)}i, '".#{$1}のNetscape検索"', ['search', 'query'], DispReferrer2_Google_cache]],
@@ -538,7 +538,7 @@ DispReferrer2_Engines = {
 	'devilfinder' => [[%r{\Ahttp://www\.devilfinder\.com/find.php}i, '"The Devilfinder"', ['q'], nil]],
 	'lyricsuniverse' => [[%r{\Ahttp://www\.lyricsuniverse\.com/}, '"LYRICS Universe"', [], nil]],
 	'vivisimo' => [[%r{\Ahttp://.+\.vivisimo\.com/search}i, '"Vivisimo"', [], nil]],
-	'a9' => [[%r{\Ahttp://a9\.com}i, '"A9"', [], nil]],
+	'a9' => [[%r{\Ahttp://a9\.com}i, '"A9"', ['q'], nil]],
 	'nttrd' => [[%r{\Ahttp://labs\.nttrd\.com/cgi-bin/index\.cgi}, '"gooラボ"', ['q'], nil]],
 	'whatis' => [[%r{\Ahttp://whatis\.techtarget\.com/wsearchResults/}i, '"WhatIs.com | web search"', ['query'], nil]],
 	'comcast' => [[%r{\Ahttp://www\.comcast\.net/qry/websearch}i, '"COMCAST"', ['query'], nil]],

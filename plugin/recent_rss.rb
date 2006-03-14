@@ -1,8 +1,8 @@
 # -*- indent-tabs-mode: t -*-
-# rss-recent.rb: RSS recent plugin 
+# recent_rss.rb: RSS recent plugin 
 #
 # options:
-#   @options['rss-recent.use-image-link'] : use image as link
+#   @options['recent_rss.use-image-link'] : use image as link
 #                                           instead of text if available.
 #
 # rss_recnet: show recnet list from RSS
@@ -27,39 +27,39 @@ RSS_RECENT_HTTP_HEADER = {
 		"Using RSS parser version is #{::RSS::VERSION}.",
 }
 
-def rss_recent(url, max=5, cache_time=3600)
+def recent_rss(url, max=5, cache_time=3600)
 	return 'DO NOT USE IN SECURE MODE' if @conf.secure
 
 	url.untaint
 
-	cache_file = "#{@cache_path}/rss-recent.#{CGI.escape(url)}"
+	cache_file = "#{@cache_path}/recent_rss.#{CGI.escape(url)}"
 
-	rss_recent_cache_rss(url, cache_file, cache_time.to_i)
+	recent_rss_cache_rss(url, cache_file, cache_time.to_i)
 	
 	return '' unless test(?r, cache_file)
 
-	rv = %Q|<div class="rss-recent">\n|
+	rv = %Q|<div class="recent_rss">\n|
 
-	site_info, *infos = rss_recent_read_from_cache(cache_file)
+	site_info, *infos = recent_rss_read_from_cache(cache_file)
   
 	if site_info
 		title, url, time, image = site_info
-		content = rss_recent_entry_to_html(title, url, time, image)
-		rv << %Q|<div class="rss-recent-title">\n|
-		rv << %Q|<span class="#{rss_recent_modified_class(time)}">#{content}</span>\n|
+		content = recent_rss_entry_to_html(title, url, time, image)
+		rv << %Q|<div class="recent_rss-title">\n|
+		rv << %Q|<span class="#{recent_rss_modified_class(time)}">#{content}</span>\n|
 		rv << "</div>\n"
 	end
   
 	have_entry = infos.size > 0 && max > 0
   
-	rv << %Q|<ol class="rss-recent">\n| if have_entry
+	rv << %Q|<ol class="recent_rss">\n| if have_entry
 	i = 0
 	infos.each do |title, url, time, image|
 		break if i >= max
 		next if title.nil?
 		rv << '<li>'
-		rv << %Q[<span class="#{rss_recent_modified_class(time)}">]
-		rv << rss_recent_entry_to_html(title, url, time, image)
+		rv << %Q[<span class="#{recent_rss_modified_class(time)}">]
+		rv << recent_rss_entry_to_html(title, url, time, image)
 		rv << %Q[</span>]
 		rv << "</li>\n"
 		i += 1
@@ -71,12 +71,12 @@ def rss_recent(url, max=5, cache_time=3600)
 
 	rv
 end
-alias recent_rss rss_recent
+alias recent_rss recent_rss
 
 class InvalidResourceError < StandardError; end
 class RSSNotModified < StandardError; end
 
-def rss_recent_cache_rss(url, cache_file, cache_time)
+def recent_rss_cache_rss(url, cache_file, cache_time)
 
 	cached_time = nil
 	cached_time = File.mtime(cache_file) if File.exist?(cache_file)
@@ -100,7 +100,7 @@ def rss_recent_cache_rss(url, cache_file, cache_time)
 
 			raise URI::InvalidURIError unless uri.is_a?(URI::HTTP)
 
-			rss_source = rss_recent_fetch_rss(uri, cached_time)
+			rss_source = recent_rss_fetch_rss(uri, cached_time)
 			
 			raise InvalidResourceError if rss_source.nil?
 
@@ -116,7 +116,7 @@ def rss_recent_cache_rss(url, cache_file, cache_time)
 
 			rss_infos = []
 			rss.items.each do |item|
-				rss_recent_pubDate_to_dc_date(item)
+				recent_rss_pubDate_to_dc_date(item)
 				if item.respond_to?(:image_item) and item.image_item
 					image = item.image_item.about
 				else
@@ -124,7 +124,7 @@ def rss_recent_cache_rss(url, cache_file, cache_time)
 				end
 				rss_infos << [item.title, item.link, item.dc_date, image]
 			end
-			rss_recent_pubDate_to_dc_date(rss.channel)
+			recent_rss_pubDate_to_dc_date(rss.channel)
 			rss_infos.unshift([
 				rss.channel.title,
 				rss.channel.link,
@@ -132,23 +132,23 @@ def rss_recent_cache_rss(url, cache_file, cache_time)
 					rss.items.collect{|item| item.dc_date}.compact.first,
 				rss.image && rss.image.url,
 			])
-			rss_recent_write_to_cache(cache_file, rss_infos)
+			recent_rss_write_to_cache(cache_file, rss_infos)
 
 		rescue RSSNotModified
 			FileUtils.touch(cache_file)
 		rescue URI::InvalidURIError
-			rss_recent_write_to_cache(cache_file, [['Invalid URI', url]])
+			recent_rss_write_to_cache(cache_file, [['Invalid URI', url]])
 		rescue InvalidResourceError, ::RSS::Error
-			rss_recent_write_to_cache(cache_file, [['Invalid Resource', url]])
+			recent_rss_write_to_cache(cache_file, [['Invalid Resource', url]])
 		end
 	end
 
 end
 
-def rss_recent_fetch_rss(uri, cache_time)
+def recent_rss_fetch_rss(uri, cache_time)
 	rss = nil
 	begin
-		uri.open(rss_recent_http_header(cache_time)) do |f|
+		uri.open(recent_rss_http_header(cache_time)) do |f|
 			case f.status.first
 			when "200"
 				rss = f.read
@@ -172,7 +172,7 @@ def rss_recent_fetch_rss(uri, cache_time)
 	rss
 end
 
-def rss_recent_http_header(cache_time)
+def recent_rss_http_header(cache_time)
 	header = RSS_RECENT_HTTP_HEADER.dup
 	if cache_time.respond_to?(:rfc2822)
 		header["If-Modified-Since"] = cache_time.rfc2822
@@ -180,7 +180,7 @@ def rss_recent_http_header(cache_time)
 	header
 end
 
-def rss_recent_write_to_cache(cache_file, rss_infos)
+def recent_rss_write_to_cache(cache_file, rss_infos)
 	File.open(cache_file, 'w') do |f|
 		f.flock(File::LOCK_EX)
 		rss_infos.each do |info|
@@ -191,7 +191,7 @@ def rss_recent_write_to_cache(cache_file, rss_infos)
 	end
 end
 
-def rss_recent_read_from_cache(cache_file)
+def recent_rss_read_from_cache(cache_file)
 	require 'time'
 	infos = []
 	File.open(cache_file) do |f|
@@ -202,15 +202,15 @@ def rss_recent_read_from_cache(cache_file)
 	end
 	infos.collect do |title, url, time, image|
 		[
-			rss_recent_convert(title),
-			rss_recent_convert(url),
-			rss_recent_convert(time) {|t| Time.parse(t)},
-			rss_recent_convert(image),
+			recent_rss_convert(title),
+			recent_rss_convert(url),
+			recent_rss_convert(time) {|t| Time.parse(t)},
+			recent_rss_convert(image),
 		]
 	end
 end
 
-def rss_recent_convert(str)
+def recent_rss_convert(str)
 	if str.nil? or str.empty?
 		nil
 	else
@@ -222,14 +222,14 @@ def rss_recent_convert(str)
 	end
 end
 
-def rss_recent_entry_to_html(title, url, time, image=nil)
+def recent_rss_entry_to_html(title, url, time, image=nil)
 	rv = ""
 	unless url.nil?
 		rv << %Q[<a href="#{CGI.escapeHTML(url)}" title="#{CGI.escapeHTML(title)}]
 		rv << %Q[ (#{CGI.escapeHTML(time.localtime.to_s)})] unless time.nil?
 		rv << %Q[">]
 	end
-	if image and @options['rss-recent.use-image-link']
+	if image and @options['recent_rss.use-image-link']
 		rv << %Q[<img src="#{CGI::escapeHTML(image)}"]
 		rv << %Q[ title="#{CGI.escapeHTML(title)}"]
 		rv << %Q[ alt="site image"]
@@ -238,12 +238,12 @@ def rss_recent_entry_to_html(title, url, time, image=nil)
 		rv << CGI::escapeHTML(title)
 	end
 	rv << '</a>' unless url.nil?
-	rv << "(#{rss_recent_modified(time)})"
+	rv << "(#{recent_rss_modified(time)})"
 	rv
 end
 
 # from RWiki
-def rss_recent_modified(t)
+def recent_rss_modified(t)
 	return '-' unless t
 	dif = (Time.now - t).to_i
 	dif = dif / 60
@@ -255,7 +255,7 @@ def rss_recent_modified(t)
 end
 
 # from RWiki
-def rss_recent_modified_class(t)
+def recent_rss_modified_class(t)
 	return 'dangling' unless t
 	dif = (Time.now - t).to_i
 	dif = dif / 60
@@ -268,7 +268,7 @@ def rss_recent_modified_class(t)
 	return "modified-old"
 end
 
-def rss_recent_pubDate_to_dc_date(target)
+def recent_rss_pubDate_to_dc_date(target)
 	if target.respond_to?(:pubDate)
 		class << target
 			alias_method(:dc_date, :pubDate)
@@ -276,23 +276,23 @@ def rss_recent_pubDate_to_dc_date(target)
 	end
 end
 
-add_conf_proc('rss-recent', label_rss_recent_title) do
-	item = 'rss-recent.use-image-link'
+add_conf_proc('recent_rss', label_recent_rss_title) do
+	item = 'recent_rss.use-image-link'
 	if @mode == 'saveconf'
 		@conf[item] = (@cgi.params[item][0] == 't')
 	end
 
 	<<-HTML
 	<div class"body">
-		<h3 class="subtitle">#{label_rss_recent_use_image_link_title}</h3>
-		<p>#{label_rss_recent_use_image_link_description}</p>
+		<h3 class="subtitle">#{label_recent_rss_use_image_link_title}</h3>
+		<p>#{label_recent_rss_use_image_link_description}</p>
 		<p>
 			<select name=#{item}>
 				<option value="f"#{@conf[item] ? '' : ' selected'}>
-					#{label_rss_recent_not_use_image_link}
+					#{label_recent_rss_not_use_image_link}
 				</option>
 				<option value="t"#{@conf[item] ? ' selected' : ''}>
-					#{label_rss_recent_use_image_link}
+					#{label_recent_rss_use_image_link}
 				</option>
 			</select>
 		</p>
