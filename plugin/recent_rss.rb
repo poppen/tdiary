@@ -38,21 +38,21 @@ def recent_rss(url, max=5, cache_time=3600)
 	
 	return '' unless test(?r, cache_file)
 
-	rv = %Q|<div class="recent_rss">\n|
+	rv = %Q|<div class="recent-rss">\n|
 
 	site_info, *infos = recent_rss_read_from_cache(cache_file)
   
 	if site_info
 		title, url, time, image = site_info
 		content = recent_rss_entry_to_html(title, url, time, image)
-		rv << %Q|<div class="recent_rss-title">\n|
+		rv << %Q|<div class="recent-rss-title">\n|
 		rv << %Q|<span class="#{recent_rss_modified_class(time)}">#{content}</span>\n|
 		rv << "</div>\n"
 	end
   
 	have_entry = infos.size > 0 && max > 0
   
-	rv << %Q|<ol class="recent_rss">\n| if have_entry
+	rv << %Q|<ol class="recent-rss">\n| if have_entry
 	i = 0
 	infos.each do |title, url, time, image|
 		break if i >= max
