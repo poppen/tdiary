@@ -1,10 +1,11 @@
-2006-03-18 KURODA Hiraku  <hiraku at hinet.mydns.jp>  
-	* ja/disp_referrer.rb: support new Google cache.
-
 2006-03-18 TADA Tadashi <sho@spc.gr.jp>
 	* recent_rss.rb: fix some typo. thanks kou-san.
 	* comment_rank.rb, makerss.rb, recent_comment3.rb, recent_trackback3.rb,
 	tb-show.rb: remove a limit of TSUKKOMI count.
+	* makerss.rb: support Mobile Link Discovery.
+
+2006-03-18 KURODA Hiraku  <hiraku at hinet.mydns.jp>  
+	* ja/disp_referrer.rb: support new Google cache.
 
 2006-03-17 TADA Tadashi <sho@spc.gr.jp>
 	* recent_rss.rb: replace 'rss_recent' to 'recent-rss' in class name in HTML.

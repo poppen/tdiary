@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.39 $
+# makerss.rb: $Revision: 1.40 $
 #
 # generate RSS file when updating.
 #
@@ -178,10 +178,11 @@ def makerss_header( uri )
 
 	xml = %Q[<?xml version="1.0" encoding="#{@makerss_encode}"?>
 <?xml-stylesheet href="rss.css" type="text/css"?>
-<rdf:RDF xmlns="http://purl.org/rss/1.0/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xml:lang="#{@conf.html_lang}">
+<rdf:RDF xmlns="http://purl.org/rss/1.0/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:xhtml="http://www.w3.org/1999/xhtml" xml:lang="#{@conf.html_lang}">
 	<channel rdf:about="#{rdf_url}">
 	<title>#{CGI::escapeHTML( @conf.html_title )}</title>
 	<link>#{uri}</link>
+	<xhtml:link xhtml:rel="alternate" xhtml:media="handheld" xhtml:type="text/html" xhtml:href="#{uri}" />
 	<description>#{desc ? CGI::escapeHTML( desc ) : ''}</description>
 	<dc:creator>#{CGI::escapeHTML( @conf.author_name )}</dc:creator>
 	<dc:rights>#{CGI::escapeHTML( copyright )}</dc:rights>
@@ -221,6 +222,7 @@ def makerss_body( uri, rdfsec )
 	if rdfsec.section.respond_to?( :body_to_html ) then
 		rdf = %Q|<item rdf:about="#{uri}#{anchor rdfsec.id}">\n|
 		rdf << %Q|<link>#{uri}#{anchor rdfsec.id}</link>\n|
+		rdf << %Q|<xhtml:link xhtml:rel="alternate" xhtml:media="handheld" xhtml:type="text/html" xhtml:href="#{uri}#{anchor rdfsec.id}" />\n|
 		rdf << %Q|<dc:date>#{rdfsec.time_string}</dc:date>\n|
 		a = rdfsec.id.scan( /(\d{4})(\d\d)(\d\d)/ ).flatten.map{|s| s.to_i}
 		date = Time::local( *a )
