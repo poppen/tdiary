@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.29 2006-03-14 15:58:21 tadatadashi Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.30 2006-03-18 10:23:58 tadatadashi Exp $-))
 日本語リソース
 
 == 概要
@@ -569,5 +569,5 @@ DispReferrer2_Engines = {
 	# NetRange:   72.14.192.0 - 72.14.239.255 
 	# CIDR:       72.14.192.0/19, 72.14.224.0/20 
 	# NetName:    GOOGLE
-	'14' => [[%r{\Ahttp://72\.14\.(19[2-9]|2[0-3][0-9])\.}i, '"Google検索"', ['as_q', 'q'], DispReferrer2_Google_cache]],
+	'14' => [[%r{\Ahttp://72\.14\.(19[2-9]|2\d\d)\.}i, '"Google検索"', ['as_q', 'q'], DispReferrer2_Google_cache]],
 }
