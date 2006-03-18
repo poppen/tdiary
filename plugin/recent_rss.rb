@@ -5,7 +5,7 @@
 #   @options['recent_rss.use-image-link'] : use image as link
 #                                           instead of text if available.
 #
-# rss_recnet: show recnet list from RSS
+# recent_rss: show recnet list from RSS
 #   parameters (default):
 #      url: URL of RSS
 #      max: max of list itmes(5)
@@ -19,11 +19,11 @@
 require "rss/rss"
 require "fileutils"
 
-RSS_RECENT_FIELD_SEPARATOR = "\0"
-RSS_RECENT_ENTRY_SEPARATOR = "\1"
-RSS_RECENT_VERSION = "0.0.6"
-RSS_RECENT_HTTP_HEADER = {
-	"User-Agent" => "tDiary RSS recent plugin version #{RSS_RECENT_VERSION}. " <<
+RECENT_RSS_FIELD_SEPARATOR = "\0"
+RECENT_RSS_ENTRY_SEPARATOR = "\1"
+RECENT_RSS_VERSION = "0.0.6"
+RECENT_RSS_HTTP_HEADER = {
+	"User-Agent" => "tDiary RSS recent plugin version #{RECENT_RSS_VERSION}. " <<
 		"Using RSS parser version is #{::RSS::VERSION}.",
 }
 
@@ -71,7 +71,6 @@ def recent_rss(url, max=5, cache_time=3600)
 
 	rv
 end
-alias recent_rss recent_rss
 
 class InvalidResourceError < StandardError; end
 class RSSNotModified < StandardError; end
@@ -173,7 +172,7 @@ def recent_rss_fetch_rss(uri, cache_time)
 end
 
 def recent_rss_http_header(cache_time)
-	header = RSS_RECENT_HTTP_HEADER.dup
+	header = RECENT_RSS_HTTP_HEADER.dup
 	if cache_time.respond_to?(:rfc2822)
 		header["If-Modified-Since"] = cache_time.rfc2822
 	end
@@ -184,8 +183,8 @@ def recent_rss_write_to_cache(cache_file, rss_infos)
 	File.open(cache_file, 'w') do |f|
 		f.flock(File::LOCK_EX)
 		rss_infos.each do |info|
-			f << info.join(RSS_RECENT_FIELD_SEPARATOR)
-			f << RSS_RECENT_ENTRY_SEPARATOR
+			f << info.join(RECENT_RSS_FIELD_SEPARATOR)
+			f << RECENT_RSS_ENTRY_SEPARATOR
 		end
 		f.flock(File::LOCK_UN)
 	end
@@ -195,9 +194,9 @@ def recent_rss_read_from_cache(cache_file)
 	require 'time'
 	infos = []
 	File.open(cache_file) do |f|
-		while info = f.gets(RSS_RECENT_ENTRY_SEPARATOR)
-			info = info.chomp(RSS_RECENT_ENTRY_SEPARATOR)
-			infos << info.split(RSS_RECENT_FIELD_SEPARATOR)
+		while info = f.gets(RECENT_RSS_ENTRY_SEPARATOR)
+			info = info.chomp(RECENT_RSS_ENTRY_SEPARATOR)
+			infos << info.split(RECENT_RSS_FIELD_SEPARATOR)
 		end
 	end
 	infos.collect do |title, url, time, image|
