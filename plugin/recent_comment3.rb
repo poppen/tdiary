@@ -1,4 +1,4 @@
-# $Revision: 1.29 $
+# $Revision: 1.30 $
 # recent_comment3: 最近のツッコミをリストアップする
 #
 #   @secure = true な環境では動作しません．
@@ -123,7 +123,7 @@ add_update_proc do
       PStore.new( cache ).transaction do |db|
          comment = @comment
          serial = 0
-         @diaries[date].each_comment( 100 ) do
+         @diaries[date].each_comment do
             serial += 1
          end
          db['comments'] = Array.new( size ) unless db.root?( 'comments' )
@@ -135,7 +135,7 @@ add_update_proc do
       PStore.new( cache ).transaction do |db|
          break unless db.root?('comments')
          
-         @diaries[date].each_comment( 100 ) do |dcomment|
+         @diaries[date].each_comment do |dcomment|
             db['comments'].each do |c|
                break if c.nil?
                comment, cdate, serial = c

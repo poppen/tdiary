@@ -1,4 +1,4 @@
-# tb-show.rb $Revision: 1.20 $
+# tb-show.rb $Revision: 1.21 $
 #
 # functions:
 #   * show TrackBack ping URL in right of TSUKKOMI label.
@@ -98,7 +98,7 @@ def referer_of_today_short( diary, limit )
 	if diary and !bot? and
 	  @conf['trackback_shortview_mode'] == "num_in_reflist" then
 		count = 0
-		diary.each_visible_trackback( 100 ) {|t,count|} # count up
+		diary.each_visible_trackback {|t,count|} # count up
 		r << %Q|<a href="#{@index}#{anchor @tb_date.strftime( '%Y%m%d' )}#t">TrackBack#{count > 1 ? 's' : ''}(#{count})</a>| unless count == 0 and @conf['tb.hide_if_no_tb']
 	end
 	r
@@ -141,7 +141,7 @@ def trackbacks_of_today_short( diary, limit = @conf['trackback_limit'] || 3 )
 	r
 end
 
-def trackbacks_of_today_long( diary, limit = 100 )
+def trackbacks_of_today_long( diary, limit = -1 )
 	count = 0
 	diary.each_visible_trackback( limit ) {|t,count|} # count up
 	fragment = 't%02d'

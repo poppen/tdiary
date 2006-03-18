@@ -1,4 +1,4 @@
-# $Revision: 1.14 $
+# $Revision: 1.15 $
 # recent_trackback3: 最近のツッコミをリストアップする
 #
 # Copyright (c) 2004 Junichiro KITA <kita@kitaj.no-ip.com>
@@ -119,7 +119,7 @@ add_update_proc do
 		cache_size = @conf['recent_trackback3.cache_size']
 		trackback = @comment
 		serial = 0
-		@diaries[date].each_visible_trackback( 100 ) {|tb, idx| serial += 1}
+		@diaries[date].each_visible_trackback {|tb, idx| serial += 1}
 		PStore.new(cache).transaction do |db|
 			db['trackbacks'] = Array.new(cache_size) unless db.root?('trackbacks')
 			if db['trackbacks'][0].nil? or trackback != db['trackbacks'][0][0]
@@ -134,7 +134,7 @@ add_update_proc do
 		PStore.new(cache).transaction do |db|
 			break unless db.root?('trackbacks')
 
-			@diaries[date].each_comment(100) do |dtrackback|
+			@diaries[date].each_comment do |dtrackback|
 				db['trackbacks'].each do |c|
 					break if c.nil?
 					trackback, tbdate, serial = c

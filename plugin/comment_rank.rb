@@ -1,4 +1,4 @@
-# comment_rank.rb $Revision: 1.5 $
+# comment_rank.rb $Revision: 1.6 $
 #
 # comment_rank: ツッコミの数でランキング
 #   パラメタ:
@@ -13,7 +13,7 @@
 def comment_rank( max = 5, sep = '&nbsp;', *except )
 	name = Hash::new(0)
 	@diaries.each_value do |diary|
-		diary.each_comment( 100 ) do |comment|
+		diary.each_comment do |comment|
 			next if except.include?(comment.name)
 			name[comment.name] += 1
 		end
