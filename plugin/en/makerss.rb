@@ -3,7 +3,7 @@
 @makerss_encoder = Proc::new {|s| s }
 
 def makerss_tsukkomi_label( id )
-	"TSUKKOMI to #{id[0,4]}-#{id[4,2]}-#{id[6,2]}[#{id[9,2].sub( /^0/, '' )}]"
+	"TSUKKOMI to #{id[0,4]}-#{id[4,2]}-#{id[6,2]}[#{id[/[1-9]\d*$/]}]"
 end
 
 @makerss_conf_label = 'RSS feed'

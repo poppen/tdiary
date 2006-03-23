@@ -1,3 +1,7 @@
+2006-03-23 TADA Tadashi <sho@spc.gr.jp>
+	* {ja,en,zh}/makerss.rb: correct TSUKKOMI number into <title> when it over
+	100. thanks Namamura.
+
 2006-03-18 TADA Tadashi <sho@spc.gr.jp>
 	* recent_rss.rb: fix some typo. thanks kou-san.
 	* comment_rank.rb, makerss.rb, recent_comment3.rb, recent_trackback3.rb,

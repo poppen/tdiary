@@ -9,7 +9,7 @@ rescue LoadError
 end
 
 def makerss_tsukkomi_label( id )
-	"#{id[0,4]}-#{id[4,2]}-#{id[6,2]}のツッコミ[#{id[9,2].sub( /^0/, '' )}]"
+	"#{id[0,4]}-#{id[4,2]}-#{id[6,2]}のツッコミ[#{id[/[1-9]\d*$/]}]"
 end
 
 @makerss_conf_label = 'RSSの生成'
