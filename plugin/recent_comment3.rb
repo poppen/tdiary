@@ -1,4 +1,4 @@
-# $Revision: 1.30 $
+# $Revision: 1.31 $
 # recent_comment3: 最近のツッコミをリストアップする
 #
 #   @secure = true な環境では動作しません．
@@ -7,7 +7,7 @@
 # Distributed under the GPL
 #
 require 'pstore'
-require 'date'
+require 'time'
 
 def recent_comment3_format(format, *args)
 	format.gsub(/\$(\d)/) {|s| args[$1.to_i - 1]}
@@ -37,6 +37,7 @@ def recent_comment3(ob_max = 'OBSOLUTE' ,sep = 'OBSOLUTE',ob_date_format = 'OBSO
    titlelen = @conf['recent_comment3.titlelen']
 
    entries = {}
+   tree_order =[]
    order = []
    idx = 0
    PStore.new(cache).transaction do |db|
@@ -55,17 +56,22 @@ def recent_comment3(ob_max = 'OBSOLUTE' ,sep = 'OBSOLUTE',ob_date_format = 'OBSO
 
          entry_date = "#{date.strftime('%Y%m%d')}"
          comment_str = entries[entry_date]
+
          if comment_str == nil then
             comment_str = []
-            order << entry_date
+            tree_order << entry_date
          end
+
          comment_str << recent_comment3_format(format, idx, a, popup, str, date_str)
          entries[entry_date] = comment_str
+         order << entry_date
 
       end
 		db.abort
    end
 
+   result = []
+   
    if @conf['recent_comment3.tree'] == "t" then
       if entries.size == 0
          ''
@@ -73,8 +79,7 @@ def recent_comment3(ob_max = 'OBSOLUTE' ,sep = 'OBSOLUTE',ob_date_format = 'OBSO
          cgi = CGI::new
          def cgi.referer; nil; end
             
-         result = []
-         order.each { | entry_date |
+         tree_order.each { | entry_date |
             a_entry = @index + anchor(entry_date)
             cgi.params['date'] = [entry_date]
             diary = TDiaryDay::new(cgi, '', @conf)
@@ -101,11 +106,9 @@ def recent_comment3(ob_max = 'OBSOLUTE' ,sep = 'OBSOLUTE',ob_date_format = 'OBSO
       if entries.size == 0
          ''
       else
-         result = []
          order.each do | entry_date |
-            entries[entry_date].each do | comment_str |
-               result << "<li>#{comment_str}</li>\n"
-            end
+            result << "<li>#{entries[entry_date][0]}</li>\n"
+            entries[entry_date].shift
          end
          %Q|<ol class="recent-comment">\n| + result.join( '' ) + "</ol>\n"
       end

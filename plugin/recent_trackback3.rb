@@ -1,11 +1,11 @@
-# $Revision: 1.15 $
+# $Revision: 1.16 $
 # recent_trackback3: 最近のツッコミをリストアップする
 #
 # Copyright (c) 2004 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
 #
 require 'pstore'
-require 'date'
+require 'time'
 
 def recent_trackback3_format(format, *args)
 	format.gsub(/\$(\d)/) {|s| args[$1.to_i - 1]}
@@ -31,8 +31,11 @@ def recent_trackback3
 	date_format = @conf['recent_trackback3.date_format']
 	format = @conf['recent_trackback3.format']
 	titlelen = @conf['recent_trackback3.titlelen']
-	entries = {}
+
+   entries = {}
+   tree_order = []
 	order = []
+   result = []
 	idx = 0
 
 	PStore.new(cache).transaction do |db|
@@ -55,10 +58,11 @@ def recent_trackback3
 			comment_str = entries[entry_date]
 			if comment_str == nil then
 				comment_str = []
-				order << entry_date
+				tree_order << entry_date
 			end
 			comment_str << recent_trackback3_format(format, idx, a, popup, str, date_str)
 			entries[entry_date] = comment_str
+         order << entry_date
 
 		end
 		db.abort
@@ -71,8 +75,7 @@ def recent_trackback3
          cgi = CGI::new
          def cgi.referer; nil; end
 
-         result = []
-         order.each { | entry_date |
+         tree_order.each { | entry_date |
             a_entry = @index + anchor(entry_date)
             cgi.params['date'] = [entry_date]
             diary = TDiaryDay::new(cgi, '', @conf)
@@ -99,11 +102,9 @@ def recent_trackback3
       if entries.size == 0
          ''
       else
-         result = []
          order.each do | entry_date |
-            entries[entry_date].each do | comment_str |
-               result << "<li>#{comment_str}</li>\n"
-            end
+            result << "<li>#{entries[entry_date][0]}</li>\n"
+            entries[entry_date].shift
          end
          %Q|<ol class="recent-trackback">\n| + result.join( '' ) + "</ol>\n"
       end
@@ -111,12 +112,14 @@ def recent_trackback3
 end
 
 add_update_proc do
-	date = @date.strftime( '%Y%m%d' )
+
+   recent_trackback3_init
+
+   date = @date.strftime( '%Y%m%d' )
+   cache = @conf['recent_trackback3.cache'].untaint
+   cache_size = @conf['recent_trackback3.cache_size']
 
 	if @mode == 'trackbackreceive' and @comment
-		recent_trackback3_init
-		cache = @conf['recent_trackback3.cache'].untaint
-		cache_size = @conf['recent_trackback3.cache_size']
 		trackback = @comment
 		serial = 0
 		@diaries[date].each_visible_trackback {|tb, idx| serial += 1}
@@ -127,9 +130,6 @@ add_update_proc do
 			end
 		end
 	elsif @mode == 'showcomment'
-		recent_trackback3_init
-		cache = @conf['recent_trackback3.cache'].untaint
-		cache_size = @conf['recent_trackback3.cache_size']
 
 		PStore.new(cache).transaction do |db|
 			break unless db.root?('trackbacks')

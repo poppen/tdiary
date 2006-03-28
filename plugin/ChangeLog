@@ -1,3 +1,7 @@
+2006-03-28 SHIBATA Hiroshi <h-sbt@nifty.com>
+	* recent_comment3.rb: fix order of TSUKKOMI in normal view mode.
+	* recent_trackback3.rb: fix order of Trackback in normal view mode.
+
 2006-03-23 TADA Tadashi <sho@spc.gr.jp>
 	* {ja,en,zh}/makerss.rb: correct TSUKKOMI number into <title> when it over
 	100. thanks Namamura.
