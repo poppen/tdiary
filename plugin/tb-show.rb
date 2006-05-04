@@ -1,4 +1,4 @@
-# tb-show.rb $Revision: 1.21 $
+# tb-show.rb $Revision: 1.22 $
 #
 # functions:
 #   * show TrackBack ping URL in right of TSUKKOMI label.
@@ -112,7 +112,7 @@ def trackbacks_of_today_short( diary, limit = @conf['trackback_limit'] || 3 )
 	fragment = 't%02d'
 	today = anchor( diary.date.strftime( '%Y%m%d' ) )
 	count = 0
-	diary.each_visible_trackback( limit ) {|t,count|} # count up
+	diary.each_visible_trackback( -1 ) {|t,count|} # count up
 	r = ''
 	r << %Q!\t<div class="comment trackbacks">\n!
 

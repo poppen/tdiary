@@ -1,3 +1,6 @@
+2006-05-05 SHIBATA Hiroshi <h-sbt@nifty.com>
+	* tb-show.rb: bugfix count up in trackbacks_of_today_short.
+
 2006-04-15 TADA Tadashi <sho@spc.gr.jp>
 	* release 2.1.4.
 
