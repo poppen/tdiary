@@ -1,3 +1,7 @@
+2006-06-18 TADA Tadashi <sho@spc.gr.jp>
+	* makerss.rb: enable to make another feed without TSUKKOMI.
+	* makerss.rb: obsolete makerss.hidecomment option.
+
 2006-05-05 SHIBATA Hiroshi <h-sbt@nifty.com>
 	* tb-show.rb: bugfix count up in trackbacks_of_today_short.
 

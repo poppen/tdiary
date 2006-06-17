@@ -1,9 +1,8 @@
-# makerss.rb: $Revision: 1.40 $
+# makerss.rb: $Revision: 1.41 $
 #
 # generate RSS file when updating.
 #
 # options configurable through settings:
-#   @conf['makerss.hidecomment'] : hide tsukkomi's. default: false
 #   @conf['makerss.hidecontent'] : hide full-text content. default: false
 #   @conf['makerss.shortdesc'] : shorter description. default: false
 #   @conf['makerss.comment_link'] : insert tsukkomi's link. default: false
@@ -11,23 +10,20 @@
 # options to be edited in tdiary.conf:
 #   @conf['makerss.file']  : local file name of RSS file. default: 'index.rdf'.
 #   @conf['makerss.url']   : URL of RSS file.
+#   @conf['makerss.no_comments.file']  : local file name of RSS file without
+#                            comments. default: 'no_comments.rdf'.
+#   @conf['makerss.no_comments.url']   : URL of RSS file without TSUKOMI.
 #   @conf.banner           : URL of site banner image (can be relative)
 #   @conf.description      : desciption of the diary
 #   @conf['makerss.partial'] : how much portion of body to be in description
-#                              used when makerss.shortdesc, default: 0.25
+#                            used when makerss.shortdesc, default: 0.25
 #
-#   CAUTION: Before using, make 'index.rdf' file into the directory of your diary,
-#            and permit writable to httpd.
+#   CAUTION: Before using, make 'index.rdf' and 'no_comments.rdf' file
+#            into the directory of your diary, and permit writable to httpd.
 #
 # Copyright (c) 2004 TADA Tadashi <sho@spc.gr.jp>
 # Distributed under the GPL
 #
-
-# backward compatibility
-item = 'makerss.hidecomment'
-if true == @conf[item] then
-	@conf[item] = 'content'
-end
 
 if /^append|replace|comment|showcomment|trackbackreceive|pingbackreceive$/ =~ @mode then
 	unless @conf.description
@@ -60,6 +56,106 @@ if /^append|replace|comment|showcomment|trackbackreceive|pingbackreceive$/ =~ @m
 	TOPLEVEL_CLASS
 end
 
+@makerss_rsses = @makerss_rsses || []
+
+class MakeRssFull
+	def initialize( conf )
+		@conf = conf
+		@item_num = 0
+	end
+
+	def title
+		''
+	end
+
+	def head( str )
+		@head = str
+		@head.sub!( /<\/title>/, "#{title}</title>" )
+	end
+
+	def foot( str ); @foot = str; end
+	def image( str ); @image = str; end
+	def banner( str ); @banner = str; end
+
+	def item( seq, body, rdfsec )
+		@item_num += 1
+		return if @item_num > 15
+		@seq = '' unless @seq
+		@seq << seq
+		@body = '' unless @body
+		@body << body
+	end
+
+	def xml
+		xml = @head.to_s
+		xml << @image.to_s
+		xml << "<items><rdf:Seq>\n"
+		xml << @seq.to_s
+		xml << "</rdf:Seq></items>\n</channel>\n"
+		xml << @banner.to_s
+		xml << @body.to_s
+		xml << @foot.to_s
+	end
+
+	def file
+		f = @conf['makerss.file'] || 'index.rdf'
+		f = 'index.rdf' if f.length == 0
+		f
+	end
+
+	def writable?
+		FileTest::writable?( file )
+	end
+
+	def write( encoder )
+		begin
+			File::open( file, 'w' ) do |f|
+				f.write( encoder.call( xml ) )
+			end
+		rescue
+		end
+	end
+
+	def url
+		u = @conf['makerss.url'] || "#{@conf.base_url}index.rdf"
+		u = "#{@conf.base_url}index.rdf" if u.length == 0
+		u
+	end
+end
+
+@makerss_rsses << MakeRssFull::new( @conf )
+
+class MakeRssNoComments < MakeRssFull
+	def title
+		'(without comments)'
+	end
+
+	def item( seq, body, rdfsec )
+		return unless rdfsec.section.respond_to?( :body_to_html )
+		super
+	end
+
+	def file
+		f = @conf['makerss.no_comments.file'] || 'no_comments.rdf'
+		f = 'no_comments.rdf' if f.length == 0
+		f
+	end
+
+	def write( encoder )
+		return unless @conf['makerss.no_comments']
+		super( encoder )
+	end
+
+	def url
+		return nil unless @conf['makerss.no_comments']
+		u = @conf['makerss.no_comments.url'] || "#{@conf.base_url}no_comments.rdf"
+		u = "#{@conf.base_url}no_comments.rdf" if u.length == 0
+		u
+	end
+end
+
+@makerss_rsses << MakeRssNoComments::new( @conf )
+
 def makerss_update
 	date = @date.strftime( "%Y%m%d" )
 	diary = @diaries[date]
@@ -70,9 +166,8 @@ def makerss_update
 
 	require 'pstore'
 	cache = {}
-	xml = ''
-	seq = ''
-	body = ''
+	rsses = @makerss_rsses
+
 	begin
 		PStore::new( "#{@cache_path}/makerss.cache" ).transaction do |db|
 			begin
@@ -121,18 +216,14 @@ def makerss_update
 					end
 				end
 
-				xml << makerss_header( uri )
-				seq << "<items><rdf:Seq>\n"
-				item_max = 15
+				rsses.each{|rss| rss.head( makerss_header( uri ) ) }
 				cache.values.sort{|a,b| b.time <=> a.time}.each_with_index do |rdfsec, idx|
-					if idx < item_max then
-						if rdfsec.section.respond_to?( :visible? ) and !rdfsec.section.visible?
-							item_max += 1
-						else
-							seq << makerss_seq( uri, rdfsec )
-							body << makerss_body( uri, rdfsec )
-						end
-					elsif idx > 50
+					unless rdfsec.section.respond_to?( :visible? ) and !rdfsec.section.visible?
+						rsses.each {|rss|
+							rss.item( makerss_seq( uri, rdfsec ), makerss_body( uri, rdfsec ), rdfsec )
+						}
+					end
+					if idx > 50
 						cache.delete( rdfsec.id )
 					end
 				end
@@ -152,18 +243,15 @@ def makerss_update
 		else
 			rdf_image = @conf.base_url + @conf.banner
 		end
-		xml << %Q[<image rdf:resource="#{rdf_image}" />\n]
+		rsses.each {|r| r.image( %Q[<image rdf:resource="#{rdf_image}" />\n] ) }
 	end
 
-	xml << seq << "</rdf:Seq></items>\n</channel>\n"
-	xml << makerss_image( uri, rdf_image ) if rdf_image
-	xml << body
-	xml << makerss_footer
-	rdf_file = @conf['makerss.file'] || 'index.rdf'
-	rdf_file = 'index.rdf' if rdf_file.length == 0
-	File::open( rdf_file, 'w' ) do |f|
-		f.write( @makerss_encoder.call( xml ) )
-	end
+	rsses.each {|r|
+		r.banner( makerss_banner( uri, rdf_image ) ) if rdf_image
+		r.foot( makerss_footer )
+		r.write( @makerss_encoder )
+	}
+
 end
 
 def makerss_header( uri )
@@ -190,14 +278,10 @@ def makerss_header( uri )
 end
 
 def makerss_seq( uri, rdfsec )
-	if rdfsec.section.respond_to?( :body_to_html ) or 'any' != @conf['makerss.hidecomment'] then
-		%Q|<rdf:li rdf:resource="#{uri}#{anchor rdfsec.id}"/>\n|
-	else
-		''
-	end
+	%Q|<rdf:li rdf:resource="#{uri}#{anchor rdfsec.id}"/>\n|
 end
 
-def makerss_image( uri, rdf_image )
+def makerss_banner( uri, rdf_image )
 	%Q[<image rdf:about="#{rdf_image}">
 	<title>#{@conf.html_title}</title>
 	<url>#{rdf_image}</url>
@@ -268,21 +352,17 @@ def makerss_body( uri, rdfsec )
 		@conf['apply_plugin'] = old_apply_plugin
 		rdf << "</item>\n"
 	else # TSUKKOMI
-		unless 'any' == @conf['makerss.hidecomment'] then
-			rdf = %Q|<item rdf:about="#{uri}#{anchor rdfsec.id}">\n|
-			rdf << %Q|<link>#{uri}#{anchor rdfsec.id}</link>\n|
-			rdf << %Q|<dc:date>#{rdfsec.time_string}</dc:date>\n|
-			rdf << %Q|<title>#{makerss_tsukkomi_label( rdfsec.id )} (#{CGI::escapeHTML( rdfsec.section.name )})</title>\n|
-			rdf << %Q|<dc:creator>#{CGI::escapeHTML( rdfsec.section.name )}</dc:creator>\n|
-			unless 'text' == @conf['makerss.hidecomment']
-				text = rdfsec.section.body
-				rdf << %Q|<description>#{CGI::escapeHTML( makerss_desc_shorten( text ) )}</description>\n|
-				unless @conf['makerss.hidecontent']
-					rdf << %Q|<content:encoded><![CDATA[#{text.make_link.gsub( /\n/, '<br>' ).gsub( /<br><br>\Z/, '' ).gsub( /\]\]>/, ']]&gt;' )}]]></content:encoded>\n|
-				end
-			end
-			rdf << "</item>\n"
+		rdf = %Q|<item rdf:about="#{uri}#{anchor rdfsec.id}">\n|
+		rdf << %Q|<link>#{uri}#{anchor rdfsec.id}</link>\n|
+		rdf << %Q|<dc:date>#{rdfsec.time_string}</dc:date>\n|
+		rdf << %Q|<title>#{makerss_tsukkomi_label( rdfsec.id )} (#{CGI::escapeHTML( rdfsec.section.name )})</title>\n|
+		rdf << %Q|<dc:creator>#{CGI::escapeHTML( rdfsec.section.name )}</dc:creator>\n|
+		text = rdfsec.section.body
+		rdf << %Q|<description>#{CGI::escapeHTML( makerss_desc_shorten( text ) )}</description>\n|
+		unless @conf['makerss.hidecontent']
+			rdf << %Q|<content:encoded><![CDATA[#{text.make_link.gsub( /\n/, '<br>' ).gsub( /<br><br>\Z/, '' ).gsub( /\]\]>/, ']]&gt;' )}]]></content:encoded>\n|
 		end
+		rdf << "</item>\n"
 	end
 	rdf
 end
@@ -296,27 +376,29 @@ add_update_proc do
 end
 
 add_header_proc {
-	rdf_url = @conf['makerss.url'] || "#{@conf.base_url}index.rdf"
-	rdf_url = "#{@conf.base_url}index.rdf" if rdf_url.length == 0
-	%Q|\t<link rel="alternate" type="application/rss+xml" title="RSS" href="#{rdf_url}">\n|
+	html = ''
+	@makerss_rsses.each do |rss|
+		next unless rss.url
+		html << %Q|\t<link rel="alternate" type="application/rss+xml" title="RSS" href="#{rss.url}">\n|
+	end
+	html
 }
 
 add_conf_proc( 'makerss', @makerss_conf_label, 'update' ) do
 	if @mode == 'saveconf' then
-		item = 'makerss.hidecomment'
-		case @cgi.params[item][0]
-		when 'f'
-			@conf[item] = false
-		when 'text'
-			@conf[item] = 'text'
-		when 'any'
-			@conf[item] = 'any'
-		end
-		%w( makerss.hidecontent makerss.shortdesc makerss.comment_link ).each do |item|
+		%w( hidecontent shortdesc comment_link no_comments).each do |s|
+			item = "makerss.#{s}"
 			@conf[item] = ( 't' == @cgi.params[item][0] )
 		end
 	end
 
+	@makerss_rsses.each do |rss|
+		if rss.class == MakeRssFull then
+			@makerss_full = rss
+		elsif rss.class == MakeRssNoComments
+			@makerss_no_comments = rss
+		end
+	end
 	makerss_conf_html
 end
 
