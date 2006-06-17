@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.41 $
+# makerss.rb: $Revision: 1.42 $
 #
 # generate RSS file when updating.
 #
@@ -379,7 +379,7 @@ add_header_proc {
 	html = ''
 	@makerss_rsses.each do |rss|
 		next unless rss.url
-		html << %Q|\t<link rel="alternate" type="application/rss+xml" title="RSS" href="#{rss.url}">\n|
+		html << %Q|\t<link rel="alternate" type="application/rss+xml" title="RSS#{rss.title}" href="#{rss.url}">\n|
 	end
 	html
 }
