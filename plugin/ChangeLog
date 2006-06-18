@@ -1,3 +1,6 @@
+2006-06-18 TADA Tadashi <sho@spc.gr.jp>
+	* makerss.rb: MakeRssFull#writable? check more when file dose not exist.
+
 2006-06-18 SHIBATA Hiroshi <h-sbt@nifty.com>
 	* makerss.rb: change value of Auto-Discovery title element.
 

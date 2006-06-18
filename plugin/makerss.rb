@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.42 $
+# makerss.rb: $Revision: 1.43 $
 #
 # generate RSS file when updating.
 #
@@ -104,7 +104,18 @@ class MakeRssFull
 	end
 
 	def writable?
-		FileTest::writable?( file )
+		if FileTest::writable?( file ) then
+			return true
+		elsif FileTest::exist?( file )
+			return false
+		else # try to create
+			begin
+				File::open( file, 'w' ){|f|}
+				return true
+			rescue
+				return false
+			end
+		end
 	end
 
 	def write( encoder )
