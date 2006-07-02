@@ -1,3 +1,6 @@
+2006-07-02 TADA Tadashi <sho@spc.gr.jp>
+	* tb-show.rb: change ID of preference page 'TrackBack' -> 'tb-show'.
+
 2006-06-18 TADA Tadashi <sho@spc.gr.jp>
 	* makerss.rb: MakeRssFull#writable? check more when file dose not exist.
 
