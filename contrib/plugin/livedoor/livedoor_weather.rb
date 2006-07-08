@@ -1,4 +1,4 @@
-# livedoor_weather.rb $Revision$:
+# livedoor_weather.rb $Revision$
 #
 # insert weather information using livedoor weather web service.
 #
@@ -48,11 +48,11 @@ def lwws_request( city_id, date_status )
 	end
 end
 
-def lwws_get( date_status )
+def lwws_get( date_status , update = false)
 	lwws_init
 
 	city_id = @conf['lwws.city_id']
-	cache_time = @conf['lwws.cache_time'] * 60 * 60  # 6 hour
+	cache_time = @conf['lwws.cache_time'] * 60 * 60  # hour
 
 	cache = "#{@cache_path}/lwws"
 	file_name = "#{cache}/#{convert_date( date_status )}.xml" # file_name is YYYYMMDD.xml
@@ -62,7 +62,11 @@ def lwws_get( date_status )
 		cached_time = nil
 		cached_time = File.mtime( file_name ) if File.exist?( file_name )
 
-		if cached_time.nil? or ( @conf['lwws.cache'] == "t" and Time.now > cached_time + cache_time )
+		if @conf['lwws.cache'] == "t" and Time.now > cached_time + cache_time
+			update = true
+		end
+
+		if cached_time.nil? or update
 			xml =  lwws_request( city_id, date_status )
 			File::open( file_name, 'wb' ) {|f| f.write( xml )}
 		end
@@ -86,8 +90,8 @@ def lwws_to_html( date_status, date = nil )
 
 	begin
 		xml = File::read( file_name )
-
 		doc = REXML::Document::new( xml ).root
+
 		telop = NKF::nkf('-We', doc.elements["telop"].text)
 		max_temp = doc.elements["temperature/max/celsius"].text
 		min_temp = doc.elements["temperature/min/celsius"].text
@@ -127,6 +131,33 @@ def lwws_to_html( date_status, date = nil )
 	end
 end
 
+def lwws_today
+	lwws_get( "today" )
+	lwws_to_html( "today" )
+end
+
+def lwws_tomorrow
+	lwws_get( "tomorrow" )
+	lwws_to_html( "tomorrow" )
+end
+
+def lwws_dayaftertomorrow
+	lwws_get( "dayaftertomorrow" )
+	lwws_to_html( "dayaftertomorrow" )
+end
+
+def lwws( date )
+	lwws_to_html( "", date )
+end
+
+add_body_enter_proc do |date|
+	lwws_to_html( "", date.strftime("%Y%m%d"))
+end
+
+add_update_proc do
+	lwws_get( "today" )
+end
+
 def lwws_conf_proc
 	lwws_init
 
@@ -137,6 +168,10 @@ def lwws_conf_proc
 		@conf['lwws.min_temp.disp'] = @cgi.params['lwws.min_temp.disp'][0]
 		@conf['lwws.cache'] = @cgi.params['lwws.cache'][0]
 		@conf['lwws.cache_time'] = @cgi.params['lwws.cache_time'][0].to_i
+
+		lwws_get( "today", true)
+		lwws_get( "tomorrow", true)
+		lwws_get( "dayaftertomorrow", true)
 	end
 
 	result = ''
@@ -165,34 +200,8 @@ def lwws_conf_proc
 	result << %Q|<p><input name="lwws.cache" type="checkbox" value="t"#{checked} >#{@lwws_desc_cache}</p>|
 	result << %Q|<p>#{@lwws_desc_cache_time}</p>|
 	result << %Q|<p><input name="lwws.cache_time" value="#{@conf['lwws.cache_time']}"></p>|
+
 	return result
-end
-
-def lwws_today
-	lwws_get( "today" )
-	lwws_to_html( "today" )
-end
-
-def lwws_tomorrow
-	lwws_get( "tomorrow" )
-	lwws_to_html( "tomorrow" )
-end
-
-def lwws_dayaftertomorrow
-	lwws_get( "dayaftertomorrow" )
-	lwws_to_html( "dayaftertomorrow" )
-end
-
-def lwws( date )
-	lwws_to_html( "", date )
-end
-
-add_body_enter_proc do |date|
-	lwws_to_html( "", date.strftime("%Y%m%d"))
-end
-
-add_update_proc do
-	lwws_get( "today" )
 end
 
 add_conf_proc( 'lwws', @lwws_plugin_name ) do

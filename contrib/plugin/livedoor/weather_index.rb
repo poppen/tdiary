@@ -1,5 +1,11 @@
 #!/usr/bin/env ruby
 
+# weather_index.rb $Revision$
+#
+# Copyright (C) 2006 SHIBATA Hiroshi <h-sbt@nifty.com>
+# You can redistribute it and/or modify it under GPL2.
+#
+
 require 'cgi'
 require 'time'
 require 'nkf'
@@ -37,11 +43,11 @@ end
 def calendar2_prev_current_next(date)
 	yyyymm = date.strftime("%Y%m")
 	if( date.month.to_i == 1 )
-			yms = [(date.year.to_i - 1).to_s + "12", yyyymm, yyyymm.to_i + 1]
+		yms = [(date.year.to_i - 1).to_s + "12", yyyymm, yyyymm.to_i + 1]
 	elsif( date.month.to_i == 12 )
-			yms = [yyyymm.to_i - 1, yyyymm, (date.year.to_i + 1).to_s + "01"]
+		yms = [yyyymm.to_i - 1, yyyymm, (date.year.to_i + 1).to_s + "01"]
 	else
-			yms = [yyyymm.to_i - 1, yyyymm, yyyymm.to_i + 1]
+		yms = [yyyymm.to_i - 1, yyyymm, yyyymm.to_i + 1]
 	end
 	return yms
 end
@@ -59,7 +65,7 @@ def lwws_to_html( date )
 		height = doc.elements["image/height"].text
 
 		result = ""
-		result << %Q|<div class=\"lwws\">|
+		result << %Q|<div class="lwws">|
 		result << %Q|<img src="#{url}" border="0" alt="#{title}" title="#{title}" width=#{width} height="#{height}" />|
 		result << %Q|</div>|
 
@@ -81,20 +87,34 @@ def make_weather_cal( date )
 	navi_format = ["前", "%d年<br>%d月", "次"]
 
 	r = ""
-	r << %Q|<div class="day">|
-	r << %Q|<div class="body"><table><tr><td colspan="7"></td></tr>|
-	r << %Q|<tr>|
+	r << %Q[
+		<html>
+		<head>
+		<title>livedoor Weather Calendar</title>
+		<link rel="stylesheet" href="#{@diary_index}/theme/base.css" type="text/css" media="all">
+		<link rel="stylesheet" href="#{@diary_index}/theme/#{@theme}/#{@theme}.css" title="pukiwiki" type="text/css" media="all">
+		</head>
+		<body>
+		<h1>livedoor Weather Calendar</h1>
+		<div class="day">
+		<div class="body"><table><tr><td colspan="7"></td></tr>
+		<tr>
+	]
+
 	r << %Q|<td align="center" colspan="2">#{calendar2_make_anchor(p_c_n[0], navi_format[0] % [year, month])}</td>|
 	r << %Q|<td align="center" colspan="3">#{calendar2_make_anchor(p_c_n[1], navi_format[1] % [year, month])}</td>|
 	r << %Q|<td align="center" colspan="2">#{calendar2_make_anchor(p_c_n[2], navi_format[2] % [year, month])}</td>|
-	r << %Q|</tr>|
-	r << "<tr>"
+
+	r << %Q[
+		</tr>
+		<tr>
+	]
 
 	0.upto(6) do |i|
 		r <<%Q|<td align="center">#{days_format[i]}</td>|
 	end
 
-	r << "</tr>\n"
+	r << %Q|</tr>|
 
 	calendar2_make_cal(year, month).each do |week|
 		r << %Q|<tr>|
@@ -109,10 +129,13 @@ def make_weather_cal( date )
 		r << %Q|</tr>|
 	end
 
-	r << %Q|</table>|
-	r << %Q|</div>|
-	r << %Q|</div>|
-
+	r << %Q[
+		</table>
+		</div>
+		</div>
+		</body>
+		</html>
+	]
 	return r
 end
 
@@ -125,22 +148,8 @@ begin
 	date = Time.now.strftime("%Y%m") if not date or not /^\d{6}$/ =~ date
 
 	print @cgi.header('type' => 'text/html', 'charset' => 'euc-jp')
-	print %Q[
-		<html>
-		<head>
-		<title>livedoor Weather Calendar</title>
-		<link rel="stylesheet" href="#{@diary_index}/theme/base.css" type="text/css" media="all">
-		<link rel="stylesheet" href="#{@diary_index}/theme/#{@theme}/#{@theme}.css" title="pukiwiki" type="text/css" media="all">
-		</head>
-		<body>
-		<h1>livedoor Weather Calendar</h1>
-	]
 	print make_weather_cal( date )
-	print %Q[
-		</body>
-		</html>
-	]
-rescue
+rescue Exception
 	if @cgi then
 		print @cgi.header( 'status' => '500 Internal Server Error', 'type' => 'text/html' )
 	else

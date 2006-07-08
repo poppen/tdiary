@@ -1,5 +1,5 @@
 #
-# English resource of livedoor_weather plugin $Revision$
+# Chinese resource of livedoor_weather plugin $Revision$
 #
 # Copyright (C) 2006 SHIBATA Hiroshi <h-sbt@nifty.com>
 # You can redistribute it and/or modify it under GPL2.
@@ -23,5 +23,5 @@
 @lwws_min_temp_label = 'Min Tempreture'
 @celsius_label = '¡î'
 @lwws_label_cache = 'Auto update of cache'
-@lwws_desc_cache = 'enable auto update.'
+@lwws_desc_cache = 'Enable auto update.'
 @lwws_desc_cache_time = 'Please set number of update time.'
