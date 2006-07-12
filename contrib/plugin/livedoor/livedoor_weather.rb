@@ -62,8 +62,10 @@ def lwws_get( date_status , update = false)
 		cached_time = nil
 		cached_time = File.mtime( file_name ) if File.exist?( file_name )
 
-		if @conf['lwws.cache'] == "t" and Time.now > cached_time + cache_time
-			update = true
+		unless cached_time.nil?
+			if @conf['lwws.cache'] == "t" and Time.now > cached_time + cache_time
+				update = true
+			end
 		end
 
 		if cached_time.nil? or update
