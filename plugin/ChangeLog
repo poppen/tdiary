@@ -1,3 +1,7 @@
+2006-07-23 TADA Tadashi <sho@spc.gr.jp>
+	* makerss.rb: delete control codes without "\n", "\r" and "\t".
+	thanks KURODA Hiraku  <hiraku at hinet.mydns.jp>.
+
 2006-07-02 TADA Tadashi <sho@spc.gr.jp>
 	* tb-show.rb: change ID of preference page 'TrackBack' -> 'tb-show'.
 

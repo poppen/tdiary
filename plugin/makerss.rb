@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.43 $
+# makerss.rb: $Revision: 1.44 $
 #
 # generate RSS file when updating.
 #
@@ -95,6 +95,7 @@ class MakeRssFull
 		xml << @banner.to_s
 		xml << @body.to_s
 		xml << @foot.to_s
+		xml.gsub( /[\x00-\x1f]/e ){|s| s =~ /[\r\n\t]/ ? s : ""}
 	end
 
 	def file
