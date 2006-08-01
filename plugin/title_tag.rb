@@ -18,7 +18,7 @@
 # CODE.
 
 # title_tag2.rb to enhance <title> element of generating HTML
-# $Id: title_tag.rb,v 1.3 2004-05-16 15:27:19 kazuhiko Exp $
+# $Id: title_tag.rb,v 1.4 2006-08-01 11:28:22 hsbt Exp $
 # To use, just put this file into plugin folder.
 
 alias :title_tag2 :title_tag
@@ -47,6 +47,9 @@ __END_OF_TOPLEVEL__
 
 def title_tag
 	if @mode == 'day' and diary = @diaries[@date.strftime('%Y%m%d')] then
+		if !diary.visible? then
+			return title_tag2
+		end
 		title = @html_title + ' - '
 		if  !diary.title.empty? then
 			title << apply_plugin(diary.title, true) << ' - '
@@ -64,7 +67,7 @@ def title_tag
 		return title_tag2
 	end
 end
-
+
 # Local Variables:
 # mode: ruby
 # code: euc-jp-unix

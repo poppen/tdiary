@@ -1,3 +1,6 @@
+2006-08-01 SHIBATA Hiroshi <h-sbt@nifty.com>
+	* title_tag.rb: hide title in invisible diary.
+
 2006-07-23 TADA Tadashi <sho@spc.gr.jp>
 	* makerss.rb: delete control codes without "\n", "\r" and "\t".
 	thanks KURODA Hiraku  <hiraku at hinet.mydns.jp>.
@@ -35,7 +38,7 @@
 	tb-show.rb: remove a limit of TSUKKOMI count.
 	* makerss.rb: support Mobile Link Discovery.
 
-2006-03-18 KURODA Hiraku  <hiraku at hinet.mydns.jp>  
+2006-03-18 KURODA Hiraku  <hiraku at hinet.mydns.jp>
 	* ja/disp_referrer.rb: support new Google cache.
 
 2006-03-17 TADA Tadashi <sho@spc.gr.jp>
@@ -89,19 +92,19 @@
 2006-01-20 MUTOH Masao  <mutoh@highway.ne.jp>
 	* counter.rb:
 	  + Improves the speed and stability.
-	    - Separate data to counterdata and accessdata.
-	    - counterdata is the target of backup, but accessdata doesn't do backup.
-	    - change a key of an Array of String to a hash.
-	    - Removed "counter.daily_backup" option. Now daily_backup is applied
-	      everyday unless this setting.
-	    - Add a new "counter.max_keep_access_num" option which you can set 
-	      the max number to keep users in the accessdata file to avoid to become
-	      too large the accessdata file.
+		 - Separate data to counterdata and accessdata.
+		 - counterdata is the target of backup, but accessdata doesn't do backup.
+		 - change a key of an Array of String to a hash.
+		 - Removed "counter.daily_backup" option. Now daily_backup is applied
+			everyday unless this setting.
+		 - Add a new "counter.max_keep_access_num" option which you can set
+			the max number to keep users in the accessdata file to avoid to become
+			too large the accessdata file.
 	  + Follow tDiary framework.
-	    - Add configuration page.
+		 - Add configuration page.
 	  + Misc
-	    - Removed "counter.deny_remote_addrs" option.
-	    - Added default deny user-agents.
+		 - Removed "counter.deny_remote_addrs" option.
+		 - Added default deny user-agents.
 
 2006-01-23 SHIBATA Hiroshi <h-sbt@nifty.com>
 	* ping.rb: fix update option.
@@ -198,7 +201,7 @@
 
 2005-10-04 NT <nt@be.to>
 	* tlink.rb: fix to create a cache file on ruby 1.8.
-          thanks Takeshi Miyasaka <miyaken at iname.com>.
+			 thanks Takeshi Miyasaka <miyaken at iname.com>.
 
 2005-09-29 TADA Tadashi <sho@spc.gr.jp>
 	* release 2.1.3.
@@ -278,8 +281,8 @@
 	* recent_comment3.rb: change date format at tree view mode.
 
 2005-08-28 SHIBATA Hiroshi <h-sbt@nifty.com>
-	* recent_comment3.rb: add Tree view mode. 
-   thanks MORIOKA Toru <vette at mail.ne.jp>.
+	* recent_comment3.rb: add Tree view mode.
+	thanks MORIOKA Toru <vette at mail.ne.jp>.
 
 2005-08-25 TADA Tadahi <sho@spc.gr.jp>
 	* specify genre of preference to some plugins.
@@ -308,7 +311,7 @@
 	<content:encoded>.
 
 2005-08-07 TADA Tadahi <sho@spc.gr.jp>
-	* image.rb: default value of @image_url to absolute URL. 
+	* image.rb: default value of @image_url to absolute URL.
 
 2005-08-07 MORIOKA Toru <vette at mail.ne.jp>
 	* makerss.rb: change <copyright> to <dc:rights>.
@@ -385,7 +388,7 @@
 	* disp_referrer.rb: fix a typo.
 
 2005-06-21 Hiroyuki Ikezoe <poincare@ikezoe.net>
-	* recent_comment.rb, comment_rank.rb: Added GPL2 Licence. 
+	* recent_comment.rb, comment_rank.rb: Added GPL2 Licence.
 	Delegated copy right to TADA-san.
 
 2005-06-17 TADA Tadashi <sho@spc.gr.jp>
@@ -545,7 +548,7 @@
 
 2004-11-18 zunda <zunda at freeshell.org>
 	* {en,zh}/makerss.rb: fixed typo, thanks to vette <vette at mail.ne.jp>
-	* {ja,en,zh}/makerss.rb: reflects form values only when OK button has 
+	* {ja,en,zh}/makerss.rb: reflects form values only when OK button has
 	been pushed, thanks to vette <vette at mail.ne.jp>
 
 2004-11-16 zunda <zunda at freeshell.org>
@@ -581,7 +584,7 @@
 
 2004-11-09 zunda <zunda at freeshell.org>
 	* search_control.rb, {en,ja}/search_control.rb: multiple user
-	agents are now allowed 
+	agents are now allowed
 
 2004-11-09 zunda <zunda at freeshell.org>
 	* disp_referrer.rb: delete cache when it is broken
@@ -1299,7 +1302,7 @@
 	* weather.rb: fix typo on option names (thank you haluchan).
 
 2003-05-19 MUTOH Masao <mutoh@highway.ne.jp>
-	* disp_referrer.rb: Support to seperate Antenna similar to 
+	* disp_referrer.rb: Support to seperate Antenna similar to
 	disp_referrer2(by zunda).
 
 2003-05-17 TADA Tadashi <sho@spc.gr.jp>
