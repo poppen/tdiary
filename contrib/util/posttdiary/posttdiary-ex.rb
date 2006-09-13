@@ -1,12 +1,12 @@
 #!/usr/bin/env ruby
 $KCODE= 'e'
 #
-# posttdiary-ex: update tDiary via e-mail. $Revision: 1.5 $
+# posttdiary-ex: update tDiary via e-mail. $Revision: 1.6 $
 #
 # Copyright (C) 2002, All right reserved by TADA Tadashi <sho@spc.gr.jp>
 # You can redistribute it and/or modify it under GPL2.
 #
-# 2005.10.18: v.1.59: Modified by K.Sakurai (http://ks.nwr.jp)
+# 2006.8.14: v.1.63: Modified by K.Sakurai (http://ks.nwr.jp)
 #  Acknowledgements:
 #   * Based on posttdiary.rb v1.2 by TADA.
 #   * Some codes partially imported from Enikki Plugin Ex. : 
@@ -21,7 +21,7 @@ $KCODE= 'e'
 def usage( detailed_help )
 	# (if "!" is at the head of the line, it is to be shown only when detailed_help == true (-h option) )
 	text = <<-TEXT
-		#{File::basename __FILE__}: update tDiary via e-mail (v1.59).
+		#{File::basename __FILE__}: update tDiary via e-mail (v1.63).
 		usage: ruby posttdiary-ex.rb [options (without -d)] <url> <user> <passwd>
 		       ruby posttdiary-ex.rb [options (with -d)]
 		arguments:
@@ -34,7 +34,7 @@ def usage( detailed_help )
 !		  ============ for automatic configuration ==========
 		  --read-conffile,   -a dirname: read settings from (dirname)/tdiary.conf
 !		          Reads configuration parameters of image_ex plugin as well.
-!		          (The default values of -i, -u, -t, -z, -o, -y, -C can be obtained.)
+!		          (The default values of -i, -u, -t, -z, -o, -y, -C can be imported.)
 !		          Specify the localtion (or fullpathname) of tDiary conf file.
 !		          ex. -a /home/hoge/htdocs/diary/tdiary.conf
 !
@@ -134,10 +134,13 @@ def usage( detailed_help )
 !		  --write-to-file,  -b filename: writeout to file (does not call update.rb)
 !		  --date-margin,    -j date_margin: avoid writing diaries for future dates
 !		          ex. -j 30 (default margin: 7)
+!		  --rotate, -T LEFT or RIGHT: rotate images
+!			  ex. -T RIGHT (rotate 90degrees clockwise)
+!		          Also possible by adding "_ROT_LEFT#" or "_ROT_RIGHT#"to mail body.
 !
 !		Output format:
-!		  without -e/f, without -t: <img src="$1" class="photo" alt="$4">
-!		  without -e/f, with -t: <A HREF="$1"><img src="$2" class="photo" alt="$4"></a>
+!		  without -e/f, without -t: <img src="$1" class="photo" alt="$4" title="$4">
+!		  without -e/f, with -t: <A HREF="$1"><img src="$2" class="photo" alt="$4" title="$4"></a>
 !		  with -e: <%=image $0,'$4'%>
 !		  with -w: {{image $0,'$4'}}  (overrides -e)
 !		  with -f: (specified format) (overrides -e, -w)
@@ -242,14 +245,8 @@ end
 
 def bmp_to_png( bmp )
 	png = bmp.sub( /\.bmp$/, '.png' )
-	begin
-		require 'magick'
-		img = Magick::Image::new( bmp )
-		img.write( 'magick' => 'png', 'filename' => png )
-	rescue LoadError
-		stat = system( "#{@convertpath} #{bmp} #{png}" )
-		raise "posttdiary-ex: could not run convert command (#{@convertpath})" if !stat
-	end
+	stat = system( "#{@convertpath} #{bmp} #{png}" )
+	raise "posttdiary-ex: could not run convert command (#{@convertpath})" if !stat
 	if FileTest::exist?( png )
 		File::delete( bmp )
 		png
@@ -310,17 +307,8 @@ def check_image_size( name, geo )
 end
 
 def change_image_size( org, geo )
-	begin
-		require 'magick'
-		img = Magick::ImageList.new( org )
-		img.change_geometry( geo + ">" ){ |cols. rows, tn|
-			tn.resize!(cols,rows)
-		}
-		img.write( 'filename' => org )
-	rescue LoadError
-		check_command( @convertpath )
-		system( "#{@convertpath} -size #{geo}\\\> #{org} -geometry #{geo}\\\> #{org}" )
-	end
+	check_command( @convertpath )
+	system( "#{@convertpath} -size #{geo}\\\> #{org} -geometry #{geo}\\\> #{org}" )
 	if FileTest::exist?( org )
 		org
 	else
@@ -339,7 +327,53 @@ def read_exif_comment( fullpath_imgname )
 			v = NKF::nkf( '-m0 -Xed', t ).gsub!( /^\s+/, '' ).chomp! if $&
 		end
 	end
+	v = '' if v =~ /^\(null\)$/i
 	v
+end
+
+def read_exif_orientation( fullpath_imgname )
+	# returns orientaion value
+	#  top-left : 1
+	#  right-top : 6
+	#  left-bottom : 8
+	#  bottom-right : 3
+	val = 1
+	v = ''
+	check_command( @exifpath )
+	open( "| #{@exifpath} -t \"Orientation\" #{fullpath_imgname}", "r" ) do |f|
+		s = f.readlines
+		s.each do |t|
+			t.gsub!( /.*Value:/, '' )
+			if $& then
+				v = t
+				break
+			end
+		end
+	end
+	val = 6 if v =~ /right.+top/i
+	val = 8 if v =~ /left.+bottom/i
+	val = 3 if v =~ /bottom.+right/i
+	val
+end
+
+def rotation_degree( ori )
+	deg = 0
+	deg = 90 if ori == 6
+	deg = -90 if ori == 8
+	deg = 180 if ori == 3
+	deg
+end
+
+def rotate_image( org, deg )
+	if FileTest::exist?( org ) then
+		check_command( @convertpath )
+		system( "#{@convertpath} -rotate #{deg} #{org} #{org}" )
+	end
+	if FileTest::exist?( org )
+		org
+	else
+		""
+	end
 end
 
 def make_thumbnail( idir, iname , newsize , gid )
@@ -347,15 +381,9 @@ def make_thumbnail( idir, iname , newsize , gid )
 	tb_name = "s" + iname
 	tb_full = idir + tb_name
 	begin
-		require 'magick'
-		img = Magick::ImageList.new( org_full )
-		img.change_geometry( newsize + ">" ){ |cols. rows, tn|
-			tn.resize!(cols,rows)
-		}
-		img.write( 'filename' => tb_full )
-	rescue LoadError
 		check_command( @convertpath )
-		system( "#{@convertpath} -size #{newsize}\\\> #{org_full} -geometry #{newsize}\\\> #{tb_full}" )
+		# only for imagemagick 6 and later!!
+		system( "#{@convertpath} -thumbnail #{newsize}\\\> #{org_full} #{tb_full}" )
 	end
 	if FileTest::exist?( tb_full )
 		if gid then
@@ -607,6 +635,7 @@ begin
 	yearly_dir = false
 	thumbnail_name = Hash.new("")
 	exif_comment = Hash.new("")
+	exif_orientation = Hash.new(1)
 	image_orgname = Hash.new("")
 
 	remote_mode = false
@@ -623,8 +652,8 @@ begin
 	filter_mode = false
 	writeout_filename = nil
 	read_exif = false
-	image_format = ' <img class="$3" src="$1" alt="$4">'
-	image_format_with_thumbnail = ' <A HREF="$1"><img class="$3" src="$2" alt="$4"></a>'
+	image_format = ' <img class="$3" src="$1" alt="$4" title="$4">'
+	image_format_with_thumbnail = ' <A HREF="$1"><img class="$3" src="$2" alt="$4" title="$4"></a>'
 	image_format_specified = nil
 	wiki_style = false
 	use_original_name = false
@@ -634,6 +663,7 @@ begin
 	@magickpath = ""
 	exifpath_specified = nil
 	@exifpath = "exif"
+	rotation_degree_specified = nil
 
 	parser.set_options(
 		['--read-conffile', '-a', GetoptLong::REQUIRED_ARGUMENT],
@@ -665,7 +695,8 @@ begin
 		['--pass-filename', '-p', GetoptLong::NO_ARGUMENT],
 		['--filter-mode', '-d', GetoptLong::NO_ARGUMENT],
 		['--write-to-file', '-b', GetoptLong::REQUIRED_ARGUMENT],
-		['--date-margin', '-j', GetoptLong::REQUIRED_ARGUMENT]
+		['--date-margin', '-j', GetoptLong::REQUIRED_ARGUMENT],
+		['--rotate', '-T', GetoptLong::REQUIRED_ARGUMENT]
 	)
 	begin
 		parser.each do |opt, arg|
@@ -738,6 +769,10 @@ begin
 				writeout_filename = arg
 			when '--date-margin'
 				date_margin = arg.to_i
+			when '--rotate'
+				rotation_degree_specified = 0
+				rotation_degree_specified = 90 if arg =~ /right/i
+				rotation_degree_specified = -90 if arg =~ /left/i
 			end
 		end
 	rescue
@@ -854,9 +889,19 @@ begin
 			tmp = Time::local( $1.to_i, $2.to_i, $3.to_i );
 		end
 	end
-	if @body.gsub!( /^\_up[ld]+only\#/i , '' ) then
+	if @body.gsub!( /^\_up[ld]+only\#[ \t]*[\r\n]+/i , '' ) then
 		upload_only = true
 	end
+	if @body.gsub!( /^\_rot[ate]*\_right\#[ \t]*[\r\n]+/i , '' ) then
+		rotation_degree_specified = 90
+	end
+	if @body.gsub!( /^\_rot[ate]*\_left\#[ \t]*[\r\n]+/i , '' ) then
+		rotation_degree_specified = -90
+	end
+	if @body.gsub!( /^\_rot[ate]*\_none\#[ \t]*[\r\n]+/i , '' ) then
+		rotation_degree_specified = 0
+	end
+
 	if tmp >= now + date_margin * 24 * 3600 then
 #		raise "posttdiary-ex: invalid future date"
 #		# use current date (now) instead of specified date(tmp)..
@@ -905,8 +950,16 @@ begin
 		nextnum += 1
 		sh.move( tmpimgname , image_dir + image_name )
 		exif_comment[image_name] = (read_exif ? read_exif_comment(image_dir + image_name) : "" )
+		exif_orientation[image_name] = (read_exif ? read_exif_orientation(image_dir + image_name) : "" )
 		image_orgname[image_name] = orglist[i]
 		change_image_size( image_dir + image_name , image_geometry ) if image_geometry
+		if rotation_degree_specified then
+			if rotation_degree_specified != 0 then
+				rotate_image( image_dir + image_name , rotation_degree_specified )
+			end
+		elsif read_exif and exif_orientation[image_name] != 1 then
+			rotate_image( image_dir + image_name , rotation_degree( exif_orientation[image_name] ) )
+		end
 		if group_id then
 			sh.chown( nil , group_id , image_dir + image_name )
 			sh.chmod( 00664 , image_dir + image_name )
@@ -964,12 +1017,17 @@ begin
 			end
 		end
 		@body.gsub!( /#{marker}/ , '' )
-		if add_div_imgnum <= img_in_div and add_div_imgnum > 0 then
-			img_src = "<div class=\"photos\">" + img_src + "</div>"
+		if img_src =~ /^\s+$/ then
+			img_src = ''
+		else
+			if add_div_imgnum <= img_in_div and add_div_imgnum > 0 then
+				img_src = "<div class=\"photos\">" + img_src + "</div>"
+			end
 		end
 		img_src.sub!( /^/ , ' ' ) if ! wiki_style
 		if use_subject then
-			@body = "#{img_src}\n#{@body.sub( /\n+\z/, '' )}"
+			img_src = img_src + "\n" if !(img_src =~ /^\s*$/)
+			@body = "#{img_src}#{@body.sub( /\n+\z/, '' )}"
 		else
 			@body = "#{@body.sub( /\n+\z/, '' )}\n#{img_src}"
 		end
