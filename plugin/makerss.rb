@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.45 $
+# makerss.rb: $Revision: 1.46 $
 #
 # generate RSS file when updating.
 #
@@ -17,6 +17,9 @@
 #   @conf.description      : desciption of the diary
 #   @conf['makerss.partial'] : how much portion of body to be in description
 #                            used when makerss.shortdesc, default: 0.25
+#   @conf['makerss.suffix'] : strings which are appended to the title tag.
+#   @conf['makerss.no_comments.suffix'] : strings which are appended to
+#                            the title tag of the commentless rdf.
 #
 #   CAUTION: Before using, make 'index.rdf' and 'no_comments.rdf' file
 #            into the directory of your diary, and permit writable to httpd.
@@ -65,7 +68,7 @@ class MakeRssFull
 	end
 
 	def title
-		''
+		@conf['makerss.suffix'] || ''
 	end
 
 	def head( str )
@@ -129,8 +132,8 @@ class MakeRssFull
 	end
 
 	def url
-		u = @conf['makerss.url'] || "#{@conf.base_url}index.rdf"
-		u = "#{@conf.base_url}index.rdf" if u.length == 0
+		u = @conf['makerss.url'] || "#{@conf.base_url}#{File.basename(file)}"
+		u = "#{@conf.base_url}#{File.basename(file)}" if u.length == 0
 		u
 	end
 end
@@ -139,7 +142,7 @@ end
 
 class MakeRssNoComments < MakeRssFull
 	def title
-		'(without comments)'
+		@conf['makerss.no_comments.suffix'] || '(without comments)'
 	end
 
 	def item( seq, body, rdfsec )
@@ -160,8 +163,8 @@ class MakeRssNoComments < MakeRssFull
 
 	def url
 		return nil unless @conf['makerss.no_comments']
-		u = @conf['makerss.no_comments.url'] || "#{@conf.base_url}no_comments.rdf"
-		u = "#{@conf.base_url}no_comments.rdf" if u.length == 0
+		u = @conf['makerss.no_comments.url'] || "#{@conf.base_url}#{File.basename(file)}"
+		u = "#{@conf.base_url}#{File.basename(file)}" if u.length == 0
 		u
 	end
 end

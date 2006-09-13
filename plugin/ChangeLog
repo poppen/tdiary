@@ -1,3 +1,7 @@
+2006-09-13  Kazuhiko  <kazuhiko@fdiary.net>
+	* makerss.rb: guess rss uris by rss file names. add
+	"makerss.suffix" and "makerss.no_comments.suffix" options.
+
 2006-08-01 SHIBATA Hiroshi <h-sbt@nifty.com>
 	* title_tag.rb: hide title in invisible diary.
 
