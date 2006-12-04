@@ -104,7 +104,7 @@ def recent_rss_cache_rss(url, cache_file, cache_time)
 			raise InvalidResourceError if rss_source.nil?
 
 			# parse RSS
-			rss = ::RSS::Parser.parse(rss_source, false)
+			rss = ::RSS::Parser.parse(rss_source.untaint, false)
 			raise ::RSS::Error if rss.nil?
 
 			# pre processing

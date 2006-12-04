@@ -1,3 +1,6 @@
+2006-12-04 YAMAGUCHI Seiji <valda at underscore.jp>
+	* recent_rss.rb: fix error on Ruby 1.8.5.
+
 2006-09-13  Kazuhiko  <kazuhiko@fdiary.net>
 	* makerss.rb: guess rss uris by rss file names. add
 	"makerss.suffix" and "makerss.no_comments.suffix" options.
