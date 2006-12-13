@@ -1,4 +1,7 @@
 2006-12-12 zunda <zunda at freeshell.org>
+	* disp_referer.rb: refined regexp of livedoor Reader
+
+2006-12-12 zunda <zunda at freeshell.org>
 	* disp_referer.rb: added http://reader.livedoor.com/reader/ to antenna
 	URL
 	* ja/disp_referer.rb: added ezweb to search engines. Could not confirm
