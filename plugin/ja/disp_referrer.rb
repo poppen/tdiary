@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.30 2006-03-18 10:23:58 tadatadashi Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.31 2006-12-13 08:54:17 zunda Exp $-))
 日本語リソース
 
 == 概要
@@ -453,6 +453,7 @@ DispReferrer2_Engines = {
 		[%r{\Ahttp://srd\.yahoo\.co\.jp}i, '"Yahooのリダイレクタ"', [], nil],
 		[%r{\Ahttp://rd.+\.yahoo\.com}i, '"Yahooのリダイレクタ"', [], nil], # エンジンは inktomi 製と見た。
 		[%r{\Ahttp://[^bm]*?\.yahoo\.([^/]+)}i, '".#{$1}のYahoo!検索"', ['p', 'va', 'vp'], DispReferrer2_Google_cache],
+		[%r{\Ahttp://wrs\.search\.yahoo\.([^/]+)/(?:.*)K=([^/]+)}i, 'keyword=$2; "#{$1}のYahoo!検索"', [], nil],
 	],
 	'yahoofs' => [[%r{\Ahttp://cache\.yahoofs\.jp/}i, '"Yahoo!検索"', ['w'], DispReferrer2_Yahoofs]],
 	'netscape' => [[%r{\Ahttp://.*?\.netscape\.([^/]+)}i, '".#{$1}のNetscape検索"', ['search', 'query'], DispReferrer2_Google_cache]],
@@ -551,7 +552,7 @@ DispReferrer2_Engines = {
 	'toppg' => [[%r{\Ahttp://g\.toppg\.to/search}i, '"Google検索(へのリダイレクタ)"', ['as_q', 'q'], DispReferrer2_Google_cache]],
 	'naoya' => [[%r{\Ahttp://naoya\.dyndns\.org/feedback/app/search}i, '"FeedBack"', ['keyword'], nil]],
 	'blogpeople' => [[%r{\Ahttp://bst\.blogpeople\.net/search_result\.jsp}i, '"blogpeople"', ['keyword'], nil]],
-	'matome' => [[%r{\Ahttp://(www|search)\.matome\.jp/keyword/(.*(?=\.html\Z)|.*\Z)}i, 'keyword=$2; "まとめ検索"', [], nil]],
+	'matome' => [[%r{\Ahttp://\w+\.matome\.jp/(keyword|tag)/(.*(?=\.html\Z)|.*\Z)}i, 'keyword=$2; "まとめ検索"', [], nil]],
 	'210' => [[%r{\Ahttp://210\.174\.160\.70/se_root.phtml}i, '"JWord（日本語キーワード）"', ['name'], nil]],
 	# % whois 64.233.160
 	# NetRange:   64.233.160.0 - 64.233.191.255
@@ -570,4 +571,18 @@ DispReferrer2_Engines = {
 	# CIDR:       72.14.192.0/19, 72.14.224.0/20 
 	# NetName:    GOOGLE
 	'14' => [[%r{\Ahttp://72\.14\.(19[2-9]|2\d\d)\.}i, '"Google検索"', ['as_q', 'q'], DispReferrer2_Google_cache]],
+	'ezweb' => [[%r{\Ahttp://ezsch\.ezweb\.ne\.jp/search/}i, '"EZweb検索"', ['query'], nil]],
+	'overture' => [[%r{\Ahttp://(\w+\.)?overture\.com/}i, '"Overture検索"', ['Keywords'], nil]],
+	'multimeta' => [[%r{\Ahttp://(\w+\.)?multimeta\.com/}i, '"Multimeta検索"', ['suchbegriff'], nil]],
+	'starware' => [[%r{\Ahttp://search\.starware\.com/}i, '"Starware検索"', ['qry'], nil]],
+	'rambler' => [[%r{\Ahttp://\w+\.rambler\.ru/}i, '"Rambler"', ['words'], nil]],
+	'technorati' => [
+		[%r{\Ahttp://www\.technorati\.jp\/search\/search\.html}i, '"テクノラティ"', ['query'], nil],
+		[%r{\Ahttp://www\.technorati\.jp\/search\/(.*)}i, 'keyword=$1; "テクノラティ"', [], nil],
+	],
+	'pagesupli' => [
+		[%r{\Ahttp://www\.pagesupli\.com/cgi-bin/nph-image.exe}i, '"pageone検索"', ['q'], nil],
+		[%r{\Ahttp://www\.pagesupli\.com/\w+/(.*)}i, 'keyword=$1; "pageone検索"', [], nil],
+	],
+	'yahoogle' => [[%r{\Ahttp://www\.yahoogle\.jp/(?:yahoogle|google|yahoo)-\d+-(.*)\.html\Z}i, 'keyword=$1; "yahoogle!"', [], nil]],
 }

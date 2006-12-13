@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.60 2006-02-24 15:40:00 tadatadashi Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.61 2006-12-13 08:54:17 zunda Exp $-))
 
 == 概要
 アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
@@ -466,7 +466,7 @@ class DispRef2Setup < Hash
 		'short.only_normal' => true,
 			# trueの場合、最新の表示で、通常のリンク元以外を隠します。
 			# falseの場合は、プラグインの無い場合と全くおなじ表示になります。
-		'antenna.url' => '(\/a\/|(?!.*\/diary\/)antenna[\/\.]|\/tama\/|\Ahttp:\/\/www\.tdiary\.net\/?(i\/)?(\?|$)|links?|\Ahttp:\/\/kitaj\.no-ip\.com\/iraira\/|\Ahttp:\/\/i-know\.jp\/|\Ahttp:\/\/(www\.)?bloglines\.com\/(myblogs|public)_display|\Ahttp:\/\/del\.icio\.us\/\w+)',
+		'antenna.url' => '(\/a\/|(?!.*\/diary\/)antenna[\/\.]|\/tama\/|\Ahttp:\/\/www\.tdiary\.net\/?(i\/)?(\?|$)|links?|\Ahttp:\/\/kitaj\.no-ip\.com\/iraira\/|\Ahttp:\/\/i-know\.jp\/|\Ahttp:\/\/(www\.)?bloglines\.com\/(myblogs|public)_display|\Ahttp:\/\/del\.icio\.us\/\w+|\Ahttp:\/\/reader.livedoor.com\/reader\/)',
 			# アンテナのURLに一致する正規表現の文字列です。
 		'antenna.title' => '(アンテナ|links?|あんてな|antenna|entry|entries|リンク集|RSS|ブックマーク)',
 			# アンテナの置換後の文字列に一致する正規表現の文字列です。
