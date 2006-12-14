@@ -1,3 +1,6 @@
+2006-12-14 zunda <zunda at freeshell.org>
+	* my-ex.rb: allow a URL as the first argument
+
 2006-12-12 zunda <zunda at freeshell.org>
 	* disp_referer.rb: refined regexp of livedoor Reader
 

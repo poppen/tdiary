@@ -1,10 +1,11 @@
-# my-ex.rb $Revision: 1.16 $
+# my-ex.rb $Revision: 1.17 $
 #
 # my(拡張版): myプラグインを拡張し、title属性に参照先の内容を挿入します。
 #             参照先がセクションの場合は(あれば)サブタイトルを、
 #             ツッコミの場合はツッコんだ人の名前と内容の一部を使います。
 # パラメタ:
 #   a:   自分の日記内のリンク先情報('YYYYMMDD#pNN' または 'YYYYMMDD#cNN')
+#        URLをそのまま書くこともできます。
 #   str: リンクにする文字列
 #
 # Copyright (c) 2002 TADA Tadashi <sho@spc.gr.jp>
@@ -13,7 +14,7 @@
 unless @conf.mobile_agent?
 
 def my( a, str, title = nil )
-	date, noise, frag = a.scan( /^(\d{4}|\d{6}|\d{8}|\d{8}-\d+)([^\d]*)?#?([pct]\d+)?$/ )[0]
+	date, frag = a.scan( /(\d{4}|\d{6}|\d{8}|\d{8}-\d+)(?:[^\d]*)?(?:#([pct]\d+))?$/ )[0]
 	anc = frag ? "#{date}#{frag}" : date
 	place, frag = frag.scan( /([cpt])(\d\d)/ )[0] if frag
 	if date and frag and @diaries[date] then
