@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.31 2006-12-13 08:54:17 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.32 2006-12-20 04:51:34 zunda Exp $-))
 日本語リソース
 
 == 概要
@@ -585,4 +585,9 @@ DispReferrer2_Engines = {
 		[%r{\Ahttp://www\.pagesupli\.com/\w+/(.*)}i, 'keyword=$1; "pageone検索"', [], nil],
 	],
 	'yahoogle' => [[%r{\Ahttp://www\.yahoogle\.jp/(?:yahoogle|google|yahoo)-\d+-(.*)\.html\Z}i, 'keyword=$1; "yahoogle!"', [], nil]],
+	# $ whois 209.85.165.104
+	# NetRange:   209.85.128.0 - 209.85.255.255
+	# CIDR:       209.85.128.0/17
+	# NetName:    GOOGLE
+	'85' => [[%r{\Ahttp://209\.85\.(12[8-9]|1[3-9]\d|2\d\d)\.}i, '"Google検索"', ['as_q', 'q'], DispReferrer2_Google_cache]],
 }

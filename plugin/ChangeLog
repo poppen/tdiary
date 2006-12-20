@@ -1,3 +1,6 @@
+2006-12-12 zunda <zunda at freeshell.org>
+	* ja/disp_referer.rb: added 209.85.128.0/17 for Google cache
+
 2006-12-14 zunda <zunda at freeshell.org>
 	* my-ex.rb: allow a URL as the first argument
 
