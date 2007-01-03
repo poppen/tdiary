@@ -2,13 +2,13 @@
 #
 # tdiarysearch
 #
-# Copyright (C) 2003,2004 Minero Aoki
+# Copyright (C) 2003-2005 Minero Aoki
 #
 # This program is free software.
 # You can distribute/modify this program under the terms of
 # the GNU GPL, General Public License version 2.
 #
-# $originalId: search.rb,v 1.12 2004/05/22 18:31:47 aamine Exp $
+# $originalId: search.rb,v 1.14 2005/07/27 07:16:07 aamine Exp $
 #
 # Project home page: http://i.loveruby.net/w/tdiarysearch.html
 #
@@ -124,12 +124,7 @@ end
 $:.unshift tdiarylib
 require 'tdiary'
 require 'tdiary/defaultio'
-begin
-  require 'erb'
-  ERbLight = ERB
-rescue LoadError
-  require 'erb/erbl'
-end
+require 'erb'
 
 class WrongQuery < StandardError; end
 
@@ -140,7 +135,7 @@ BEGIN { $defout.binmode }
 def main
   $KCODE = 'EUC'
   cgi = CGI.new
-  @config = TDiary::Config.new( cgi )
+  @config = TDiary::Config.new(cgi)
   @config.options['apply_plugin'] = true
   html = '<html><head><title></title></head><body><p>error</p></body></html>'
   begin
@@ -231,20 +226,20 @@ end
 
 def search_form_page(theme)
   patterns = []
-  ERbLight.new(HEADER + SEARCH_FORM + FOOTER).result(binding())
+  ERB.new(HEADER + SEARCH_FORM + FOOTER).result(binding())
 end
 
 def search_result_page(theme, patterns)
-  ERbLight.new(HEADER + SEARCH_RESULT + FOOTER).result(binding())
+  ERB.new(HEADER + SEARCH_RESULT + FOOTER).result(binding())
 end
 
 def search_error_page(theme, patterns, reason)
-  ERbLight.new(HEADER + SEARCH_ERROR + FOOTER).result(binding())
+  ERB.new(HEADER + SEARCH_ERROR + FOOTER).result(binding())
 end
 
 def history_page(theme)
   patterns = []
-  ERbLight.new(HEADER + HISTORY + FOOTER).result(binding())
+  ERB.new(HEADER + HISTORY + FOOTER).result(binding())
 end
 
 def query_log
