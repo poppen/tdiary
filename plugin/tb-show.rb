@@ -1,4 +1,4 @@
-# tb-show.rb $Revision: 1.23 $
+# tb-show.rb $Revision: 1.24 $
 #
 # functions:
 #   * show TrackBack ping URL in right of TSUKKOMI label.
@@ -167,15 +167,15 @@ def trackbacks_of_today_long( diary, limit = -1 )
 		end
 
 		r << %Q!\t\t\t<div class="commentator trackback">\n!
-		r << %Q!\t\t\t\t<a name="#{ f }" href="#{ @index }#{ today }##{ f }">#{ @conf['trackback_anchor'] }</a>\n!
+		r << %Q!\t\t\t\t<a name="#{ f }" href="#{h @index }#{ today }##{ f }">#{ @conf['trackback_anchor'] }</a>\n!
 		if bot? then
-			r << %Q!\t\t\t\t<span class="commentator trackbackblog">#{ CGI::escapeHTML( a )}</span>\n!
+			r << %Q!\t\t\t\t<span class="commentator trackbackblog">#{h a}</span>\n!
 		else
-			r << %Q!\t\t\t\t<span class="commentator trackbackblog"><a href="#{ CGI::escapeHTML( url ) }">#{ CGI::escapeHTML( a )}</a></span>\n!
+			r << %Q!\t\t\t\t<span class="commentator trackbackblog"><a href="#{h url}">#{h a}</a></span>\n!
 		end
 		r << %Q!\t\t\t\t<span class="commenttime trackbacktime">#{ comment_date( t.date ) }</span>\n!
 		r << %Q!\t\t\t</div>\n!
-		r << %Q!\t\t\t<p>#{ CGI::escapeHTML( excerpt ).strip.gsub( /\n/,'<br>') }</p>\n! if excerpt
+		r << %Q!\t\t\t<p>#{h excerpt.strip.gsub( /\n/,'<br>')}</p>\n! if excerpt
   	end
 	r << %Q!\t\t</div>\n!
 	r << %Q!\t</div>\n!

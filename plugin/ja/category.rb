@@ -1,4 +1,4 @@
-# ja/category.rb $Revision: 1.9 $
+# ja/category.rb $Revision: 1.10 $
 #
 # Copyright (c) 2004 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -22,7 +22,7 @@ def category_title
 	end
 	period = " (#{period})" if period
 
-	"[#{CGI.escapeHTML(info.category.join('|'))}#{period}]"
+	"[#{h info.category.join('|')}#{period}]"
 end
 
 def category_init_local
@@ -49,7 +49,7 @@ def category_conf_html
 	r = <<HTML
 <h3 class="subtitle">カテゴリインデックスの作成</h3>
 <p>
-カテゴリ一の機能を利用するにはカテゴリインデックスをあらかじめ作成しておく必要があります。
+カテゴリの機能を利用するにはカテゴリインデックスをあらかじめ作成しておく必要があります。
 カテゴリインデックスを作成するには
 以下のチェックを入れてからOKボタンを押してください。
 </p>
@@ -72,23 +72,9 @@ def category_conf_html
 </select>
 </p>
 
-<h3 class="subtitle">ヘッダ</h3>
+<h3 class="subtitle">表示期間の初期状態</h3>
 <p>
-画面上部に表示する文章を指定します。
-「&lt;%= category_navi %&gt;」で、カテゴリに特化したナビゲーションボタンを表示することができます。
-また「&lt;%= category_list%&gt;」でカテゴリ名一覧を表示することができます。
-その他，各種プラグインやHTMLを記述できます。
-</p>
-
-<p>ヘッダ1：ナビゲーションボタンのすぐ下に表示されます。</p>
-<textarea name="category.header1" cols="70" rows="8">#{CGI.escapeHTML(@conf['category.header1'])}</textarea>
-
-<p>ヘッダ2：H1のすぐ下に表示されます。</p>
-<p><textarea name="category.header2" cols="70" rows="8">#{CGI.escapeHTML(@conf['category.header2'])}</textarea></p>
-
-<h3 class="subtitle">デフォルトの表示期間</h3>
-<p>
-カテゴリ表示モードのデフォルトの表示期間を指定します。
+カテゴリ表示画面を表示した時の、最初の表示期間を指定します。
 </p>
 <p>
 <select name="category.period">
@@ -108,6 +94,22 @@ HTML
 	r << <<HTML
 </select>
 </p>
+
+<h3 class="subtitle">ヘッダ</h3>
+<p>
+画面上部に表示する文章を指定します。
+「&lt;%= category_navi %&gt;」で、カテゴリに特化したナビゲーションボタンを表示することができます。
+また「&lt;%= category_list%&gt;」でカテゴリ名一覧を表示することができます。
+その他，各種プラグインやHTMLを記述できます。
+</p>
+
+<h4>ヘッダ1</h4>
+<p>ナビゲーションボタンのすぐ下に表示されます。</p>
+<p><textarea name="category.header1" cols="60" rows="5">#{h @conf['category.header1']}</textarea></p>
+
+<h4>ヘッダ2</h4>
+<p>H1のすぐ下に表示されます。</p>
+<p><textarea name="category.header2" cols="60" rows="5">#{h @conf['category.header2']}</textarea></p>
 
 <h3 class="subtitle">ボタンラベル</h3>
 <p>
@@ -137,8 +139,8 @@ HTML
 		r << <<HTML
 <tr>
 	<td>#{button}</td>
-	<td><input type="text" name="#{name}" value="#{CGI.escapeHTML(@conf[name])}" size="30"></td>
-	<td><p><span class="adminmenu"><a>#{@conf[name].sub(/\$1/, "2004").sub(/\$2/, "2")}</a></span></p></td>
+	<td><input type="text" name="#{name}" value="#{h @conf[name]}" size="30"></td>
+	<td><p><span class="adminmenu"><a>#{@conf[name].sub(/\$1/, "2007").sub(/\$2/, "2")}</a></span></p></td>
 </tr>
 HTML
 	end
@@ -160,9 +162,9 @@ def category_icon_conf_html
 <p>
 <dl>
 <dt>ディレクトリ:</dt>
-<dd><input name="category.icon_dir" value="#{@category_icon_dir}" size="30"></dd>
+<dd><input name="category.icon_dir" value="#{h @category_icon_dir}" size="30"></dd>
 <dt>URL:</dt>
-<dd><input name="category.icon_url" value="#{@category_icon_url}" size="30"></dd>
+<dd><input name="category.icon_url" value="#{h @category_icon_url}" size="30"></dd>
 </dl>
 </p>
 <hr>
@@ -173,7 +175,7 @@ HTML
 	@categories.each do |c|
 		str << %Q|\t<tr>\n\t\t<td>#{c}</td>\n\t\t<td>\n|
 		str << category_icon_select(c)
-		str << %Q|<img src="#{@category_icon_url}#{@category_icon[c]}">| if @category_icon[c]
+		str << %Q|<img src="#{h @category_icon_url}#{h @category_icon[c]}">| if @category_icon[c]
 		str << %Q|</td>\n\t</tr>\n|
 	end
 	r << <<HTML

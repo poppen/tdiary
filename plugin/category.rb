@@ -1,4 +1,4 @@
-# category.rb $Revision: 1.30 $
+# category.rb $Revision: 1.31 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -279,7 +279,7 @@ public
 		else
 			label = @category.map {|c| CGI.escapeHTML(c)}.join(':')
 		end
-		%Q|<a href="#{@conf.index}?#{a}">#{label}</a>|
+		%Q|<a href="#{CGI::escapeHTML( @conf.index )}?#{a}">#{label}</a>|
 	end
 
 	#

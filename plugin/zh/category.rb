@@ -1,4 +1,4 @@
-# ja/category.rb $Revision: 1.2 $
+# ja/category.rb $Revision: 1.3 $
 #
 # Copyright (c) 2004 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -70,20 +70,6 @@ Category names can be shown under the 'Article' form.
 </select>
 </p>
 
-<h3 class="subtitle">Header</h3>
-<p>
-This text is inserted into top of category view.
-"&lt;%= category_navi %&gt;" genaretes navigation buttons for category, 
-and "&lt;%= category_list %&gt;" lists all category names.
-You can use plugins and write any HTML tags.
-</p>
-
-<p>Header 1: inserted under the navigtion buttons.</p>
-<textarea name="category.header1" cols="70" rows="8">#{CGI.escapeHTML(@conf['category.header1'])}</textarea>
-
-<p>Header 2: inserted under the &lt;H1&gt;.</p>
-<p><textarea name="category.header2" cols="70" rows="8">#{CGI.escapeHTML(@conf['category.header2'])}</textarea></p>
-
 <h3 class="subtitle">Default period</h3>
 <p>
 Specify the default display period for category view.
@@ -104,6 +90,22 @@ HTML
 	end
 	r << <<HTML
 </select></p>
+
+<h3 class="subtitle">Header</h3>
+<p>
+This text is inserted into top of category view.
+"&lt;%= category_navi %&gt;" genaretes navigation buttons for category, 
+and "&lt;%= category_list %&gt;" lists all category names.
+You can use plugins and write any HTML tags.
+</p>
+
+<h4>Header 1</h4>
+<p>Inserted under the navigtion buttons.</p>
+<p><textarea name="category.header1" cols="70" rows="8">#{h @conf['category.header1']}</textarea></p>
+
+<h4>Header 2</h4>
+<p>Inserted under the &lt;H1&gt;.</p>
+<p><textarea name="category.header2" cols="70" rows="8">#{h @conf['category.header2']}</textarea></p>
 
 <h3 class="subtitle">Button labels</h3>
 <p>
@@ -133,8 +135,8 @@ HTML
 		r << <<HTML
 <tr>
 	<td>#{button}</td>
-	<td><input type="text" name="#{name}" value="#{CGI.escapeHTML(@conf[name])}" size="30"></td>
-	<td><p><span class="adminmenu"><a>#{@conf[name].sub(/\$1/, "2004").sub(/\$2/, "2")}</a></span></p></td>
+	<td><input type="text" name="#{name}" value="#{h @conf[name]}" size="30"></td>
+	<td><p><span class="adminmenu"><a>#{@conf[name].sub(/\$1/, "2007").sub(/\$2/, "2")}</a></span></p></td>
 </tr>
 HTML
 	end
@@ -156,9 +158,9 @@ Specify the directory and url of category icons.
 <p>
 <dl>
 <dt>Directory:</dt>
-<dd><input name="category.icon_dir" value="#{@category_icon_dir}" size="30"></dd>
+<dd><input name="category.icon_dir" value="#{h @category_icon_dir}" size="30"></dd>
 <dt>URL:</dt>
-<dd><input name="category.icon_url" value="#{@category_icon_url}" size="30"></dd>
+<dd><input name="category.icon_url" value="#{h @category_icon_url}" size="30"></dd>
 </dl>
 </p>
 <hr>
@@ -169,7 +171,7 @@ HTML
 	@categories.each do |c|
 		str << %Q|\t<tr>\n\t\t<td>#{c}</td>\n\t\t<td>\n|
 		str << category_icon_select(c)
-		str << %Q|<img src="#{@category_icon_url}#{@category_icon[c]}">| if @category_icon[c]
+		str << %Q|<img src="#{h @category_icon_url}#{h @category_icon[c]}">| if @category_icon[c]
 		str << %Q|</td>\n\t</tr>\n|
 	end
 	<<HTML
