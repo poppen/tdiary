@@ -1,4 +1,4 @@
-# ja/recent_trackback3.rb $Revision: 1.5 $
+# ja/recent_trackback3.rb $Revision: 1.6 $
 #
 # Japanese resources for recent_trackback3.rb
 #
@@ -14,7 +14,7 @@ add_conf_proc( 'recent_trackback3', '最近のTrackBack', 'tsukkomi' ) do
 
 	<<-HTML
 	<h3 class="subtitle">表示するTrackBackの数</h3>
-	<p>最大<input name="recent_trackback3.n" value="#{h( conf['recent_trackback3.n'] )}" size="3">件</p>
+	<p>最大<input name="recent_trackback3.n" value="#{h( @conf['recent_trackback3.n'] )}" size="3">件</p>
 
 	<h3 class="subtitle">日付フォーマット</h3>
 	<p>使用できる'%'文字については<a href="http://www.ruby-lang.org/ja/man/index.cgi?cmd=view;name=Time#strftime">Rubyのマニュアル</a>を参照．</p>
