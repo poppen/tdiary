@@ -1,4 +1,4 @@
-# category.rb $Revision: 1.32 $
+# category.rb $Revision: 1.33 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -176,6 +176,8 @@ module Category
 # Info
 #
 class Info
+	include ERB::Util
+
 	def initialize(cgi, years, conf, args = {})
 		@cgi = cgi
 		@years = years
@@ -279,7 +281,7 @@ public
 		else
 			label = @category.map {|c| h( c )}.join(':')
 		end
-		%Q|<a href="#{h  @index}?#{a}">#{label}</a>|
+		%Q|<a href="#{h @index}?#{a}">#{label}</a>|
 	end
 
 	#
@@ -359,6 +361,8 @@ end
 # Cache
 #
 class Cache
+	include ERB::Util
+
 	def initialize(conf, bind)
 		@conf = conf
 		@binding = bind                           # ...... very ugly
