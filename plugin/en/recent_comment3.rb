@@ -1,4 +1,4 @@
-# en/recent_comment3.rb $Revision: 1.4 $
+# en/recent_comment3.rb $Revision: 1.5 $
 #
 # English resources for recent_comment3.rb
 #
@@ -14,26 +14,26 @@ if @mode == 'conf' || @mode == 'saveconf'
 
       <<-HTML
       <h3 class="subtitle">The number of display comment</h3>
-      <p>Max <input name="recent_comment3.max" value="#{@conf['recent_comment3.max']}" size="3" /> item</p>
+      <p>Max <input name="recent_comment3.max" value="#{h( @conf['recent_comment3.max'] )}" size="3" /> item</p>
 
       <h3 class="subtitle">Date format</h3>
       <p>Refer to <a href="http://www.ruby-lang.org/ja/man/index.cgi?cmd=view;name=Time#strftime">Ruby's Manual</a>for the \'%\' character that can be used.</p>
-      <p><input name="recent_comment3.date_format" value="#{CGI.escapeHTML(@conf['recent_comment3.date_format'])}" size="40" /></p>
+      <p><input name="recent_comment3.date_format" value="#{h( @conf['recent_comment3.date_format'] )}" size="40" /></p>
 
       <h3 class="subtitle">Non display name in recent comment list</h3>
       <p>Specified The name not displayed in the list. Name is delimited by ","</p>
-      <p><input name="recent_comment3.except_list" size="60" value="#{CGI.escapeHTML( @conf['recent_comment3.except_list'] )}" /></p>
+      <p><input name="recent_comment3.except_list" size="60" value="#{h( @conf['recent_comment3.except_list'] )}" /></p>
 
       <h3 class="subtitle">Tree View mode</h3>
       <p><input name="recent_comment3.tree" type="checkbox" value="t"#{checked} />used Tree View</p>
 
       <h3 class="subtitle">length of title at Tree View mode</h3>
       <p>Input length of title at Tree View mode. When Tree view mode is not used, it doesn't relate.</p>
-      <p>Max <input name="recent_comment3.titlelen" value="#{@conf['recent_comment3.titlelen']}" size="3" /> characters.</p>
+      <p>Max <input name="recent_comment3.titlelen" value="#{h( @conf['recent_comment3.titlelen'] )}" size="3" /> characters.</p>
 
       <h3 class="subtitle">HTML Template for generate</h3>
       <p>Specify how each comment is rendered.</p>
-      <textarea name="recent_comment3.format" cols="60" rows="3">#{CGI.escapeHTML(@conf['recent_comment3.format'])}</textarea>
+      <textarea name="recent_comment3.format" cols="60" rows="3">#{h( @conf['recent_comment3.format'] )}</textarea>
       <p><em>$digit</em> in the template is replaced as follows.</p>
       <dl>
       <dt>$2</dt><dd>comment's URL</dd>

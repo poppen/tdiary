@@ -1,4 +1,4 @@
-# $Revision: 1.21 $
+# $Revision: 1.22 $
 # recent_list: 最近書いた日記のタイトル，サブタイトルを表示する
 #   パラメタ(カッコ内は未指定時の値):
 #     days:            何日分の日記を表示するか(20)
@@ -55,8 +55,8 @@ def recent_list( days = 30, date_format = nil, title_with_body = nil, show_size 
 					if !@plugin_files.grep(/\/category.rb$/).empty? and m.diaries[date].categorizable?
 						m.diaries[date].each_section do |section|
 							if section.stripped_subtitle
-								result << %Q|\t<li><a href="#{@index}#{anchor "%s#p%02d" % [date, i]}"|
-								result << %Q| title="#{CGI::escapeHTML( @conf.shorten( apply_plugin( section.body_to_html, true) ) )}"| if title_with_body == true
+								result << %Q|\t<li><a href="#{h( @index )}#{h( anchor "%s#p%02d" % [date, i] )}"|
+								result << %Q| title="#{h( @conf.shorten( apply_plugin( section.body_to_html, true) ) )}"| if title_with_body == true
 								result << %Q|>#{i}</a>. | \
 										<< %Q|#{section.stripped_subtitle_to_html}</li>\n|
 							end
@@ -65,8 +65,8 @@ def recent_list( days = 30, date_format = nil, title_with_body = nil, show_size 
 					else
 						m.diaries[date].each_section do |section|
 							if section.subtitle
-								result << %Q|\t<li><a href="#{@index}#{anchor "%s#p%02d" % [date, i]}"|
-								result << %Q| title="#{CGI::escapeHTML( @conf.shorten( apply_plugin(section.body_to_html, true) ) )}"| if title_with_body == true
+								result << %Q|\t<li><a href="#{h( @index )}#{h( anchor "%s#p%02d" % [date, i] )}"|
+								result << %Q| title="#{h( @conf.shorten( apply_plugin(section.body_to_html, true) ) )}"| if title_with_body == true
 								result << %Q|>#{i}</a>. | \
 										<< %Q|#{section.subtitle_to_html}</li>\n|
 							end

@@ -1,4 +1,4 @@
-# search_form.rb $Revision: 1.8 $
+# search_form.rb $Revision: 1.9 $
 #
 # Show a form for search engines.
 #
@@ -18,10 +18,10 @@
 def search_form(url, query, button_name = "Search", size = 20, 
 						default_text = "", first_form = "", last_form = "")
 %Q[
-	<form class="search" method="GET" action="#{url}">
+	<form class="search" method="GET" action="#{h( url )}">
 	<div class="search">
 	#{first_form}
-		<input class="search" type="text" name="#{query}" size="#{size}" value="#{default_text}">
+		<input class="search" type="text" name="#{h( query )}" size="#{h( size )}" value="#{h( default_text )}">
 		<input class="search" type="submit" value="#{button_name}">
 	#{last_form}
 	</div>

@@ -224,17 +224,17 @@ end
 def recent_rss_entry_to_html(title, url, time, image=nil)
 	rv = ""
 	unless url.nil?
-		rv << %Q[<a href="#{CGI.escapeHTML(url)}" title="#{CGI.escapeHTML(title)}]
-		rv << %Q[ (#{CGI.escapeHTML(time.localtime.to_s)})] unless time.nil?
+		rv << %Q[<a href="#{h( url )}" title="#{h( title )}]
+		rv << %Q[ (#{h( time.localtime )})] unless time.nil?
 		rv << %Q[">]
 	end
 	if image and @options['recent_rss.use-image-link']
-		rv << %Q[<img src="#{CGI::escapeHTML(image)}"]
-		rv << %Q[ title="#{CGI.escapeHTML(title)}"]
+		rv << %Q[<img src="#{h( image )}"]
+		rv << %Q[ title="#{h( title )}"]
 		rv << %Q[ alt="site image"]
 		rv << %Q[>\n]
 	else
-		rv << CGI::escapeHTML(title)
+		rv << h( title )
 	end
 	rv << '</a>' unless url.nil?
 	rv << "(#{recent_rss_modified(time)})"

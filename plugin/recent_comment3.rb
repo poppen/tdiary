@@ -1,4 +1,4 @@
-# $Revision: 1.31 $
+# $Revision: 1.32 $
 # recent_comment3: 最近のツッコミをリストアップする
 #
 #   @secure = true な環境では動作しません．
@@ -10,7 +10,7 @@ require 'pstore'
 require 'time'
 
 def recent_comment3_format(format, *args)
-	format.gsub(/\$(\d)/) {|s| args[$1.to_i - 1]}
+   format.gsub(/\$(\d)/) {|s| args[$1.to_i - 1]}
 end
 
 def recent_comment3_init
@@ -19,13 +19,13 @@ def recent_comment3_init
    @conf['recent_comment3.max'] ||= 3
    @conf['recent_comment3.date_format'] ||= "(%m-%d)"
    @conf['recent_comment3.except_list'] ||= ''
-	@conf['recent_comment3.format'] ||= '<a href="$2" title="$3">$4 $5</a>'
+   @conf['recent_comment3.format'] ||= '<a href="$2" title="$3">$4 $5</a>'
    @conf['recent_comment3.tree'] ||= ""
    @conf['recent_comment3.titlelen'] ||= 20
 end
 
 def recent_comment3(ob_max = 'OBSOLUTE' ,sep = 'OBSOLUTE',ob_date_format = 'OBSOLUTE',*ob_except )
-	return 'DO NOT USE IN SECURE MODE' if @conf.secure
+   return 'DO NOT USE IN SECURE MODE' if @conf.secure
 
    recent_comment3_init
    
@@ -33,7 +33,7 @@ def recent_comment3(ob_max = 'OBSOLUTE' ,sep = 'OBSOLUTE',ob_date_format = 'OBSO
    max = @conf['recent_comment3.max']
    date_format = @conf['recent_comment3.date_format'] 
    except = @conf['recent_comment3.except_list'].split(/,/)
-	format = @conf['recent_comment3.format']
+   format = @conf['recent_comment3.format']
    titlelen = @conf['recent_comment3.titlelen']
 
    entries = {}
@@ -47,10 +47,10 @@ def recent_comment3(ob_max = 'OBSOLUTE' ,sep = 'OBSOLUTE',ob_date_format = 'OBSO
          comment, date, serial = c
          next unless comment.visible?
          next if except.include?(comment.name)
-         a = @index + anchor("#{date.strftime('%Y%m%d')}#c#{'%02d' % serial}")
-         popup = CGI::escapeHTML(comment.shorten( @conf.comment_length ))
-         str = CGI::escapeHTML(comment.name)
-         date_str = comment.date.strftime(date_format)
+         a = h( @index + anchor("#{date.strftime('%Y%m%d')}#c#{'%02d' % serial}") )
+         popup = h(comment.shorten( @conf.comment_length ))
+         str = h(comment.name)
+         date_str = h( comment.date.strftime(date_format) )
 
          idx += 1
 
@@ -67,7 +67,7 @@ def recent_comment3(ob_max = 'OBSOLUTE' ,sep = 'OBSOLUTE',ob_date_format = 'OBSO
          order << entry_date
 
       end
-		db.abort
+      db.abort
    end
 
    result = []
@@ -93,7 +93,7 @@ def recent_comment3(ob_max = 'OBSOLUTE' ,sep = 'OBSOLUTE',ob_date_format = 'OBSO
             end
             
             result << "<li>"
-            result << %Q|<a href="#{a_entry}">#{@conf.shorten( title, 20 )}</a><br>|
+            result << %Q|<a href="#{h( a_entry )}">#{h( @conf.shorten( title, 20 ) )}</a><br>|
             entries[entry_date].sort.each { | comment_str |
                result << comment_str + "<br>"
             }

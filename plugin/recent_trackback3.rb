@@ -1,4 +1,4 @@
-# $Revision: 1.16 $
+# $Revision: 1.17 $
 # recent_trackback3: 最近のツッコミをリストアップする
 #
 # Copyright (c) 2004 Junichiro KITA <kita@kitaj.no-ip.com>
@@ -89,7 +89,7 @@ def recent_trackback3
             end
 
             result << "<li>"
-            result << %Q|<a href="#{a_entry}">#{@conf.shorten( title, 20 )}</a><br>|
+            result << %Q|<a href="#{h( a_entry )}">#{h( @conf.shorten( title, 20 ) )}</a><br>|
             entries[entry_date].sort.each { | comment_str |
                result << comment_str + "<br>"
             }
@@ -158,4 +158,5 @@ if @mode == 'saveconf'
 		@conf['recent_trackback3.titlelen'] = @cgi.params['recent_trackback3.titlelen'][0].to_i
 	end
 end
+
 # vim: ts=3

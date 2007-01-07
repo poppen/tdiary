@@ -1,4 +1,4 @@
-# ja/recent_comment.rb $Revision: 1.2 $
+# ja/recent_comment.rb $Revision: 1.3 $
 #
 # Japanese resources for recent_comment.rb
 #
@@ -12,16 +12,16 @@ if @mode == 'conf' || @mode == 'saveconf'
       recent_comment_init
       <<-HTML
       <h3 class="subtitle">表示するツッコミの数</h3>
-      <p>最大 <input name="recent_comment.max" value="#{@conf['recent_comment.max']}" size="3" /> 件</p>
+      <p>最大 <input name="recent_comment.max" value="#{h( @conf['recent_comment.max'] )}" size="3" /> 件</p>
       <h3 class="subtitle">日付フォーマット</h3>
       <p>使用できる\'%\'文字については<a href="http://www.ruby-lang.org/ja/man/index.cgi?cmd=view;name=Time#strftime">Rubyのマニュアル</a>を参照．</p>
-      <p><input name="recent_comment.date_format" value="#{CGI.escapeHTML(@conf['recent_comment.date_format'])}" size="40" /></p>
+      <p><input name="recent_comment.date_format" value="#{h(@conf['recent_comment.date_format'])}" size="40" /></p>
       <h3 class="subtitle">一覧に表示しない名前</h3>
       <p>リストに表示しない名前を指定します．</p>
-      <p><input name="recent_comment.except_list" size="60" value="#{CGI.escapeHTML( @conf['recent_comment.except_list'] )}" /></p>
+      <p><input name="recent_comment.except_list" size="60" value="#{h( @conf['recent_comment.except_list'] )}" /></p>
       <h3 class="subtitle">生成するHTMLのテンプレート</h3>
       <p>各ツッコミをどのようなHTMLで表示するかを指定します．</p>
-      <textarea name="recent_comment.format" cols="70" rows="3">#{CGI.escapeHTML(@conf['recent_comment.format'])}</textarea>
+      <textarea name="recent_comment.format" cols="70" rows="3">#{h( @conf['recent_comment.format'] )}</textarea>
       <p>テンプレート中の<em>$数字</em>はそれぞれ以下の内容で置き換えられます．必要のないものは指定しなくても構いません．</p>
       <dl>
       <dt>$2</dt><dd>ツッコミのURL．</dd>

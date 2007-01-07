@@ -1,4 +1,4 @@
-# speed_comment.rb $Revision: 1.5 $
+# speed_comment.rb $Revision: 1.6 $
 #
 # spped_comment: 最新・月毎表示時に簡易なツッコミフォームを表示する
 #                pluginディレクトリに入れるだけで動きます。
@@ -23,12 +23,12 @@ add_body_leave_proc do |date|
 		@conf['speed_comment.name_size'] = 20 unless @conf['speed_comment.name_size']
 		@conf['speed_comment.body_size'] = 40 unless @conf['speed_comment.body_size']
 		r = ""
-		r << %Q[<div class="form"><form method="post" action="] + @index + %Q["><p>]
-		r << %Q[<input type="hidden" name="date" value="] + date.strftime( '%Y%m%d' ) + %Q[">]
+		r << %Q[<div class="form"><form method="post" action="#{h( @index )}"><p>]
+		r << %Q[<input type="hidden" name="date" value="#{h( date.strftime( '%Y%m%d' ) )}">]
 		r << %Q[<input type="hidden" name="mail" value="">]
-		r << comment_name_label + %Q[: <input class="field" name="name" size="#{@conf['speed_comment.name_size']}" value="#{@cgi.cookies['tdiary'][0]}">]
-		r << comment_body_label + %Q[: <input class="field" name="body" size="#{@conf['speed_comment.body_size']}">]
-		r << %Q[<input type="submit" name="comment" value="] + comment_submit_label + %Q[">]
+		r << %Q[#{h( comment_name_label )} : <input class="field" name="name" size="#{@conf['speed_comment.name_size']}" value="#{h( @cgi.cookies['tdiary'][0] )}">]
+		r << %Q[#{h( comment_body_label )} : <input class="field" name="body" size="#{@conf['speed_comment.body_size']}">]
+		r << %Q[<input type="submit" name="comment" value="#{h( comment_submit_label )}">]
 		r << %Q[</p></form></div>]
 	else
 		''
@@ -43,8 +43,8 @@ unless @resource_loaded then
 	def speed_comment_html
 		<<-HTML
 		<h3>簡易ツッコミフォームのサイズ</h3>
-		<p>名前欄: <input name="speed_comment.name_size" size="5" value="#{@conf['speed_comment.name_size'] || 20}"></p>
-		<p>本文欄: <input name="speed_comment.body_size" size="5" value="#{@conf['speed_comment.body_size'] || 40}"></p>
+		<p>名前欄: <input name="speed_comment.name_size" size="5" value="#{h( @conf['speed_comment.name_size'] ) || 20}"></p>
+		<p>本文欄: <input name="speed_comment.body_size" size="5" value="#{h( @conf['speed_comment.body_size'] ) || 40}"></p>
 		HTML
 	end
 end
@@ -58,5 +58,3 @@ add_conf_proc( 'speed_comment', speed_comment_label ) do
 	end
 	speed_comment_html
 end
-
-

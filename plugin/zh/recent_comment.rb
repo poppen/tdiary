@@ -1,4 +1,4 @@
-# en/recent_comment.rb $Revision: 1.2 $
+# en/recent_comment.rb $Revision: 1.3 $
 #
 # English resources for recent_comment.rb
 #
@@ -12,16 +12,16 @@ if @mode == 'conf' || @mode == 'saveconf'
       recent_comment_init
       <<-HTML
       <h3 class="subtitle">The number of display comment</h3>
-      <p>Max <input name="recent_comment.max" value="#{@conf['recent_comment.max']}" size="3" /> item</p>
+      <p>Max <input name="recent_comment.max" value="#{h( @conf['recent_comment.max'] )}" size="3" /> item</p>
       <h3 class="subtitle">Date format</h3>
       <p>Refer to <a href="http://www.ruby-lang.org/ja/man/index.cgi?cmd=view;name=Time#strftime">Ruby's Manual</a>for the \'%\' character that can be used.</p>
-      <p><input name="recent_comment.date_format" value="#{CGI.escapeHTML(@conf['recent_comment.date_format'])}" size="40" /></p>
+      <p><input name="recent_comment.date_format" value="#{h( @conf['recent_comment.date_format'] )}" size="40" /></p>
       <h3 class="subtitle">Non display name in recent comment list</h3>
       <p>Specified The name not displayed in the list.</p>
-      <p><input name="recent_comment.except_list" size="60" value="#{CGI.escapeHTML( @conf['recent_comment.except_list'] )}" /></p>
+      <p><input name="recent_comment.except_list" size="60" value="#{h( @conf['recent_comment.except_list'] )}" /></p>
       <h3 class="subtitle">HTML Template for generate</h3>
       <p>Specify how each comment is rendered.</p>
-      <textarea name="recent_comment.format" cols="70" rows="3">#{CGI.escapeHTML(@conf['recent_comment.format'])}</textarea>
+      <textarea name="recent_comment.format" cols="70" rows="3">#{h( @conf['recent_comment.format'] )}</textarea>
       <p><em>$digit</em> in the template is replaced as follows.</p>
       <dl>
       <dt>$2</dt><dd>comment's URL</dd>

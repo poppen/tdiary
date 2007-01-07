@@ -1,4 +1,4 @@
-# ja/recent_trackback3.rb $Revision: 1.5 $
+# ja/recent_trackback3.rb $Revision: 1.6 $
 #
 # English resources for recent_trackback3.rb
 #
@@ -14,22 +14,22 @@ add_conf_proc( 'recent_trackback3', 'Recent TrackBacks', 'tsukkomi' ) do
 
 	<<-HTML
 	<h3 class="subtitle">The number of trackbacks</h3>
-	<p>Max <input name="recent_trackback3.n" value="#{@conf['recent_trackback3.n']}" size="3"> entries</p>
+	<p>Max <input name="recent_trackback3.n" value="#{h( @conf['recent_trackback3.n'] )}" size="3"> entries</p>
 
 	<h3 class="subtitle">Format specification for date</h3>
 	<p>See <a href="http://www.rubycentral.com/ref/ref_c_time.html#strftime">ruby's reference manual</a>.</p>
-	<p><input name="recent_trackback3.date_format" value="#{CGI.escapeHTML(@conf['recent_trackback3.date_format'])}" size="40"></p>
+	<p><input name="recent_trackback3.date_format" value="#{h( @conf['recent_trackback3.date_format'] )}" size="40"></p>
  
  	<h3 class="subtitle">Tree View mode</h3>
  	<p><input name="recent_trackback3.tree" type="checkbox" value="t"#{checked} />used Tree View</p>
  
  	<h3 class="subtitle">length of title at Tree View mode</h3>
  	<p>Input length of title at Tree View mode. When Tree view mode is not used, it doesn't relate.</p>
- 	<p>Max <input name="recent_trackback3.titlelen" value="#{@conf['recent_trackback3.titlelen']}" size="3" /> characters.</p>
+ 	<p>Max <input name="recent_trackback3.titlelen" value="#{h( @conf['recent_trackback3.titlelen'] )}" size="3" /> characters.</p>
  
 	<h3 class="subtitle">Template</h3>
 	<p>Specify how each trackback is rendered.</p>
-	<textarea name="recent_trackback3.format" cols="60" rows="3">#{CGI.escapeHTML(@conf['recent_trackback3.format'])}</textarea>
+	<textarea name="recent_trackback3.format" cols="60" rows="3">#{h( @conf['recent_trackback3.format'] )}</textarea>
 	<p><em>$digit</em> in the template is replaced as follows.</p>
 	<dl>
 		<dt>$2</dt><dd>the TrackBack's URL</dd>
