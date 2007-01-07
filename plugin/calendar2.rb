@@ -1,4 +1,4 @@
-# calendar2.rb $Revision: 1.16 $
+# calendar2.rb $Revision: 1.17 $
 #
 # calendar2: add calendar as table layout.
 #   parameter:
@@ -65,7 +65,7 @@ end
 
 def calendar2_make_anchor(ym, str)
 	if ym
-		%Q|<a href="#{@index}#{anchor ym}">#{str}</a>|
+		%Q|<a href="#{h @index}#{anchor ym}">#{str}</a>|
 	else
 		str
 	end
@@ -143,7 +143,7 @@ CALENDAR_HEAD
 								end
 							end
 							if todos.size != 0
-								%Q|<a title="#{todos.join( "\n" ).gsub( /"/, '&quot;' )}"><span class="calendar-todo">#{day}</span></a>|
+								%Q|<a title="#{h todos.join( "\n" )}"><span class="calendar-todo">#{day}</span></a>|
 							else
 								day.to_s
 							end
@@ -159,12 +159,12 @@ CALENDAR_HEAD
 							else
 								text = section.body_to_html
 							end
-							subtitles <<  %Q|#{idx}. #{@conf.shorten(apply_plugin( text, true )).gsub(/"/, '&quot;')}|
+							subtitles << h( %Q|#{idx}. #{@conf.shorten(apply_plugin( text, true ))}| )
 							idx.succ!
 						end
 						day_img = ((@calendar2_show_image and !@conf.secure) ? calender2_make_image(@diaries[date], date) : day.to_s)
 						day_img = day.to_s if day_img == nil
-            %Q|<a href="#{@index}#{anchor date}" title="#{subtitles.join("&#13;&#10;")}">#{day_img}</a>|
+            %Q|<a href="#{h @index}#{anchor date}" title="#{subtitles.join("&#13;&#10;")}">#{day_img}</a>|
 					end
 			end
 		end

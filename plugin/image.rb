@@ -1,4 +1,4 @@
-# image.rb $Revision: 1.31 $
+# image.rb $Revision: 1.32 $
 # -pv-
 # 
 # 名称:
@@ -52,8 +52,8 @@
 #
 
 unless @resource_loaded then
-	def image_error_num( max ); "画像は1日#{max}枚までです。不要な画像を削除してから追加してください"; end
-	def image_error_size( max ); "画像の最大サイズは#{max}バイトまでです"; end
+	def image_error_num( max ); "画像は1日#{h max}枚までです。不要な画像を削除してから追加してください"; end
+	def image_error_size( max ); "画像の最大サイズは#{h max}バイトまでです"; end
 	def image_label_list_caption; '絵日記(一覧・削除)'; end
 	def image_label_add_caption; '絵日記(追加)'; end
 	def image_label_description; '画像の説明'; end
@@ -73,23 +73,23 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
 	end
 	if size then
 		if size.kind_of?(Array)
-			size = " width=\"#{size[0]}\" height=\"#{size[1]}\""
+			size = %Q| width="#{h size[0]}" height="#{h size[1]}"|
 
 		else
-			size = " width=\"#{size.to_i}\""
+			size = %Q| width="#{size.to_i}"|
 		end
 	elsif @image_maxwidth and not @conf.secure then
 		File::open( "#{@image_dir}/#{image}".untaint ) do |f|
 			t, w, h = image_info( f )
 			if w > @image_maxwidth then
-				size = %Q[ width="#{@image_maxwidth}"]
+				size = %Q[ width="#{h @image_maxwidth}"]
 			else
 				size = ""
 			end
 		end
 	end
 	if thumbnail then
-	   	%Q[<a href="#{@image_url}/#{image}"><img class="#{place}" src="#{@image_url}/#{image_t}" alt="#{alt}" title="#{alt}"#{size}></a>]
+	  	%Q[<a href="#{h @image_url}/#{h image}"><img class="#{h place}" src="#{h @image_url}/#{h image_t}" alt="#{h alt}" title="#{h alt}"#{size}></a>]
 	else
 		%Q[<img class="#{place}" src="#{@image_url}/#{image}" alt="#{alt}" title="#{alt}"#{size}>]
 	end
@@ -109,7 +109,7 @@ def image_link( id, desc )
 	else
    	image = image_list( @image_date )[id.to_i]
 	end
-   %Q[<a href="#{@image_url}/#{image}">#{desc}</a>]
+   %Q[<a href="#{h @image_url}/#{h image}">#{desc}</a>]
 end
 
 #
@@ -281,7 +281,7 @@ add_form_proc do |date|
 		<div class="caption">
 		#{image_label_list_caption}
 		</div>
-		<form class="update" method="post" action="#{@conf.update}"><div>
+		<form class="update" method="post" action="#{h @update}"><div>
 		#{csrf_protection}
 		<table>
 		<tr>]
@@ -293,7 +293,7 @@ add_form_proc do |date|
 			else
 				img_type, img_w, img_h = open(File.join(@image_dir,img).untaint, 'r') {|f| image_info(f)}
 			end
-			r << %Q[<td><img class="form" src="#{@image_url}/#{img}" alt="#{id}" width="#{(img_w && img_w > 160) ? 160 : (img_w ? img_w : 160)}"></td>]
+			r << %Q[<td><img class="form" src="#{h @image_url}/#{h img}" alt="#{h id}" width="#{h( (img_w && img_w > 160) ? 160 : (img_w ? img_w : 160) )}"></td>]
 			ptag = "#{ptag1}image #{id}, '#{image_label_description}', nil, #{img_w && img_h ? '['+img_w.to_s+','+img_h.to_s+']' : 'nil'}#{ptag2}"
 			if @conf.secure then
 				img_info = ''
@@ -305,7 +305,7 @@ add_form_proc do |date|
 			end
 			tmp << %Q[<td>
 			#{img_info}<br>
-			<input type="checkbox" tabindex="#{tabidx+id*2}" name="plugin_image_id" value="#{id}">#{id}
+			<input type="checkbox" tabindex="#{tabidx+id*2}" name="plugin_image_id" value="#{h id}">#{id}
 			<input type="button" tabindex="#{tabidx+id*2+1}" onclick="ins(&quot;#{ptag}&quot;)" value="#{image_label_add_plugin}">
 			</td>]
 	   end
@@ -327,7 +327,7 @@ add_form_proc do |date|
 	if @image_message then
 		r << %Q[<p class="message">#{@image_message}</p>]
 	end
-   r << %Q[<form class="update" method="post" enctype="multipart/form-data" action="#{@conf.update}"><div>
+   r << %Q[<form class="update" method="post" enctype="multipart/form-data" action="#{h @update}"><div>
 	#{@conf.secure ? image_label_only_jpeg : ''}
 	#{csrf_protection}
    <input type="hidden" name="plugin_image_addimage" value="true">

@@ -1,4 +1,4 @@
-# calendar3.rb $Revision: 1.39 $
+# calendar3.rb $Revision: 1.40 $
 #
 # calendar3: 現在表示している月のカレンダーを表示します．
 #  パラメタ: なし
@@ -142,8 +142,8 @@ def calendar3
 	month = date.month
 	day = date.day
 
-	result << %Q|<span class="calendar-prev-month"><a href="#{@index}#{anchor "%04d%02d" % Calendar3.prev_month(year, month)}">&lt;&lt;</a></span>\n|
-	result << %Q|<span class="calendar-current-month"><a href="#{@index}#{anchor "%04d%02d" % [year, month]}">#{"%04d/%02d" % [year, month]}</a>/</span>\n|
+	result << %Q|<span class="calendar-prev-month"><a href="#{h @index}#{anchor "%04d%02d" % Calendar3.prev_month(year, month)}">&lt;&lt;</a></span>\n|
+	result << %Q|<span class="calendar-current-month"><a href="#{h @index}#{anchor "%04d%02d" % [year, month]}">#{"%04d/%02d" % [year, month]}</a>/</span>\n|
 	#Calendar3.make_cal(year, month)[(day - num >= 0 ? day - num : 0)..(day - 1)].each do |day, kind|
 	Calendar3.make_cal(year, month).each do |day, kind|
 		date = "%04d%02d%02d" % [year, month, day]
@@ -154,7 +154,7 @@ def calendar3
 			if show_todo
 				@diaries[date].each_section do |section|
 					if show_todo === section.subtitle
-						todos << CGI::escapeHTML(section.body_to_html).gsub(/\n/, "&#13;&#10;")
+						todos << h( section.body_to_html ).gsub( /\n/, "&#13;&#10;" )
 					end
 				end
 			end
@@ -190,7 +190,7 @@ def calendar3
 				end
 			end
 			result << r.join("&#13;&#10;")
-			result << %Q|" href="#{@index}#{anchor date}">#{day}</a>\n|
+			result << %Q|" href="#{h @index}#{anchor date}">#{day}</a>\n|
 			if @calendar3_show_popup
 				result << %Q|  <span class="calendar-popup" id="popup-#{day}">\n|
 				i = 1
@@ -199,7 +199,7 @@ def calendar3
 						if section.stripped_subtitle
 							text = apply_plugin( section.body_to_html, true )
 							subtitle = apply_plugin( section.stripped_subtitle_to_html )
-							result << %Q|    <a href="#{@index}#{anchor "%s#p%02d" % [date, i]}" title="#{CGI::escapeHTML( @conf.shorten( text ) )}">#{i}</a>. #{subtitle}<br>\n|
+							result << %Q|    <a href="#{h @index}#{anchor "%s#p%02d" % [date, i]}" title="#{h @conf.shorten( text )}">#{i}</a>. #{subtitle}<br>\n|
 						end
 						i += 1
 					end
@@ -208,7 +208,7 @@ def calendar3
 						if section.subtitle
 							text = apply_plugin( section.body_to_html, true )
 							subtitle = apply_plugin( section.subtitle_to_html )
-							result << %Q|    <a href="#{@index}#{anchor "%s#p%02d" % [date, i]}" title="#{CGI::escapeHTML( @conf.shorten( text ) )}">#{i}</a>. #{subtitle}<br>\n|
+							result << %Q|    <a href="#{h @index}#{anchor "%s#p%02d" % [date, i]}" title="#{h @conf.shorten( text )}">#{i}</a>. #{subtitle}<br>\n|
 						end
 						i += 1
 					end
@@ -218,7 +218,7 @@ def calendar3
 			result << %Q|</span>\n|
 		end
 	end
-	result << %Q|<span class="calendar-next-month"><a href="#{@index}#{anchor "%04d%02d" % Calendar3.next_month(year, month)}">&gt;&gt;</a></span>\n|
+	result << %Q|<span class="calendar-next-month"><a href="#{h @index}#{anchor "%04d%02d" % Calendar3.next_month(year, month)}">&gt;&gt;</a></span>\n|
 	result
 end
 

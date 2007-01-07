@@ -1,4 +1,4 @@
-# footnote.rb $Revision: 1.8 $
+# footnote.rb $Revision: 1.9 $
 #
 # fn: 脚注plugin
 #   パラメタ:
@@ -36,7 +36,7 @@ def fn(text, mark = '*')
 		@footnotes << [@footnote_index[0], text, mark]
 		r = %Q|<span class="footnote"><a |
 		r << %Q|name="#{@footnote_mark_name % @footnote_index[0]}" | if @mode == 'day'
-		r << %Q|href="#{@footnote_url % @footnote_index[0]}" title="#{CGI::escapeHTML text}">#{mark}#{@footnote_index[0]}</a></span>|
+		r << %Q|href="#{@footnote_url % @footnote_index[0]}" title="#{h text}">#{mark}#{@footnote_index[0]}</a></span>|
 	else
  		""
 	end
@@ -45,9 +45,9 @@ end
 add_body_enter_proc(Proc.new do |date|
 	date = date.strftime("%Y%m%d")
 	@footnote_name.replace "f%02d"
-	@footnote_url.replace "#{@index}#{anchor date}##{@footnote_name}"
+	@footnote_url.replace "#{h @index}#{anchor date}##{@footnote_name}"
 	@footnote_mark_name.replace "fm%02d"
-	@footnote_mark_url.replace "#{@index}#{anchor date}##{@footnote_mark_name}"
+	@footnote_mark_url.replace "#{h @index}#{anchor date}##{@footnote_mark_name}"
 	@footnotes.clear
 	@footnote_index[0] = 0
 	""

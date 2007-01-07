@@ -1,4 +1,4 @@
-# comment_rank.rb $Revision: 1.6 $
+# comment_rank.rb $Revision: 1.7 $
 #
 # comment_rank: ツッコミの数でランキング
 #   パラメタ:
@@ -21,7 +21,7 @@ def comment_rank( max = 5, sep = '&nbsp;', *except )
 	result = []
 	name.sort{|a,b| (a[1])<=>(b[1])}.reverse.each_with_index do |ary,idx|
 		break if idx >= max
-		result << "<strong>#{idx+1}.</strong>#{CGI::escapeHTML( ary[0].to_s )}(#{ary[1].to_s})"
+		result << "<strong>#{idx+1}.</strong>#{h ary[0]}(#{ary[1].to_s})"
 	end
 	result.join( sep )
 end

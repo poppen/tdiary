@@ -1,4 +1,4 @@
-# list.rb $Revision: 1.3 $
+# list.rb $Revision: 1.4 $
 #
 # <ol> 順番付きリスト生成
 #   <%= ol l %>
@@ -13,10 +13,6 @@
 # Copyright (c) 2002 abbey <inlet@cello.no-ip.org>
 # Distributed under the GPL.
 #
-=begin ChangeLog
-2002-12-18 TADA Tadashi <sho@spc.gr.jp>
-	* remove parameter of t and s (for HTML Strict).
-=end
 
 def ol( l, t = nil, s = nil )
 	apply_plugin( %Q[<ol>#{li l}</ol>] )

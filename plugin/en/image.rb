@@ -1,5 +1,5 @@
 #
-# English resource of image plugin $Revision: 1.3 $
+# English resource of image plugin $Revision: 1.4 $
 #
 
 #
@@ -35,8 +35,8 @@
 #     Max display width of image without specified 'size' parameter.
 #     It will ignore when @secure = true.
 #
-def image_error_num( max ); "You can add images upto #{max} par a day."; end
-def image_error_size( max ); "You can add images upto #{max} bytes par an image."; end
+def image_error_num( max ); "You can add images upto #{h max} par a day."; end
+def image_error_size( max ); "You can add images upto #{h max} bytes par an image."; end
 def image_label_list_caption; 'Image Diary (List/Delete))'; end
 def image_label_add_caption; 'Image Diary (Add)'; end
 def image_label_description; 'Description of the image'; end

@@ -1,4 +1,4 @@
-# comment_mail_qmail.rb $Revision: 1.9 $
+# comment_mail_qmail.rb $Revision: 1.10 $
 #
 # qmailを使ってツッコミをメールで知らせる
 #   入れるだけで動作する。
@@ -30,7 +30,7 @@
 def comment_mail( text, to )
 	begin
 		qmail = @conf['comment_mail.qmail'] || '/var/qmail/bin/qmail-inject'
-		open( "|#{qmail} -f #{@conf.author_mail.untaint} #{to.join(' ')}", 'w' ) do |o|
+		open( %Q[|'#{qmail.gsub(/'/, '')}' -f '#{@conf.author_mail.gsub( /'/, '' ).untaint}' '#{to.map{|x|x.gsub(/'/,'')}.join("' '")}'], 'w' ) do |o|
 			o.write( text )
 		end
 	rescue

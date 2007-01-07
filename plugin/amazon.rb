@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.47 $: Making link with image to Amazon using Amazon ECS.
+# amazon.rb $Revision: 1.48 $: Making link with image to Amazon using Amazon ECS.
 #
 # see document: #{@lang}/amazon.rb
 #
@@ -64,14 +64,14 @@ def amazon_to_html( item, with_image = true, label = nil, pos = 'amazon' )
 			end
 			image = <<-HTML
 			<img class="#{pos}"
-			src="#{item.elements.to_a( "#{size}Image/URL" )[0].text}"
-			height="#{item.elements.to_a( "#{size}Image/Height" )[0].text}"
-			width="#{item.elements.to_a( "#{size}Image/Width" )[0].text}"
-			alt="#{CGI::escapeHTML(label)}" title="#{CGI::escapeHTML(label)}">
+			src="#{h item.elements.to_a( "#{size}Image/URL" )[0].text}"
+			height="#{h item.elements.to_a( "#{size}Image/Height" )[0].text}"
+			width="#{h item.elements.to_a( "#{size}Image/Width" )[0].text}"
+			alt="#{h label}" title="#{h label}">
 			HTML
 		rescue
 			if @conf['amazon.nodefault'] then
-				image = CGI::escapeHTML(label)
+				image = h( label )
 			else
 				base = @conf['amazon.default_image_base'] || 'http://www.tdiary.org/images/amazondefaults/'
 				name = case @conf['amazon.imgsize']
@@ -86,10 +86,10 @@ def amazon_to_html( item, with_image = true, label = nil, pos = 'amazon' )
 				end
 				image = <<-HTML
 				<img class="#{pos}"
-				src="#{base}#{name}.png"
+				src="#{h base}#{name}.png"
 				height="#{size[0]}"
 				width="#{size[1]}"
-				alt="#{CGI::escapeHTML(label)}" title="#{CGI::escapeHTML(label)}">
+				alt="#{h label}" title="#{h label}">
 				HTML
 			end
 		end
@@ -100,7 +100,7 @@ def amazon_to_html( item, with_image = true, label = nil, pos = 'amazon' )
 		label = ''
 	end
 
-	%Q|<a href="#{item.elements.to_a( 'DetailPageURL' )[0].text}">#{image}#{CGI::escapeHTML(label)}</a>|
+	%Q|<a href="#{h item.elements.to_a( 'DetailPageURL' )[0].text}">#{image}#{h label}</a>|
 end
 
 def amazon_secure_html( asin, with_image, label, pos = 'amazon' )
@@ -111,8 +111,8 @@ def amazon_secure_html( asin, with_image, label, pos = 'amazon' )
 	if with_image and @conf['amazon.secure-cgi'] then
 		image = <<-HTML
 		<img class="#{pos}"
-		src="#{@conf['amazon.secure-cgi']}?asin=#{asin};size=#{@conf['amazon.imgsize']}"
-		alt="#{CGI::escapeHTML(label)}" title="#{CGI::escapeHTML(label)}">
+		src="#{h @conf['amazon.secure-cgi']}?asin=#{h asin};size=#{h @conf['amazon.imgsize']}"
+		alt="#{h label}" title="#{h label}">
 		HTML
 	end
 	image.gsub!( /\t/, '' )
@@ -124,7 +124,7 @@ def amazon_secure_html( asin, with_image, label, pos = 'amazon' )
 	url =  "#{@amazon_url}/#{asin}"
 	url << "/#{@conf['amazon.aid']}" if @conf['amazon.aid'] and @conf['amazon.aid'].length > 0
 	url << "/ref=nosim/"
-	%Q|<a href="#{url}">#{image}#{CGI::escapeHTML(label)}</a>|
+	%Q|<a href="#{h url}">#{image}#{h label}</a>|
 end
 
 def amazon_get( asin, with_image = true, label = nil, pos = 'amazon' )
@@ -150,9 +150,9 @@ def amazon_get( asin, with_image = true, label = nil, pos = 'amazon' )
 		rescue NoMethodError
 			if item == nil then
 				message = doc.elements.to_a( 'Items/Request/Errors/Error/Message' )[0].text
-				"#{label ? label : asin}<!--#{NKF::nkf( '-We', message )}-->"
+				"#{label ? label : asin}<!--#{h NKF::nkf( '-We', message )}-->"
 			else
-				"#{label ? label : asin}<!--#{$!}\n#{$@.join ' / '}-->"
+				"#{label ? label : asin}<!--#{h $!}\n#{h $@.join( ' / ' )}-->"
 			end
 		end
 	end
@@ -188,22 +188,22 @@ def amazon_conf_proc
 		result << <<-HTML
 			<h3>#{@amazon_label_imgsize}</h3>
 			<p><select name="amazon.imgsize">
-				<option value="0"#{if @conf['amazon.imgsize'] == 0 then " selected" end}>#{@amazon_label_large}</option>
-				<option value="1"#{if @conf['amazon.imgsize'] == 1 then " selected" end}>#{@amazon_label_regular}</option>
-				<option value="2"#{if @conf['amazon.imgsize'] == 2 then " selected" end}>#{@amazon_label_small}</option>
+				<option value="0"#{" selected" if @conf['amazon.imgsize'] == 0}>#{@amazon_label_large}</option>
+				<option value="1"#{" selected" if @conf['amazon.imgsize'] == 1}>#{@amazon_label_regular}</option>
+				<option value="2"#{" selected" if @conf['amazon.imgsize'] == 2}>#{@amazon_label_small}</option>
 			</select></p>
 			<h3>#{@amazon_label_title}</h3>
 			<p><select name="amazon.hidename">
-				<option value="true"#{if @conf['amazon.hidename'] then " selected" end}>#{@amazon_label_hide}</option>
-				<option value="false"#{if not @conf['amazon.hidename'] then " selected" end}>#{@amazon_label_show}</option>
+				<option value="true"#{" selected" if @conf['amazon.hidename']}>#{@amazon_label_hide}</option>
+				<option value="false"#{" selected" unless @conf['amazon.hidename']}>#{@amazon_label_show}</option>
 			</select></p>
 		HTML
 		unless @conf.secure then
 			result << <<-HTML
 				<h3>#{@amazon_label_notfound}</h3>
 				<p><select name="amazon.nodefault">
-					<option value="true"#{if @conf['amazon.nodefault'] then " selected" end}>#{@amazon_label_usetitle}</option>
-					<option value="false"#{if not @conf['amazon.nodefault'] then " selected" end}>#{@amazon_label_usedefault}</option>
+					<option value="true"#{" selected" if @conf['amazon.nodefault']}>#{@amazon_label_usetitle}</option>
+					<option value="false"#{" selected" unless @conf['amazon.nodefault']}>#{@amazon_label_usedefault}</option>
 				</select></p>
 				<h3>#{@amazon_label_clearcache}</h3>
 				<p><input type="checkbox" name="amazon.clearcache" value="true">#{@amazon_label_clearcache_desc}</input></p>
@@ -214,7 +214,7 @@ def amazon_conf_proc
 		result << <<-HTML
 			<h3>#{@amazon_label_aid}</h3>
 			<p>#{@amazon_label_aid_desc}</p>
-			<p><input name="amazon.aid" value="#{CGI::escapeHTML( @conf['amazon.aid'] ) if @conf['amazon.aid']}"></p>
+			<p><input name="amazon.aid" value="#{h( @conf['amazon.aid'] ) if @conf['amazon.aid']}"></p>
 		HTML
 	end
 	result

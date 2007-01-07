@@ -1,4 +1,4 @@
-# kw.rb $Revision: 1.13 $
+# kw.rb $Revision: 1.14 $
 #
 # kw: keyword link generator
 #   Parameters:
@@ -72,9 +72,9 @@ def kw( keyword, name = nil, title = nil )
 	end
 	keyword = key unless show_inter
 	name = keyword unless name
-	title = title ? %Q[ title="#{title}"] : ''
+	title = title ? %Q[ title="#{h title}"] : ''
 	begin
-		key = CGI::escape( case @kw_dic[inter][1]
+		key = h( case @kw_dic[inter][1]
 			when 'euc-jp'
 				#NKF::nkf( '-e', key )
 				key
@@ -91,7 +91,7 @@ def kw( keyword, name = nil, title = nil )
 		inter = nil
 		retry
 	end
-	%Q[<a href="#{CGI::escapeHTML( @kw_dic[inter][0].sub( /\$1/, key ) )}"#{title}>#{name}</a>]
+	%Q[<a href="#{h @kw_dic[inter][0].sub( /\$1/, key )}"#{title}>#{name}</a>]
 end
 
 #
@@ -133,7 +133,7 @@ add_conf_proc( 'kw', kw_label ) do
 	end
 	<<-HTML
 	#{kw_desc}
-	<p><textarea name="kw.dic" cols="60" rows="10">#{CGI::escapeHTML( dic.collect{|a|a.flatten.join( " " )}.join( "\n" ) )}</textarea></p>
+	<p><textarea name="kw.dic" cols="60" rows="10">#{h dic.collect{|a|a.flatten.join( " " )}.join( "\n" )}</textarea></p>
 	HTML
 end
 

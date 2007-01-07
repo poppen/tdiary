@@ -1,3 +1,6 @@
+2007-01-07 TADA Tadashi <sho@spc.gr.jp>
+	* apply HTML escape when generate HTML in some more plugins.
+
 2007-01-06 TADA Tadashi <sho@spc.gr.jp>
 	* apply HTML escape when generate HTML in some plugins.
 

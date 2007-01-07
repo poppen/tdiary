@@ -1,5 +1,5 @@
 #
-# English resource of image plugin $Revision: 1.1 $
+# English resource of image plugin $Revision: 1.2 $
 #
 
 #
@@ -30,8 +30,8 @@
 #     Max size of an image. Default is 10000 bytes.
 #     This option is effective in @secure = true.
 #
-def image_error_num( max ); "每則日誌最多可貼 #{max} 張圖片"; end
-def image_error_size( max ); "每張圖片最大限制為 #{max} bytes"; end
+def image_error_num( max ); "每則日誌最多可貼 #{h max} 張圖片"; end
+def image_error_size( max ); "每張圖片最大限制為 #{h max} bytes"; end
 def image_label_list_caption; '列出或刪除圖片'; end
 def image_label_add_caption; '附加圖片'; end
 def image_label_description; '圖片的附註'; end

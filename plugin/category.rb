@@ -1,4 +1,4 @@
-# category.rb $Revision: 1.31 $
+# category.rb $Revision: 1.32 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -56,9 +56,9 @@ def category_anchor(category)
 			""
 		end
 	if @category_icon[category]
-		%Q|<a href="#{@index}?#{period_string}category=#{CGI::escape(category)}"><img class="category" src="#{@category_icon_url}#{@category_icon[category]}" alt="#{category}"></a>|
+		%Q|<a href="#{h @index}?#{period_string}category=#{h category}"><img class="category" src="#{h @category_icon_url}#{h @category_icon[category]}" alt="#{category}"></a>|
 	else
-		%Q|[<a href="#{@index}?#{period_string}category=#{CGI::escape(category)}">#{category}</a>]|
+		%Q|[<a href="#{h @index}?#{period_string}category=#{h category}">#{category}</a>]|
 	end
 end
 
@@ -105,7 +105,7 @@ def category_list_sections
 	@categorized.keys.sort.each do |c|
 		info.category = c
 		if @category_icon[c]
-			img = %Q|<img class="category" src="#{@category_icon_url}#{@category_icon[c]}" alt="#{c}">|
+			img = %Q|<img class="category" src="#{h @category_icon_url}#{h @category_icon[c]}" alt="#{h c}">|
 		else
 			img = ''
 		end
@@ -118,7 +118,7 @@ HTML
 		@categorized[c].keys.sort.each do |ymd|
 			text = Time.local(ymd[0,4], ymd[4,2], ymd[6,2]).strftime(@conf.date_format)
 			@categorized[c][ymd].sort.each do |idx, title, excerpt|
-				r << %Q|\t\t\t<a href="#{@conf.index}#{anchor "#{ymd}#p#{'%02d' % idx}"}" title="#{excerpt}">#{text}#p#{'%02d' % idx}</a> #{apply_plugin(title)}<br>\n|
+				r << %Q|\t\t\t<a href="#{h @index}#{anchor "#{ymd}#p#{'%02d' % idx}"}" title="#{h excerpt}">#{text}#p#{'%02d' % idx}</a> #{apply_plugin(title)}<br>\n|
 			end
 		end
 		r << <<HTML
@@ -147,11 +147,11 @@ def category_dropdown_list(label = nil, multiple = nil)
 
 	options = ''
 	(['ALL'] + @categories).each do |c|
-		options << %Q|\t\t<option value="#{CGI.escapeHTML(c)}"#{" selected" if category.include?(c)}>#{CGI.escapeHTML(c)}</option>\n|
+		options << %Q|\t\t<option value="#{h c}"#{" selected" if category.include?(c)}>#{h c}</option>\n|
 	end
 
 	<<HTML
-<form method="get" action="#{@conf.index}?#{period_string}"><div>
+<form method="get" action="#{h @index}?#{period_string}"><div>
 	<select name="category"#{" multiple" if multiple}>
 #{options}
 	</select>
@@ -265,7 +265,7 @@ public
 	end
 
 	def make_anchor(label = nil)
-		a = @category.map {|c| "category=#{CGI.escape(c)}"}.join(';')
+		a = @category.map {|c| "category=#{h c}"}.join(';')
 		a << ";year=#{@year}" if @year
 		a << ";month=#{@month}" if @month
 		if label
@@ -277,9 +277,9 @@ public
 				label = label.gsub(/\$1/, @year || '*')
 			end
 		else
-			label = @category.map {|c| CGI.escapeHTML(c)}.join(':')
+			label = @category.map {|c| h( c )}.join(':')
 		end
-		%Q|<a href="#{CGI::escapeHTML( @conf.index )}?#{a}">#{label}</a>|
+		%Q|<a href="#{h  @index}?#{a}">#{label}</a>|
 	end
 
 	#
@@ -484,7 +484,7 @@ class Cache
 private
 	def cache_file(category = nil)
 		if category
-			"#{@dir}/#{CGI.escape(category)}".untaint
+			"#{@dir}/#{h category}".untaint
 		else
 			"#{@dir}/category_list"
 		end
@@ -564,8 +564,7 @@ end # module Category
 		ret << '<div class="field title">'
 		ret << "#{@category_conf_label}:\n"
 		@categories.each do |c|
-			e_c = CGI.escapeHTML(c)
-			ret << %Q!| <a href="javascript:inj_c(&quot;[#{e_c}]&quot;)">#{e_c}</a>\n!
+			ret << %Q!| <a href="javascript:inj_c(&quot;[#{h c}]&quot;)">#{h c}</a>\n!
 		end
 		ret << "|\n</div>\n<br>\n"
 	end
@@ -602,10 +601,10 @@ end
 def category_icon_select(category)
 	options = %Q|<\t<option value="none">#{@category_icon_none_label}</option>\n|
 	@category_all_icon.each do |i|
-		options << %Q|\t<option value="#{CGI.escapeHTML(i)}"#{" selected" if @category_icon[category] == i}>#{CGI.escapeHTML(i)}</option>\n|
+		options << %Q|\t<option value="#{h i}"#{" selected" if @category_icon[category] == i}>#{h i}</option>\n|
 	end
 	<<HTML
-<select name="category.icon.#{category}">
+<select name="category.icon.#{h category}">
 #{options}
 </select>
 HTML
@@ -613,7 +612,7 @@ end
 
 def category_icon_sample
 	@category_all_icon.map do |i|
-		%Q|<img src="#{@category_icon_url}#{i}" alt="#{i}" title="#{i}">\n|
+		%Q|<img src="#{h @category_icon_url}#{h i}" alt="#{h i}" title="#{h i}">\n|
 	end.join("/\n")
 end
 
