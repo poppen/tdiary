@@ -1,10 +1,10 @@
 #!/usr/bin/env ruby
-# rast-search.rb $Revision: 1.7 $
+# rast-search.rb $Revision: 1.8 $
 #
 # Copyright (C) 2005 Kazuhiko <kazuhiko@fdiary.net>
 # You can redistribute it and/or modify it under GPL2.
 #
-$KCODE= 'u'
+$KCODE= 'e'
 BEGIN { $defout.binmode }
 
 require 'rast.so'
@@ -24,25 +24,25 @@ module TDiary
 	class TDiaryRast < ::TDiary::TDiaryBase
 		MAX_PAGES = 20
 		SORT_OPTIONS = [
-			["score", "„Çπ„Ç≥„Ç¢È†Ü"],
-			["date", "Êó•‰ªòÈ†Ü"],
+			["score", "•π•≥•¢ΩÁ"],
+			["date", "∆¸…’ΩÁ"],
 		]
 		SORT_PROPERTIES = ["date"]
 		ORDER_OPTIONS = [
-			["asc", "ÊòáÈ†Ü"],
-			["desc", "ÈôçÈ†Ü"],
+			["asc", "æ∫ΩÁ"],
+			["desc", "πﬂΩÁ"],
 		]
 		NUM_OPTIONS = [10, 20, 30, 50, 100]
 
 		def initialize( cgi, rhtml, conf )
 			super
 			@db_path = conf.options['rast.db_path'] || "#{cache_path}/rast"
-			@encoding = 'utf8'
+			@encoding = conf.options['rast.encoding'] || 'euc_jp'
 			# conf.options['sp.selected'] = ''
 			parse_args
 			format_form
 			if @query.empty?
-				@msg = 'Ê§úÁ¥¢Êù°‰ª∂„ÇíÂÖ•Âäõ„Åó„Å¶„ÄÅ„ÄåÊ§úÁ¥¢„Äç„Éú„Çø„É≥„ÇíÊäº„Åó„Å¶„Åè„Å†„Åï„ÅÑ'
+				@msg = '∏°∫˜æÚ∑Ô§Ú∆˛Œœ§∑§∆°¢°÷∏°∫˜°◊•‹•ø•Û§Ú≤°§∑§∆§Ø§¿§µ§§'
 			else
 				search
 			end
@@ -88,7 +88,7 @@ module TDiary
 				@result = db.search(convert(@query), options)
 				@secs = Time.now - t
 			rescue
-				@msg = "„Ç®„É©„Éº: #{_($!.to_s)}</p>"
+				@msg = "•®•È°º: #{_($!.to_s)}</p>"
 			ensure
 				db.close
 			end
@@ -119,7 +119,7 @@ module TDiary
 			end
 			buf = "<p class=\"infobar\">\n"
 			if current_page > 1
-				buf.concat(format_link("Ââç„Å∏", @start - @num, @num))
+				buf.concat(format_link("¡∞§ÿ", @start - @num, @num))
 			end
 			if first_page > 1
 				buf.concat("... ")
@@ -135,7 +135,7 @@ module TDiary
 				buf.concat("... ")
 			end
 			if current_page < page_count
-				buf.concat(format_link("Ê¨°„Å∏", @start + @num, @num))
+				buf.concat(format_link("º°§ÿ", @start + @num, @num))
 			end
 			buf.concat("</p>\n")
 			return buf
@@ -185,9 +185,9 @@ module TDiary
 		def format_form
 			@num_options = NUM_OPTIONS.collect { |n|
 				if n == @num
-					"<option value=\"#{n}\" selected>#{n}‰ª∂„Åö„Å§</option>"
+					"<option value=\"#{n}\" selected>#{n}∑Ô§∫§ƒ</option>"
 				else
-					"<option value=\"#{n}\">#{n}‰ª∂„Åö„Å§</option>"
+					"<option value=\"#{n}\">#{n}∑Ô§∫§ƒ</option>"
 				end
 			}.join("\n")
 			@sort_options = format_options(SORT_OPTIONS, @sort)
@@ -199,7 +199,13 @@ module TDiary
 		end
 
 		def convert(str)
-			@conf.to_native(str)
+			case @encoding
+			when 'utf8'
+				require 'nkf'
+				NKF::nkf('-w -m0', str)
+			else
+				@conf.to_native(str)
+			end
 		end
 	end
 end
