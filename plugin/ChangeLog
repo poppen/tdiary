@@ -1,3 +1,6 @@
+2007-01-08 zunda <zunda at freeshell.org>
+	* navi_user.rb: escaped arguments to navi_item
+
 2007-01-07 zunda <zunda at freeshell.org>
 	* highlgiht.rb: modififed to escape diary_title in Ruby and
 	unescape it in Javascript
