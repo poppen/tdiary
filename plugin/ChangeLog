@@ -1,4 +1,8 @@
 2007-01-07 zunda <zunda at freeshell.org>
+	* my-ex.rb: modified to use ERB::Util.h instead of
+	CGI::escpaeHTML and escape base-html
+
+2007-01-07 zunda <zunda at freeshell.org>
 	* disp_referrer.rb: try ERB::Util.h before trying CGI::escpaeHTML
 	* disp_referrer.rb, */disp_referrer.rb: added HTML-escapes to
 	@conf.update, urls, and other strings

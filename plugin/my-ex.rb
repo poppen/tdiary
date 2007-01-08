@@ -1,4 +1,4 @@
-# my-ex.rb $Revision: 1.18 $
+# my-ex.rb $Revision: 1.19 $
 #
 # my(拡張版): myプラグインを拡張し、title属性に参照先の内容を挿入します。
 #             参照先がセクションの場合は(あれば)サブタイトルを、
@@ -28,14 +28,14 @@ def my( a, str, title = nil )
 				idx += 1
 			end
 			if section and section.subtitle then
-				title = CGI::escapeHTML( "#{apply_plugin(section.subtitle_to_html, true)}" )
+				title = h( "#{apply_plugin(section.subtitle_to_html, true)}" )
 				title.sub!( /^(\[([^\]]+)\])+ */, '' )
 			end
 		when 'c'
 			com = nil
 			@diaries[date].each_comment( frag.to_i ) {|c| com = c}
 			if com then
-				title = CGI::escapeHTML( "[#{com.name}] #{com.shorten( @conf.comment_length )}" )
+				title = h( "[#{com.name}] #{com.shorten( @conf.comment_length )}" )
 			end
 		when 't'
 			if @plugin_files.grep(/tb-show.rb\z/)
@@ -43,7 +43,7 @@ def my( a, str, title = nil )
 				@diaries[date].each_visible_trackback( frag.to_i ) {|t, idx| tb = t}
 				if tb then
 					url, name, tbtitle, excerpt = tb.body.split( /\n/,4 )
-					title = CGI::escapeHTML( "[#{name}] #{@conf.shorten( excerpt, @conf.comment_length )}" )
+					title = h( "[#{name}] #{@conf.shorten( excerpt, @conf.comment_length )}" )
 				end
 			end
 		end
@@ -51,9 +51,9 @@ def my( a, str, title = nil )
 	index = /^https?:/ =~ @index ? '' : @conf.base_url
 	index += @index.sub(%r|^\./|, '')
 	if title then
-		%Q[<a href="#{index}#{anchor anc}" title="#{title}">#{str}</a>]
+		%Q[<a href="#{h index}#{anchor anc}" title="#{title}">#{str}</a>]
 	else
-		%Q[<a href="#{index}#{anchor anc}">#{str}</a>]
+		%Q[<a href="#{h index}#{anchor anc}">#{str}</a>]
 	end
 end
 
