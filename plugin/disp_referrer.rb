@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.63 2007-01-08 05:37:27 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.64 2007-01-08 06:21:47 zunda Exp $-))
 
 == 概要
 アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
@@ -989,7 +989,7 @@ class DispRef2Refs
 
 	def to_short_html
 		return '' if not @refs[DispRef2URL::Normal] or @refs[DispRef2URL::Normal].size < 1
-		result = DispRef2String::escapeHTML( @setup['labels'][DispRef2URL::Normal] )
+		result = DispRef2String::escapeHTML( @setup['labels'][DispRef2URL::Normal] ) + ' | '
 		@refs[DispRef2URL::Normal].each do |a|
 			result << %Q[<a rel="nofollow" href="#{DispRef2String::escapeHTML( a[2][0][1].url )}" title="#{DispRef2String::escapeHTML( a[2][0][1].title )}">#{a[0]}</a> | ]
 		end
