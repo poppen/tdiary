@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.46 $
+# makerss.rb: $Revision: 1.47 $
 #
 # generate RSS file when updating.
 #
@@ -73,7 +73,7 @@ class MakeRssFull
 
 	def head( str )
 		@head = str
-		@head.sub!( /<\/title>/, "#{title}</title>" )
+		@head.sub!( /<\/title>/, "#{ERB::Util::h title}</title>" )
 	end
 
 	def foot( str ); @foot = str; end
@@ -258,7 +258,7 @@ def makerss_update
 		else
 			rdf_image = @conf.base_url + @conf.banner
 		end
-		rsses.each {|r| r.image( %Q[<image rdf:resource="#{rdf_image}" />\n] ) }
+		rsses.each {|r| r.image( %Q[<image rdf:resource="#{h rdf_image}" />\n] ) }
 	end
 
 	rsses.each {|r|
@@ -281,26 +281,26 @@ def makerss_header( uri )
 
 	xml = %Q[<?xml version="1.0" encoding="#{@makerss_encode}"?>
 <?xml-stylesheet href="rss.css" type="text/css"?>
-<rdf:RDF xmlns="http://purl.org/rss/1.0/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:xhtml="http://www.w3.org/1999/xhtml" xml:lang="#{@conf.html_lang}">
-	<channel rdf:about="#{rdf_url}">
-	<title>#{CGI::escapeHTML( @conf.html_title )}</title>
-	<link>#{uri}</link>
-	<xhtml:link xhtml:rel="alternate" xhtml:media="handheld" xhtml:type="text/html" xhtml:href="#{uri}" />
-	<description>#{desc ? CGI::escapeHTML( desc ) : ''}</description>
-	<dc:creator>#{CGI::escapeHTML( @conf.author_name )}</dc:creator>
-	<dc:rights>#{CGI::escapeHTML( copyright )}</dc:rights>
+<rdf:RDF xmlns="http://purl.org/rss/1.0/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:xhtml="http://www.w3.org/1999/xhtml" xml:lang="#{h @conf.html_lang}">
+	<channel rdf:about="#{h rdf_url}">
+	<title>#{h @conf.html_title}</title>
+	<link>#{h uri}</link>
+	<xhtml:link xhtml:rel="alternate" xhtml:media="handheld" xhtml:type="text/html" xhtml:href="#{h uri}" />
+	<description>#{h desc}</description>
+	<dc:creator>#{h @conf.author_name}</dc:creator>
+	<dc:rights>#{h copyright}</dc:rights>
 	]
 end
 
 def makerss_seq( uri, rdfsec )
-	%Q|<rdf:li rdf:resource="#{uri}#{anchor rdfsec.id}"/>\n|
+	%Q|<rdf:li rdf:resource="#{h uri}#{anchor rdfsec.id}"/>\n|
 end
 
 def makerss_banner( uri, rdf_image )
-	%Q[<image rdf:about="#{rdf_image}">
-	<title>#{@conf.html_title}</title>
-	<url>#{rdf_image}</url>
-	<link>#{uri}</link>
+	%Q[<image rdf:about="#{h rdf_image}">
+	<title>#{h @conf.html_title}</title>
+	<url>#{h rdf_image}</url>
+	<link>#{h uri}</link>
 	</image>
 	]
 end
@@ -319,10 +319,10 @@ end
 def makerss_body( uri, rdfsec )
 	rdf = ""
 	if rdfsec.section.respond_to?( :body_to_html ) then
-		rdf = %Q|<item rdf:about="#{uri}#{anchor rdfsec.id}">\n|
-		rdf << %Q|<link>#{uri}#{anchor rdfsec.id}</link>\n|
-		rdf << %Q|<xhtml:link xhtml:rel="alternate" xhtml:media="handheld" xhtml:type="text/html" xhtml:href="#{uri}#{anchor rdfsec.id}" />\n|
-		rdf << %Q|<dc:date>#{rdfsec.time_string}</dc:date>\n|
+		rdf = %Q|<item rdf:about="#{h uri}#{anchor rdfsec.id}">\n|
+		rdf << %Q|<link>#{h uri}#{anchor rdfsec.id}</link>\n|
+		rdf << %Q|<xhtml:link xhtml:rel="alternate" xhtml:media="handheld" xhtml:type="text/html" xhtml:href="#{h uri}#{anchor rdfsec.id}" />\n|
+		rdf << %Q|<dc:date>#{h rdfsec.time_string}</dc:date>\n|
 		a = rdfsec.id.scan( /(\d{4})(\d\d)(\d\d)/ ).flatten.map{|s| s.to_i}
 		date = Time::local( *a )
 		body_enter_proc( date )
@@ -335,16 +335,16 @@ def makerss_body( uri, rdfsec )
 			subtitle = apply_plugin( rdfsec.section.body_to_html, true ).strip
 			subtitle = @conf.shorten( subtitle.gsub( /&.*?;/, '' ), 20 )
 		end
-		rdf << %Q|<title>#{CGI::escapeHTML( subtitle )}</title>\n|
-		rdf << %Q|<dc:creator>#{CGI::escapeHTML( @conf.author_name )}</dc:creator>\n|
+		rdf << %Q|<title>#{h subtitle}</title>\n|
+		rdf << %Q|<dc:creator>#{h @conf.author_name}</dc:creator>\n|
 		unless rdfsec.section.categories.empty?
 			rdfsec.section.categories.each do |category|
-				rdf << %Q|<dc:subject>#{CGI::escapeHTML( category )}</dc:subject>\n|
+				rdf << %Q|<dc:subject>#{h category}</dc:subject>\n|
 			end
 		end
 		desc = apply_plugin( rdfsec.section.body_to_html, true ).strip
 		desc.gsub!( /&.*?;/, '' )
-		rdf << %Q|<description>#{CGI::escapeHTML( makerss_desc_shorten( desc ) )}</description>\n|
+		rdf << %Q|<description>#{h makerss_desc_shorten( desc )}</description>\n|
 		unless @conf['makerss.hidecontent']
 			text = ''
 			text += '<h3>' + apply_plugin( rdfsec.section.subtitle_to_html.sub( /^(\[([^\]]+)\])+ */, '' ) ).strip + '</h3>' if rdfsec.section.subtitle_to_html and not rdfsec.section.subtitle_to_html.empty?
@@ -357,7 +357,7 @@ def makerss_body( uri, rdfsec )
                uri = @conf.index.dup
                uri[0, 0] = @conf.base_url unless %r|^https?://|i =~ uri
                uri.gsub!( %r|/\./|, '/' )
-               rdf << %Q|\n<p><a href="#{uri + anchor( "#{ymd}c" )}">#{ comment_new }</a></p>|
+               rdf << %Q|\n<p><a href="#{h uri}#{anchor "#{ymd}c"}">#{comment_new}</a></p>|
             end
             rdf << %Q|]]></content:encoded>\n|
 			end
@@ -367,13 +367,13 @@ def makerss_body( uri, rdfsec )
 		@conf['apply_plugin'] = old_apply_plugin
 		rdf << "</item>\n"
 	else # TSUKKOMI
-		rdf = %Q|<item rdf:about="#{uri}#{anchor rdfsec.id}">\n|
-		rdf << %Q|<link>#{uri}#{anchor rdfsec.id}</link>\n|
-		rdf << %Q|<dc:date>#{rdfsec.time_string}</dc:date>\n|
-		rdf << %Q|<title>#{makerss_tsukkomi_label( rdfsec.id )} (#{CGI::escapeHTML( rdfsec.section.name )})</title>\n|
-		rdf << %Q|<dc:creator>#{CGI::escapeHTML( rdfsec.section.name )}</dc:creator>\n|
+		rdf = %Q|<item rdf:about="#{h uri}#{anchor rdfsec.id}">\n|
+		rdf << %Q|<link>#{h uri}#{anchor rdfsec.id}</link>\n|
+		rdf << %Q|<dc:date>#{h rdfsec.time_string}</dc:date>\n|
+		rdf << %Q|<title>#{makerss_tsukkomi_label( rdfsec.id )} (#{h rdfsec.section.name})</title>\n|
+		rdf << %Q|<dc:creator>#{h rdfsec.section.name}</dc:creator>\n|
 		text = rdfsec.section.body
-		rdf << %Q|<description>#{CGI::escapeHTML( makerss_desc_shorten( text ) )}</description>\n|
+		rdf << %Q|<description>#{h makerss_desc_shorten( text )}</description>\n|
 		unless @conf['makerss.hidecontent']
 			rdf << %Q|<content:encoded><![CDATA[#{text.make_link.gsub( /\n/, '<br>' ).gsub( /<br><br>\Z/, '' ).gsub( /\]\]>/, ']]&gt;' )}]]></content:encoded>\n|
 		end
@@ -394,7 +394,7 @@ add_header_proc {
 	html = ''
 	@makerss_rsses.each do |rss|
 		next unless rss.url
-		html << %Q|\t<link rel="alternate" type="application/rss+xml" title="RSS#{rss.title}" href="#{rss.url}">\n|
+		html << %Q|\t<link rel="alternate" type="application/rss+xml" title="RSS#{h rss.title}" href="#{h rss.url}">\n|
 	end
 	html
 }

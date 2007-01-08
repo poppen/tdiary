@@ -1,4 +1,4 @@
-# makelirs.rb $Revision: 1.16 $
+# makelirs.rb $Revision: 1.17 $
 #
 # 更新情報をLIRSフォーマットのファイルに吐き出す
 #
@@ -60,13 +60,13 @@ add_update_proc do
 	t = TDiaryLatest::new( cgi, "latest.rhtml", conf )
 	body = t.eval_rhtml
 	# escape comma
-	e = proc{|str| str.gsub(/[,\\]/) { "\\#{$&}" } }
+	e = proc{|str| str.gsub(/[,\\]/){ "\\#{$&}" }.gsub( /[\r\n]/, '' ) }
 
 	now = Time.now
 	utc_offset = now.utc_offset
 
-	uri = @conf.index.dup
-	uri[0, 0] = @conf.base_url if %r|^https?://|i !~ @conf.index
+	uri = @index.dup
+	uri[0, 0] = @conf.base_url if %r|^https?://|i !~ @index
 	uri.gsub!( %r|/\./|, '/' )
 
 	lirs = "LIRS,#{t.last_modified.tv_sec},#{Time.now.tv_sec},#{utc_offset},#{body.size},#{uri},#{e[@html_title]},#{e[@author_name]},,\n"

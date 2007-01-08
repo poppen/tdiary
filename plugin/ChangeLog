@@ -1,3 +1,7 @@
+2007-01-08 TADA Tadashi <sho@spc.gr.jp>
+	* makelirs.rb: remove CR/LF char from LIRS items.
+	* makerss.rb: escape HTML tags from feed XML.
+
 2007-01-08 zunda <zunda at freeshell.org>
 	* navi_user.rb: escaped arguments to navi_item
 
