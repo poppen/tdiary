@@ -1,4 +1,8 @@
 2007-01-07 zunda <zunda at freeshell.org>
+	* highlgiht.rb: modififed to escape diary_title in Ruby and
+	unescape it in Javascript
+
+2007-01-07 zunda <zunda at freeshell.org>
 	* search_control.rb: modified to use h instead of
 	CGI::escpaeHTML and escape base-html
 
