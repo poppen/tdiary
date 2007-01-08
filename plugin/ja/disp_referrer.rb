@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.32 2006-12-20 04:51:34 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.33 2007-01-08 05:37:27 zunda Exp $-))
 日本語リソース
 
 == 概要
@@ -257,10 +257,10 @@ class DispRef2SetupIF
 			<tr>
 				<td><input name="dr2.current_mode" value="#{Options}" type="hidden">
 				リンク元置換リストにないリンク元を
-				<td><input name="dr2.unknown.divide" value="true" type="radio"#{' checked'if @setup['unknown.divide']}>#{@setup['unknown.label']}として分ける
+				<td><input name="dr2.unknown.divide" value="true" type="radio"#{' checked'if @setup['unknown.divide']}>#{DispRef2String::escapeHTML(@setup['unknown.label'])}として分ける
 				<td><input name="dr2.unknown.divide" value="false" type="radio"#{' checked'if not @setup['unknown.divide']}>通常のリンク元と混ぜる。
 			<tr>
-				<td>#{@setup['unknown.label']}を
+				<td>#{DispRef2String::escapeHTML(@setup['unknown.label'])}を
 				<td><input name="dr2.unknown.hide" value="false" type="radio"#{' checked'if not @setup['unknown.hide']}>表示する
 				<td><input name="dr2.unknown.hide" value="true" type="radio"#{' checked'if @setup['unknown.hide']}>隠す。
 			<tr>
@@ -317,7 +317,7 @@ class DispRef2SetupIF
 				<td><input name="dr2.no_cache" value="true" type="radio"#{' checked'if @setup['no_cache']}>利用しない。
 			<tr>
 				<td>キャッシュの大きさを
-				<td colspan="3"><input name="dr2.cache_max_size" value="#{@setup['cache_max_size']}" type="text">バイトまでにする。
+				<td colspan="3"><input name="dr2.cache_max_size" value="#{DispRef2String::escapeHTML(@setup['cache_max_size'])}" type="text">バイトまでにする。
 			<tr>
 				<td>今回の設定変更で、キャッシュを
 				<td><input name="dr2.cache.update" value="force" type="radio">クリアする
@@ -387,7 +387,7 @@ class DispRef2SetupIF
 			end
 			r << <<-_HTML
 				<p>
-					ここにないURLは「<a href="#{@conf.update}?conf=referer">リンク元</a>」から修正してください。
+					ここにないURLは「<a href="#{DispRef2String::escapeHTML(@conf.update)}?conf=referer">リンク元</a>」から修正してください。
 				</p>
 				<dl>
 			_HTML
@@ -395,7 +395,7 @@ class DispRef2SetupIF
 			urls.sort.each do |url|
 				shown_url = DispRef2String::escapeHTML( @setup.to_native( DispRef2String::unescape( url ) ) )
 				if @cgi.auth_type and @cgi.remote_user and @setup['configure.use_link'] then
-					r << "<dt><a href=\"#{url}\">#{shown_url}</a>"
+					r << "<dt><a href=\"#{DispRef2String::escapeHTML(url)}\">#{shown_url}</a>"
 				else
 					r << "<dt>#{shown_url}"
 				end
@@ -414,7 +414,7 @@ class DispRef2SetupIF
 			_HTML
 		else
 			r << <<-_HTML
-				<p>現在、#{@setup['unknown.label']}はありません。</p>
+				<p>現在、#{DispRef2String::escapeHTML(@setup['unknown.label'])}はありません。</p>
 			_HTML
 		end
 		r << <<-_HTML

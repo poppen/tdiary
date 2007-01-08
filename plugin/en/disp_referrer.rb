@@ -1,5 +1,5 @@
 =begin
-= A little bit more powerful display of referrers((-$Id: disp_referrer.rb,v 1.16 2005-10-15 12:27:54 zunda Exp $-))
+= A little bit more powerful display of referrers((-$Id: disp_referrer.rb,v 1.17 2007-01-08 05:37:27 zunda Exp $-))
 English resource
 
 == Copyright notice
@@ -112,14 +112,14 @@ class DispRef2SetupIF
 			<input name="dr2.current_mode" value="#{Options}" type="hidden">
 			<table>
 			<tr>
-				<td><input name="dr2.unknown.divide" value="true" type="radio"#{' checked'if @setup['unknown.divide']}>Separate #{@setup['unknown.label']}
-				<td><input name="dr2.unknown.divide" value="false" type="radio"#{' checked'if not @setup['unknown.divide']}>Treat #{@setup['unknown.label']} as normal links.
+				<td><input name="dr2.unknown.divide" value="true" type="radio"#{' checked'if @setup['unknown.divide']}>Separate #{DispRef2String::escapeHTML(@setup['unknown.label'])}
+				<td><input name="dr2.unknown.divide" value="false" type="radio"#{' checked'if not @setup['unknown.divide']}>Treat #{DispRef2String::escapeHTML(@setup['unknown.label'])} as normal links.
 			</table>
 			<table>
 			<tr>
 				<td><input name="dr2.unknown.hide" value="false" type="radio"#{' checked'if not @setup['unknown.hide']}>Show
 				<td><input name="dr2.unknown.hide" value="true" type="radio"#{' checked'if @setup['unknown.hide']}>Hide
-				separated #{@setup['unknown.label']}.
+				separated #{DispRef2String::escapeHTML(@setup['unknown.label'])}.
 			<tr>
 				<td><input name="dr2.normal.categorize" value="true" type="radio"#{' checked'if @setup['normal.categorize']}>Use
 				<td><input name="dr2.normal.categorize" value="false" type="radio"#{' checked'if not @setup['normal.categorize']}>Don't use
@@ -173,7 +173,7 @@ class DispRef2SetupIF
 				cache.
 			<tr>
 				<td>Limit cache size to
-				<td colspan="3"><input name="dr2.cache_max_size" value="#{@setup['cache_max_size']}" type="text">Bytes.
+				<td colspan="3"><input name="dr2.cache_max_size" value="#{DispRef2String::escapeHTML(@setup['cache_max_size'])}" type="text">Bytes.
 			<tr>
 				<td><input name="dr2.cache.update" value="force" type="radio">clear
 				<td><input name="dr2.cache.update" value="auto" type="radio" checked>clear if needed
@@ -239,7 +239,7 @@ class DispRef2SetupIF
 			r << <<-_HTML
 				<p>
 					Please edit URLs not shown here through &quot;<a
-					href="#{@conf.update}?conf=referer">Today's link</a>&quot;
+					href="#{DispRef2String::escapeHTML(@conf.update)}?conf=referer">Today's link</a>&quot;
 				</p>
 				<dl>
 			_HTML
@@ -247,7 +247,7 @@ class DispRef2SetupIF
 			urls.sort.each do |url|
 				shown_url = DispRef2String::escapeHTML( @setup.to_native( DispRef2String::unescape( url ) ) )
 				if @cgi.auth_type and @cgi.remote_user and @setup['configure.use_link'] then
-					r << "<dt><a href=\"#{url}\">#{shown_url}</a>"
+					r << "<dt><a href=\"#{DispRef2String::escapeHTML(url)}\">#{shown_url}</a>"
 				else
 					r << "<dt>#{shown_url}"
 				end
@@ -267,7 +267,7 @@ class DispRef2SetupIF
 			_HTML
 		else
 			r << <<-_HTML
-				<p>Currently there is no #{@setup['unknown.label']}.</p>
+				<p>Currently there is no #{DispRef2String::escapeHTML(@setup['unknown.label'])}.</p>
 			_HTML
 		end
 		r << <<-_HTML

@@ -1,4 +1,9 @@
 2007-01-07 zunda <zunda at freeshell.org>
+	* disp_referrer.rb: try ERB::Util.h before trying CGI::escpaeHTML
+	* disp_referrer.rb, */disp_referrer.rb: added HTML-escapes to
+	@conf.update, urls, and other strings
+
+2007-01-07 zunda <zunda at freeshell.org>
 	* */weather.rb: use ERB::Util.h instead of CGI::escpaeHTML and
 	added HTML-escapes to URLs
 

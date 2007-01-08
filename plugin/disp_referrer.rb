@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.62 2006-12-13 09:15:53 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.63 2007-01-08 05:37:27 zunda Exp $-))
 
 == 概要
 アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
@@ -348,19 +348,40 @@ class DispRef2String
 			@@have_nora = true
 		end
 		def self::escapeHTML( str )
-			Web::escapeHTML( str )
+			str ? Web::escapeHTML( str ) : ''
 		end
 		def self::unescape( str )
-			Web::unescape( str )
+			str ? Web::unescape( str ) : ''
 		end
 	rescue LoadError
-		def self::escapeHTML( str )
-			CGI::escapeHTML( str )
-		end
-		def self::unescape( str )
-			# escape ruby 1.6 bug.
-			str.gsub( /\+/, ' ').gsub(/((?:%[0-9a-fA-F]{2})+)/n) do
-				[$1.delete('%')].pack('H*')
+		begin
+			require 'erb'
+			def self::escapeHTML( str )
+				str ? ERB::Util.h( str ) : ''
+			end
+			def self::unescape( str )
+				if str then
+					# escape ruby 1.6 bug.
+					str.gsub( /\+/, ' ').gsub(/((?:%[0-9a-fA-F]{2})+)/n) do
+						[$1.delete('%')].pack('H*')
+					end
+				else
+					''
+				end
+			end
+		rescue LoadError
+			def self::escapeHTML( str )
+				str ? CGI::escapeHTML( str ) : ''
+			end
+			def self::unescape( str )
+				if str then
+					# escape ruby 1.6 bug.
+					str.gsub( /\+/, ' ').gsub(/((?:%[0-9a-fA-F]{2})+)/n) do
+						[$1.delete('%')].pack('H*')
+					end
+				else
+					''
+				end
 			end
 		end
 	end
@@ -968,7 +989,7 @@ class DispRef2Refs
 
 	def to_short_html
 		return '' if not @refs[DispRef2URL::Normal] or @refs[DispRef2URL::Normal].size < 1
-		result = %Q[#{@setup['labels'][DispRef2URL::Normal]} | ]
+		result = DispRef2String::escapeHTML( @setup['labels'][DispRef2URL::Normal] )
 		@refs[DispRef2URL::Normal].each do |a|
 			result << %Q[<a rel="nofollow" href="#{DispRef2String::escapeHTML( a[2][0][1].url )}" title="#{DispRef2String::escapeHTML( a[2][0][1].title )}">#{a[0]}</a> | ]
 		end
@@ -978,7 +999,7 @@ class DispRef2Refs
 	def to_long_html( label )
 		return '' if not @has_ref
 		# we always need a caption
-		result = %Q[<div class="caption">#{label}</div>\n]
+		result = %Q[<div class="caption">#{DispRef2String::escapeHTML( label )}</div>\n]
 		result << others_to_long_html( DispRef2URL::Normal )
 		if( @setup['normal.categorize'] and special_categories ) then
 			special_categories.each do |cat|
@@ -998,9 +1019,9 @@ class DispRef2Refs
 			unless DispRef2URL::Normal == cat_key then
 				# to_long_html provides the catpion for normal links
 				if @setup['labels'].has_key?( cat_key ) then
-					result << %Q[<div class="caption">#{@setup['labels'][cat_key]}</div>\n]
+					result << %Q[<div class="caption">#{DispRef2String::escapeHTML( @setup['labels'][cat_key] )}</div>\n]
 				else
-					result << %Q[<div class="caption">#{cat_key}</div>\n]
+					result << %Q[<div class="caption">#{DispRef2String::escapeHTML( cat_key )}</div>\n]
 				end
 			end
 			result << '<ul>'
@@ -1031,7 +1052,7 @@ class DispRef2Refs
 
 		def search_to_long_html
 			return '' unless @refs[DispRef2URL::Search] and @refs[DispRef2URL::Search].size > 0
-			result = %Q[<div class="caption">#{@setup['labels'][DispRef2URL::Search]}</div>\n]
+			result = %Q[<div class="caption">#{DispRef2String::escapeHTML( @setup['labels'][DispRef2URL::Search] )}</div>\n]
 			result << ( @setup['search.expand'] ? "<ul>\n" : '<ul><li>' )
 			sep = nil
 			@refs[DispRef2URL::Search].each do |a|
@@ -1238,16 +1259,16 @@ class DispRef2SetupIF
 		end
 		if @cache then
 			r << sprintf( Disp_referrer2_cache_info, DispRef2String::bytes( @cache.size ) )
-			r << sprintf( Disp_referrer2_update_info, "#{@conf.update}?conf=referer" )
+			r << sprintf( Disp_referrer2_update_info, "#{DispRef2String::escapeHTML(@conf.update)}?conf=referer" )
 		end
 		r << "<p>\n"
 		case @current_mode
 		when Options
-			r << sprintf( Disp_referrer2_move_to_refererlist, "#{@conf.update}?conf=disp_referrer2;dr2.new_mode=#{RefList};dr2.change_mode=true" )
+			r << sprintf( Disp_referrer2_move_to_refererlist, "#{DispRef2String::escapeHTML(@conf.update)}?conf=disp_referrer2;dr2.new_mode=#{RefList};dr2.change_mode=true" )
 		when RefList
-			r << sprintf( Disp_referrer2_move_to_config, "#{@conf.update}?conf=disp_referrer2;dr2.new_mode=#{Options};dr2.change_mode=true" )
+			r << sprintf( Disp_referrer2_move_to_config, "#{DispRef2String::escapeHTML(@conf.update)}?conf=disp_referrer2;dr2.new_mode=#{Options};dr2.change_mode=true" )
 		end
-		r << sprintf( Disp_referrer2_also_todayslink, "#{@conf.update}?conf=referer" )
+		r << sprintf( Disp_referrer2_also_todayslink, "#{DispRef2String::escapeHTML(@conf.update)}?conf=referer" )
 		r << %Q{<input type="hidden" name="saveconf" value="ok"></p><hr>\n}
 		r
 	end
