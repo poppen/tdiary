@@ -1,5 +1,5 @@
 =begin
-= ここだけ検索プラグイン/search control plugin((-$Id: search_control.rb,v 1.7 2004-11-12 19:19:40 zunda Exp $-))
+= ここだけ検索プラグイン/search control plugin((-$Id: search_control.rb,v 1.8 2007-01-08 09:00:48 zunda Exp $-))
 
 Under revision! TODO: add/remove user agents
 
@@ -161,7 +161,7 @@ add_conf_proc( Search_control_prefix, Search_control_plugin_name ) do
 	r = Search_control_description_html + "<ul>\n"
 	r << %Q|<li><input name="#{_sc_newkey}" value="" type="text"> #{Search_control_new_label}\n|
 	(@conf[_sc_nkey] - 1).downto( 1 ) do |i|
-		r << %Q|<li><input name="#{_sc_akey( i )}" value="#{CGI::escapeHTML( @conf[_sc_akey( i )] )}" type="text">\n|
+		r << %Q|<li><input name="#{_sc_akey( i )}" value="#{h( @conf[_sc_akey( i )] )}" type="text">\n|
 		r << %Q|#{Search_control_delete_label}<input name="#{_sc_delkey( i )}" value="t" type="checkbox">\n|
 		r << "<ul>\n"
 		Search_control_categories.each do |c|

@@ -1,4 +1,8 @@
 2007-01-07 zunda <zunda at freeshell.org>
+	* search_control.rb: modified to use h instead of
+	CGI::escpaeHTML and escape base-html
+
+2007-01-07 zunda <zunda at freeshell.org>
 	* disp_referrer.rb: fixed typo in to_short_html
 
 2007-01-07 zunda <zunda at freeshell.org>
