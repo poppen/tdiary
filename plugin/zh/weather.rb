@@ -1,5 +1,5 @@
 =begin
-= Weather-of-today plugin((-$Id: weather.rb,v 1.2 2004-08-10 18:28:53 zunda Exp $-))
+= Weather-of-today plugin((-$Id: weather.rb,v 1.3 2007-01-08 04:54:07 zunda Exp $-))
 Records the weather when the diary is first updated for the date and
 displays it.
 
@@ -36,6 +36,7 @@ We want Japanese displayed in a diary written in Japanese.
     given string. No translations are defined for English. Please see an
 		example in the Japanese resource.
 =end
+require 'erb'
 
 class Weather
 	Words_en = []
@@ -55,7 +56,7 @@ Weather of a date.
 class Weather
 
 	def error_html_string
-		%Q|#{HTML_START}Weather error:<a href="#{@url}">#{CGI::escapeHTML( @error )}</a>#{HTML_END}|
+		%Q|#{HTML_START}Weather error:<a href="#{ERB::Util.h(@url)}">#{ERB::Util.h( @error )}</a>#{HTML_END}|
 	end
 
 	# edit this method to define how you show the weather
@@ -63,13 +64,13 @@ class Weather
 		r = "#{HTML_START}"
 
 		# weather
-		r << %Q|<a href="#{@url}">|
+		r << %Q|<a href="#{ERB::Util.h(@url)}">|
 		has_condition = false
 		if @data['weather'] then
-			r << CGI::escapeHTML( WeatherTranslator::S.new( @data['weather']).translate( Words_en ).compact.capitalize )
+			r << ERB::Util.h( WeatherTranslator::S.new( @data['weather']).translate( Words_en ).compact.capitalize )
 			has_condition = true
 		elsif @data['condition'] then
-			r << CGI::escapeHTML( WeatherTranslator::S.new( @data['condition']).translate( Words_en ).compact.capitalize )
+			r << ERB::Util.h( WeatherTranslator::S.new( @data['condition']).translate( Words_en ).compact.capitalize )
 			has_condition = true
 		end
 
@@ -106,13 +107,13 @@ class Weather
 		# weather
 		if @data['weather'] then
 			r << "#{I_HTML_START}"
-			r << %Q|<A HREF="#{@url}">|
-			r << CGI::escapeHTML( WeatherTranslator::S.new( @data['weather']).translate( Words_en ).compact.capitalize )
+			r << %Q|<A HREF="#{ERB::Util.h(@url)}">|
+			r << ERB::Util.h( WeatherTranslator::S.new( @data['weather']).translate( Words_en ).compact.capitalize )
 			r << "</A>#{I_HTML_END}\n"
 		elsif @data['condition'] then
 			r << "#{I_HTML_START}"
-			r << %Q|<A HREF="#{@url}">|
-			r << CGI::escapeHTML( WeatherTranslator::S.new( @data['condition']).translate( Words_en ).compact.capitalize )
+			r << %Q|<A HREF="#{ERB::Util.h(@url)}">|
+			r << ERB::Util.h( WeatherTranslator::S.new( @data['condition']).translate( Words_en ).compact.capitalize )
 			r << "</A>#{I_HTML_END}\n"
 		end
 

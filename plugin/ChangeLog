@@ -1,3 +1,7 @@
+2007-01-07 zunda <zunda at freeshell.org>
+	* */weather.rb: use ERB::Util.h instead of CGI::escpaeHTML and
+	added HTML-escapes to URLs
+
 2007-01-07 SHIBATA Hiroshi <h-sbt@nifty.com>
 	* apply HTML escape when generate HTML in some more plugins.
 
