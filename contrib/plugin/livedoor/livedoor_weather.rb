@@ -103,7 +103,7 @@ def lwws_to_html( date_status, date = nil )
 		result << %Q|<div class=\"lwws\">|
 
 		if @conf['lwws.icon.disp'] != "t" || @conf.mobile_agent? then
-			result << %Q|<a href="#{detail_url}">#{telop}</a>|
+			result << %Q|<a href="#{h(detail_url)}">#{telop}</a>|
 		else
 			title = NKF::nkf('-We', doc.elements["image/title"].text)
 			link = doc.elements["image/link"].text
@@ -115,12 +115,12 @@ def lwws_to_html( date_status, date = nil )
 
 		if @conf['lwws.max_temp.disp'] == "t" then
 			unless max_temp == nil
-				result << %Q| #{@lwws_max_temp_label}:#{max_temp}#{@celsius_label}|
+				result << %Q| #{@lwws_max_temp_label}:#{h(max_temp)}#{@celsius_label}|
 			end
 		end
 		if @conf['lwws.min_temp.disp'] == "t" then
 			unless min_temp == nil
-				result << %Q| #{@lwws_min_temp_label}:#{min_temp}#{@celsius_label}|
+				result << %Q| #{@lwws_min_temp_label}:#{h(min_temp)}#{@celsius_label}|
 			end
 		end
 
@@ -181,7 +181,7 @@ def lwws_conf_proc
 	result << <<-HTML
 	<h3>#{@lwws_label_city_id}</h3>
 	<p>#{@lwws_desc_city_id}</p>
-	<p><input name="lwws.city_id" value="#{@conf['lwws.city_id']}"></p>
+	<p><input name="lwws.city_id" value="#{h(@conf['lwws.city_id'])}"></p>
 	HTML
 
 	result << %Q|<h3>#{@lwws_icon_label}</h3>|
@@ -201,7 +201,7 @@ def lwws_conf_proc
 	checked = "t" == @conf['lwws.cache'] ? ' checked' : ''
 	result << %Q|<p><input name="lwws.cache" type="checkbox" value="t"#{checked} >#{@lwws_desc_cache}</p>|
 	result << %Q|<p>#{@lwws_desc_cache_time}</p>|
-	result << %Q|<p><input name="lwws.cache_time" value="#{@conf['lwws.cache_time']}"></p>|
+	result << %Q|<p><input name="lwws.cache_time" value="#{h(@conf['lwws.cache_time'])}"></p>|
 
 	return result
 end

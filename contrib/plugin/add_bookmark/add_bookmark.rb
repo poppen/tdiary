@@ -20,15 +20,15 @@ add_subtitle_proc do |date, index, subtitle|
       section_url = @conf.base_url + anchor(date.strftime('%Y%m%d')) + '#p' + ('%02d' % index)
       
       if @conf['add.bookmark.hatena'] == "t" then
-         caption += %Q|<a href=\"http://b.hatena.ne.jp/append?#{CGI.escape(section_url)}\"><img src=\"http://b.hatena.ne.jp/images/append.gif\" width=\"16\" height=\"12\" style =\"border: none;\" alt=\"#{@caption_hatena}\" title=\"#{@caption_hatena}\"></a> |
+         caption += %Q|<a href=\"http://b.hatena.ne.jp/append?#{h(section_url)}\"><img src=\"http://b.hatena.ne.jp/images/append.gif\" width=\"16\" height=\"12\" style =\"border: none;\" alt=\"#{@caption_hatena}\" title=\"#{@caption_hatena}\"></a> |
       end
       
       if @conf['add.bookmark.del'] == "t" then
-         caption += %Q|<a href=\"http://del.icio.us/1?url=#{CGI.escape(section_url)}\"><img src=\"http://del.icio.us/img/delicious.gif\" width=\"18\" height=\"18\" style=\"border: none;\" alt=\"#{@caption_del}\" title=\"#{@caption_del}\"></a> |
+         caption += %Q|<a href=\"http://del.icio.us/1?url=#{h(section_url)}\"><img src=\"http://del.icio.us/img/delicious.gif\" width=\"18\" height=\"18\" style=\"border: none;\" alt=\"#{@caption_del}\" title=\"#{@caption_del}\"></a> |
       end
       
       if @conf['add.bookmark.mm'] == "t" then
-         caption += %Q|<a href=\"http://1470.net/mm/memo_form.html?url=#{CGI.escape(section_url)}\"><img src=\"http://1470.net/img/mm_icon.gif\" width=\"21\" height=\"12\" style=\"border: none;\" alt=\"#{@caption_mm}\" title=\"#{@caption_mm}\"></a> |
+         caption += %Q|<a href=\"http://1470.net/mm/memo_form.html?url=#{h(section_url)}\"><img src=\"http://1470.net/img/mm_icon.gif\" width=\"21\" height=\"12\" style=\"border: none;\" alt=\"#{@caption_mm}\" title=\"#{@caption_mm}\"></a> |
       end
    end
    

@@ -8,6 +8,10 @@ subtitleの右にソーシャルブックマークへのリンクを埋め込みます。
 
 !更新履歴
 
+2007-01-09  SHIBATA Hiroshi  <h-sbt@nifty.com>
+
+	* サニタイズキャンペーンに伴う修正
+	
 2005-09-06  SHIBATA Hiroshi  <h-sbt@nifty.com>
 
 	* HTML4.01 Strictに準拠

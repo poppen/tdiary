@@ -1,4 +1,4 @@
-# account_ad.rb $Revision: 1.2 $
+# account_ad.rb $Revision: 1.3 $
 #
 # Copyright (c) 2005 SHIBATA  Hiroshi <h-sbt@nifty.com>
 # Distributed under the GPL
@@ -25,8 +25,8 @@ add_header_proc do
 			<rdf:Description rdf:about="#{permalink}">
 			   <foaf:maker rdf:parseType="Resource">
 			     <foaf:holdsAccount>
-			       <foaf:OnlineAccount foaf:accountName="#{account_name}">
-			         <foaf:accountServiceHomepage rdf:resource="#{account_service}" />
+			       <foaf:OnlineAccount foaf:accountName="#{h(account_name)}">
+			         <foaf:accountServiceHomepage rdf:resource="#{h(account_service)}" />
 			       </foaf:OnlineAccount>
 			     </foaf:holdsAccount>
 			   </foaf:maker>
