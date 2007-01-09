@@ -1,5 +1,5 @@
 =begin
-= その日の天気プラグイン((-$Id: weather.rb,v 1.7 2007-01-08 04:54:07 zunda Exp $-))
+= その日の天気プラグイン((-$Id: weather.rb,v 1.8 2007-01-09 10:27:46 zunda Exp $-))
 その日の天気を、その日の日記を最初に更新する時に取得して保存し、それぞれ
 の日の日記の上部に表示します。
 
@@ -281,9 +281,10 @@ Weather of a date.
       Returns a CHTML fragment to be shown on a mobile browser.
 =end
 class Weather
+	include ERB::Util
 
 	def error_html_string
-		%Q|#{HTML_START}お天気エラー:<a href="#{ERB::Util.h(@url)}">#{ERB::Util.h( @error )}</a>#{HTML_END}|
+		%Q|#{HTML_START}お天気エラー:<a href="#{u(@url)}">#{h( @error )}</a>#{HTML_END}|
 	end
 
 	# edit this method to define how you show the weather
@@ -306,11 +307,11 @@ class Weather
 		end
 
 		# weather
-		r << %Q|<a href="#{ERB::Util.h(@url)}">|
+		r << %Q|<a href="#{u(@url)}">|
 		if @data['weather'] then
-			r << ERB::Util.h( WeatherTranslator::S.new( @data['weather']).translate( Words_ja ).compact )
+			r << h( WeatherTranslator::S.new( @data['weather']).translate( Words_ja ).compact )
 		elsif @data['condition'] then
-			r << ERB::Util.h( WeatherTranslator::S.new( @data['condition']).translate( Words_ja ).compact )
+			r << h( WeatherTranslator::S.new( @data['condition']).translate( Words_ja ).compact )
 		end
 
 		# temperature
@@ -328,13 +329,13 @@ class Weather
 		# weather
 		if @data['weather'] then
 			r << "#{I_HTML_START}"
-			r << %Q|<A HREF="#{ERB::Util.h(@url)}">|
-			r << ERB::Util.h( WeatherTranslator::S.new( @data['weather']).translate( Words_ja ).compact )
+			r << %Q|<A HREF="#{u(@url)}">|
+			r << h( WeatherTranslator::S.new( @data['weather']).translate( Words_ja ).compact )
 			r << "</A>#{I_HTML_END}\n"
 		elsif @data['condition'] then
 			r << "#{I_HTML_START}"
-			r << %Q|<A HREF="#{ERB::Util.h(@url)}">|
-			r << ERB::Util.h( WeatherTranslator::S.new( @data['condition']).translate( Words_ja ).compact )
+			r << %Q|<A HREF="#{u(@url)}">|
+			r << h( WeatherTranslator::S.new( @data['condition']).translate( Words_ja ).compact )
 			r << "</A>#{I_HTML_END}\n"
 		end
 

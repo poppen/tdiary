@@ -1,5 +1,5 @@
 =begin
-= Weather-of-today plugin((-$Id: weather.rb,v 1.4 2007-01-08 04:54:07 zunda Exp $-))
+= Weather-of-today plugin((-$Id: weather.rb,v 1.5 2007-01-09 10:27:46 zunda Exp $-))
 Records the weather when the diary is first updated for the date and
 displays it.
 
@@ -54,9 +54,10 @@ Weather of a date.
       Returns a CHTML fragment to be shown on a mobile browser.
 =end
 class Weather
+	include ERB::Util
 
 	def error_html_string
-		%Q|#{HTML_START}Weather error:<a href="#{ERB::Util.h(@url)}">#{ERB::Util.h( @error )}</a>#{HTML_END}|
+		%Q|#{HTML_START}Weather error:<a href="#{u(@url)}">#{h( @error )}</a>#{HTML_END}|
 	end
 
 	# edit this method to define how you show the weather
@@ -64,13 +65,13 @@ class Weather
 		r = "#{HTML_START}"
 
 		# weather
-		r << %Q|<a href="#{ERB::Util.h(@url)}">|
+		r << %Q|<a href="#{u(@url)}">|
 		has_condition = false
 		if @data['weather'] then
-			r << ERB::Util.h( WeatherTranslator::S.new( @data['weather']).translate( Words_en ).compact.capitalize )
+			r << h( WeatherTranslator::S.new( @data['weather']).translate( Words_en ).compact.capitalize )
 			has_condition = true
 		elsif @data['condition'] then
-			r << ERB::Util.h( WeatherTranslator::S.new( @data['condition']).translate( Words_en ).compact.capitalize )
+			r << h( WeatherTranslator::S.new( @data['condition']).translate( Words_en ).compact.capitalize )
 			has_condition = true
 		end
 
@@ -107,13 +108,13 @@ class Weather
 		# weather
 		if @data['weather'] then
 			r << "#{I_HTML_START}"
-			r << %Q|<A HREF="#{ERB::Util.h(@url)}">|
-			r << ERB::Util.h( WeatherTranslator::S.new( @data['weather']).translate( Words_en ).compact.capitalize )
+			r << %Q|<A HREF="#{u(@url)}">|
+			r << h( WeatherTranslator::S.new( @data['weather']).translate( Words_en ).compact.capitalize )
 			r << "</A>#{I_HTML_END}\n"
 		elsif @data['condition'] then
 			r << "#{I_HTML_START}"
-			r << %Q|<A HREF="#{ERB::Util.h(@url)}">|
-			r << ERB::Util.h( WeatherTranslator::S.new( @data['condition']).translate( Words_en ).compact.capitalize )
+			r << %Q|<A HREF="#{u(@url)}">|
+			r << h( WeatherTranslator::S.new( @data['condition']).translate( Words_en ).compact.capitalize )
 			r << "</A>#{I_HTML_END}\n"
 		end
 

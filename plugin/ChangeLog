@@ -1,3 +1,9 @@
+2007-01-09 zunda <zunda at freeshell.org>
+	* disp_referrer.rb: do not try to use ERB::Util.h which will
+	fail on ruby-1.8.2
+	* */weather.rb: include ERB::Util in class Weather for ruby-1.8.2
+	* */weather.rb: use u() instead of h() to encode URLs
+
 2007-01-08 TADA Tadashi <sho@spc.gr.jp>
 	* makelirs.rb: remove CR/LF char from LIRS items.
 	* makerss.rb: escape HTML tags from feed XML.

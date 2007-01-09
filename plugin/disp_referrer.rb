@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.64 2007-01-08 06:21:47 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.65 2007-01-09 10:27:46 zunda Exp $-))
 
 == 概要
 アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
@@ -354,34 +354,17 @@ class DispRef2String
 			str ? Web::unescape( str ) : ''
 		end
 	rescue LoadError
-		begin
-			require 'erb'
-			def self::escapeHTML( str )
-				str ? ERB::Util.h( str ) : ''
-			end
-			def self::unescape( str )
-				if str then
-					# escape ruby 1.6 bug.
-					str.gsub( /\+/, ' ').gsub(/((?:%[0-9a-fA-F]{2})+)/n) do
-						[$1.delete('%')].pack('H*')
-					end
-				else
-					''
+		def self::escapeHTML( str )
+			str ? CGI::escapeHTML( str ) : ''
+		end
+		def self::unescape( str )
+			if str then
+				# escape ruby 1.6 bug.
+				str.gsub( /\+/, ' ').gsub(/((?:%[0-9a-fA-F]{2})+)/n) do
+					[$1.delete('%')].pack('H*')
 				end
-			end
-		rescue LoadError
-			def self::escapeHTML( str )
-				str ? CGI::escapeHTML( str ) : ''
-			end
-			def self::unescape( str )
-				if str then
-					# escape ruby 1.6 bug.
-					str.gsub( /\+/, ' ').gsub(/((?:%[0-9a-fA-F]{2})+)/n) do
-						[$1.delete('%')].pack('H*')
-					end
-				else
-					''
-				end
+			else
+				''
 			end
 		end
 	end
