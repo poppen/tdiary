@@ -1,4 +1,4 @@
-# pingback.rb: $Revision: 1.4 $
+# pingback.rb: $Revision: 1.5 $
 #
 # Pingback when updating.
 #
@@ -11,7 +11,7 @@
 #
 
 add_header_proc do
-  %Q!\t<link rel="pingback" href="#{@options['pingback.url']}" />\n!
+  %Q!\t<link rel="pingback" href="#{h( @options['pingback.url'] )}" />\n!
 end
 
 add_update_proc do
@@ -29,7 +29,7 @@ add_update_proc do
         diary.each_section do |section|
           index += 1
           id = "#{date}p%02d" % index
-          my_url = %Q|#{@conf.index}#{anchor(@date.strftime('%Y%m%d'))}|
+          my_url = %Q|#{h( @conf.index )}#{h( anchor(@date.strftime('%Y%m%d') ) )}|
           my_url[0, 0] = @conf.base_url if %r|^https?://|i !~ @conf.index
           my_url += "\#p%02d" % index
           my_url.gsub!( %r|/\./|, '/' )

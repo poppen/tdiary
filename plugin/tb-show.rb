@@ -1,4 +1,4 @@
-# tb-show.rb $Revision: 1.24 $
+# tb-show.rb $Revision: 1.25 $
 #
 # functions:
 #   * show TrackBack ping URL in right of TSUKKOMI label.
@@ -36,10 +36,10 @@ unless @conf.mobile_agent? then
 add_body_enter_proc do |date|
 	cgi = File.basename(@options['tb.cgi'] || './tb.rb')
 	@tb_date = date
-	@tb_id_url = %Q|#{@conf.index}#{anchor @tb_date.strftime('%Y%m%d')}|
+	@tb_id_url = %Q|#{h( @conf.index )}#{h( anchor( @tb_date.strftime('%Y%m%d') ) )}|
 	@tb_id_url[0, 0] = @conf.base_url if %r|^https?://|i !~ @conf.index
 	@tb_id_url.gsub!( %r|/\./|, '/' )
-	@tb_url = %Q|#{@conf.base_url}#{cgi}/#{@tb_date.strftime('%Y%m%d')}|
+	@tb_url = %Q|#{h( @conf.base_url )}#{h( cgi )}/#{h( @tb_date.strftime('%Y%m%d') )}|
 	''
 end
 
@@ -55,10 +55,10 @@ if @mode == 'day' and not bot? then
 	xmlns:dc="http://purl.org/dc/elements/1.1/"
 	xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/">
 <rdf:Description
-	rdf:about="#{@tb_id_url}"
-	dc:identifier="#{@tb_id_url}"
-	dc:title="#{CGI::escapeHTML( apply_plugin( @diaries[@tb_date.strftime('%Y%m%d')].title, true ) ).gsub(/-{2,}/) {'&#45;' * $&.size}}"
-	trackback:ping="#{@tb_url}" />
+	rdf:about="#{h( @tb_id_url )}"
+	dc:identifier="#{h( @tb_id_url )}"
+	dc:title="#{h( apply_plugin( @diaries[@tb_date.strftime('%Y%m%d')].title, true ) ).gsub(/-{2,}/) {'&#45;' * $&.size}}"
+	trackback:ping="#{h( @tb_url )}" />
 </rdf:RDF>
 -->
 			TBRDF

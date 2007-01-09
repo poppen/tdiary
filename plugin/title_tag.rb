@@ -18,7 +18,7 @@
 # CODE.
 
 # title_tag2.rb to enhance <title> element of generating HTML
-# $Id: title_tag.rb,v 1.4 2006-08-01 11:28:22 hsbt Exp $
+# $Id: title_tag.rb,v 1.5 2007-01-09 13:36:06 hsbt Exp $
 # To use, just put this file into plugin folder.
 
 alias :title_tag2 :title_tag
@@ -60,9 +60,9 @@ def title_tag
 		else
 			t2 << diary.all_stripped_subtitles_to_html.join(' , ')
 		end
-		return "<title>#{CGI::escapeHTML(title)}#{@conf.shorten(apply_plugin(t2, true))}</title>"
+		return "<title>#{h( title )}#{h( @conf.shorten(apply_plugin(t2, true)) )}</title>"
 	elsif @mode == 'categoryview' then
-		return @conf.shorten("<title>#{CGI::escapeHTML(@html_title)}#{category_title()}</title>")
+		return @conf.shorten("<title>#{h( @html_title )}#{h( category_title() )}</title>")
 	else
 		return title_tag2
 	end

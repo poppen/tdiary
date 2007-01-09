@@ -1,4 +1,4 @@
-# tb-send.rb $Revision: 1.22 $
+# tb-send.rb $Revision: 1.23 $
 #
 # Copyright (c) 2003 Junichiro Kita <kita@kitaj.no-ip.com>
 # You can distribute this file under the GPL.
@@ -23,12 +23,12 @@ add_edit_proc do |date|
 				else
 					focus = ''
 				end
-				section_titles << %[<option value="#{anc}"#{focus}>#{CGI::escapeHTML( apply_plugin( t.subtitle_to_html, true ) ).chomp}</option>\n\t\t\t]
+				section_titles << %[<option value="#{h( anc )}"#{h( focus )}>#{h( apply_plugin( t.subtitle_to_html, true ) ).chomp}</option>\n\t\t\t]
 				idx += 1
 			end
 		end
 		anc = 'p%02d' % idx
-		section_titles << %[<option value="#{anc}"#{selected ? '' : ' selected'}>#{@tb_send_label_current_section}</option>]
+		section_titles << %[<option value="#{h( anc )}"#{selected ? '' : ' selected'}>#{h( @tb_send_label_current_section )}</option>]
 	
 		select_sections = <<-FROM
 			<div class="field">
@@ -44,11 +44,11 @@ add_edit_proc do |date|
 		<h3 class="subtitle">TrackBack</h3>
 		<div class="trackback">
 			<div class="field title">
-			#{@tb_send_label_url}: <textarea tabindex="500" style="height: 2em;" name="plugin_tb_url" cols="40" rows="1">#{CGI::escapeHTML( url )}</textarea>
+			#{@tb_send_label_url}: <textarea tabindex="500" style="height: 2em;" name="plugin_tb_url" cols="40" rows="1">#{h( url )}</textarea>
 			</div>
 			#{select_sections}
 			<div class="textarea">
-			#{@tb_send_label_excerpt}: <textarea tabindex="502" style="height: 4em;" name="plugin_tb_excerpt" cols="70" rows="4">#{CGI::escapeHTML( excerpt )}</textarea>
+			#{@tb_send_label_excerpt}: <textarea tabindex="502" style="height: 4em;" name="plugin_tb_excerpt" cols="70" rows="4">#{h( excerpt )}</textarea>
 			</div>
 		</div>
 	FORM

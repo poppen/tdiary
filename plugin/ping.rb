@@ -1,4 +1,4 @@
-# ping.rb: $Revision: 1.9 $
+# ping.rb: $Revision: 1.10 $
 #
 # ping to weblog ping servers.
 #
@@ -71,9 +71,9 @@ def ping_conf_proc
 	result = <<-HTML
 		<h3>#{@ping_label_list}</h3>
 		<p>#{@ping_label_list_desc}</p>
-		<p><textarea name="ping.list" cols="70" rows="5">#{CGI::escapeHTML( @conf['ping.list'] )}</textarea></p>
+		<p><textarea name="ping.list" cols="70" rows="5">#{h( @conf['ping.list'] )}</textarea></p>
 		<h3>#{@ping_label_timeout}</h3>
-		<p><input type="text" name="ping.timeout" value="#{CGI::escapeHTML( @conf['ping.timeout'] )}" /></p>
+		<p><input type="text" name="ping.timeout" value="#{h( @conf['ping.timeout'] )}" /></p>
 	HTML
 end
 

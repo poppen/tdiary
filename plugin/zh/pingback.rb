@@ -5,10 +5,10 @@ add_conf_proc('Pingback', 'Pingback') do
 
 	<<-HTML
 	<h3 class="subtitle">URL of Pingback server</h3>
-	<p><input name="pingback.url" value="#{@conf['pingback.url']}" size="100"></p>
+	<p><input name="pingback.url" value="#{h(@conf['pingback.url'])}" size="100"></p>
 	<h3 class="subtitle">expire time for cache</h3>
-	<p><input name="pingback.expire" value="#{@conf['pingback.expire']}" size="6">secs</p>
+	<p><input name="pingback.expire" value="#{h(@conf['pingback.expire'])}" size="6">secs</p>
 	<h3 class="subtitle">Pingback Excluding List</h3>
-	<p><textarea name="pingback.exclude" cols="70" rows="10">#{@conf['pingback.exclude']}</textarea></p>
+	<p><textarea name="pingback.exclude" cols="70" rows="10">#{h(@conf['pingback.exclude'])}</textarea></p>
 	HTML
 end

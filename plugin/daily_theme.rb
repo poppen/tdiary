@@ -1,4 +1,4 @@
-# daily_theme.rb $Revision: 1.2 $
+# daily_theme.rb $Revision: 1.3 $
 #
 # Copyright (c) 2005 SHIBATA Hiroshi <h-sbt@nifty.com>
 # Distributed under the GPL
@@ -24,8 +24,8 @@ def css_tag
       
    title = CGI::escapeHTML( File::basename( css, '.css' ) )
    <<-CSS
-   <link rel="stylesheet" href="#{theme_url}/base.css" type="text/css" media="all">
-   <link rel="stylesheet" href="#{css}" title="#{title}" type="text/css" media="all">
+   <link rel="stylesheet" href="#{h theme_url}/base.css" type="text/css" media="all">
+   <link rel="stylesheet" href="#{h css}" title="#{h title}" type="text/css" media="all">
    CSS
    
 end
@@ -49,6 +49,6 @@ def daily_theme_conf_proc
 	result = <<-HTML
    <h3>#{@daily_theme_label}</h3>
    <p>#{@daily_theme_label_desc}</p>
-   <p><textarea name="daily_theme.list" cols="70" rows="20">#{CGI::escapeHTML( @conf['daily_theme.list'] )}</textarea></p>
+   <p><textarea name="daily_theme.list" cols="70" rows="20">#{h( @conf['daily_theme.list'] )}</textarea></p>
 	HTML
 end
