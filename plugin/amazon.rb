@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.48 $: Making link with image to Amazon using Amazon ECS.
+# amazon.rb $Revision: 1.49 $: Making link with image to Amazon using Amazon ECS.
 #
 # see document: #{@lang}/amazon.rb
 #
@@ -63,7 +63,7 @@ def amazon_to_html( item, with_image = true, label = nil, pos = 'amazon' )
 			else;   'Medium'
 			end
 			image = <<-HTML
-			<img class="#{pos}"
+			<img class="#{h pos}"
 			src="#{h item.elements.to_a( "#{size}Image/URL" )[0].text}"
 			height="#{h item.elements.to_a( "#{size}Image/Height" )[0].text}"
 			width="#{h item.elements.to_a( "#{size}Image/Width" )[0].text}"
@@ -85,7 +85,7 @@ def amazon_to_html( item, with_image = true, label = nil, pos = 'amazon' )
 				else;   [160, 122]
 				end
 				image = <<-HTML
-				<img class="#{pos}"
+				<img class="#{h pos}"
 				src="#{h base}#{name}.png"
 				height="#{size[0]}"
 				width="#{size[1]}"
@@ -110,8 +110,8 @@ def amazon_secure_html( asin, with_image, label, pos = 'amazon' )
 	image = ''
 	if with_image and @conf['amazon.secure-cgi'] then
 		image = <<-HTML
-		<img class="#{pos}"
-		src="#{h @conf['amazon.secure-cgi']}?asin=#{h asin};size=#{h @conf['amazon.imgsize']}"
+		<img class="#{h pos}"
+		src="#{h @conf['amazon.secure-cgi']}?asin=#{h(u(asin))};size=#{h(u(@conf['amazon.imgsize']))}"
 		alt="#{h label}" title="#{h label}">
 		HTML
 	end
@@ -121,8 +121,8 @@ def amazon_secure_html( asin, with_image, label, pos = 'amazon' )
 		label = ''
 	end
 
-	url =  "#{@amazon_url}/#{asin}"
-	url << "/#{@conf['amazon.aid']}" if @conf['amazon.aid'] and @conf['amazon.aid'].length > 0
+	url =  "#{@amazon_url}/#{u asin}"
+	url << "/#{u @conf['amazon.aid']}" if @conf['amazon.aid'] and @conf['amazon.aid'].length > 0
 	url << "/ref=nosim/"
 	%Q|<a href="#{h url}">#{image}#{h label}</a>|
 end

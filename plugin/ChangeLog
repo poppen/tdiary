@@ -1,4 +1,8 @@
 2007-01-10 zunda <zunda at freeshell.org>
+	* amazon.rb: modified to escape pos, which can be typed
+	by the user, and URL-escape asin and amazon.imgsize.
+
+2007-01-10 zunda <zunda at freeshell.org>
 	* a.rb: modified to URL-escape syntheized part of URL independent of
 	charset, use h() insted of CGI.escapeHTML(), and HTML-escape data
 	inside textarea
