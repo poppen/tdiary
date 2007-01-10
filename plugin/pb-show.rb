@@ -1,4 +1,4 @@
-# pb-show.rb $Revision: 1.7 $
+# pb-show.rb $Revision: 1.8 $
 #
 # functions:
 #   * show Pingback ping URL in right of TSUKKOMI label.
@@ -61,7 +61,7 @@ def referer_of_today_short( diary, limit )
 	if diary and !bot? then
 		count = 0
 		diary.each_visible_pingback( 100 ) {|t,count|} # count up
-		r << %Q|<a href="#{h( @index )}#{h( anchor( @pb_date.strftime( '%Y%m%d' ) ) )}#b">Pingback#{h( count > 1 ? 's' : '')}(#{h( count )})</a>| unless count == 0 and @options['pb.hide_if_no_pb']
+		r << %Q|<a href="#{h( @index )}#{h( anchor( @pb_date.strftime( '%Y%m%d' ) ) )}#b">Pingback#{'s' if count > 1}(#{h( count )})</a>| unless count == 0 and @options['pb.hide_if_no_pb']
 	end
 	r
 end
@@ -83,7 +83,7 @@ def pingbacks_of_today_short( diary, limit = @conf['pingback_limit'] || 3 )
 	r << %Q!\t\t</div>\n!
 
 	r << %Q!\t\t<div class="commentshort pingbackshort">\n!
-	r << %Q!\t\t\t<p><a href="#{ @index }#{ today }#b01">Before...</a></p>\n! if count > limit
+	r << %Q!\t\t\t<p><a href="#{h @index }#{ today }#b01">Before...</a></p>\n! if count > limit
 
 	diary.each_visible_pingback_tail( limit ) do |t,i|
 		sourceURI, targetURI = t.body.split( /\n/,2 )
@@ -120,7 +120,7 @@ def pingbacks_of_today_long( diary, limit = 100 )
 		if bot? then
 			r << %Q!\t\t\t\t<span class="commentator pingbackblog">#{ h( sourceURI + " to " + targetURI )}</span>\n!
 		else
-			r << %Q!\t\t\t\t<span class="commentator pingbackblog"><a href="#{ h( sourceURI ) }">#{h( sourceURI )}</a> to <a href="#{ h( targetURI ) }">#{CGI::escapeHTML( targetURI )}</a></span>\n!
+			r << %Q!\t\t\t\t<span class="commentator pingbackblog"><a href="#{ h( sourceURI ) }">#{h( sourceURI )}</a> to <a href="#{ h( targetURI ) }">#{h targetURI}</a></span>\n!
 		end
 		r << %Q!\t\t\t\t<span class="commenttime pingbacktime">#{ h( comment_date( t.date ) ) }</span>\n!
 		r << %Q!\t\t\t</div>\n!
@@ -139,10 +139,10 @@ end # unless mobile_agent?
 add_body_enter_proc do |date|
 	cgi = File.basename(@options['pb.cgi'] || './pb.rb')
 	@pb_date = date
-   @pb_id_url = %Q|#{h( @conf.index )}#{h anchor( @pb_date.strftime('%Y%m%d') )}|
+   @pb_id_url = %Q|#{@index}#{anchor( @pb_date.strftime('%Y%m%d') )}|
 	@pb_id_url[0, 0] = @conf.base_url if %r|^https?://|i !~ @conf.index
 	@pb_id_url.gsub!( %r|/\./|, '/' )
-	@pb_url = %Q|#{h( @conf.base_url )}#{h( cgi )}/#{h( @pb_date.strftime('%Y%m%d') )}|
+	@pb_url = %Q|#{@conf.base_url}#{cgi}/#{@pb_date.strftime('%Y%m%d')}|
 	''
 end
 

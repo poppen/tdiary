@@ -1,6 +1,7 @@
 2007-01-10 TADA Tadashi <sho@spc.gr.jp>
 	* src.rb: modified to use ERB::Util.h instead of CGI::escpaeHTML.
 	* todo .rb: modified to use ERB::Util.h instead of CGI::escpaeHTML and escape base-html
+	* tb-show.rbm pb-show.rb: rewind some over escapes.
 
 2007-01-09 zunda <zunda at freeshell.org>
 	* navi_user.rb: modified to work on secure mode

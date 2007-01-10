@@ -1,4 +1,4 @@
-# tb-show.rb $Revision: 1.25 $
+# tb-show.rb $Revision: 1.26 $
 #
 # functions:
 #   * show TrackBack ping URL in right of TSUKKOMI label.
@@ -36,10 +36,10 @@ unless @conf.mobile_agent? then
 add_body_enter_proc do |date|
 	cgi = File.basename(@options['tb.cgi'] || './tb.rb')
 	@tb_date = date
-	@tb_id_url = %Q|#{h( @conf.index )}#{h( anchor( @tb_date.strftime('%Y%m%d') ) )}|
+	@tb_id_url = %Q|#{@index}#{anchor( @tb_date.strftime('%Y%m%d') )}|
 	@tb_id_url[0, 0] = @conf.base_url if %r|^https?://|i !~ @conf.index
 	@tb_id_url.gsub!( %r|/\./|, '/' )
-	@tb_url = %Q|#{h( @conf.base_url )}#{h( cgi )}/#{h( @tb_date.strftime('%Y%m%d') )}|
+	@tb_url = %Q|#{@conf.base_url}#{cgi}/#{@tb_date.strftime('%Y%m%d')}|
 	''
 end
 
@@ -55,10 +55,10 @@ if @mode == 'day' and not bot? then
 	xmlns:dc="http://purl.org/dc/elements/1.1/"
 	xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/">
 <rdf:Description
-	rdf:about="#{h( @tb_id_url )}"
-	dc:identifier="#{h( @tb_id_url )}"
+	rdf:about="#{h @tb_id_url}"
+	dc:identifier="#{h @tb_id_url}"
 	dc:title="#{h( apply_plugin( @diaries[@tb_date.strftime('%Y%m%d')].title, true ) ).gsub(/-{2,}/) {'&#45;' * $&.size}}"
-	trackback:ping="#{h( @tb_url )}" />
+	trackback:ping="#{@tb_url}" />
 </rdf:RDF>
 -->
 			TBRDF
@@ -99,7 +99,7 @@ def referer_of_today_short( diary, limit )
 	  @conf['trackback_shortview_mode'] == "num_in_reflist" then
 		count = 0
 		diary.each_visible_trackback {|t,count|} # count up
-		r << %Q|<a href="#{@index}#{anchor @tb_date.strftime( '%Y%m%d' )}#t">TrackBack#{count > 1 ? 's' : ''}(#{count})</a>| unless count == 0 and @conf['tb.hide_if_no_tb']
+		r << %Q|<a href="#{h @index}#{anchor @tb_date.strftime( '%Y%m%d' )}#t">TrackBack#{'s' if count > 1}(#{count})</a>| unless count == 0 and @conf['tb.hide_if_no_tb']
 	end
 	r
 end
@@ -117,13 +117,13 @@ def trackbacks_of_today_short( diary, limit = @conf['trackback_limit'] || 3 )
 	r << %Q!\t<div class="comment trackbacks">\n!
 
 	r << %Q!\t\t<div class="caption">\n!
-	r << %Q!\t\t\t#{ trackback_today }#{ trackback_total( count ) }\n! if count > 0 && (is_blog_style || @conf['trackback_shortview_mode'] == "shortlist")
-	r << %Q!\t\t\t[#{ trackback_ping_url }]\n! if is_blog_style || @conf['trackback_disp_pingurl']
+	r << %Q!\t\t\t#{trackback_today}#{trackback_total( count )}\n! if count > 0 && (is_blog_style || @conf['trackback_shortview_mode'] == "shortlist")
+	r << %Q!\t\t\t[#{trackback_ping_url}]\n! if is_blog_style || @conf['trackback_disp_pingurl']
 	r << %Q!\t\t</div>\n!
 	return r << %Q!\t</div>\n! unless is_blog_style || @conf['trackback_shortview_mode'] == "shortlist"
 
 	r << %Q!\t\t<div class="commentshort trackbackshort">\n!
-	r << %Q!\t\t\t<p><a href="#{ @index }#{ today }#t01">Before...</a></p>\n! if count > limit
+	r << %Q!\t\t\t<p><a href="#{h @index}#{today}#t01">Before...</a></p>\n! if count > limit
 
 	diary.each_visible_trackback_tail( limit ) do |t,i|
 		url, name, title, excerpt = t.body.split( /\n/,4 )
@@ -131,9 +131,9 @@ def trackbacks_of_today_short( diary, limit = @conf['trackback_limit'] || 3 )
 		a += ':' + title if title &&! title.empty?
 
 		r << %Q!\t\t\t<p>\n!
-		r << %Q!\t\t\t\t<a href="#{ @index }#{ today }##{ fragment % i }">#{ @conf['trackback_anchor'] }</a>\n!
-		r << %Q!\t\t\t\t<span class="commentator blog"><a href="#{ CGI::escapeHTML( url ) }">#{CGI::escapeHTML( a )}</a></span>\n!
-		r << %Q!\t\t\t\t#{ CGI::escapeHTML( @conf.shorten( excerpt, @conf.comment_length ) ) } \n! if excerpt
+		r << %Q!\t\t\t\t<a href="#{h @index}#{today}##{fragment % i}">#{@conf['trackback_anchor']}</a>\n!
+		r << %Q!\t\t\t\t<span class="commentator blog"><a href="#{h url}">#{h a}</a></span>\n!
+		r << %Q!\t\t\t\t#{h @conf.shorten( excerpt, @conf.comment_length )} \n! if excerpt
 		r << %Q!\t\t\t</p>\n!
 	end
 	r << %Q!\t\t</div>\n!
@@ -151,8 +151,8 @@ def trackbacks_of_today_long( diary, limit = -1 )
 	r << %Q!\t<div class="comment trackbacks">\n!
 
 	r << %Q!\t\t<div class="caption">\n!
-	r << %Q!\t\t\t#{ trackback_today }#{ trackback_total( count ) }\n! if count > 0
-	r << %Q!\t\t\t[#{ trackback_ping_url(true) }]\n!
+	r << %Q!\t\t\t#{trackback_today}#{trackback_total( count )}\n! if count > 0
+	r << %Q!\t\t\t[#{trackback_ping_url(true)}]\n!
 	r << %Q!\t\t</div>\n!
 
 	r << %Q!\t\t<div class="commentbody trackbackbody">\n!
@@ -167,15 +167,15 @@ def trackbacks_of_today_long( diary, limit = -1 )
 		end
 
 		r << %Q!\t\t\t<div class="commentator trackback">\n!
-		r << %Q!\t\t\t\t<a name="#{ f }" href="#{h @index }#{ today }##{ f }">#{ @conf['trackback_anchor'] }</a>\n!
+		r << %Q!\t\t\t\t<a name="#{f}" href="#{h @index}#{today}##{f}">#{@conf['trackback_anchor']}</a>\n!
 		if bot? then
 			r << %Q!\t\t\t\t<span class="commentator trackbackblog">#{h a}</span>\n!
 		else
 			r << %Q!\t\t\t\t<span class="commentator trackbackblog"><a href="#{h url}">#{h a}</a></span>\n!
 		end
-		r << %Q!\t\t\t\t<span class="commenttime trackbacktime">#{ comment_date( t.date ) }</span>\n!
+		r << %Q!\t\t\t\t<span class="commenttime trackbacktime">#{comment_date( t.date )}</span>\n!
 		r << %Q!\t\t\t</div>\n!
-		r << %Q!\t\t\t<p>#{h excerpt.strip.gsub( /\n/,'<br>')}</p>\n! if excerpt
+		r << %Q!\t\t\t<p>#{h( excerpt ).strip.gsub( /\n/,'<br>')}</p>\n! if excerpt
   	end
 	r << %Q!\t\t</div>\n!
 	r << %Q!\t</div>\n!
@@ -184,7 +184,7 @@ end
 
 def trackback_ping_url(add_name = false)
 	if @tb_url and not bot?
-		%Q|TrackBack URL: <a href="#{@tb_url}"#{add_name ? ' name="t"': ''}>#{@tb_url}</a>|
+		%Q|TrackBack URL: <a href="#{h @tb_url}"#{add_name ? ' name="t"': ''}>#{h @tb_url}</a>|
 	else
 		''
 	end
