@@ -1,3 +1,7 @@
+2007-01-10  Kazuhiko  <kazuhiko@fdiary.net>
+	* pb-show.rb, recent_list.rb, title_list.rb: remove parentheses
+	warnings.
+
 2007-01-10 TADA Tadashi <sho@spc.gr.jp>
 	* makerss.rb: include ERB::Util to MakeRssFull class.
 

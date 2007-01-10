@@ -1,4 +1,4 @@
-# pb-show.rb $Revision: 1.6 $
+# pb-show.rb $Revision: 1.7 $
 #
 # functions:
 #   * show Pingback ping URL in right of TSUKKOMI label.
@@ -139,7 +139,7 @@ end # unless mobile_agent?
 add_body_enter_proc do |date|
 	cgi = File.basename(@options['pb.cgi'] || './pb.rb')
 	@pb_date = date
-   @pb_id_url = %Q|#{h( @conf.index )}#{h( anchor @pb_date.strftime('%Y%m%d') )}|
+   @pb_id_url = %Q|#{h( @conf.index )}#{h anchor( @pb_date.strftime('%Y%m%d') )}|
 	@pb_id_url[0, 0] = @conf.base_url if %r|^https?://|i !~ @conf.index
 	@pb_id_url.gsub!( %r|/\./|, '/' )
 	@pb_url = %Q|#{h( @conf.base_url )}#{h( cgi )}/#{h( @pb_date.strftime('%Y%m%d') )}|
