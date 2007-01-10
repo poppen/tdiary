@@ -1,11 +1,10 @@
 #!/usr/bin/env ruby
-# xmlrpc.rb $Revision: 1.6 $
+# xmlrpc.rb $Revision: 1.7 $
 #
 # Copyright (c) 2004 MoonWolf <moonwolf@moonwolf.com>
 # Distributed under the GPL
 #
 # require Ruby1.8 or xml-rpc(http://raa.ruby-lang.org/project/xml-rpc/)
-# require Uconv
 
 BEGIN { $defout.binmode }
 $KCODE = 'n'
@@ -17,7 +16,7 @@ else
 end
 $:.unshift org_path.untaint
 require 'tdiary'
-require 'uconv'
+require 'nkf'
 require 'uri'
 
 require 'xmlrpc/server'
@@ -27,37 +26,12 @@ else
   server = XMLRPC::CGIServer.new
 end
 
-RE_U301C = Regexp.compile("\343\200\234",false,"U")
-RE_U2016 = Regexp.compile("\342\200\226",false,"U")
-RE_U2212 = Regexp.compile("\342\210\222",false,"U")
-RE_U00A2 = Regexp.compile("\302\242",false,"U")
-RE_U00A3 = Regexp.compile("\302\243",false,"U")
-RE_U00AC = Regexp.compile("\302\254",false,"U")
-RE_UFF5E = Regexp.compile("\357\275\236",false,"U")
-RE_U2225 = Regexp.compile("\342\210\245",false,"U")
-RE_UFF0D = Regexp.compile("\357\274\215",false,"U")
-RE_UFFE0 = Regexp.compile("\357\277\240",false,"U")
-RE_UFFE1 = Regexp.compile("\357\277\241",false,"U")
-RE_UFFE2 = Regexp.compile("\357\277\242",false,"U")
 def euctou8(str)
-  str = Uconv.euctou8(str)
-  str.gsub!(RE_U301C,"\357\275\236")
-  str.gsub!(RE_U2016,"\342\210\245")
-  str.gsub!(RE_U2212,"\357\274\215")
-  str.gsub!(RE_U00A2,"\357\277\240")
-  str.gsub!(RE_U00A3,"\357\277\241")
-  str.gsub!(RE_U00AC,"\357\277\242")
-  str
+  NKF::nkf('-m0 -E -w', str)
 end
 
 def u8toeuc(str)
-  str = str.gsub(RE_UFF5E,"\343\200\234")
-  str.gsub!(RE_U2225,"\342\200\226")
-  str.gsub!(RE_UFF0D,"\342\210\222")
-  str.gsub!(RE_UFFE0,"\302\242")
-  str.gsub!(RE_UFFE1,"\302\243")
-  str.gsub!(RE_UFFE2,"\302\254")
-  Uconv.u8toeuc(str)
+  NKF::nkf('-m0 -W -e', str)
 end
 
 server.add_handler('blogger.newPost') do |appkey, blogid, username, password, content, publish|

@@ -1,3 +1,6 @@
+2007-01-11  Kazuhiko  <kazuhiko@fdiary.net>
+	* xmlrpc/xmlrpc.rb: use nkf instead of uconv.
+
 2007-01-10  Kazuhiko  <kazuhiko@fdiary.net>
 	* xmlrpc/xmlrpc.rb: support recent tDiary.
 
