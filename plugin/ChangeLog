@@ -1,3 +1,6 @@
+2007-01-10  Kazuhiko  <kazuhiko@fdiary.net>
+	* xmlrpc/xmlrpc.rb: support recent tDiary.
+
 2007-01-10 zunda <zunda at freeshell.org>
 	* navi_user.rb: fixed bug introduced with previous commit: should
 	have userd navi_latest for link to latest view
