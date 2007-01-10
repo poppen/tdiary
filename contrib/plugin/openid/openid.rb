@@ -1,5 +1,5 @@
 #
-# openid.rb: Insert OpenID delegation information. $Revision: 1.5 $
+# openid.rb: Insert OpenID delegation information. $Revision: 1.6 $
 #
 # Copyright (C) 2005, TADA Tadashi <sho@spc.gr.jp>
 # You can redistribute it and/or modify it under GPL2.
@@ -16,7 +16,7 @@ if /^(latest|conf|saveconf)$/ =~ @mode then
 	if @conf['openid.service'] and @conf['openid.id'] then
 		add_header_proc do
 			<<-HTML
-			<link rel="openid.server" href="#{h @openid_list[@conf['openid.service'])][0]}">
+			<link rel="openid.server" href="#{h @openid_list[@conf['openid.service']][0]}">
 			<link rel="openid.delegate" href="#{h @openid_list[@conf['openid.service']][1].sub( /#ID#/, @conf['openid.id'] )}">
 			HTML
 		end
