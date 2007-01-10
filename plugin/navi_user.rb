@@ -1,11 +1,9 @@
-# navi_user.rb $Revision: 1.8 $
+# navi_user.rb $Revision: 1.9 $
 #
 # navi_user: 前日，翌日→前の日記，次の日記
 #   modeがday/commentのときに表示される「前日」「翌日」ナビゲーション
 #   リンクを，「前の日記」，「次の日記」に変更するplugin．前の日記，次
 #   の日記がない場合は，ナビゲーションを表示しない．月またぎにも対応．
-#
-#   @secure=true では動作しません．
 #
 # Copyright (c) 2002 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -18,7 +16,7 @@ module TDiary
 end
 MODIFY_CLASS
 
-def navi_user_day
+add_header_proc do
 	cgi = CGI.new
 	def cgi.referer; nil; end
 	days = []
@@ -41,12 +39,15 @@ def navi_user_day
 	days |= [today]
 	days.sort!
 	days.unshift(nil).push(nil)
-	prev_day, cur_day, next_day = days[days.index(today) - 1, 3]
+	@navi_user_days = days[days.index(today) - 1, 3]
+	''
+end
 
+def navi_user_day
 	result = ''
-	result << navi_item( "#{h @index}#{anchor prev_day}", "&laquo;#{h navi_prev_diary(navi_user_format(prev_day))}" ) if prev_day
-	result << navi_item( h(@index), h(navi_latest) )
-	result << navi_item( "#{h @index}#{anchor next_day}", "#{h navi_next_diary(navi_user_format(next_day))}&raquo;" ) if next_day
+	result << navi_item( "#{h @index}#{anchor @navi_user_days[0]}", "&laquo;#{h navi_prev_diary(navi_user_format(@navi_user_days[0]))}" ) if @navi_user_days[0]
+	result << navi_item( h(@index), h(@navi_user_days[1]) )
+	result << navi_item( "#{h @index}#{anchor @navi_user_days[2]}", "#{h navi_next_diary(navi_user_format(@navi_user_days[2]))}&raquo;" ) if @navi_user_days[2]
 	result
 end
 
