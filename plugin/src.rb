@@ -1,4 +1,4 @@
-# src.rb $Revision: 1.2 $
+# src.rb $Revision: 1.3 $
 #
 # src: 外部ファイルを挿入する(HTMLエスケープ付き)
 #   パラメタ:
@@ -8,7 +8,7 @@
 # You can distribute this file under the GPL2.
 #
 def src( file )
-	CGI::escapeHTML( File::readlines( file ).join )
+	h( File::readlines( file ).join )
 end
 
 #
@@ -17,6 +17,6 @@ end
 # パラメタ: テキスト文字列
 #
 def src_inline( str )
-	CGI::escapeHTML( str )
+	h( str )
 end
 
