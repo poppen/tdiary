@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.65 2007-01-09 10:27:46 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.66 2007-01-10 05:50:39 zunda Exp $-))
 
 == 概要
 アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
@@ -354,9 +354,6 @@ class DispRef2String
 			str ? Web::unescape( str ) : ''
 		end
 	rescue LoadError
-		def self::escapeHTML( str )
-			str ? CGI::escapeHTML( str ) : ''
-		end
 		def self::unescape( str )
 			if str then
 				# escape ruby 1.6 bug.
@@ -365,6 +362,17 @@ class DispRef2String
 				end
 			else
 				''
+			end
+		end
+		begin
+			require 'erb'
+			extend ERB::Util
+			def DispRef2String::escapeHTML( str )
+				str ? h( str ) : ''
+			end
+		rescue LoadError
+			def DispRef2String::escapeHTML( str )
+				str ? CGI::escapeHTML( str ) : ''
 			end
 		end
 	end

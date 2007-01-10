@@ -1,3 +1,6 @@
+2007-01-09 zunda <zunda at freeshell.org>
+	* disp_referrer.rb: extend ERB::Util to use h() on ruby-1.8.2
+
 2007-01-09 SHIBATA Hiroshi <h-sbt@nifty.com>
 	* apply HTML escape when generate HTML in some more plugins.
 
