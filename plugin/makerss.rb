@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.47 $
+# makerss.rb: $Revision: 1.48 $
 #
 # generate RSS file when updating.
 #
@@ -62,6 +62,8 @@ end
 @makerss_rsses = @makerss_rsses || []
 
 class MakeRssFull
+	include ERB::Util
+
 	def initialize( conf )
 		@conf = conf
 		@item_num = 0
@@ -73,7 +75,7 @@ class MakeRssFull
 
 	def head( str )
 		@head = str
-		@head.sub!( /<\/title>/, "#{ERB::Util::h title}</title>" )
+		@head.sub!( /<\/title>/, "#{h title}</title>" )
 	end
 
 	def foot( str ); @foot = str; end

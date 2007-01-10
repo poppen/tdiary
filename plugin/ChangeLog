@@ -1,3 +1,6 @@
+2007-01-10 TADA Tadashi <sho@spc.gr.jp>
+	* makerss.rb: include ERB::Util to MakeRssFull class.
+
 2007-01-09 zunda <zunda at freeshell.org>
 	* disp_referrer.rb: extend ERB::Util to use h() on ruby-1.8.2
 
