@@ -1,4 +1,4 @@
-# ja/todo.rb $Revision: 1.2 $
+# ja/todo.rb $Revision: 1.3 $
 #
 # Japanese resources for todo.rb
 #
@@ -17,7 +17,7 @@ add_conf_proc('ToDo', 'ToDoプラグイン') do
 
 	<<-HTML
 	<h3 class="subtitle">使い方</h3>
-	<p><a href="#{@update}?conf=header">ヘッダ・フッタ</a>に'&lt;%=todo%&gt;'を追加して下さい．</p>
+	<p><a href="#{h @update}?conf=header">ヘッダ・フッタ</a>に'&lt;%=todo%&gt;'を追加して下さい．</p>
 	<h3 class="subtitle">ToDo編集</h3>
 	<p>一行に一つずつToDoを記述します．ToDoの形式は</p>
 	<pre>優先度[期限] すること</pre>
@@ -28,11 +28,11 @@ add_conf_proc('ToDo', 'ToDoプラグイン') do
 
 	<h3 class="subtitle">ToDoリストのタイトル</h3>
 	<p>ToDoリストのタイトルを指定します。何も指定しないと、&quot;ToDo:&quot;が利用されます。</p>
-	<p><input name="todo.title" value="#{CGI::escapeHTML(@conf['todo.title']) if @conf['todo.title']}"></p>
+	<p><input name="todo.title" value="#{h(@conf['todo.title']) if @conf['todo.title']}"></p>
 
 	<h3 class="subtitle">表示するToDoの件数</h3>
 	<p>表示するToDoの件数を表示します。何も指定しないと、10件が設定されます。</p>
-	<p>最大<input name="todo.n" value="#{@conf['todo.n']}" size="3">件</p>
+	<p>最大<input name="todo.n" value="#{h @conf['todo.n']}" size="3">件</p>
 	HTML
 end
 # vim: ts=3

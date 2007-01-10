@@ -1,4 +1,4 @@
-# todo.rb $Revision: 1.5 $
+# todo.rb $Revision: 1.6 $
 #
 # todo: show ToDo lists.
 #
@@ -136,7 +136,7 @@ TODO
 end
 
 def navi_t(name = todo_config_label)
-	%Q|<span class="adminmenu"><a href="#{@update}?conf=ToDo">#{name}</a></span>\n|
+	%Q|<span class="adminmenu"><a href="#{h @update}?conf=ToDo">#{name}</a></span>\n|
 end
 
 # backward compatibility
