@@ -1,4 +1,4 @@
-# navi_user.rb $Revision: 1.9 $
+# navi_user.rb $Revision: 1.10 $
 #
 # navi_user: 前日，翌日→前の日記，次の日記
 #   modeがday/commentのときに表示される「前日」「翌日」ナビゲーション
@@ -46,7 +46,7 @@ end
 def navi_user_day
 	result = ''
 	result << navi_item( "#{h @index}#{anchor @navi_user_days[0]}", "&laquo;#{h navi_prev_diary(navi_user_format(@navi_user_days[0]))}" ) if @navi_user_days[0]
-	result << navi_item( h(@index), h(@navi_user_days[1]) )
+	result << navi_item( h(@index), h(navi_latest) )
 	result << navi_item( "#{h @index}#{anchor @navi_user_days[2]}", "#{h navi_next_diary(navi_user_format(@navi_user_days[2]))}&raquo;" ) if @navi_user_days[2]
 	result
 end
