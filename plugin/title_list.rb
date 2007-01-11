@@ -1,4 +1,4 @@
-# titile_list.rb $Revision: 1.20 $
+# titile_list.rb $Revision: 1.21 $
 #
 # title_list: 現在表示している月のタイトルリストを表示
 #   パラメタ(カッコ内は未指定時の値):
@@ -20,11 +20,11 @@ def title_list( rev = false )
 		result << %Q[<li><a href="#{h( @index )}#{h anchor( date )}">#{h( @diaries[date].date.strftime( @date_format ) )}</a>\n\t<ul class="title-list-item">\n]
 		if !@plugin_files.grep(/\/category.rb$/).empty? and @diaries[date].categorizable?
 			@diaries[date].each_section do |section|
-				result << %Q[\t<li>#{h( section.stripped_subtitle_to_html )}</li>\n] if section.stripped_subtitle
+				result << %Q[\t<li>#{section.stripped_subtitle_to_html}</li>\n] if section.stripped_subtitle
 			end
 		else
 			@diaries[date].each_section do |section|
-				result << %Q[<li>#{h( section.subtitle_to_html )}</li>\n] if section.subtitle
+				result << %Q[<li>#{section.subtitle_to_html}</li>\n] if section.subtitle
 			end
 		end
 		result << "\t</ul>\n</li>\n"

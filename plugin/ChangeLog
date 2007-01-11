@@ -1,4 +1,6 @@
 2007-01-11  Kazuhiko  <kazuhiko@fdiary.net>
+	* title_list.rb: remove escape of *_to_html() results.
+
 	* kw.rb: url_encode key instead of html_escape. add '-m0' option
 	to nkf().
 
