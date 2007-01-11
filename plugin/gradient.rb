@@ -1,4 +1,4 @@
-# gradient.rb $Revision: 1.2 $
+# gradient.rb $Revision: 1.3 $
 #
 # gradient.rb: 文字の大きさを変化させながら表示
 #   パラメタ:
@@ -20,7 +20,7 @@ def gradient( str, first_size, last_size )
 	sd = ( last_size - first_size ).to_f / len
 	ary.each do |x|
 		s = sprintf( '%d',fontsize.round )
-		result << %Q[<span style="font-size: #{s}pt;">#{x}</span>]
+		result << %Q[<span style="font-size: #{s}pt;">#{h x}</span>]
 		fontsize += sd
 	end
 	result

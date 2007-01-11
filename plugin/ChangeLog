@@ -1,4 +1,7 @@
 2007-01-11 zunda <zunda at freeshell.org>
+	* gradient.rb: modified to escape each character
+
+2007-01-11 zunda <zunda at freeshell.org>
 	* gradation.rb: modified to escape each character
 
 2007-01-11 zunda <zunda at freeshell.org>
