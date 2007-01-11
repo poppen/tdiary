@@ -1,4 +1,4 @@
-# image.rb $Revision: 1.32 $
+# image.rb $Revision: 1.33 $
 # -pv-
 # 
 # Ì¾¾Î:
@@ -91,7 +91,7 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
 	if thumbnail then
 	  	%Q[<a href="#{h @image_url}/#{h image}"><img class="#{h place}" src="#{h @image_url}/#{h image_t}" alt="#{h alt}" title="#{h alt}"#{size}></a>]
 	else
-		%Q[<img class="#{place}" src="#{@image_url}/#{image}" alt="#{alt}" title="#{alt}"#{size}>]
+		%Q[<img class="#{h place}" src="#{h @image_url}/#{h image}" alt="#{h alt}" title="#{h alt}"#{h size}>]
 	end
 end
 
@@ -333,7 +333,7 @@ add_form_proc do |date|
    <input type="hidden" name="plugin_image_addimage" value="true">
    <input type="hidden" name="date" value="#{date.strftime( '%Y%m%d' )}">
    <input type="file" tabindex="#{tabidx+98}" name="plugin_image_file" size="50">
-   <input type="submit" tabindex="#{tabidx+99}" name="plugin" value="#{image_label_add_image}">
+   <input type="submit" tabindex="#{tabidx+99}" name="plugin" value="#{h image_label_add_image}">
    </div></form>
 	</div>]
 end
