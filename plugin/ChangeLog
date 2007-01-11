@@ -1,4 +1,10 @@
 2007-01-10 zunda <zunda at freeshell.org>
+	* category.rb: modified to escape category names in sub
+	titles (as is done in the other place) and URL-escape
+	category names in URLs. We might still have to take care
+	of charactor codes before URL-escaping category names.
+
+2007-01-10 zunda <zunda at freeshell.org>
 	* calendar3.rb: modified to escape title attributes of pop-ups
 
 2007-01-11  Kazuhiko  <kazuhiko@fdiary.net>
