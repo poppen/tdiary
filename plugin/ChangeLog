@@ -1,4 +1,7 @@
 2007-01-11 zunda <zunda at freeshell.org>
+	* image.rb: removed an escape which was too much
+
+2007-01-11 zunda <zunda at freeshell.org>
 	* image.rb: added escapes
 
 2007-01-11 zunda <zunda at freeshell.org>

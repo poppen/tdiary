@@ -1,4 +1,4 @@
-# image.rb $Revision: 1.33 $
+# image.rb $Revision: 1.34 $
 # -pv-
 # 
 # Ì¾¾Î:
@@ -91,7 +91,7 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
 	if thumbnail then
 	  	%Q[<a href="#{h @image_url}/#{h image}"><img class="#{h place}" src="#{h @image_url}/#{h image_t}" alt="#{h alt}" title="#{h alt}"#{size}></a>]
 	else
-		%Q[<img class="#{h place}" src="#{h @image_url}/#{h image}" alt="#{h alt}" title="#{h alt}"#{h size}>]
+		%Q[<img class="#{h place}" src="#{h @image_url}/#{h image}" alt="#{h alt}" title="#{h alt}"#{size}>]
 	end
 end
 
