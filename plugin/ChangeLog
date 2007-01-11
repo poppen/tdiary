@@ -1,4 +1,8 @@
 2007-01-11 zunda <zunda at freeshell.org>
+	* navi_user.rb: modified to check @date before going further.
+	@date is nil in configuration mode.
+
+2007-01-11 zunda <zunda at freeshell.org>
 	* makelirs.rb: modified to escape comma in uri
 
 2007-01-11 zunda <zunda at freeshell.org>
