@@ -1,4 +1,8 @@
 2007-01-10 zunda <zunda at freeshell.org>
+	* counter.rb: modified to escape theme_url and values for
+	inputs and text areas
+
+2007-01-10 zunda <zunda at freeshell.org>
 	* category.rb: modified to escape category names in sub
 	titles (as is done in the other place) and URL-escape
 	category names in URLs. We might still have to take care

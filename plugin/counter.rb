@@ -1,4 +1,4 @@
-# counter.rb $Revision: 1.26 $
+# counter.rb $Revision: 1.27 $
 #
 # Access counter plugin.
 #
@@ -286,6 +286,7 @@ TOPLEVEL_CLASS
 
 
   module TDiaryCounter
+    extend ERB::Util
     @version = "2.0.2"
 
     def run(cache_path, cgi, options)
@@ -432,11 +433,11 @@ TOPLEVEL_CLASS
       depth = 0
       str.scan(/./).each do |num|
 	if block_given?
-	  result << %Q[<img src="#{theme_url}/#{yield(num)}" alt="#{num}" />]
+	  result << %Q[<img src="#{h theme_url}/#{yield(num)}" alt="#{num}" />]
 	elsif filetype == ""
 	  result << %Q[<span class="counter-#{depth}"><span class="counter-num-#{num}">#{num}</span></span>]
 	else 
-	  result << %Q[<img src="#{theme_url}/#{num}.#{filetype}" alt="#{num}" />]
+	  result << %Q[<img src="#{h theme_url}/#{num}.#{filetype}" alt="#{num}" />]
 	end
 	depth += 1
       end
@@ -570,7 +571,7 @@ def print_conf_html
   <<-HTML
   <h3 class="subtitle">#{@counter_conf_init_head}</h3>
   <p>#{@counter_conf_init_desc}</p>
-  <p>#{@counter_conf_init_label}<input name="counter.init_num" value="#{@conf["counter.init_num"]}" size="5"></p>
+  <p>#{@counter_conf_init_label}<input name="counter.init_num" value="#{h @conf["counter.init_num"]}" size="5"></p>
 
   <h3 class="subtitle">#{@counter_conf_log_head}</h3>
   <p>#{@counter_conf_log_desc}</p>
@@ -583,15 +584,15 @@ def print_conf_html
 
   <h3 class="subtitle">#{@counter_conf_timer_head}</h3>
   <p>#{@counter_conf_timer_desc}</p>
-  <p>#{@counter_conf_timer_label}<input name="counter.timer" value="#{@conf["counter.timer"]}" size="2">#{@counter_conf_timer_unit}</p>
+  <p>#{@counter_conf_timer_label}<input name="counter.timer" value="#{h @conf["counter.timer"]}" size="2">#{@counter_conf_timer_unit}</p>
 
   <h3 class="subtitle">#{@counter_conf_deny_same_src_interval_head}</h3>
   <p>#{@counter_conf_deny_same_src_interval_desc}</p>
-  <p>#{@counter_conf_deny_same_src_interval_label}<input name="counter.deny_same_src_interval" value="#{@conf["counter.deny_same_src_interval"]}" size="2">#{@counter_conf_deny_same_src_interval_unit}</p>
+  <p>#{@counter_conf_deny_same_src_interval_label}<input name="counter.deny_same_src_interval" value="#{h @conf["counter.deny_same_src_interval"]}" size="2">#{@counter_conf_deny_same_src_interval_unit}</p>
 
   <h3 class="subtitle">#{@counter_conf_max_keep_access_num_head}</h3>
   <p>#{@counter_conf_max_keep_access_num_desc}</p>
-  <p>#{@counter_conf_max_keep_access_num_label}<input name="counter.max_keep_access_num" value="#{@conf["counter.max_keep_access_num"]}" size="7">#{@counter_conf_max_keep_access_num_unit}</p>
+  <p>#{@counter_conf_max_keep_access_num_label}<input name="counter.max_keep_access_num" value="#{h @conf["counter.max_keep_access_num"]}" size="7">#{@counter_conf_max_keep_access_num_unit}</p>
 
   <h3 class="subtitle">#{@counter_conf_deny_user_agents_head}</h3>
   <p>#{@counter_conf_deny_user_agents_desc}</p>
@@ -602,8 +603,8 @@ def print_conf_html
   <h3 class="subtitle">#{@counter_conf_kiriban_head}</h3>
   <p>#{@counter_conf_kiriban_desc}</p>
   <p><dl>
-    <li>#{@counter_conf_kiriban_label_all}<input name="counter.kiriban" value="#{@conf["counter.kiriban"]}" size="60"></li>
-    <li>#{@counter_conf_kiriban_label_today}<input name="counter.kiriban_today" value="#{@conf["counter.kiriban_today"]}" size="60"></li>
+    <li>#{@counter_conf_kiriban_label_all}<input name="counter.kiriban" value="#{h @conf["counter.kiriban"]}" size="60"></li>
+    <li>#{@counter_conf_kiriban_label_today}<input name="counter.kiriban_today" value="#{h @conf["counter.kiriban_today"]}" size="60"></li>
   </dl></p>
   <h3 class="subtitle">#{@counter_conf_kiriban_messages_head}</h3>
   <p>#{@counter_conf_kiriban_messages_desc}</p>
