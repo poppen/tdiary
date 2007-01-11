@@ -1,4 +1,7 @@
 2007-01-11 zunda <zunda at freeshell.org>
+	* highlight.rb: modified to unescape section_title in Javascript
+
+2007-01-11 zunda <zunda at freeshell.org>
 	* */category.rb: stoped HTML-escaping category_title. Escape
 	should be done just when constructing HTML sniplets.
 
