@@ -1,4 +1,4 @@
-# kw.rb $Revision: 1.14 $
+# kw.rb $Revision: 1.15 $
 #
 # kw: keyword link generator
 #   Parameters:
@@ -74,16 +74,16 @@ def kw( keyword, name = nil, title = nil )
 	name = keyword unless name
 	title = title ? %Q[ title="#{h title}"] : ''
 	begin
-		key = h( case @kw_dic[inter][1]
+		key = u( case @kw_dic[inter][1]
 			when 'euc-jp'
-				#NKF::nkf( '-e', key )
+				#NKF::nkf( '-m0 -e', key )
 				key
 			when 'sjis'
-				NKF::nkf( '-s', key )
+				NKF::nkf( '-m0 -s', key )
 			when 'jis'
-				NKF::nkf( '-j', key )
+				NKF::nkf( '-m0 -j', key )
 			when 'utf-8'
-				NKF::nkf( '-w', key )
+				NKF::nkf( '-m0 -w', key )
 			else # none
 				key
 		end )

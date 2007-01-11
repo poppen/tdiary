@@ -1,4 +1,7 @@
 2007-01-11  Kazuhiko  <kazuhiko@fdiary.net>
+	* kw.rb: url_encode key instead of html_escape. add '-m0' option
+	to nkf().
+
 	* xmlrpc/xmlrpc.rb: use nkf instead of uconv.
 
 2007-01-10  Kazuhiko  <kazuhiko@fdiary.net>
