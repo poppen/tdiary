@@ -1,4 +1,4 @@
-# category.rb $Revision: 1.35 $
+# category.rb $Revision: 1.36 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -56,9 +56,9 @@ def category_anchor(category)
 			""
 		end
 	if @category_icon[category]
-		%Q|<a href="#{h @index}?#{period_string}category=#{h(u(category))}"><img class="category" src="#{h @category_icon_url}#{h @category_icon[category]}" alt="#{h category}"></a>|
+		%Q|<a href="#{h @index}?#{period_string}category=#{u category}"><img class="category" src="#{h @category_icon_url}#{h @category_icon[category]}" alt="#{h category}"></a>|
 	else
-		%Q|[<a href="#{h @index}?#{period_string}category=#{h(u(category))}">#{h category}</a>]|
+		%Q|[<a href="#{h @index}?#{period_string}category=#{u category}">#{h category}</a>]|
 	end
 end
 
@@ -267,7 +267,7 @@ public
 	end
 
 	def make_anchor(label = nil)
-		a = @category.map {|c| "category=#{h(u(c))}"}.join(';')
+		a = @category.map {|c| "category=#{u c}"}.join(';')
 		a << ";year=#{@year}" if @year
 		a << ";month=#{@month}" if @month
 		if label
