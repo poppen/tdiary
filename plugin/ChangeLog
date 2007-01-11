@@ -1,4 +1,8 @@
 2007-01-11 zunda <zunda at freeshell.org>
+	* */category.rb: stoped HTML-escaping category_title. Escape
+	should be done just when constructing HTML sniplets.
+
+2007-01-11 zunda <zunda at freeshell.org>
 	* gradient.rb: modified to escape each character
 
 2007-01-11 zunda <zunda at freeshell.org>

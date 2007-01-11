@@ -1,4 +1,4 @@
-# ja/category.rb $Revision: 1.3 $
+# ja/category.rb $Revision: 1.4 $
 #
 # Copyright (c) 2004 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -22,7 +22,7 @@ def category_title
 	end
 	period = " (#{period})" if period
 
-	"[#{CGI.escapeHTML(info.category.join('|'))}#{period}]"
+	"[#{info.category.join('|')}#{period}]"
 end
 
 def category_init_local
