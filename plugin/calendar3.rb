@@ -1,4 +1,4 @@
-# calendar3.rb $Revision: 1.40 $
+# calendar3.rb $Revision: 1.41 $
 #
 # calendar3: 現在表示している月のカレンダーを表示します．
 #  パラメタ: なし
@@ -176,7 +176,7 @@ def calendar3
 				@diaries[date].each_section do |section|
 					if section.stripped_subtitle
 						text = apply_plugin( section.stripped_subtitle_to_html, true )
-						r << %Q|#{i}. #{text}|
+						r << %Q|#{i}. #{h text}|
 					end
 					i += 1
 				end
@@ -184,7 +184,7 @@ def calendar3
 				@diaries[date].each_section do |section|
 					if section.subtitle
 						text = apply_plugin( section.subtitle_to_html, true )
-						r << %Q|#{i}. #{text}|
+						r << %Q|#{i}. #{h text}|
 					end
 					i += 1
 				end
