@@ -111,20 +111,20 @@ def image( id, alt = "image", id2 = nil, width = nil, place="none" )
 	slist = imageList(@image_date, image_dir, "s").untaint
 	
 	if width
-		width_tag = %Q[width="#{width}"]
+		width_tag = %Q[width="#{h width}"]
 	else
 		width_tag = ""
 	end
 
 	if id2
-		%Q[<a href="#{image_url}#{list[id.to_i]}"><img class="#{place}" src="#{image_url}#{list[id2.to_i]}" alt="#{alt}"></a>]
+		%Q[<a href="#{h image_url}#{h list[id.to_i]}"><img class="#{h place}" src="#{h image_url}#{h list[id2.to_i]}" alt="#{h alt}"></a>]
 	else
 		if slist[id.to_i]
-			%Q[<a href="#{image_url}#{list[id.to_i]}"><img src="#{image_url}#{slist[id.to_i]}" alt="#{alt}" title="#{alt}" #{width_tag} class="#{place}"></a>]
+			%Q[<a href="#{h image_url}#{h list[id.to_i]}"><img src="#{h image_url}#{h slist[id.to_i]}" alt="#{h alt}" title="#{h alt}" #{width_tag} class="#{h place}"></a>]
 		else
 			if list[id.to_i]
-#				%Q[<a href="#{image_url}#{list[id.to_i]}"><img src="#{image_url}#{list[id.to_i]}" alt="#{alt}" #{width_tag} class="#{place}"></a>]
-				%Q[<img src="#{image_url}#{list[id.to_i]}" alt="#{alt}" title="#{alt}" #{width_tag} class="#{place}">]
+#				%Q[<a href="#{h image_url}#{h list[id.to_i]}"><img src="#{h image_url}#{h list[id.to_i]}" alt="#{h alt}" #{width_tag} class="#{h place}"></a>]
+				%Q[<img src="#{h image_url}#{h list[id.to_i]}" alt="#{h alt}" title="#{h alt}" #{width_tag} class="#{h place}">]
 			end
 		end
 	end
@@ -149,7 +149,7 @@ def image_link( id, str )
 		image_dir = %Q[#{@image_dir}/]
 	end
 	list = imageList(@image_date, image_dir).untaint
-	%Q[<a href="#{image_url}#{list[id.to_i]}">#{str}</a>]
+	%Q[<a href="#{h image_url}#{h list[id.to_i]}">#{str}</a>]
 end
 
 ###
@@ -407,18 +407,18 @@ add_form_proc do |date|
 	while id < n_image do
 		thumbnail_tag = ''
 		if slist[id.to_i]
-			src_tag = %Q[src="#{image_url}#{slist[id.to_i]}"]
-			alt_tag = %Q[alt="#{slist[id.to_i]}"]
+			src_tag = %Q[src="#{h image_url}#{h slist[id.to_i]}"]
+			alt_tag = %Q[alt="#{h slist[id.to_i]}"]
 		else
-			src_tag = %Q[src="#{image_url}#{list[id.to_i]}"]
-			alt_tag = %Q[alt="#{list[id.to_i]}"]
-			thumbnail_tag = %Q[<form class="update" method="post" enctype="multipart/form-data" action="#{@conf.update}">#{csrf_protection}<input type="hidden" name="plugin_image_name" value="#{date.strftime( '%Y%m%d' )}_#{id}"><input type="hidden" name="plugin_image_dir" value="#{image_dir}"><input type="hidden" name="plugin_image_thumbnail" value="true"><input type="hidden" name="date" value="#{date.strftime( '%Y%m%d' )}"><input type="file" name="plugin_image_file"><input type="submit" name="plugin" value="サムネイル"></form>] if imageex_useresize == 0
+			src_tag = %Q[src="#{h image_url}#{h list[id.to_i]}"]
+			alt_tag = %Q[alt="#{h list[id.to_i]}"]
+			thumbnail_tag = %Q[<form class="update" method="post" enctype="multipart/form-data" action="#{h @update}">#{csrf_protection}<input type="hidden" name="plugin_image_name" value="#{date.strftime( '%Y%m%d' )}_#{h id}"><input type="hidden" name="plugin_image_dir" value="#{h image_dir}"><input type="hidden" name="plugin_image_thumbnail" value="true"><input type="hidden" name="date" value="#{date.strftime( '%Y%m%d' )}"><input type="file" name="plugin_image_file"><input type="submit" name="plugin" value="サムネイル"></form>] if imageex_useresize == 0
 		end
 		
 		ptag = "#{image_plugin_tag1}image #{id}, '画像の説明'#{image_plugin_tag2}"
 		
-		i<< %Q[<td><table border="1" cellpadding="1" cellspacing="1"><tr><td style="text-align:center"><input type="button" onclick="ins(&quot;#{ptag}&quot;)" value="本文に追加"></td></tr><tr><td style="text-align:center">#{image_plugin_tag1}image #{id},'title#{id}'#{image_plugin_tag2}</td></tr><tr><td width="#{@imageex_thumbnailsize * 1.5}" height="#{@imageex_thumbnailsize * 1.3}" style="text-align:center">
-<img class="form" #{src_tag} #{alt_tag} height="#{@imageex_thumbnailsize}" ></tr><tr><td>#{thumbnail_tag}<form class="update" method="post" action="#{@conf.update}">#{csrf_protection}<input type="hidden" name="plugin_image_del" value="true"><input type="hidden" name="date" value="#{date.strftime( '%Y%m%d' )}"><input type="hidden" name="plugin_image_id" value="#{id}"><input type="submit" name="plugin" value="画像を削除"><input type="hidden" name="plugin_image_dir" value="#{image_dir}"></form>
+		i<< %Q[<td><table border="1" cellpadding="1" cellspacing="1"><tr><td style="text-align:center"><input type="button" onclick="ins(&quot;#{ptag}&quot;)" value="本文に追加"></td></tr><tr><td style="text-align:center">#{image_plugin_tag1}image #{h id},'title#{h id}'#{image_plugin_tag2}</td></tr><tr><td width="#{@imageex_thumbnailsize * 1.5}" height="#{@imageex_thumbnailsize * 1.3}" style="text-align:center">
+<img class="form" #{src_tag} #{alt_tag} height="#{@imageex_thumbnailsize}" ></tr><tr><td>#{thumbnail_tag}<form class="update" method="post" action="#{h @update}">#{csrf_protection}<input type="hidden" name="plugin_image_del" value="true"><input type="hidden" name="date" value="#{date.strftime( '%Y%m%d' )}"><input type="hidden" name="plugin_image_id" value="#{h id}"><input type="submit" name="plugin" value="画像を削除"><input type="hidden" name="plugin_image_dir" value="#{h image_dir}"></form>
 </tr></table></td>] if slist[id.to_i] || list[id.to_i]
 		nt += 1 if slist[id.to_i] || list[id.to_i]
 		
@@ -445,9 +445,9 @@ add_form_proc do |date|
 	<div class="caption">
 	絵日記(追加)
 	</div>
-  <form class="update" method="post" enctype="multipart/form-data" action="#{@conf.update}">
+  <form class="update" method="post" enctype="multipart/form-data" action="#{h @update}">
   	#{csrf_protection}
-	<input type="hidden" name="plugin_image_dir" value="#{image_dir}">
+	<input type="hidden" name="plugin_image_dir" value="#{h image_dir}">
   <input type="hidden" name="plugin_image_add" value="true">
   <input type="file"	 name="plugin_image_file">
   <input type="hidden" name="date" value="#{date.strftime( '%Y%m%d' )}">

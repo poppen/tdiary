@@ -1,4 +1,4 @@
-# image_gps.rb $Revision: 1.4 $
+# image_gps.rb $Revision: 1.5 $
 # 
 # 概要:
 # 画像にGPSによる位置情報が含まれている場合は、対応する地図へのリンクを生成する。
@@ -35,10 +35,9 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
   end
   if size then
     if size.kind_of?(Array)
-      size = " width=\"#{size[0]}\" height=\"#{size[1]}\""
-      
+      size = %Q| width="#{size[0].to_i}" height="#{size[1].to_i}"|
     else
-      size = " width=\"#{size.to_i}\""
+      size = %Q| width="#{size.to_i}"|
     end
   else
     size = ""
@@ -50,9 +49,9 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
   ( datum,nl,el ) = gps_info("#{@image_dir}/#{image}")
   
   if thumbnail then
-    %Q[<a href="#{@image_url}/#{image}"><img class="#{place}" src="#{@image_url}/#{image_t}" alt="#{alt}" title="#{alt}"#{size}></a>]
+    %Q[<a href="#{h @image_url}/#{h image}"><img class="#{h place}" src="#{h @image_url}/#{h image_t}" alt="#{h alt}" title="#{h alt}"#{size}></a>]
   elsif el.nil?
-    %Q[<img class="#{place}" src="#{@image_url}/#{image}" alt="#{alt}" title="#{alt}"#{size}>]
+    %Q[<img class="#{h place}" src="#{h @image_url}/#{h image}" alt="#{h alt}" title="#{h alt}"#{size}>]
   else
   	if @conf.mobile_agent?
       lat = "#{sprintf("%d.%d.%.2f",*nl)}"
@@ -65,7 +64,7 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
       href = %Q[<a href="#{mapion}/c/f?el=#{lon}&amp;nl=#{lat}&amp;scl=10000&amp;pnf=1&amp;uc=1&amp;grp=all&amp;size=500,500">]
     end
     
-    href + %Q[<img class="#{place}" src="#{@image_url}/#{image}" alt="#{alt}" title="#{alt}" #{size}></a>]
+    href + %Q[<img class="#{h place}" src="#{h @image_url}/#{h image}" alt="#{h alt}" title="#{h alt}" #{size}></a>]
     
   end
 end

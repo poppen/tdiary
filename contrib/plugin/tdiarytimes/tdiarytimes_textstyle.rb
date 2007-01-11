@@ -1,4 +1,4 @@
-# tdiarytimes_textstyle.rb $Revision: 1.1 $
+# tdiarytimes_textstyle.rb $Revision: 1.2 $
 #
 # Copyright (c) 2004 phonondrive <tdiary@phonondrive.com>
 # Distributed under the GPL
@@ -96,7 +96,7 @@
 #
 # Acknowledgements：
 # --------------------------------------------------------------------
-# This plugin is based on tdiarytimes.rb $Revision: 1.1 $
+# This plugin is based on tdiarytimes.rb $Revision: 1.2 $
 # Copyright (c) 2003 neuichi <neuichi@nmnl.jp>
 # Distributed under the GPL
 # http://nmnl.jp/hiki/software/?tDiary+%3A%3A+Plugin
@@ -258,7 +258,7 @@ def tdiarytimes_textstyle (init_text = nil, entr_text = nil, init_color = nil, e
 
 	# htmlデータの出力
 
-	r << %Q|<span style="color:##{init_color};#{init_css}" title="#{title_text}">|
+	r << %Q|<span style="color:##{h init_color};#{h init_css}" title="#{h title_text}">|
 
 	(0..143).each {|i|
 		data = ary_data[i]
@@ -277,7 +277,7 @@ def tdiarytimes_textstyle (init_text = nil, entr_text = nil, init_color = nil, e
 					now_color << format("%02x", entr_color_rgb[i].hex + ((fade_color_rgb[i].hex - entr_color_rgb[i].hex)*delta).to_i)
 				}
 			end
-			r << %Q|<span style="color:##{now_color};#{entr_css}" title="#{Time.at(data).strftime('%b %d,%Y')}">#{entr_text}</span>|
+			r << %Q|<span style="color:##{h now_color};#{h entr_css}" title="#{Time.at(data).strftime('%b %d,%Y')}">#{entr_text}</span>|
 		else
 			r << %Q|#{init_text}|
 		end

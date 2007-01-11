@@ -4,7 +4,7 @@
 # Distributed under the GPL
 #
 # 2003-12-01 circle extention added by Minero Aoki <aamine@loveruby.net>
-# $Id: tdiarytimes2.rb,v 1.1 2004-05-22 04:48:10 tadatadashi Exp $
+# $Id: tdiarytimes2.rb,v 1.2 2007-01-11 02:55:26 tadatadashi Exp $
 #
 # プラグイン配布ページ
 # http://i.loveruby.net/w/tdiarytimes.html
@@ -188,8 +188,8 @@ class TDiaryTimesBar < TDiaryTimes
   def initialize(dbfile, options)
     super
     @text         = options['tdiarytimes.text'] || 'T D I A R Y T I M E S'
-    @width        = options['tdiarytimes.width'] || 400
-    @height       = options['tdiarytimes.height'] || 20
+    @width        = options['tdiarytimes.width'].to_i || 400
+    @height       = options['tdiarytimes.height'].to_i || 20
     @textcolor    = options['tdiarytimes.textcolor'] || '#444444'
     @fillcolor    = options['tdiarytimes.fillcolor'] || '#444444'
     @linecolor    = options['tdiarytimes.linecolor'] || '#ffffff'
@@ -198,8 +198,8 @@ class TDiaryTimesBar < TDiaryTimes
   end
 
   def html(alt)
-    %Q[<img src="#{image_file()}"
-            alt="#{alt || @text}"
+    %Q[<img src="#{h image_file()}"
+            alt="#{h( alt || @text )}"
             width="#{@width + GAP_W}"
             height="#{@height + GAP_H}"
             class="tdiarytimes">].gsub(/\s+/, ' ')
@@ -266,8 +266,8 @@ class TDiaryTimesCircle < TDiaryTimes
   def initialize(dbfile, options)
     super
     #@text   # cannot change now
-    @width        = options['tdiarytimes.width'] || 80
-    @height       = options['tdiarytimes.height'] || 80
+    @width        = options['tdiarytimes.width'].to_i || 80
+    @height       = options['tdiarytimes.height'].to_i || 80
     @textcolor    = options['tdiarytimes.textcolor'] || '#444444'
     @fillcolor    = options['tdiarytimes.fillcolor'] || '#444444'
     @linecolor    = options['tdiarytimes.linecolor'] || '#ffffff'
@@ -276,8 +276,8 @@ class TDiaryTimesCircle < TDiaryTimes
   end
 
   def html(alt)
-    %Q[<img src="#{image_file()}"
-            alt="#{alt || ''}"
+    %Q[<img src="#{h image_file()}"
+            alt="#{h( alt || '' )}"
             width="#{@width}"
             height="#{@height}"
             class="tdiarytimes">].gsub(/\s+/, ' ')

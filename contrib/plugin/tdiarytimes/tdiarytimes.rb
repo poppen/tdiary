@@ -1,4 +1,4 @@
-# tdiarytimes.rb $Revision: 1.1 $
+# tdiarytimes.rb $Revision: 1.2 $
 #
 # Copyright (c) 2003 neuichi <neuichi@nmnl.jp>
 # Distributed under the GPL
@@ -144,10 +144,10 @@ if /^(append|replace)$/ =~ @mode then
 end
 
 def tdiarytimes(alt = nil)
-	width = @options['tdiarytimes.width'] || 400
+	width = @options['tdiarytimes.width'].to_i || 400
 	width += 10
 	
-	height = @options['tdiarytimes.height'] || 20
+	height = @options['tdiarytimes.height'].to_i || 20
 	height += 16
 	
 	file = @options['tdiarytimes.file'] || 'tdiarytimes.png'
@@ -156,9 +156,9 @@ def tdiarytimes(alt = nil)
 	result = ""
 	
 	if alt
-		result << "<img src=\"#{file}\" alt=\"#{alt}\" width=\"#{width}\" height=\"#{height}\" class=\"tdiarytimes\">"
+		result << %Q|<img src="#{h file}" alt="#{h alt}" width="#{width}" height="#{height}" class="tdiarytimes">|
 	else
-		result << "<img src=\"#{file}\" alt=\"#{text}\" width=\"#{width}\" height=\"#{height}\" class=\"tdiarytimes\">"
+		result << %Q|<img src="#{h file}" alt="#{h text}" width="#{width}" height="#{height}" class="tdiarytimes">|
 	end
 
 	result

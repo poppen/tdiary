@@ -14,7 +14,7 @@ def google_analytics_insert_code
 	<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
 	</script>
 	<script type="text/javascript">
-	_uacct = "UA-#{@conf['google_analytics.profile']}";
+	_uacct = "UA-#{h @conf['google_analytics.profile']}";
 	urchinTracker();
 	</script>
 	HTML
@@ -28,6 +28,6 @@ add_conf_proc( 'google_analytics', 'Google Analytics' ) do
 	<<-HTML
 		<h3>Google Analytics Profile</h3>
 		<p>set your Profile ID (NNNNN-N)</p>
-		<p><input name="google_analytics.profile" value="#{CGI::escapeHTML( @conf['google_analytics.profile'] || '' )}"></p>
+		<p><input name="google_analytics.profile" value="#{h @conf['google_analytics.profile']}"></p>
 	HTML
 end

@@ -20,7 +20,7 @@
 @antispamref_html_myurl = <<-TEXT
 	<h3>許容するリンク先の指定</h3>
 	<p>
-	トップページURL(#{CGI.escapeHTML(if @conf.index_page.empty? then "未設定" else @conf.index_page end)})と日記のURL(#{CGI.escapeHTML(if @conf.base_url.empty? then "不明" else @conf.base_url end)})以外にリンク先として許容するURLを指定します。
+	トップページURL(#{h(if @conf.index_page.empty? then "未設定" else @conf.index_page end)})と日記のURL(#{h(if @conf.base_url.empty? then "不明" else @conf.base_url end)})以外にリンク先として許容するURLを指定します。
 	正規表現も利用可能です。
 	</p>
 	TEXT

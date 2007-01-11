@@ -1,4 +1,4 @@
-# tdiarygraph_flashstyle.rb $Revision: 1.1 $
+# tdiarygraph_flashstyle.rb $Revision: 1.2 $
 #
 # Copyright (c) 2004 phonondrive <tdiary@phonondrive.com>
 # Distributed under the GPL
@@ -87,7 +87,7 @@
 
 def tdiarygraph_flashstyle
 	if @conf['tdiarygraph_f.templete'] == nil or @conf['tdiarygraph_f.templete'] == ""
-		r = %Q|使用を開始するには、<a href="./#{@update}?conf=tdiarygraph_f">プリファレンス画面</a>にて一度設定を完了して下さい。(tdiarygraph-flashstyle)|
+		r = %Q|使用を開始するには、<a href="./#{h @update}?conf=tdiarygraph_f">プリファレンス画面</a>にて一度設定を完了して下さい。(tdiarygraph-flashstyle)|
 	else
 		logname = ((@conf['tdiarygraph_f.log_path'] != "" and @conf['tdiarygraph_f.log_path'] != nil) ? @conf['tdiarygraph_f.log_path'] : "counter.log")
 		r = @conf['tdiarygraph_f.templete'].gsub(/\&uid/,"\&uid=#{File.mtime(logname.untaint).to_i}")
@@ -139,7 +139,7 @@ add_conf_proc( 'tdiarygraph_f', 'tdiarygraph-flashstyle の設定' ) do
 		argv << "init_num=#{@cgi.params['init_num'][0]}" if @cgi.params['init_num'][0] != ""
 
 		@conf['tdiarygraph_f.text_text'] = @cgi.params['text_text'][0].upcase
-		argv << "text_text=#{CGI::escape NKF::nkf('-s', @cgi.params['text_text'][0].upcase)}" if @cgi.params['text_text'][0] != ""
+		argv << "text_text=#{h NKF::nkf('-s', @cgi.params['text_text'][0].upcase)}" if @cgi.params['text_text'][0] != ""
 		@conf['tdiarygraph_f.text_rgb'] = @cgi.params['text_rgb'][0]
 		argv << "text_rgb=0x#{@cgi.params['text_rgb'][0]}" if @cgi.params['text_rgb'][0] != ""
 		@conf['tdiarygraph_f.text_report'] = @cgi.params['text_report'][0]
@@ -198,66 +198,66 @@ add_conf_proc( 'tdiarygraph_f', 'tdiarygraph-flashstyle の設定' ) do
 		<hr>
 		<h3 class="subtitle">表示する FLASH アプレットの選択</h3>
 		<p><select name="type">
-		<option value="0"#{if @conf['tdiarygraph_f.type'] == "0" then " selected" end}>プリセットを使用しない</option>
-		<option value="468x60-e"#{if @conf['tdiarygraph_f.type'] == "468x60-e" or @conf['tdiarygraph_f.type'] == nil or @conf['tdiarygraph_f.type'] == "" then " selected" end}>tdiarygraph468x60e.swf, 468x60</option>
-		<option value="728x90-e"#{if @conf['tdiarygraph_f.type'] == "728x90-e" then " selected" end}>tdiarygraph728x90e.swf, 728x90</option>
-		<option value="125x125-e"#{if @conf['tdiarygraph_f.type'] == "125x125-e" then " selected" end}>tdiarygraph125x125e.swf, 125x125</option>
-		<option value="240x180-e"#{if @conf['tdiarygraph_f.type'] == "240x180-e" then " selected" end}>tdiarygraph240x180e.swf, 240x180</option>
-		<option value="120x90-e"#{if @conf['tdiarygraph_f.type'] == "120x90-e" then " selected" end}>tdiarygraph120x90e.swf, 120x90</option>
+		<option value="0"#{" selected" if @conf['tdiarygraph_f.type'] == "0"}>プリセットを使用しない</option>
+		<option value="468x60-e"#{" selected" if @conf['tdiarygraph_f.type'] == "468x60-e" or @conf['tdiarygraph_f.type'] == nil or @conf['tdiarygraph_f.type'] == ""}>tdiarygraph468x60e.swf, 468x60</option>
+		<option value="728x90-e"#{" selected" if @conf['tdiarygraph_f.type'] == "728x90-e"}>tdiarygraph728x90e.swf, 728x90</option>
+		<option value="125x125-e"#{" selected" if @conf['tdiarygraph_f.type'] == "125x125-e"}>tdiarygraph125x125e.swf, 125x125</option>
+		<option value="240x180-e"#{" selected" if @conf['tdiarygraph_f.type'] == "240x180-e"}>tdiarygraph240x180e.swf, 240x180</option>
+		<option value="120x90-e"#{" selected" if @conf['tdiarygraph_f.type'] == "120x90-e"}>tdiarygraph120x90e.swf, 120x90</option>
 		</select></p>
 		<h3 class="subtitle">プリセットを使用しない場合は、以下で指定して下さい。</h3>
-		<p>FLASH のファイル名<br><input name="filename" value="#{@conf['tdiarygraph_f.filename'].to_s}" size="40"></p>
-		<p>FLASH の表示幅<br><input name="width" value="#{@conf['tdiarygraph_f.width'].to_s}" size="20"></p>
-		<p>FLASH の表示高さ<br><input name="height" value="#{@conf['tdiarygraph_f.height'].to_s}" size="20"></p>
+		<p>FLASH のファイル名<br><input name="filename" value="#{h @conf['tdiarygraph_f.filename']}" size="40"></p>
+		<p>FLASH の表示幅<br><input name="width" value="#{h @conf['tdiarygraph_f.width']}" size="20"></p>
+		<p>FLASH の表示高さ<br><input name="height" value="#{h @conf['tdiarygraph_f.height']}" size="20"></p>
 		<hr>
 		<h3 class="subtitle">アクセスログデータ</h3>
-		<p>本プラグインが作成する counter.log の複製のファイル名 (counter.log)<br><input name="log_path" value="#{@conf['tdiarygraph_f.log_path'].to_s}" size="20"></p>
-		<p>累計アクセス数の初期値。(0) counter.rb で init_num を指定している場合は、同じ値 (#{@conf['counter.init_num']}) を設定してください。<br><input name="init_num" value="#{@conf['tdiarygraph_f.init_num'].to_s}" size="20"></p>
+		<p>本プラグインが作成する counter.log の複製のファイル名 (counter.log)<br><input name="log_path" value="#{h @conf['tdiarygraph_f.log_path']}" size="20"></p>
+		<p>累計アクセス数の初期値。(0) counter.rb で init_num を指定している場合は、同じ値 (#{@conf['counter.init_num']}) を設定してください。<br><input name="init_num" value="#{h @conf['tdiarygraph_f.init_num']}" size="20"></p>
 		<hr>
 		<h3 class="subtitle">タイトルテキスト</h3>
-		<p>タイトルテキスト (TDIARYGRAPH-FLASHSTYLE)<br>使用出来る文字は、英大文字 (A-Z) と数字 (0-9)、および記号のみです。<br><input name="text_text" value="#{@conf['tdiarygraph_f.text_text'].to_s}" size="20"></p>
-		<p>タイトルテキストの色 (FFFFFF)<br><input name="text_rgb" value="#{@conf['tdiarygraph_f.text_rgb'].to_s}" size="20"></p>
+		<p>タイトルテキスト (TDIARYGRAPH-FLASHSTYLE)<br>使用出来る文字は、英大文字 (A-Z) と数字 (0-9)、および記号のみです。<br><input name="text_text" value="#{h @conf['tdiarygraph_f.text_text']}" size="20"></p>
+		<p>タイトルテキストの色 (FFFFFF)<br><input name="text_rgb" value="#{h @conf['tdiarygraph_f.text_rgb']}" size="20"></p>
 		<h3 class="subtitle">レポートテキスト</h3>
 		<p>レポートの表示有無 (表示)<br><select name="text_report">
-		<option value="1"#{if @conf['tdiarygraph_f.text_report'] != "0" then " selected" end}>表示</option>
-		<option value="0"#{if @conf['tdiarygraph_f.text_report'] == "0" then " selected" end}>非表示</option>
+		<option value="1"#{" selected" if @conf['tdiarygraph_f.text_report'] != "0"}>表示</option>
+		<option value="0"#{" selected" if @conf['tdiarygraph_f.text_report'] == "0"}>非表示</option>
 		</select></p>
-		<p>レポートテキストの色 (CCCCCC)<br><input name="text_report_rgb" value="#{@conf['tdiarygraph_f.text_report_rgb'].to_s}" size="20"></p>
+		<p>レポートテキストの色 (CCCCCC)<br><input name="text_report_rgb" value="#{h @conf['tdiarygraph_f.text_report_rgb']}" size="20"></p>
 		<h3 class="subtitle">レポート書式のカスタマイズ</h3>
-		<p>タグを埋め込んだ位置にデータが展開されます。<br>使用出来る文字 (タグを除く) は、英大文字 (A-Z) と数字 (0-9)、および記号のみです。<br><input name="text_report_format" value="#{@conf['tdiarygraph_f.text_report_format'].to_s}" size="70"></p>
+		<p>タグを埋め込んだ位置にデータが展開されます。<br>使用出来る文字 (タグを除く) は、英大文字 (A-Z) と数字 (0-9)、および記号のみです。<br><input name="text_report_format" value="#{h @conf['tdiarygraph_f.text_report_format']}" size="70"></p>
 		<p>[ 使用出来るタグ ] &lt;firstday&gt; : ログ初日, &lt;lastday&gt; : ログ最終日, &lt;days&gt; : ログ日数, &lt;total&gt; : 累計アクセス数, &lt;peak&gt; : 日別最大アクセス数, &lt;br&gt; : 改行</p>
 		<hr>
 		<h3 class="subtitle">背景や棒グラフの色</h3>
-		<p>背景の色 (333333)<br><input name="bg_rgb" value="#{@conf['tdiarygraph_f.bg_rgb'].to_s}" size="20"></p>
-		<p>背景の不透明度 (100)<br><input name="bg_alpha" value="#{@conf['tdiarygraph_f.bg_alpha'].to_s}" size="20"></p>
+		<p>背景の色 (333333)<br><input name="bg_rgb" value="#{h @conf['tdiarygraph_f.bg_rgb']}" size="20"></p>
+		<p>背景の不透明度 (100)<br><input name="bg_alpha" value="#{h @conf['tdiarygraph_f.bg_alpha']}" size="20"></p>
 		<p>背景の枠線 (非表示)<br><select name="bg_frame">
-		<option value="0"#{if @conf['tdiarygraph_f.bg_frame'] == "0" or @conf['tdiarygraph_f.bg_frame'] == nil or @conf['tdiarygraph_f.bg_frame'] == "" then " selected" end}>非表示</option>
-		<option value="1"#{if @conf['tdiarygraph_f.bg_frame'] == "1"  then " selected" end}>左と上に表示</option>
+		<option value="0"#{" selected" if @conf['tdiarygraph_f.bg_frame'] == "0" or @conf['tdiarygraph_f.bg_frame'] == nil or @conf['tdiarygraph_f.bg_frame'] == ""}>非表示</option>
+		<option value="1"#{" selected" if @conf['tdiarygraph_f.bg_frame'] == "1"}>左と上に表示</option>
 		</select></p>
-		<p>日別アクセス数棒グラフの色 (CCCCCC)<br><input name="bar_rgb" value="#{@conf['tdiarygraph_f.bar_rgb'].to_s}" size="20"></p>
-		<p>日別アクセス数棒グラフの不透明度 (100)<br><input name="bar_alpha" value="#{@conf['tdiarygraph_f.bar_alpha'].to_s}" size="20"></p>
-		<p>累計アクセス数棒グラフの色 (666666)<br><input name="line_rgb" value="#{@conf['tdiarygraph_f.line_rgb'].to_s}" size="20"></p>
-		<p>累計アクセス数棒グラフの不透明度 (100)<br><input name="line_alpha" value="#{@conf['tdiarygraph_f.line_alpha'].to_s}" size="20"></p>
+		<p>日別アクセス数棒グラフの色 (CCCCCC)<br><input name="bar_rgb" value="#{h @conf['tdiarygraph_f.bar_rgb']}" size="20"></p>
+		<p>日別アクセス数棒グラフの不透明度 (100)<br><input name="bar_alpha" value="#{h @conf['tdiarygraph_f.bar_alpha']}" size="20"></p>
+		<p>累計アクセス数棒グラフの色 (666666)<br><input name="line_rgb" value="#{h @conf['tdiarygraph_f.line_rgb']}" size="20"></p>
+		<p>累計アクセス数棒グラフの不透明度 (100)<br><input name="line_alpha" value="#{h @conf['tdiarygraph_f.line_alpha']}" size="20"></p>
 		<hr>
 		<h3 class="subtitle">棒グラフの線幅</h3>
-		<p>日別アクセス数棒グラフの線幅を絶対値で指定します。<br><input name="bar_width" value="#{@conf['tdiarygraph_f.bar_width'].to_s}" size="20"></p>
-		<p>累計アクセス数棒グラフの線幅を絶対値で指定します。<br><input name="line_width" value="#{@conf['tdiarygraph_f.line_width'].to_s}" size="20"></p>
+		<p>日別アクセス数棒グラフの線幅を絶対値で指定します。<br><input name="bar_width" value="#{h @conf['tdiarygraph_f.bar_width']}" size="20"></p>
+		<p>累計アクセス数棒グラフの線幅を絶対値で指定します。<br><input name="line_width" value="#{h @conf['tdiarygraph_f.line_width']}" size="20"></p>
 		<hr>
 		<h3 class="subtitle">モアレ対策</h3>
-		<p>棒グラフの線幅を相対的に微調整します。(0) 設定した値に対して線幅がリニアに変更されるわけではありません。<br><br><input name="bold" value="#{@conf['tdiarygraph_f.bold'].to_s}" size="20"></p>
+		<p>棒グラフの線幅を相対的に微調整します。(0) 設定した値に対して線幅がリニアに変更されるわけではありません。<br><br><input name="bold" value="#{h @conf['tdiarygraph_f.bold']}" size="20"></p>
 		<hr>
 		<h3 class="subtitle">ユニークID を使用したファイル取得</h3>
 		<p>ファイル取得のリクエストにユニークID (例えば ?#{Time.now.to_i}) を含めることにより、古いファイルがブラウザにキャッシュされたままになるのを防ぎます。FLASH のユニークID はプリファレンス設定時に、ログファイルのユニークID はエントリ登録時に更新されます。</p>
 		<p>ユニークID の付加 (付加する)<br><select name="uid">
-		<option value="1"#{if @conf['tdiarygraph_f.uid'] != "0" then " selected" end}>付加する</option>
-		<option value="0"#{if @conf['tdiarygraph_f.uid'] == "0" then " selected" end}>付加しない</option>
+		<option value="1"#{" selected" if @conf['tdiarygraph_f.uid'] != "0"}>付加する</option>
+		<option value="0"#{" selected" if @conf['tdiarygraph_f.uid'] == "0"}>付加しない</option>
 		</select></p>
 		<hr>
 		<h3 class="subtitle">プレビュー</h3>
 		<p>表示したい FLASH ファイル (.swf) が tdiary.rb と同じフォルダにアップロードされている必要があります。また、カウンタログファイルが FLASH ファイルと同じフォルダに転送されていない場合にはグラフが表示されません。</p>
 		<p>プレビュー (非表示)<br><select name="preview">
-		<option value="0"#{if @conf['tdiarygraph_f.preview'] != "1" then " selected" end}>非表示</option>
-		<option value="1"#{if @conf['tdiarygraph_f.preview'] == "1" then " selected" end}>表示</option>
+		<option value="0"#{" selected" if @conf['tdiarygraph_f.preview'] != "1"}>非表示</option>
+		<option value="1"#{" selected" if @conf['tdiarygraph_f.preview'] == "1"}>表示</option>
 		</select></p>
 	HTML
 
@@ -275,15 +275,15 @@ end
 
 def tdiarygraph_flashstyle_templete ( filename="tdiarygraph468x60e.swf",  argvs="", width="468", height="60" )
 	<<-r
-		<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" width="#{width}" height="#{height}" id="tdiarygraph" align="middle">
+		<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" width="#{h width}" height="#{h height}" id="tdiarygraph" align="middle">
 		<param name="allowScriptAccess" value="sameDomain" />
-		<param name="movie" value="#{filename}#{argvs}" />
+		<param name="movie" value="#{h filename}#{h argvs}" />
 		<param name="play" value="false" />
 		<param name="loop" value="false" />
 		<param name="quality" value="high" />
 		<param name="wmode" value="transparent" />
 		<param name="bgcolor" value="#ffffff" />
-		<embed src="#{filename}#{argvs}" play="false" loop="false" quality="high" wmode="transparent" bgcolor="#ffffff" width="#{width}" height="#{height}" name="tdiarygraph" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+		<embed src="#{h filename}#{h argvs}" play="false" loop="false" quality="high" wmode="transparent" bgcolor="#ffffff" width="#{h width}" height="#{h height}" name="tdiarygraph" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
 		</object>
 	r
 end

@@ -22,35 +22,35 @@ add_conf_proc( 'antirefspam', 'Anti Referer Spam' ) do
 	<<-HTML
 	#{@antispamref_html_antispamref}
 	<p>
-	<input type="checkbox" name="antirefspam.disable" value="true" #{if @conf['antirefspam.disable'].to_s == "true" then "checked" end}>#{@antispamref_html_disable}
+	<input type="checkbox" name="antirefspam.disable" value="true"#{" checked" if @conf['antirefspam.disable'].to_s == "true"}>#{@antispamref_html_disable}
 	</p>
 
 	#{@antispamref_html_myurl}
-	<p><input name="antirefspam.myurl" value="#{CGI::escapeHTML( @conf['antirefspam.myurl'].to_s )}" size="70"></p>
+	<p><input name="antirefspam.myurl" value="#{h @conf['antirefspam.myurl']}" size="70"></p>
 
 	#{@antispamref_html_proxy}
 	<p>
-	server : <input name="antirefspam.proxy_server" value="#{CGI::escapeHTML( @conf['antirefspam.proxy_server'].to_s )}" size="40">
-	port : <input name="antirefspam.proxy_port" value="#{CGI::escapeHTML( @conf['antirefspam.proxy_port'].to_s )}" size="5">
+	server : <input name="antirefspam.proxy_server" value="#{h @conf['antirefspam.proxy_server']}" size="40">
+	port : <input name="antirefspam.proxy_port" value="#{h @conf['antirefspam.proxy_port']}" size="5">
 	</p>
 
 	#{@antispamref_html_trustedurl}
-	<textarea name="antirefspam.trustedurl" cols="70" rows="15">#{CGI::escapeHTML( @conf['antirefspam.trustedurl'].to_s )}</textarea>
+	<textarea name="antirefspam.trustedurl" cols="70" rows="15">#{h @conf['antirefspam.trustedurl']}</textarea>
 
 	<p>
-	<input type="checkbox" name="antirefspam.checkreftable" value="true" #{if @conf['antirefspam.checkreftable'].to_s == "true" then "checked" end}>#{@antispamref_html_checkreftable}
+	<input type="checkbox" name="antirefspam.checkreftable" value="true"#{" checked" if @conf['antirefspam.checkreftable'].to_s == "true"}>#{@antispamref_html_checkreftable}
 	</p>
 
 	#{@antispamref_html_comment}
 	<p>
-	<input type="checkbox" name="antirefspam.comment_kanaonly" value="true" #{if @conf['antirefspam.comment_kanaonly'].to_s == "true" then "checked" end}>#{@antispamref_html_comment_kanaonly}
+	<input type="checkbox" name="antirefspam.comment_kanaonly" value="true"#{" checked" if @conf['antirefspam.comment_kanaonly'].to_s == "true"}>#{@antispamref_html_comment_kanaonly}
 	</p>
 	<p>
-	#{@antispamref_html_comment_maxsize} <input name="antirefspam.comment_maxsize" value="#{CGI::escapeHTML( @conf['antirefspam.comment_maxsize'].to_s )}" size="8">
+	#{@antispamref_html_comment_maxsize} <input name="antirefspam.comment_maxsize" value="#{h @conf['antirefspam.comment_maxsize']}" size="8">
 	</p>
 	<p>
 	#{@antispamref_html_comment_ngwords}
-	<textarea name="antirefspam.comment_ngwords" cols="70" rows="15">#{CGI::escapeHTML( @conf['antirefspam.comment_ngwords'].to_s )}</textarea>
+	<textarea name="antirefspam.comment_ngwords" cols="70" rows="15">#{h @conf['antirefspam.comment_ngwords'])}</textarea>
 	</p>
 
 	#{@antispamref_html_faq}

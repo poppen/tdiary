@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-# windex.rb $Revision: 1.1 $
+# windex.rb $Revision: 1.2 $
 #
 # windex: 索引を生成する
 #   パラメタ:
@@ -225,7 +225,7 @@ class WIIndexPage
 			<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 			<html>
 				<head>
-					<title>#{@title}(索引)</title>
+					<title>#{h @title}(索引)</title>
 					#{@css}
 				</head>
 				<body>
@@ -266,7 +266,7 @@ private
 					body << "<p>#{name} ... "
 					num_anchor = 1
 					windex[name]["anchor"].sort.each do |anchor|
-						body = body + %Q[<a href="#{anchor}">#{num_anchor}</a>]
+						body = body + %Q[<a href="#{h anchor}">#{num_anchor}</a>]
 						if num_anchor < windex[name]["anchor"].length
 							body = body + ","
 						end
@@ -346,10 +346,10 @@ class WIRedirectPage
 		body = <<-BODY
 			<html>
 				<head>
-					<meta http-equiv="refresh" content="0;url=#{anchor}">
+					<meta http-equiv="refresh" content="0;url=#{h anchor}">
 					<title>moving...</title>
 				</head>
-				<body>Wait or <a href="#{anchor}">Click here!</a></body>
+				<body>Wait or <a href="#{h anchor}">Click here!</a></body>
 			</html>
 			BODY
 
@@ -371,14 +371,14 @@ class WISinglePage
 		anchors.sort.each do |anchor|
 			str_date = anchor.scan(/\d{8}/)[0]
 			date = Time.local(str_date[0..3].to_i,str_date[4..5].to_i,str_date[6..7].to_i)
-			body << %Q[<p><a href="#{anchor}">#{date.strftime(@date_format)}</a></p>\n]
+			body << %Q[<p><a href="#{h anchor}">#{date.strftime(@date_format)}</a></p>\n]
 		end
 		body << "\n</div>\n"
 		body = <<-BODY
 			<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 			<html>
 				<head>
-					<title>#{@title}(索引)</title>
+					<title>#{h @title}(索引)</title>
 					#{@css}
 				</head>
 				<body>
@@ -406,13 +406,13 @@ class WIErrorPage
 			<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 			<html>
 				<head>
-					<title>#{@title}(索引)</title>
+					<title>#{h @title}(索引)</title>
 					#{@css}
 				</head>
 				<body>
 					<h1>#{@title} [索引]</h1>
 					<div class="day"><div class="body">
-						キーワード「#{@key}」は登録されていません。
+						キーワード「#{h @key}」は登録されていません。
 					</div></div>
 				</body>
 			</html>
@@ -430,12 +430,12 @@ def wikw(str)
 	if @wordindex.has_key?(str) == true
 		anchors = @wordindex[str]["anchor"]
 		if anchors.length == 1
-			return %Q[<a href="#{anchors[0]}">#{str}</a>]
+			return %Q[<a href="#{h anchors[0]}">#{str}</a>]
 		else
 			body = "#{str}("
 			num_anchor = 1
 			anchors.sort.each do |anchor|
-				body << %Q[<a href="#{anchor}">#{num_anchor}</a>]
+				body << %Q[<a href="#{h anchor}">#{num_anchor}</a>]
 				if num_anchor < anchors.length
 					body << ","
 				end

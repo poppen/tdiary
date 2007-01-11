@@ -28,11 +28,11 @@ google_alternate_ad_url = ""
 google_ad_width = #{google_ad_size[@conf['google_adsense.layout']][0]};
 google_ad_height = #{google_ad_size[@conf['google_adsense.layout']][1]};
 google_ad_format = "#{google_ad_size[@conf['google_adsense.layout']][0]}x#{google_ad_size[@conf['google_adsense.layout']][1]}_as";
-google_color_border = "#{@conf['google_adsense.color.border']}";
-google_color_bg = "#{@conf['google_adsense.color.bg']}";
-google_color_link = "#{@conf['google_adsense.color.link']}";
-google_color_url = "#{@conf['google_adsense.color.url']}";
-google_color_text = "#{@conf['google_adsense.color.text']}";
+google_color_border = "#{h @conf['google_adsense.color.border']}";
+google_color_bg = "#{h @conf['google_adsense.color.bg']}";
+google_color_link = "#{h @conf['google_adsense.color.link']}";
+google_color_url = "#{h @conf['google_adsense.color.url']}";
+google_color_text = "#{h @conf['google_adsense.color.text']}";
 //--></script>
 <script type="text/javascript"
 	src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
@@ -96,11 +96,11 @@ add_conf_proc( 'google_adsense', 'Google AdSense' ) do
 	<h3>バナーの色</h3>
 	<p>バナーの各パーツの色を指定できます。HTMLやCSSと同じ、6桁の16進数で指定します。</p>
 	<table style="margin-left: 2em;">
-		<tr><td>枠</td><td style="background-color: ##{@conf['google_adsense.color.border']};">&nbsp;<input name="google_adsense.color.border" size="7" value="#{@conf['google_adsense.color.border']}">&nbsp;</td></tr>
-		<tr><td>背景</td><td style="background-color: ##{@conf['google_adsense.color.bg']};">&nbsp;<input name="google_adsense.color.bg" size="7" value="#{@conf['google_adsense.color.bg']}">&nbsp;</td></tr>
-		<tr><td>リンク</td><td style="background-color: ##{@conf['google_adsense.color.link']};">&nbsp;<input name="google_adsense.color.link" size="7" value="#{@conf['google_adsense.color.link']}">&nbsp;</td></tr>
-		<tr><td>URL</td><td style="background-color: ##{@conf['google_adsense.color.url']};">&nbsp;<input name="google_adsense.color.url" size="7" value="#{@conf['google_adsense.color.url']}">&nbsp;</td></tr>
-		<tr><td>テキスト</td><td style="background-color: ##{@conf['google_adsense.color.text']};">&nbsp;<input name="google_adsense.color.text" size="7" value="#{@conf['google_adsense.color.text']}">&nbsp;</td></tr>
+		<tr><td>枠</td><td style="background-color: ##{h @conf['google_adsense.color.border']};">&nbsp;<input name="google_adsense.color.border" size="7" value="#{h @conf['google_adsense.color.border']}">&nbsp;</td></tr>
+		<tr><td>背景</td><td style="background-color: ##{h @conf['google_adsense.color.bg']};">&nbsp;<input name="google_adsense.color.bg" size="7" value="#{h @conf['google_adsense.color.bg']}">&nbsp;</td></tr>
+		<tr><td>リンク</td><td style="background-color: ##{h @conf['google_adsense.color.link']};">&nbsp;<input name="google_adsense.color.link" size="7" value="#{h @conf['google_adsense.color.link']}">&nbsp;</td></tr>
+		<tr><td>URL</td><td style="background-color: ##{h @conf['google_adsense.color.url']};">&nbsp;<input name="google_adsense.color.url" size="7" value="#{h @conf['google_adsense.color.url']}">&nbsp;</td></tr>
+		<tr><td>テキスト</td><td style="background-color: ##{h @conf['google_adsense.color.text']};">&nbsp;<input name="google_adsense.color.text" size="7" value="#{h @conf['google_adsense.color.text']}">&nbsp;</td></tr>
 	</table>
 	HTML
 end

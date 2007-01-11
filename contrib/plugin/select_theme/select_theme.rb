@@ -32,14 +32,14 @@ end
 def select_theme_form
   options = ''
   get_theme_list.each do |theme, name|
-    options << %Q!\t<option value="#{CGI.escapeHTML(theme)}"#{' selected' if theme == @conf.theme}>#{CGI.escapeHTML(name)}</option>\n!
+    options << %Q!\t<option value="#{h theme}"#{' selected' if theme == @conf.theme}>#{h name}</option>\n!
     if theme == DEFAULT_THEME
-      options = %Q!\t<option value="#{CGI.escapeHTML(theme)}">(default)</option>\n! + options
+      options = %Q!\t<option value="#{h theme}">(default)</option>\n! + options
     end
   end
 
   <<HTML
-<form class="comment" method="get" action="#{@conf.index}">
+<form class="comment" method="get" action="#{h @index}">
  <select name="select_theme">
 #{options}
  </select>

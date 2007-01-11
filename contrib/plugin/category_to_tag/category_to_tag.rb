@@ -1,5 +1,5 @@
 # category_to_tag.rb - show categories list in end of each section
-# $Revision: 1.4 $
+# $Revision: 1.5 $
 #
 # Copyright (C) 2005, TADA Tadashi <sho@spc.gr.jp>
 # You can redistribute it and/or modify it under GPL2.
@@ -50,7 +50,7 @@ def category_to_tag_list
 		r = '<div class="tags">Tags: '
 		@category_to_tag_list.each do |tag, blog|
 			if blog
-				r << %Q|<a href="#{@index}?blogcategory=#{CGI::escape(tag)}">#{tag}</a> |
+				r << %Q|<a href="#{h @index}?blogcategory=#{h tag}">#{tag}</a> |
 			else
 				r << category_anchor( "#{tag}" ).sub( /^\[/, '' ).sub( /\]$/, '' ) << ' '
 			end
