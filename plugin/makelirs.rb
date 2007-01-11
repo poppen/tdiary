@@ -1,4 +1,4 @@
-# makelirs.rb $Revision: 1.17 $
+# makelirs.rb $Revision: 1.18 $
 #
 # 更新情報をLIRSフォーマットのファイルに吐き出す
 #
@@ -69,7 +69,7 @@ add_update_proc do
 	uri[0, 0] = @conf.base_url if %r|^https?://|i !~ @index
 	uri.gsub!( %r|/\./|, '/' )
 
-	lirs = "LIRS,#{t.last_modified.tv_sec},#{Time.now.tv_sec},#{utc_offset},#{body.size},#{uri},#{e[@html_title]},#{e[@author_name]},,\n"
+	lirs = "LIRS,#{t.last_modified.tv_sec},#{Time.now.tv_sec},#{utc_offset},#{body.size},#{e[uri]},#{e[@html_title]},#{e[@author_name]},,\n"
 	File::open( file, 'w' ) do |o|
 		o.puts lirs
 	end

@@ -1,4 +1,7 @@
 2007-01-11 zunda <zunda at freeshell.org>
+	* makelirs.rb: modified to escape comma in uri
+
+2007-01-11 zunda <zunda at freeshell.org>
 	* kw.rb: modified to escape anchor string
 
 2007-01-11 zunda <zunda at freeshell.org>
