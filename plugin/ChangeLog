@@ -1,3 +1,7 @@
+2007-01-11 zunda <zunda at freeshell.org>
+	* daily_theme.rb: modified to URL-escape urls as well as escape
+	theme names
+
 2007-01-10 zunda <zunda at freeshell.org>
 	* amazon.rb and category.rb: stop HTML-escaping URL-escaped
 	strings. Excuse me, this was too much.

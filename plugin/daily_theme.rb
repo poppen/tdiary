@@ -1,12 +1,16 @@
-# daily_theme.rb $Revision: 1.3 $
+# daily_theme.rb $Revision: 1.4 $
 #
 # Copyright (c) 2005 SHIBATA Hiroshi <h-sbt@nifty.com>
 # Distributed under the GPL
 #
 
 def css_tag
+   theme_name = File::basename( @css, '.css' )
+   css_url = @css
+
    if @mode =~ /conf$/ then
-      css = "#{theme_url}/conf.css"
+      css_url = "#{h theme_url}/conf.css"
+      theme_name = 'conf'
    elsif @conf.options.include?('daily_theme.list')
       if @conf.options['daily_theme.list'].size > 0
          theme_list = @conf.options['daily_theme.list'].split(/\n/)
@@ -14,18 +18,13 @@ def css_tag
          index = Time.now.yday % theme_list.size
          theme_name = theme_list[index].strip
          
-         css = "#{theme_url}/#{theme_name}/#{theme_name}.css"
-      else
-         css = @css
+         css_url = "#{h theme_url}/#{u theme_name}/#{u theme_name}.css"
       end
-   else
-      css = @css
    end
       
-   title = CGI::escapeHTML( File::basename( css, '.css' ) )
    <<-CSS
    <link rel="stylesheet" href="#{h theme_url}/base.css" type="text/css" media="all">
-   <link rel="stylesheet" href="#{h css}" title="#{h title}" type="text/css" media="all">
+   <link rel="stylesheet" href="#{h css_url}" title="#{h theme_name}" type="text/css" media="all">
    CSS
    
 end
