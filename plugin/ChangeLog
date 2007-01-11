@@ -1,4 +1,7 @@
 2007-01-11 zunda <zunda at freeshell.org>
+	* dropdown_calendar.rb: escape @index
+
+2007-01-11 zunda <zunda at freeshell.org>
 	* daily_theme.rb: modified to URL-escape urls as well as escape
 	theme names
 

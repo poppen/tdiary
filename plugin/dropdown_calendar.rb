@@ -1,4 +1,4 @@
-# dropdown_calendar.rb $Revision: 1.4 $
+# dropdown_calendar.rb $Revision: 1.5 $
 #
 # calendar: カレンダーをドロップダウンリストに置き換えるプラグイン
 #   パラメタ: なし
@@ -10,7 +10,7 @@
 @dropdown_calendar_label = '過去の日記' unless @resource_loaded
 
 def calendar
-	result = %Q[<form method="get" action="#{@index}">\n]
+	result = %Q[<form method="get" action="#{h @index}">\n]
 	result << %Q[<div class="calendar">#{@options['dropdown_calendar.label'] || @dropdown_calendar_label}\n]
 	result << %Q[<select name="date">\n]
 	@years.keys.sort.reverse_each do |year|
