@@ -1,4 +1,4 @@
-# gradation.rb $Revision: 1.2 $
+# gradation.rb $Revision: 1.3 $
 #
 # gradation.rb: 文字列をグラデーション表示
 #   パラメタ:
@@ -21,7 +21,7 @@ def gradation( str, first_color, last_color )
 	bd = ((last_color[4..5].hex - b)/len)
 	ary.each do |x|
 		c = sprintf( '%02x%02x%02x', r, g, b )
-		result << %Q[<span style="color: ##{c}">#{x}</span>]
+		result << %Q[<span style="color: ##{c}">#{h x}</span>]
 		r += rd
 		g += gd
 		b += bd
