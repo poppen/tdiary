@@ -1,4 +1,4 @@
-# kw.rb $Revision: 1.15 $
+# kw.rb $Revision: 1.16 $
 #
 # kw: keyword link generator
 #   Parameters:
@@ -91,7 +91,7 @@ def kw( keyword, name = nil, title = nil )
 		inter = nil
 		retry
 	end
-	%Q[<a href="#{h @kw_dic[inter][0].sub( /\$1/, key )}"#{title}>#{name}</a>]
+	%Q[<a href="#{h @kw_dic[inter][0].sub( /\$1/, key )}"#{title}>#{h name}</a>]
 end
 
 #
