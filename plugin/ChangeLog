@@ -1,4 +1,9 @@
 2007-01-11 zunda <zunda at freeshell.org>
+	* recent_comment.rb: modified not to escape anchor() because
+	number_anchor.rb returns class attribute for a tag. This might
+	be a security problem in the future.
+
+2007-01-11 zunda <zunda at freeshell.org>
 	* random_google.rb: modified to better escape the query string
 
 2007-01-11 zunda <zunda at freeshell.org>
