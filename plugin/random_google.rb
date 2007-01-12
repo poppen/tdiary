@@ -1,4 +1,4 @@
-# random_google.rb $Revision: 1.5 $
+# random_google.rb $Revision: 1.6 $
 #
 # random_google: 日記からランダムに抽出した単語をgoogleで検索するリンクを生成する
 #
@@ -119,18 +119,18 @@ add_conf_proc('RandomGoogle', '関連するかもしれないページ検索') do
 
 	<h3 class="subtitle">表示関連</h3>
 	#{"<p>googleへのリンクを示す文字列とリンクの上にマウスポインタを置いた時にポップアップする文字列を指定します．文字列中の $1 は抽出されたキーワードで置換されます．</p>" unless @conf.mobile_agent?}
-	<p>リンク：<input name="random_google_caption" size="70" value="#{@conf['random_google.caption']}"></p>
-	<p>ポップアップ：<input name="random_google_popup" size="70" value="#{@conf['random_google.popup']}"></p>
+	<p>リンク：<input name="random_google_caption" size="70" value="#{h @conf['random_google.caption']}"></p>
+	<p>ポップアップ：<input name="random_google_popup" size="70" value="#{h @conf['random_google.popup']}"></p>
 
 	<h3 class="subtitle">追加するキーワード</h3>
 	#{"<p>追加したいキーワードを指定します．複数指定する場合はキーワードをスペースで区切って指定してください．</p>" unless @conf.mobile_agent?}
 	#{"<p>例)</p><pre>-site:example.com</pre>" unless @conf.mobile_agent?}
-	<p><input name="random_google_append" size="70" value="#{@conf['random_google.append']}"></p>
+	<p><input name="random_google_append" size="70" value="#{h @conf['random_google.append']}"></p>
 
 	<h3 class="subtitle">除外するキーワード</h3>
 	#{"<p>除外したいキーワードを指定します．複数指定する場合はキーワードをスペースで区切って指定してください．</p>" unless @conf.mobile_agent?}
 	#{"<p>例)</p><pre>a the</pre>" unless @conf.mobile_agent?}
-	<p><input name="random_google_exception" size="70" value="#{@conf['random_google.exception']}"></p>
+	<p><input name="random_google_exception" size="70" value="#{h @conf['random_google.exception']}"></p>
 	HTML
 
 	unless @conf.secure
@@ -149,7 +149,7 @@ add_conf_proc('RandomGoogle', '関連するかもしれないページ検索') do
 	<h3 class="subtitle">形態素解析器のパス</h3>
 	#{"<p>利用する形態素解析器を絶対パスで指定します．</p>" unless @conf.mobile_agent?}
 	#{"<p>例)</p><pre>/usr/local/bin/chasen</pre>" unless @conf.mobile_agent?}
-	<p><input name="random_google_analyzer_path" size="70" value="#{@conf['random_google.analyzer_path']}"></p>
+	<p><input name="random_google_analyzer_path" size="70" value="#{h @conf['random_google.analyzer_path']}"></p>
 	HTML
 	end
 	r
