@@ -1,4 +1,4 @@
-# random_google.rb $Revision: 1.6 $
+# random_google.rb $Revision: 1.7 $
 #
 # random_google: 日記からランダムに抽出した単語をgoogleで検索するリンクを生成する
 #
@@ -70,13 +70,13 @@ if /(latest|day)/ === @mode and ! @conf.bot? and ! @conf.mobile_agent?
 				r << words.delete_at(rand(words.size))
 			end
 			append = @conf['random_google.append'].split
-			rr = (r.compact.map {|i| CGI::escape(i)} + append).join('+')
-			rrr = r.compact.map {|i| CGI::escapeHTML(i)}.join(' ')
-			caption = @conf['random_google.caption'].gsub(/\$1/, rrr)
-			popup = @conf['random_google.popup'].gsub(/\$1/, rrr)
+			rr = (r.compact + append).map {|i| u(i)}.join('+')	# URL-escaped
+			rrr = r.compact.map.join(' ')
+			caption = @conf['random_google.caption'].gsub(/\$1/, h(rrr)) # only the words picked up are escaped
+			popup = h(@conf['random_google.popup'].gsub(/\$1/, rrr)) # escaped
 			<<-HTML
 			<div class="body-enter">
-			[<a href="http://www.google.com/search?lr=lang_ja&amp;ie=euc-jp&amp;q=#{h( rr )}" title="#{h( popup )}">
+			[<a href="http://www.google.com/search?lr=lang_ja&amp;ie=euc-jp&amp;q=#{rr}" title="#{popup}">
 			#{caption}
 			</a>]
 			</div>

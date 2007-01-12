@@ -1,4 +1,7 @@
 2007-01-11 zunda <zunda at freeshell.org>
+	* random_google.rb: modified to better escape the query string
+
+2007-01-11 zunda <zunda at freeshell.org>
 	* random_google.rb: modified to escape values of input tags in
 	configuration interface
 
