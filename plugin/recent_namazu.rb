@@ -30,7 +30,7 @@ def recent_namazu(file, namazu, limit = 5, sep='&nbsp;', make_link = true)
 			break if idx >= limit
 			word = line.split(/\t/)[0]
 			if make_link
-				result << %Q[<a href="#{h( namazu )}?query=#{h( word )}">#{h( word )}</a>]
+				result << %Q[<a href="#{h( namazu )}?query=#{u( word )}">#{h( word )}</a>]
 			else
 				result << h( word )
 			end
