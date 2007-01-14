@@ -1,3 +1,6 @@
+2007-01-14 TADA Tadashi <sho@spc.gr.jp>
+	* tlink.rb, xmlrpc.rb: modified to use ERB::Util.h instead of CGI::escpaeHTML and escape base-html
+
 2007-01-13 zunda <zunda at freeshell.org>
 	* search_form.rb: modified to escape button name, quoated some
 	values in HTML tags

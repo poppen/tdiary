@@ -1,4 +1,4 @@
-# tlink.rb $Revision: 1.18 $
+# tlink.rb $Revision: 1.19 $
 #
 # title Â°À­ÉÕ anchor plugin
 #
@@ -150,6 +150,6 @@ def tlink( url, str, title = nil )
     end
   end
 
-  %Q[<a href="#{url}" title="#{title}">#{str}</a>]
+  %Q[<a href="#{h url}" title="#{h title}">#{str}</a>]
 end
 

@@ -1,4 +1,4 @@
-# xmlrpc.rb: $Revision: 1.2 $
+# xmlrpc.rb: $Revision: 1.3 $
 #
 # XML-RPC API
 #
@@ -7,7 +7,7 @@
 #
 
 add_header_proc do
-  %Q!\t<link rel="EditURI" type="application/rsd+xml" title="RSD" href="#{@conf.base_url}rsd.xml" />\n!
+  %Q!\t<link rel="EditURI" type="application/rsd+xml" title="RSD" href="#{h @conf.base_url}rsd.xml" />\n!
 end
 
 add_conf_proc('XMLRPC', 'XML-RPC API') do
@@ -16,19 +16,19 @@ add_conf_proc('XMLRPC', 'XML-RPC API') do
 
 	<<-HTML
 	<h3 class="subtitle">#{label_xmlrpc_url}</h3>
-	<p><input type="text" name="xmlrpc.url" value="#{@conf['xmlrpc.url']}" size="100"></p>
+	<p><input type="text" name="xmlrpc.url" value="#{h @conf['xmlrpc.url']}" size="100"></p>
 	<h3 class="subtitle">#{label_xmlrpc_blogid}</h3>
-	<p><input type="text" name="xmlrpc.blogid" value="#{@conf['xmlrpc.blogid']}" size="20"></p>
+	<p><input type="text" name="xmlrpc.blogid" value="#{h @conf['xmlrpc.blogid']}" size="20"></p>
 	<h3 class="subtitle">#{label_xmlrpc_username}</h3>
-	<p><input type="text" name="xmlrpc.username" value="#{@conf['xmlrpc.username']}" size="20"></p>
+	<p><input type="text" name="xmlrpc.username" value="#{h @conf['xmlrpc.username']}" size="20"></p>
 	<h3 class="subtitle">#{label_xmlrpc_password}</h3>
-	<p><input type="password" name="xmlrpc.password" value="#{@conf['xmlrpc.password']}" size="20"></p>
+	<p><input type="password" name="xmlrpc.password" value="#{h @conf['xmlrpc.password']}" size="20"></p>
 	<h3 class="subtitle">#{label_xmlrpc_lastname}</h3>
-	<p><input type="text" name="xmlrpc.lastname" value="#{@conf['xmlrpc.lastname']}" size="20"></p>
+	<p><input type="text" name="xmlrpc.lastname" value="#{h @conf['xmlrpc.lastname']}" size="20"></p>
 	<h3 class="subtitle">#{label_xmlrpc_firstname}</h3>
-	<p><input type="text" name="xmlrpc.firstname" value="#{@conf['xmlrpc.firstname']}" size="20"></p>
+	<p><input type="text" name="xmlrpc.firstname" value="#{h @conf['xmlrpc.firstname']}" size="20"></p>
 	<h3 class="subtitle">#{label_xmlrpc_userid}</h3>
-	<p><input type="text" name="xmlrpc.userid" value="#{@conf['xmlrpc.userid']}" size="20"></p>
+	<p><input type="text" name="xmlrpc.userid" value="#{h @conf['xmlrpc.userid']}" size="20"></p>
 	HTML
 end
 
@@ -60,10 +60,10 @@ def saveconf_xmlrpc
         <service>
           <engineName>tDiary</engineName>
           <engineLink>http://www.tdiary.org/</engineLink>
-          <homePageLink>#{@conf.base_url}</homePageLink>
+          <homePageLink>#{h @conf.base_url}</homePageLink>
           <apis>
-          <api name="MetaWeblog" preferred="true" apiLink="#{@conf['xmlrpc.url']}" blogID="#{@conf['xmlrpc.blogid']}"/>
-          <api name="Blogger" preferred="false" apiLink="#{@conf['xmlrpc.url']}" blogID="#{@conf['xmlrpc.blogid']}"/>
+          <api name="MetaWeblog" preferred="true" apiLink="#{h @conf['xmlrpc.url']}" blogID="#{h @conf['xmlrpc.blogid']}"/>
+          <api name="Blogger" preferred="false" apiLink="#{h @conf['xmlrpc.url']}" blogID="#{h @conf['xmlrpc.blogid']}"/>
           </apis>
         </service>
       </rsd>
