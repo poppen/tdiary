@@ -1,4 +1,4 @@
-# search_form.rb $Revision: 1.9 $
+# search_form.rb $Revision: 1.10 $
 #
 # Show a form for search engines.
 #
@@ -22,7 +22,7 @@ def search_form(url, query, button_name = "Search", size = 20,
 	<div class="search">
 	#{first_form}
 		<input class="search" type="text" name="#{h( query )}" size="#{h( size )}" value="#{h( default_text )}">
-		<input class="search" type="submit" value="#{button_name}">
+		<input class="search" type="submit" value="#{h button_name}">
 	#{last_form}
 	</div>
 	</form>
@@ -37,7 +37,7 @@ def googlej_form(button_name = "Google ¸¡º÷", size = 20, default_text = "")
 	first = %Q[<a href="http://www.google.com/">
 		<img src="http://www.google.com/logos/Logo_40wht.gif" 
 			style="border-width: 0px; vertical-align: middle;" alt="Google"></a>]
-	last = %Q[<input type=hidden name=hl value="ja"><input type=hidden name=ie value="euc-jp">]
+	last = %Q[<input type="hidden" name="hl" value="ja"><input type="hidden" name="ie" value="euc-jp">]
 	search_form("http://www.google.com/search", "q", button_name, size, default_text, first, last)
 end
 

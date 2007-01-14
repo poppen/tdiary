@@ -1,4 +1,8 @@
 2007-01-13 zunda <zunda at freeshell.org>
+	* search_form.rb: modified to escape button name, quoated some
+	values in HTML tags
+
+2007-01-13 zunda <zunda at freeshell.org>
 	* recent_namazu.rb: modified to URL-escape the keywords instead
 	of HTML-escape. Sorry, not tested.
 
