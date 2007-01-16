@@ -1,4 +1,4 @@
-# bq.rb $Revision: 1.4 $
+# bq.rb $Revision: 1.5 $
 #
 # bq: blockquoteを使った引用を生成する
 #   パラメタ:
@@ -29,9 +29,11 @@ def bq( src, title = nil, url = nil )
 	result << %Q[<p>#{src.gsub( /\n/, "</p>\n<p>" )}</p>\n].sub( %r[<p></p>], '' )
 	result << %Q[</blockquote>\n]
 	if url then
-		result << %Q[<p class="source">[<cite><a href="#{h url}" title="#{h title}より引用">#{title}</a></cite>より引用]</p>\n]
+		cite = %Q[<cite><a href="#{h url}" title="#{h bq_cite_from( title )}">#{title}</a></cite>]
+		result << %Q[<p class="source">[#{bq_cite_from cite}]</p>\n]
 	elsif title
-		result << %Q[<p class="source">[<cite>#{h title}</cite>より引用]</p>\n]
+		cite = %Q[<cite>#{title}</cite>]
+		result << %Q[<p class="source">[#{bq_cite_from( cite )}]</p>\n]
 	end
 	result
 end

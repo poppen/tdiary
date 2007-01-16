@@ -1,3 +1,6 @@
+2007-01-16 TADA Tadashi <sho@spc.gr.jp>
+	* bq.rb: i18n. {ja,en,zh}/bq.rb added.
+
 2007-01-14 TADA Tadashi <sho@spc.gr.jp>
 	* tlink.rb, xmlrpc.rb: modified to use ERB::Util.h instead of CGI::escpaeHTML and escape base-html
 
