@@ -1,10 +1,10 @@
-# cocomment.rb $Revision: 1.2 $
+# cocomment.rb $Revision: 1.3 $
 #
 # Copyright (C) 2006 by Hiroshi SHIBATA
 # You can redistribute it and/or modify it under GPL2.
 #
 if @mode == 'day' and not bot? then
-	add_footer_proc do
+   add_body_enter_proc do |date|
 		<<-SCRIPT
       <script type="text/javascript">
       coco =
@@ -12,8 +12,8 @@ if @mode == 'day' and not bot? then
       var blogTool               = "tDiary";
       var blogURL                = "#{h @conf.base_url}";
       var blogTitle              = "#{h @conf.html_title}";
-      var postURL                = document.location.href;
-      var postTitle              = document.title;
+      var postURL                = "#{h @conf.base_url}#{anchor( date.strftime( '%Y%m%d' ) )}";
+      var postTitle              = "#{h( apply_plugin( @diaries[date.strftime('%Y%m%d')].title, true ) )}";
       var commentAuthorFieldName = "name";
       var commentAuthorLoggedIn  = false;
       var commentFormName        = "comment-form";
