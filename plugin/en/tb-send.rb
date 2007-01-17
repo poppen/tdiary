@@ -1,6 +1,5 @@
 # English resource of tb-send.rb
 
-@tb_send_ping_charset = 'UTF-8'
 @tb_send_label_url = 'Send TrackBack to'
 @tb_send_label_section = 'Section of TrackBack source'
 @tb_send_label_no_section = '(no section specify)'
@@ -9,4 +8,8 @@ if @conf['tb.no_section'] then
 	@tb_send_label_excerpt = 'Excerpt (use article body in default if not specify here)'
 else
 	@tb_send_label_excerpt = 'Excerpt (use section body in default if not specify here)'
+end
+
+def tb_send_utf8( str )
+	str
 end

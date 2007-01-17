@@ -1,6 +1,5 @@
 # Japanese resource of tb-send.rb
 
-@tb_send_ping_charset = @conf.encoding
 @tb_send_label_url = 'TrackBack送信先URL'
 @tb_send_label_section = 'TrackBackするセクション'
 @tb_send_label_no_section = '(セクションを指定しない)'
@@ -9,4 +8,8 @@ if @conf['tb.no_section'] then
 	@tb_send_label_excerpt = '概略(記入しなければ本文の冒頭が使われます)'
 else
 	@tb_send_label_excerpt = '概略(記入しなければ選択したセクションの冒頭が使われます)'
+end
+
+def tb_send_utf8( str )
+	NKF::nkf( '-m0 -Ew', str )
 end

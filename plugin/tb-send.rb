@@ -1,4 +1,4 @@
-# tb-send.rb $Revision: 1.23 $
+# tb-send.rb $Revision: 1.24 $
 #
 # Copyright (c) 2003 Junichiro Kita <kita@kitaj.no-ip.com>
 # You can distribute this file under the GPL.
@@ -103,17 +103,16 @@ def tb_send_trackback
  
 	require 'net/http'
 	urls.each do |url|
-		trackback = "url=#{CGI::escape(my_url)}"
-		trackback << "&charset=#{@tb_send_ping_charset}"
-		trackback << "&title=#{CGI::escape( @conf.to_native( title ) )}" unless title.empty?
-		trackback << "&excerpt=#{CGI::escape( @conf.to_native( excerpt) )}" unless excerpt.empty?
-		trackback << "&blog_name=#{CGI::escape(blog_name)}"
+		trackback = "url=#{u my_url}"
+		trackback << "&title=#{u tb_send_utf8( title )}" unless title.empty?
+		trackback << "&excerpt=#{u tb_send_utf8( excerpt )}" unless excerpt.empty?
+		trackback << "&blog_name=#{u tb_send_utf8( blog_name )}"
 
 		if %r|^http://(?:(.+):(.+)@)?([^/]+)(/.*)$| =~ url then
 		   basic_user = $1
 			basic_pass = $2
-			request = Net::HTTP::Post.new($4)
-			request['Content-Type'] = 'application/x-www-form-urlencoded'
+			request = Net::HTTP::Post.new( $4 )
+			request['Content-Type'] = "application/x-www-form-urlencoded; charset=utf-8"
 			host, port = $3.split( /:/, 2 )
 			port = '80' unless port
 			Net::HTTP.version_1_1
