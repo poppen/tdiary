@@ -1,6 +1,8 @@
 2007-01-17 TADA Tadashi <sho@spc.gr.jp>
 	* tb-send.rb: support TrackBack spec 1.2 and send by UTF-8 charset.
 	* trackback/tb.rb: support TrackBack spec 1.2.
+	* ja/{makerss,ping}.rb: use NKF insted of Uconv.
+	* zh/{makerss,ping}.rb: use Iconv for convert to UTF-8.
 
 2007-01-16 TADA Tadashi <sho@spc.gr.jp>
 	* bq.rb: i18n. {ja,en,zh}/bq.rb added.
@@ -95,10 +97,8 @@
 
 2007-01-11  Kazuhiko  <kazuhiko@fdiary.net>
 	* title_list.rb: remove escape of *_to_html() results.
-
 	* kw.rb: url_encode key instead of html_escape. add '-m0' option
 	to nkf().
-
 	* xmlrpc/xmlrpc.rb: use nkf instead of uconv.
 
 2007-01-10  Kazuhiko  <kazuhiko@fdiary.net>

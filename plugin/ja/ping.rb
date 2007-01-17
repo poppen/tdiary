@@ -1,12 +1,6 @@
 # ping.rb Japanese resources
-begin
-	require 'uconv'
-	@ping_encode = 'UTF-8'
-	@ping_encoder = Proc::new {|s| Uconv.euctou8( s ) }
-rescue LoadError
-	@ping_encode = @conf.encoding
-	@ping_encoder = Proc::new {|s| s }
-end
+@ping_encode = 'UTF-8'
+@ping_encoder = Proc::new {|s| NKF::nkf( "-m0 -Ew", s ) }
 
 if /conf/ =~ @mode then
 	@ping_label_conf = '更新通知'

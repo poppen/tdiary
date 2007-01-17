@@ -1,6 +1,7 @@
-# ping.rb English resources
+# ping.rb Chinese resources
+require 'iconv'
 @ping_encode = 'UTF-8'
-@ping_encoder = Proc::new {|s| s }
+@ping_encoder = Proc::new {|s| Iconv::conv( 'UTF-8', 'Big5', s ) }
 
 if /conf/ =~ @mode then
 	@ping_label_conf = 'Update ping'
