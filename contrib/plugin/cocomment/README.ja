@@ -2,7 +2,7 @@
 coCommentプラグイン
 
 ! 概要
-tDiaryをcoCommentに対応させるプラグイン
+tDiaryをcoComment(http://www.cocomment.com/)に対応させるプラグイン
 
 !使い方
 プラグインフォルダに入れるだけで動作します。
@@ -12,7 +12,8 @@ GPL2
 
 !更新履歴
 !!20070117
-*tDiary-contrib 追加に伴って name 属性 comment-form を core に追加
+* tDiary-contrib 追加に伴って name 属性 comment-form を core に追加
+* cocomment-fetchlet を追加
 
 !!20060527
-*初版公開
+* 初版公開

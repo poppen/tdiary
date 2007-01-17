@@ -1,4 +1,4 @@
-# cocomment.rb $Revision: 1.1 $
+# cocomment.rb $Revision: 1.2 $
 #
 # Copyright (C) 2006 by Hiroshi SHIBATA
 # You can redistribute it and/or modify it under GPL2.
@@ -6,7 +6,9 @@
 if @mode == 'day' and not bot? then
 	add_footer_proc do
 		<<-SCRIPT
-      <script type="text/javascript"><!--
+      <script type="text/javascript">
+      coco =
+      {
       var blogTool               = "tDiary";
       var blogURL                = "#{h @conf.base_url}";
       var blogTitle              = "#{h @conf.html_title}";
@@ -17,7 +19,9 @@ if @mode == 'day' and not bot? then
       var commentFormName        = "comment-form";
       var commentTextFieldName   = "body";
       var commentButtonName      = "comment";
-      // --></script>
+      }
+      <script id="cocomment-fetchlet" src="http://www.cocomment.com/js/enabler.js" type="text/javascript">
+      </script>
 		SCRIPT
 	end
 end
