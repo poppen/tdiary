@@ -1,4 +1,4 @@
-# pb-show.rb $Revision: 1.8 $
+# pb-show.rb $Revision: 1.9 $
 #
 # functions:
 #   * show Pingback ping URL in right of TSUKKOMI label.
@@ -61,7 +61,7 @@ def referer_of_today_short( diary, limit )
 	if diary and !bot? then
 		count = 0
 		diary.each_visible_pingback( 100 ) {|t,count|} # count up
-		r << %Q|<a href="#{h( @index )}#{h( anchor( @pb_date.strftime( '%Y%m%d' ) ) )}#b">Pingback#{'s' if count > 1}(#{h( count )})</a>| unless count == 0 and @options['pb.hide_if_no_pb']
+		r << %Q|<a href="#{h( @index )}#{anchor( @pb_date.strftime( '%Y%m%d' ) )}#b">Pingback#{'s' if count > 1}(#{h( count )})</a>| unless count == 0 and @options['pb.hide_if_no_pb']
 	end
 	r
 end
@@ -88,7 +88,7 @@ def pingbacks_of_today_short( diary, limit = @conf['pingback_limit'] || 3 )
 	diary.each_visible_pingback_tail( limit ) do |t,i|
 		sourceURI, targetURI = t.body.split( /\n/,2 )
 		r << %Q!\t\t\t<p>\n!
-		r << %Q!\t\t\t\t<a href="#{ h( @index ) }#{ h( today ) }##{ h( fragment % i ) }">#{ h( @conf['pingback_anchor'] ) }</a>\n!
+		r << %Q!\t\t\t\t<a href="#{ h( @index ) }#{ today }##{ fragment % i }">#{ h( @conf['pingback_anchor'] ) }</a>\n!
 		r << %Q!\t\t\t\t<span class="commentator blog"><a href="#{ h( sourceURI ) }">#{h( sourceURI )}</a> to <a href="#{ h( targetURI ) }">#{h( targetURI )}</a></span>\n!
 		r << %Q!\t\t\t</p>\n!
 	end
@@ -107,7 +107,7 @@ def pingbacks_of_today_long( diary, limit = 100 )
 	r << %Q!\t<div class="comment pingbacks">\n!
 
 	r << %Q!\t\t<div class="caption">\n!
-	r << %Q!\t\t\t#{ h( pingback_today ) }#{ h( pingback_total( count ) ) }\n!
+	r << %Q!\t\t\t#{ pingback_today }#{ pingback_total( count ) }\n!
 	r << %Q!\t\t</div>\n!
 
 	r << %Q!\t\t<div class="commentbody pingbackbody">\n!
@@ -116,13 +116,13 @@ def pingbacks_of_today_long( diary, limit = 100 )
 		f = fragment % i
 
 		r << %Q!\t\t\t<div class="commentator pingback">\n!
-		r << %Q!\t\t\t\t<a name="#{ h( f ) }" href="#{ h( @index ) }#{ h( today ) }##{ h( f ) }">#{ h( @conf['pingback_anchor'] ) }</a>\n!
+		r << %Q!\t\t\t\t<a name="#{ f }" href="#{ h( @index ) }#{ today }##{ f }">#{ @conf['pingback_anchor'] }</a>\n!
 		if bot? then
 			r << %Q!\t\t\t\t<span class="commentator pingbackblog">#{ h( sourceURI + " to " + targetURI )}</span>\n!
 		else
 			r << %Q!\t\t\t\t<span class="commentator pingbackblog"><a href="#{ h( sourceURI ) }">#{h( sourceURI )}</a> to <a href="#{ h( targetURI ) }">#{h targetURI}</a></span>\n!
 		end
-		r << %Q!\t\t\t\t<span class="commenttime pingbacktime">#{ h( comment_date( t.date ) ) }</span>\n!
+		r << %Q!\t\t\t\t<span class="commenttime pingbacktime">#{ comment_date( t.date ) }</span>\n!
 		r << %Q!\t\t\t</div>\n!
   	end
 	r << %Q!\t\t</div>\n!
@@ -139,10 +139,10 @@ end # unless mobile_agent?
 add_body_enter_proc do |date|
 	cgi = File.basename(@options['pb.cgi'] || './pb.rb')
 	@pb_date = date
-   @pb_id_url = %Q|#{@index}#{anchor( @pb_date.strftime('%Y%m%d') )}|
+   @pb_id_url = %Q|#{h @index}#{anchor( @pb_date.strftime('%Y%m%d') )}|
 	@pb_id_url[0, 0] = @conf.base_url if %r|^https?://|i !~ @conf.index
 	@pb_id_url.gsub!( %r|/\./|, '/' )
-	@pb_url = %Q|#{@conf.base_url}#{cgi}/#{@pb_date.strftime('%Y%m%d')}|
+	@pb_url = %Q|#{h @conf.base_url}#{cgi}/#{@pb_date.strftime('%Y%m%d')}|
 	''
 end
 
