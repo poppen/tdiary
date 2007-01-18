@@ -1,6 +1,4 @@
 # ping.rb Japanese resources
-@ping_encode = 'UTF-8'
-@ping_encoder = Proc::new {|s| NKF::nkf( "-m0 -Ew", s ) }
 
 if /conf/ =~ @mode then
 	@ping_label_conf = '更新通知'

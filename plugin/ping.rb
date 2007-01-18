@@ -1,4 +1,4 @@
-# ping.rb: $Revision: 1.10 $
+# ping.rb: $Revision: 1.11 $
 #
 # ping to weblog ping servers.
 #
@@ -17,8 +17,8 @@ end
 def ping( list )
 	return unless @cgi.params['plugin_ping_send'][0] == 'true'
 
-	xml = @ping_encoder.call( <<-XML )
-<?xml version="1.0" encoding="#{@ping_encode}"?>
+	xml = to_utf8( <<-XML )
+<?xml version="1.0" encoding="UTF-8"?>
 <methodCall>
   <methodName>weblogUpdates.ping</methodName>
   <params>

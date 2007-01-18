@@ -1,4 +1,4 @@
-# tb-send.rb $Revision: 1.24 $
+# tb-send.rb $Revision: 1.25 $
 #
 # Copyright (c) 2003 Junichiro Kita <kita@kitaj.no-ip.com>
 # You can distribute this file under the GPL.
@@ -104,9 +104,9 @@ def tb_send_trackback
 	require 'net/http'
 	urls.each do |url|
 		trackback = "url=#{u my_url}"
-		trackback << "&title=#{u tb_send_utf8( title )}" unless title.empty?
-		trackback << "&excerpt=#{u tb_send_utf8( excerpt )}" unless excerpt.empty?
-		trackback << "&blog_name=#{u tb_send_utf8( blog_name )}"
+		trackback << "&title=#{u to_utf8( title )}" unless title.empty?
+		trackback << "&excerpt=#{u to_utf8( excerpt )}" unless excerpt.empty?
+		trackback << "&blog_name=#{u to_utf8( blog_name )}"
 
 		if %r|^http://(?:(.+):(.+)@)?([^/]+)(/.*)$| =~ url then
 		   basic_user = $1

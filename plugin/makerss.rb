@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.48 $
+# makerss.rb: $Revision: 1.49 $
 #
 # generate RSS file when updating.
 #
@@ -124,10 +124,10 @@ class MakeRssFull
 		end
 	end
 
-	def write( encoder )
+	def write
 		begin
 			File::open( file, 'w' ) do |f|
-				f.write( encoder.call( xml ) )
+				f.write( to_utf8( xml ) )
 			end
 		rescue
 		end
@@ -158,9 +158,9 @@ class MakeRssNoComments < MakeRssFull
 		f
 	end
 
-	def write( encoder )
+	def write
 		return unless @conf['makerss.no_comments']
-		super( encoder )
+		super
 	end
 
 	def url
@@ -266,7 +266,7 @@ def makerss_update
 	rsses.each {|r|
 		r.banner( makerss_banner( uri, rdf_image ) ) if rdf_image
 		r.foot( makerss_footer )
-		r.write( @makerss_encoder )
+		r.write
 	}
 
 end
@@ -281,7 +281,7 @@ def makerss_header( uri )
 	copyright += " <#{@conf.author_mail}>" if @conf.author_mail and not @conf.author_mail.empty?
 	copyright += ", copyright of comments by respective authors"
 
-	xml = %Q[<?xml version="1.0" encoding="#{@makerss_encode}"?>
+	xml = %Q[<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet href="rss.css" type="text/css"?>
 <rdf:RDF xmlns="http://purl.org/rss/1.0/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:xhtml="http://www.w3.org/1999/xhtml" xml:lang="#{h @conf.html_lang}">
 	<channel rdf:about="#{h rdf_url}">

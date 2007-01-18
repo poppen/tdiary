@@ -9,8 +9,3 @@ if @conf['tb.no_section'] then
 else
 	@tb_send_label_excerpt = 'Excerpt (use section body in default if not specify here)'
 end
-
-require 'iconv'
-def tb_send_utf8( str )
-	Iconv::conv( 'UTF-8', 'Big5', str )
-end

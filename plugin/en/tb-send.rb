@@ -9,7 +9,3 @@ if @conf['tb.no_section'] then
 else
 	@tb_send_label_excerpt = 'Excerpt (use section body in default if not specify here)'
 end
-
-def tb_send_utf8( str )
-	str
-end
