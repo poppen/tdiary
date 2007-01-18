@@ -1,4 +1,4 @@
-# category.rb $Revision: 1.36 $
+# category.rb $Revision: 1.37 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -468,18 +468,24 @@ class Cache
 		end
 
 		categorized = {}
-		categories.each do |c|
-			PStore.new(cache_file(c)).transaction do |db|
-				categorized[c] = db['category']
-				db.abort
-			end
-			categorized[c].keys.each do |ymd|
-				y, m = ymd[0,4], ymd[4,2]
-				if years[y].nil? or !years[y].include?(m)
-					categorized[c].delete(ymd)
+		begin
+			categorized.clear
+			categories.each do |c|
+				PStore.new(cache_file(c)).transaction do |db|
+					categorized[c] = db['category']
+					db.abort
 				end
+				categorized[c].keys.each do |ymd|
+					y, m = ymd[0,4], ymd[4,2]
+					if years[y].nil? or !years[y].include?(m)
+						categorized[c].delete(ymd)
+					end
+				end
+				categorized.delete(c) if categorized[c].empty?
 			end
-			categorized.delete(c) if categorized[c].empty?
+		rescue NoMethodError	# when categorized[c] is nil
+			recreate(years)
+			retry
 		end
 
 		categorized
