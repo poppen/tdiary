@@ -1,3 +1,8 @@
+2007-01-17 zunda <zunda at freeshell.org>
+	* navi_user.rb: added and modified to use mock-up CGI class to
+	avoid error from cgi.rb:980:in `read_multipart': no content
+	body (EOFError)
+
 2007-01-18  Kazuhiko  <kazuhiko@fdiary.net>
 	* amazon.rb: convert to String first.
 

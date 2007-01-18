@@ -1,4 +1,4 @@
-# navi_user.rb $Revision: 1.11 $
+# navi_user.rb $Revision: 1.12 $
 #
 # navi_user: 前日，翌日→前の日記，次の日記
 #   modeがday/commentのときに表示される「前日」「翌日」ナビゲーション
@@ -16,10 +16,17 @@ module TDiary
 end
 MODIFY_CLASS
 
+class NaviUserCGI
+	attr_reader :params, :referer
+	def initialize(datestr)
+		@params = {'date' => [datestr]}
+		@referer = nil
+	end
+end
+
 add_header_proc do
 	if @date then
-		cgi = CGI.new
-		def cgi.referer; nil; end
+		cgi = NaviUserCGI.new(@date.strftime('%Y%m%d'))
 		days = []
 		yms = []
 		today = @date.strftime('%Y%m%d')
