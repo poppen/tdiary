@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.51 $: Making link with image to Amazon using Amazon ECS.
+# amazon.rb $Revision: 1.52 $: Making link with image to Amazon using Amazon ECS.
 #
 # see document: #{@lang}/amazon.rb
 #
@@ -159,11 +159,11 @@ def isbn_13to10( isbn13 )
 end
 
 def amazon_get( asin, with_image = true, label = nil, pos = 'amazon' )
+	asin = asin.to_s.strip # delete white spaces
+
 	if isbn_13?( asin ) # ISBN-13
 		asin = isbn_13to10( asin )
 	end
-
-	asin = asin.to_s.strip # delete white spaces
 
 	if @conf.secure then
 		amazon_secure_html( asin, with_image, label, pos )
