@@ -1,3 +1,6 @@
+2007-01-19 TADA Tadashi <sho@spc.gr.jp>
+	* makerss.rb: fix bug: generate empty feed.
+
 2007-01-18 TADA Tadashi <sho@spc.gr.jp>
 	* makerss.rb, ping.rb, tb-send.rb: fix charset to UTF-8, and using to_utf8 method.
 

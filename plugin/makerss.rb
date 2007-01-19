@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.49 $
+# makerss.rb: $Revision: 1.50 $
 #
 # generate RSS file when updating.
 #
@@ -124,10 +124,10 @@ class MakeRssFull
 		end
 	end
 
-	def write
+	def write( encoder )
 		begin
 			File::open( file, 'w' ) do |f|
-				f.write( to_utf8( xml ) )
+				f.write( encoder.call( xml ) )
 			end
 		rescue
 		end
@@ -158,9 +158,9 @@ class MakeRssNoComments < MakeRssFull
 		f
 	end
 
-	def write
+	def write( encoder )
 		return unless @conf['makerss.no_comments']
-		super
+		super( encoder )
 	end
 
 	def url
@@ -266,7 +266,7 @@ def makerss_update
 	rsses.each {|r|
 		r.banner( makerss_banner( uri, rdf_image ) ) if rdf_image
 		r.foot( makerss_footer )
-		r.write
+		r.write( Proc::new{|s| to_utf8( s )} )
 	}
 
 end
