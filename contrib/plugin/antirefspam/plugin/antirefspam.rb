@@ -50,7 +50,7 @@ add_conf_proc( 'antirefspam', 'Anti Referer Spam' ) do
 	</p>
 	<p>
 	#{@antispamref_html_comment_ngwords}
-	<textarea name="antirefspam.comment_ngwords" cols="70" rows="15">#{h @conf['antirefspam.comment_ngwords'])}</textarea>
+	<textarea name="antirefspam.comment_ngwords" cols="70" rows="15">#{h @conf['antirefspam.comment_ngwords']}</textarea>
 	</p>
 
 	#{@antispamref_html_faq}
