@@ -1,6 +1,6 @@
 #
 # ja/my-sequel.rb
-# $Revision: 1.1 $
+# $Revision: 1.2 $
 #
 # show links to follow-up entries
 #
@@ -12,11 +12,12 @@
 # of GPL version 2.
 #
 
-@my_sequel_plugin_name = '後日談へのリンク'
+@my_sequel_plugin_name ||= '後日談へのリンク'
 @my_sequel_description ||= <<_END
 <p>myプラグインで過去の日記に言及すると、その日記からのリンクを表示します。</p>
-<p>デフォルトの設定に戻す時は、デフォルトに戻したい設定の文字列を削除して「OK」ボタンを押してください。</p>
+<p>設定が登録されるのは「OK」ボタンを押してからです。デフォルトの設定に戻す時でも、「OK」ボタンを押してください。</p>
 _END
+@my_sequel_restore_default_label ||= '−デフォルトに戻す:'
 @my_sequel_default_hash ||= {
 	:label => {
 		:title => 'ラベル',

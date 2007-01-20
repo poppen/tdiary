@@ -1,6 +1,6 @@
 #
 # my-sequel.rb
-# $Revision: 1.1 $
+# $Revision: 1.2 $
 #
 # show links to follow-up entries
 #
@@ -15,7 +15,9 @@
 # Please search a line with `language resource'
 #
 require 'pstore'
-require 'erb'
+unless defined?(ERB)
+	require 'erb'
+end
 
 class MySequel
 	include ERB::Util
@@ -52,13 +54,10 @@ class MySequel
 		def merge_params(params)
 			@default_hash.each_key do |key|
 				keystr = key.to_s
-				if params[keystr] then
-					value = params[keystr][0]
-					unless value.empty? then
-						@conf_hash[key] = value
-					else
-						@conf_hash.delete(key)
-					end
+				if params[keystr+'.reset'] and params[keystr+'.reset'][0] then
+					@conf_hash.delete(key)
+				elsif params[keystr] then
+					@conf_hash[key] = params[keystr][0]
 				end
 			end
 		end
@@ -83,13 +82,13 @@ class MySequel
 		end
 
 		# returns an HTML sniplet for configuration interface
-		def html(mobile = false)
+		def html(restore_default_label, mobile = false)
 			return @default_hash.keys.sort_by{|k| @default_hash[k][:index]}.map{|k|
 				r = %Q|\t<h3 class="subtitle">#{h @default_hash[k][:title]}</h3>\n|
 				description = @default_hash[k][:description]
 				r += %Q|\t<p>#{h description}</p>\n| if description and not mobile
 				unless @default_hash[k][:textarea]
-					r += %Q|\t<p><input name="#{h k.to_s}" value="#{h(Conf.to_native(self[k]))}"></p>\n|
+					r += %Q|\t<p><input name="#{h k.to_s}" type="text" value="#{h(Conf.to_native(self[k]))}">#{restore_default_label}<input name="#{h k.to_s}.reset" type="checkbox" value="t"></p>\n|
 				else
 					cols = 70
 					rows = 10
@@ -97,7 +96,7 @@ class MySequel
 						cols = @default_hash[k][:textarea][:cols] || cols
 						rows = @default_hash[k][:textarea][:rows] || rows
 					end
-					r += %Q|\t<p><textarea name="#{h k.to_s}" cols="#{h cols}" rows="#{h rows}">#{h(Conf.to_native(self[k]))}</textarea></p>\n|
+					r += %Q|\t<p><textarea name="#{h k.to_s}" cols="#{h cols}" rows="#{h rows}">#{h(Conf.to_native(self[k]))}</textarea>#{restore_default_label}<input name="#{h k.to_s}.reset" type="checkbox" value="t"></p>\n|
 				end
 				r
 			}.join
@@ -106,13 +105,17 @@ class MySequel
 
 	# CSS sniplet for sequels
 	def self::css(inner_css)
-		return <<"_END"
+		unless inner_css.strip.empty?
+			return <<"_END"
 <style type="text/css" media="all">
 div.sequel {
 #{h(inner_css.chomp.gsub(/\r/, ''))}
 }
 </style>
 _END
+		else
+			return ''
+		end
 	end
 
 	# cache directory for this plguin
@@ -349,10 +352,11 @@ unless __FILE__ == $0 then
 	@my_sequel_description ||= <<_END
 <p>Shows links to follow-up entries,
 which have `my' link to the entry in the past.</p>
-<p>Set an empty string to revert the default setting.</p>
+<p>Do not forget to push the OK button to store the changes.</p>
 _END
 	@my_sequel_label_conf ||= 'Link label'
 	@my_sequel_label ||= 'Follow up: '
+	@my_sequel_restore_default_label ||= ' - Restore default:'
 	@my_sequel_default_hash ||= {
 		:label => {
 			:title => 'Link label',
@@ -391,7 +395,7 @@ _END
 		<<_HTML
 	<h3>#{@my_sequel_plugin_name}</h3>
 	#{@my_sequel_description}
-	#{@my_sequel_conf.html(@conf.mobile_agent?).chomp}
+	#{@my_sequel_conf.html(@my_sequel_restore_default_label, @conf.mobile_agent?).chomp}
 _HTML
 	end
 
@@ -566,6 +570,33 @@ else
 		end
 	end
 
+	class TestMySequelCss < Test::Unit::TestCase
+		def test_usual
+			assert_equal(<<'_TARGET', MySequel::css(<<'_INNER'))
+<style type="text/css" media="all">
+div.sequel {
+hogehoge: &lt;mogemoge&gt;
+}
+</style>
+_TARGET
+hogehoge: <mogemoge>
+_INNER
+		end
+
+		def test_empty
+			assert_equal('', MySequel::css(''))
+		end
+
+		def test_space
+			assert_equal('', MySequel::css(' '))
+		end
+
+		def test_crlf
+			assert_equal('', MySequel::css("\r\n"))
+		end
+
+	end
+
 	class TestMySequelConf < Test::Unit::TestCase
 		include ERB::Util
 
@@ -614,6 +645,12 @@ else
 			assert_equal('configured label', @my_sequel_conf[:label])
 		end
 
+		def testparams_with_empty_array
+			options = {'label' => ['configured label'], 'label.reset' => []}
+			@my_sequel_conf.merge_params(options)
+			assert_equal('configured label', @my_sequel_conf[:label])
+		end
+
 		def testtohash
 			testmerge
 			conf_hash = {'dummy' => 'dummy'}
@@ -625,13 +662,20 @@ else
 			testmerge
 			options = {'label' => ['']}
 			@my_sequel_conf.merge_params(options)
+			assert_equal('', @my_sequel_conf[:label])
+		end
+
+		def testparams_with_reset
+			testmerge
+			options = {'label' => ['any value'], 'label.reset' => 't'}
+			@my_sequel_conf.merge_params(options)
 			assert_equal('default label', @my_sequel_conf[:label])
 		end
 
 		def test_delete_confhash
 			options = {'my_sequel.label' => 'configured label'}
 			@my_sequel_conf.merge_hash(options)
-			params = {'label' => ['']}
+			params = {'label' => ['any value'],'label.reset' => 't'}
 			@my_sequel_conf.merge_params(params)
 			@my_sequel_conf.to_conf_hash(options)
 			assert(!options.has_key?('my_sequel.label'))
@@ -654,38 +698,38 @@ else
 		def testconfhtml
 			target = <<_HTML
 	<h3 class="subtitle">#{h @defaults[:label][:title]}</h3>
-	<p><input name="label" value="#{h(@defaults[:label][:default])}"></p>
+	<p><input name="label" type="text" value="#{h(@defaults[:label][:default])}"> - Restore default:<input name="label.reset" type="checkbox" value="t"></p>
 	<h3 class="subtitle">#{h @defaults[:format][:title]}</h3>
 	<p>#{h @defaults[:format][:description]}</p>
-	<p><input name="format" value="#{h(@defaults[:format][:default])}"></p>
+	<p><input name="format" type="text" value="#{h(@defaults[:format][:default])}"> - Restore default:<input name="format.reset" type="checkbox" value="t"></p>
 	<h3 class="subtitle">#{h @defaults[:textarea][:title]}</h3>
 	<p><textarea name="textarea" cols="70" rows="10">a
 b
-cc</textarea></p>
+cc</textarea> - Restore default:<input name="textarea.reset" type="checkbox" value="t"></p>
 	<h3 class="subtitle">#{h @defaults[:textarea_with_size][:title]}</h3>
 	<p><textarea name="textarea_with_size" cols="70" rows="2">a
 b
-cc</textarea></p>
+cc</textarea> - Restore default:<input name="textarea_with_size.reset" type="checkbox" value="t"></p>
 _HTML
-			assert_equal(target, @my_sequel_conf.html)
+			assert_equal(target, @my_sequel_conf.html(' - Restore default:'))
 		end
 
 		def testconfhtml_mobile
 			target = <<_HTML
 	<h3 class="subtitle">#{h @defaults[:label][:title]}</h3>
-	<p><input name="label" value="#{h(@defaults[:label][:default])}"></p>
+	<p><input name="label" type="text" value="#{h(@defaults[:label][:default])}"> - Restore default:<input name="label.reset" type="checkbox" value="t"></p>
 	<h3 class="subtitle">#{h @defaults[:format][:title]}</h3>
-	<p><input name="format" value="#{h(@defaults[:format][:default])}"></p>
+	<p><input name="format" type="text" value="#{h(@defaults[:format][:default])}"> - Restore default:<input name="format.reset" type="checkbox" value="t"></p>
 	<h3 class="subtitle">#{h @defaults[:textarea][:title]}</h3>
 	<p><textarea name="textarea" cols="70" rows="10">a
 b
-cc</textarea></p>
-	<h3 class="subtitle">#{h @defaults[:textarea_with_size][:title]}</h3>
+cc</textarea> - Restore default:<input name="textarea.reset" type="checkbox" value="t"></p>
+	<h3 class="subtitle">#{@defaults[:textarea_with_size][:title]}</h3>
 	<p><textarea name="textarea_with_size" cols="70" rows="2">a
 b
-cc</textarea></p>
+cc</textarea> - Restore default:<input name="textarea_with_size.reset" type="checkbox" value="t"></p>
 _HTML
-			assert_equal(target, @my_sequel_conf.html(true))
+			assert_equal(target, @my_sequel_conf.html(' - Restore default:', true))
 		end
 
 	end
