@@ -1,4 +1,4 @@
-# $Revision: 1.17 $
+# $Revision: 1.18 $
 # recent_trackback3: 最近のツッコミをリストアップする
 #
 # Copyright (c) 2004 Junichiro KITA <kita@kitaj.no-ip.com>
@@ -43,7 +43,7 @@ def recent_trackback3
 		db['trackbacks'].each do |tb|
 			break if idx >= n or tb == nil
 			trackback, date, serial = tb
-			next unless trackback.visible_true?
+			next unless trackback.visible?
 			url, blog_name, title, excerpt = trackback.body.split(/\n/, 4)
 
 			a = @index + anchor("#{date.strftime('%Y%m%d')}#t#{'%02d' % serial}")
