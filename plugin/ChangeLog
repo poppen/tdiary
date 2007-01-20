@@ -1,3 +1,7 @@
+2007-01-19 zunda <zunda at freeshell.org>
+	* my-sequel.rb: copied from zunda's local repository, v.1.28
+	* ja/my-sequel.rb: copied from zunda's local repository, v.1.10
+
 2007-01-19 TADA Tadashi <sho@spc.gr.jp>
 	* makerss.rb: fix bug: generate empty feed.
 
