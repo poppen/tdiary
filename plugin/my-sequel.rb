@@ -1,6 +1,6 @@
 #
 # my-sequel.rb
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 #
 # show links to follow-up entries
 #
@@ -35,6 +35,27 @@ class MySequel
 			def self::to_native(str)
 				@conf.to_native(str)
 			end
+		end
+
+		def self::handler_escape(string)
+			string.gsub(/\r/n, '').gsub(/&/n, '&amp;').gsub(/"/n, '&quot;').gsub(/>/n, '&gt;').gsub(/</n, '&lt;').gsub(/\n/n, '\n')
+		end
+
+		def self::handler_scriptlet
+			return <<'_END'
+function unescape(string) {
+	return string.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&amp;/g, '&');
+}
+function uncheck(element) {
+	document.getElementById(element.id+".reset").checked = false;
+}
+function restore(element) {
+	var text_id = element.id.replace(/\.reset$/, "")
+	if (element.checked) {
+		document.getElementById(text_id).value = unescape(default_values[text_id]);
+	}
+}
+_END
 		end
 
 		def initialize(conf_hash)
@@ -105,6 +126,25 @@ class MySequel
 				r += %Q|#{restore_default_label}<input name="#{h k.to_s}.reset"#{idattr_reset} type="checkbox" value="t"#{restore}></p>\n|
 				r
 			}.join
+		end
+
+		# Javascript hash literal for default values
+		def default_js_hash
+			r = "default_values = {\n"
+			r += @default_hash.keys.sort_by{|k| @default_hash[k][:index]}.map{|k|
+				%Q|\t"#{h k}": "#{Conf::handler_escape(@default_hash[k][:default])}"|
+			}.join(",\n")
+			r += "\n};\n"
+			return r
+		end
+
+		def handler_block
+			return <<"_END"
+<script type="text/javascript"><!-- 
+#{default_js_hash.chomp}
+#{Conf::handler_scriptlet.chomp}
+// --></script>
+_END
 		end
 	end
 
@@ -398,6 +438,7 @@ _END
 			@my_sequel_conf.to_conf_hash(@conf)
 		end
 		<<_HTML
+#{@my_sequel_conf.handler_block}
 	<h3>#{@my_sequel_plugin_name}</h3>
 	#{@my_sequel_description}
 	#{@my_sequel_conf.html(@my_sequel_restore_default_label, @conf.mobile_agent?).chomp}
