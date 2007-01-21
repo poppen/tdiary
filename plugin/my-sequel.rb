@@ -1,6 +1,6 @@
 #
 # my-sequel.rb
-# $Revision: 1.4 $
+# $Revision: 1.5 $
 #
 # show links to follow-up entries
 #
@@ -107,7 +107,7 @@ _END
 			return @default_hash.keys.sort_by{|k| @default_hash[k][:index]}.map{|k|
 				idattr = mobile ? '' : %Q| id="#{h k.to_s}"|
 				idattr_reset = mobile ? '' : %Q| id="#{h k.to_s}.reset"|
-				uncheck = mobile ? '' : ' onchange="uncheck(this)"'
+				uncheck = mobile ? '' : ' onfocus="uncheck(this)"'
 				restore = mobile ? '' : ' onchange="restore(this)" onclick="restore(this)"'
 				r = %Q|\t<h3 class="subtitle">#{h @default_hash[k][:title]}</h3>\n|
 				description = @default_hash[k][:description]

@@ -1,4 +1,8 @@
 2007-01-20 zunda <zunda at freeshell.org>
+	* my-sequel.rb: MySequel::Conf: uncheck the restore checkbox
+	onfocus instead of onchange. Thank you, Tada-san
+
+2007-01-20 zunda <zunda at freeshell.org>
 	* my-sequel.rb: MySequel::Conf: added event handlers so default
 	values are displayed when checkboxes are checked and
 	checkboxes are unchecked when settings are edited.
