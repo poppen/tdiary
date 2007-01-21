@@ -1,6 +1,6 @@
 #
 # my-sequel.rb
-# $Revision: 1.2 $
+# $Revision: 1.3 $
 #
 # show links to follow-up entries
 #
@@ -84,11 +84,15 @@ class MySequel
 		# returns an HTML sniplet for configuration interface
 		def html(restore_default_label, mobile = false)
 			return @default_hash.keys.sort_by{|k| @default_hash[k][:index]}.map{|k|
+				idattr = mobile ? '' : %Q| id="#{h k.to_s}"|
+				idattr_reset = mobile ? '' : %Q| id="#{h k.to_s}.reset"|
+				uncheck = mobile ? '' : ' onchange="uncheck(this)"'
+				restore = mobile ? '' : ' onchange="restore(this)" onclick="restore(this)"'
 				r = %Q|\t<h3 class="subtitle">#{h @default_hash[k][:title]}</h3>\n|
 				description = @default_hash[k][:description]
 				r += %Q|\t<p>#{h description}</p>\n| if description and not mobile
 				unless @default_hash[k][:textarea]
-					r += %Q|\t<p><input name="#{h k.to_s}" type="text" value="#{h(Conf.to_native(self[k]))}">#{restore_default_label}<input name="#{h k.to_s}.reset" type="checkbox" value="t"></p>\n|
+					r += %Q|\t<p><input name="#{h k.to_s}"#{idattr} type="text" value="#{h(Conf.to_native(self[k]))}"#{uncheck}>|
 				else
 					cols = 70
 					rows = 10
@@ -96,8 +100,9 @@ class MySequel
 						cols = @default_hash[k][:textarea][:cols] || cols
 						rows = @default_hash[k][:textarea][:rows] || rows
 					end
-					r += %Q|\t<p><textarea name="#{h k.to_s}" cols="#{h cols}" rows="#{h rows}">#{h(Conf.to_native(self[k]))}</textarea>#{restore_default_label}<input name="#{h k.to_s}.reset" type="checkbox" value="t"></p>\n|
+					r += %Q|\t<p><textarea name="#{h k.to_s}"#{idattr} cols="#{h cols}" rows="#{h rows}"#{uncheck}>#{h(Conf.to_native(self[k]))}</textarea>|
 				end
+				r += %Q|#{restore_default_label}<input name="#{h k.to_s}.reset"#{idattr_reset} type="checkbox" value="t"#{restore}></p>\n|
 				r
 			}.join
 		end
@@ -698,18 +703,18 @@ _INNER
 		def testconfhtml
 			target = <<_HTML
 	<h3 class="subtitle">#{h @defaults[:label][:title]}</h3>
-	<p><input name="label" type="text" value="#{h(@defaults[:label][:default])}"> - Restore default:<input name="label.reset" type="checkbox" value="t"></p>
+	<p><input name="label" id="label" type="text" value="#{h(@defaults[:label][:default])}" onchange="uncheck(this)"> - Restore default:<input name="label.reset" id="label.reset" type="checkbox" value="t" onchange="restore(this)" onclick="restore(this)"></p>
 	<h3 class="subtitle">#{h @defaults[:format][:title]}</h3>
 	<p>#{h @defaults[:format][:description]}</p>
-	<p><input name="format" type="text" value="#{h(@defaults[:format][:default])}"> - Restore default:<input name="format.reset" type="checkbox" value="t"></p>
+	<p><input name="format" id="format" type="text" value="#{h(@defaults[:format][:default])}" onchange="uncheck(this)"> - Restore default:<input name="format.reset" id="format.reset" type="checkbox" value="t" onchange="restore(this)" onclick="restore(this)"></p>
 	<h3 class="subtitle">#{h @defaults[:textarea][:title]}</h3>
-	<p><textarea name="textarea" cols="70" rows="10">a
+	<p><textarea name="textarea" id="textarea" cols="70" rows="10" onchange="uncheck(this)">a
 b
-cc</textarea> - Restore default:<input name="textarea.reset" type="checkbox" value="t"></p>
+cc</textarea> - Restore default:<input name="textarea.reset" id="textarea.reset" type="checkbox" value="t" onchange="restore(this)" onclick="restore(this)"></p>
 	<h3 class="subtitle">#{h @defaults[:textarea_with_size][:title]}</h3>
-	<p><textarea name="textarea_with_size" cols="70" rows="2">a
+	<p><textarea name="textarea_with_size" id="textarea_with_size" cols="70" rows="2" onchange="uncheck(this)">a
 b
-cc</textarea> - Restore default:<input name="textarea_with_size.reset" type="checkbox" value="t"></p>
+cc</textarea> - Restore default:<input name="textarea_with_size.reset" id="textarea_with_size.reset" type="checkbox" value="t" onchange="restore(this)" onclick="restore(this)"></p>
 _HTML
 			assert_equal(target, @my_sequel_conf.html(' - Restore default:'))
 		end

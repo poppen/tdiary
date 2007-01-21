@@ -1,3 +1,8 @@
+2007-01-20 zunda <zunda at freeshell.org>
+	* my-sequel.rb: MySequel::Conf: modified to execute event
+	handlers in configuration HTML. Event handlers are still to be
+	implmented.
+
 2007-01-21 SHIBATA Hiroshi <h-sbt@nifty.com>
 	* recent_trackback3.rb: fix bug: show invisible trackbacks.
 
