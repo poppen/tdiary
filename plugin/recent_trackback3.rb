@@ -1,4 +1,4 @@
-# $Revision: 1.18 $
+# $Revision: 1.19 $
 # recent_trackback3: 最近のツッコミをリストアップする
 #
 # Copyright (c) 2004 Junichiro KITA <kita@kitaj.no-ip.com>
@@ -43,27 +43,30 @@ def recent_trackback3
 		db['trackbacks'].each do |tb|
 			break if idx >= n or tb == nil
 			trackback, date, serial = tb
-			next unless trackback.visible?
+			next unless trackback.visible_true?
+
 			url, blog_name, title, excerpt = trackback.body.split(/\n/, 4)
 
-			a = @index + anchor("#{date.strftime('%Y%m%d')}#t#{'%02d' % serial}")
-			popup = CGI.escapeHTML(@conf.shorten(excerpt, 60))
+			a = h(@index) + anchor("#{date.strftime('%Y%m%d')}#t#{'%02d' % serial}")
+			popup = h(@conf.shorten(excerpt, 60))
 			str = [blog_name, title].compact.join(":").sub(/:$/, '')
 			str = url if str == ''
-			str = CGI.escapeHTML(@conf.shorten(str, 30))
-			date_str = trackback.date.strftime(date_format)
+			str = h(@conf.shorten(str, 30))
+			date_str = h(trackback.date.strftime(date_format))
+			
 			idx += 1
 
 			entry_date = "#{date.strftime('%Y%m%d')}"
 			comment_str = entries[entry_date]
+			
 			if comment_str == nil then
 				comment_str = []
 				tree_order << entry_date
 			end
+			
 			comment_str << recent_trackback3_format(format, idx, a, popup, str, date_str)
 			entries[entry_date] = comment_str
          order << entry_date
-
 		end
 		db.abort
 	end
@@ -130,10 +133,8 @@ add_update_proc do
 			end
 		end
 	elsif @mode == 'showcomment'
-
 		PStore.new(cache).transaction do |db|
 			break unless db.root?('trackbacks')
-
 			@diaries[date].each_comment do |dtrackback|
 				db['trackbacks'].each do |c|
 					break if c.nil?

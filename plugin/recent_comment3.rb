@@ -1,4 +1,4 @@
-# $Revision: 1.32 $
+# $Revision: 1.33 $
 # recent_comment3: 最近のツッコミをリストアップする
 #
 #   @secure = true な環境では動作しません．
@@ -47,7 +47,8 @@ def recent_comment3(ob_max = 'OBSOLUTE' ,sep = 'OBSOLUTE',ob_date_format = 'OBSO
          comment, date, serial = c
          next unless comment.visible?
          next if except.include?(comment.name)
-         a = h( @index + anchor("#{date.strftime('%Y%m%d')}#c#{'%02d' % serial}") )
+
+         a = h( @index ) + anchor("#{date.strftime('%Y%m%d')}#c#{'%02d' % serial}") 
          popup = h(comment.shorten( @conf.comment_length ))
          str = h(comment.name)
          date_str = h( comment.date.strftime(date_format) )
