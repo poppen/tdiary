@@ -1,3 +1,6 @@
+2007-01-23 zunda <zunda at freeshell.org>
+	* ja/disp_referrer.rb: added blog-search.yahoo.co.jp
+
 2007-01-21 SHIBATA Hiroshi <h-sbt@nifty.com>
 	* recent_comment3.rb: modified not to escape anchor().
 	* recent_trackback3.rb: rollback visible to visible_true.

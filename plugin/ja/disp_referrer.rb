@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.33 2007-01-08 05:37:27 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.34 2007-01-23 10:27:55 zunda Exp $-))
 日本語リソース
 
 == 概要
@@ -452,7 +452,7 @@ DispReferrer2_Engines = {
 		[%r{\Ahttp://.*?\.rd\.yahoo\.([^/]+)}i, '".#{$1}のYahooのリダイレクタ"', 'split(/\*/)[1]', nil],
 		[%r{\Ahttp://srd\.yahoo\.co\.jp}i, '"Yahooのリダイレクタ"', [], nil],
 		[%r{\Ahttp://rd.+\.yahoo\.com}i, '"Yahooのリダイレクタ"', [], nil], # エンジンは inktomi 製と見た。
-		[%r{\Ahttp://[^bm]*?\.yahoo\.([^/]+)}i, '".#{$1}のYahoo!検索"', ['p', 'va', 'vp'], DispReferrer2_Google_cache],
+		[%r{\Ahttp://(?:[^bm]*?|blog-search)\.yahoo\.([^/]+)}i, '".#{$1}のYahoo!検索"', ['p', 'va', 'vp'], DispReferrer2_Google_cache],
 		[%r{\Ahttp://wrs\.search\.yahoo\.([^/]+)/(?:.*)K=([^/]+)}i, 'keyword=$2; "#{$1}のYahoo!検索"', [], nil],
 	],
 	'yahoofs' => [[%r{\Ahttp://cache\.yahoofs\.jp/}i, '"Yahoo!検索"', ['w'], DispReferrer2_Yahoofs]],
