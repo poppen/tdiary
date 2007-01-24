@@ -1,8 +1,8 @@
-# amazon.rb $Revision: 1.52 $: Making link with image to Amazon using Amazon ECS.
+# amazon.rb $Revision: 1.53 $: Making link with image to Amazon using Amazon ECS.
 #
 # see document: #{@lang}/amazon.rb
 #
-# Copyright (C) 2005 TADA Tadashi <sho@spc.gr.jp>
+# Copyright (C) 2005-2007 TADA Tadashi <sho@spc.gr.jp>
 # You can redistribute it and/or modify it under GPL2.
 #
 require 'open-uri'
@@ -12,9 +12,9 @@ require 'nkf'
 
 # do not change these variables
 @amazon_subscription_id = '1CVA98NEF1G753PFESR2'
-@amazon_require_version = '2005-07-26'
+@amazon_require_version = '2007-01-17'
 
-def amazon_call_ecs( asin )
+def amazon_call_ecs( asin, id_type )
 	aid =  @conf['amazon.aid'] || ''
 	aid = 'cshs-22' if aid.length == 0
 
@@ -24,6 +24,8 @@ def amazon_call_ecs( asin )
 	url << "&AssociateTag=#{aid}"
 	url << "&Operation=ItemLookup"
 	url << "&ItemId=#{asin}"
+	url << "&IdType=#{id_type}"
+	url << "&SearchIndex=Books" if id_type == 'ISBN'
 	url << "&ResponseGroup=Medium"
 	url << "&Version=#{@amazon_require_version}"
 
@@ -127,42 +129,14 @@ def amazon_secure_html( asin, with_image, label, pos = 'amazon' )
 	%Q|<a href="#{h url}">#{image}#{h label}</a>|
 end
 
-def isbn_10?( isbn )
-	isbn.gsub( /[^\dX]/, '' ).length == 10
-end
-
-def isbn_13?( isbn )
-	isbn.gsub( /[^\d]/, '' ).length == 13
-end
-
-def isbn_check_digit_10( isbn )
-	raise ArgumentError::new( "#{isbn} is wrong ISBN-10" ) unless isbn_10?( isbn )
-
-	sum = 0
-	isbn.gsub( /[^\dX]/, '' ).chop.split( // ).each_with_index do |item, index|
-		sum += item.to_i * (10 - index)
-	end
-	check_digit = 11 - sum % 11
-	check_digit = case check_digit
-	when 10; 'X'
-	when 11; '0'
-	else; check_digit.to_s
-	end
-	check_digit
-end
-
-def isbn_13to10( isbn13 )
-	isbn10 = isbn13.gsub( /[^\d]/, '' )[3,10]
-	check_digit = isbn_check_digit_10( isbn10 )
-	isbn10[9] = check_digit
-	isbn10
-end
-
 def amazon_get( asin, with_image = true, label = nil, pos = 'amazon' )
 	asin = asin.to_s.strip # delete white spaces
-
-	if isbn_13?( asin ) # ISBN-13
-		asin = isbn_13to10( asin )
+	digit = asin.gsub( /[^\d]/, '' )
+	if digit.length == 13 then # ISBN-13
+		asin = digit
+		id_type = 'ISBN'
+	else
+		id_type = 'ASIN'
 	end
 
 	if @conf.secure then
@@ -174,7 +148,7 @@ def amazon_get( asin, with_image = true, label = nil, pos = 'amazon' )
 			begin
 				xml = File::read( "#{cache}/#{asin}.xml" )
 			rescue Errno::ENOENT
-				xml =  amazon_call_ecs( asin )
+				xml =  amazon_call_ecs( asin, id_type )
 				File::open( "#{cache}/#{asin}.xml", 'wb' ) {|f| f.write( xml )}
 			end
 			doc = REXML::Document::new( xml ).root
