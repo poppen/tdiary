@@ -1,4 +1,4 @@
-# $Revision: 1.33 $
+# $Revision: 1.34 $
 # recent_comment3: 最近のツッコミをリストアップする
 #
 #   @secure = true な環境では動作しません．
@@ -40,6 +40,7 @@ def recent_comment3(ob_max = 'OBSOLUTE' ,sep = 'OBSOLUTE',ob_date_format = 'OBSO
    tree_order =[]
    order = []
    idx = 0
+
    PStore.new(cache).transaction do |db|
       break unless db.root?('comments')
       db['comments'].each do |c|
@@ -94,7 +95,7 @@ def recent_comment3(ob_max = 'OBSOLUTE' ,sep = 'OBSOLUTE',ob_date_format = 'OBSO
             end
             
             result << "<li>"
-            result << %Q|<a href="#{h( a_entry )}">#{h( @conf.shorten( title, 20 ) )}</a><br>|
+            result << %Q|<a href="#{h( a_entry )}">#{h( @conf.shorten( title, titlelen ) )}</a><br>|
             entries[entry_date].sort.each { | comment_str |
                result << comment_str + "<br>"
             }

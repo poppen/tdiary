@@ -1,3 +1,6 @@
+2007-01-24 SHIBATA Hiroshi <h-sbt@nifty.com>
+	* recent_trackback3.rb,recent_comment3.rb: fix bug: enable to shoten title.
+
 2007-01-24 TADA Tadashi <sho@spc.gr.jp>
 	* amazon.rb: support Amazon-ECS 2007-01-17: ISBN-13.
 
