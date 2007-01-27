@@ -1,3 +1,6 @@
+2007-01-27 TADA Tadashi <sho@spc.gr.jp>
+	* my-sequel.rb: remove <p> inner <div>.
+
 2007-01-24 SHIBATA Hiroshi <h-sbt@nifty.com>
 	* recent_trackback3.rb,recent_comment3.rb: fix bug: enable to shoten title.
 

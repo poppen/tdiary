@@ -1,6 +1,6 @@
 #
 # my-sequel.rb
-# $Revision: 1.5 $
+# $Revision: 1.6 $
 #
 # show links to follow-up entries
 #
@@ -234,11 +234,11 @@ _END
 	def html(dst_anchor, date_format, label)
 		anchors = srcs(dst_anchor)
 		if anchors and not anchors.empty? then
-			r = %Q|<div class="sequel"><p>#{h label}|
+			r = %Q|<div class="sequel">#{h label}|
 			r += anchors.map{|src_anchor|
 				yield(src_anchor, Time.local(*(src_anchor.scan(/(\d{4,4})(\d\d)(\d\d)/)[0])).strftime(date_format))
 			}.join(', ')
-			r += "</p></div>\n"
+			r += "</div>\n"
 			return r
 		else
 			return ''
