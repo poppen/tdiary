@@ -1,5 +1,5 @@
 #
-# akismet.rb: tDiary comment spam filter using Akismet API setup plugin. $Revision: 1.1 $
+# akismet.rb: tDiary comment spam filter using Akismet API setup plugin. $Revision: 1.2 $
 #
 # Copyright (C) TADA Tadashi <sho@spc.gr.jp> 2007.
 # Distributed under GPL2.
@@ -13,6 +13,7 @@ add_conf_proc( 'akismet', @akismet_label_conf, 'security' ) do
 end
 
 def akismet_conf_proc
+	verify = true
 	if @mode == 'saveconf' then
 		@conf['akismet.enable'] = (@cgi.params['akismet.enable'][0] == 'true')
 		@conf['akismet.key'] = @cgi.params['akismet.key'][0]
