@@ -1,3 +1,6 @@
+2007-01-29 TADA Tadashi <sho@spc.gr.jp>
+	* akismet.rb: add plugin to setup Akismet spam filter.
+
 2007-01-27 TADA Tadashi <sho@spc.gr.jp>
 	* my-sequel.rb: remove <p> inner <div>.
 
