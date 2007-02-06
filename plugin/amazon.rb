@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.54 $: Making link with image to Amazon using Amazon ECS.
+# amazon.rb $Revision: 1.55 $: Making link with image to Amazon using Amazon ECS.
 #
 # see document: #{@lang}/amazon.rb
 #
@@ -8,7 +8,6 @@
 require 'open-uri'
 require 'timeout'
 require 'rexml/document'
-require 'nkf'
 
 # do not change these variables
 @amazon_subscription_id = '1CVA98NEF1G753PFESR2'
@@ -41,13 +40,13 @@ def amazon_to_html( item, with_image = true, label = nil, pos = 'amazon' )
 		item.elements.each( '*/Author' ) do |a|
 			author << a.text << '/'
 		end
-		author = "(#{NKF::nkf '-We', author.chop!})"
+		author = "(#{@conf.to_native( author.chop!, 'utf-8' )})"
 	rescue
 		author = ''
 	end
 
 	unless label then
-		label = %Q|#{NKF::nkf '-We', item.elements.to_a( '*/Title' )[0].text}#{author}|
+		label = %Q|#{@conf.to_native( item.elements.to_a( '*/Title' )[0].text, 'utf-8' )}#{author}|
 	end
 
 	image = ''
@@ -153,7 +152,7 @@ def amazon_get( asin, with_image = true, label = nil, pos = 'amazon' )
 		rescue NoMethodError
 			if item == nil then
 				message = doc.elements.to_a( 'Items/Request/Errors/Error/Message' )[0].text
-				"#{label ? label : asin}<!--#{h NKF::nkf( '-We', message )}-->"
+				"#{label ? label : asin}<!--#{h @conf.to_native( message, 'utf-8' )}-->"
 			else
 				"#{label ? label : asin}<!--#{h $!}\n#{h $@.join( ' / ' )}-->"
 			end
