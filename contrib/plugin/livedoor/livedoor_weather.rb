@@ -8,7 +8,6 @@
 require 'open-uri'
 require 'timeout'
 require 'rexml/document'
-require 'nkf'
 
 def lwws_init
 	@conf['lwws.city_id'] ||= 63
@@ -94,7 +93,7 @@ def lwws_to_html( date_status, date = nil )
 		xml = File::read( file_name )
 		doc = REXML::Document::new( xml ).root
 
-		telop = NKF::nkf('-We', doc.elements["telop"].text)
+		telop = @conf.to_native(doc.elements["telop"].text)
 		max_temp = doc.elements["temperature/max/celsius"].text
 		min_temp = doc.elements["temperature/min/celsius"].text
 		detail_url = doc.elements["link"].text
@@ -105,7 +104,7 @@ def lwws_to_html( date_status, date = nil )
 		if @conf['lwws.icon.disp'] != "t" || @conf.mobile_agent? then
 			result << %Q|<a href="#{h(detail_url)}">#{telop}</a>|
 		else
-			title = NKF::nkf('-We', doc.elements["image/title"].text)
+			title = @conf.to_native(doc.elements["image/title"].text)
 			link = doc.elements["image/link"].text
 			url = doc.elements["image/url"].text
 			width = doc.elements["image/width"].text
