@@ -1,5 +1,5 @@
 #
-# English resource of amazon plugin $Revision: 1.6 $
+# English resource of amazon plugin $Revision: 1.7 $
 #
 # Copyright (C) 2002 HAL99 <hal99@mtj.biglobe.ne.jp>
 # You can redistribute it and/or modify it under GPL2.
@@ -29,7 +29,6 @@
 #                           changed in preferences page.
 #   @options['amazon.hideconf']: When you want to prohibit changing amazon.aid
 #                                via preferences page, set false.
-#   @options['amazon.proxy']: HTTP proxy in "host:post" style.
 #   @options['amazon.imgsize']: specify image size (0:laege, 1:regular, 2:small)
 #   @options['amazon.hidename']: hide book name when class="amazon", set true.
 #   @options['amazon.default_image_base']: URL that include default images.

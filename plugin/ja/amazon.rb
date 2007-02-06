@@ -1,5 +1,5 @@
 #
-# Japanese resource of amazon plugin $Revision: 1.11 $
+# Japanese resource of amazon plugin $Revision: 1.12 $
 #
 # Copyright (C) 2002 HAL99 <hal99@mtj.biglobe.ne.jp>
 # You can redistribute it and/or modify it under GPL2.
@@ -38,8 +38,6 @@
 #                                このオプションは設定画面から変更可能です
 #   @options['amazon.hideconf']: 設定画面上でアソシエイトIDを入力不可能
 #                                にしたい場合、trueに設定します
-#   @options['amazon.proxy']:    「host:post」形式でHTTP proxyを指定すると
-#                                Proxy経由でAmazonの情報を取得します
 #   @options['amazon.imgsize']:  表示するイメージのサイズを指定します
 #                                (0:大  1:中  2:小)
 #   @options['amazon.hidename']: class="amazon"のときに商品名を表示したく
