@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.55 $: Making link with image to Amazon using Amazon ECS.
+# amazon.rb $Revision: 1.56 $: Making link with image to Amazon using Amazon ECS.
 #
 # see document: #{@lang}/amazon.rb
 #
@@ -40,7 +40,7 @@ def amazon_to_html( item, with_image = true, label = nil, pos = 'amazon' )
 		item.elements.each( '*/Author' ) do |a|
 			author << a.text << '/'
 		end
-		author = "(#{@conf.to_native( author.chop!, 'utf-8' )})"
+		author = "(#{@conf.to_native( author.chop, 'utf-8' )})"
 	rescue
 		author = ''
 	end
