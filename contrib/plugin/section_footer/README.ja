@@ -28,6 +28,7 @@ GPL2
 ! Changelog
 !!20070206
 * NKFを使うのをやめて @conf.to_native を使うようにした
+* to_native の第二引数として utf-8 を指定
 
 !!20070205
 * delicious JSON のキャッシュデータは @cache/delicious/YYYYMM に作成するようにした

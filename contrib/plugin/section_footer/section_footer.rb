@@ -114,7 +114,7 @@ def add_delicious(date, index)
 
    begin
       File::open( file_name ) do |f|
-            data = JSON.parse(@conf.to_native(f.read))
+            data = JSON.parse(@conf.to_native( f.read, 'utf-8' ))
          unless data[0].nil?
             count = data[0]["total_posts"].to_i
          end
