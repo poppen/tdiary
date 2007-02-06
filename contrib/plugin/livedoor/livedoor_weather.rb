@@ -36,14 +36,8 @@ def lwws_request( city_id, date_status )
 	url << "?city=#{city_id}"
 	url << "&day=#{date_status}"
 
-	proxy = nil
-	if @conf['amazon.proxy'] and @conf['amazon.proxy'].length > 0 then
-		proxy = @conf['amazon.proxy']
-		proxy = 'http://' + proxy unless proxy =~ /^https?:/
-	end
-
 	timeout( 10 ) do
-		open( url, :proxy => proxy ) {|f| f.read}
+		open( url ) {|f| f.read}
 	end
 end
 
