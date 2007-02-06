@@ -5,9 +5,8 @@
 #
 require 'digest/md5'
 require 'open-uri'
-require 'nkf'
-require 'json'
 require 'timeout'
+require 'json'
 
 def permalink( date, index, escape = true )
    ymd = date.strftime( "%Y%m%d" )
@@ -115,7 +114,7 @@ def add_delicious(date, index)
 
    begin
       File::open( file_name ) do |f|
-            data = JSON.parse(NKF.nkf('-We', f.read))
+            data = JSON.parse(@conf.to_native(f.read))
          unless data[0].nil?
             count = data[0]["total_posts"].to_i
          end

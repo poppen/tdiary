@@ -26,6 +26,9 @@ http://www.hsbt.org/diary/
 GPL2
 
 ! Changelog
+!!20070206
+* NKFを使うのをやめて @conf.to_native を使うようにした
+
 !!20070205
 * delicious JSON のキャッシュデータは @cache/delicious/YYYYMM に作成するようにした
 
