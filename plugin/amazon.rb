@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.56 $: Making link with image to Amazon using Amazon ECS.
+# amazon.rb $Revision: 1.57 $: Making link with image to Amazon using Amazon ECS.
 #
 # see document: #{@lang}/amazon.rb
 #
@@ -28,8 +28,10 @@ def amazon_call_ecs( asin, id_type )
 	url << "&ResponseGroup=Medium"
 	url << "&Version=#{@amazon_require_version}"
 
+	proxy = @conf['proxy']
+	proxy = 'http://' + proxy if proxy
 	timeout( 10 ) do
-		open( url ) {|f| f.read}
+		open( url, :proxy => proxy ) {|f| f.read }
 	end
 end
 
