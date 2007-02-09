@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.50 $
+# makerss.rb: $Revision: 1.51 $
 #
 # generate RSS file when updating.
 #
@@ -287,7 +287,7 @@ def makerss_header( uri )
 	<channel rdf:about="#{h rdf_url}">
 	<title>#{h @conf.html_title}</title>
 	<link>#{h uri}</link>
-	<xhtml:link xhtml:rel="alternate" xhtml:media="handheld" xhtml:type="text/html" xhtml:href="#{h uri}" />
+	<xhtml:link rel="alternate" media="handheld" type="text/html" href="#{h uri}" />
 	<description>#{h desc}</description>
 	<dc:creator>#{h @conf.author_name}</dc:creator>
 	<dc:rights>#{h copyright}</dc:rights>
@@ -323,7 +323,7 @@ def makerss_body( uri, rdfsec )
 	if rdfsec.section.respond_to?( :body_to_html ) then
 		rdf = %Q|<item rdf:about="#{h uri}#{anchor rdfsec.id}">\n|
 		rdf << %Q|<link>#{h uri}#{anchor rdfsec.id}</link>\n|
-		rdf << %Q|<xhtml:link xhtml:rel="alternate" xhtml:media="handheld" xhtml:type="text/html" xhtml:href="#{h uri}#{anchor rdfsec.id}" />\n|
+		rdf << %Q|<xhtml:link rel="alternate" media="handheld" type="text/html" href="#{h uri}#{anchor rdfsec.id}" />\n|
 		rdf << %Q|<dc:date>#{h rdfsec.time_string}</dc:date>\n|
 		a = rdfsec.id.scan( /(\d{4})(\d\d)(\d\d)/ ).flatten.map{|s| s.to_i}
 		date = Time::local( *a )

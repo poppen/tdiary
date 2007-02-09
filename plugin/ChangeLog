@@ -1,3 +1,6 @@
+2007-02-09 TADA Tadashi <sho@spc.gr.jp>
+	* makerss.rb: delete xhtml prefix from attributes of mobile link discovery.
+
 2007-02-07 TADA Tadashi <sho@spc.gr.jp>
 	* amazon.rb: rewind about proxy, and use @conf['proxy'].
 
