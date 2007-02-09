@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.58 $: Making link with image to Amazon using Amazon ECS.
+# amazon.rb $Revision: 1.59 $: Making link with image to Amazon using Amazon ECS.
 #
 # see document: #{@lang}/amazon.rb
 #
@@ -89,7 +89,12 @@ end
 def amazon_detail_html( item )
 	author = amazon_author( item )
 	title = amazon_title( item )
+
+	size_orig = @conf['amazon.imgsize']
+	@conf['amazon.imgsize'] = 2
 	image = amazon_image( item )
+	@conf['amazon.imgsize'] = size_orig
+
 	url = amazon_url( item )
 	html = <<-HTML
 	<a href="#{url}">
