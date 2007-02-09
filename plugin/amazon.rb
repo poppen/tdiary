@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.57 $: Making link with image to Amazon using Amazon ECS.
+# amazon.rb $Revision: 1.58 $: Making link with image to Amazon using Amazon ECS.
 #
 # see document: #{@lang}/amazon.rb
 #
@@ -35,69 +35,103 @@ def amazon_call_ecs( asin, id_type )
 	end
 end
 
-def amazon_to_html( item, with_image = true, label = nil, pos = 'amazon' )
-	with_image = false if @mode == 'categoryview'
+def amazon_author( item )
 	begin
 		author = ''
 		item.elements.each( '*/Author' ) do |a|
 			author << a.text << '/'
 		end
-		author = "(#{@conf.to_native( author.chop, 'utf-8' )})"
+		@conf.to_native( author.chop, 'utf-8' )
 	rescue
-		author = ''
+		''
 	end
+end
 
-	unless label then
-		label = %Q|#{@conf.to_native( item.elements.to_a( '*/Title' )[0].text, 'utf-8' )}#{author}|
-	end
+def amazon_title( item )
+	@conf.to_native( item.elements.to_a( '*/Title' )[0].text, 'utf-8' )
+end
 
-	image = ''
-	if with_image then
-		begin
-			size = case @conf['amazon.imgsize']
-			when 0; 'Large' 
-			when 2; 'Small'
-			else;   'Medium'
-			end
-			image = <<-HTML
-			<img class="#{h pos}"
-			src="#{h item.elements.to_a( "#{size}Image/URL" )[0].text}"
-			height="#{h item.elements.to_a( "#{size}Image/Height" )[0].text}"
-			width="#{h item.elements.to_a( "#{size}Image/Width" )[0].text}"
-			alt="#{h label}" title="#{h label}">
-			HTML
-		rescue
-			if @conf['amazon.nodefault'] then
-				image = h( label )
-			else
-				base = @conf['amazon.default_image_base'] || 'http://www.tdiary.org/images/amazondefaults/'
-				name = case @conf['amazon.imgsize']
-				when 0; 'large'
-				when 2; 'small'
-				else;   'medium'
-				end
-				size = case @conf['amazon.imgsize']
-				when 0; [500, 380]
-				when 2; [75, 57]
-				else;   [160, 122]
-				end
-				image = <<-HTML
-				<img class="#{h pos}"
-				src="#{h base}#{name}.png"
-				height="#{size[0]}"
-				width="#{size[1]}"
-				alt="#{h label}" title="#{h label}">
-				HTML
-			end
+def amazon_image( item )
+	image = {}
+	begin
+		size = case @conf['amazon.imgsize']
+		when 0; 'Large' 
+		when 2; 'Small'
+		else;   'Medium'
 		end
-		image.gsub!( /\t/, '' )
+		image[:src] = item.elements.to_a( "#{size}Image/URL" )[0].text
+		image[:height] = item.elements.to_a( "#{size}Image/Height" )[0].text
+		image[:width] = item.elements.to_a( "#{size}Image/Width" )[0].text
+	rescue
+		base = @conf['amazon.default_image_base'] || 'http://www.tdiary.org/images/amazondefaults/'
+		case @conf['amazon.imgsize']
+		when 0
+			image[:src] = "#{base}large.png"
+			image[:height] = 500
+			image[:width] = 380
+		when 2
+			image[:src] = "#{base}small.png"
+			image[:height] = 75
+			image[:width] = 57
+		else
+			image[:src] = "#{base}medium.png"
+			image[:height] = 160
+			image[:width] = 122
+		end
 	end
+	image
+end
 
+def amazon_url( item )
+	item.elements.to_a( 'DetailPageURL' )[0].text
+end
+
+def amazon_detail_html( item )
+	author = amazon_author( item )
+	title = amazon_title( item )
+	image = amazon_image( item )
+	url = amazon_url( item )
+	html = <<-HTML
+	<a href="#{url}">
+		<img class="left" src="#{h image[:src]}"
+		height="#{h image[:height]}" width="#{h image[:width]}"
+		alt="#{h title}" title="#{h title}">
+	</a>
+	<strong>#{h title}</strong><br>
+	#{h author}<br>
+	#{h @conf.to_native( item.elements.to_a( '*/Label' )[0].text, 'utf-8' )}<br>
+	#{h @conf.to_native( item.elements.to_a( '*/LowestNewPrice/FormattedPrice' )[0].text, 'utf-8' )}<br style="clear: left">
+	HTML
+end
+
+def amazon_to_html( item, with_image = true, label = nil, pos = 'amazon' )
+	with_image = false if @mode == 'categoryview'
+
+	author = amazon_author( item )
+	author = "(#{author})" if author.length == 0
+	
 	if with_image and @conf['amazon.hidename'] || pos != 'amazon' then
 		label = ''
+	elsif not label
+		label = %Q|#{amazon_title( item )}#{author}|
 	end
 
-	%Q|<a href="#{h item.elements.to_a( 'DetailPageURL' )[0].text}">#{image}#{h label}</a>|
+	if with_image
+		image = amazon_image( item )
+		unless image[:src] then
+			img = ''
+		else
+			img = <<-HTML
+			<img class="#{h pos}" src="#{h image[:src]}"
+			height="#{h image[:height]}" width="#{h image[:width]}"
+			alt="#{h label}" title="#{h label}">
+			HTML
+			img.gsub!( /\t/, '' )
+		end
+	end
+
+	url = amazon_url( item )
+	%Q|<a href="#{h url}">#{img}#{h label}</a>|
 end
 
 def amazon_secure_html( asin, with_image, label, pos = 'amazon' )
@@ -148,7 +182,11 @@ def amazon_get( asin, with_image = true, label = nil, pos = 'amazon' )
 			end
 			doc = REXML::Document::new( xml ).root
 			item = doc.elements.to_a( '*/Item' )[0]
-			amazon_to_html( item, with_image, label, pos )
+			if pos == 'detail' then
+				amazon_detail_html( item )
+			else
+				amazon_to_html( item, with_image, label, pos )
+			end
 		rescue Timeout::Error
 			asin
 		rescue NoMethodError
@@ -223,6 +261,11 @@ def amazon_conf_proc
 	end
 	result
 end
+
+def isbn_detail( asin )
+	amazon_get( asin, true, nil, 'detail' )
+end
+
 def isbn_image( asin, label = nil )
 	amazon_get( asin, true, label )
 end

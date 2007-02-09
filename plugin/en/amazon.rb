@@ -1,5 +1,5 @@
 #
-# English resource of amazon plugin $Revision: 1.12 $
+# English resource of amazon plugin $Revision: 1.13 $
 #
 # Copyright (C) 2002 HAL99 <hal99@mtj.biglobe.ne.jp>
 # You can redistribute it and/or modify it under GPL2.
@@ -19,6 +19,9 @@
 # isbn_image: show the item image of specified ISBN by class="right".
 #     asin:    ASIN or ISBN
 #     comment: comment (optional)
+#
+# isbn_detail: show the item detail with image
+#     asin:    ASIN or ISBN
 #
 # isbn: light version. it dose not access to amazon.
 #     asin:    ASIN or ISBN
