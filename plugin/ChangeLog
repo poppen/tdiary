@@ -1,3 +1,6 @@
+2007-02-10 TADA Tadashi <sho@spc.gr.jp>
+	* amazon.rb: fix: author dose not have '()'.
+
 2007-02-09 TADA Tadashi <sho@spc.gr.jp>
 	* makerss.rb: delete xhtml prefix from attributes of mobile link discovery.
 	* amazon.rb: add new plugin 'isbn_detail'.

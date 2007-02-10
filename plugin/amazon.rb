@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.59 $: Making link with image to Amazon using Amazon ECS.
+# amazon.rb $Revision: 1.60 $: Making link with image to Amazon using Amazon ECS.
 #
 # see document: #{@lang}/amazon.rb
 #
@@ -113,7 +113,7 @@ def amazon_to_html( item, with_image = true, label = nil, pos = 'amazon' )
 	with_image = false if @mode == 'categoryview'
 
 	author = amazon_author( item )
-	author = "(#{author})" if author.length == 0
+	author = "(#{author})" unless author.length == 0
 	
 	if with_image and @conf['amazon.hidename'] || pos != 'amazon' then
 		label = ''
