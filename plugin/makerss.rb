@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.51 $
+# makerss.rb: $Revision: 1.52 $
 #
 # generate RSS file when updating.
 #
@@ -105,7 +105,7 @@ class MakeRssFull
 
 	def file
 		f = @conf['makerss.file'] || 'index.rdf'
-		f = 'index.rdf' if f.length == 0
+		f = 'index.rdf' if f.empty?
 		f
 	end
 
@@ -135,7 +135,7 @@ class MakeRssFull
 
 	def url
 		u = @conf['makerss.url'] || "#{@conf.base_url}#{File.basename(file)}"
-		u = "#{@conf.base_url}#{File.basename(file)}" if u.length == 0
+		u = "#{@conf.base_url}#{File.basename(file)}" if u.empty?
 		u
 	end
 end
@@ -154,7 +154,7 @@ class MakeRssNoComments < MakeRssFull
 
 	def file
 		f = @conf['makerss.no_comments.file'] || 'no_comments.rdf'
-		f = 'no_comments.rdf' if f.length == 0
+		f = 'no_comments.rdf' if f.empty?
 		f
 	end
 
@@ -166,7 +166,7 @@ class MakeRssNoComments < MakeRssFull
 	def url
 		return nil unless @conf['makerss.no_comments']
 		u = @conf['makerss.no_comments.url'] || "#{@conf.base_url}#{File.basename(file)}"
-		u = "#{@conf.base_url}#{File.basename(file)}" if u.length == 0
+		u = "#{@conf.base_url}#{File.basename(file)}" if u.empty?
 		u
 	end
 end
@@ -273,7 +273,7 @@ end
 
 def makerss_header( uri )
 	rdf_url = @conf['makerss.url'] || "#{@conf.base_url}index.rdf"
-	rdf_url = "#{@conf.base_url}index.rdf" if rdf_url.length == 0
+	rdf_url = "#{@conf.base_url}index.rdf" if rdf_url.empty?
 
 	desc = @conf.description || ''
 
@@ -318,6 +318,10 @@ def makerss_desc_shorten( text )
 	@conf.shorten( text, len )
 end
 
+def feed?
+	@makerss_in_feed
+end
+
 def makerss_body( uri, rdfsec )
 	rdf = ""
 	if rdfsec.section.respond_to?( :body_to_html ) then
@@ -327,30 +331,39 @@ def makerss_body( uri, rdfsec )
 		rdf << %Q|<dc:date>#{h rdfsec.time_string}</dc:date>\n|
 		a = rdfsec.id.scan( /(\d{4})(\d\d)(\d\d)/ ).flatten.map{|s| s.to_i}
 		date = Time::local( *a )
-		body_enter_proc( date )
 		old_apply_plugin = @conf['apply_plugin']
 		@conf['apply_plugin'] = true
 
-		subtitle = apply_plugin( rdfsec.section.subtitle_to_html, true ).strip
-		subtitle.sub!( /^(\[([^\]]+)\])+ */, '' )
-		if subtitle.empty?
-			subtitle = apply_plugin( rdfsec.section.body_to_html, true ).strip
-			subtitle = @conf.shorten( subtitle.gsub( /&.*?;/, '' ), 20 )
+		@makerss_in_feed = true
+		subtitle = rdfsec.section.subtitle_to_html
+		sec_id = rdfsec.id[9,2].to_i
+		body_enter = body_enter_proc( date )
+		body = apply_plugin( rdfsec.section.body_to_html )
+		body_leave = body_leave_proc( date )
+		@makerss_in_feed = false
+
+		sub = apply_plugin( subtitle, true ).strip
+		sub.sub!( /^(\[([^\]]+)\])+ */, '' )
+		if sub.empty?
+			sub = remove_tag( body ).strip
+			sub = @conf.shorten( sub.gsub( /&.*?;/, '' ), 20 )
 		end
-		rdf << %Q|<title>#{h subtitle}</title>\n|
+		rdf << %Q|<title>#{h sub}</title>\n|
 		rdf << %Q|<dc:creator>#{h @conf.author_name}</dc:creator>\n|
 		unless rdfsec.section.categories.empty?
 			rdfsec.section.categories.each do |category|
 				rdf << %Q|<dc:subject>#{h category}</dc:subject>\n|
 			end
 		end
-		desc = apply_plugin( rdfsec.section.body_to_html, true ).strip
+		desc = remove_tag( body ).strip
 		desc.gsub!( /&.*?;/, '' )
 		rdf << %Q|<description>#{h makerss_desc_shorten( desc )}</description>\n|
 		unless @conf['makerss.hidecontent']
 			text = ''
-			text += '<h3>' + apply_plugin( rdfsec.section.subtitle_to_html.sub( /^(\[([^\]]+)\])+ */, '' ) ).strip + '</h3>' if rdfsec.section.subtitle_to_html and not rdfsec.section.subtitle_to_html.empty?
-			text += apply_plugin( rdfsec.section.body_to_html ).strip
+			text << '<h3>' + apply_plugin( subtitle.sub( /^(\[([^\]]+)\])+ */, '' ) ).strip + '</h3>' if subtitle and not subtitle.empty?
+			text << body_enter
+			text << body
+			text << body_leave
 			unless text.empty?
 				text.gsub!( /\]\]>/, ']]&gt;' )
 				rdf << %Q|<content:encoded><![CDATA[#{text}|
@@ -365,7 +378,6 @@ def makerss_body( uri, rdfsec )
 			end
 		end
 
-		body_leave_proc( date )
 		@conf['apply_plugin'] = old_apply_plugin
 		rdf << "</item>\n"
 	else # TSUKKOMI

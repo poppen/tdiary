@@ -1,5 +1,8 @@
 2007-02-10 TADA Tadashi <sho@spc.gr.jp>
-	* amazon.rb: fix: author does not have '()'.
+	* amazon.rb: fix: author dose not have '()'.
+	* footnote.rb: insert footnote into each section.
+	* makerss.rb: insert body_enter and body_leave procs.
+	* makerss.rb: add 'feed?' method that turns true in feed.
 
 2007-02-09 TADA Tadashi <sho@spc.gr.jp>
 	* makerss.rb: delete xhtml prefix from attributes of mobile link discovery.
