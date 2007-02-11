@@ -26,6 +26,9 @@ http://www.hsbt.org/diary/
 GPL2
 
 ! Changelog
+!!20070210
+* Permalink 生成時の余計なエスケープをしないようにした
+
 !!20070206
 * NKFを使うのをやめて @conf.to_native を使うようにした
 * to_native の第二引数として utf-8 を指定

@@ -69,7 +69,7 @@ add_section_leave_proc do |date, index|
 
       # 「このエントリを含むlivedoor クリップ」のリンクの追加
       r << add_delicious(date, index)
-      
+
       # 「このエントリを含むはてなブックーク」のリンクの追加
       r << add_hatenabm(date, index)
 
@@ -85,7 +85,7 @@ end
 
 def add_permalink(date, index)
    r = " | "
-   r << %Q|<a href="#{permalink(date, index)}">Permalink</a> |
+   r << %Q|<a href="#{permalink(date, index, false)}">Permalink</a> |
    return r
 end
 
@@ -100,7 +100,7 @@ def add_ldclip(date, index)
    r << %Q|<a href="http://clip.livedoor.com/page/#{permalink(date, index)}"><img src="./images/myclip.gif" width="19" height="19" style="border: none;" alt="このエントリを含む livedoor クリップ" title="このエントリを含む livedoor クリップ"> <img src="http://image.clip.livedoor.com/counter/#{permalink(date, index)}" border="0" /></a>|
    return r
 end
-   
+
 def add_delicious(date, index)
    url_md5 = Digest::MD5.hexdigest(permalink(date, index, false))
    cache_dir = "#{@cache_path}/delicious/#{date.strftime( "%Y%m" )}/"
@@ -109,7 +109,7 @@ def add_delicious(date, index)
 
    r = " | "
    r << %Q|<a href="http://del.icio.us/url/#{url_md5}"><img src="./images/delicious.small.gif" width="10" height="10" style="border: none;" alt="このエントリを含む del.icio.us" title="このエントリを含む del.icio.us">|
-   
+
    delicious_json( cache_dir, file_name, url_md5 )
 
    begin
@@ -122,16 +122,16 @@ def add_delicious(date, index)
    rescue
       return r
    end
-      
+
    if count > 0
       r << %Q| #{count} users</a>|
    else
       r << %Q|</a>|
    end
-   
+
    return r
 end
-   
+
 def delicious_json( cache_dir, file_name, url_md5 )
 
    cache_time = 8 * 60 * 60  # 8 hour
@@ -147,10 +147,10 @@ def delicious_json( cache_dir, file_name, url_md5 )
             update = true
          end
       end
-         
+
       if cached_time.nil? or update
          begin
-            timeout(10) do 
+            timeout(10) do
                open( 'http://badges.del.icio.us/feeds/json/url/data?hash=' + url_md5 ) do |file|
                   File::open( file_name, 'wb' ) do |f|
                      f.write( file.read )
