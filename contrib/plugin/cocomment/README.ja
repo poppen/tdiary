@@ -11,6 +11,9 @@ tDiaryをcoComment(http://www.cocomment.com/)に対応させるプラグイン
 GPL2
 
 !更新履歴
+!!20070212
+* IE7でのスクリプトエラーに対処(埋め込む Javascript を微調整)
+
 !!20070118
 * postURLとpostTitleを取得するときにjavascriptを使わないようにした。
 
