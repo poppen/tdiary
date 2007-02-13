@@ -1,4 +1,4 @@
-# footnote.rb $Revision: 1.11 $
+# footnote.rb $Revision: 1.12 $
 #
 # fn: 脚注plugin
 #   パラメタ:
@@ -14,7 +14,11 @@ add_body_enter_proc do |date|
 end
 
 add_section_enter_proc do |date, index|
-	fn_initialize( index )
+	if @conf.style =~ /wiki/i then
+		''
+	else
+		fn_initialize( index )
+	end
 end
 
 def fn_initialize( section = 1 )
@@ -44,7 +48,11 @@ end
 
 # print footnotes
 add_section_leave_proc do |date, index|
-	fn_put
+	if @conf.style =~ /wiki/i then
+		''
+	else
+		fn_put
+	end
 end
 
 add_body_leave_proc do |date|

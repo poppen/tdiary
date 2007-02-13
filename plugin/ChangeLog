@@ -1,3 +1,6 @@
+2007-02-13 TADA Tadashi <sho@spc.gr.jp>
+	* footnote.rb: support whatsnew-list.rb in Blogkit.
+
 2007-02-10 TADA Tadashi <sho@spc.gr.jp>
 	* amazon.rb: fix: author dose not have '()'.
 	* footnote.rb: insert footnote into each section.
