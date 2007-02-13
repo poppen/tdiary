@@ -5,7 +5,7 @@
     <link><%= @conf.base_url.sub(%r|/[^/]*$|, '/') %><%= _(@cgi.script_name ? File.basename(@cgi.script_name) : "") %><%= format_anchor(@start, @num) %></link>
     <description>Rast ¸¡º÷: <%= _(@query) %></description>
     <language>ja-JP</language>
-    <openSearch:totalResults><%= @hit_count %></openSearch:totalResults>
+    <openSearch:totalResults><%= @result.hit_count %></openSearch:totalResults>
     <openSearch:startIndex><%= @start + 1 %></openSearch:startIndex>
     <openSearch:itemsPerPage><%= @num %></openSearch:itemsPerPage>
     <% for item in @result.items %>
