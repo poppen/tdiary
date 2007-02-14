@@ -8,7 +8,6 @@
 #
 # tdiary.confにおける設定:
 #   @options['lwws.city_id']  : 天気情報を取得したい都市のIDを指定(設定画面から編集可能)
-#   @options['amazon.proxy']  :「host:post」形式でHTTP proxyを指定
 #
 
 @lwws_rest_url = 'http://weather.livedoor.com/forecast/webservice/rest/v1'

@@ -146,7 +146,9 @@ def lwws( date )
 end
 
 add_body_enter_proc do |date|
-	lwws_to_html( "", date.strftime("%Y%m%d"))
+   unless feed?
+      lwws_to_html( "", date.strftime("%Y%m%d"))
+   end
 end
 
 add_update_proc do
