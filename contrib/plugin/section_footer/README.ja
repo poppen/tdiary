@@ -8,12 +8,12 @@
 * はてなブックマークコメント表示
 * このエントリを含む del.icio.us
 * このエントリを含む livedoor クリップ
+* このエントリを含む Buzzurl
 * Permalink
 
 !注意事項
 * blogkitでは動きません
 * セキュアな環境では動きません
-* proxy には対応していません
 * category_to_tag.rb と同時に使うことはできません
 * アイコンイメージは相対パス「./images/」と設定しています。環境に応じて書き換えてください
 * Permalinkやアイコンは用途に合わせてadd_section_leave_procから適当に削ってください
@@ -26,6 +26,9 @@ http://www.hsbt.org/diary/
 GPL2
 
 ! Changelog
+!!20070212
+* Buzzurl(http://buzzurl.jp) に対応した
+
 !!20070210
 * Permalink 生成時の余計なエスケープをしないようにした
 

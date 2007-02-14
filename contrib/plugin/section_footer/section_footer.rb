@@ -1,8 +1,9 @@
 # section_footer.rb $Revision 1.0 $
 #
 # Copyright (c) 2005 SHIBATA Hiroshi <h-sbt@nifty.com>
-# Distributed under the GPL2
+# You can redistribute it and/or modify it under GPL2.
 #
+
 require 'digest/md5'
 require 'open-uri'
 require 'timeout'
@@ -66,15 +67,18 @@ add_section_leave_proc do |date, index|
             end
          end
       end
-
-      # 「このエントリを含むlivedoor クリップ」のリンクの追加
+      
+      # 「このエントリを含む del.icio.us」
       r << add_delicious(date, index)
 
-      # 「このエントリを含むはてなブックーク」のリンクの追加
+      # 「このエントリを含むはてなブックーク」
       r << add_hatenabm(date, index)
 
-      # 「このエントリを含むlivedoor クリップ」のリンクの追加
+      # 「このエントリを含む livedoor クリップ」
       r << add_ldclip(date, index)
+      
+      # 「このエントリを含む Buzzurl」
+      r << add_buzzurl(date, index)
 
       # Permalinkの追加
       r << add_permalink(date, index)
@@ -98,6 +102,12 @@ end
 def add_ldclip(date, index)
    r = " | "
    r << %Q|<a href="http://clip.livedoor.com/page/#{permalink(date, index)}"><img src="./images/myclip.gif" width="19" height="19" style="border: none;" alt="このエントリを含む livedoor クリップ" title="このエントリを含む livedoor クリップ"> <img src="http://image.clip.livedoor.com/counter/#{permalink(date, index)}" border="0" /></a>|
+   return r
+end
+
+def add_buzzurl(date, index)
+   r = " | "
+   r << %Q|<a href="http://buzzurl.jp/entry/#{permalink(date, index)}"><img src="./images/add_icon_mini_10.gif" border="0" title="このエントリを含む Buzzurl" alt="このエントリを含む Buzzurl" width="16" height="12" class="icon" /> <img src="http://buzzurl.jp/api/counter/#{permalink(date, index)}" border="0" /></a>|
    return r
 end
 
