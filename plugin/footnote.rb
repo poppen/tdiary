@@ -1,4 +1,4 @@
-# footnote.rb $Revision: 1.12 $
+# footnote.rb $Revision: 1.13 $
 #
 # fn: 脚注plugin
 #   パラメタ:
@@ -28,8 +28,8 @@ def fn_initialize( section = 1 )
 end
 
 def fn( text, mark = '*' )
-	@fn_notes << text
-	@fn_marks << mark
+	@fn_notes += [text]
+	@fn_marks += [mark]
 	idx = @fn_notes.size
 
 	r = %Q|<span class="footnote">|
