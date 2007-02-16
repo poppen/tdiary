@@ -15,7 +15,6 @@
 * blogkitでは動きません
 * セキュアな環境では動きません
 * category_to_tag.rb と同時に使うことはできません
-* アイコンイメージは相対パス「./images/」と設定しています。環境に応じて書き換えてください
 * Permalinkやアイコンは用途に合わせてadd_section_leave_procから適当に削ってください
 * 利用するには [[JSON library for Ruby|http://rubyforge.org/projects/json/]] が必要です。misc/lib 以下に配置してください
 
@@ -26,6 +25,9 @@ http://www.hsbt.org/diary/
 GPL2
 
 ! Changelog
+!!20070215
+* アイコンを本家から持ってくるようにした
+
 !!20070212
 * Buzzurl(http://buzzurl.jp) に対応した
 

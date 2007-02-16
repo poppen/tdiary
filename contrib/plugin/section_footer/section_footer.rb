@@ -95,19 +95,19 @@ end
 
 def add_hatenabm(date, index)
    r = " | "
-   r << %Q|<a href="http://b.hatena.ne.jp/entry/#{permalink(date, index)}"><img src="./images/b_entry_de.gif" border="0" title="このエントリを含むはてなブックマーク" alt="このエントリを含むはてなブックマーク" width="16" height="12" class="icon" /> <img src="http://b.hatena.ne.jp/entry/image/normal/#{permalink(date, index)}" border="0" /></a> <img src="http://r.hatena.ne.jp/images/popup.gif" onclick="iconImageClickHandler(this, '#{permalink(date, index, false)}', event);" alt="">|
+   r << %Q|<a href="http://b.hatena.ne.jp/entry/#{permalink(date, index)}"><img src="http://d.hatena.ne.jp/images/b_entry.gif" style="border: none;vertical-align: middle;" title="このエントリを含むはてなブックマーク" alt="このエントリを含むはてなブックマーク" width="16" height="12" /> <img src="http://b.hatena.ne.jp/entry/image/normal/#{permalink(date, index)}" style="border: none;vertical-align: middle;" /></a> <img src="http://r.hatena.ne.jp/images/popup.gif" style="border: none;vertical-align: middle;" onclick="iconImageClickHandler(this, '#{permalink(date, index, false)}', event);" alt="">|
    return r
 end
 
 def add_ldclip(date, index)
    r = " | "
-   r << %Q|<a href="http://clip.livedoor.com/page/#{permalink(date, index)}"><img src="./images/myclip.gif" width="19" height="19" style="border: none;" alt="このエントリを含む livedoor クリップ" title="このエントリを含む livedoor クリップ"> <img src="http://image.clip.livedoor.com/counter/#{permalink(date, index)}" border="0" /></a>|
+   r << %Q|<a href="http://clip.livedoor.com/page/#{permalink(date, index)}"><img src="http://parts.blog.livedoor.jp/img/cmn/clip_16_16_w.gif" width="16" height="16" style="border: none;vertical-align: middle;" alt="このエントリを含む livedoor クリップ" title="このエントリを含む livedoor クリップ"> <img src="http://image.clip.livedoor.com/counter/#{permalink(date, index)}" style="border: none;vertical-align: middle;" /></a>|
    return r
 end
 
 def add_buzzurl(date, index)
    r = " | "
-   r << %Q|<a href="http://buzzurl.jp/entry/#{permalink(date, index)}"><img src="./images/add_icon_mini_10.gif" border="0" title="このエントリを含む Buzzurl" alt="このエントリを含む Buzzurl" width="16" height="12" class="icon" /> <img src="http://buzzurl.jp/api/counter/#{permalink(date, index)}" border="0" /></a>|
+   r << %Q|<a href="http://buzzurl.jp/entry/#{permalink(date, index)}"><img src="http://buzzurl.jp/static/image/api/icon/add_icon_mini_10.gif" style="border: none;vertical-align: middle;" title="このエントリを含む Buzzurl" alt="このエントリを含む Buzzurl" width="16" height="12" class="icon" /> <img src="http://buzzurl.jp/api/counter/#{permalink(date, index)}" style="border: none;vertical-align: middle;" /></a>|
    return r
 end
 
@@ -118,7 +118,7 @@ def add_delicious(date, index)
    count = 0
 
    r = " | "
-   r << %Q|<a href="http://del.icio.us/url/#{url_md5}"><img src="./images/delicious.small.gif" width="10" height="10" style="border: none;" alt="このエントリを含む del.icio.us" title="このエントリを含む del.icio.us">|
+   r << %Q|<a href="http://del.icio.us/url/#{url_md5}"><img src="http://images.del.icio.us/static/img/delicious.small.gif" width="10" height="10" style="border: none;vertical-align: middle;" alt="このエントリを含む del.icio.us" title="このエントリを含む del.icio.us">|
 
    delicious_json( cache_dir, file_name, url_md5 )
 
