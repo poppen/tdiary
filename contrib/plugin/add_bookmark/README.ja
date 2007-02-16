@@ -1,56 +1,50 @@
-
-add_bookmark.rb
-
 !概要
 subtitleの右にソーシャルブックマークへのリンクを埋め込みます。
 
-設定画面で埋め込みたいブックマークを選択できます。
-
-!更新履歴
-
-2007-01-09  SHIBATA Hiroshi  <h-sbt@nifty.com>
-
-	* サニタイズキャンペーンに伴う修正
-	
-2005-09-06  SHIBATA Hiroshi  <h-sbt@nifty.com>
-
-	* HTML4.01 Strictに準拠
-	* セクションのURLをエスケープするように変更
-
-2005-09-01  SHIBATA Hiroshi  <h-sbt@nifty.com>
-
-	* はてなブックマークのURLを修正
-
-2005-08-28  SHIBATA Hiroshi  <h-sbt@nifty.com>
-
-	* add_subtitle_procに対応
-	* webshots,LiVEMARK,fc2ブックマークを削除
-	* 強制的にアイコンを使用するように設定
-
-2005-06-02  SHIBATA Hiroshi  <h-sbt@nifty.com>
-
-	* はてなブックマークのアイコンの修正 
-	* del.icio.usのURLの修正 
-
-2005-06-01  SHIBATA Hiroshi  <h-sbt@nifty.com>
-
-	* LiVEMARKに対応 
-	* はてなブックマーク、del.icio.us、MM/Memoをアイコンで表示できるようにした。
-
-2005-05-28  SHIBATA Hiroshi  <h-sbt@nifty.com>
-
-	* @confの値とdayモードの判定方法を変更 
-	* 処理でイテレータを使うように変更 
-	* 英語リソースの追加 
-	* webshotsに対応 
-	* fc2ブックマークに対応 
-
-2005-05-25  SHIBATA Hiroshi  <h-sbt@nifty.com>
-
-	* 初版公開
+!使い方
+プラグインフォルダに配置するだけで使用可能です。
+プラグイン選択画面で有効に変更後、設定画面で埋め込みたいブックマークを選択します。
 
 !ライセンス
-GPL
+GPL2
+
+!更新履歴
+!!20070215
+* サービスから MM/Memo を削除
+* サービスに livedoor クリップ と Buzzurl を追加
+
+!!20070109
+* サニタイズキャンペーンに伴う修正
+	
+!!20050906
+* HTML4.01 Strictに準拠
+* セクションのURLをエスケープするように変更
+
+!!20050901
+* はてなブックマークのURLを修正
+
+!!20050828
+* add_subtitle_procに対応
+* webshots,LiVEMARK,fc2ブックマークを削除
+* 強制的にアイコンを使用するように設定
+
+!!20050602
+* はてなブックマークのアイコンの修正 
+* del.icio.usのURLの修正 
+
+!!20050601
+* LiVEMARKに対応 
+* はてなブックマーク、del.icio.us、MM/Memoをアイコンで表示できるようにした。
+
+!!20050528
+* @confの値とdayモードの判定方法を変更 
+* 処理でイテレータを使うように変更 
+* 英語リソースの追加 
+* webshotsに対応 
+* fc2ブックマークに対応 
+
+!!20050525
+* 初版公開
 
 !参考情報
 add_conf_procのチェックボックス処理についてはsearch_control.rb、body_enter_procについてはrandom_google.rbを参考にしました。

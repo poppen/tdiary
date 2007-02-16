@@ -1,12 +1,13 @@
 # add_bookmark.rb $Revision 1.3 $
 #
 # Copyright (c) 2005 SHIBATA Hiroshi <h-sbt@nifty.com>
-# Distributed under the GPL
+# You can redistribute it and/or modify it under GPL2.
 
 def bookmark_init
+   @conf['add.bookmark.delicious'] ||= ""
    @conf['add.bookmark.hatena'] ||= ""
-   @conf['add.bookmark.del'] ||= ""
-   @conf['add.bookmark.mm'] ||= ""
+   @conf['add.bookmark.livedoor'] ||= ""
+   @conf['add.bookmark.buzzurl'] ||= ""
 end
 
 add_subtitle_proc do |date, index, subtitle|
@@ -19,16 +20,28 @@ add_subtitle_proc do |date, index, subtitle|
 
       section_url = @conf.base_url + anchor(date.strftime('%Y%m%d')) + '#p' + ('%02d' % index)
       
+      if @conf['add.bookmark.delicious'] == "t" then
+         caption += %Q|<a href="http://del.icio.us/post/v4?url=#{h(section_url)}">|
+         caption += %Q|<img src="http://images.del.icio.us/static/img/delicious.small.gif" width="10" height="10" style="border: none;vertical-align: middle;" alt="#{@caption_delicious}" title="#{@caption_delicious}" />|
+         caption += %Q|</a> |
+      end
+
       if @conf['add.bookmark.hatena'] == "t" then
-         caption += %Q|<a href=\"http://b.hatena.ne.jp/append?#{h(section_url)}\"><img src=\"http://b.hatena.ne.jp/images/append.gif\" width=\"16\" height=\"12\" style =\"border: none;\" alt=\"#{@caption_hatena}\" title=\"#{@caption_hatena}\"></a> |
+         caption += %Q|<a href="http://b.hatena.ne.jp/append?#{h(section_url)}">|
+         caption += %Q|<img src="http://b.hatena.ne.jp/images/append.gif" width="16" height="12" style="border: none;vertical-align: middle;" alt="#{@caption_hatena}" title="#{@caption_hatena}" />|
+         caption += %Q|</a> |
       end
-      
-      if @conf['add.bookmark.del'] == "t" then
-         caption += %Q|<a href=\"http://del.icio.us/1?url=#{h(section_url)}\"><img src=\"http://del.icio.us/img/delicious.gif\" width=\"18\" height=\"18\" style=\"border: none;\" alt=\"#{@caption_del}\" title=\"#{@caption_del}\"></a> |
+         
+      if @conf['add.bookmark.livedoor'] == "t" then
+         caption += %Q|<a href="http://clip.livedoor.com/redirect?link=#{h(section_url)}" class="ldclip-redirect">|
+         caption += %Q|<img src="http://parts.blog.livedoor.jp/img/cmn/clip_16_16_w.gif" width="16" height="16" style="border: none;vertical-align: middle;" alt="#{@caption_livedoor}" title="#{@caption_livedoor}" />|
+         caption += %Q|</a> |
       end
-      
-      if @conf['add.bookmark.mm'] == "t" then
-         caption += %Q|<a href=\"http://1470.net/mm/memo_form.html?url=#{h(section_url)}\"><img src=\"http://1470.net/img/mm_icon.gif\" width=\"21\" height=\"12\" style=\"border: none;\" alt=\"#{@caption_mm}\" title=\"#{@caption_mm}\"></a> |
+
+      if @conf['add.bookmark.buzzurl'] == "t" then
+         caption += %Q|<a href="http://buzzurl.jp/entry/#{h(section_url)}">|
+         caption += %Q|<img src="http://buzzurl.jp/static/image/api/icon/add_icon_mini_10.gif" width="16" height="12" style="border: none;vertical-align: middle;" title="#{@caption_buzzurl}" alt="#{@caption_buzzurl}" class="icon" />|
+         caption += %Q|</a> |
       end
    end
    
@@ -46,9 +59,10 @@ def add_bookmark_conf_proc
    saveconf_add_bookmark
 
    bookmark_categories = [
+   'add.bookmark.delicious',
    'add.bookmark.hatena',
-   'add.bookmark.del',
-   'add.bookmark.mm',
+   'add.bookmark.livedoor',
+   'add.bookmark.buzzurl'
    ]
 
    r = ''
@@ -60,13 +74,13 @@ def add_bookmark_conf_proc
       r << %Q|<li><input name=#{idx} type="checkbox" value="t"#{checked}>#{label}</li>|
    end
    r << %Q|</ul>|
-
 end
 
 if @mode == 'saveconf'
    def saveconf_add_bookmark
+      @conf['add.bookmark.delicious'] = @cgi.params['add.bookmark.delicious'][0]
       @conf['add.bookmark.hatena'] = @cgi.params['add.bookmark.hatena'][0]
-      @conf['add.bookmark.del'] = @cgi.params['add.bookmark.del'][0]
-      @conf['add.bookmark.mm'] = @cgi.params['add.bookmark.mm'][0]
+      @conf['add.bookmark.livedoor'] = @cgi.params['add.bookmark.livedoor'][0]
+      @conf['add.bookmark.buzzurl'] = @cgi.params['add.bookmark.buzzurl'][0]
    end
 end

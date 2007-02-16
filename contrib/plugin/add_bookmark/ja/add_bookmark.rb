@@ -1,17 +1,20 @@
 # ja/add_bookmark.rb $Revision 1.3 $
 #
 # Japanese resource of add_bookmark.rb
+# You can redistribute it and/or modify it under GPL2.
 #
 
 @add_bookmark_label = 'ブックマーク追加'
 @add_bookmark_desc = 'ページに埋め込みたいリンクをチェックしてください。'
 
+@caption_delicious = 'del.icio.usに追加'
 @caption_hatena = 'はてなブックマークに追加'
-@caption_del = 'del.icio.usに追加'
-@caption_mm = 'MM/Memoに追加'
+@caption_livedoor = 'livedoor クリップに追加'
+@caption_buzzurl = 'Buzzurl に追加'
 
 @bookmark_label = [
-   'はてなブックマーク',
    'del.icio.us',
-   'MM/Memo',
+   'はてなブックマーク',
+   'livedoor クリップ',
+   'Buzzurl'
 ]
