@@ -1,5 +1,5 @@
 #
-# dbi_io.rb: DBI IO for tDiary 2.x. $Revision: 1.5 $
+# dbi_io.rb: DBI IO for tDiary 2.x. $Revision: 1.6 $
 #
 # NAME             dbi_io
 #
@@ -51,46 +51,11 @@ module TDiary
 
     module RefererIO
       def restore_referer(diaries)
-        begin
-          diaries.each {|date, diary_object|
-            sql = "SELECT diary_id, count, ref FROM refererdata WHERE author=? AND diary_id=?;"
-            @dbh.select_all(sql, @dbi_author, date) {|diary_id, count, ref|
-              diary_object.add_referer(ref.chomp, count.to_i)
-            }
-          }
-        rescue Errno::ENOENT
-        end
+        return
       end
 
       def store_referer(diaries)
-        begin
-          diaries.each {|date, diary|
-            referers_diff = []
-            referers = diary.instance_variable_get('@referers')
-            referers.each_pair {|k, v|
-              begin
-                next if (v - @old_referers[date][k]).empty?
-              rescue
-              end
-              referers_diff << v
-            }
-            next if referers_diff.empty?
-            referers_diff.each {|count,ref|
-              param = [count, @dbi_author, date, ref]
-              begin
-                sth = @dbh.execute("UPDATE refererdata SET count=? WHERE author=? AND diary_id=? AND ref=?;", *param)
-                if sth.rows==0
-                  no = @dbh.select_one("SELECT MAX(no) from refererdata where author=? AND diary_id=?", @dbi_author, date).first.to_i + 1
-                  param << no
-                  @dbh.execute("INSERT INTO refererdata (count, author, diary_id, ref, no ) VALUES (?,?,?,?,?);", *param)
-                end
-              rescue DBI::ProgrammingError
-                $stderr.puts "invalid referer:#{ref}"
-              end
-            }
-          }
-        rescue Errno::ENOENT
-        end
+        return
       end
     end
     

@@ -26,3 +26,14 @@
     @dbi_user       = '<user>'          # DBのアカウント
     @dbi_passwd     = '<password>       # DBのパスワード
     @dbi_author     = '<author>'        # author
+
+!! プラグインのインストール
+リンク元の保存・表示のために、プラグインを以下のいずれかの
+方法でインストールする必要があります
+
+(1) tdiary.confの@option['sp.path']に、このディレクトリに
+    あるpluginのパスを追加し、設定画面からrefererDbiIO.rb
+    を有効にする。
+
+(2) tDiaryのインストール先にあるpluginディレクトリに、
+    plugin/refererDbiIO.rbをコピーする。

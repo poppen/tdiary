@@ -32,3 +32,11 @@ CREATE TABLE refererdata (
   ref      TEXT       NOT NULL,
   CONSTRAINT refererdata_pkey PRIMARY KEY (author, diary_id, no)
 );
+CREATE TABLE referervolatile (
+  author   TEXT       NOT NULL,
+  diary_id VARCHAR(8) NOT NULL,
+  no       INTEGER    NOT NULL,
+  count    INTEGER    NOT NULL,
+  ref      TEXT       NOT NULL,
+  CONSTRAINT referervolatile_pkey PRIMARY KEY (author, diary_id, no)
+);

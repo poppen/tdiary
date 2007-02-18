@@ -1,3 +1,8 @@
+2007-02-18  sasashin <sasashin at sasashin.net>
+	* dbi_io.rb: delete restore_referer and store_referer impl.
+	* tdiary_table.sql: add referervolatile table definition.
+	* plugin/refererDbiIO.rb: add new plugin for referer.
+
 2005-12-27  Kazuhiko  <kazuhiko@fdiary.net>
 	* dbi_io.rb (store_referer): ignore invalid referers.
 
