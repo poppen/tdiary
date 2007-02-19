@@ -1,4 +1,4 @@
-# edit_today.rb : add link to edit after title of each days. $Revision: 1.1 $
+# edit_today.rb : add link to edit after title of each days. $Revision: 1.2 $
 #
 # Copyright (C) 2007 by NOB <nob@harunaru.com>
 # You can redistribute it and/or modify it under GPL2.
@@ -36,7 +36,7 @@ def edit_today_saveconf
 	end
 end
 
-add_conf_proc( 'edit_today', @edit_today_caption ) do
+add_conf_proc( 'edit_today', @edit_today_caption, 'update' ) do
 	edit_today_saveconf
 	edit_today_init
 	edit_today_conf_html
