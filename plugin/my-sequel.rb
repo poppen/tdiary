@@ -1,6 +1,6 @@
 #
 # my-sequel.rb
-# $Revision: 1.6 $
+# $Revision: 1.7 $
 #
 # show links to follow-up entries
 #
@@ -580,6 +580,30 @@ else
 			assert_equal(['20070101#p01'], cached.srcs('20060101#p01'))
 			# confirmation of other links
 			testsrcs
+		end
+
+		def testadd_two_months	# http://zunda.freeshell.org/d/20070122.html#c01
+			# write the diary for 2007-02-15
+			cached = MySequel.new(@cache_path)
+			cached.restore('20070215')
+			cached.clean_dsts(Time.local(2007,2,15))
+			cached.add('20070215#p01', '20070115#p01')
+			assert_equal(['20070215#p01'], cached.srcs('20070115#p01'))
+			cached.clean_srcs
+			cached.commit
+			# write the diary for 2007-03-10
+			cached = MySequel.new(@cache_path)
+			cached.restore('20070310')
+			cached.clean_dsts(Time.local(2007,3,10))
+			cached.add('20070310#p01', '20070115#p01')
+			assert_equal(['20070215#p01', '20070310#p01'], cached.srcs('20070115#p01'))
+			cached.clean_srcs
+			cached.commit
+			# display the diary on 2007-01-15
+			cached = MySequel.new(@cache_path)
+			cached.restore('20070115')
+			assert_equal(['20070215#p01', '20070310#p01'], cached.srcs('20070115#p01'))
+
 		end
 
 		def testedit	# confirms edition of a link

@@ -1,3 +1,9 @@
+2007-02-21 zunda <zunda at freeshell.org>
+	* my-sequel.rb: added a test case `testadd_two_months',
+	which reproduces the bug reported at
+	http://zunda.freeshell.org/d/20070122.html#c01
+	Thanks to miyasaka_m
+
 2007-02-21 TADA Tadashi <sho@spc.gr.jp>
 	* footnote.rb: fix bug on Wiki style. support latest and month view.
 	thanks to sunoko.
