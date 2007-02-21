@@ -1,4 +1,4 @@
-# footnote.rb $Revision: 1.13 $
+# footnote.rb $Revision: 1.14 $
 #
 # fn: 脚注plugin
 #   パラメタ:
@@ -10,19 +10,18 @@
 
 # initialize variables
 add_body_enter_proc do |date|
-	fn_initialize
+	fn_initialize( date )
+	''
 end
 
 add_section_enter_proc do |date, index|
-	if @conf.style =~ /wiki/i then
-		''
-	else
-		fn_initialize( index )
-	end
+	fn_initialize( date, index ) unless @conf.style =~ /blog/i
+	''
 end
 
-def fn_initialize( section = 1 )
-	@fn_section = section
+def fn_initialize( date, section = 1 )
+	@fn_fragment_fm = sprintf( 'fm%s-%02d-%%02d', date.strftime( '%Y%m%d' ), section )
+	@fn_fragment_f = @fn_fragment_fm.sub( /^fm/, 'f' )
 	@fn_notes = []
 	@fn_marks = []
 end
@@ -37,8 +36,8 @@ def fn( text, mark = '*' )
 		r << %Q|#{mark}#{idx}|
 	else
 		r << %Q|<a |
-		r << %Q|name="#{sprintf( 'fm%02d-%02d', @fn_section, idx )}" | if @mode == 'day'
-		r << %Q|href="##{sprintf( 'f%02d-%02d', @fn_section, idx )}" |
+		r << %Q|name="#{@fn_fragment_fm % idx}" |
+		r << %Q|href="##{@fn_fragment_f % idx}" |
 		r << %Q|title="#{h text}">|
 		r << %Q|#{mark}#{idx}|
 		r << %Q|</a>|
@@ -48,11 +47,7 @@ end
 
 # print footnotes
 add_section_leave_proc do |date, index|
-	if @conf.style =~ /wiki/i then
-		''
-	else
-		fn_put
-	end
+	@conf.style =~ /blog/i ? '' : fn_put
 end
 
 add_body_leave_proc do |date|
@@ -68,8 +63,8 @@ def fn_put
 				r << %Q|#{h @fn_marks[idx]}#{idx+1}|
 			else
 				r << %Q|<a |
-				r << %Q|name="#{sprintf( 'f%02d-%02d', @fn_section, idx+1 )}" | if @mode == 'day'
-				r << %Q|href="##{sprintf( 'fm%02d-%02d', @fn_section, idx+1 )}">|
+				r << %Q|name="#{@fn_fragment_f % (idx+1)}" |
+				r << %Q|href="##{@fn_fragment_fm % (idx+1)}">|
 				r << %Q|#{h @fn_marks[idx]}#{idx+1}|
 				r << %Q|</a>|
 			end

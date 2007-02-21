@@ -1,3 +1,7 @@
+2007-02-21 TADA Tadashi <sho@spc.gr.jp>
+	* footnote.rb: fix bug on Wiki style. support latest and month view.
+	thanks to sunoko.
+
 2007-02-19 TADA Tadashi <sho@spc.gr.jp>
 	* add new plugin: edit_today.rb.
 
