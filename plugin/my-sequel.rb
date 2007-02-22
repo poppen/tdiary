@@ -1,6 +1,6 @@
 #
 # my-sequel.rb
-# $Revision: 1.8 $
+# $Revision: 1.9 $
 #
 # show links to follow-up entries
 #
@@ -772,16 +772,16 @@ _INNER
 		def testconfhtml
 			target = <<_HTML
 	<h3 class="subtitle">#{h @defaults[:label][:title]}</h3>
-	<p><input name="label" id="label" type="text" value="#{h(@defaults[:label][:default])}" onchange="uncheck(this)"> - Restore default:<input name="label.reset" id="label.reset" type="checkbox" value="t" onchange="restore(this)" onclick="restore(this)"></p>
+	<p><input name="label" id="label" type="text" value="#{h(@defaults[:label][:default])}" onfocus="uncheck(this)"> - Restore default:<input name="label.reset" id="label.reset" type="checkbox" value="t" onchange="restore(this)" onclick="restore(this)"></p>
 	<h3 class="subtitle">#{h @defaults[:format][:title]}</h3>
 	<p>#{h @defaults[:format][:description]}</p>
-	<p><input name="format" id="format" type="text" value="#{h(@defaults[:format][:default])}" onchange="uncheck(this)"> - Restore default:<input name="format.reset" id="format.reset" type="checkbox" value="t" onchange="restore(this)" onclick="restore(this)"></p>
+	<p><input name="format" id="format" type="text" value="#{h(@defaults[:format][:default])}" onfocus="uncheck(this)"> - Restore default:<input name="format.reset" id="format.reset" type="checkbox" value="t" onchange="restore(this)" onclick="restore(this)"></p>
 	<h3 class="subtitle">#{h @defaults[:textarea][:title]}</h3>
-	<p><textarea name="textarea" id="textarea" cols="70" rows="10" onchange="uncheck(this)">a
+	<p><textarea name="textarea" id="textarea" cols="70" rows="10" onfocus="uncheck(this)">a
 b
 cc</textarea> - Restore default:<input name="textarea.reset" id="textarea.reset" type="checkbox" value="t" onchange="restore(this)" onclick="restore(this)"></p>
 	<h3 class="subtitle">#{h @defaults[:textarea_with_size][:title]}</h3>
-	<p><textarea name="textarea_with_size" id="textarea_with_size" cols="70" rows="2" onchange="uncheck(this)">a
+	<p><textarea name="textarea_with_size" id="textarea_with_size" cols="70" rows="2" onfocus="uncheck(this)">a
 b
 cc</textarea> - Restore default:<input name="textarea_with_size.reset" id="textarea_with_size.reset" type="checkbox" value="t" onchange="restore(this)" onclick="restore(this)"></p>
 _HTML
