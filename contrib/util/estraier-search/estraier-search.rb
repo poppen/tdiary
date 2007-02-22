@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# estraier-search.rb $Revision: 1.2 $
+# estraier-search.rb $Revision: 1.3 $
 #
 # Copyright (C) 2007 Kazuhiko <kazuhiko@fdiary.net>
 # You can redistribute it and/or modify it under GPL2.
@@ -62,6 +62,7 @@ module TDiary
 			}
 			# override some plugins
 			def @plugin.sn(number = nil); ''; end
+			def @plugin.whats_new; ''; end
 		end
 
 		def eval_rxml
