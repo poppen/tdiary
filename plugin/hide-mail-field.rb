@@ -8,7 +8,7 @@
 # Distributed under GPL.
 #
 add_header_proc do
-	if @mode == 'day' then
+	if @mode == 'day' and not @conf.mobile_agent? then
 		<<-STYLE
 		<style type="text/css"><!--
 			form.comment div.mail { display: none; }
@@ -18,3 +18,8 @@ add_header_proc do
 		''
 	end
 end
+
+def comment_form_mobile_mail_field
+	%Q|<INPUT NAME="mail" TYPE="hidden">|
+end
+

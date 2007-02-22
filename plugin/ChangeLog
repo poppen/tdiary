@@ -2,6 +2,7 @@
 	* add new plugin: hide-mail-field.rb
 	* zh/tb-show.rb: up to date to recent preferences page.
 	* trackback/tb.rb: up to date to recent error page.
+	* hide-mail-field.rb: set hidden attribute on mobile mode.
 
 2007-02-21 zunda <zunda at freeshell.org>
 	* my-sequel.rb: reformatted the CSS and Javascript sniplets.
