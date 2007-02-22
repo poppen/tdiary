@@ -1,6 +1,6 @@
 #
 # my-sequel.rb
-# $Revision: 1.9 $
+# $Revision: 1.10 $
 #
 # show links to follow-up entries
 #
@@ -140,10 +140,8 @@ _END
 
 		def handler_block
 			return <<"_END"
-<script type="text/javascript"><!-- 
-#{default_js_hash.chomp}
-#{Conf::handler_scriptlet.chomp}
-// --></script>
+<script type="text/javascript"><!--
+#{default_js_hash}#{Conf::handler_scriptlet}// --></script>
 _END
 		end
 	end
@@ -152,11 +150,10 @@ _END
 	def self::css(inner_css)
 		unless inner_css.strip.empty?
 			return <<"_END"
-<style type="text/css" media="all">
-div.sequel {
-#{h(inner_css.chomp.gsub(/\r/, ''))}
-}
-</style>
+\t<style type="text/css" media="all"><!--
+\tdiv.sequel {
+#{h(inner_css.gsub(/^\s*/, "\t\t").gsub(/\r?\n/, "\n"))}\t}
+\t--></style>
 _END
 		else
 			return ''
@@ -443,11 +440,11 @@ _END
 			@my_sequel_conf.merge_params(@cgi.params)
 			@my_sequel_conf.to_conf_hash(@conf)
 		end
-		<<_HTML
+		<<"_HTML"
 #{@my_sequel_conf.handler_block}
-	<h3>#{@my_sequel_plugin_name}</h3>
-	#{@my_sequel_description}
-	#{@my_sequel_conf.html(@my_sequel_restore_default_label, @conf.mobile_agent?).chomp}
+<h3>#{@my_sequel_plugin_name}</h3>
+#{@my_sequel_description}
+#{@my_sequel_conf.html(@my_sequel_restore_default_label, @conf.mobile_agent?).chomp}
 _HTML
 	end
 
@@ -646,12 +643,12 @@ else
 
 	class TestMySequelCss < Test::Unit::TestCase
 		def test_usual
-			assert_equal(<<'_TARGET', MySequel::css(<<'_INNER'))
-<style type="text/css" media="all">
-div.sequel {
-hogehoge: &lt;mogemoge&gt;
-}
-</style>
+			assert_equal(<<"_TARGET", MySequel::css(<<'_INNER'))
+\t<style type="text/css" media="all"><!--
+\tdiv.sequel {
+\t\thogehoge: &lt;mogemoge&gt;
+\t}
+\t--></style>
 _TARGET
 hogehoge: <mogemoge>
 _INNER

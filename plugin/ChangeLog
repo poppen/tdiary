@@ -1,4 +1,8 @@
 2007-02-21 zunda <zunda at freeshell.org>
+	* my-sequel.rb: reformatted the CSS and Javascript sniplets.
+	Thanks to miyasaka_m: http://zunda.freeshell.org/d/20070122.html#c04
+
+2007-02-21 zunda <zunda at freeshell.org>
 	* my-sequel.rb: updated testconfhtml following the new
 	specification for the configuration interface
 
