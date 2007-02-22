@@ -1,3 +1,6 @@
+2007-02-21 zunda <zunda at freeshell.org>
+	* my-sequel.rb: fixed the bug that shows only links from a month
+
 2007-02-22 TADA Tadashi <sho@spc.gr.jp>
 	* add new plugin: hide-mail-field.rb
 
