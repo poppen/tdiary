@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# tb.rb $Revision: 1.11 $
+# tb.rb $Revision: 1.12 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -58,9 +58,18 @@ begin
 			</html>]
 	end
 rescue Exception
-	puts "Content-Type: text/plain\n\n"
-	puts "#$! (#{$!.class})"
+	if @cgi then
+		print @cgi.header( 'status' => CGI::HTTP_STATUS['SERVER_ERROR'], 'type' => 'text/html' )
+	else
+		print "Status: 500 Internal Server Error\n"
+		print "Content-Type: text/html\n\n"
+	end
+	puts "<h1>500 Internal Server Error</h1>"
+	puts "<pre>"
+	puts CGI::escapeHTML( "#{$!} (#{$!.class})" )
 	puts ""
-	puts $@.join( "\n" )
+	puts CGI::escapeHTML( $@.join( "\n" ) )
+	puts "</pre>"
+	puts "<div>#{' ' * 500}</div>"
 end
 # vim: ts=3
