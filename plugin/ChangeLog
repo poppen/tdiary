@@ -1,3 +1,6 @@
+2007-02-23 TADA Tadashi <sho@spc.gr.jp>
+	* recent_comment3.rb: compare date after to_s.
+
 2007-02-22 TADA Tadashi <sho@spc.gr.jp>
 	* add new plugin: hide-mail-field.rb
 	* zh/tb-show.rb: up to date to recent preferences page.

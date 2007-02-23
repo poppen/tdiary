@@ -1,4 +1,4 @@
-# $Revision: 1.34 $
+# $Revision: 1.35 $
 # recent_comment3: 最近のツッコミをリストアップする
 #
 #   @secure = true な環境では動作しません．
@@ -145,7 +145,7 @@ add_update_proc do
                break if c.nil?
                comment, cdate, serial = c
                next if cdate.strftime('%Y%m%d') != date
-               if comment == dcomment and comment.date == dcomment.date
+               if comment == dcomment and comment.date.to_s == dcomment.date.to_s
                   comment.show = dcomment.visible?
                   next
                end
