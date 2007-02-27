@@ -18,7 +18,7 @@
 # OUT OF  OR IN CONNECTION WITH  THE CODE OR THE  USE OR OTHER  DEALINGS IN THE
 # CODE.
 
-# $Id: hatena_style.rb,v 1.11 2004-11-06 18:08:13 mput Exp $
+# $Id: hatena_style.rb,v 1.12 2007-02-27 06:57:14 kazuhiko Exp $
 # Hatena::Diary compatible style
 # Works only under ruby 1.8.1 or later
 
@@ -336,6 +336,14 @@ class Hatena::Block
             break if /\|<$/ =~ str1
           end
           @elems.push Hatena::Verbatim.new(buffer)
+        when lines[0] == ">||\n"
+          buffer = ''
+          until lines.empty?
+            str1 = lines.shift
+            buffer.concat str1
+            break if /\|\|<$/ =~ str1
+          end
+          @elems.push Hatena::SuperVerbatim.new(buffer)
         when lines[0][0,5] == '><!--'
           # comment, throwing away
           until lines.empty?
@@ -588,6 +596,23 @@ end
 class Hatena::Verbatim
   def initialize(str)
     @str = str[3..-4].freeze
+  end
+
+  def convert(mode)
+    template = nil
+    if mode == :CHTML
+      template = "<PRE>%s</PRE>"
+    else
+      template = "<pre>%s</pre>"
+    end
+    sprintf(template,CGI.escapeHTML(@str))
+  end
+end
+
+# preformatted text
+class Hatena::SuperVerbatim
+  def initialize(str)
+    @str = str[3..-5].freeze
   end
 
   def convert(mode)
