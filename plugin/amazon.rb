@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.60 $: Making link with image to Amazon using Amazon ECS.
+# amazon.rb $Revision: 1.61 $: Making link with image to Amazon using Amazon ECS.
 #
 # see document: #{@lang}/amazon.rb
 #
@@ -15,7 +15,7 @@ require 'rexml/document'
 
 def amazon_call_ecs( asin, id_type )
 	aid =  @conf['amazon.aid'] || ''
-	aid = 'cshs-22' if aid.length == 0
+	aid = 'cshs-22' if aid.empty?
 
 	url =  @amazon_ecs_url.dup
 	url << "?Service=AWSECommerceService"
@@ -98,14 +98,14 @@ def amazon_detail_html( item )
 	url = amazon_url( item )
 	html = <<-HTML
 	<a href="#{url}">
-		<img class="left" src="#{h image[:src]}"
+		<img class="amazon-detail left" src="#{h image[:src]}"
 		height="#{h image[:height]}" width="#{h image[:width]}"
 		alt="#{h title}" title="#{h title}">
 	</a>
-	<strong>#{h title}</strong><br>
-	#{h author}<br>
-	#{h @conf.to_native( item.elements.to_a( '*/Label' )[0].text, 'utf-8' )}<br>
-	#{h @conf.to_native( item.elements.to_a( '*/LowestNewPrice/FormattedPrice' )[0].text, 'utf-8' )}<br style="clear: left">
+	<span class="amazon-title">#{h title}</span><br>
+	<span class="amazon-author">#{h author}</span><br>
+	<span class="amazon-label">#{h @conf.to_native( item.elements.to_a( '*/Label' )[0].text, 'utf-8' )}</span><br>
+	<span class="amazon-price">#{h @conf.to_native( item.elements.to_a( '*/LowestNewPrice/FormattedPrice' )[0].text, 'utf-8' )}</span><br style="clear: left">
 	HTML
 end
 
@@ -113,7 +113,7 @@ def amazon_to_html( item, with_image = true, label = nil, pos = 'amazon' )
 	with_image = false if @mode == 'categoryview'
 
 	author = amazon_author( item )
-	author = "(#{author})" unless author.length == 0
+	author = "(#{author})" unless author.empty?
 	
 	if with_image and @conf['amazon.hidename'] || pos != 'amazon' then
 		label = ''
