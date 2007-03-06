@@ -1,4 +1,4 @@
-# tdiarytimes_flashstyle.rb $Revision: 1.1 $
+# tdiarytimes_flashstyle.rb $Revision: 1.2 $
 #
 # Copyright (c) 2004 phonondrive <tdiary@phonondrive.com>
 # Distributed under the GPL
@@ -247,7 +247,7 @@ def tdiarytimes_flashstyle_preview
 	end
 end
 
-def tdiarytimes_flashstyle_templete ( filename="tdiarytimes234x30.swf",  argvs="", width="234", height="30" )
+def tdiarytimes_flashstyle_templete( filename="tdiarytimes234x30.swf",  argvs="", width="234", height="30" )
 	<<-r
 		<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" width="#{width}" height="#{height}" id="tdiarytimes" align="middle">
 		<param name="allowScriptAccess" value="sameDomain" />

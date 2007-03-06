@@ -1,4 +1,4 @@
-# tdiarygraph_flashstyle.rb $Revision: 1.2 $
+# tdiarygraph_flashstyle.rb $Revision: 1.3 $
 #
 # Copyright (c) 2004 phonondrive <tdiary@phonondrive.com>
 # Distributed under the GPL
@@ -273,7 +273,7 @@ def tdiarygraph_flashstyle_preview
 end
 
 
-def tdiarygraph_flashstyle_templete ( filename="tdiarygraph468x60e.swf",  argvs="", width="468", height="60" )
+def tdiarygraph_flashstyle_templete( filename="tdiarygraph468x60e.swf",  argvs="", width="468", height="60" )
 	<<-r
 		<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" width="#{h width}" height="#{h height}" id="tdiarygraph" align="middle">
 		<param name="allowScriptAccess" value="sameDomain" />
@@ -289,7 +289,7 @@ def tdiarygraph_flashstyle_templete ( filename="tdiarygraph468x60e.swf",  argvs=
 end
 
 
-def tdiarygraph_flashstyle_text_report_format ( format="" )
+def tdiarygraph_flashstyle_text_report_format( format="" )
 	if format != ""
 		r = format.gsub('<', '&lt;').gsub('>', '&gt;').gsub(' ', '+')
 	end

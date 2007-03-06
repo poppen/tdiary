@@ -1,4 +1,4 @@
-# tdiarytimes_textstyle.rb $Revision: 1.2 $
+# tdiarytimes_textstyle.rb $Revision: 1.3 $
 #
 # Copyright (c) 2004 phonondrive <tdiary@phonondrive.com>
 # Distributed under the GPL
@@ -96,7 +96,7 @@
 #
 # Acknowledgements：
 # --------------------------------------------------------------------
-# This plugin is based on tdiarytimes.rb $Revision: 1.2 $
+# This plugin is based on tdiarytimes.rb $Revision: 1.3 $
 # Copyright (c) 2003 neuichi <neuichi@nmnl.jp>
 # Distributed under the GPL
 # http://nmnl.jp/hiki/software/?tDiary+%3A%3A+Plugin
@@ -211,7 +211,7 @@ end
 # プラグイン表示時の動作
 # --------------------------------------------------------------------
 
-def tdiarytimes_textstyle (init_text = nil, entr_text = nil, init_color = nil, entr_color = nil, fade_color = nil, init_css = nil, entr_css = nil, title_text = nil, fade_time = nil)
+def tdiarytimes_textstyle(init_text = nil, entr_text = nil, init_color = nil, entr_color = nil, fade_color = nil, init_css = nil, entr_css = nil, title_text = nil, fade_time = nil)
 
 
     # モバイル端末、テキストブラウザ、CSS非対応ブラウザ、検索ボットなどには結果を出力しない
