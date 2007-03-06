@@ -1,4 +1,4 @@
-# number_anchor.rb $Revision: 1.3 $
+# number_anchor.rb $Revision: 1.4 $
 #
 # number_anchor: アンカーにid属性を付加する
 #          アンカー画像を異なるものにするためのもの
@@ -10,7 +10,7 @@
 # Distributed under the GPL
 #
 
-def use_number_anchor ( n = 1 )
+def use_number_anchor( n = 1 )
 	@use_number_anchor = true
 	@total_anchor = n
 	""

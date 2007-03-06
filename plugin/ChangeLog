@@ -1,3 +1,6 @@
+2007-03-06  Kazuhiko  <kazuhiko@fdiary.net>
+	* number_anchor.rb: fix a warning message.
+
 2007-03-06 TADA Tadashi <sho@spc.gr.jp>
 	* edit_today.rb: fix warning message was shown on Firefox.
 
