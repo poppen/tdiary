@@ -1,3 +1,6 @@
+2007-03-06 TADA Tadashi <sho@spc.gr.jp>
+	* edit_today.rb: fix warning message was shown on Firefox.
+
 2007-02-27 TADA Tadashi <sho@spc.gr.jp>
 	* amazon.rb: add span elements into isbn_detail.
 
