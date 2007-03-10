@@ -11,6 +11,9 @@ tDiaryをcoComment(http://www.cocomment.com/)に対応させるプラグイン
 GPL2
 
 !更新履歴
+!!20070309
+* mobile_agent? の使用方法を修正
+
 !!20070213
 * ケータイ端末からのアクセスは無視するようにした
 
