@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-# squeeze.rb $Revision: 1.23 $
+# squeeze.rb $Revision: 1.24 $
 #
 # Create daily HTML file from tDiary database.
 #
@@ -28,7 +28,7 @@ if mode == "CMD" || mode == "CGI"
 
 	if mode == "CMD"
 		def usage
-			puts "squeeze $Revision: 1.23 $"
+			puts "squeeze $Revision: 1.24 $"
 			puts " making html files from tDiary's database."
 			puts " usage: ruby squeeze.rb [-p <tDiary path>] [-c <tdiary.conf path>] [-a] [-s] [-x suffix] <dest path>"
 			exit
@@ -172,11 +172,13 @@ module TDiary
 			@years.keys.sort.each do |year|
 				print "(#{year.to_s}/) "
 				@years[year.to_s].sort.each do |month|
+					diaries2 = nil
 					@io.transaction(Time::local(year.to_i, month.to_i)) do |diaries|
-						diaries.sort.each do |day, diary|
-							print YATDiarySqueeze.new(diary, dest, all_data, compat, conf, suffix).execute + " "
-						end
+						diaries2 = diaries
 						DIRTY_NONE
+					end
+					diaries2.sort.each do |day, diary|
+						print YATDiarySqueeze.new(diary, dest, all_data, compat, conf, suffix).execute + " "
 					end
 				end
 			end
@@ -194,7 +196,7 @@ if mode == "CGI" || mode == "CMD"
 			</head>
 			<body><div style="text-align:center">
 			<h1>Squeeze for tDiary</h1>
-			<p>$Revision: 1.23 $</p>
+			<p>$Revision: 1.24 $</p>
 			<p>Copyright (C) 2002 MUTOH Masao&lt;mutoh@highway.ne.jp&gt;</p></div>
 			<br><br>Start!</p><hr>
 		]
