@@ -139,7 +139,7 @@ def image_right( id, alt = "image", id2 = nil, width=nil )
 end
 
 def image_link( id, str )
-  @image_date ||= @date.strftime("%Y%m%d")
+	@image_date ||= @date.strftime("%Y%m%d")
 	@image_year ||= @date.strftime("%Y")
 	if @imageex_yearlydir == 1
 		image_url = %Q[#{@image_url}/#{@image_year}/]
@@ -175,7 +175,7 @@ add_form_proc do |date|
 		imageex_useresize = @options && @options['image_ex.useresize'] || 0
 		imageex_converttype = @options && @options['image_ex.converttype'] || 0
 		imageex_thresholdsize = @options && @options['image_ex.thresholdsize'] || 160
-		imageex_convertedwidth =  @options && @options['image_ex.convertedwidth'] || 160
+		imageex_convertedwidth = @options && @options['image_ex.convertedwidth'] || 160
 		imageex_convertedheight = @options && @options['image_ex.convertedheight'] || 120
 
 		if imageex_useresize == 1 || imageex_useresize ==2
@@ -228,7 +228,7 @@ add_form_proc do |date|
 				else
 					imageex_convertedsize ="#{imageex_convertedheight}"
 				end
-				com_line =%Q[#{topnm} #{orig} | #{pnmscale}  --width #{imageex_convertedsize} | #{pnmto} > #{new}]
+				com_line =%Q[#{topnm} #{orig} | #{pnmscale} --width #{imageex_convertedsize} | #{pnmto} > #{new}]
 				system( com_line )
 				if FileTest::size?( new ) == 0
 					File::delete( new )
@@ -269,7 +269,7 @@ add_form_proc do |date|
 			end
 			
 			if imageex_useresize == 1 or imageex_useresize == 2
-				open(image_file,"rb")  do |fh|
+				open(image_file,"rb") do |fh|
 					img = ImageSize.new(fh.read)
 					width = img.get_width
 					height = img.get_height
@@ -364,10 +364,10 @@ add_form_proc do |date|
 		posttable << %Q[</TR></TABLE>]
 	end
 
-	if @conf.respond_to?(:style) and  @conf.style == "Wiki"
+	if @conf.respond_to?(:style) and @conf.style =~ /Wiki$/i
 		image_plugin_tag1 = "{{"
 		image_plugin_tag2 = "}}"
-	elsif  @conf.respond_to?(:style) and  @conf.style == "RD"
+	elsif @conf.respond_to?(:style) and @conf.style =~ /RD$/i
 		image_plugin_tag1 = "((%"
 		image_plugin_tag2 = "%))"
 	else
@@ -433,24 +433,24 @@ add_form_proc do |date|
 		<div class="caption">
 		絵日記(一覧・削除)
 		</div>
-  	
+
 		#{pretable}
 		#{i}
 		#{posttable}
-  	
-  	</div>]
+
+		</div>]
 	end
-  
-  r << %Q[<div class="form">
+
+	r << %Q[<div class="form">
 	<div class="caption">
 	絵日記(追加)
 	</div>
-  <form class="update" method="post" enctype="multipart/form-data" action="#{h @update}">
-  	#{csrf_protection}
+	<form class="update" method="post" enctype="multipart/form-data" action="#{h @update}">
+	#{csrf_protection}
 	<input type="hidden" name="plugin_image_dir" value="#{h image_dir}">
-  <input type="hidden" name="plugin_image_add" value="true">
-  <input type="file"	 name="plugin_image_file">
-  <input type="hidden" name="date" value="#{date.strftime( '%Y%m%d' )}">
+	<input type="hidden" name="plugin_image_add" value="true">
+	<input type="file"	 name="plugin_image_file">
+	<input type="hidden" name="date" value="#{date.strftime( '%Y%m%d' )}">
 	<input type="submit" name="plugin" value="画像の追加">
 	</form></div>]
 end
