@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# estraier-search.rb $Revision: 1.3 $
+# estraier-search.rb $Revision: 1.4 $
 #
 # Copyright (C) 2007 Kazuhiko <kazuhiko@fdiary.net>
 # You can redistribute it and/or modify it under GPL2.
@@ -102,15 +102,16 @@ module TDiary
 		end
 
 		def format_result_item(item)
-			@title = item.attr('@title')
 			@date = item.attr('@uri')
 			if @conf["estraier.with_user_name"]
 				@date.gsub!(/.*:/, "")
 			end
 			@date_str = Date.parse(@date).strftime(@conf.date_format)
 			@last_modified = item.attr('@mdate')
+			@title = _(item.attr('@title'))
 			@summary = _(item.snippet).gsub(/\t.*/, "").gsub(/\n\n/, " ... ").gsub(/\n/, "")
 			for term in @query.split
+				@title.gsub!(Regexp.new(Regexp.quote(CGI.escapeHTML(term)), true, @encoding), "<strong>\\&</strong>")
 				@summary.gsub!(Regexp.new(Regexp.quote(CGI.escapeHTML(term)), true, @encoding), "<strong>\\&</strong>")
 			end
 			query = "[SIMILAR]"

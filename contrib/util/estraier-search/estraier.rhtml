@@ -1,6 +1,6 @@
 <div class="adminmenu"><%%=navi_user%></div>
 
-<h1><%= CGI::escapeHTML( @conf.html_title ) %> [全文検索]</h1>
+<h1><%= _(@conf.html_title) %> [全文検索]</h1>
 
 <form action="<%= @cgi.script_name ? _(@cgi.script_name) : '' %>">
 <p>
@@ -48,7 +48,7 @@
 <h2><span class="date"><a href="<%= @conf.index %><%= @plugin.anchor(@date) %>"><%= @date_str %></a></span> <span class="nyear">[<a href="<%= @similar %>">類似検索</a>]</span></h2>
 <div class="body">
 <div class="section">
-<h3><a href="<%= @conf.index %><%= @plugin.anchor(@date) %>"><%= @conf.section_anchor %></a><%= _(@conf.to_native(@title)) %></h3>
+<h3><a href="<%= @conf.index %><%= @plugin.anchor(@date) %>"><%= @conf.section_anchor %></a><%= @conf.to_native(@title) %></h3>
 <p>
 <%= @conf.to_native(@summary, "utf-8") %>
 </p>
