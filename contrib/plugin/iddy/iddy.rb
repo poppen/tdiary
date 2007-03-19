@@ -45,6 +45,8 @@ def iddy( id )
 	imageurl = user.to_a( 'imageurl' )[0]
 	name = user.to_a( 'name' )[0]
 	nameroma = user.to_a( 'nameroma' )[0]
+	mail = user.to_a( 'mail' )[0]
+	submail = user.to_a( 'submail' )[0]
 	
 	html = '<div class="iddy">'
 	html << %Q|<a href="#{profileurl.text}">|
@@ -55,6 +57,11 @@ def iddy( id )
 		html << %Q|<span class="iddy-name">#{nameroma.text}</span>|
 	else
 		html << %Q|<span class="iddy-name">#{id}</span>|
+	end
+	if submail then
+		html << %Q|<span class="iddy-mail">#{submail}</span>|
+	elsif mail
+		html << %Q|<span class="iddy-mail">#{mail}</span>|
 	end
 	html << '</a>'
 	html << %Q|<span class="iddy-powered">Powerd by <a href="http://iddy.jp/">iddy.jp</a></span>|
