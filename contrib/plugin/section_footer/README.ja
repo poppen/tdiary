@@ -16,7 +16,7 @@
 * セキュアな環境では動きません
 * category_to_tag.rb と同時に使うことはできません
 * Permalinkやアイコンは用途に合わせてadd_section_leave_procから適当に削ってください
-* 利用するには [[JSON library for Ruby|http://rubyforge.org/projects/json/]] が必要です。misc/lib 以下に配置してください
+* 利用するには [[JSON library for Ruby|http://rubyforge.org/projects/json/]] が必要(lib 以下に配置済み)
 
 ! 動作事例
 http://www.hsbt.org/diary/
@@ -25,6 +25,9 @@ http://www.hsbt.org/diary/
 GPL2
 
 ! Changelog
+!!20070321
+* JSON library for Ruby を追加
+
 !!20070215
 * アイコンを本家から持ってくるようにした
 
