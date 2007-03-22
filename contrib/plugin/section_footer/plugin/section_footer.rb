@@ -68,8 +68,11 @@ add_section_leave_proc do |date, index|
          end
       end
       
-      # 「このエントリを含む del.icio.us」
-      r << add_delicious(date, index)
+      # 「このエントリを含む del.icio.us(json)」
+      r << add_delicious_json(date, index)
+
+		# 「このエントリを含む del.icio.us(画像API)」
+		# r << add_delicious(date, index)
 
       # 「このエントリを含むはてなブックーク」
       r << add_hatenabm(date, index)
@@ -113,39 +116,23 @@ end
 
 def add_delicious(date, index)
    url_md5 = Digest::MD5.hexdigest(permalink(date, index, false))
+
+	r = " | "
+   r << %Q|<a href="http://del.icio.us/url/#{url_md5}"><img src="http://images.del.icio.us/static/img/delicious.small.gif" width="10" height="10" style="border: none;vertical-align: middle;" alt="このエントリを含む del.icio.us" title="このエントリを含む del.icio.us"> <img src="http://del.icio.us/feeds/img/savedcount/#{url_md5}" style="border:none;margin:0" /></a>|
+   return r
+end
+
+def add_delicious_json(date, index)
+
+   url_md5 = Digest::MD5.hexdigest(permalink(date, index, false))
    cache_dir = "#{@cache_path}/delicious/#{date.strftime( "%Y%m" )}/"
    file_name = "#{cache_dir}/#{url_md5}.json"
+   cache_time = 8 * 60 * 60  # 8 hour
+   update = false
    count = 0
 
    r = " | "
    r << %Q|<a href="http://del.icio.us/url/#{url_md5}"><img src="http://images.del.icio.us/static/img/delicious.small.gif" width="10" height="10" style="border: none;vertical-align: middle;" alt="このエントリを含む del.icio.us" title="このエントリを含む del.icio.us">|
-
-   delicious_json( cache_dir, file_name, url_md5 )
-
-   begin
-      File::open( file_name ) do |f|
-            data = JSON.parse(@conf.to_native( f.read, 'utf-8' ))
-         unless data[0].nil?
-            count = data[0]["total_posts"].to_i
-         end
-      end
-   rescue
-      return r
-   end
-
-   if count > 0
-      r << %Q| #{count} users</a>|
-   else
-      r << %Q|</a>|
-   end
-
-   return r
-end
-
-def delicious_json( cache_dir, file_name, url_md5 )
-
-   cache_time = 8 * 60 * 60  # 8 hour
-   update = false
 
    begin
       Dir::mkdir( cache_dir ) unless File::directory?( cache_dir )
@@ -173,4 +160,24 @@ def delicious_json( cache_dir, file_name, url_md5 )
       end
    rescue
    end
+
+   begin
+      File::open( file_name ) do |f|
+            data = JSON.parse(@conf.to_native( f.read, 'utf-8' ))
+         unless data[0].nil?
+            count = data[0]["total_posts"].to_i
+         end
+      end
+   rescue
+      return r
+   end
+
+   if count > 0
+      r << %Q| #{count} users</a>|
+   else
+      r << %Q|</a>|
+   end
+
+   return r
 end
+

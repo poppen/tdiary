@@ -25,6 +25,9 @@ http://www.hsbt.org/diary/
 GPL2
 
 ! Changelog
+!!20070322
+* 画像取得API に対応
+
 !!20070321
 * JSON library for Ruby を追加
 
