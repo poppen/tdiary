@@ -7,7 +7,6 @@
 require 'digest/md5'
 require 'open-uri'
 require 'timeout'
-require 'json'
 
 def permalink( date, index, escape = true )
    ymd = date.strftime( "%Y%m%d" )
@@ -118,13 +117,14 @@ def add_delicious(date, index)
    url_md5 = Digest::MD5.hexdigest(permalink(date, index, false))
 
 	r = " | "
-   r << %Q|<a href="http://del.icio.us/url/#{url_md5}"><img src="http://images.del.icio.us/static/img/delicious.small.gif" width="10" height="10" style="border: none;vertical-align: middle;" alt="このエントリを含む del.icio.us" title="このエントリを含む del.icio.us"> <img src="http://del.icio.us/feeds/img/savedcount/#{url_md5}" style="border:none;margin:0" /></a>|
+   r << %Q|<a href="http://del.icio.us/url/#{url_md5}"><img src="http://images.del.icio.us/static/img/delicious.small.gif" width="10" height="10" style="border: none;vertical-align: middle;" alt="このエントリを含む del.icio.us" title="このエントリを含む del.icio.us"> <img src="http://del.icio.us/feeds/img/savedcount/#{url_md5}?aggregate" style="border:none;margin:0" /></a>|
    return r
 end
 
 def add_delicious_json(date, index)
-
-   url_md5 = Digest::MD5.hexdigest(permalink(date, index, false))
+	require 'json'
+   
+	url_md5 = Digest::MD5.hexdigest(permalink(date, index, false))
    cache_dir = "#{@cache_path}/delicious/#{date.strftime( "%Y%m" )}/"
    file_name = "#{cache_dir}/#{url_md5}.json"
    cache_time = 8 * 60 * 60  # 8 hour
