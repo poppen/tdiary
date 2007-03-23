@@ -1,4 +1,4 @@
-# category.rb $Revision: 1.38 $
+# category.rb $Revision: 1.39 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -171,6 +171,16 @@ end
 
 
 module Category
+
+#
+# CGI (mock-up CGI class for Cache::recreate)
+#
+class CGI
+	attr_reader :params
+	def initialize
+		@params = Hash.new([])
+	end
+end
 
 #
 # Info
@@ -431,7 +441,7 @@ class Cache
 	# (re)create category cache
 	#
 	def recreate(years)
-		cgi = CGI::new
+		cgi = Category::CGI::new
 		def cgi.referer; nil; end
 
 		list = []

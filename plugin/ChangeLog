@@ -1,3 +1,6 @@
+2007-03-23 MIYASAKA Masaru <alkaid at coral.ocn.ne.jp>
+	* category.rb: class CGI -> Category::CGI.
+
 2007-03-11 MIYASAKA Masaru <alkaid at coral.ocn.ne.jp>
 	* squeeze.rb: close each data transactions before convert.
 
