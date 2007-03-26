@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.61 $: Making link with image to Amazon using Amazon ECS.
+# amazon.rb $Revision: 1.62 $: Making link with image to Amazon using Amazon ECS.
 #
 # see document: #{@lang}/amazon.rb
 #
@@ -43,7 +43,7 @@ def amazon_author( item )
 		end
 		@conf.to_native( author.chop, 'utf-8' )
 	rescue
-		''
+		'-'
 	end
 end
 
@@ -86,6 +86,26 @@ def amazon_url( item )
 	item.elements.to_a( 'DetailPageURL' )[0].text
 end
 
+def amazon_label( item )
+	begin
+		@conf.to_native( item.elements.to_a( '*/Label' )[0].text, 'utf-8' )
+	rescue
+		'-'
+	end
+end
+
+def amazon_price( item )
+	begin
+		@conf.to_native( item.elements.to_a( '*/LowestNewPrice/FormattedPrice' )[0].text, 'utf-8' )
+	rescue
+		begin
+			@conf.to_native( item.elements.to_a( '*/ListPrice/FormattedPrice' )[0].text, 'utf-8' )
+		rescue
+			'(no price)'
+		end
+	end
+end
+
 def amazon_detail_html( item )
 	author = amazon_author( item )
 	title = amazon_title( item )
@@ -104,8 +124,8 @@ def amazon_detail_html( item )
 	</a>
 	<span class="amazon-title">#{h title}</span><br>
 	<span class="amazon-author">#{h author}</span><br>
-	<span class="amazon-label">#{h @conf.to_native( item.elements.to_a( '*/Label' )[0].text, 'utf-8' )}</span><br>
-	<span class="amazon-price">#{h @conf.to_native( item.elements.to_a( '*/LowestNewPrice/FormattedPrice' )[0].text, 'utf-8' )}</span><br style="clear: left">
+	<span class="amazon-label">#{h amazon_label( item )}</span><br>
+	<span class="amazon-price">#{h amazon_price( item )}</span><br style="clear: left">
 	HTML
 end
 

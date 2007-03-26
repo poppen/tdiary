@@ -1,3 +1,6 @@
+2007-03-26 TADA Tadashi <sho@spc.gr.jp>
+	* amazon.rb: fix error when no price, no label on isbn_detail
+
 2007-03-23 MIYASAKA Masaru <alkaid at coral.ocn.ne.jp>
 	* category.rb: class CGI -> Category::CGI.
 
