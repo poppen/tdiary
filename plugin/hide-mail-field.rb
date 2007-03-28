@@ -19,6 +19,18 @@ add_header_proc do
 	end
 end
 
+add_footer_proc do
+	if @mode == 'day' and not @conf.mobile_agent? then
+		<<-SCRIPT
+		<script type="text/javascript"><!--
+			document.getElementsByName("mail")[0].value = "";
+		//--></script>
+		SCRIPT
+	else
+		''
+	end
+end
+
 def comment_form_mobile_mail_field
 	%Q|<INPUT NAME="mail" TYPE="hidden">|
 end

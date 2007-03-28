@@ -1,3 +1,6 @@
+2007-03-28 TADA Tadashi <sho@spc.gr.jp>
+	* hide-mail-field.rb: set empty string into mail field by JavaScript.
+
 2007-03-26 TADA Tadashi <sho@spc.gr.jp>
 	* amazon.rb: fix error when no price, no label on isbn_detail
 
