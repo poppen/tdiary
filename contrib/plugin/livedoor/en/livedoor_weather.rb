@@ -20,7 +20,7 @@
 @lwws_icon_desc = 'Weather information is displayed in the icon. '
 @lwws_max_temp_label = 'Max Tempreture'
 @lwws_min_temp_label = 'Min Tempreture'
-@celsius_label = '¡î'
+@celsius_label = 'C'
 @lwws_label_cache = 'Auto update of cache'
 @lwws_desc_cache = 'Enable auto update.'
 @lwws_desc_cache_time = 'Please set number of update time.'

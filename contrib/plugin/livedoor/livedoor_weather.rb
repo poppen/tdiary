@@ -1,8 +1,8 @@
-# livedoor_weather.rb $Revision$
+# livedoor_weather.rb
 #
 # insert weather information using livedoor weather web service.
 #
-# Copyright (C) 2006 SHIBATA Hiroshi <h-sbt@nifty.com>
+# Copyright (C) 2007 SHIBATA Hiroshi <h-sbt@nifty.com>
 # You can redistribute it and/or modify it under GPL2.
 #
 require 'open-uri'
@@ -19,7 +19,7 @@ def lwws_init
 end
 
 def convert_date( date_status )
-  case date_status
+	case date_status
 	when "today"
 		date = Time.now
 	when "tomorrow"
@@ -31,22 +31,23 @@ def convert_date( date_status )
 end
 
 def lwws_request( city_id, date_status )
-
 	url =  @lwws_rest_url.dup
 	url << "?city=#{city_id}"
 	url << "&day=#{date_status}"
-
+	
+	proxy = @conf['proxy']
+	proxy = 'http://' + proxy if proxy
 	timeout( 10 ) do
-		open( url ) {|f| f.read}
+		open( url, :proxy => proxy ) {|f| f.read }
 	end
 end
 
-def lwws_get( date_status , update = false)
+d ef lwws_get( date_status , update = false)
 	lwws_init
 
 	city_id = @conf['lwws.city_id']
 	cache_time = @conf['lwws.cache_time'] * 60 * 60  # hour
-
+	
 	cache = "#{@cache_path}/lwws"
 	file_name = "#{cache}/#{convert_date( date_status )}.xml" # file_name is YYYYMMDD.xml
 
@@ -119,8 +120,7 @@ def lwws_to_html( date_status, date = nil )
 
 		result << %Q|</div>|
 
-		return result
-
+		return result		
 	rescue Errno::ENOENT
 		return ''
 	end
@@ -145,19 +145,9 @@ def lwws( date )
 	lwws_to_html( "", date )
 end
 
-add_body_enter_proc do |date|
-   unless feed?
-      lwws_to_html( "", date.strftime("%Y%m%d"))
-   end
-end
-
-add_update_proc do
-	lwws_get( "today" )
-end
-
 def lwws_conf_proc
 	lwws_init
-
+	
 	if @mode == 'saveconf' then
 		@conf['lwws.city_id'] = @cgi.params['lwws.city_id'][0].to_i
 		@conf['lwws.icon.disp'] = @cgi.params['lwws.icon.disp'][0]
@@ -201,6 +191,17 @@ def lwws_conf_proc
 	return result
 end
 
+add_body_enter_proc do |date|
+   unless feed?
+      lwws_to_html( "", date.strftime("%Y%m%d"))
+   end
+end
+
+add_update_proc do
+	lwws_get( "today" )
+end
+
 add_conf_proc( 'lwws', @lwws_plugin_name ) do
 	lwws_conf_proc
 end
+
