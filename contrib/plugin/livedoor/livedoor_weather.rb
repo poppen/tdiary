@@ -42,7 +42,7 @@ def lwws_request( city_id, date_status )
 	end
 end
 
-d ef lwws_get( date_status , update = false)
+def lwws_get( date_status , update = false)
 	lwws_init
 
 	city_id = @conf['lwws.city_id']
