@@ -34,7 +34,7 @@ def lwws_request( city_id, date_status )
 	url =  @lwws_rest_url.dup
 	url << "?city=#{city_id}"
 	url << "&day=#{date_status}"
-	
+
 	proxy = @conf['proxy']
 	proxy = 'http://' + proxy if proxy
 	timeout( 10 ) do
@@ -47,7 +47,7 @@ d ef lwws_get( date_status , update = false)
 
 	city_id = @conf['lwws.city_id']
 	cache_time = @conf['lwws.cache_time'] * 60 * 60  # hour
-	
+
 	cache = "#{@cache_path}/lwws"
 	file_name = "#{cache}/#{convert_date( date_status )}.xml" # file_name is YYYYMMDD.xml
 
@@ -120,7 +120,7 @@ def lwws_to_html( date_status, date = nil )
 
 		result << %Q|</div>|
 
-		return result		
+		return result
 	rescue Errno::ENOENT
 		return ''
 	end
@@ -147,7 +147,7 @@ end
 
 def lwws_conf_proc
 	lwws_init
-	
+
 	if @mode == 'saveconf' then
 		@conf['lwws.city_id'] = @cgi.params['lwws.city_id'][0].to_i
 		@conf['lwws.icon.disp'] = @cgi.params['lwws.icon.disp'][0]
@@ -204,4 +204,3 @@ end
 add_conf_proc( 'lwws', @lwws_plugin_name ) do
 	lwws_conf_proc
 end
-
