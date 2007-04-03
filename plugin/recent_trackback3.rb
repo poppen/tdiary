@@ -1,4 +1,4 @@
-# $Revision: 1.20 $
+# $Revision: 1.21 $
 # recent_trackback3: 最近のツッコミをリストアップする
 #
 # Copyright (c) 2004 Junichiro KITA <kita@kitaj.no-ip.com>
@@ -23,30 +23,30 @@ end
 
 def recent_trackback3
 	return 'DO NOT USE IN SECURE MODE' if @conf.secure
-
+	
 	recent_trackback3_init
-
+	
 	cache = @conf['recent_trackback3.cache'].untaint
 	n = @conf['recent_trackback3.n']
 	date_format = @conf['recent_trackback3.date_format']
 	format = @conf['recent_trackback3.format']
 	titlelen = @conf['recent_trackback3.titlelen']
-
+	
    entries = {}
    tree_order = []
 	order = []
    result = []
 	idx = 0
-
+	
 	PStore.new(cache).transaction do |db|
 		break unless db.root?('trackbacks')
 		db['trackbacks'].each do |tb|
 			break if idx >= n or tb == nil
 			trackback, date, serial = tb
 			next unless trackback.visible_true?
-
+			
 			url, blog_name, title, excerpt = trackback.body.split(/\n/, 4)
-
+			
 			a = h(@index) + anchor("#{date.strftime('%Y%m%d')}#t#{'%02d' % serial}")
 			popup = h(@conf.shorten(excerpt, 60))
 			str = [blog_name, title].compact.join(":").sub(/:$/, '')
@@ -55,7 +55,7 @@ def recent_trackback3
 			date_str = h(trackback.date.strftime(date_format))
 			
 			idx += 1
-
+			
 			entry_date = "#{date.strftime('%Y%m%d')}"
 			comment_str = entries[entry_date]
 			
@@ -70,19 +70,19 @@ def recent_trackback3
 		end
 		db.abort
 	end
-
+	
    if @conf['recent_trackback3.tree'] == "t" then
       if entries.size == 0
          ''
       else
          cgi = CGI::new
          def cgi.referer; nil; end
-
-         tree_order.each { | entry_date |
+			
+         tree_order.each do | entry_date |
             a_entry = @index + anchor(entry_date)
             cgi.params['date'] = [entry_date]
             diary = TDiaryDay::new(cgi, '', @conf)
-
+				
             if diary != nil then
                title = diary.diaries[entry_date].title.gsub( /<[^>]*>/, '' )
             end
@@ -90,15 +90,14 @@ def recent_trackback3
                date = Time.parse(entry_date)
                title = "#{date.strftime @date_format}"
             end
-
+				
             result << "<li>"
             result << %Q|<a href="#{h( a_entry )}">#{h( @conf.shorten( title, titlelen ) )}</a><br>|
-            entries[entry_date].sort.each { | comment_str |
+				entries[entry_date].sort.each do | comment_str |
                result << comment_str + "<br>"
-            }
+            end
             result << "</li>\n"
-         }
-
+         end
          %Q|<ul class="recent-trackback">\n| + result.join( '' ) + "</ul>\n"
       end
    else
@@ -115,13 +114,13 @@ def recent_trackback3
 end
 
 add_update_proc do
-
+	
    recent_trackback3_init
-
+	
    date = @date.strftime( '%Y%m%d' )
    cache = @conf['recent_trackback3.cache'].untaint
    cache_size = @conf['recent_trackback3.cache_size']
-
+	
 	if @mode == 'trackbackreceive' and @comment
 		trackback = @comment
 		serial = 0

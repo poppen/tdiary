@@ -1,4 +1,4 @@
-# $Revision: 1.35 $
+# $Revision: 1.36 $
 # recent_comment3: 最近のツッコミをリストアップする
 #
 #   @secure = true な環境では動作しません．
@@ -26,7 +26,7 @@ end
 
 def recent_comment3(ob_max = 'OBSOLUTE' ,sep = 'OBSOLUTE',ob_date_format = 'OBSOLUTE',*ob_except )
    return 'DO NOT USE IN SECURE MODE' if @conf.secure
-
+	
    recent_comment3_init
    
    cache = @conf['recent_comment3.cache'].untaint
@@ -35,12 +35,12 @@ def recent_comment3(ob_max = 'OBSOLUTE' ,sep = 'OBSOLUTE',ob_date_format = 'OBSO
    except = @conf['recent_comment3.except_list'].split(/,/)
    format = @conf['recent_comment3.format']
    titlelen = @conf['recent_comment3.titlelen']
-
+	
    entries = {}
    tree_order =[]
    order = []
    idx = 0
-
+	
    PStore.new(cache).transaction do |db|
       break unless db.root?('comments')
       db['comments'].each do |c|
@@ -48,30 +48,29 @@ def recent_comment3(ob_max = 'OBSOLUTE' ,sep = 'OBSOLUTE',ob_date_format = 'OBSO
          comment, date, serial = c
          next unless comment.visible?
          next if except.include?(comment.name)
-
+			
          a = h( @index ) + anchor("#{date.strftime('%Y%m%d')}#c#{'%02d' % serial}") 
          popup = h(comment.shorten( @conf.comment_length ))
          str = h(comment.name)
          date_str = h( comment.date.strftime(date_format) )
-
+			
          idx += 1
-
+			
          entry_date = "#{date.strftime('%Y%m%d')}"
          comment_str = entries[entry_date]
-
+			
          if comment_str == nil then
             comment_str = []
             tree_order << entry_date
          end
-
+			
          comment_str << recent_comment3_format(format, idx, a, popup, str, date_str)
          entries[entry_date] = comment_str
-         order << entry_date
-
+         order << entry_date			
       end
       db.abort
    end
-
+	
    result = []
    
    if @conf['recent_comment3.tree'] == "t" then
@@ -80,8 +79,8 @@ def recent_comment3(ob_max = 'OBSOLUTE' ,sep = 'OBSOLUTE',ob_date_format = 'OBSO
       else
          cgi = CGI::new
          def cgi.referer; nil; end
-            
-         tree_order.each { | entry_date |
+			
+         tree_order.each do | entry_date |
             a_entry = @index + anchor(entry_date)
             cgi.params['date'] = [entry_date]
             diary = TDiaryDay::new(cgi, '', @conf)
@@ -96,11 +95,11 @@ def recent_comment3(ob_max = 'OBSOLUTE' ,sep = 'OBSOLUTE',ob_date_format = 'OBSO
             
             result << "<li>"
             result << %Q|<a href="#{h( a_entry )}">#{h( @conf.shorten( title, titlelen ) )}</a><br>|
-            entries[entry_date].sort.each { | comment_str |
+				entries[entry_date].sort.each do | comment_str |
                result << comment_str + "<br>"
-            }
+            end
             result << "</li>\n"
-         }
+         end
          
          %Q|<ul class="recent-comment">\n| + result.join( '' ) + "</ul>\n"
       end

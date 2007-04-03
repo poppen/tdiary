@@ -1,3 +1,6 @@
+2007-04-03 SHIBATA Hiroshi <h-sbt@nifty.com>
+	* recent_comment3.rb,recent_trackback3.rb: replace soft tab to hard tab.
+	
 2007-03-28 TADA Tadashi <sho@spc.gr.jp>
 	* hide-mail-field.rb: set empty string into mail field by JavaScript.
 
