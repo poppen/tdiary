@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.34 2007-01-23 10:27:55 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.35 2007-04-13 05:21:15 zunda Exp $-))
 日本語リソース
 
 == 概要
@@ -468,7 +468,7 @@ DispReferrer2_Engines = {
 	'goo' => [
 		[%r{\Ahttp://((www|ocn|dictionary|kids|eco|oshiete|.*search|community|machi|bb|bsearch|dir|channel|ocnsearch)\.)?goo\.ne\.jp}i, '"goo"', ['MT'], nil ],
 		[%r{\Ahttp://((www|ocn|dictionary|kids|eco|oshiete|.*search|community|machi|bb|bsearch|dir|channel|ocnsearch)\.)?goo\.ne\.jp}i, '"goo"', [], nil ],
-		[%r{\Ahttp://.*mobile\.goo\.ne\.jp/search_i.jsp}i, '"goo"', ['MT'], nil ],
+		[%r{\Ahttp://.*mobile\.goo\.ne\.jp/search(?:_i)?.jsp}i, '"goo"', ['MT'], nil ],
 	],
 	'nifty' => [
 		[%r{\Ahttp://search\.nifty\.com}i, '"@nifty/@search"', ['q', 'Text'], DispReferrer2_Google_cache],
