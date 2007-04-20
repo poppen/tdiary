@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.35 2007-04-13 05:21:15 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.36 2007-04-20 09:08:01 zunda Exp $-))
 日本語リソース
 
 == 概要
@@ -441,12 +441,11 @@ DispReferrer2_Google_cache = /cache:[^:]+:([^+]+)+/
 DispReferrer2_Yahoofs = /u=(.+)/
 DispReferrer2_Engines = {
 	'google' => [
-		[%r{\Ahttp://(?:[^./]+\.)*?google\.([^/]+)/(search|custom|ie)}i, '".#{$1}のGoogle検索"', ['as_q', 'q', 'as_epq'], DispReferrer2_Google_cache],
+		[%r{\Ahttp://(?:[^./]+\.)*?google\.([^/]+)/((?:hws/)?search|blogsearch|custom|ie)}i, '".#{$1}のGoogle検索"', ['as_q', 'q', 'as_epq'], DispReferrer2_Google_cache],
 		[%r{\Ahttp://.*?\bgoogle\.([^/]+)/.*url}i, '".#{$1}のGoogleのURL検索?"', ['as_q', 'q'], DispReferrer2_Google_cache],
 		[%r{\Ahttp://.*?\bgoogle/search}i, '"たぶんGoogle検索"', ['as_q', 'q'], DispReferrer2_Google_cache],
 		[%r{\Ahttp://eval.google\.([^/]+)}i, '".#{$1}のGoogle Accounts"', [], nil],
-		[%r{\Ahttp://(?:[^./]+\.)*?google\.([^/]+)}i, '".#{$1}のGoogle検索"', [], nil],
-		[%r{\Ahttp://images\.google\.([^/]+)/imgres}i, '".#{$1}のGoogleイメージ検索"', ['imgurl'], DispReferrer2_Google_cache],
+		[%r{\Ahttp://images\.google\.([^/]+)/(?:imgres|images)}i, '".#{$1}のGoogleイメージ検索"', ['q', 'imgurl'], DispReferrer2_Google_cache],
 	],
 	'yahoo' => [
 		[%r{\Ahttp://.*?\.rd\.yahoo\.([^/]+)}i, '".#{$1}のYahooのリダイレクタ"', 'split(/\*/)[1]', nil],
@@ -454,6 +453,8 @@ DispReferrer2_Engines = {
 		[%r{\Ahttp://rd.+\.yahoo\.com}i, '"Yahooのリダイレクタ"', [], nil], # エンジンは inktomi 製と見た。
 		[%r{\Ahttp://(?:[^bm]*?|blog-search)\.yahoo\.([^/]+)}i, '".#{$1}のYahoo!検索"', ['p', 'va', 'vp'], DispReferrer2_Google_cache],
 		[%r{\Ahttp://wrs\.search\.yahoo\.([^/]+)/(?:.*)K=([^/]+)}i, 'keyword=$2; "#{$1}のYahoo!検索"', [], nil],
+		[%r{\Ahttp://(?:image-search\.yahoo\.co\.jp/search|images\.search\.yahoo\.co\.jp/bin/(?:search|query))}, '".co.jpのYahoo!画像検索"', ['p'], DispReferrer2_Google_cache],
+		[%r{\Ahttp://images\.search\.yahoo\.com/search/images(?:/view)?}, '".comのYahoo!画像検索"', ['p'], DispReferrer2_Google_cache],
 	],
 	'yahoofs' => [[%r{\Ahttp://cache\.yahoofs\.jp/}i, '"Yahoo!検索"', ['w'], DispReferrer2_Yahoofs]],
 	'netscape' => [[%r{\Ahttp://.*?\.netscape\.([^/]+)}i, '".#{$1}のNetscape検索"', ['search', 'query'], DispReferrer2_Google_cache]],
@@ -461,7 +462,10 @@ DispReferrer2_Engines = {
 	'metacrawler' => [[%r{\Ahttp://.*?.metacrawler.com}i, '"MetaCrawler"', ['q'], nil ]],
 	'metabot' => [[%r{\Ahttp://.*?\.metabot\.ru}i, '"MetaBot.ru"', ['st'], nil ]],
 	'altavista' => [[%r{\Ahttp://.*altavista\.([^/]+)}i, '".#{$1}のAltaVista検索"', ['q'], nil ]],
-	'infoseek' => [[%r{\Ahttp://(www\.)?infoseek\.co\.jp}i, '"インフォシーク"', ['qt'], nil ]],
+	'infoseek' => [
+		[%r{\Ahttp://(www\.)?infoseek\.co\.jp}i, '"Infoseek"', ['qt'], nil],
+		[%r{\Ahttp://search\.www\.infoseek\.co\.jp/[IO]Titles}, '"Infoseekハイブリッド検索"', ['qt'], nil],
+	],
 	'odn' => [[%r{\Ahttp://.*?\.odn\.ne\.jp}i, '"ODN検索"', ['QueryString', 'key'], nil ]],
 	'lycos' => [[%r{\Ahttp://.*?\.lycos\.([^/]+)}i, '".#{$1}のLycos"', ['query', 'q', 'qt'], nil ]],
 	'fresheye' => [[%r{\Ahttp://.*?\.fresheye}i, '"フレッシュアイ"', ['kw'], nil ]],
@@ -471,7 +475,7 @@ DispReferrer2_Engines = {
 		[%r{\Ahttp://.*mobile\.goo\.ne\.jp/search(?:_i)?.jsp}i, '"goo"', ['MT'], nil ],
 	],
 	'nifty' => [
-		[%r{\Ahttp://search\.nifty\.com}i, '"@nifty/@search"', ['q', 'Text'], DispReferrer2_Google_cache],
+		[%r{\Ahttp://search\.nifty\.com}i, '"@nifty/@search"', ['q', 'Text', 'text'], DispReferrer2_Google_cache],
 		[%r{\Ahttp://srchnavi\.nifty\.com}i, '"@niftyのリダイレクタ"', ['title'], nil ],
 	],
 	'eniro' => [[%r{\Ahttp://.*?\.eniro\.se}i, '"Eniro"', ['q'], DispReferrer2_Google_cache]],

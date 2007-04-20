@@ -1,3 +1,7 @@
+2007-04-19 zunda <zunda at freeshell.org>
+	* ja/disp_referrer.rb: cleaned up and added some URLs
+	Thanks to Akinori MUSHA <knu at idaemons.org>
+
 2007-04-03 SHIBATA Hiroshi <h-sbt@nifty.com>
 	* recent_comment3.rb: sorry, re-tabify.
 
