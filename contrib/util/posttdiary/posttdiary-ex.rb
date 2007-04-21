@@ -1,12 +1,12 @@
 #!/usr/bin/env ruby
 $KCODE= 'e'
 #
-# posttdiary-ex: update tDiary via e-mail. $Revision: 1.6 $
+# posttdiary-ex: update tDiary via e-mail. $Revision: 1.7 $
 #
 # Copyright (C) 2002, All right reserved by TADA Tadashi <sho@spc.gr.jp>
 # You can redistribute it and/or modify it under GPL2.
 #
-# 2006.8.14: v.1.63: Modified by K.Sakurai (http://ks.nwr.jp)
+# 2007.3.23: v.1.64: Modified by K.Sakurai (http://ks.nwr.jp)
 #  Acknowledgements:
 #   * Based on posttdiary.rb v1.2 by TADA.
 #   * Some codes partially imported from Enikki Plugin Ex. : 
@@ -21,7 +21,7 @@ $KCODE= 'e'
 def usage( detailed_help )
 	# (if "!" is at the head of the line, it is to be shown only when detailed_help == true (-h option) )
 	text = <<-TEXT
-		#{File::basename __FILE__}: update tDiary via e-mail (v1.63).
+		#{File::basename __FILE__}: update tDiary via e-mail (v1.64).
 		usage: ruby posttdiary-ex.rb [options (without -d)] <url> <user> <passwd>
 		       ruby posttdiary-ex.rb [options (with -d)]
 		arguments:
@@ -133,7 +133,7 @@ def usage( detailed_help )
 !		  --filter-mode,    -d: print to stdout (does not call update.rb)
 !		  --write-to-file,  -b filename: writeout to file (does not call update.rb)
 !		  --date-margin,    -j date_margin: avoid writing diaries for future dates
-!		          ex. -j 30 (default margin: 7)
+!		          ex. -j 30 (default=7, 0=disabled)
 !		  --rotate, -T LEFT or RIGHT: rotate images
 !			  ex. -T RIGHT (rotate 90degrees clockwise)
 !		          Also possible by adding "_ROT_LEFT#" or "_ROT_RIGHT#"to mail body.
@@ -544,7 +544,7 @@ def parse_mail( head, body , image_dir )
 	imgnum = -1
 	imgdir = add_delimiter( image_dir )
 
-	if head =~ /Content-Type:\s*Multipart\/Mixed.*boundary=\"*([^\"\r\n]*)\"*/im then
+	if   head =~ /Content-Type:\s*Multipart\/Mixed.*boundary=\"*([^\"\r\n]*)\"*/im or head =~ /Content-Type:\s*Multipart\/Related.*boundary=\"*([^\"\r\n]*)\"*/im then
 		bound = "--" + $1
 		body_sub = body.split( Regexp.compile( Regexp.escape( bound ) ) )
 		body_sub.each do |b|
@@ -902,8 +902,8 @@ begin
 		rotation_degree_specified = 0
 	end
 
-	if tmp >= now + date_margin * 24 * 3600 then
-#		raise "posttdiary-ex: invalid future date"
+	if date_margin != 0 and (tmp - now).abs >= date_margin * 24 * 3600 then
+#		raise "posttdiary-ex: specified date is too far from today"
 #		# use current date (now) instead of specified date(tmp)..
 	else
 		now = tmp
