@@ -1,3 +1,6 @@
+2007-04-22 TADA Tadashi <sho@spc.gr.jp>
+	* category.rb: support mobile mode.
+
 2007-04-19 zunda <zunda at freeshell.org>
 	* ja/disp_referrer.rb: cleaned up and added some URLs
 	Thanks to Akinori MUSHA <knu at idaemons.org>
