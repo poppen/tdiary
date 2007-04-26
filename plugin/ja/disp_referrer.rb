@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.37 2007-04-26 11:55:08 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.38 2007-04-26 12:09:06 zunda Exp $-))
 日本語リソース
 
 == 概要
@@ -451,23 +451,23 @@ DispReferrer2_Engines = {
 		[%r{\Ahttp://[^/]+\.rd\.yahoo\.([^/]+)}i, '".#{$1}のYahooのリダイレクタ"', 'split(/\*/)[1]', nil],
 		[%r{\Ahttp://srd\.yahoo\.co\.jp/}i, '"Yahooのリダイレクタ"', [], nil],
 		[%r{\Ahttp://rd[^/]+\.yahoo\.com/}i, '"Yahooのリダイレクタ"', [], nil], # エンジンは inktomi 製と見た。
-		[%r{\Ahttp://(?:[^bm/]+|blog-search)\.yahoo\.([^/]+)}i, '".#{$1}のYahoo!検索"', ['p', 'va', 'vp'], DispReferrer2_Google_cache],
+		[%r{\Ahttp://(?:[^bm/]+|blog-search)\.yahoo\.([^/]+)/}i, '".#{$1}のYahoo!検索"', ['p', 'va', 'vp'], DispReferrer2_Google_cache],
 		[%r{\Ahttp://wrs\.search\.yahoo\.([^/]+)/(?:.*)\bK=([^/]+)}i, 'keyword=$2; "#{$1}のYahoo!検索"', [], nil],
 		[%r{\Ahttp://(?:image-search\.yahoo\.co\.jp/(?:search|detail)|images\.search\.yahoo\.co\.jp/bin/(?:search|query))}, '".co.jpのYahoo!画像検索"', ['p'], DispReferrer2_Google_cache],
 		[%r{\Ahttp://images\.search\.yahoo\.com/search/images(?:/view)?}, '".comのYahoo!画像検索"', ['p'], DispReferrer2_Google_cache],
 	],
 	'yahoofs' => [[%r{\Ahttp://cache\.yahoofs\.jp/}i, '"Yahoo!検索"', ['w'], DispReferrer2_Yahoofs]],
-	'netscape' => [[%r{\Ahttp://[^/]+\.netscape\.([^/]+)}i, '".#{$1}のNetscape検索"', ['search', 'query'], DispReferrer2_Google_cache]],
-	'msn' => [[%r{\Ahttp://[^/]+\.MSN\.([^/]+)}i, '".#{$1}のMSNサーチ"', ['q', 'MT'], nil ]],
+	'netscape' => [[%r{\Ahttp://[^/]+\.netscape\.([^/]+)/}i, '".#{$1}のNetscape検索"', ['search', 'query'], DispReferrer2_Google_cache]],
+	'msn' => [[%r{\Ahttp://[^/]+\.MSN\.([^/]+)/}i, '".#{$1}のMSNサーチ"', ['q', 'MT'], nil ]],
 	'metacrawler' => [[%r{\Ahttp://[^/]+\.metacrawler.com/}i, '"MetaCrawler"', ['q'], nil ]],
 	'metabot' => [[%r{\Ahttp://[^/]+\.metabot\.ru/}i, '"MetaBot.ru"', ['st'], nil ]],
-	'altavista' => [[%r{\Ahttp://(?:[^/]+\.)?altavista\.([^/]+)}i, '".#{$1}のAltaVista検索"', ['q'], nil ]],
+	'altavista' => [[%r{\Ahttp://(?:[^/]+\.)?altavista\.([^/]+)/}i, '".#{$1}のAltaVista検索"', ['q'], nil ]],
 	'infoseek' => [
 		[%r{\Ahttp://(www\.)?infoseek\.co\.jp/}i, '"Infoseek"', ['qt'], nil],
 		[%r{\Ahttp://search\.www\.infoseek\.co\.jp/[IO]Titles}, '"Infoseekハイブリッド検索"', ['qt'], nil],
 	],
 	'odn' => [[%r{\Ahttp://[^/]+\.odn\.ne\.jp/}i, '"ODN検索"', ['QueryString', 'key'], nil ]],
-	'lycos' => [[%r{\Ahttp://[^/]+\.lycos\.([^/]+)}i, '".#{$1}のLycos"', ['query', 'q', 'qt'], nil ]],
+	'lycos' => [[%r{\Ahttp://[^/]+\.lycos\.([^/]+)/}i, '".#{$1}のLycos"', ['query', 'q', 'qt'], nil ]],
 	'fresheye' => [[%r{\Ahttp://[^/]+\.fresheye}i, '"フレッシュアイ"', ['kw'], nil ]],
 	'goo' => [
 		[%r{\Ahttp://((www|ocn|dictionary|kids|eco|oshiete|(?:[^/]+\.)?search|(?:[^/]+\.)?blog|community|machi|bb|dir|channel|ocnsearch)\.)?goo\.ne\.jp/}i, '"goo"', ['MT'], nil ],
@@ -483,7 +483,7 @@ DispReferrer2_Engines = {
 		[%r{\Ahttp://srchnavi\.nifty\.com/}i, '"@niftyのリダイレクタ"', ['title'], nil ],
 	],
 	'eniro' => [[%r{\Ahttp://[^/]+\.eniro\.se/}i, '"Eniro"', ['q'], DispReferrer2_Google_cache]],
-	'excite' => [[%r{\Ahttp://[^/]+\.excite\.([^/]+)}i, '".#{$1}のExcite"', ['search', 's', 'query', 'qkw'], nil ]],
+	'excite' => [[%r{\Ahttp://[^/]+\.excite\.([^/]+)/}i, '".#{$1}のExcite"', ['search', 's', 'query', 'qkw'], nil ]],
 	'biglobe' => [
 		[%r{\Ahttp://(?:[^/]+\.)?search\.biglobe\.ne\.jp/}i, '"BIGLOBEサーチ"', ['q'], nil ],
 		[%r{\Ahttp://(?:[^/]+\.)?search\.biglobe\.ne\.jp/}i, '"BIGLOBEサーチ"', [], nil ],
@@ -516,7 +516,7 @@ DispReferrer2_Engines = {
 	'nytimes' => [[%r{\Ahttp://query\.nytimes\.com/search}i, '"New York Times: Search"', ['as_q', 'q', 'query'], DispReferrer2_Google_cache]],
 	'aaacafe' => [[%r{\Ahttp://search\.aaacafe\.ne\.jp/search}i, '"AAA!CAFE"', ['key'], nil]],
 	'virgilio' => [[%r{\Ahttp://search\.virgilio\.it/search}i, '"VIRGILIO Ricerca"', ['qs'], nil]],
-	'ceek' => [[%r{\Ahttp://www\.ceek\.jp}i, '"ceek.jp"', ['q'], nil]],
+	'ceek' => [[%r{\Ahttp://www\.ceek\.jp/}i, '"ceek.jp"', ['q'], nil]],
 	'cnn' => [[%r{\Ahttp://websearch\.cnn\.com/}i, '"CNN.com"', ['query', 'as_q', 'q', 'as_epq'], DispReferrer2_Google_cache]],
 	'webferret' => [[%r{\Ahttp://webferret\.search\.com/}i, '"WebFerret"', 'split(/,/)[1]', nil]],
 	'eniro' => [[%r{\Ahttp://www\.eniro\.se/}i, '"Eniro"', ['query', 'as_q', 'q'], DispReferrer2_Google_cache]],
@@ -542,7 +542,7 @@ DispReferrer2_Engines = {
 	'ask' => [[%r{\Ahttp://ask\.jp/web.asp}i, '"ask.jp"', ['q'], nil ]],
 	'searchscout' => [[%r{\Ahttp://results\.searchscout\.com/search}i, '"SearchSout"', ['k'], nil ]],
 	'inktomi' => [[%r{\Ahttp://rdrw1.inktomi.com/click}i, '"inktomi のリダイレクタ"', [], nil]],
-	'3721' => [[%r{\Ahttp://(seek|nmsearch)\.3721\.com/}i, '"3721网頁搜索"', ['p','name'], nil]],
+	'3721' => [[%r{\Ahttp://(?:seek|nmsearch)\.3721\.com/}i, '"3721网頁搜索"', ['p','name'], nil]],
 	'yisou' => [[%r{\Ahttp://www\.yisou\.com/}i, '"一搜"', ['p'], nil]],
 	'devilfinder' => [[%r{\Ahttp://www\.devilfinder\.com/find.php}i, '"The Devilfinder"', ['q'], nil]],
 	'lyricsuniverse' => [[%r{\Ahttp://www\.lyricsuniverse\.com/}, '"LYRICS Universe"', [], nil]],
@@ -560,28 +560,28 @@ DispReferrer2_Engines = {
 	'toppg' => [[%r{\Ahttp://g\.toppg\.to/search}i, '"Google検索(へのリダイレクタ)"', ['as_q', 'q'], DispReferrer2_Google_cache]],
 	'naoya' => [[%r{\Ahttp://naoya\.dyndns\.org/feedback/app/search}i, '"FeedBack"', ['keyword'], nil]],
 	'blogpeople' => [[%r{\Ahttp://bst\.blogpeople\.net/search_result\.jsp}i, '"blogpeople"', ['keyword'], nil]],
-	'matome' => [[%r{\Ahttp://\w+\.matome\.jp/(keyword|tag)/(.*(?=\.html\Z)|.*\Z)}i, 'keyword=$2; "まとめ検索"', [], nil]],
+	'matome' => [[%r{\Ahttp://\w+\.matome\.jp/(?:keyword|tag)/(.*(?=\.html\Z)|.*\Z)}i, 'keyword=$1; "まとめ検索"', [], nil]],
 	'210' => [[%r{\Ahttp://210\.174\.160\.70/se_root.phtml}i, '"JWord（日本語キーワード）"', ['name'], nil]],
 	# % whois 64.233.160
 	# NetRange:   64.233.160.0 - 64.233.191.255
 	# CIDR:       64.233.160.0/19
 	# NetName:    GOOGLE
-	'233' => [[%r{\Ahttp://64\.233\.(1[6-8][0-9]|190|191)\.\d+/}i, '"Google検索"', ['as_q', 'q'], DispReferrer2_Google_cache]],
+	'233' => [[%r{\Ahttp://64\.233\.(?:1[6-8][0-9]|190|191)\.\d+/}i, '"Google検索"', ['as_q', 'q'], DispReferrer2_Google_cache]],
 	# % whois 66.102.0.0
 	# NetRange:   66.102.0.0 - 66.102.15.255
 	# CIDR:       66.102.0.0/20
 	# NetName:    GOOGLE-2
-	'102' => [[%r{\Ahttp://66\.102\.([0-9]|1[0-5])\.\d+/}i, '"Google検索"', ['as_q', 'q'], DispReferrer2_Google_cache]],
+	'102' => [[%r{\Ahttp://66\.102\.(?:[0-9]|1[0-5])\.\d+/}i, '"Google検索"', ['as_q', 'q'], DispReferrer2_Google_cache]],
 	# other google candidates:
-	'216' => [[%r{\Ahttp://(\d+\.){3}\d+/search}i, '"Google検索?"', ['as_q', 'q'], DispReferrer2_Google_cache]],		# cache servers of google?
+	'216' => [[%r{\Ahttp://(?:\d+\.){3}\d+/search}i, '"Google検索?"', ['as_q', 'q'], DispReferrer2_Google_cache]],		# cache servers of google?
 	# % whois whois 72.14.203.104
 	# NetRange:   72.14.192.0 - 72.14.239.255 
 	# CIDR:       72.14.192.0/19, 72.14.224.0/20 
 	# NetName:    GOOGLE
-	'14' => [[%r{\Ahttp://72\.14\.(19[2-9]|2\d\d)\.\d+/}i, '"Google検索"', ['as_q', 'q'], DispReferrer2_Google_cache]],
+	'14' => [[%r{\Ahttp://72\.14\.(?:19[2-9]|2\d\d)\.\d+/}i, '"Google検索"', ['as_q', 'q'], DispReferrer2_Google_cache]],
 	'ezweb' => [[%r{\Ahttp://ezsch\.ezweb\.ne\.jp/search/}i, '"EZweb検索"', ['query'], nil]],
-	'overture' => [[%r{\Ahttp://(\w+\.)?overture\.com/}i, '"Overture検索"', ['Keywords'], nil]],
-	'multimeta' => [[%r{\Ahttp://(\w+\.)?multimeta\.com/}i, '"Multimeta検索"', ['suchbegriff'], nil]],
+	'overture' => [[%r{\Ahttp://(?:\w+\.)?overture\.com/}i, '"Overture検索"', ['Keywords'], nil]],
+	'multimeta' => [[%r{\Ahttp://(?:\w+\.)?multimeta\.com/}i, '"Multimeta検索"', ['suchbegriff'], nil]],
 	'starware' => [[%r{\Ahttp://search\.starware\.com/}i, '"Starware検索"', ['qry'], nil]],
 	'rambler' => [[%r{\Ahttp://\w+\.rambler\.ru/}i, '"Rambler"', ['words'], nil]],
 	'technorati' => [
@@ -597,5 +597,5 @@ DispReferrer2_Engines = {
 	# NetRange:   209.85.128.0 - 209.85.255.255
 	# CIDR:       209.85.128.0/17
 	# NetName:    GOOGLE
-	'85' => [[%r{\Ahttp://209\.85\.(12[8-9]|1[3-9]\d|2\d\d)\.\d+/}i, '"Google検索"', ['as_q', 'q'], DispReferrer2_Google_cache]],
+	'85' => [[%r{\Ahttp://209\.85\.(?:12[8-9]|1[3-9]\d|2\d\d)\.\d+/}i, '"Google検索"', ['as_q', 'q'], DispReferrer2_Google_cache]],
 }

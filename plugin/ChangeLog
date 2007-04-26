@@ -1,4 +1,8 @@
 2007-04-26 zunda <zunda at freeshell.org>
+	* ja/disp_referrer.rb: postfixed slashes to host names, prefixed `:?'
+	to parenthesis which are not referred.
+
+2007-04-26 zunda <zunda at freeshell.org>
 	* ja/disp_referrer.rb: made regexps stricter, sorted out goo
 	search engines, and added support for goo OEM search, such as
 	So-net's. Thanks to Akinori MUSHA <knu at idaemons.org>
