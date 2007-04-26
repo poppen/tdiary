@@ -1,3 +1,8 @@
+2007-04-26 zunda <zunda at freeshell.org>
+	* ja/disp_referrer.rb: made regexps stricter, sorted out goo
+	search engines, and added support for goo OEM search, such as
+	So-net's. Thanks to Akinori MUSHA <knu at idaemons.org>
+
 2007-04-22 TADA Tadashi <sho@spc.gr.jp>
 	* category.rb: support mobile mode.
 
