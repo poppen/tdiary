@@ -1,4 +1,4 @@
-# category.rb $Revision: 1.40 $
+# category.rb $Revision: 1.41 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -55,7 +55,7 @@ def category_anchor(category)
 		else
 			""
 		end
-	if @category_icon[category]
+	if @category_icon[category] and !@conf.mobile?
 		%Q|<a href="#{h @index}?#{period_string}category=#{u category}"><img class="category" src="#{h @category_icon_url}#{h @category_icon[category]}" alt="#{h category}"></a>|
 	else
 		%Q|[<a href="#{h @index}?#{period_string}category=#{u category}">#{h category}</a>]|
@@ -170,19 +170,28 @@ def category_dropdown_list(label = nil, multiple = nil)
 	label ||= 'Categorize!'
 	multiple ||= false
 
-	category = Category::Info.new(@cgi, @years, @conf).category
-	category = ['ALL'] if category.empty?
+	info = Category::Info.new(@cgi, @years, @conf)
+	category = info.category
+	if category.empty?
+		return '' if @conf.mobile?
+		category = ['ALL'] 
+	end
 
 	options = ''
 	(['ALL'] + @categories).each do |c|
 		options << %Q|\t\t<option value="#{h c}"#{" selected" if category.include?(c)}>#{h c}</option>\n|
 	end
 
+	params = ''
+	params << %Q[<input type="hidden" name="year" value="#{info.year}">] if info.year
+	params << %Q[<input type="hidden" name="month" value="#{info.month}">] if info.month
+
 	<<HTML
-<form method="get" action="#{h @index}?#{period_string}"><div>
+<form method="get" action="#{h @index}"><div>
 	<select name="category"#{" multiple" if multiple}>
 #{options}
 	</select>
+	#{params}
 	<input type="submit" value="#{label}">
 </div></form>
 HTML
