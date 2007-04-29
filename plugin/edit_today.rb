@@ -1,4 +1,4 @@
-# edit_today.rb : add link to edit after title of each days. $Revision: 1.3 $
+# edit_today.rb : add link to edit after title of each days. $Revision: 1.4 $
 #
 # Copyright (C) 2007 by NOB <nob@harunaru.com>
 # You can redistribute it and/or modify it under GPL2.
@@ -13,7 +13,7 @@ add_title_proc do |date,title|
 end
 
 def edit_today_link( date, title )
-	unless @mode == 'day'
+	unless /^(day|preview)$/ =~ @mode
 		edit_today_init
 		caption = @conf['edit_today.caption']
 		unless @conf.mobile_agent?
