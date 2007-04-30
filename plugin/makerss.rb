@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.52 $
+# makerss.rb: $Revision: 1.53 $
 #
 # generate RSS file when updating.
 #
@@ -434,9 +434,9 @@ end
 add_edit_proc do
 	checked = @cgi.params['makerss_update'][0] == 'false' ? ' checked' : ''
 	r = <<-HTML
-	<div class="makerss">
-	<input type="checkbox" name="makerss_update" value="false"#{checked} tabindex="390" />
+	<div class="makerss"><label for="makerss_update">
+	<input type="checkbox" id="makerss_update" name="makerss_update" value="false"#{checked} tabindex="390">
 	#{@makerss_edit_label}
-	</div>
+	</label></div>
 	HTML
 end

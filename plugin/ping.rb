@@ -1,4 +1,4 @@
-# ping.rb: $Revision: 1.11 $
+# ping.rb: $Revision: 1.12 $
 #
 # ping to weblog ping servers.
 #
@@ -87,10 +87,10 @@ def ping_edit_proc
 		checked = @cgi.params['plugin_ping_send'][0] == 'true' ? ' checked' : ''
 	end
 	r = <<-HTML
-	<div class="ping">
-	<input type="checkbox" name="plugin_ping_send" value="true"#{checked}  tabindex="400" />
+	<div class="ping"><label for="plugin_ping_send">
+	<input type="checkbox" id="plugin_ping_send" name="plugin_ping_send" value="true"#{checked}  tabindex="400">
 	#{@ping_label_send}
-	</div>
+	</label></div>
 	HTML
 end
 # vim: ts=3

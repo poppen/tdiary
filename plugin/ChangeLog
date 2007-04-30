@@ -1,3 +1,6 @@
+2007-04-30 TADA Tadashi <sho@spc.gr.jp>
+	* makerss.rb, ping.rb: add label elements in update form.
+
 2007-04-29 TADA Tadashi <sho@spc.gr.jp>
 	* category.rb: support mobile mode more.
 	* edit_today.rb: hide edit link on preview mode.
