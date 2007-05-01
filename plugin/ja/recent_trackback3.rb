@@ -1,4 +1,4 @@
-# ja/recent_trackback3.rb $Revision: 1.6 $
+# ja/recent_trackback3.rb $Revision: 1.7 $
 #
 # Japanese resources for recent_trackback3.rb
 #
@@ -21,7 +21,7 @@ add_conf_proc( 'recent_trackback3', '最近のTrackBack', 'tsukkomi' ) do
 	<p><input name="recent_trackback3.date_format" value="#{h( @conf['recent_trackback3.date_format'] )}" size="40"></p>
 
 	<h3 class="subtitle">ツリー表示機能</h3>
-	<p><input name="recent_trackback3.tree" type="checkbox" value="t"#{checked} />ツリー表示機能を使用する</p>
+	<p><label for="recent_trackback3.tree"><input id="recent_trackback3.tree" name="recent_trackback3.tree" type="checkbox" value="t"#{checked} />ツリー表示機能を使用する</label></p>
 
 	<h3 class="subtitle">ツリー表示時のタイトルの長さ</h3>
 	<p>ツリー表示機能を使用する時のタイトルの長さを指定します。ツリー表示機能を使用しない場合には関係ありません。</p>

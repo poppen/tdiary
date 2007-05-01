@@ -1,6 +1,6 @@
 #
 # my-sequel.rb
-# $Revision: 1.10 $
+# $Revision: 1.11 $
 #
 # show links to follow-up entries
 #
@@ -123,7 +123,8 @@ _END
 					end
 					r += %Q|\t<p><textarea name="#{h k.to_s}"#{idattr} cols="#{h cols}" rows="#{h rows}"#{uncheck}>#{h(Conf.to_native(self[k]))}</textarea>|
 				end
-				r += %Q|#{restore_default_label}<input name="#{h k.to_s}.reset"#{idattr_reset} type="checkbox" value="t"#{restore}></p>\n|
+				name = "#{h k.to_s}.reset"
+				r += %Q|&nbsp;-&nbsp;<label for="#{name}"><input id="#{name}" name="#{name}"#{idattr_reset} type="checkbox" value="t"#{restore}>#{restore_default_label}</label></p>\n|
 				r
 			}.join
 		end
@@ -404,7 +405,7 @@ which have `my' link to the entry in the past.</p>
 _END
 	@my_sequel_label_conf ||= 'Link label'
 	@my_sequel_label ||= 'Follow up: '
-	@my_sequel_restore_default_label ||= ' - Restore default:'
+	@my_sequel_restore_default_label ||= 'Restore default'
 	@my_sequel_default_hash ||= {
 		:label => {
 			:title => 'Link label',

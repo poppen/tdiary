@@ -1,4 +1,4 @@
-# ja/recent_trackback3.rb $Revision: 1.6 $
+# ja/recent_trackback3.rb $Revision: 1.7 $
 #
 # English resources for recent_trackback3.rb
 #
@@ -21,7 +21,7 @@ add_conf_proc( 'recent_trackback3', 'Recent TrackBacks', 'tsukkomi' ) do
 	<p><input name="recent_trackback3.date_format" value="#{h( @conf['recent_trackback3.date_format'] )}" size="40"></p>
 
 	<h3 class="subtitle">Tree View mode</h3>
-	<p><input name="recent_trackback3.tree" type="checkbox" value="t"#{checked} />used Tree View</p>
+	<p><label for="recent_trackback3.tree"><input id="recent_trackback3.tree" name="recent_trackback3.tree" type="checkbox" value="t"#{checked} />use Tree View</label></p>
 
 	<h3 class="subtitle">length of title at Tree View mode</h3>
 	<p>Input length of title at Tree View mode. When Tree view mode is not used, it doesn't relate.</p>

@@ -1,4 +1,4 @@
-# ja/category.rb $Revision: 1.11 $
+# ja/category.rb $Revision: 1.12 $
 #
 # Copyright (c) 2004 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -53,9 +53,9 @@ def category_conf_html
 カテゴリインデックスを作成するには
 以下のチェックを入れてからOKボタンを押してください。
 </p>
-<p>
-<input type="checkbox" name="category_initialize" value="1">カテゴリインデックスの作成
-</p>
+<p><label for="category_initialize">
+<input type="checkbox" id="category_initialize" name="category_initialize" value="1">カテゴリインデックスの作成
+</label></p>
 <p>
 日記の量やサーバの性能にもよりますが、数秒から数十秒でインデックスの作成は終了します。
 </p>

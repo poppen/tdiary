@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.62 $: Making link with image to Amazon using Amazon ECS.
+# amazon.rb $Revision: 1.63 $: Making link with image to Amazon using Amazon ECS.
 #
 # see document: #{@lang}/amazon.rb
 #
@@ -273,7 +273,7 @@ def amazon_conf_proc
 					<option value="false"#{" selected" unless @conf['amazon.nodefault']}>#{@amazon_label_usedefault}</option>
 				</select></p>
 				<h3>#{@amazon_label_clearcache}</h3>
-				<p><input type="checkbox" name="amazon.clearcache" value="true">#{@amazon_label_clearcache_desc}</input></p>
+				<p><label for="amazon.clearcache"><input type="checkbox" id="amazon.clearcache" name="amazon.clearcache" value="true">#{@amazon_label_clearcache_desc}</label></p>
 			HTML
 		end
 	end

@@ -1,4 +1,4 @@
-# ja/recent_comment3.rb $Revision: 1.5 $
+# ja/recent_comment3.rb $Revision: 1.6 $
 #
 # Japanese resources for recent_comment3.rb
 #
@@ -25,7 +25,7 @@ if @mode == 'conf' || @mode == 'saveconf'
       <p><input name="recent_comment3.except_list" size="60" value="#{h( @conf['recent_comment3.except_list'] )}" /></p>
 
       <h3 class="subtitle">ツリー表示機能</h3>
-      <p><input name="recent_comment3.tree" type="checkbox" value="t"#{checked} />ツリー表示機能を使用する</p>
+      <p><label for="recent_comment3.tree"><input id="recent_comment3.tree" name="recent_comment3.tree" type="checkbox" value="t"#{checked} />ツリー表示機能を使用する</label></p>
 
       <h3 class="subtitle">ツリー表示時のタイトルの長さ</h3>
       <p>ツリー表示機能を使用する時のタイトルの長さを指定します。ツリー表示機能を使用しない場合には関係ありません。</p>

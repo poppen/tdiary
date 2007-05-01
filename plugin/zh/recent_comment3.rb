@@ -1,4 +1,4 @@
-# zh/recent_comment3.rb $Revision: 1.4 $
+# zh/recent_comment3.rb $Revision: 1.5 $
 #
 # Chinese  resources for recent_comment3.rb
 #
@@ -25,7 +25,7 @@ if @mode == 'conf' || @mode == 'saveconf'
       <p><input name="recent_comment3.except_list" size="60" value="#{h( @conf['recent_comment3.except_list'] )}" /></p>
 
       <h3 class="subtitle">Tree View mode</h3>
-      <p><input name="recent_comment3.tree" type="checkbox" value="t"#{checked} />used Tree View</p>
+      <p><label for="recent_comment3.tree"><input id="recent_comment3.tree" name="recent_comment3.tree" type="checkbox" value="t"#{checked} />use Tree View</label></p>
 
       <h3 class="subtitle">length of title at Tree View mode</h3>
       <p>Input length of title at Tree View mode. When Tree view mode is not used, it doesn't relate.</p>

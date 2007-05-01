@@ -1,6 +1,6 @@
 #
 # ja/my-sequel.rb
-# $Revision: 1.2 $
+# $Revision: 1.3 $
 #
 # show links to follow-up entries
 #
@@ -17,7 +17,7 @@
 <p>myプラグインで過去の日記に言及すると、その日記からのリンクを表示します。</p>
 <p>設定が登録されるのは「OK」ボタンを押してからです。デフォルトの設定に戻す時でも、「OK」ボタンを押してください。</p>
 _END
-@my_sequel_restore_default_label ||= '−デフォルトに戻す:'
+@my_sequel_restore_default_label ||= 'デフォルトに戻す'
 @my_sequel_default_hash ||= {
 	:label => {
 		:title => 'ラベル',

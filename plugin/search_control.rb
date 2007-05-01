@@ -1,5 +1,5 @@
 =begin
-= ここだけ検索プラグイン/search control plugin((-$Id: search_control.rb,v 1.8 2007-01-08 09:00:48 zunda Exp $-))
+= ここだけ検索プラグイン/search control plugin((-$Id: search_control.rb,v 1.9 2007-05-01 13:05:21 tadatadashi Exp $-))
 
 Under revision! TODO: add/remove user agents
 
@@ -162,13 +162,15 @@ add_conf_proc( Search_control_prefix, Search_control_plugin_name ) do
 	r << %Q|<li><input name="#{_sc_newkey}" value="" type="text"> #{Search_control_new_label}\n|
 	(@conf[_sc_nkey] - 1).downto( 1 ) do |i|
 		r << %Q|<li><input name="#{_sc_akey( i )}" value="#{h( @conf[_sc_akey( i )] )}" type="text">\n|
-		r << %Q|#{Search_control_delete_label}<input name="#{_sc_delkey( i )}" value="t" type="checkbox">\n|
+		name = "#{_sc_delkey( i )}"
+		r << %Q|<label for="#{name}"><input id="#{name}" name="#{name}" value="t" type="checkbox">#{Search_control_delete_label}</label>\n|
 		r << "<ul>\n"
 		Search_control_categories.each do |c|
 			label = c[0]
 			view = c[1]
 			checked = 't' == @conf[_sc_vkey( view, i )] ? ' checked' : ''
-			r << %Q|<li><input name="#{_sc_vkey( view, i )}" value="t" type="checkbox"#{checked}>#{label}\n|
+			name = "#{_sc_vkey( view, i )}"
+			r << %Q|<li><label for="#{name}"><input id="#{name}" name="#{name}" value="t" type="checkbox"#{checked}>#{label}</label>\n|
 		end
 		r << "</ul>\n"
 	end
@@ -178,7 +180,8 @@ add_conf_proc( Search_control_prefix, Search_control_plugin_name ) do
 		label = c[0]
 		view = c[1]
 		checked = 't' == @conf[_sc_vkey( view, 0 )] ? ' checked' : ''
-		r << %Q|<li><input name="#{_sc_vkey( view, 0 )}" value="t" type="checkbox"#{checked}>#{label}\n|
+		name = "#{_sc_vkey( view, 0 )}"
+		r << %Q|<li><label for="#{name}"><input id="#{name}" name="#{name}" value="t" type="checkbox"#{checked}>#{label}</label>\n|
 	end
 	r << "</ul>\n</ul>\n"
 	r << %Q|<input type="hidden" name="#{_sc_nkey}" value="#{@conf[_sc_nkey]}">|

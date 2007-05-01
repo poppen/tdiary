@@ -1,3 +1,7 @@
+2007-05-01 TADA Tadashi <sho@spc.gr.jp>
+	* amazon.rb, category.rb, recent_comment3.rb, recent_trakcback3.rb,
+	my-sequel.rb, search_control.rb: add label elements in preferences form.
+
 2007-04-30 TADA Tadashi <sho@spc.gr.jp>
 	* makerss.rb, ping.rb: add label elements in update form.
 
