@@ -1,3 +1,6 @@
+2007-05-03 TADA Tadashi <sho@spc.gr.jp>
+	* search_control.rb: force nofollow in category page.
+
 2007-05-01 TADA Tadashi <sho@spc.gr.jp>
 	* amazon.rb, category.rb, recent_comment3.rb, recent_trakcback3.rb,
 	my-sequel.rb, search_control.rb: add label elements in preferences form.

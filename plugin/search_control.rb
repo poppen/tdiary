@@ -1,5 +1,5 @@
 =begin
-= ここだけ検索プラグイン/search control plugin((-$Id: search_control.rb,v 1.9 2007-05-01 13:05:21 tadatadashi Exp $-))
+= ここだけ検索プラグイン/search control plugin((-$Id: search_control.rb,v 1.10 2007-05-03 02:36:03 tadatadashi Exp $-))
 
 Under revision! TODO: add/remove user agents
 
@@ -201,16 +201,18 @@ add_header_proc do
 
 	# view
 	view = ''
+	follow = 'follow'
 	if /^(latest|day|month|nyear)$/ =~ @mode then
 		view = @mode
 	elsif /^category/ =~ @mode then
 		view = 'category'
+		follow = 'nofollow'
 	end
 
 	# output
 	sw = @conf[_sc_vkey( view, number )]
 	if sw then
-		%Q|\t<meta name="robots" content="#{'f' == sw ? 'noindex' : 'index' },follow">\n|
+		%Q|\t<meta name="robots" content="#{'f' == sw ? 'noindex' : 'index' },#{follow}">\n|
 	else
 		''
 	end
