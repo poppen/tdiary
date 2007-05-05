@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.63 $: Making link with image to Amazon using Amazon ECS.
+# amazon.rb $Revision: 1.64 $: Making link with image to Amazon using Amazon ECS.
 #
 # see document: #{@lang}/amazon.rb
 #
@@ -215,12 +215,16 @@ def amazon_get( asin, with_image = true, label = nil, pos = 'amazon' )
 		rescue Timeout::Error
 			asin
 		rescue NoMethodError
-			if item == nil then
-				message = doc.elements.to_a( 'Items/Request/Errors/Error/Message' )[0].text
-				"#{label ? label : asin}<!--#{h @conf.to_native( message, 'utf-8' )}-->"
-			else
-				"#{label ? label : asin}<!--#{h $!}\n#{h $@.join( ' / ' )}-->"
+			message = label || asin
+			if @mode == 'preview' then
+				if item == nil then
+					m = doc.elements.to_a( 'Items/Request/Errors/Error/Message' )[0].text
+					message << %Q|<span class="message">(#{h @conf.to_native( m, 'utf-8' )})</span>|
+				else
+					message << %Q|<span class="message">(#{h $!}\n#{h $@.join( ' / ' )})</span>|
+				end
 			end
+			message
 		end
 	end
 end

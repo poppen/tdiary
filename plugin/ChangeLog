@@ -1,3 +1,6 @@
+2007-05-05 TADA Tadashi <sho@spc.gr.jp>
+	* amazon.rb: print error message from amazon API when preview mode.
+
 2007-05-03 TADA Tadashi <sho@spc.gr.jp>
 	* search_control.rb: force nofollow in category page.
 
