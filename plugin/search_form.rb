@@ -1,49 +1,46 @@
-# search_form.rb $Revision: 1.10 $
+# search_form.rb $Revision: 1.11 $ $Revision: 1.11 $
 #
 # Show a form for search engines.
 #
-# 1. Usage
-# namazu_form(url, button_name, size, default_text
-# googlej_form(button_name, size, default_text)
-# yahooj_form(button_name, size, default_text)
-#
-# 2. Documents
-# See URLs below for more details.
-#   http://ponx.s5.xrea.com/hiki/search_form.rb.html (English) 
-#   http://ponx.s5.xrea.com/hiki/ja/search_form.rb.html (Japanese) 
-#
 # Copyright (c) 2002 MUTOH Masao <mutoh@highway.ne.jp>
 # Distributed under the same license terms as tDiary.
-# 
-def search_form(url, query, button_name = "Search", size = 20, 
-						default_text = "", first_form = "", last_form = "")
-%Q[
-	<form class="search" method="GET" action="#{h( url )}">
-	<div class="search">
-	#{first_form}
-		<input class="search" type="text" name="#{h( query )}" size="#{h( size )}" value="#{h( default_text )}">
-		<input class="search" type="submit" value="#{h button_name}">
-	#{last_form}
-	</div>
-	</form>
-]
+#
+
+add_header_proc do
+	@extract_search_keyword = ''
+	if @cgi.referer then
+		begin
+			setup = DispRef2Setup::new( @conf, 1, true, nil, @mode )
+			disp_url = DispRef2URL::new( @cgi.referer )
+			disp_url.parse( setup )
+			if disp_url.category == :search then
+				@extract_search_keyword = disp_url.key
+			end
+		rescue NameError
+		end
+	end
+	''
 end
 
-def namazu_form(url, button_name = "Search", size = 20, default_text = "")
-	search_form(url, "query", button_name, size, default_text)
+def extract_search_keyword
+	h @extract_search_keyword
 end
 
-def googlej_form(button_name = "Google ¸¡º÷", size = 20, default_text = "")
-	first = %Q[<a href="http://www.google.com/">
-		<img src="http://www.google.com/logos/Logo_40wht.gif" 
-			style="border-width: 0px; vertical-align: middle;" alt="Google"></a>]
-	last = %Q[<input type="hidden" name="hl" value="ja"><input type="hidden" name="ie" value="euc-jp">]
-	search_form("http://www.google.com/search", "q", button_name, size, default_text, first, last)
+
+def search_form(url, query, button_name = "Search", size = 20, default_text = "", first_form = "", last_form = "")
+	default_text = @extract_search_keyword if default_text.empty?
+	%Q[
+		<form class="search" method="GET" action="#{h( url )}">
+		<div class="search">
+		#{first_form}
+			<input class="search" type="text" name="#{h( query )}" size="#{h( size )}" value="#{h( default_text )}">
+			<input class="search" type="submit" value="#{h button_name}">
+		#{last_form}
+		</div>
+		</form>
+	]
 end
 
-def yahooj_form(button_name = "Yahoo! ¸¡º÷", size = 20, default_text = "")
-	first = %Q[<a href="http://www.yahoo.co.jp/">
-		<img src="http://img.yahoo.co.jp/images/yahoojp_sm.gif" 
-			style="border-width: 0px; vertical-align: middle;" alt="Yahoo! JAPAN"></a>]
-	search_form("http://search.yahoo.co.jp/bin/search", "p", button_name, size, default_text, first, "")
+def namazu_form( url, button_name = "Search", size = 20, default_text = "" )
+	search_form( url, "query", button_name, size, default_text )
 end

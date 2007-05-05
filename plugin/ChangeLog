@@ -1,5 +1,7 @@
 2007-05-05 TADA Tadashi <sho@spc.gr.jp>
 	* amazon.rb: print error message from amazon API when preview mode.
+	* search_form.rb: i18n.
+	* search_form.rb: add extract_search_keyword plugin using disp_referrer.rb.
 
 2007-05-03 TADA Tadashi <sho@spc.gr.jp>
 	* search_control.rb: force nofollow in category page.
