@@ -3,7 +3,6 @@
 # Copyright (C) 2005 Kazuhiko <kazuhiko@fdiary.net>
 # You can redistribute it and/or modify it under GPL2.
 #
-require 'rast'
 
 mode = ""
 if $0 == __FILE__
@@ -21,7 +20,7 @@ if mode == "CMD"
 	$stdout.sync = true
 
 	def usage
-		puts "rast-register.rb $Revision: 1.12 $"
+		puts "rast-register.rb $Revision: 1.13 $"
 		puts " register to rast index files from tDiary's database."
 		puts " usage: ruby rast-regiser.rb [-p <tDiary directory>] [-c <tdiary.conf directory>]"
 		exit
@@ -56,6 +55,8 @@ if mode == "CMD"
 		exit( 1 )
 	end
 end
+
+require 'rast'
 
 module TDiary
 	#

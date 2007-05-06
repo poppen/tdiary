@@ -1,13 +1,11 @@
 #!/usr/bin/env ruby
-# rast-search.rb $Revision: 1.8 $
+# rast-search.rb $Revision: 1.9 $
 #
 # Copyright (C) 2005 Kazuhiko <kazuhiko@fdiary.net>
 # You can redistribute it and/or modify it under GPL2.
 #
 $KCODE= 'e'
 BEGIN { $defout.binmode }
-
-require 'rast.so'
 
 if FileTest::symlink?( __FILE__ ) then
 	org_path = File::dirname( File::readlink( __FILE__ ) )
@@ -16,6 +14,7 @@ else
 end
 $:.unshift( org_path.untaint )
 require 'tdiary'
+require 'rast'
 
 #
 # class TDiaryRast
