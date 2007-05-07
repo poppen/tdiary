@@ -20,7 +20,7 @@ if mode == "CMD"
 	$stdout.sync = true
 
 	def usage
-		puts "rast-register.rb $Revision: 1.13 $"
+		puts "rast-register.rb $Revision: 1.14 $"
 		puts " register to rast index files from tDiary's database."
 		puts " usage: ruby rast-regiser.rb [-p <tDiary directory>] [-c <tdiary.conf directory>]"
 		exit
@@ -312,8 +312,8 @@ else
 			str = <<-HTML
 <h3 class="subtitle">#{@rast_register_conf_header}</h3>
 <p>
-<input type="checkbox" name="rast_register_rebuild" value="1">
-#{@rast_register_conf_description}
+<label for="rast_register_rebuild"><input id="rast_register_rebuild" type="checkbox" name="rast_register_rebuild" value="1">
+#{@rast_register_conf_description}</label>
 </p>
 HTML
 			if @mode == 'saveconf'

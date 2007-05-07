@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# estraier-register.rb $Revision: 1.2 $
+# estraier-register.rb $Revision: 1.3 $
 #
 # Copyright (C) 2007 Kazuhiko <kazuhiko@fdiary.net>
 # You can redistribute it and/or modify it under GPL2.
@@ -22,7 +22,7 @@ if mode == "CMD"
 	$stdout.sync = true
 
 	def usage
-		puts "hyper-estraier-register.rb $Revision: 1.2 $"
+		puts "hyper-estraier-register.rb $Revision: 1.3 $"
 		puts " register to hyper-estraier index files from tDiary's database."
 		puts " usage: ruby hyper-estraier-regiser.rb [-p <tDiary directory>] [-c <tdiary.conf directory>]"
 		exit
@@ -275,8 +275,8 @@ else
 			str = <<-HTML
 <h3 class="subtitle">#{@estraier_register_conf_header}</h3>
 <p>
-<input type="checkbox" name="estraier_register_rebuild" value="1">
-#{@estraier_register_conf_description}
+<label for="estraier_register_rebuild"><input id="estraier_register_rebuild" type="checkbox" name="estraier_register_rebuild" value="1">
+#{@estraier_register_conf_description}</label>
 </p>
 HTML
 			if @mode == 'saveconf'
