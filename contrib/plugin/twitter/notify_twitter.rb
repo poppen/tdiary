@@ -2,7 +2,6 @@
 # Copyright (C) 2007 peo <peo@mb.neweb.ne.jp>
 # You can redistribute it and/or modify it under GPL2.
 #
-require 'kconv'
 require 'net/http'
 
 module Twitter
@@ -43,13 +42,12 @@ def notify_twitter
 	url = @conf.base_url + anchor(date)
 
 	status = "[blog update] #{blogtitle} : #{sectitles} #{url}"
-	status = status.kconv(Kconv::UTF8, Kconv::EUC)
 	#STDERR.puts status
 
 	user = @conf['twitter.user']
 	pass = @conf['twitter.pass']
 	twupdater = Twitter::Updater.new(user, pass)
-	twupdater.update(status)
+	twupdater.update( to_utf8( status, 'EUC-JP' ) )
 end
 
 add_update_proc do
