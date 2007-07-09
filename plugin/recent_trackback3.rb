@@ -1,4 +1,4 @@
-# $Revision: 1.21 $
+# $Revision: 1.22 $
 # recent_trackback3: 最近のツッコミをリストアップする
 #
 # Copyright (c) 2004 Junichiro KITA <kita@kitaj.no-ip.com>
@@ -140,7 +140,7 @@ add_update_proc do
 					trackback, tbdate, serial = c
 					next if tbdate.strftime('%Y%m%d') != date
 					if trackback == dtrackback and trackback.date == dtrackback.date
-						trackback.show = dtrackback.visible_true?
+						trackback.show = (dtrackback.visible? and "TrackBack" != dtrackback.name)
 						next
 					end
 				end

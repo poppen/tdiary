@@ -1,3 +1,7 @@
+2007-07-09 TADA Tadashi <sho@spc.gr.jp>
+	* recent_trackback3.rb: fix error on changing visibility of TrackBack in
+	mobile mode.
+
 2007-05-05 TADA Tadashi <sho@spc.gr.jp>
 	* amazon.rb: print error message from amazon API when preview mode.
 	* search_form.rb: i18n.
