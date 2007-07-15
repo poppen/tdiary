@@ -1,4 +1,4 @@
-# category.rb $Revision: 1.42 $
+# category.rb $Revision: 1.43 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -632,14 +632,16 @@ end
 # when update diary, update cache
 #
 add_update_proc do
-	cache = @category_cache
-	list = []
-	diary = @diaries[@date.strftime('%Y%m%d')]
-	diary.each_section do |s|
-		list |= s.categories
+	if /^(append|replace)$/ =~ @mode
+		cache = @category_cache
+		list = []
+		diary = @diaries[@date.strftime('%Y%m%d')]
+		diary.each_section do |s|
+			list |= s.categories
+		end
+		cache.add_categories(list)
+		cache.replace_sections(diary)
 	end
-	cache.add_categories(list)
-	cache.replace_sections(diary)
 end
 
 

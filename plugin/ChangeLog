@@ -1,3 +1,11 @@
+2007-07-15  Kazuhiko  <kazuhiko@fdiary.net>
+	* category.rb: update category caches in append or replace mode
+	only.
+
+2007-07-14  Kazuhiko  <kazuhiko@fdiary.net>
+	* highlight.rb: calculate the length of the section anchor not by
+	ruby but by javascript.
+
 2007-07-09 TADA Tadashi <sho@spc.gr.jp>
 	* recent_trackback3.rb: fix error on changing visibility of TrackBack in
 	mobile mode.

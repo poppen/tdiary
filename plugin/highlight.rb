@@ -1,4 +1,4 @@
-# highlight.rb $Revision: 1.10 $
+# highlight.rb $Revision: 1.11 $
 #
 # Highlighting the element jumped from other pages.
 #
@@ -27,7 +27,7 @@ if @mode == 'day' and not bot? then
 
 				if (highlightElem.tagName == 'H3') {
 					var diary_title = "#{(@conf.html_title || '').gsub(/&/n, '&amp;').gsub(/"/n, '&quot;').gsub(/>/n, '&gt;').gsub(/</n, '&lt;')} (#{@date.strftime('%Y-%m-%d')})";
-					var sanchor_length = #{apply_plugin( @conf.section_anchor ).gsub(/<[^>]+?>/, '').length};
+					var sanchor_length = "#{apply_plugin( @conf.section_anchor ).gsub(/<[^>]+?>/, '').gsub(/\"/, '\"')}".length;
 					var section_title = highlightElem.innerHTML.replace(/<[^>]+?>/g, '').substr(sanchor_length);
 					document.title = (section_title + ' - ' + diary_title).replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&amp;/g, '&');
 				}
