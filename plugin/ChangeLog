@@ -1,3 +1,6 @@
+2007-07-15 TADA Tadashi <sho@spc.gr.jp>
+	* navi_user.rb: do not show navigations to hidden diaries.
+
 2007-07-15  Kazuhiko  <kazuhiko@fdiary.net>
 	* category.rb: update category caches in append or replace mode
 	only.

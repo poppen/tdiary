@@ -1,4 +1,4 @@
-# navi_user.rb $Revision: 1.12 $
+# navi_user.rb $Revision: 1.13 $
 #
 # navi_user: 前日，翌日→前の日記，次の日記
 #   modeがday/commentのときに表示される「前日」「翌日」ナビゲーション
@@ -42,6 +42,7 @@ add_header_proc do
 			next unless ym
 			cgi.params['date'] = [ym]
 			m = TDiaryMonth.new(cgi, '', @conf)
+			m.diaries.delete_if {|date,diary| !diary.visible?}
 			days += m.diaries.keys.sort
 		end
 		days |= [today]
