@@ -1,4 +1,4 @@
-# edit_today.rb : add link to edit after title of each days. $Revision: 1.4 $
+# edit_today.rb : add link to edit after title of each days. $Revision: 1.5 $
 #
 # Copyright (C) 2007 by NOB <nob@harunaru.com>
 # You can redistribute it and/or modify it under GPL2.
@@ -19,7 +19,7 @@ def edit_today_link( date, title )
 		unless @conf.mobile_agent?
 			r = <<-HTML
 			#{title}\n<span class="edit-today">
-			<a href="#{@update}?edit=true;#{date.strftime( 'year=%Y;month=%m;day=%d' )}" title="#{edit_today_edit_label( date )}">#{caption}</a>
+			<a href="#{@update}?edit=true;#{date.strftime( 'year=%Y;month=%m;day=%d' )}" title="#{edit_today_edit_label( date )}" rel="nofollow">#{caption}</a>
 			</span>
 			HTML
 		else
