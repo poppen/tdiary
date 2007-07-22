@@ -1,5 +1,5 @@
 #
-# openid.rb: Insert OpenID delegation information. $Revision: 1.6 $
+# openid.rb: Insert OpenID delegation information. $Revision: 1.7 $
 #
 # Copyright (C) 2005, TADA Tadashi <sho@spc.gr.jp>
 # You can redistribute it and/or modify it under GPL2.
@@ -10,7 +10,8 @@ if /^(latest|conf|saveconf)$/ =~ @mode then
 		# service => [openid.server, openid.delegate(replace #ID# as account name)]
 		'TypeKey' => ['http://www.typekey.com/t/openid/', 'http://profile.typekey.com/#ID#/'],
 		'Videntiry.org' => ['http://videntity.org/serverlogin?action=openid', 'http://#ID#.videntity.org/'],
-		'LiveJournal' => ['http://www.livejournal.com/openid/server.bml', 'http://#ID#.livejournal.com/']
+		'LiveJournal' => ['http://www.livejournal.com/openid/server.bml', 'http://#ID#.livejournal.com/'],
+		'livedoor' => ['http://auth.livedoor.com/openid/server', 'http://profile.livedoor.com/#ID#'],
 	}
 
 	if @conf['openid.service'] and @conf['openid.id'] then
