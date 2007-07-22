@@ -1,4 +1,4 @@
-# a.rb $Revision: 1.12 $
+# a.rb $Revision: 1.13 $
 #
 # Create anchor easily.
 #
@@ -37,8 +37,10 @@
 require 'nkf'
 
 # Resources
-def a_conf_label; "アンカー自動生成プラグイン辞書ファイル編集"; end
-def a_conf_explain; "<p>1行で1つのアンカーになります。フォーマットは、キー URL 名称です。各項目は空白で区切ります。名称は省略可能です。省略した場合はキーが名称として使われます。</p><p>例： bibo http://ponx.s5.xrea.com/bibo/ Linuxビボ〜ろく</p>"; end
+unless @resource_loaded then
+	def a_conf_label; "アンカー自動生成プラグイン辞書ファイル編集"; end
+	def a_conf_explain; "<p>1行で1つのアンカーになります。フォーマットは、キー URL 名称です。各項目は空白で区切ります。名称は省略可能です。省略した場合はキーが名称として使われます。</p><p>例： bibo http://ponx.s5.xrea.com/bibo/ Linuxビボ〜ろく</p>"; end
+end
 def a_conf_cols; '70%'; end
 def a_conf_rows; 20; end
 
