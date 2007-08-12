@@ -30,14 +30,14 @@ add_conf_proc( 'hatena_star', 'Hatena::Star' ) do
 	end
 	<<-HTML
 	<h3>Token</h3>
-	<p><input name="hatena_star.token" value="#{CGI::escapeHTML @conf['hatena_star.token']}" size=50></P>
+	<p><input name="hatena_star.token" value="#{CGI::escapeHTML( @conf['hatena_star.token'] || '' )}" size=50></P>
 	<h3>Star Image (URL)</h3>
-	<p><input name="hatena_star.star.image" value="#{CGI::escapeHTML @conf['hatena_star.star.image']}" size=50></P>
+	<p><input name="hatena_star.star.image" value="#{CGI::escapeHTML( @conf['hatena_star.star.image'] || '' )}" size=50></P>
 	<h3>Add Star Image (URL)</h3>
-	<p><input name="hatena_star.star.add" value="#{CGI::escapeHTML @conf['hatena_star.star.add']}" size=50></P>
+	<p><input name="hatena_star.star.add" value="#{CGI::escapeHTML( @conf['hatena_star.star.add'] || '' )}" size=50></P>
 	<h3>Comment Image (URL)</h3>
-	<p><input name="hatena_star.comment.image" value="#{CGI::escapeHTML @conf['hatena_star.comment.image']}" size=50></P>
+	<p><input name="hatena_star.comment.image" value="#{CGI::escapeHTML( @conf['hatena_star.comment.image'] || '' )}" size=50></P>
 	<h3>Active Comment Image (URL)</h3>
-	<p><input name="hatena_star.comment.active" value="#{CGI::escapeHTML @conf['hatena_star.comment.active']}" size=50></P>
+	<p><input name="hatena_star.comment.active" value="#{CGI::escapeHTML( @conf['hatena_star.comment.active'] || '' )}" size=50></P>
 	HTML
 end
