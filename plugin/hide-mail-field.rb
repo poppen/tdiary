@@ -35,3 +35,9 @@ def comment_form_mobile_mail_field
 	%Q|<INPUT NAME="mail" TYPE="hidden">|
 end
 
+add_conf_proc( 'hide-mail-field', @hide_mail_field_label_conf, 'security' ) do
+	if @mode == 'saveconf'
+		@conf['comment_description'] = @cgi.params['comment_description'][0]
+	end
+	hide_mail_field_conf_html
+end

@@ -1,3 +1,7 @@
+2007-08-12 TADA Tadashi <sho@spc.gr.jp>
+	* hide-mail-field.rb: add preference page for changing description of
+	TSUKKOMI.
+
 2007-07-22 TADA Tadashi <sho@spc.gr.jp>
 	* a.rb: i18n.
 
