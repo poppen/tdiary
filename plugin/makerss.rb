@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.53 $
+# makerss.rb: $Revision: 1.54 $
 #
 # generate RSS file when updating.
 #
@@ -365,7 +365,7 @@ def makerss_body( uri, rdfsec )
 			text << body
 			text << body_leave
 			unless text.empty?
-				text.gsub!( /\]\]>/, ']]&gt;' )
+				text.gsub!( /\]\]>/, ']]]]><![CDATA[>' )
 				rdf << %Q|<content:encoded><![CDATA[#{text}|
             unless @conf['makerss.comment_link']
                ymd = date.strftime( "%Y%m%d" )
@@ -389,7 +389,7 @@ def makerss_body( uri, rdfsec )
 		text = rdfsec.section.body
 		rdf << %Q|<description>#{h makerss_desc_shorten( text )}</description>\n|
 		unless @conf['makerss.hidecontent']
-			rdf << %Q|<content:encoded><![CDATA[#{text.make_link.gsub( /\n/, '<br>' ).gsub( /<br><br>\Z/, '' ).gsub( /\]\]>/, ']]&gt;' )}]]></content:encoded>\n|
+			rdf << %Q|<content:encoded><![CDATA[#{text.make_link.gsub( /\n/, '<br>' ).gsub( /<br><br>\Z/, '' ).gsub( /\]\]>/, ']]]]><![CDATA[>' )}]]></content:encoded>\n|
 		end
 		rdf << "</item>\n"
 	end
