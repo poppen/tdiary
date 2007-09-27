@@ -1,4 +1,4 @@
-# category.rb $Revision: 1.43 $
+# category.rb $Revision: 1.44 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -183,8 +183,8 @@ def category_dropdown_list(label = nil, multiple = nil)
 	end
 
 	params = ''
-	params << %Q[<input type="hidden" name="year" value="#{info.year}">] if info.year
-	params << %Q[<input type="hidden" name="month" value="#{info.month}">] if info.month
+	params << %Q[<input type="hidden" name="year" value="#{h info.year}">] if info.year
+	params << %Q[<input type="hidden" name="month" value="#{h info.month}">] if info.month
 
 	<<HTML
 <form method="get" action="#{h @index}"><div>
@@ -328,7 +328,7 @@ public
 		else
 			label = @category.map {|c| h( c )}.join(':')
 		end
-		%Q|<a href="#{h @conf.index}?#{a}">#{label}</a>|
+		%Q|<a href="#{h @conf.index}?#{h a}">#{h label}</a>|
 	end
 
 	#

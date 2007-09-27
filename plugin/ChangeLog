@@ -1,3 +1,6 @@
+2007-09-27 TADA Tadashi <sho@spc.gr.jp>
+	* category.rb: escape HTML more.
+
 2007-09-23 TADA Tadashi <sho@spc.gr.jp>
 	* makerss.rb: splited CDATA section by each ']]>'.
 
