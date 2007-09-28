@@ -12,7 +12,16 @@
 
 add_header_proc do
 	hatena_star = %Q|\t<script type="text/javascript" src="http://s.hatena.ne.jp/js/HatenaStar.js"></script>\n|
-	hatena_star << %Q|\t<script type="text/javascript"><!--\n|
+	hatena_star << %Q|\t<script type="text/javascript"><!--
+		Hatena.Star.SiteConfig = {
+			entryNodes: {
+				'div.section': {
+					uri: 'h3 a',
+					title: 'h3',
+					container: 'h3'
+				}
+			}
+		};\n|
 		@hatena_star_options.each do |o,v|
 			hatena_star << %Q|\t\tHatena.Star.#{v} = '#{CGI::escapeHTML @conf["hatena_star.#{o}"]}';\n| if @conf["hatena_star.#{o}"]
 		end
