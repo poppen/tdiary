@@ -1,12 +1,12 @@
 #!/usr/bin/env ruby
 $KCODE= 'e'
 #
-# posttdiary-ex: update tDiary via e-mail. $Revision: 1.7 $
+# posttdiary-ex: update tDiary via e-mail. $Revision: 1.8 $
 #
 # Copyright (C) 2002, All right reserved by TADA Tadashi <sho@spc.gr.jp>
 # You can redistribute it and/or modify it under GPL2.
 #
-# 2007.3.23: v.1.64: Modified by K.Sakurai (http://ks.nwr.jp)
+# 2007.9.22: v.1.65: Modified by K.Sakurai (http://ks.nwr.jp)
 #  Acknowledgements:
 #   * Based on posttdiary.rb v1.2 by TADA.
 #   * Some codes partially imported from Enikki Plugin Ex. : 
@@ -979,7 +979,7 @@ begin
 			serial = i.sub( /^\d+_(\d+)\.[^\.]*?$/, '\1' )
 			serial = i if use_image_ex and pass_filename
 			cm = ""
-			cm = exif_comment[i] if read_exif and exif_comment[i].size > 0
+			cm = exif_comment[i] if read_exif and exif_comment[i] and exif_comment[i].size > 0
 			cm = image_orgname[i] if use_original_name and (!cm or cm.size == 0)
 			cm = i.gsub(/\.[^\.]*?$/, '') if !cm or cm.size == 0
 			if use_image_ex then
