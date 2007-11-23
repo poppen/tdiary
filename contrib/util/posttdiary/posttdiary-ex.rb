@@ -1,12 +1,12 @@
 #!/usr/bin/env ruby
 $KCODE= 'e'
 #
-# posttdiary-ex: update tDiary via e-mail. $Revision: 1.8 $
+# posttdiary-ex: update tDiary via e-mail. $Revision: 1.9 $
 #
 # Copyright (C) 2002, All right reserved by TADA Tadashi <sho@spc.gr.jp>
 # You can redistribute it and/or modify it under GPL2.
 #
-# 2007.9.22: v.1.65: Modified by K.Sakurai (http://ks.nwr.jp)
+# 2007.11.22: v.1.66: Modified by K.Sakurai (http://ks.nwr.jp)
 #  Acknowledgements:
 #   * Based on posttdiary.rb v1.2 by TADA.
 #   * Some codes partially imported from Enikki Plugin Ex. : 
@@ -65,6 +65,8 @@ def usage( detailed_help )
 !		          Adds "!" to subject when -s option is given
 !		          Recognize Wiki style tags and rewrite
 !		          Must be used with image.rb or image_ex.rb plugin.
+		  --blog-style,      -B: do not specify date to append unless specified
+!			  Suitable for use with blogkit
 		  --read-exif,       -c: read "User Comment" tag from EXIF and use as ALT text
 !		          If not specified, filename would be used as ALT text.
 !		          Requires libexif and "exif" command.
@@ -537,6 +539,39 @@ def post_image( http, cgi, user, pass, image_dir , imgname, remote_image_dir, no
 	(image_body ? true : false)
 end
 
+def get_date_to_append( http, cgi, user, pass, now )
+	# call update.rb via HTTP and get the date to append
+	str = cgi
+	req = Net::HTTP::Get.new( str )
+	req.basic_auth user, pass
+	response, = http.request(req)
+	body = response.body
+
+	year = now.strftime( "%Y" )
+	month = now.strftime( "%m" )
+	day = now.strftime( "%d" )
+	bodytmp = body.split(/$/);
+	bodytmp.each do |oneline|
+		if oneline =~ /\<input\s.*\sname=\"year\"([^\>]*)\>/ then
+			if $1 =~ /value=\"(\d\d\d\d)"/ then
+				year = $1
+			end
+		end
+		if oneline =~ /\<input\s.*\sname=\"month\"([^\>]*)\>/ then
+			if $1 =~ /value=\"(\d+)\"/ then
+				month = $1
+			end
+		end
+		if oneline =~ /\<input\s.*\sname=\"day\"([^\>]*)\>/ then
+			if $1 =~ /value=\"(\d+)\"/ then
+				day = $1
+			end
+		end
+	end
+
+	Time::local( year, month, day )
+end
+
 def parse_mail( head, body , image_dir )
 	imglist = []
 	orglist = []
@@ -656,6 +691,7 @@ begin
 	image_format_with_thumbnail = ' <A HREF="$1"><img class="$3" src="$2" alt="$4" title="$4"></a>'
 	image_format_specified = nil
 	wiki_style = false
+	blog_style = false
 	use_original_name = false
 	date_margin = 7
 	convertpath_specified = nil
@@ -690,6 +726,7 @@ begin
 		['--image-format', '-f', GetoptLong::REQUIRED_ARGUMENT],
 		['--use-original-name', '-r', GetoptLong::NO_ARGUMENT],
 		['--wiki-style', '-w', GetoptLong::NO_ARGUMENT],
+		['--blog-style', '-B', GetoptLong::NO_ARGUMENT],
 		['--read-exif', '-c', GetoptLong::NO_ARGUMENT],
 		['--margin-time', '-m', GetoptLong::REQUIRED_ARGUMENT],
 		['--pass-filename', '-p', GetoptLong::NO_ARGUMENT],
@@ -758,6 +795,8 @@ begin
 			when '--wiki-style'
 				wiki_style = true
 				use_image_ex = true
+			when '--blog-style'
+				blog_style = true
 			when '--read-exif'
 				read_exif = true
 			when '--pass-filename'
@@ -887,6 +926,12 @@ begin
 		end
 		if /(\d\d\d\d)[^\d]+(\d+)[^\d]+(\d+)/ =~ t then
 			tmp = Time::local( $1.to_i, $2.to_i, $3.to_i );
+		end
+	else
+		if blog_style and !filter_mode then
+			Net::HTTP.start( host, port ) do |http|
+				tmp = get_date_to_append( http, cgi, user, pass, now )
+			end
 		end
 	end
 	if @body.gsub!( /^\_up[ld]+only\#[ \t]*[\r\n]+/i , '' ) then
