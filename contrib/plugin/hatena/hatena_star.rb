@@ -4,10 +4,9 @@
 
 @hatena_star_options = {
 	'token' => 'Token',
-	'star.image' => 'Star.ImgSrc',
-	'star.add' => 'AddButton.ImgSrc',
-	'comment.image' => 'CommentButton.ImgSrc',
-	'comment.active' => 'CommentButton.ImgSrcActive'
+	'star.image' => '.hatena-star-star-image',
+	'star.add' => '.hatena-star-add-button-image',
+	'comment.image' => '.hatena-star-comment-button-image'
 }
 
 add_header_proc do
@@ -22,10 +21,16 @@ add_header_proc do
 				}
 			}
 		};\n|
-		@hatena_star_options.each do |o,v|
-			hatena_star << %Q|\t\tHatena.Star.#{v} = '#{CGI::escapeHTML @conf["hatena_star.#{o}"]}';\n| if @conf["hatena_star.#{o}"]
+		if @conf['hatena_star.token'] then
+			hatena_star << %Q|\t\tHatena.Star.Token = '#{CGI::escapeHTML @conf["hatena_star.token"]}';\n|
 		end
 	hatena_star << %Q|\t//--></script>\n|
+	hatena_star << %Q|\t<style type="text/css"><!--\n|
+	@hatena_star_options.each do |o,v|
+		next if o == 'token'
+		hatena_star << %Q|\t\t#{v} { background-image: url(#{CGI::escapeHTML @conf["hatena_star.#{o}"]}); }\n| if @conf["hatena_star.#{o}"]
+	end
+	hatena_star << %Q|\t//--></style>\n|
 end
 
 add_conf_proc( 'hatena_star', 'Hatena::Star' ) do
@@ -46,7 +51,5 @@ add_conf_proc( 'hatena_star', 'Hatena::Star' ) do
 	<p><input name="hatena_star.star.add" value="#{CGI::escapeHTML( @conf['hatena_star.star.add'] || '' )}" size=50></P>
 	<h3>Comment Image (URL)</h3>
 	<p><input name="hatena_star.comment.image" value="#{CGI::escapeHTML( @conf['hatena_star.comment.image'] || '' )}" size=50></P>
-	<h3>Active Comment Image (URL)</h3>
-	<p><input name="hatena_star.comment.active" value="#{CGI::escapeHTML( @conf['hatena_star.comment.active'] || '' )}" size=50></P>
 	HTML
 end
