@@ -48,6 +48,7 @@ class SpambayesConfig
 
 	def add_spam(data)
 		t = data.token
+		return if t.empty?
 		bayes_filter.spam << t if t.any?{|i| !bayes_filter.spam.include?(i)}
 		bayes_filter.spam << t while (bayes_filter.estimate(t)||0.0) <= threshold
 		@db_updated = true
@@ -55,6 +56,7 @@ class SpambayesConfig
 
 	def add_ham(data, with_add_comment=false)
 		t = data.token
+		return if t.empty?
 		bayes_filter.ham << t if t.any?{|i| !bayes_filter.ham.include?(i)}
 		bayes_filter.ham << t while (bayes_filter.estimate(t)||1.0) > threshold
 		@db_updated = true

@@ -315,7 +315,7 @@ module TDiary::Filter
 			RE_QUERY_SEP = /[&;]|$/
 			RE_QUERY_HEAD = /\?(?:.*#{RE_QUERY_SEP})?/o
 
-			RE_GOOGLE_HOSTS = /.*\.google\.(?:co\.[a-z]{2}|com)/o
+			RE_GOOGLE_HOSTS = /.*\.google\.(?:co\.[a-z]{2}|com(?:\.[a-z]{2})?)/o
 			RE_GOOGLE = %r[^https?://#{RE_GOOGLE_HOSTS}/.*?#{RE_QUERY_HEAD}q=(.*?)#{RE_QUERY_SEP}]o
 			special :google, RE_GOOGLE
 
@@ -325,20 +325,29 @@ module TDiary::Filter
 			RE_EZ_GOOGLE = %r[^https?://ezsch\.ezweb\.ne\.jp/search/ezGoogleMain\.php#{RE_QUERY_HEAD}query=(.*?)#{RE_QUERY_SEP}]o
 			special :ez_google, RE_EZ_GOOGLE, "Google(ezweb)"
 
+			RE_EZWEB = %r[^https?://ezsch\.ezweb\.ne\.jp/.*?#{RE_QUERY_HEAD}query=(.*?)#{RE_QUERY_SEP}]
+			special :ezweb, RE_EZWEB, "EZweb"
+
 			RE_GOO = %r[^http://search\.goo\.ne\.jp/.*?#{RE_QUERY_HEAD}MT=(.*?)#{RE_QUERY_SEP}]o
 			special :goo, RE_GOO
 
 			RE_NIFTY = %r[^https?://search\.nifty\.com/.*?#{RE_QUERY_HEAD}Text=(.*?)#{RE_QUERY_SEP}]o
 			special :nifty, RE_NIFTY
 
-			RE_LIVESEARCH = %r[https?://search\.live\.com/.*?#{RE_QUERY_HEAD}q=(.*?)#{RE_QUERY_SEP}]o
+			RE_LIVESEARCH = %r[^https?://search\.live\.com/.*?#{RE_QUERY_HEAD}q=(.*?)#{RE_QUERY_SEP}]o
 			special :livesearch, RE_LIVESEARCH, "Live Search"
 
-			RE_BIGLOBE = %r[https?://.*search\.biglobe\.ne\.jp/.*?#{RE_QUERY_HEAD}q=(.*?)#{RE_QUERY_SEP}]o
+			RE_BIGLOBE = %r[^https?://.*search\.biglobe\.ne\.jp/.*?#{RE_QUERY_HEAD}q=(.*?)#{RE_QUERY_SEP}]o
 			special :biglobe, RE_BIGLOBE
 
-			RE_MSN = %r[https?://search\.msn\.co\.jp/.*?#{RE_QUERY_HEAD}q=(.*?)#{RE_QUERY_SEP}]o
+			RE_MSN = %r[^https?://search\.msn\.co\.jp/.*?#{RE_QUERY_HEAD}q=(.*?)#{RE_QUERY_SEP}]o
 			special :msn, RE_MSN, "MSN"
+
+			RE_INFOSEEK = %r[^https?://search\.www\.infoseek\.co\.jp/.*?#{RE_QUERY_HEAD}qt=(.*?)#{RE_QUERY_SEP}]o
+			special :infoseek, RE_INFOSEEK
+
+			RE_HATENA_B = %r[^https?://b\.hatena\.ne\.jp/[^/]+/(.*?)(?:\?.*)?$]o
+			special :hatena_b, RE_HATENA_B, "Hatena::Bookmark"
 		end
 
 		include Misc
