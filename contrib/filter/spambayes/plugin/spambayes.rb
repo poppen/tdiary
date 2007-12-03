@@ -469,18 +469,17 @@ EOT
 		hams = []
 		processed = false
 		@cgi.params.each do |k, v|
-			next unless k=~/^r([shu])(.*)$/
+			next unless k=~/^r([shd])(.*)$/
 			processed = true
 			type = $1
 			referer = Referer.from_html($2)
-			token = referer.token
 			v = v[0]
 			case v
 			when "spam"
-				bayes_filter.spam << token if type=~/[uh]/
+				add_spam(referer) if type=~/^[dh]/
 				spams << referer
 			when "ham"
-				bayes_filter.ham << token if type=~/[us]/
+				add_ham(referer) if type=~/^[ds]/
 				hams << referer
 			end
 		end
