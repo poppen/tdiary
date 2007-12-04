@@ -1,3 +1,6 @@
+2007-12-05 zunda <zunda at freeshell.org>
+	* ja/disp_referrer.rb: added support for unit test
+
 2007-09-27 TADA Tadashi <sho@spc.gr.jp>
 	* category.rb: escape HTML more.
 

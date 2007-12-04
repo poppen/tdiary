@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.38 2007-04-26 12:09:06 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.39 2007-12-04 22:09:44 zunda Exp $-))
 日本語リソース
 
 == 概要
@@ -599,3 +599,80 @@ DispReferrer2_Engines = {
 	# NetName:    GOOGLE
 	'85' => [[%r{\Ahttp://209\.85\.(?:12[8-9]|1[3-9]\d|2\d\d)\.\d+/}i, '"Google検索"', ['as_q', 'q'], DispReferrer2_Google_cache]],
 }
+
+# Test cases which are far from complete:
+# run this script to unit-test just small part of the features
+if __FILE__ == $0 then
+	require 'test/unit'
+	require 'nkf'
+
+	# I am sorry that the language resouce has been loaded to the
+	# top level. Therefore, we will spit required objects defined
+	# in tdiary.rb to the top level.
+
+	# Stab for @conf
+	class StabConf
+		def secure; false; end
+		def options; {}; end
+		def referer_table; []; end
+		def no_referer; []; end
+		def io_class; nil; end
+	end
+	@conf = StabConf.new
+
+	# Required module and class structures
+	module TDiary
+		class TDiaryLatest
+		end
+
+		class DefaultIO
+		end
+	end
+
+	# Methods that shuold have been defined in Plugin
+	class Object
+		def referer_today; '本日のリンク元'; end
+		def add_conf_proc(*args); end
+		def to_native( str, charset = nil )
+			from = case charset
+				when /^utf-8$/i
+					'W'
+				when /^shift_jis/i
+					'S'
+				when /^EUC-JP/i
+					'E'
+				else
+					''
+			end
+			NKF::nkf( "-m0 -#{from}e", str )
+		end
+	end
+
+	class TestSearchEngines < Test::Unit::TestCase
+		def setup
+			path = File.join(File.dirname(__FILE__), '..', File.basename(__FILE__))
+			load(path)
+
+			@dr2_setup = DispRef2Setup.new(StabConf.new, nil, true, [], '')
+		end
+
+		def match(url, keyword, provider = nil)
+			x = DispRef2URL.new(url).parse(@dr2_setup)
+			assert_equal(:search, x.category)
+			assert_equal(to_native(keyword), to_native(x.key))
+			assert_equal(to_native(provider), to_native(x.title_ignored)) if provider
+		end
+
+		def test_search_engines
+			[
+				# simple test to test the unittest code
+				['http://www.google.com/search?q=test', 'test', '.comのGoogle検索'],
+				['http://www.google.com/search?q=test', 'test'],
+			].each do |url, keyword, provider|
+				match(url, keyword, provider)
+			end
+		end
+
+	end
+end
+
