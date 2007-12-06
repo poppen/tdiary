@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.66 2007-01-10 05:50:39 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.67 2007-12-06 19:11:38 zunda Exp $-))
 
 == 概要
 アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
@@ -753,18 +753,17 @@ class DispRef2URL
 			title = nil
 			keyword = nil
 			cached_url = nil
-			values = query ? DispRef2String::parse_query( query ) : nil
 			catch( :done ) do
-				setup['search_engines'][engine].each do |e|
-					if( e[0] =~ urlbase ) then
-						title = eval( e[1] )
+				setup['search_engines'][engine].each do |re_url, title, keys, cache|
+					if( re_url =~ urlbase ) then
+						title = eval( title )
 						throw :done if keyword
-						if e[2].empty? then
+						if keys.empty? then
 							keyword = setup['search.unknown_keyword']
 							throw :done
 						end
-						if String == e[2].class then
-							k, c = (query ? query : @url ).instance_eval( e[2] )
+						if String == keys.class then
+							k, c = (query ? query : @url ).instance_eval( keys )
 							if k then
 								keyword = k
 							else
@@ -773,15 +772,16 @@ class DispRef2URL
 							cached_url = c ? c : nil
 							throw :done
 						else	# should be an Array usually
-							if not values then
-								keyword = setup['search.unknown_keyword']
-								throw :done
-							end
-							e[2].each do |k|
-								if( values[k] and not values[k][0].empty? ) then
-									unless( e[3] and e[3] =~ values[k][0] ) then
+							keys.each do |kpath|
+								value = nil
+								unless( kpath.split( '>' ).inject( query ? query : @url ) { |q, k|
+									value, = DispRef2String::parse_query( q.sub( /.*?\?/, '' ) )[k]
+									break nil if value.nil?
+									setup.to_native( DispRef2String::unescape( value ) )
+								}.nil? ) then
+									unless( cache and cache =~ value ) then
 										cached_url = nil
-										keyword = values[k][0]
+										keyword = value
 										throw :done
 									else
 										cached_url = $1
@@ -789,6 +789,10 @@ class DispRef2URL
 										throw :done
 									end
 								end
+							end
+							if( keyword.nil? ) then
+								keyword = setup['search.unknown_keyword']
+								throw :done
 							end
 						end
 					end

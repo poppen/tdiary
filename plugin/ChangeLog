@@ -1,4 +1,12 @@
 2007-12-06 zunda <zunda at freeshell.org>
+	* disp_referrer.rb, ja/disp_referrer.rb: applied patch at
+	http://d.akinori.org/?date=20070704#p01 by Akinori MUSHA
+	<akinori:at:musha:dot:org>. Thank you. Please note that I am
+	thinking of chaging the notation from prev>q to {'prev' => 'q'}
+	or something simpler.
+	* ja/disp_referrer.rb: added a test case for recursive conversion
+
+2007-12-06 zunda <zunda at freeshell.org>
 	* ??/disp_referrer.rb: added label tags to radio buttons and check boxes
 
 2007-12-05 zunda <zunda at freeshell.org>

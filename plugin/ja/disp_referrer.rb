@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.40 2007-12-06 18:43:18 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.41 2007-12-06 19:11:38 zunda Exp $-))
 日本語リソース
 
 == 概要
@@ -445,7 +445,8 @@ DispReferrer2_Engines = {
 		[%r{\Ahttp://.*?\bgoogle\.([^/]+)/.*url}i, '".#{$1}のGoogleのURL検索?"', ['as_q', 'q'], DispReferrer2_Google_cache],
 		[%r{\Ahttp://.*?\bgoogle/search}i, '"たぶんGoogle検索"', ['as_q', 'q'], DispReferrer2_Google_cache],
 		[%r{\Ahttp://eval.google\.([^/]+)}i, '".#{$1}のGoogle Accounts"', [], nil],
-		[%r{\Ahttp://images\.google\.([^/]+)/(?:imgres|images)}i, '".#{$1}のGoogleイメージ検索"', ['q', 'imgurl'], DispReferrer2_Google_cache],
+		[%r{\Ahttp://images\.google\.([^/]+)/images}i, '".#{$1}のGoogleイメージ検索"', ['q'], DispReferrer2_Google_cache],
+		[%r{\Ahttp://images\.google\.([^/]+)/imgres}i, '".#{$1}のGoogleイメージ検索"', ['prev>q'], DispReferrer2_Google_cache],
 	],
 	'yahoo' => [
 		[%r{\Ahttp://[^/]+\.rd\.yahoo\.([^/]+)}i, '".#{$1}のYahooのリダイレクタ"', 'split(/\*/)[1]', nil],
@@ -668,6 +669,14 @@ if __FILE__ == $0 then
 				# simple test to test the unittest code
 				['http://www.google.com/search?q=test', 'test', '.comのGoogle検索'],
 				['http://www.google.com/search?q=test', 'test'],
+			].each do |url, keyword, provider|
+				match(url, keyword, provider)
+			end
+		end
+
+		def test_recursive_conversion
+			[
+				['http://images.google.com/imgres?imgurl=http://zunda.freeshell.org/p/020302_GermanKbdSml.jpg&imgrefurl=http://zunda.freeshell.org/d/20050629.html&h=170&w=512&sz=30&hl=fr&start=256&tbnid=TlfDZCEB4H1PTM:&tbnh=43&tbnw=131&prev=/images%3Fq%3Dqwertz%26start%3D240%26ndsp%3D20%26svnum%3D10%26hl%3Dfr%26lr%3D%26sa%3DN', 'qwertz', '.comのGoogleイメージ検索']
 			].each do |url, keyword, provider|
 				match(url, keyword, provider)
 			end
