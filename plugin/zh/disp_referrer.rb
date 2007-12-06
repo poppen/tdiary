@@ -1,5 +1,5 @@
 =begin
-= A little bit more powerful display of referrers((-$Id: disp_referrer.rb,v 1.9 2007-01-08 05:37:27 zunda Exp $-))
+= A little bit more powerful display of referrers((-$Id: disp_referrer.rb,v 1.10 2007-12-06 18:43:18 zunda Exp $-))
 English resource
 
 == Copyright notice
@@ -83,7 +83,7 @@ _END
 Disp_referrer2_update_info = <<'_END'.taint
 <p>
 	Please clear the cache by checking this box:
-  <input name="dr2.cache.update" value="force" type="checkbox">clear the cache,
+  <label for="dr2.cache.update"><input id="dr2.cache.update" name="dr2.cache.update" value="force" type="checkbox">clear the cache</label>,
 	and clicking OK
 	after editing the <a href="%1$s">today's link</a> lists.
 </p>
@@ -112,54 +112,54 @@ class DispRef2SetupIF
 			<input name="dr2.current_mode" value="#{Options}" type="hidden">
 			<table>
 			<tr>
-				<td><input name="dr2.unknown.divide" value="true" type="radio"#{' checked'if @setup['unknown.divide']}>Separate #{DispRef2String::escapeHTML(@setup['unknown.label'])}
-				<td><input name="dr2.unknown.divide" value="false" type="radio"#{' checked'if not @setup['unknown.divide']}>Treat #{DispRef2String::escapeHTML(@setup['unknown.label'])} as normal links.
+				<td><label for="dr2.unknown.divide.true"><input id="dr2.unknown.divide.true" name="dr2.unknown.divide" value="true" type="radio"#{' checked'if @setup['unknown.divide']}>Separate #{DispRef2String::escapeHTML(@setup['unknown.label'])}</label>
+				<td><label for="dr2.unknown.divide.false"><input id="dr2.unknown.divide.false" name="dr2.unknown.divide" value="false" type="radio"#{' checked'if not @setup['unknown.divide']}>Treat #{DispRef2String::escapeHTML(@setup['unknown.label'])}</label> as normal links.
 			</table>
 			<table>
 			<tr>
-				<td><input name="dr2.unknown.hide" value="false" type="radio"#{' checked'if not @setup['unknown.hide']}>Show
-				<td><input name="dr2.unknown.hide" value="true" type="radio"#{' checked'if @setup['unknown.hide']}>Hide
+				<td><label for="dr2.unknown.hide.false"><input id="dr2.unknown.hide.false" name="dr2.unknown.hide" value="false" type="radio"#{' checked'if not @setup['unknown.hide']}>Show</label>
+				<td><label for="dr2.unknown.hide.true"><input id="dr2.unknown.hide.true" name="dr2.unknown.hide" value="true" type="radio"#{' checked'if @setup['unknown.hide']}>Hide</label>
 				separated #{DispRef2String::escapeHTML(@setup['unknown.label'])}.
 			<tr>
-				<td><input name="dr2.normal.categorize" value="true" type="radio"#{' checked'if @setup['normal.categorize']}>Use
-				<td><input name="dr2.normal.categorize" value="false" type="radio"#{' checked'if not @setup['normal.categorize']}>Don't use
+				<td><label for="dr2.normal.categorize.true"><input id="dr2.normal.categorize.true" name="dr2.normal.categorize" value="true" type="radio"#{' checked'if @setup['normal.categorize']}>Use</label>
+				<td><label for="dr2.normal.categorize.false"><input id="dr2.normal.categorize.false" name="dr2.normal.categorize" value="false" type="radio"#{' checked'if not @setup['normal.categorize']}>Don't use</label>
 				strings inside [ and ] to categorize normal links.
 			<tr>
-				<td><input name="dr2.long.only_normal" value="false" type="radio"#{' checked'if not @setup['long.only_normal']}>Show
-				<td><input name="dr2.long.only_normal" value="true" type="radio"#{' checked'if @setup['long.only_normal']}>Hide
+				<td><label for="dr2.long.only_normal.false"><input id="dr2.long.only_normal.false" name="dr2.long.only_normal" value="false" type="radio"#{' checked'if not @setup['long.only_normal']}>Show</label>
+				<td><label for="dr2.long.only_normal.true"><input id="dr2.long.only_normal.true" name="dr2.long.only_normal" value="true" type="radio"#{' checked'if @setup['long.only_normal']}>Hide</label>
 				links other than normal URLs in the daily view.
 			<tr>
-				<td><input name="dr2.short.only_normal" value="false" type="radio"#{' checked'if not @setup['short.only_normal']}>Show
-				<td><input name="dr2.short.only_normal" value="true" type="radio"#{' checked'if @setup['short.only_normal']}>Hide
+				<td><label for="dr2.short.only_normal.false"><input id="dr2.short.only_normal.false" name="dr2.short.only_normal" value="false" type="radio"#{' checked'if not @setup['short.only_normal']}>Show</label>
+				<td><label for="dr2.short.only_normal.true"><input id="dr2.short.only_normal.true" name="dr2.short.only_normal" value="true" type="radio"#{' checked'if @setup['short.only_normal']}>Hide</label>
 				links other than normal URLs in the latest view.
 			</table>
 			<h3>Grouping of normal links</h3>
 			<table>
 			<tr>
-				<td><input name="dr2.normal.group" value="true" type="radio"#{' checked'if @setup['normal.group']}>Group with the title strings
-				<td><input name="dr2.normal.group" value="false" type="radio"#{' checked'if not @setup['normal.group']}>Show each URLs
+				<td><label for="dr2.normal.group.true"><input id="dr2.normal.group.true" name="dr2.normal.group" value="true" type="radio"#{' checked'if @setup['normal.group']}>Group with the title strings</label>
+				<td><label for="dr2.normal.group.false"><input id="dr2.normal.group.false" name="dr2.normal.group" value="false" type="radio"#{' checked'if not @setup['normal.group']}>Show each URLs</label>
 				of normal links.
 			<tr>
-				<td><input name="dr2.normal.ignore_parenthesis" value="true" type="radio"#{' checked'if @setup['normal.ignore_parenthesis']}>Ignore
-				<td><input name="dr2.normal.ignore_parenthesis" value="false" type="radio"#{' checked'if not @setup['normal.ignore_parenthesis']}>don't ignore
+				<td><label for="dr2.normal.ignore_parenthesis.true"><input id="dr2.normal.ignore_parenthesis.true" name="dr2.normal.ignore_parenthesis" value="true" type="radio"#{' checked'if @setup['normal.ignore_parenthesis']}>Ignore</label>
+				<td><label for="dr2.normal.ignore_parenthesis.false"><input id="dr2.normal.ignore_parenthesis.false" name="dr2.normal.ignore_parenthesis" value="false" type="radio"#{' checked'if not @setup['normal.ignore_parenthesis']}>don't ignore</label>
 				the last parenthesis when grouping normal links with the titles.
 			</table>
 			<h3>Grouping of links from antennae</h3>
 			<table>
 			<tr>
-				<td><input name="dr2.antenna.group" value="true" type="radio"#{' checked'if @setup['antenna.group']}>Group with the title strings
-				<td><input name="dr2.antenna.group" value="false" type="radio"#{' checked'if not @setup['antenna.group']}>Show each URLs
+				<td><label for="dr2.antenna.group.true"><input id="dr2.antenna.group.true" name="dr2.antenna.group" value="true" type="radio"#{' checked'if @setup['antenna.group']}>Group with the title strings</label>
+				<td><label for="dr2.antenna.group.false"><input id="dr2.antenna.group.false" name="dr2.antenna.group" value="false" type="radio"#{' checked'if not @setup['antenna.group']}>Show each URLs</label>
 				of links from antennae.
 			<tr>
-				<td><input name="dr2.antenna.ignore_parenthesis" value="true" type="radio"#{' checked'if @setup['antenna.ignore_parenthesis']}>ignore
-				<td><input name="dr2.antenna.ignore_parenthesis" value="false" type="radio"#{' checked'if not @setup['antenna.ignore_parenthesis']}>don't ignore
+				<td><label for="dr2.antenna.ignore_parenthesis.true"><input id="dr2.antenna.ignore_parenthesis.true" name="dr2.antenna.ignore_parenthesis" value="true" type="radio"#{' checked'if @setup['antenna.ignore_parenthesis']}>ignore</labe>
+				<td><label for="dr2.antenna.ignore_parenthesis.false"><input id="dr2.antenna.ignore_parenthesis.false" name="dr2.antenna.ignore_parenthesis" value="false" type="radio"#{' checked'if not @setup['antenna.ignore_parenthesis']}>don't ignore</labe>
 				the last parenthesis when grouping links from antennae with the titles.
 			</table>
 			<h3>Keywords from search engines</h3>
 			<table>
 			<tr>
-				<td><input name="dr2.search.expand" value="true" type="radio"#{' checked'if @setup['search.expand']}>Show
-				<td><input name="dr2.search.expand" value="false" type="radio"#{' checked'if not @setup['search.expand']}>Don't show
+				<td><label for="dr2.search.expand.true"><input id="dr2.search.expand.true" name="dr2.search.expand" value="true" type="radio"#{' checked'if @setup['search.expand']}>Show</label>
+				<td><Label for="dr2.search.expand.false"><input id="dr2.search.expand.false" name="dr2.search.expand" value="false" type="radio"#{' checked'if not @setup['search.expand']}>Don't show</label>
 				the search engine names.
 			</table>
 		_HTML
@@ -168,16 +168,16 @@ class DispRef2SetupIF
 			<h3>Cache</h3>
 			<table>
 			<tr>
-				<td><input name="dr2.no_cache" value="false" type="radio"#{' checked'if not @setup['no_cache']}>Use
-				<td><input name="dr2.no_cache" value="true" type="radio"#{' checked'if @setup['no_cache']}>Don't use
+				<td><label for="dr2.no_cache.false"><input id="dr2.no_cache.false" name="dr2.no_cache" value="false" type="radio"#{' checked'if not @setup['no_cache']}>Use</label>
+				<td><label for="dr2.no_cache.true"><input id="dr2.no_cache.true" name="dr2.no_cache" value="true" type="radio"#{' checked'if @setup['no_cache']}>Don't use</label>
 				cache.
 			<tr>
 				<td>Limit cache size to
 				<td colspan="3"><input name="dr2.cache_max_size" value="#{DispRef2String::escapeHTML(@setup['cache_max_size'])}" type="text">Bytes.
 			<tr>
-				<td><input name="dr2.cache.update" value="force" type="radio">clear
-				<td><input name="dr2.cache.update" value="auto" type="radio" checked>clear if needed
-				<td><input name="dr2.cache.update" value="never" type="radio">don't clear
+				<td><label for="dr2.cache.update.force"><input id="dr2.cache.update.force" name="dr2.cache.update" value="force" type="radio">clear</label>
+				<td><label for="dr2.cache.update.auto"><input id="dr2.cache.update.auto" name="dr2.cache.update" value="auto" type="radio" checked>clear if needed</label>
+				<td><label for="dr2.cache.update.never"><input id="dr2.cache.update.never" name="dr2.cache.update" value="never" type="radio">don't clear</label>
 				the cache at this time.
 			</table>
 			<p>Cache size limit is an approximation. There is a chance that the cache size is bigger than the configured value. Setting the limit to zero disalbes limitation. K or M can be suffixed meaning Kbytes or Mbytes.</p>
@@ -254,8 +254,8 @@ class DispRef2SetupIF
 				r << <<-_HTML
 					<dd>
 						Add this URL to
-						<input name="dr2.#{i}.noref" value="true" type="checkbox">Excluding list
-						<input name="dr2.#{i}.ignore" value="true" type="checkbox">Ignore list<br>
+						<label for="dr2.#{i}.noref"><input id="dr2.#{i}.noref" name="dr2.#{i}.noref" value="true" type="checkbox">Excluding list</label>
+						<label for="dr2.#{i}.ignore"><input id="dr2.#{i}.ignore" name="dr2.#{i}.ignore" value="true" type="checkbox">Ignore list</label><br>
 						<input name="dr2.#{i}.reg" value="#{DispRef2String::escapeHTML( DispRef2String::url_regexp( url ) )}" type="text" size="70"><br>
 						<input name="dr2.#{i}.title" value="" type="text" size="70">
 				_HTML
@@ -277,9 +277,9 @@ class DispRef2SetupIF
 			<ul>
 			<li>URL:
 				<input name="dr2.antenna.url" value="#{DispRef2String::escapeHTML( @setup.to_native( @setup['antenna.url'] ) )}" type="text" size="70">
-				<input name="dr2.antenna.url.default" value="true" type="checkbox">Use default
+				<label for="dr2.antenna.url.default"><input id="dr2.antenna.url.default" name="dr2.antenna.url.default" value="true" type="checkbox">Use default</label>
 			<li>Title:<input name="dr2.antenna.title" value="#{DispRef2String::escapeHTML( @setup.to_native( @setup['antenna.title'] ) )}" type="text" size="70">
-				<input name="dr2.antenna.title.default" value="true" type="checkbox">Use default
+				<label for="dr2.antenna.title.default"><input id="dr2.antenna.title.default" name="dr2.antenna.title.default" value="true" type="checkbox">Use default</label>
 			</ul>
 			_HTML
 		r

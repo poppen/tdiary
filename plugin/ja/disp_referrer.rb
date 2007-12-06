@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.39 2007-12-04 22:09:44 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.40 2007-12-06 18:43:18 zunda Exp $-))
 日本語リソース
 
 == 概要
@@ -227,7 +227,7 @@ Disp_referrer2_update_info = <<'_END'.taint
 <p>
 	「<a href="%1$s">リンク元</a>」の変更の後には、
 	このチェックボックス
-  −<input name="dr2.cache.update" value="force" type="checkbox">キャッシュをクリアする−
+  −<label for="dr2.cache.update"><input id="dr2.cache.update" name="dr2.cache.update" value="force" type="checkbox">キャッシュをクリアする</label>−
 	チェックしてからOKをクリックして、
 	キャッシュのクリアをしてくさい。
 </p>
@@ -257,54 +257,54 @@ class DispRef2SetupIF
 			<tr>
 				<td><input name="dr2.current_mode" value="#{Options}" type="hidden">
 				リンク元置換リストにないリンク元を
-				<td><input name="dr2.unknown.divide" value="true" type="radio"#{' checked'if @setup['unknown.divide']}>#{DispRef2String::escapeHTML(@setup['unknown.label'])}として分ける
-				<td><input name="dr2.unknown.divide" value="false" type="radio"#{' checked'if not @setup['unknown.divide']}>通常のリンク元と混ぜる。
+				<td><label for="dr2.unknown.divide.true"><input id="dr2.unknown.divide.true" name="dr2.unknown.divide" value="true" type="radio"#{' checked'if @setup['unknown.divide']}>#{DispRef2String::escapeHTML(@setup['unknown.label'])}として分ける</label>
+				<td><label for="dr2.unknown.divide.false"><input id="dr2.unknown.divide.false" name="dr2.unknown.divide" value="false" type="radio"#{' checked'if not @setup['unknown.divide']}>通常のリンク元と混ぜる</label>。
 			<tr>
 				<td>#{DispRef2String::escapeHTML(@setup['unknown.label'])}を
-				<td><input name="dr2.unknown.hide" value="false" type="radio"#{' checked'if not @setup['unknown.hide']}>表示する
-				<td><input name="dr2.unknown.hide" value="true" type="radio"#{' checked'if @setup['unknown.hide']}>隠す。
+				<td><label for="dr2.unknown.hide.false"><input id="dr2.unknown.hide.false" name="dr2.unknown.hide" value="false" type="radio"#{' checked'if not @setup['unknown.hide']}>表示する</label>
+				<td><label for="dr2.unknown.hide.true"><input id="dr2.unknown.hide.true" name="dr2.unknown.hide" value="true" type="radio"#{' checked'if @setup['unknown.hide']}>隠す</label>。
 			<tr>
 				<td>リンク元置換リストの置換後の文字列の最初の[]をカテゴリー分けに
-				<td><input name="dr2.normal.categorize" value="true" type="radio"#{' checked'if @setup['normal.categorize']}>使う
-				<td><input name="dr2.normal.categorize" value="false" type="radio"#{' checked'if not @setup['normal.categorize']}>使わない。
+				<td><label for="dr2.normal.categorize.true"><input id="dr2.normal.categorize.true" name="dr2.normal.categorize" value="true" type="radio"#{' checked'if @setup['normal.categorize']}>使う</label>
+				<td><label for="dr2.normal.categorize.false"><input id="dr2.normal.categorize.false" name="dr2.normal.categorize" value="false" type="radio"#{' checked'if not @setup['normal.categorize']}>使わない</label>。
 			<tr>
 				<td>一日分の表示で、通常のリンク元以外のリンク元を
-				<td><input name="dr2.long.only_normal" value="false" type="radio"#{' checked'if not @setup['long.only_normal']}>表示する
-				<td><input name="dr2.long.only_normal" value="true" type="radio"#{' checked'if @setup['long.only_normal']}>隠す。
+				<td><label for="dr2.long.only_normal.false"><input id="dr2.long.only_normal.false" name="dr2.long.only_normal" value="false" type="radio"#{' checked'if not @setup['long.only_normal']}>表示する</label>
+				<td><label for="dr2.long.only_normal.true"><input id="dr2.long.only_normal.true" name="dr2.long.only_normal" value="true" type="radio"#{' checked'if @setup['long.only_normal']}>隠す</label>。
 			<tr>
 				<td>最新の表示で、通常のリンク元以外のリンク元を
-				<td><input name="dr2.short.only_normal" value="false" type="radio"#{' checked'if not @setup['short.only_normal']}>表示する
-				<td><input name="dr2.short.only_normal" value="true" type="radio"#{' checked'if @setup['short.only_normal']}>隠す。
+				<td><label for="dr2.short.only_normal.false"><input id="dr2.short.only_normal.false" name="dr2.short.only_normal" value="false" type="radio"#{' checked'if not @setup['short.only_normal']}>表示する</label>
+				<td><label for="dr2.short.only_normal.true"><input id="dr2.short.only_normal.true" name="dr2.short.only_normal" value="true" type="radio"#{' checked'if @setup['short.only_normal']}>隠す</label>。
 			</table>
 			<p>最新の表示で、通常のリンク元以外のリンク元を表示する場合には、このプラグインが無い場合とまったく同じ表示になります。</p>
 			<h3>通常のリンク元のグループ化</h3>
 			<table>
 			<tr>
 				<td>通常のリンク元を
-				<td><input name="dr2.normal.group" value="true" type="radio"#{' checked'if @setup['normal.group']}>置換後の文字列でまとめる
-				<td><input name="dr2.normal.group" value="false" type="radio"#{' checked'if not @setup['normal.group']}>URL毎に分ける。
+				<td><label for="dr2.normal.group.true"><input id="dr2.normal.group.true" name="dr2.normal.group" value="true" type="radio"#{' checked'if @setup['normal.group']}>置換後の文字列でまとめる</label>
+				<td><label for="dr2.normal.group.false"><input id="dr2.normal.group.false" name="dr2.normal.group" value="false" type="radio"#{' checked'if not @setup['normal.group']}>URL毎に分ける</label>。
 			<tr>
 				<td>通常のリンク元を置換後の文字列でまとめる場合に、最後の()を
-				<td><input name="dr2.normal.ignore_parenthesis" value="true" type="radio"#{' checked'if @setup['normal.ignore_parenthesis']}>無視する /
-				<td><input name="dr2.normal.ignore_parenthesis" value="false" type="radio"#{' checked'if not @setup['normal.ignore_parenthesis']}>無視しない。
+				<td><label for="dr2.normal.ignore_parenthesis.true"><input id="dr2.normal.ignore_parenthesis.true" name="dr2.normal.ignore_parenthesis" value="true" type="radio"#{' checked'if @setup['normal.ignore_parenthesis']}>無視する</label>
+				<td><label for="dr2.normal.ignore_parenthesis.false"><input id="dr2.normal.ignore_parenthesis.false" name="dr2.normal.ignore_parenthesis" value="false" type="radio"#{' checked'if not @setup['normal.ignore_parenthesis']}>無視しない</label>。
 			</table>
 			<h3>アンテナからのリンクのグループ化</h3>
 			<table>
 			<tr>
 				<td>アンテナからのリンクを
-				<td><input name="dr2.antenna.group" value="true" type="radio"#{' checked'if @setup['antenna.group']}>置換後の文字列でまとめる
-				<td><input name="dr2.antenna.group" value="false" type="radio"#{' checked'if not @setup['antenna.group']}>URL毎に分ける。
+				<td><label for="dr2.antenna.group.true"><input id="dr2.antenna.group.true" name="dr2.antenna.group" value="true" type="radio"#{' checked'if @setup['antenna.group']}>置換後の文字列でまとめる</label>
+				<td><label for="dr2.antenna.group.false"><input id="dr2.antenna.group.false" name="dr2.antenna.group" value="false" type="radio"#{' checked'if not @setup['antenna.group']}>URL毎に分ける</label>。
 			<tr>
 				<td>アンテナからのリンクを置換後の文字列でまとめる場合に、最後の()を
-				<td><input name="dr2.antenna.ignore_parenthesis" value="true" type="radio"#{' checked'if @setup['antenna.ignore_parenthesis']}>無視する
-				<td><input name="dr2.antenna.ignore_parenthesis" value="false" type="radio"#{' checked'if not @setup['antenna.ignore_parenthesis']}>無視しない。
+				<td><label for="dr2.antenna.ignore_parenthesis.true"><input id="dr2.antenna.ignore_parenthesis.true" name="dr2.antenna.ignore_parenthesis" value="true" type="radio"#{' checked'if @setup['antenna.ignore_parenthesis']}>無視する</label>
+				<td><label for="dr2.antenna.ignore_parenthesis.false"><input id="dr2.antenna.ignore_parenthesis.false" name="dr2.antenna.ignore_parenthesis" value="false" type="radio"#{' checked'if not @setup['antenna.ignore_parenthesis']}>無視しない</label>。
 			</table>
 			<h3>検索キーワードの表示</h3>
 			<table>
 			<tr>
 				<td>検索エンジン名を
-				<td><input name="dr2.search.expand" value="true" type="radio"#{' checked'if @setup['search.expand']}>表示する
-				<td><input name="dr2.search.expand" value="false" type="radio"#{' checked'if not @setup['search.expand']}>表示しない。
+				<td><label for="dr2.search.expand.true"><input id="dr2.search.expand.true" name="dr2.search.expand" value="true" type="radio"#{' checked'if @setup['search.expand']}>表示する</label>
+				<td><label for="dr2.search.expand.false"><input id="dr2.search.expand.false" name="dr2.search.expand" value="false" type="radio"#{' checked'if not @setup['search.expand']}>表示しない</label>。
 			</table>
 		_HTML
 		unless @setup.secure then
@@ -313,16 +313,16 @@ class DispRef2SetupIF
 			<table>
 			<tr>
 				<td>キャッシュを
-				<td><input name="dr2.no_cache" value="false" type="radio"#{' checked'if not @setup['no_cache']}>利用する
-				<td><input name="dr2.no_cache" value="true" type="radio"#{' checked'if @setup['no_cache']}>利用しない。
+				<td><label for="dr2.no_cache.false"><input id="dr2.no_cache.false" name="dr2.no_cache" value="false" type="radio"#{' checked'if not @setup['no_cache']}>利用する</label>
+				<td><label for="dr2.no_cache.true"><input id="dr2.no_cache.true" name="dr2.no_cache" value="true" type="radio"#{' checked'if @setup['no_cache']}>利用しない</label>。
 			<tr>
 				<td>キャッシュの大きさを
 				<td colspan="3"><input name="dr2.cache_max_size" value="#{DispRef2String::escapeHTML(@setup['cache_max_size'])}" type="text">バイトまでにする。
 			<tr>
 				<td>今回の設定変更で、キャッシュを
-				<td><input name="dr2.cache.update" value="force" type="radio">クリアする
-				<td><input name="dr2.cache.update" value="auto" type="radio" checked>必要ならクリアする
-				<td><input name="dr2.cache.update" value="never" type="radio">クリアしない。
+				<td><label for="dr2.cache.update.force"><input id="dr2.cache.update.force" name="dr2.cache.update" value="force" type="radio">クリアする</label>
+				<td><label for="dr2.cache.update.auto"><input id="dr2.cache.update.auto" name="dr2.cache.update" value="auto" type="radio" checked>必要ならクリアする</label>
+				<td><label for="dr2.cache.update.never"><input id="dr2.cache.update.never" name="dr2.cache.update" value="never" type="radio">クリアしない</label>。
 			</table>
 			<p>キャッシュの大きさの制限は目安です。これよりも大きくなる場合もあります。キャッシュの大きさの制限を0にすると、キャッシュの大きさを制限しなくなります。最後にKやMをつけると、キロバイト、メガバイト単位になります。</p>
 		_HTML
@@ -351,7 +351,7 @@ class DispRef2SetupIF
 			下記のリストに現れなくなります。
 			無視リストは、
 			下記のリストにURLを表示するかどうかの判断にだけ使われます。
-			<input name="dr2.clear_ignore_urls" value="true" type="checkbox">無視リストを空にする場合はチェックして下さい。
+			<label for="dr2.clear_ignore_urls"><input id="dr2.clear_ignore_urls" name="dr2.clear_ignore_urls" value="true" type="checkbox">無視リストを空にする場合はチェック</label>して下さい。
 		</p>
 		_HTML
 		if urls.size > 0 then
@@ -401,8 +401,8 @@ class DispRef2SetupIF
 				end
 				r << <<-_HTML
 					<dd>
-						<input name="dr2.#{i}.noref" value="true" type="checkbox">除外リストに追加
-						<input name="dr2.#{i}.ignore" value="true" type="checkbox">無視リストに追加<br>
+						<label for="dr2.#{i}.noref"><input id="dr2.#{i}.noref" name="dr2.#{i}.noref" value="true" type="checkbox">除外リストに追加</label>
+						<label for="dr2.#{i}.ignore"><input id="dr2.#{i}.ignore" name="dr2.#{i}.ignore" value="true" type="checkbox">無視リストに追加</label><br>
 						<input name="dr2.#{i}.reg" value="#{DispRef2String::escapeHTML( DispRef2String::url_regexp( url ) )}" type="text" size="70"><br>
 						<input name="dr2.#{i}.title" value="" type="text" size="70">
 				_HTML
@@ -424,9 +424,9 @@ class DispRef2SetupIF
 			<ul>
 			<li>URL:
 				<input name="dr2.antenna.url" value="#{DispRef2String::escapeHTML( @setup.to_native( @setup['antenna.url'] ) )}" type="text" size="70">
-				<input name="dr2.antenna.url.default" value="true" type="checkbox">デフォルトに戻す
+				<label for="dr2.antenna.url.default"><input id="dr2.antenna.url.default" name="dr2.antenna.url.default" value="true" type="checkbox">デフォルトに戻す</label>
 			<li>置換後の文字列:<input name="dr2.antenna.title" value="#{DispRef2String::escapeHTML( @setup.to_native( @setup['antenna.title'] ) )}" type="text" size="70">
-				<input name="dr2.antenna.title.default" value="true" type="checkbox">デフォルトに戻す
+				<label for="dr2.antenna.title.default"><input id="dr2.antenna.title.default" name="dr2.antenna.title.default" value="true" type="checkbox">デフォルトに戻す</label>
 			</ul>
 			_HTML
 		r

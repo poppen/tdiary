@@ -1,3 +1,6 @@
+2007-12-06 zunda <zunda at freeshell.org>
+	* ??/disp_referrer.rb: added label tags to radio buttons and check boxes
+
 2007-12-05 zunda <zunda at freeshell.org>
 	* ja/disp_referrer.rb: added support for unit test
 
