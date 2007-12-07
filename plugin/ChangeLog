@@ -1,3 +1,14 @@
+2007-12-07 zunda <zunda at freeshell.org>
+	* disp_referrer.rb: modified to recursively convert URL in query
+	with keyword specified with a Symbol
+	* disp_referrer.rb: refactored parse_as_search()
+	* ja/disp_referrer.rb: modified an entry of DispReferrer2_Engines
+	accordingly
+	* ja/disp_referrer.rb: add an option to extensive test. Provide path
+	to .tdr files to the command line
+	* en/disp_referrer.rb, zh/disp_referrer.rb: added a comment for
+	specifing recuseive conversion
+
 2007-12-06 zunda <zunda at freeshell.org>
 	* disp_referrer.rb, ja/disp_referrer.rb: applied patch at
 	http://d.akinori.org/?date=20070704#p01 by Akinori MUSHA

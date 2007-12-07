@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.41 2007-12-06 19:11:38 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.42 2007-12-07 13:34:17 zunda Exp $-))
 日本語リソース
 
 == 概要
@@ -437,6 +437,9 @@ end
 # key: company name
 # value: array of:
 # [0]:url regexp [1]:title [2]:keys for search keyword [3]:cache regexp
+# keys - an Array of Strings for usual keys
+#      - a String as a Ruby code to be sent to URL after regexp matching
+#      - a Symbol to indicate the key contains URL to be recursively converted
 DispReferrer2_Google_cache = /cache:[^:]+:([^+]+)+/
 DispReferrer2_Yahoofs = /u=(.+)/
 DispReferrer2_Engines = {
@@ -446,7 +449,7 @@ DispReferrer2_Engines = {
 		[%r{\Ahttp://.*?\bgoogle/search}i, '"たぶんGoogle検索"', ['as_q', 'q'], DispReferrer2_Google_cache],
 		[%r{\Ahttp://eval.google\.([^/]+)}i, '".#{$1}のGoogle Accounts"', [], nil],
 		[%r{\Ahttp://images\.google\.([^/]+)/images}i, '".#{$1}のGoogleイメージ検索"', ['q'], DispReferrer2_Google_cache],
-		[%r{\Ahttp://images\.google\.([^/]+)/imgres}i, '".#{$1}のGoogleイメージ検索"', ['prev>q'], DispReferrer2_Google_cache],
+		[%r{\Ahttp://images\.google\.([^/]+)/imgres}i, '".#{$1}のGoogleイメージ検索"', :prev, DispReferrer2_Google_cache],
 	],
 	'yahoo' => [
 		[%r{\Ahttp://[^/]+\.rd\.yahoo\.([^/]+)}i, '".#{$1}のYahooのリダイレクタ"', 'split(/\*/)[1]', nil],
@@ -604,7 +607,6 @@ DispReferrer2_Engines = {
 # Test cases which are far from complete:
 # run this script to unit-test just small part of the features
 if __FILE__ == $0 then
-	require 'test/unit'
 	require 'nkf'
 
 	# I am sorry that the language resouce has been loaded to the
@@ -649,39 +651,73 @@ if __FILE__ == $0 then
 		end
 	end
 
-	class TestSearchEngines < Test::Unit::TestCase
-		def setup
-			path = File.join(File.dirname(__FILE__), '..', File.basename(__FILE__))
-			load(path)
+	# load the main plugin file
+	load(File.join(File.dirname(__FILE__), '..', File.basename(__FILE__)))
 
-			@dr2_setup = DispRef2Setup.new(StabConf.new, nil, true, [], '')
-		end
+	if ARGV.empty? then
+		require 'test/unit'
+		class TestSearchEngines < Test::Unit::TestCase
+			def setup
+				@dr2_setup = DispRef2Setup.new(StabConf.new, nil, true, [], '')
+			end
 
-		def match(url, keyword, provider = nil)
-			x = DispRef2URL.new(url).parse(@dr2_setup)
-			assert_equal(:search, x.category)
-			assert_equal(to_native(keyword), to_native(x.key))
-			assert_equal(to_native(provider), to_native(x.title_ignored)) if provider
-		end
+			def match(url, keyword, provider = nil)
+				x = DispRef2URL.new(url).parse(@dr2_setup)
+				assert_equal(:search, x.category)
+				assert_equal(to_native(keyword), to_native(x.key))
+				assert_equal(to_native(provider), to_native(x.title_ignored)) if provider
+			end
 
-		def test_search_engines
-			[
-				# simple test to test the unittest code
-				['http://www.google.com/search?q=test', 'test', '.comのGoogle検索'],
-				['http://www.google.com/search?q=test', 'test'],
-			].each do |url, keyword, provider|
-				match(url, keyword, provider)
+			def test_search_engines
+				[
+					# simple test to test the unittest code
+					['http://www.google.com/search?q=test', 'test', '.comのGoogle検索'],
+					['http://www.google.com/search?q=test', 'test'],
+					['http://images.google.com/images?q=qwertz&start=240&ndsp=20&svnum=10&hl=fr&lr=&sa=N', 'qwertz'],
+				].each do |url, keyword, provider|
+					match(url, keyword, provider)
+				end
+			end
+
+			def test_cached_urls
+				[
+					['http://72.14.235.104/search?q=cache:gj71ka2AWYgJ:zunda.freeshell.org/d/20071019.html+rsync+error+error+in+file+IO&hl=ja&ct=clnk&cd=2&gl=jp', 'rsync error error in file IO', 'Google検索(zunda.freeshell.org/d/20071019.htmlのキャッシュ)'],
+				].each do |url, keyword, provider|
+					match(url, keyword, provider)
+				end
+			end
+
+			def test_recursive_conversion
+				[
+					['http://images.google.com/imgres?imgurl=http://zunda.freeshell.org/p/020302_GermanKbdSml.jpg&imgrefurl=http://zunda.freeshell.org/d/20050629.html&h=170&w=512&sz=30&hl=fr&start=256&tbnid=TlfDZCEB4H1PTM:&tbnh=43&tbnw=131&prev=/images%3Fq%3Dqwertz%26start%3D240%26ndsp%3D20%26svnum%3D10%26hl%3Dfr%26lr%3D%26sa%3DN', 'qwertz', '.comのGoogleイメージ検索']
+				].each do |url, keyword, provider|
+					match(url, keyword, provider)
+				end
 			end
 		end
 
-		def test_recursive_conversion
-			[
-				['http://images.google.com/imgres?imgurl=http://zunda.freeshell.org/p/020302_GermanKbdSml.jpg&imgrefurl=http://zunda.freeshell.org/d/20050629.html&h=170&w=512&sz=30&hl=fr&start=256&tbnid=TlfDZCEB4H1PTM:&tbnh=43&tbnw=131&prev=/images%3Fq%3Dqwertz%26start%3D240%26ndsp%3D20%26svnum%3D10%26hl%3Dfr%26lr%3D%26sa%3DN', 'qwertz', '.comのGoogleイメージ検索']
-			].each do |url, keyword, provider|
-				match(url, keyword, provider)
+	else
+		# entensive test - provide path to defaultIO .tdr files to the command line
+		dr2_setup = DispRef2Setup.new(StabConf.new, nil, true, [], '')
+		n = 0
+		ARGV.each do |tdr|
+			File.open(tdr) do |f|
+				f.each do |l|
+					count, ref = l.chomp.split( / /, 2 )
+					next unless /\A\d+\z/ =~ count
+					next if not ref or ref.empty?
+					begin
+						x = DispRef2URL.new(ref).parse(dr2_setup)
+						#puts "#{ref} -> #{x.title} [#{x.title_ignored}]"
+						n += 1
+					rescue
+						$stderr.puts "#{ref} -> #{$!}"
+						raise
+					end
+				end
 			end
 		end
-
+		puts "#{n} conversions"
 	end
 end
 

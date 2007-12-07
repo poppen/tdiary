@@ -1,5 +1,5 @@
 =begin
-= A little bit more powerful display of referrers((-$Id: disp_referrer.rb,v 1.18 2007-12-06 18:43:18 zunda Exp $-))
+= A little bit more powerful display of referrers((-$Id: disp_referrer.rb,v 1.19 2007-12-07 13:34:17 zunda Exp $-))
 English resource
 
 == Copyright notice
@@ -291,6 +291,9 @@ end
 # key: company name
 # value: array of:
 # [0]:url regexp [1]:title [2]:keys for search keyword [3]:cache regexp
+# keys - an Array of Strings for usual keys
+#      - a String as a Ruby code to be sent to URL after regexp matching
+#      - a Symbol to indicate the key contains URL to be recursively converted
 DispReferrer2_Google_cache = /cache:[^:]+:([^+]+)+/
 DispReferrer2_Engines = {
 	'google' => [

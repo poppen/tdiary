@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.67 2007-12-06 19:11:38 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.68 2007-12-07 13:34:17 zunda Exp $-))
 
 == 概要
 アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
@@ -740,6 +740,16 @@ class DispRef2URL
 			@key == other.key
 	end
 
+	def replace_with(other)
+		@category = other.category
+		@category_label = other.category_label
+		@title = other.title
+		@title_ignored = other.title_ignored
+		@title_group = other.title_group
+		@key = other.key
+		return self
+	end
+
 	private
 		def parse_as_search( setup )
 			# see which search engine is used
@@ -754,34 +764,36 @@ class DispRef2URL
 			keyword = nil
 			cached_url = nil
 			catch( :done ) do
-				setup['search_engines'][engine].each do |re_url, title, keys, cache|
+				setup['search_engines'][engine].each do |re_url, title_code, keys, cache|
 					if( re_url =~ urlbase ) then
-						title = eval( title )
+						title = eval( title_code )
 						throw :done if keyword
-						if keys.empty? then
-							keyword = setup['search.unknown_keyword']
+						if String == keys.class then	# a Ruby code to extract key
+							re_url =~ urlbase
+							keyword, cached_url = (query || @url ).instance_eval( keys )
 							throw :done
 						end
-						if String == keys.class then
-							k, c = (query ? query : @url ).instance_eval( keys )
-							if k then
-								keyword = k
-							else
-								keyword = setup['search.unknown_keyword']
+						next unless query	# below is to extract keyword from query
+						values = DispRef2String::parse_query( query )
+						if Symbol == keys.class then
+							key = keys.to_s
+							if values[key] and not (encoded_uri = values[key][0]).empty? then
+								begin
+									original_uri = URI::parse( urlbase ) + URI::parse( URI::decode(encoded_uri) )
+									throw :done if original_uri == urlbase	# denial of service?
+									self.replace_with( DispRef2URL.new( original_uri.to_s ).parse( setup ) )
+									return self
+								rescue URI::InvalidURIError
+									throw :done
+								end
 							end
-							cached_url = c ? c : nil
-							throw :done
-						else	# should be an Array usually
-							keys.each do |kpath|
-								value = nil
-								unless( kpath.split( '>' ).inject( query ? query : @url ) { |q, k|
-									value, = DispRef2String::parse_query( q.sub( /.*?\?/, '' ) )[k]
-									break nil if value.nil?
-									setup.to_native( DispRef2String::unescape( value ) )
-								}.nil? ) then
-									unless( cache and cache =~ value ) then
+							next
+						else	# an Array of keys in which keywords are stored
+							keys.each do |key|
+								if values[key] and not (value = values[key][0]).empty? then
+									unless cache and cache =~ value then
 										cached_url = nil
-										keyword = value
+										keyword = values[key][0]
 										throw :done
 									else
 										cached_url = $1
@@ -790,17 +802,15 @@ class DispRef2URL
 									end
 								end
 							end
-							if( keyword.nil? ) then
-								keyword = setup['search.unknown_keyword']
-								throw :done
-							end
+							next
 						end
 					end
 				end
+				return nil
 			end
-			return nil unless keyword
 
 			# format
+			keyword ||= setup['search.unknown_keyword']
 			@category = Search
 			@category_label = nil
 			@title = DispRef2String::normalize( setup.to_native( DispRef2String::unescape( keyword ) ) )
@@ -809,11 +819,10 @@ class DispRef2URL
 			@title_group = @title
 			@key = @title_group
 
-			self
+			return self
 		end
 
 		def parse_as_others( setup )
-
 			# try to convert with referer_table
 			matched = false
 			title = setup.to_native( DispRef2String::unescape( @url ) )
