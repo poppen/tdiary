@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.43 2007-12-10 11:23:17 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.44 2007-12-10 12:44:09 zunda Exp $-))
 日本語リソース
 
 == 概要
@@ -455,6 +455,7 @@ DispReferrer2_Engines = {
 		[%r{\Ahttp://[^/]+\.rd\.yahoo\.([^/]+)}i, '".#{$1}のYahooのリダイレクタ"', 'split(/\*/)[1]', nil],
 		[%r{\Ahttp://srd\.yahoo\.co\.jp/}i, '"Yahooのリダイレクタ"', [], nil],
 		[%r{\Ahttp://rd[^/]+\.yahoo\.com/}i, '"Yahooのリダイレクタ"', [], nil], # エンジンは inktomi 製と見た。
+		[%r{\Ahttp://([a-z]{2})\.search\.yahoo\.com/}i, '".#{$1}のYahoo!検索"', ['p'], DispReferrer2_Google_cache],
 		[%r{\Ahttp://(?:[^bm/]+|blog-search)\.yahoo\.([^/]+)/}i, '".#{$1}のYahoo!検索"', ['p', 'va', 'vp'], DispReferrer2_Google_cache],
 		[%r{\Ahttp://wrs\.search\.yahoo\.([^/]+)/(?:.*)\bK=([^/]+)}i, 'keyword=$2; "#{$1}のYahoo!検索"', [], nil],
 		[%r{\Ahttp://(?:image-search\.yahoo\.co\.jp/(?:search|detail)|images\.search\.yahoo\.co\.jp/bin/(?:search|query))}, '".co.jpのYahoo!画像検索"', ['p'], DispReferrer2_Google_cache],
@@ -468,7 +469,7 @@ DispReferrer2_Engines = {
 	'altavista' => [[%r{\Ahttp://(?:[^/]+\.)?altavista\.([^/]+)/}i, '".#{$1}のAltaVista検索"', ['q'], nil ]],
 	'infoseek' => [
 		[%r{\Ahttp://(www\.)?infoseek\.co\.jp/}i, '"Infoseek"', ['qt'], nil],
-		[%r{\Ahttp://search\.www\.infoseek\.co\.jp/[IO]Titles}, '"Infoseekハイブリッド検索"', ['qt'], nil],
+		[%r{\Ahttp://search\d*\.www\.infoseek\.co\.jp/(?:[IO]Titles|Seek)}, '"Infoseekハイブリッド検索"', ['qt'], nil],
 	],
 	'odn' => [[%r{\Ahttp://[^/]+\.odn\.ne\.jp/}i, '"ODN検索"', ['QueryString', 'key'], nil ]],
 	'lycos' => [[%r{\Ahttp://[^/]+\.lycos\.([^/]+)/}i, '".#{$1}のLycos"', ['query', 'q', 'qt'], nil ]],
@@ -602,6 +603,17 @@ DispReferrer2_Engines = {
 	# CIDR:       209.85.128.0/17
 	# NetName:    GOOGLE
 	'85' => [[%r{\Ahttp://209\.85\.(?:12[8-9]|1[3-9]\d|2\d\d)\.\d+/}i, '"Google検索"', ['as_q', 'q'], DispReferrer2_Google_cache]],
+	'chew' => [[%r{\Ahttp://blog\.chew\.jp/result/(?:.*/)?(.+)}, 'keyword=$1; "YGブログ検索"', [], nil]],
+	'x0' => [[%r{\Ahttp://bloger\.x0\.com/result/(?:.*/)?(.+)}, 'keyword=$1; "YGブログ検索"', [], nil]],
+	'wordtantei' => [[%r{\Ahttp://wordtantei\.com/result/(?:.*/)?(.+)}, 'keyword=$1; "ワード探偵"', [], nil]],
+	'sfa-cms' => [[%r{\Ahttp://www\.sfa-cms\.(?:com|net)/word/(?:.*/)?(.+)}, 'keyword=$1; "入れ⇔替え検索"', [], nil]],
+	'hatena' => [[%r{\Ahttp://search\.hatena\.ne\.jp/}i, '"はてな検索"', ['word'], nil]],
+	'live' => [
+		[%r{\Ahttp://search\.live\.com/results\.aspx}i, '"Live Search"', ['q'], nil],
+		[%r{\Ahttp://search\.live\.com/images/results\.aspx}i, '"Live Search(画像)"', ['q'], nil],
+		[%r{\Ahttp://search\.live\.com/news/results\.aspx}i, '"Live Search(ニュース)"', ['q'], nil],
+
+	],
 }
 
 # Test cases which are far from complete:
@@ -675,6 +687,11 @@ if __FILE__ == $0 then
 					['http://www.google.com/search?q=test', 'test', '.comのGoogle検索'],
 					['http://www.google.com/search?q=test', 'test'],
 					['http://images.google.com/images?q=qwertz&start=240&ndsp=20&svnum=10&hl=fr&lr=&sa=N', 'qwertz'],
+					['http://bloger.x0.com/result/%E3%83%86%E3%82%B9%E3%83%88%E3%81%A7%E3%81%99%E3%81%A8/%E3%83%86%E3%82%B9%E3%83%88%E3%81%A7%E3%81%99%E3%81%A8', 'テストですと', 'YGブログ検索'],
+					['http://wordtantei.com/result/%E3%83%86%E3%82%B9%E3%83%88/%E3%83%86%E3%82%B9%E3%83%88', 'テスト', 'ワード探偵'],
+					['http://www.sfa-cms.net/word/zunda/zunda+%E3%81%9A%E3%82%93%E3%81%A0', 'zunda ずんだ', '入れ⇔替え検索'],
+					['http://search.hatena.ne.jp/search?word=zunda&site=', 'zunda', 'はてな検索'],
+					['http://search.live.com/results.aspx?q=%E3%81%8A%E3%81%BE%E3%81%AC%E3%81%91%E6%B4%BB%E5%8B%95%E6%97%A5%E8%AA%8C&go=%E6%A4%9C%E7%B4%A2&mkt=ja-jp&scope=&FORM=LIVSOP', 'おまぬけ活動日誌', 'Live Search'],
 				].each do |url, keyword, provider|
 					match(url, keyword, provider)
 				end
@@ -690,7 +707,7 @@ if __FILE__ == $0 then
 
 			def test_recursive_conversion
 				[
-					['http://images.google.com/imgres?imgurl=http://zunda.freeshell.org/p/020302_GermanKbdSml.jpg&imgrefurl=http://zunda.freeshell.org/d/20050629.html&h=170&w=512&sz=30&hl=fr&start=256&tbnid=TlfDZCEB4H1PTM:&tbnh=43&tbnw=131&prev=/images%3Fq%3Dqwertz%26start%3D240%26ndsp%3D20%26svnum%3D10%26hl%3Dfr%26lr%3D%26sa%3DN', 'qwertz', '.comのGoogleイメージ検索']
+					['http://images.google.com/imgres?imgurl=http://zunda.freeshell.org/p/020302_GermanKbdSml.jpg&imgrefurl=http://zunda.freeshell.org/d/20050629.html&h=170&w=512&sz=30&hl=fr&start=256&tbnid=TlfDZCEB4H1PTM:&tbnh=43&tbnw=131&prev=/images%3Fq%3Dqwertz%26start%3D240%26ndsp%3D20%26svnum%3D10%26hl%3Dfr%26lr%3D%26sa%3DN', 'qwertz', '.comのGoogleイメージ検索'],
 				].each do |url, keyword, provider|
 					match(url, keyword, provider)
 				end

@@ -1,4 +1,9 @@
 2007-12-10 zunda <zunda at freeshell.org>
+	* ja/disp_referrer.rb: added search engines from chew, wordtantei,
+	sfa-cms, hatena, Live Search. Modified search engines from Yahoo and
+	Infoseek.
+
+2007-12-10 zunda <zunda at freeshell.org>
 	* ja/disp_referrer.rb: added require 'uri' to test code
 
 2007-12-07 zunda <zunda at freeshell.org>
