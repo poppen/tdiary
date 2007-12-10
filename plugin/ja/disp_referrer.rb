@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.42 2007-12-07 13:34:17 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.43 2007-12-10 11:23:17 zunda Exp $-))
 日本語リソース
 
 == 概要
@@ -608,6 +608,7 @@ DispReferrer2_Engines = {
 # run this script to unit-test just small part of the features
 if __FILE__ == $0 then
 	require 'nkf'
+	require 'uri'
 
 	# I am sorry that the language resouce has been loaded to the
 	# top level. Therefore, we will spit required objects defined
