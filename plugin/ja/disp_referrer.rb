@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.44 2007-12-10 12:44:09 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.45 2007-12-11 07:23:39 zunda Exp $-))
 日本語リソース
 
 == 概要
@@ -449,7 +449,8 @@ DispReferrer2_Engines = {
 		[%r{\Ahttp://.*?\bgoogle/search}i, '"たぶんGoogle検索"', ['as_q', 'q'], DispReferrer2_Google_cache],
 		[%r{\Ahttp://eval.google\.([^/]+)}i, '".#{$1}のGoogle Accounts"', [], nil],
 		[%r{\Ahttp://images\.google\.([^/]+)/images}i, '".#{$1}のGoogleイメージ検索"', ['q'], DispReferrer2_Google_cache],
-		[%r{\Ahttp://images\.google\.([^/]+)/imgres}i, '".#{$1}のGoogleイメージ検索"', :prev, DispReferrer2_Google_cache],
+		[%r{\Ahttp://images\.google\.([^/]+)/imgres}i, '".#{$1}のGoogleイメージ検索"', [:prev], DispReferrer2_Google_cache],
+		[%r{\Ahttp://translate\.google\.([^/]+)/translate}i, '".#{$1}のGoogle検索"', [:prev], DispReferrer2_Google_cache],
 	],
 	'yahoo' => [
 		[%r{\Ahttp://[^/]+\.rd\.yahoo\.([^/]+)}i, '".#{$1}のYahooのリダイレクタ"', 'split(/\*/)[1]', nil],
@@ -541,7 +542,7 @@ DispReferrer2_Engines = {
 		[%r{\Ahttp://answerbus\.coli\.uni-sb\.de/cgi-bin/answerbus/answer.cgi}i, '"AnswerBus"', [], nil ],
 	],
 	'dogplile' => [[%r{\Ahttp://www.\dogpile\.com/info\.dogpl/search/web/}i, '"dogpile"', [], nil ]],
-	'www' => [[%r{\Ahttp://www\.google/search}i, '"Google検索?"', ['as_q', 'q'], DispReferrer2_Google_cache]],	# TLD missing
+	'www' => [[%r{\Ahttp://www\.google/search}i, '"Google検索?"', [:prev, 'as_q', 'q'], DispReferrer2_Google_cache]],	# TLD missing
 	'planet' => [[%r{\Ahttp://www\.planet\.nl/planet/}i, '"Planet-Zoekpagina"', ['googleq', 'keyword'], DispReferrer2_Google_cache]], # googleq parameter has a strange prefix
 	'dcn' => [[%r{\Ahttp://www\.dcn\.to/~comment/cgi-bin/commenton\.cgi}i, '"メタサーチCOMMENTON"', ['q'], nil ]],
 	'ask' => [[%r{\Ahttp://ask\.jp/web.asp}i, '"ask.jp"', ['q'], nil ]],
@@ -561,8 +562,8 @@ DispReferrer2_Engines = {
 	'livedoor' => [[%r{\Ahttp://(sf|www|search)\.livedoor\.}i, '"Livedoor"', ['q'], nil ]],
 	'tkensaku' => [[%r{\Ahttp://www\.tkensaku\.com/sclient\.cgi}i, '"TKENSAKU"', ['value'], nil]],
 	'yahoofs' => [[%r{\Ahttp://cache\.yahoofs\.jp/(?:search/)?cache}i, '"Yahoo! cache"', ['p', 'w'], nil]],
-	'googlie' => [[%r{\Ahttp://www\.googlie\.com/search}i, '"Google検索(へのリダイレクタ)"', ['as_q', 'q'], DispReferrer2_Google_cache]],
-	'toppg' => [[%r{\Ahttp://g\.toppg\.to/search}i, '"Google検索(へのリダイレクタ)"', ['as_q', 'q'], DispReferrer2_Google_cache]],
+	'googlie' => [[%r{\Ahttp://www\.googlie\.com/search}i, '"Google検索(へのリダイレクタ)"', [:prev, 'as_q', 'q'], DispReferrer2_Google_cache]],
+	'toppg' => [[%r{\Ahttp://g\.toppg\.to/search}i, '"Google検索(へのリダイレクタ)"', [:prev, 'as_q', 'q'], DispReferrer2_Google_cache]],
 	'naoya' => [[%r{\Ahttp://naoya\.dyndns\.org/feedback/app/search}i, '"FeedBack"', ['keyword'], nil]],
 	'blogpeople' => [[%r{\Ahttp://bst\.blogpeople\.net/search_result\.jsp}i, '"blogpeople"', ['keyword'], nil]],
 	'matome' => [[%r{\Ahttp://\w+\.matome\.jp/(?:keyword|tag)/(.*(?=\.html\Z)|.*\Z)}i, 'keyword=$1; "まとめ検索"', [], nil]],
@@ -571,19 +572,28 @@ DispReferrer2_Engines = {
 	# NetRange:   64.233.160.0 - 64.233.191.255
 	# CIDR:       64.233.160.0/19
 	# NetName:    GOOGLE
-	'233' => [[%r{\Ahttp://64\.233\.(?:1[6-8][0-9]|190|191)\.\d+/}i, '"Google検索"', ['as_q', 'q'], DispReferrer2_Google_cache]],
+	'233' => [[%r{\Ahttp://64\.233\.(?:1[6-8][0-9]|190|191)\.\d+/}i, '"Google検索"', [:prev, 'as_q', 'q'], DispReferrer2_Google_cache]],
 	# % whois 66.102.0.0
 	# NetRange:   66.102.0.0 - 66.102.15.255
 	# CIDR:       66.102.0.0/20
 	# NetName:    GOOGLE-2
-	'102' => [[%r{\Ahttp://66\.102\.(?:[0-9]|1[0-5])\.\d+/}i, '"Google検索"', ['as_q', 'q'], DispReferrer2_Google_cache]],
+	'102' => [[%r{\Ahttp://66\.102\.(?:[0-9]|1[0-5])\.\d+/}i, '"Google検索"', [:prev, 'as_q', 'q'], DispReferrer2_Google_cache]],
 	# other google candidates:
-	'216' => [[%r{\Ahttp://(?:\d+\.){3}\d+/search}i, '"Google検索?"', ['as_q', 'q'], DispReferrer2_Google_cache]],		# cache servers of google?
-	# % whois whois 72.14.203.104
+	# % whois 216.239.37.104
+	# NetRange:   216.239.32.0 - 216.239.63.255 
+	# CIDR:       216.239.32.0/19 
+	# NetName:    GOOGLE
+	'216' => [[%r{\Ahttp://216\.239\.(?:3[2-9]|[4-5]\d|6[0-3])\.\d+/}i, '"Google検索"', [:prev, 'as_q', 'q'], DispReferrer2_Google_cache]],
+	# % whois 72.14.203.104
 	# NetRange:   72.14.192.0 - 72.14.239.255 
 	# CIDR:       72.14.192.0/19, 72.14.224.0/20 
 	# NetName:    GOOGLE
-	'14' => [[%r{\Ahttp://72\.14\.(?:19[2-9]|2\d\d)\.\d+/}i, '"Google検索"', ['as_q', 'q'], DispReferrer2_Google_cache]],
+	'14' => [[%r{\Ahttp://72\.14\.(?:19[2-9]|2\d\d)\.\d+/}i, '"Google検索"', [:prev, 'as_q', 'q'], DispReferrer2_Google_cache]],
+	# % whois 66.249.93.104
+	# NetRange:   66.249.64.0 - 66.249.95.255 
+	# CIDR:       66.249.64.0/19 
+	# NetName:    GOOGLE
+	'249' => [[%r{\Ahttp://66\.249\.(?:6[4-9]|[7-8]\d|9[0-5])\.\d+/}i, '"Google検索"', [:prev, 'as_q', 'q'], DispReferrer2_Google_cache]],
 	'ezweb' => [[%r{\Ahttp://ezsch\.ezweb\.ne\.jp/search/}i, '"EZweb検索"', ['query'], nil]],
 	'overture' => [[%r{\Ahttp://(?:\w+\.)?overture\.com/}i, '"Overture検索"', ['Keywords'], nil]],
 	'multimeta' => [[%r{\Ahttp://(?:\w+\.)?multimeta\.com/}i, '"Multimeta検索"', ['suchbegriff'], nil]],
@@ -602,7 +612,7 @@ DispReferrer2_Engines = {
 	# NetRange:   209.85.128.0 - 209.85.255.255
 	# CIDR:       209.85.128.0/17
 	# NetName:    GOOGLE
-	'85' => [[%r{\Ahttp://209\.85\.(?:12[8-9]|1[3-9]\d|2\d\d)\.\d+/}i, '"Google検索"', ['as_q', 'q'], DispReferrer2_Google_cache]],
+	'85' => [[%r{\Ahttp://209\.85\.(?:12[8-9]|1[3-9]\d|2\d\d)\.\d+/}i, '"Google検索"', [:prev, 'as_q', 'q'], DispReferrer2_Google_cache]],
 	'chew' => [[%r{\Ahttp://blog\.chew\.jp/result/(?:.*/)?(.+)}, 'keyword=$1; "YGブログ検索"', [], nil]],
 	'x0' => [[%r{\Ahttp://bloger\.x0\.com/result/(?:.*/)?(.+)}, 'keyword=$1; "YGブログ検索"', [], nil]],
 	'wordtantei' => [[%r{\Ahttp://wordtantei\.com/result/(?:.*/)?(.+)}, 'keyword=$1; "ワード探偵"', [], nil]],
@@ -676,9 +686,9 @@ if __FILE__ == $0 then
 
 			def match(url, keyword, provider = nil)
 				x = DispRef2URL.new(url).parse(@dr2_setup)
-				assert_equal(:search, x.category)
-				assert_equal(to_native(keyword), to_native(x.key))
-				assert_equal(to_native(provider), to_native(x.title_ignored)) if provider
+				assert_equal(:search, x.category, url)
+				assert_equal(to_native(keyword), to_native(x.key), url)
+				assert_equal(to_native(provider), to_native(x.title_ignored), url) if provider
 			end
 
 			def test_search_engines
@@ -708,6 +718,10 @@ if __FILE__ == $0 then
 			def test_recursive_conversion
 				[
 					['http://images.google.com/imgres?imgurl=http://zunda.freeshell.org/p/020302_GermanKbdSml.jpg&imgrefurl=http://zunda.freeshell.org/d/20050629.html&h=170&w=512&sz=30&hl=fr&start=256&tbnid=TlfDZCEB4H1PTM:&tbnh=43&tbnw=131&prev=/images%3Fq%3Dqwertz%26start%3D240%26ndsp%3D20%26svnum%3D10%26hl%3Dfr%26lr%3D%26sa%3DN', 'qwertz', '.comのGoogleイメージ検索'],
+					['http://translate.google.com/translate?hl=en&sl=ja&u=http://zunda.freeshell.org/d/20070706.html&sa=X&oi=translate&resnum=2&ct=result&prev=/search%3Fq%3Del%2Bcombote%2Binternational%2Blotto%2Bcommission%26hl%3Den', 'el combote international lotto commission', '.comのGoogle検索'],
+					['http://64.233.179.104/translate_c?hl=en&sl=ja&u=http://zunda.freeshell.org/d/20070501.html&prev=/search%3Fq%3Dhtaccess%2Bbrowser%2Bagent%2BDoCoMo/1.0/N505i/c20/TB/W20H10%26hl%3Den%26client%3Dfirefox-a%26rls%3Dorg.mozilla:en-US:official%26hs%3DKUR', 'htaccess browser agent DoCoMo/1.0/N505i/c20/TB/W20H10', 'Google検索'],
+					['http://216.239.37.104/translate_c?hl=en&sl=ja&u=http://zunda.freeshell.org/d/20050907.html&prev=/search%3Fq%3Drnbovdd.dll%26start%3D10%26hl%3Den%26lr%3D%26client%3Dfirefox-a%26rls%3Dorg.mozilla:en-US:official%26sa%3DN', 'rnbovdd.dll', 'Google検索'],
+					['http://66.249.93.104/translate_c?hl=en&sl=ja&u=http://zunda.freeshell.org/d/20051017.html&prev=/search%3Fq%3Dgperf%2Bwarning%2B%2522missing%2Binitializer%2522%26hl%3Den%26sa%3DG', 'gperf warning "missing initializer"']
 				].each do |url, keyword, provider|
 					match(url, keyword, provider)
 				end

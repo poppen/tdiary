@@ -1,4 +1,9 @@
 2007-12-10 zunda <zunda at freeshell.org>
+	* disp_referrer.rb: modified to allow to write keys for seach word (String)
+	and recursive URL (Symbol) in an Array
+	* ja/disp_referrer.rb: added translation URLs from Google
+
+2007-12-10 zunda <zunda at freeshell.org>
 	* ja/disp_referrer.rb: added search engines from chew, wordtantei,
 	sfa-cms, hatena, Live Search. Modified search engines from Yahoo and
 	Infoseek. Thank you, knu

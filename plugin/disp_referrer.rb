@@ -1,5 +1,5 @@
 =begin
-= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.68 2007-12-07 13:34:17 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.69 2007-12-11 07:23:39 zunda Exp $-))
 
 == 概要
 アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
@@ -765,19 +765,22 @@ class DispRef2URL
 			cached_url = nil
 			catch( :done ) do
 				setup['search_engines'][engine].each do |re_url, title_code, keys, cache|
-					if( re_url =~ urlbase ) then
-						title = eval( title_code )
-						throw :done if keyword
-						if String == keys.class then	# a Ruby code to extract key
-							re_url =~ urlbase
-							keyword, cached_url = (query || @url ).instance_eval( keys )
-							throw :done
-						end
-						next unless query	# below is to extract keyword from query
-						values = DispRef2String::parse_query( query )
-						if Symbol == keys.class then
-							key = keys.to_s
-							if values[key] and not (encoded_uri = values[key][0]).empty? then
+					next unless re_url =~ urlbase
+
+					title = eval( title_code )
+					throw :done if keyword
+					if String == keys.class then	# a Ruby code to extract key
+						re_url =~ urlbase
+						keyword, cached_url = (query || @url).instance_eval( keys )
+						throw :done
+					end
+					next unless query	# below is to extract keyword from query
+					values = DispRef2String::parse_query( query )
+					# an Array of keys in which keywords or recursive URL are stored
+					keys.each do |key|
+						if Symbol === key then
+							k = key.to_s
+							if values[k] and not (encoded_uri = values[k][0]).empty? then
 								begin
 									original_uri = URI::parse( urlbase ) + URI::parse( URI::decode(encoded_uri) )
 									throw :done if original_uri == urlbase	# denial of service?
@@ -787,24 +790,20 @@ class DispRef2URL
 									throw :done
 								end
 							end
-							next
-						else	# an Array of keys in which keywords are stored
-							keys.each do |key|
-								if values[key] and not (value = values[key][0]).empty? then
-									unless cache and cache =~ value then
-										cached_url = nil
-										keyword = values[key][0]
-										throw :done
-									else
-										cached_url = $1
-										keyword = $` + $'
-										throw :done
-									end
-								end
+						elsif values[key] and not (value = values[key][0]).empty? then
+							unless cache and cache =~ value then
+								cached_url = nil
+								keyword = values[key][0]
+								throw :done
+							else
+								cached_url = $1
+								keyword = $` + $'
+								throw :done
 							end
-							next
 						end
+						next
 					end
+
 				end
 				return nil
 			end
