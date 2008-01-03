@@ -1,3 +1,7 @@
+2008-01-03 OGAWA KenIchi <kenichi at ice.email.ne.jp>
+	* category.rb: remove over escapes from categories.
+	* */category.rb: remove character entity reference from navigation default.
+
 2007-12-16 TADA Tadashi <sho@spc.gr.jp>
 	* release 2.2.0.
 

@@ -1,4 +1,4 @@
-# ja/category.rb $Revision: 1.5 $
+# ja/category.rb $Revision: 1.6 $
 #
 # Copyright (c) 2004 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -26,14 +26,14 @@ def category_title
 end
 
 def category_init_local
-	@conf['category.prev_year'] ||= '&laquo;($1)'
-	@conf['category.next_year'] ||= '($1)&raquo;'
-	@conf['category.prev_half'] ||= '&laquo;($1-$2)'
-	@conf['category.next_half'] ||= '($1-$2)&raquo;'
-	@conf['category.prev_quarter'] ||= '&laquo;($1-$2)'
-	@conf['category.next_quarter'] ||= '($1-$2)&raquo;'
-	@conf['category.prev_month'] ||= '&laquo;($1-$2)'
-	@conf['category.next_month'] ||= '($1-$2)&raquo;'
+	@conf['category.prev_year'] ||= '<< ($1)'
+	@conf['category.next_year'] ||= '($1) >>'
+	@conf['category.prev_half'] ||= '<< ($1-$2)'
+	@conf['category.next_half'] ||= '($1-$2) >>'
+	@conf['category.prev_quarter'] ||= '<< ($1-$2)'
+	@conf['category.next_quarter'] ||= '($1-$2) >>'
+	@conf['category.prev_month'] ||= '<< ($1-$2)'
+	@conf['category.next_month'] ||= '($1-$2) >>'
 	@conf['category.this_year'] ||= 'this year'
 	@conf['category.this_half'] ||= 'this half'
 	@conf['category.this_quarter'] ||= 'this quarter'

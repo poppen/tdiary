@@ -1,4 +1,4 @@
-# category.rb $Revision: 1.44 $
+# category.rb $Revision: 1.45 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -326,7 +326,7 @@ public
 				label = label.gsub(/\$1/, @year || '*')
 			end
 		else
-			label = @category.map {|c| h( c )}.join(':')
+			label = @category.map.join(':')
 		end
 		%Q|<a href="#{h @conf.index}?#{h a}">#{h label}</a>|
 	end
