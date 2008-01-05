@@ -1,3 +1,7 @@
+2008-01-05 akira yamada <akira at arika.org>
+	* highlight.rb: escape backslash in diary title and delete white space from tail
+	of subtitle.
+
 2008-01-03 OGAWA KenIchi <kenichi at ice.email.ne.jp>
 	* category.rb: remove over escapes from categories.
 	* */category.rb: remove character entity reference from navigation default.
