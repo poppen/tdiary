@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.54 $
+# makerss.rb: $Revision: 1.55 $
 #
 # generate RSS file when updating.
 #
@@ -345,10 +345,9 @@ def makerss_body( uri, rdfsec )
 		sub = apply_plugin( subtitle, true ).strip
 		sub.sub!( /^(\[([^\]]+)\])+ */, '' )
 		if sub.empty?
-			sub = remove_tag( body ).strip
-			sub = @conf.shorten( sub.gsub( /&.*?;/, '' ), 20 )
+			sub = @conf.shorten( remove_tag( body ).strip, 20 )
 		end
-		rdf << %Q|<title>#{h sub}</title>\n|
+		rdf << %Q|<title>#{sub}</title>\n|
 		rdf << %Q|<dc:creator>#{h @conf.author_name}</dc:creator>\n|
 		unless rdfsec.section.categories.empty?
 			rdfsec.section.categories.each do |category|

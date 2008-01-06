@@ -1,10 +1,14 @@
+2008-01-06 TADA Tadashi <sho@spc.gr.jp>
+	* makerss.rb: delete over escape of <title> in each items. thanks for Ogawa
+	KenIchi.
+
 2008-01-05 akira yamada <akira at arika.org>
 	* highlight.rb: escape backslash in diary title and delete white space from tail
 	of subtitle.
 
 2008-01-03 OGAWA KenIchi <kenichi at ice.email.ne.jp>
-	* category.rb: remove over escapes from categories.
-	* */category.rb: remove character entity reference from navigation default.
+	* category.rb: delete over escapes from categories.
+	* */category.rb: delete character entity reference from navigation default.
 
 2007-12-16 TADA Tadashi <sho@spc.gr.jp>
 	* release 2.2.0.
