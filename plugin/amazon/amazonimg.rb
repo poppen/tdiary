@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-# amazonimg.rb $Revision: 1.4 $: CGI script for tDiary amazon plugin in secure mode.
+# amazonimg.rb $Revision: 1.5 $: CGI script for tDiary amazon plugin in secure mode.
 #
 # set URL of this script to @options['amazon.secure-cgi'] into tdiary.conf.
 #
@@ -77,7 +77,7 @@ end
 cgi = CGI::new
 asin, = cgi.params['asin']
 size, = cgi.params['size']
-if asin && /[0-9A-Z]{10}/ =~ asin then
+if asin && /\A[0-9A-Z]{10}\z/ =~ asin then
 	size = '1' if !size or size.length == 0
 	amazon_redirect( cgi, asin.untaint, size.to_i )
 else
