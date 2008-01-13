@@ -1,5 +1,5 @@
 #
-# openid.rb: Insert OpenID delegation information. $Revision: 1.9 $
+# openid.rb: Insert OpenID delegation information. $Revision: 1.10 $
 #
 # Copyright (C) 2005, TADA Tadashi <sho@spc.gr.jp>
 # You can redistribute it and/or modify it under GPL2.
@@ -14,7 +14,7 @@ if /^(latest|conf|saveconf)$/ =~ @mode then
 		'OpenID.ne.jp' => ['http://www.openid.ne.jp/user/auth', 'http://#ID#.openid.ne.jp', 'http://#ID#.openid.ne.jp/user/xrds'],
 		'TypeKey' => ['http://www.typekey.com/t/openid/', 'http://profile.typekey.com/#ID#/', nil],
 		'Videntiry.org' => ['http://videntity.org/serverlogin?action=openid', 'http://#ID#.videntity.org/', nil],
-		'Vox' => ['ihttp://www.vox.com/services/openid/server', 'http://#ID#.vox.com/', nil],
+		'Vox' => ['http://www.vox.com/services/openid/server', 'http://#ID#.vox.com/', nil],
 		'myopenid.com' => ['http://www.myopenid.com/server', 'http://#ID#.myopenid.com', "http://www.myopenid.com/xrds?username=#ID#"],
 	}
 
