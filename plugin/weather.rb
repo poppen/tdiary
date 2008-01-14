@@ -1,5 +1,5 @@
 =begin
-= その日の天気プラグイン / Weather-of-today plugin((-$Id: weather.rb,v 1.12 2004-08-10 18:28:41 zunda Exp $-))
+= その日の天気プラグイン / Weather-of-today plugin((-$Id: weather.rb,v 1.13 2008-01-14 03:55:35 hsbt Exp $-))
 Records the weather when the diary is first updated for the date and
 displays it.
 
@@ -24,6 +24,8 @@ of GPL version 2 or later.
 =end
 
 =begin ChangeLog
+* Mon Jan 14, 2008 SHIBATA Hiroshi <h-sbt@nifty.com>
+- Hide output string in RSS feed.
 * Mon Sep 29, 2003 zunda <zunda at freeshell.org>
 - Japanese resources divided into  a separate file, English resource
   created
@@ -480,6 +482,12 @@ def configure_weather
 	weather_configure_html( @conf )
 end
 
-add_body_enter_proc do |date| weather( date ) end
+add_body_enter_proc do |date| 
+	unless feed? then
+		weather( date )
+	end
+end
+
 add_update_proc do get_weather end
 add_conf_proc( 'weather', @weather_plugin_name ) do configure_weather end
+

@@ -1,3 +1,6 @@
+2008-01-14 SHIBATA Hiroshi <h-sbt@nifty.com>
+	* weather.rb: Hide output string in RSS feed.
+
 2008-01-06 TADA Tadashi <sho@spc.gr.jp>
 	* makerss.rb: delete over escape of <title> in each items. thanks for Ogawa
 	KenIchi.
