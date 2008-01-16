@@ -1,5 +1,5 @@
 =begin
-= その日の天気プラグイン((-$Id: weather.rb,v 1.8 2007-01-09 10:27:46 zunda Exp $-))
+= その日の天気プラグイン((-$Id: weather.rb,v 1.9 2008-01-16 09:43:30 zunda Exp $-))
 その日の天気を、その日の日記を最初に更新する時に取得して保存し、それぞれ
 の日の日記の上部に表示します。
 
@@ -309,14 +309,14 @@ class Weather
 		# weather
 		r << %Q|<a href="#{u(@url)}">|
 		if @data['weather'] then
-			r << h( WeatherTranslator::S.new( @data['weather']).translate( Words_ja ).compact )
+			r << %Q|<span class="weather">#{h( WeatherTranslator::S.new( @data['weather']).translate( Words_ja ).compact )}</span>|
 		elsif @data['condition'] then
-			r << h( WeatherTranslator::S.new( @data['condition']).translate( Words_ja ).compact )
+			r << %Q|<span class="condition">#{h( WeatherTranslator::S.new( @data['condition']).translate( Words_ja ).compact )}</span>|
 		end
 
 		# temperature
 		if @data['temperature(C)'] and t = @data['temperature(C)'].scan(/-?[\d.]+/)[-1] then
-			r << %Q| #{sprintf( '%.0f', t )}℃|
+			r << %Q| <span class="temperature">#{sprintf( '%.0f', t )}℃</span>|
 		end
 
 		r << "</a>#{HTML_END}\n"

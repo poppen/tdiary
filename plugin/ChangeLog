@@ -1,3 +1,6 @@
+2008-01-15 zunda <zunda at freeshell.org>
+	* */weather.rb: added included weather/condition and temperature into span
+
 2008-01-14 SHIBATA Hiroshi <h-sbt@nifty.com>
 	* weather.rb: Hide output string in RSS feed.
 

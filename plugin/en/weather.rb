@@ -1,5 +1,5 @@
 =begin
-= Weather-of-today plugin((-$Id: weather.rb,v 1.5 2007-01-09 10:27:46 zunda Exp $-))
+= Weather-of-today plugin((-$Id: weather.rb,v 1.6 2008-01-16 09:43:30 zunda Exp $-))
 Records the weather when the diary is first updated for the date and
 displays it.
 
@@ -68,18 +68,18 @@ class Weather
 		r << %Q|<a href="#{u(@url)}">|
 		has_condition = false
 		if @data['weather'] then
-			r << h( WeatherTranslator::S.new( @data['weather']).translate( Words_en ).compact.capitalize )
+			r << %Q|<span class="weather">#{h( WeatherTranslator::S.new( @data['weather']).translate( Words_en ).compact.capitalize )}</span>|
 			has_condition = true
 		elsif @data['condition'] then
-			r << h( WeatherTranslator::S.new( @data['condition']).translate( Words_en ).compact.capitalize )
+			r << %Q|<span class="condition">#{h( WeatherTranslator::S.new( @data['condition']).translate( Words_en ).compact.capitalize )}</span>|
 			has_condition = true
 		end
 
 		# temperature
 		if @data['temperature(C)'] and t = @data['temperature(C)'].scan(/-?[\d.]+/)[-1] then
 			r << ', ' if has_condition
-			r << %Q| #{sprintf( '%.0f', 9.0/5.0 * t.to_f + 32.0 )} deg-F|
-			#r << %Q| #{sprintf( '%.0f', t )} deg-C|
+			r << %Q| <span class="temperature">#{sprintf( '%.0f', 9.0/5.0 * t.to_f + 32.0 )} deg-F</span>|
+			#r << %Q| <span class="temperature">#{sprintf( '%.0f', t )} deg-C</span>|
 		end
 		r << '</a>'
 
