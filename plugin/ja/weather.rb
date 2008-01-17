@@ -1,5 +1,5 @@
 =begin
-= その日の天気プラグイン((-$Id: weather.rb,v 1.9 2008-01-16 09:43:30 zunda Exp $-))
+= その日の天気プラグイン((-$Id: weather.rb,v 1.10 2008-01-17 09:54:46 zunda Exp $-))
 その日の天気を、その日の日記を最初に更新する時に取得して保存し、それぞれ
 の日の日記の上部に表示します。
 
@@ -165,10 +165,6 @@ Weatherクラスに、Words_jaという配列定数として与えてあります。
 軟な設定ができます。
 
 === 表示に関するもの
-デフォルトでは、天気データは、HTML_STARTとHTML_ENDに設定されている文字 
-列で囲まれます。divやspanのクラスを変更する場合には、これらを変更するだ 
-けで充分です。それ以上の変更が必要な場合は以下を変更してください。
-
 : Weather.html_string
   @data[item]を参照して、天気を表示するHTML断片を作ってください。
 
@@ -176,10 +172,8 @@ Weatherクラスに、Words_jaという配列定数として与えてあります。
   データ取得エラーがあった場合に、@errorを参照してエラーを表示するHTML断
   片を作ってください。
 
-携帯端末からの閲覧の際には、
-  @options['weather.show_mobile'] = true
-の場合には、上記の代わりに、それぞれI_HTML_START、I_HTML_END、
-Weather.i_html_stringが使われます。エラーの表示はできません。
+携帯端末からの閲覧の際には、Weather.i_html_stringが使われます。エラーの
+表示はできません。
 
 === 天気データの取得に関するもの
 : Weather.parse_html( html, items )
@@ -284,12 +278,12 @@ class Weather
 	include ERB::Util
 
 	def error_html_string
-		%Q|#{HTML_START}お天気エラー:<a href="#{u(@url)}">#{h( @error )}</a>#{HTML_END}|
+		%Q|<div class="weather"><span class="weather">お天気エラー:<a href="#{u(@url)}">#{h( @error )}</a></span></div>|
 	end
 
 	# edit this method to define how you show the weather
 	def html_string
-		r = "#{HTML_START}"
+		r = '<div class="weather"><span class="weather">'
 
 		# time stamp
 		if @tz then
@@ -319,7 +313,7 @@ class Weather
 			r << %Q| <span class="temperature">#{sprintf( '%.0f', t )}℃</span>|
 		end
 
-		r << "</a>#{HTML_END}\n"
+		r << "</a></span></div>\n"
 	end
 
 	# edit this method to define how you show the weather for a mobile agent
@@ -328,15 +322,15 @@ class Weather
 
 		# weather
 		if @data['weather'] then
-			r << "#{I_HTML_START}"
+			r << "<P>"
 			r << %Q|<A HREF="#{u(@url)}">|
 			r << h( WeatherTranslator::S.new( @data['weather']).translate( Words_ja ).compact )
-			r << "</A>#{I_HTML_END}\n"
+			r << "</A></P>\n"
 		elsif @data['condition'] then
-			r << "#{I_HTML_START}"
+			r << "<P>"
 			r << %Q|<A HREF="#{u(@url)}">|
 			r << h( WeatherTranslator::S.new( @data['condition']).translate( Words_ja ).compact )
-			r << "</A>#{I_HTML_END}\n"
+			r << "</A></P>\n"
 		end
 
 	end

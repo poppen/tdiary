@@ -1,3 +1,7 @@
+2008-01-16 zunda <zunda at freeshell.org>
+	* weather.rb, */weather.rb: moved definition of surrounding tags to
+	html_string methods
+
 2008-01-15 zunda <zunda at freeshell.org>
 	* */weather.rb: added included weather/condition and temperature into span
 

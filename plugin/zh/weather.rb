@@ -1,5 +1,5 @@
 =begin
-= Weather-of-today plugin((-$Id: weather.rb,v 1.5 2008-01-16 09:43:31 zunda Exp $-))
+= Weather-of-today plugin((-$Id: weather.rb,v 1.6 2008-01-17 09:54:46 zunda Exp $-))
 Records the weather when the diary is first updated for the date and
 displays it.
 
@@ -57,12 +57,12 @@ class Weather
 	include ERB::Util
 
 	def error_html_string
-		%Q|#{HTML_START}Weather error:<a href="#{u(@url)}">#{h( @error )}</a>#{HTML_END}|
+		%Q|<div class="weather"><span class="weather">Weather error:<a href="#{u(@url)}">#{h( @error )}</a></span></div>|
 	end
 
 	# edit this method to define how you show the weather
 	def html_string
-		r = "#{HTML_START}"
+		r = '<div class="weather"><span class="weather">'
 
 		# weather
 		r << %Q|<a href="#{u(@url)}">|
@@ -98,7 +98,7 @@ class Weather
 			ENV['TZ'] = tzbak
 		end
 
-		r << "#{HTML_END}\n"
+		r << "</span></div>\n"
 	end
 
 	# edit this method to define how you show the weather for a mobile agent
@@ -107,15 +107,15 @@ class Weather
 
 		# weather
 		if @data['weather'] then
-			r << "#{I_HTML_START}"
+			r << "<P>"
 			r << %Q|<A HREF="#{u(@url)}">|
 			r << h( WeatherTranslator::S.new( @data['weather']).translate( Words_en ).compact.capitalize )
-			r << "</A>#{I_HTML_END}\n"
+			r << "</A></P>\n"
 		elsif @data['condition'] then
-			r << "#{I_HTML_START}"
+			r << "<P>"
 			r << %Q|<A HREF="#{u(@url)}">|
 			r << h( WeatherTranslator::S.new( @data['condition']).translate( Words_en ).compact.capitalize )
-			r << "</A>#{I_HTML_END}\n"
+			r << "</A></P>\n"
 		end
 
 	end

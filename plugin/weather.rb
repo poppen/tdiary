@@ -1,5 +1,5 @@
 =begin
-= その日の天気プラグイン / Weather-of-today plugin((-$Id: weather.rb,v 1.13 2008-01-14 03:55:35 hsbt Exp $-))
+= その日の天気プラグイン / Weather-of-today plugin((-$Id: weather.rb,v 1.14 2008-01-17 09:54:46 zunda Exp $-))
 Records the weather when the diary is first updated for the date and
 displays it.
 
@@ -143,10 +143,6 @@ class Weather
 	attr_reader :date, :time, :url, :error, :data, :tz
 
 	# magic numbers
-	HTML_START = '<div class="weather"><span class="weather">'
-	HTML_END = '</span></div>'
-	I_HTML_START = '<P>'
-	I_HTML_END = '</P>'
 	WAITTIME = 10
 	MAXREDIRECT = 10
 
