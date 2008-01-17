@@ -1,5 +1,5 @@
 =begin
-= Weather-of-today plugin((-$Id: weather.rb,v 1.6 2008-01-17 09:54:46 zunda Exp $-))
+= Weather-of-today plugin((-$Id: weather.rb,v 1.7 2008-01-17 09:58:53 zunda Exp $-))
 Records the weather when the diary is first updated for the date and
 displays it.
 
@@ -57,7 +57,7 @@ class Weather
 	include ERB::Util
 
 	def error_html_string
-		%Q|<div class="weather"><span class="weather">Weather error:<a href="#{u(@url)}">#{h( @error )}</a></span></div>|
+		%Q|<div class="weather"><span class="weather">Weather error:<a href="#{h(@url)}">#{h( @error )}</a></span></div>|
 	end
 
 	# edit this method to define how you show the weather
@@ -65,7 +65,7 @@ class Weather
 		r = '<div class="weather"><span class="weather">'
 
 		# weather
-		r << %Q|<a href="#{u(@url)}">|
+		r << %Q|<a href="#{h(@url)}">|
 		has_condition = false
 		if @data['weather'] then
 			r << %Q|<span class="weather">#{h( WeatherTranslator::S.new( @data['weather']).translate( Words_en ).compact.capitalize )}</span>|

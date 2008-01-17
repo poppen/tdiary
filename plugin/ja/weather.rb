@@ -1,5 +1,5 @@
 =begin
-= その日の天気プラグイン((-$Id: weather.rb,v 1.10 2008-01-17 09:54:46 zunda Exp $-))
+= その日の天気プラグイン((-$Id: weather.rb,v 1.11 2008-01-17 09:58:53 zunda Exp $-))
 その日の天気を、その日の日記を最初に更新する時に取得して保存し、それぞれ
 の日の日記の上部に表示します。
 
@@ -278,7 +278,7 @@ class Weather
 	include ERB::Util
 
 	def error_html_string
-		%Q|<div class="weather"><span class="weather">お天気エラー:<a href="#{u(@url)}">#{h( @error )}</a></span></div>|
+		%Q|<div class="weather"><span class="weather">お天気エラー:<a href="#{h(@url)}">#{h( @error )}</a></span></div>|
 	end
 
 	# edit this method to define how you show the weather
@@ -301,7 +301,7 @@ class Weather
 		end
 
 		# weather
-		r << %Q|<a href="#{u(@url)}">|
+		r << %Q|<a href="#{h(@url)}">|
 		if @data['weather'] then
 			r << %Q|<span class="weather">#{h( WeatherTranslator::S.new( @data['weather']).translate( Words_ja ).compact )}</span>|
 		elsif @data['condition'] then
