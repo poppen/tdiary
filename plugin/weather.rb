@@ -1,5 +1,5 @@
 =begin
-= その日の天気プラグイン / Weather-of-today plugin((-$Id: weather.rb,v 1.14 2008-01-17 09:54:46 zunda Exp $-))
+= その日の天気プラグイン / Weather-of-today plugin((-$Id: weather.rb,v 1.15 2008-01-19 10:23:55 zunda Exp $-))
 Records the weather when the diary is first updated for the date and
 displays it.
 
@@ -412,15 +412,15 @@ Weather_default_items = {
 }
 
 # shows weather
-def weather( date = nil )
+def weather( date = nil, wrap = true )
 	return '' if @conf.bot? and not @options['weather.show_robot']
 	path = @options['weather.dir'] || Weather_default_path
 	w = Weather::restore( path, date || @date )
 	if w then
 		unless @cgi.mobile_agent? then
-			w.to_html( @options['weather.show_error'] )
+			%Q|#{wrap ? '<div class="weather">' : ' '}#{w.to_html( @options['weather.show_error'] )}#{wrap ? "</div>\n" : ''}|
 		else
-			w.to_i_html if @options['weather.show_mobile']
+			%Q|<P>#{w.to_i_html if @options['weather.show_mobile']}</P>\n|
 		end
 	else
 		''
@@ -460,27 +460,36 @@ def configure_weather
 		else
 			@conf['weather.tz'] = ''
 		end
-		# weather.show_mobile
-		case @cgi.params['weather.show_mobile'][0]
-		when 'true'
-			@conf['weather.show_mobile'] = true
-		when 'false'
-			@conf['weather.show_mobile'] = false
-		end
-		# weather.show_robot
-		case @cgi.params['weather.show_robot'][0]
-		when 'true'
-			@conf['weather.show_robot'] = true
-		when 'false'
-			@conf['weather.show_robot'] = false
+		%w(in_title show_mobile show_robot).each do |item|
+			case @cgi.params["weather.#{item}"][0]
+			when 'true'
+				@conf["weather.#{item}"] = true
+			when 'false'
+				@conf["weather.#{item}"] = false
+			end
 		end
 	end
 	weather_configure_html( @conf )
 end
 
-add_body_enter_proc do |date| 
-	unless feed? then
+add_header_proc do
+	<<"_END"
+\t<style type="text/css" media="all"><!--
+\t\th2 span.weather{font-size: small;}
+\t\tdiv.weather{text-align: right; font-size: 75%;}
+\t--></style>
+_END
+end
+
+if not feed? and not @options['weather.in_title'] then
+	add_body_enter_proc do |date| 
 		weather( date )
+	end
+end
+
+if not feed? and @options['weather.in_title'] then
+	add_title_proc do |date, title| 
+		title + weather( date, false )
 	end
 end
 

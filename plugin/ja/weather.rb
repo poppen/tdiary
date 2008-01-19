@@ -1,5 +1,5 @@
 =begin
-= その日の天気プラグイン((-$Id: weather.rb,v 1.11 2008-01-17 09:58:53 zunda Exp $-))
+= その日の天気プラグイン((-$Id: weather.rb,v 1.12 2008-01-19 10:23:55 zunda Exp $-))
 その日の天気を、その日の日記を最初に更新する時に取得して保存し、それぞれ
 の日の日記の上部に表示します。
 
@@ -278,12 +278,12 @@ class Weather
 	include ERB::Util
 
 	def error_html_string
-		%Q|<div class="weather"><span class="weather">お天気エラー:<a href="#{h(@url)}">#{h( @error )}</a></span></div>|
+		%Q|<span class="weather">お天気エラー:<a href="#{h(@url)}">#{h( @error )}</a></span>|
 	end
 
 	# edit this method to define how you show the weather
 	def html_string
-		r = '<div class="weather"><span class="weather">'
+		r = '<span class="weather">'
 
 		# time stamp
 		if @tz then
@@ -313,7 +313,7 @@ class Weather
 			r << %Q| <span class="temperature">#{sprintf( '%.0f', t )}℃</span>|
 		end
 
-		r << "</a></span></div>\n"
+		r << "</a></span>"
 	end
 
 	# edit this method to define how you show the weather for a mobile agent
@@ -322,15 +322,13 @@ class Weather
 
 		# weather
 		if @data['weather'] then
-			r << "<P>"
 			r << %Q|<A HREF="#{u(@url)}">|
 			r << h( WeatherTranslator::S.new( @data['weather']).translate( Words_ja ).compact )
-			r << "</A></P>\n"
+			r << "</A>"
 		elsif @data['condition'] then
-			r << "<P>"
 			r << %Q|<A HREF="#{u(@url)}">|
 			r << h( WeatherTranslator::S.new( @data['condition']).translate( Words_ja ).compact )
-			r << "</A></P>\n"
+			r << "</A>"
 		end
 
 	end
@@ -358,6 +356,14 @@ def weather_configure_html( conf )
 		ENV['TZ'] = 'Japan'などと書き足すか、
 		以下に、Japanと記入してください。</p>
 	<p><input name="weather.tz" value="#{conf['weather.tz']}"></p>
+	<h4>WWWブラウザへの表示</h4>
+	<p>下記から選んでください。</p>
+	<p><select name="weather.in_title">
+		<option value="false"#{' selected'unless conf['weather.in_title']}>
+		本文の上に表示する
+		<option value="true"#{' selected'if conf['weather.in_title']}>
+		タイトルの横に表示する
+	</select></p>
 	<h4>携帯電話への表示</h4>
 	<p>下記から選んでください。</p>
 	<p><select name="weather.show_mobile">

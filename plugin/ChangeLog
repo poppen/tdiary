@@ -1,3 +1,8 @@
+2008-01-19 zunda <zunda at freeshell.org>
+	* weather.rb, */weather.rb: modified so that weather can be shown at right
+	of title
+	* weather.rb: modified to include default CSS
+
 2008-01-16 zunda <zunda at freeshell.org>
 	* */weather.rb: fixed escape of URL of NOAA
 

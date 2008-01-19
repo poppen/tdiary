@@ -1,5 +1,5 @@
 =begin
-= Weather-of-today plugin((-$Id: weather.rb,v 1.8 2008-01-17 09:58:53 zunda Exp $-))
+= Weather-of-today plugin((-$Id: weather.rb,v 1.9 2008-01-19 10:23:55 zunda Exp $-))
 Records the weather when the diary is first updated for the date and
 displays it.
 
@@ -57,12 +57,12 @@ class Weather
 	include ERB::Util
 
 	def error_html_string
-		%Q|<div class="weather"><span class="weather">Weather error:<a href="#{h(@url)}">#{h( @error )}</a></span></div>|
+		%Q|<span class="weather">Weather error:<a href="#{h(@url)}">#{h( @error )}</a></span>|
 	end
 
 	# edit this method to define how you show the weather
 	def html_string
-		r = '<div class="weather"><span class="weather">'
+		r = '<span class="weather">'
 
 		# weather
 		r << %Q|<a href="#{h(@url)}">|
@@ -98,7 +98,7 @@ class Weather
 			ENV['TZ'] = tzbak
 		end
 
-		r << "</span></div>\n"
+		r << "</span>"
 	end
 
 	# edit this method to define how you show the weather for a mobile agent
@@ -107,15 +107,13 @@ class Weather
 
 		# weather
 		if @data['weather'] then
-			r << "<P>"
 			r << %Q|<A HREF="#{u(@url)}">|
 			r << h( WeatherTranslator::S.new( @data['weather']).translate( Words_en ).compact.capitalize )
-			r << "</A></P>\n"
+			r << "</A>"
 		elsif @data['condition'] then
-			r << "<P>"
 			r << %Q|<A HREF="#{u(@url)}">|
 			r << h( WeatherTranslator::S.new( @data['condition']).translate( Words_en ).compact.capitalize )
-			r << "</A></P>\n"
+			r << "</A>"
 		end
 
 	end
@@ -143,6 +141,14 @@ def weather_configure_html( conf )
 		file in the directory tdiary.rb is: e.g. ENV['TZ'] = 'US/Pacific',
 		or write it down the box below.</p>
 	<p><input name="weather.tz" value="#{conf['weather.tz']}"></p>
+	<h4>Display on a normal browser</h4>
+	<p>Select from below:</p>
+	<p><select name="weather.in_title">
+		<option value="false"#{' selected'unless conf['weather.in_title']}>
+		Show weather above text
+		<option value="true"#{' selected'if conf['weather.in_title']}>
+		Show weather at right of title
+	</select></p>
 	<h4>Display on a mobile browser</h4>
 	<p>Select from below:</p>
 	<p><select name="weather.show_mobile">
