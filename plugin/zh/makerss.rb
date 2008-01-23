@@ -38,4 +38,4 @@ def makerss_conf_html
 	HTML
 end
 
-@makerss_edit_label = "A little modify (don't update RSS)"
+@makerss_edit_label = "A little modify (don't update feeds)"

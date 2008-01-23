@@ -34,4 +34,4 @@ def makerss_conf_html
    HTML
 end
 
-@makerss_edit_label = 'ちょっとした修正(RSSを更新しない)'
+@makerss_edit_label = 'ちょっとした修正(フィードを更新しない)'
