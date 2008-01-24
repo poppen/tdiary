@@ -1,3 +1,6 @@
+2008-01-24 TADA Tadashi <sho@spc.gr.jp>
+	* */hide-mail-field.rb: added notice to rewite TSUKKOMI information.
+
 2008-01-23 TADA Tadashi <sho@spc.gr.jp>
 	* */makerss.rb: change some labels on edit page.
 
