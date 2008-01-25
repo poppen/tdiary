@@ -124,5 +124,9 @@ class SpambayesConfig
 		def no_token_exist
 			"(トークンがありません)"
 		end
+
+		def spam_rate
+			"スパム率"
+		end
 	end
 end
