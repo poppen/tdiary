@@ -15,8 +15,9 @@ module Bayes
 		module EUC
 			KCODE = "e"
 			KATAKANA = "\xa5\xa2-\xa5\xf3"
+      BAR = "\xa1\xbc"
 			KANJI = "\xb0\xa1-\xfc\xfe"
-			RE_KATAKANA = /[#{KATAKANA}]{2,}/eo
+			RE_KATAKANA = /[#{KATAKANA}#{BAR}]{2,}/eo
 			RE_KANJI = /[#{KANJI}]{2,}/eo
 
 			CHARSET.setup_re(self)
@@ -31,8 +32,9 @@ module Bayes
 				"#{c2u(a)}-#{c2u(b)}"
 			end
 			KATAKANA = utf_range(0x30a0, 0x30ff)
+      BAR = c2u(0x30fc)
 			KANJI = utf_range(0x4e00, 0x9faf)
-			RE_KATAKANA = /[#{KATAKANA}]{2,}/uo
+			RE_KATAKANA = /[#{KATAKANA}#{BAR}]{2,}/uo
 			RE_KANJI = /[#{KANJI}]{2,}/uo
 
 			CHARSET.setup_re(self)
