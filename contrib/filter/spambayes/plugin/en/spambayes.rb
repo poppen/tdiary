@@ -44,20 +44,12 @@ class SpambayesConfig
 			"Mail TO"
 		end
 
-		def stay_ham
-			"Stay as HAM"
-		end
-
 		def register_ham
 			"Register as HAM"
 		end
 
-		def stay_spam
-			"Stay as spam"
-		end
-
 		def register_spam
-			"Register as spam"
+			"Register as SPAM"
 		end
 
 		def comment_processed
@@ -125,7 +117,7 @@ class SpambayesConfig
 		end
 
 		def spam_rate
-			"Rate of spam"
+			"SPAM rate"
 		end
 	end
 end
