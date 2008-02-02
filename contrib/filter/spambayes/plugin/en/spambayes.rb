@@ -49,7 +49,7 @@ class SpambayesConfig
 		end
 
 		def register_spam
-			"Register as SPAM"
+			"Register as spam"
 		end
 
 		def comment_processed
@@ -117,7 +117,7 @@ class SpambayesConfig
 		end
 
 		def spam_rate
-			"SPAM rate"
+			"Rate of spam"
 		end
 	end
 end
