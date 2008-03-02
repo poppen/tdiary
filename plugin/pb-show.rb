@@ -1,4 +1,4 @@
-# pb-show.rb $Revision: 1.9 $
+# pb-show.rb $Revision: 1.10 $
 #
 # functions:
 #   * show Pingback ping URL in right of TSUKKOMI label.

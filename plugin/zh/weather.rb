@@ -1,5 +1,5 @@
 =begin
-= Weather-of-today plugin((-$Id: weather.rb,v 1.8 2008-01-19 10:23:55 zunda Exp $-))
+= Weather-of-today plugin((-$Id: weather.rb,v 1.9 2008-03-02 09:01:47 kazuhiko Exp $-))
 Records the weather when the diary is first updated for the date and
 displays it.
 

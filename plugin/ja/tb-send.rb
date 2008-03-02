@@ -1,11 +1,11 @@
 # Japanese resource of tb-send.rb
 
-@tb_send_label_url = 'TrackBackÁ÷¿®ÀèURL'
-@tb_send_label_section = 'TrackBack¤¹¤ë¥»¥¯¥·¥ç¥ó'
-@tb_send_label_no_section = '(¥»¥¯¥·¥ç¥ó¤ò»ØÄê¤·¤Ê¤¤)'
-@tb_send_label_current_section = '(ºÇ¸å¤ËÄÉµ­¤·¤¿¥»¥¯¥·¥ç¥ó)'
+@tb_send_label_url = 'TrackBacké€ä¿¡å…ˆURL'
+@tb_send_label_section = 'TrackBackã™ã‚‹ã‚»ã‚¯ã‚·ãƒ§ãƒ³'
+@tb_send_label_no_section = '(ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã‚’æŒ‡å®šã—ãªã„)'
+@tb_send_label_current_section = '(æœ€å¾Œã«è¿½è¨˜ã—ãŸã‚»ã‚¯ã‚·ãƒ§ãƒ³)'
 if @conf['tb.no_section'] then
-	@tb_send_label_excerpt = '³µÎ¬(µ­Æş¤·¤Ê¤±¤ì¤ĞËÜÊ¸¤ÎËÁÆ¬¤¬»È¤ï¤ì¤Ş¤¹)'
+	@tb_send_label_excerpt = 'æ¦‚ç•¥(è¨˜å…¥ã—ãªã‘ã‚Œã°æœ¬æ–‡ã®å†’é ­ãŒä½¿ã‚ã‚Œã¾ã™)'
 else
-	@tb_send_label_excerpt = '³µÎ¬(µ­Æş¤·¤Ê¤±¤ì¤ĞÁªÂò¤·¤¿¥»¥¯¥·¥ç¥ó¤ÎËÁÆ¬¤¬»È¤ï¤ì¤Ş¤¹)'
+	@tb_send_label_excerpt = 'æ¦‚ç•¥(è¨˜å…¥ã—ãªã‘ã‚Œã°é¸æŠã—ãŸã‚»ã‚¯ã‚·ãƒ§ãƒ³ã®å†’é ­ãŒä½¿ã‚ã‚Œã¾ã™)'
 end

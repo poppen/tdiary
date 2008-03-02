@@ -1,7 +1,7 @@
-# speed_comment.rb $Revision: 1.6 $
+# speed_comment.rb $Revision: 1.7 $
 #
-# spped_comment: ºÇ¿·¡¦·îËèÉ½¼¨»ş¤Ë´Ê°×¤Ê¥Ä¥Ã¥³¥ß¥Õ¥©¡¼¥à¤òÉ½¼¨¤¹¤ë
-#                plugin¥Ç¥£¥ì¥¯¥È¥ê¤ËÆş¤ì¤ë¤À¤±¤ÇÆ°¤­¤Ş¤¹¡£
+# spped_comment: æœ€æ–°ãƒ»æœˆæ¯è¡¨ç¤ºæ™‚ã«ç°¡æ˜“ãªãƒ„ãƒƒã‚³ãƒŸãƒ•ã‚©ãƒ¼ãƒ ã‚’è¡¨ç¤ºã™ã‚‹
+#                pluginãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã«å…¥ã‚Œã‚‹ã ã‘ã§å‹•ãã¾ã™ã€‚
 #
 # Copyright (c) 2002 TADA Tadashi <sho@spc.gr.jp>
 # Distributed under the GPL
@@ -37,14 +37,14 @@ end
 
 unless @resource_loaded then
 	def speed_comment_label
-		'´Ê°×¥Ä¥Ã¥³¥ß'
+		'ç°¡æ˜“ãƒ„ãƒƒã‚³ãƒŸ'
 	end
 
 	def speed_comment_html
 		<<-HTML
-		<h3>´Ê°×¥Ä¥Ã¥³¥ß¥Õ¥©¡¼¥à¤Î¥µ¥¤¥º</h3>
-		<p>Ì¾Á°Íó: <input name="speed_comment.name_size" size="5" value="#{h( @conf['speed_comment.name_size'] ) || 20}"></p>
-		<p>ËÜÊ¸Íó: <input name="speed_comment.body_size" size="5" value="#{h( @conf['speed_comment.body_size'] ) || 40}"></p>
+		<h3>ç°¡æ˜“ãƒ„ãƒƒã‚³ãƒŸãƒ•ã‚©ãƒ¼ãƒ ã®ã‚µã‚¤ã‚º</h3>
+		<p>åå‰æ¬„: <input name="speed_comment.name_size" size="5" value="#{h( @conf['speed_comment.name_size'] ) || 20}"></p>
+		<p>æœ¬æ–‡æ¬„: <input name="speed_comment.body_size" size="5" value="#{h( @conf['speed_comment.body_size'] ) || 40}"></p>
 		HTML
 	end
 end

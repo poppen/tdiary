@@ -1,23 +1,23 @@
 =begin
-= Ϣ�������ץ饰���� sn.rb $Revision: 1.3 $
+= 連番生成プラグイン sn.rb $Revision: 1.4 $
 
-== ����
-	�����դ���������̤��ֹ��ɽ�����ޤ���
+== 概要
+	各日付の日記内で通し番号を表示します。
 
-== �Ȥ���
+== 使い方
 	sn( number )
-		number - ���������󥿤���ꤷ���ͤ˥��åȤ��ޤ���
+		number - 内部カウンタを指定した値にセットします。
 	sn_anchorid
 
-	sn()�᥽�åɤ������γ����դ��Ȥˡ�1����Ϥޤ��̤��ֹ��ɽ�����ޤ���
+	sn()メソッドは日記の各日付ごとに、1から始まる通し番号を表示します。
 
-	sn_anchorid()�᥽�åɤϸ��ߤΥ��󥫡�id���ֹ��ɽ�����ޤ���
-	sn_anchorid()�����ꥪ�ץ������Υ��������/�ĥå��ߥ��󥫡�
-	�Ȥ��ƻ��ꤹ�뤳�Ȥˤ�äơ����Υ��������/�ĥå��ߥ��󥫡���
-	URL�ȷ���դ������ͤ�ɽ�����뤳�Ȥ��Ǥ��ޤ���
+	sn_anchorid()メソッドは現在のアンカーidの番号を表示します。
+	sn_anchorid()を設定オプション内のセクション/ツッコミアンカー
+	として指定することによって，そのセクション/ツッコミアンカーの
+	URLと結び付いた数値を表示することができます。
 
-== ����
-	anchor()��zoe����number_anchor.rb�򻲹ͤ˺������ޤ�����
+== 参考
+	anchor()はzoe氏作のnumber_anchor.rbを参考に作成しました。
 
 = Sequential number generator plugin
 == Abstract
@@ -39,7 +39,7 @@
 == reference
 	Original anchor() appeared in the number_anchor.rb by zoe-san.
 
-== ����ˤĤ��� (Copyright notice)
+== 著作権について (Copyright notice)
 	Copyright (c) 2003 SAKAMOTO Hideki <hs@on-sky.net>
 	Distributed under the GPL
 =end

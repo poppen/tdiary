@@ -1,10 +1,10 @@
-# comment_rank.rb $Revision: 1.7 $
+# comment_rank.rb $Revision: 1.8 $
 #
-# comment_rank: �ĥå��ߤο��ǥ�󥭥�
-#   �ѥ�᥿:
-#     max:  ����ɽ����(̤�����:5)
-#     sep:  ���ѥ졼��(̤�����:����)
-#     except:        ̵�뤹��̾��(�����Ĥ⤢�����,�Ƕ��ڤä��¤٤�)
+# comment_rank: ツッコミの数でランキング
+#   パラメタ:
+#     max:  最大表示数(未指定時:5)
+#     sep:  セパレータ(未指定時:空白)
+#     except:        無視する名前(いくつもある場合は,で区切って並べる)
 #
 # Copyright (c) 2002 TADA Tadashi <sho@spc.gr.jp>
 # You can distribute this file under the GPL2.

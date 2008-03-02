@@ -1,5 +1,5 @@
-# ja/bq.rb $Revision: 1.1 $
+# ja/bq.rb $Revision: 1.2 $
 #
 def bq_cite_from( cite )
-	"#{cite}¤è¤ê°úÍÑ"
+	"#{cite}ã‚ˆã‚Šå¼•ç”¨"
 end

@@ -31,6 +31,9 @@
 2008-01-14 SHIBATA Hiroshi <h-sbt@nifty.com>
 	* weather.rb: Hide output string in RSS feed.
 
+2008-01-06  Kazuhiko  <kazuhiko@fdiary.net>
+	* amazon.rb, amazon/amazonimg.rb: support multi-country amazon links.
+
 2008-01-06 TADA Tadashi <sho@spc.gr.jp>
 	* makerss.rb: delete over escape of <title> in each items. thanks for Ogawa
 	KenIchi.
@@ -132,7 +135,6 @@
 
 2007-04-29 TADA Tadashi <sho@spc.gr.jp>
 	* category.rb: support mobile mode more.
-	* edit_today.rb: hide edit link on preview mode.
 
 2007-04-26 zunda <zunda at freeshell.org>
 	* ja/disp_referrer.rb: postfixed slashes to host names, prefixed `:?'
@@ -290,9 +292,6 @@
 2007-01-19 zunda <zunda at freeshell.org>
 	* my-sequel.rb: copied from zunda's local repository, v.1.28
 	* ja/my-sequel.rb: copied from zunda's local repository, v.1.10
-
-2007-01-19 TADA Tadashi <sho@spc.gr.jp>
-	* makerss.rb: fix bug: generate empty feed.
 
 2007-01-18 TADA Tadashi <sho@spc.gr.jp>
 	* makerss.rb, ping.rb, tb-send.rb: fix charset to UTF-8, and using to_utf8 method.

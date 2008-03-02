@@ -1,5 +1,5 @@
 #
-# English resource of image plugin $Revision: 1.2 $
+# English resource of image plugin $Revision: 1.3 $
 #
 
 #
@@ -30,12 +30,12 @@
 #     Max size of an image. Default is 10000 bytes.
 #     This option is effective in @secure = true.
 #
-def image_error_num( max ); "¨C«h¤é»x³Ì¦h¥i¶K #{h max} ±i¹Ï¤ù"; end
-def image_error_size( max ); "¨C±i¹Ï¤ù³Ì¤j­­¨î¬° #{h max} bytes"; end
-def image_label_list_caption; '¦C¥X©Î§R°£¹Ï¤ù'; end
-def image_label_add_caption; 'ªş¥[¹Ï¤ù'; end
-def image_label_description; '¹Ï¤ùªºªşµù'; end
-def image_label_add_plugin; 'ªş¥[¨ì¤å³¹·í¤¤'; end
-def image_label_delete; '±N¿ï¨úªº¹Ï¤ù§R°£'; end
-def image_label_only_jpeg; '¥u±µ¨ü JPEG ®æ¦¡'; end
-def image_label_add_image; '¤W¶Ç¹Ï¤ù'; end
+def image_error_num( max ); "æ¯å‰‡æ—¥èªŒæœ€å¤šå¯è²¼ #{h max} å¼µåœ–ç‰‡"; end
+def image_error_size( max ); "æ¯å¼µåœ–ç‰‡æœ€å¤§é™åˆ¶ç‚º #{h max} bytes"; end
+def image_label_list_caption; 'åˆ—å‡ºæˆ–åˆªé™¤åœ–ç‰‡'; end
+def image_label_add_caption; 'é™„åŠ åœ–ç‰‡'; end
+def image_label_description; 'åœ–ç‰‡çš„é™„è¨»'; end
+def image_label_add_plugin; 'é™„åŠ åˆ°æ–‡ç« ç•¶ä¸­'; end
+def image_label_delete; 'å°‡é¸å–çš„åœ–ç‰‡åˆªé™¤'; end
+def image_label_only_jpeg; 'åªæ¥å— JPEG æ ¼å¼'; end
+def image_label_add_image; 'ä¸Šå‚³åœ–ç‰‡'; end

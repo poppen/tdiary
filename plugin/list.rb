@@ -1,14 +1,14 @@
-# list.rb $Revision: 1.4 $
+# list.rb $Revision: 1.5 $
 #
-# <ol> �����դ��ꥹ������
+# <ol> 順番付きリスト生成
 #   <%= ol l %>
-#   �ѥ�᥿:
-#     l: �ꥹ��ʸ����(\n������)
+#   パラメタ:
+#     l: リスト文字列(\nくぎり)
 #
-# <ul> ����̵���ꥹ��
+# <ul> 順番無しリスト
 #   <%= ul l , t %>
-#   �ѥ�᥿:
-#     l: �ꥹ��ʸ����(\n������)
+#   パラメタ:
+#     l: リスト文字列(\nくぎり)
 #
 # Copyright (c) 2002 abbey <inlet@cello.no-ip.org>
 # Distributed under the GPL.

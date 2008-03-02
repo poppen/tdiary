@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# xmlrpc.rb $Revision: 1.7 $
+# xmlrpc.rb $Revision: 1.8 $
 #
 # Copyright (c) 2004 MoonWolf <moonwolf@moonwolf.com>
 # Distributed under the GPL
@@ -16,7 +16,6 @@ else
 end
 $:.unshift org_path.untaint
 require 'tdiary'
-require 'nkf'
 require 'uri'
 
 require 'xmlrpc/server'
@@ -26,20 +25,12 @@ else
   server = XMLRPC::CGIServer.new
 end
 
-def euctou8(str)
-  NKF::nkf('-m0 -E -w', str)
-end
-
-def u8toeuc(str)
-  NKF::nkf('-m0 -W -e', str)
-end
-
 server.add_handler('blogger.newPost') do |appkey, blogid, username, password, content, publish|
   @cgi = CGI::new
   conf = ::TDiary::Config::new(@cgi)
   ENV['REQUEST_METHOD'] = 'POST'
   ENV['HTTP_REFERER'] = (URI.parse(conf.base_url) + conf.update).to_s
-  if username==euctou8(conf['xmlrpc.username']) && password==euctou8(conf['xmlrpc.password'])
+  if username==conf['xmlrpc.username'] && password==conf['xmlrpc.password']
     begin
       postid = Time.now.strftime("%Y%m%d")
       year, month, day = postid.scan(/(\d{4})(\d\d)(\d\d)/)[0]
@@ -77,7 +68,7 @@ server.add_handler('blogger.editPost') do |appkey, postid, username, password, c
   conf = ::TDiary::Config::new(@cgi)
   ENV['REQUEST_METHOD'] = 'POST'
   ENV['HTTP_REFERER'] = (URI.parse(conf.base_url) + conf.update).to_s
-  unless username==euctou8(conf['xmlrpc.username']) && password==euctou8(conf['xmlrpc.password'])
+  unless username==conf['xmlrpc.username'] && password==conf['xmlrpc.password']
     raise XMLRPC::FaultException.new(1,'userid or password incorrect')
   end
   begin
@@ -124,7 +115,7 @@ server.add_handler('blogger.deletePost') do |appkey, postid, username, password|
   conf = ::TDiary::Config::new(@cgi)
   ENV['REQUEST_METHOD'] = 'POST'
   ENV['HTTP_REFERER'] = (URI.parse(conf.base_url) + conf.update).to_s
-  unless username==euctou8(conf['xmlrpc.username']) && password==euctou8(conf['xmlrpc.password'])
+  unless username==conf['xmlrpc.username'] && password==conf['xmlrpc.password']
     raise XMLRPC::FaultException.new(1,'userid or password incorrect')
   end
   begin
@@ -160,7 +151,7 @@ end
 server.add_handler('blogger.getRecentPosts') do |appkey, blogid, username, password, numberOfPosts|
   @cgi = CGI::new
   conf = ::TDiary::Config::new(@cgi)
-  unless username==euctou8(conf['xmlrpc.username']) && password==euctou8(conf['xmlrpc.password'])
+  unless username==conf['xmlrpc.username'] && password==conf['xmlrpc.password']
     raise XMLRPC::FaultException.new(1,'userid or password incorrect')
   end
   result = []
@@ -174,12 +165,12 @@ server.add_handler('blogger.getRecentPosts') do |appkey, blogid, username, passw
     diary.each_section {|sec|
       index += 1
       postid = diary.date.strftime('%Y%m%d') + "%02d" % index
-      author = sec.author || euctou8(conf['xmlrpc.userid'])
+      author = sec.author || conf['xmlrpc.userid']
       body  = sec.subtitle + "\n" + sec.body
       result << {
         'postid'      => postid,
-        'userid'      => euctou8(author),
-        'content'     => euctou8(body),
+        'userid'      => author,
+        'content'     => body,
         'dateCreated' => diary.last_modified.utc
       }
     }
@@ -190,13 +181,13 @@ end
 server.add_handler('blogger.getUsersBlogs') do |appkey, username, password|
   @cgi = CGI::new
   conf = ::TDiary::Config::new(@cgi)
-  unless username==euctou8(conf['xmlrpc.username']) && password==euctou8(conf['xmlrpc.password'])
+  unless username==conf['xmlrpc.username'] && password==conf['xmlrpc.password']
     raise XMLRPC::FaultException.new(1,'userid or password incorrect')
   end
   result = [
     {
       'blogid'   => conf['xmlrpc.blogid'],
-      'blogName' => euctou8(conf.html_title),
+      'blogName' => conf.html_title,
       'url'      => conf.base_url
     }
   ]
@@ -206,16 +197,16 @@ end
 server.add_handler('blogger.getUserInfo') do |appkey, username, password|
   @cgi = CGI::new
   conf = ::TDiary::Config::new(@cgi)
-  unless username==euctou8(conf['xmlrpc.username']) && password==euctou8(conf['xmlrpc.password'])
+  unless username==conf['xmlrpc.username'] && password==conf['xmlrpc.password']
     raise XMLRPC::FaultException.new(1,'userid or password incorrect')
   end
   result = {
-    'nickname'  => euctou8(conf.author_name),
+    'nickname'  => conf.author_name,
     'email'     => conf.author_mail,
     'url'       => conf.base_url,
-    'lastname'  => euctou8(conf['xmlrpc.lastname']),
-    'firstname' => euctou8(conf['xmlrpc.firstname']),
-    'userid'    => euctou8(conf['xmlrpc.userid'])
+    'lastname'  => conf['xmlrpc.lastname'],
+    'firstname' => conf['xmlrpc.firstname'],
+    'userid'    => conf['xmlrpc.userid']
   }
   result
 end
@@ -225,7 +216,7 @@ server.add_handler('metaWeblog.newPost') do |blogid, username, password, content
   conf = ::TDiary::Config::new(@cgi)
   ENV['REQUEST_METHOD'] = 'POST'
   ENV['HTTP_REFERER'] = (URI.parse(conf.base_url) + conf.update).to_s
-  unless username==euctou8(conf['xmlrpc.username']) && password==euctou8(conf['xmlrpc.password'])
+  unless username==conf['xmlrpc.username'] && password==conf['xmlrpc.password']
     raise XMLRPC::FaultException.new(1,'userid or password incorrect')
   end
   begin
@@ -236,7 +227,7 @@ server.add_handler('metaWeblog.newPost') do |blogid, username, password, content
     time = Time::local( year, month, day ) + 12*60*60
     diary = tdiary[time] || tdiary.instance_variable_get(:@io).diary_factory(time, '', '', conf.style)
     
-    index = diary.add_section(u8toeuc(content['title']), u8toeuc(content['description']))
+    index = diary.add_section(content['title'], content['description'])
     src = diary.to_src
     
     @cgi.params.delete 'date'
@@ -261,7 +252,7 @@ server.add_handler('metaWeblog.editPost') do |postid, username, password, conten
   conf = ::TDiary::Config::new(@cgi)
   ENV['REQUEST_METHOD'] = 'POST'
   ENV['HTTP_REFERER'] = (URI.parse(conf.base_url) + conf.update).to_s
-  unless username==euctou8(conf['xmlrpc.username']) && password==euctou8(conf['xmlrpc.password'])
+  unless username==conf['xmlrpc.username'] && password==conf['xmlrpc.password']
     raise XMLRPC::FaultException.new(1,'userid or password incorrect')
   end
   begin
@@ -277,8 +268,8 @@ server.add_handler('metaWeblog.editPost') do |postid, username, password, conten
     diary.each_section {|sec|
       i += 1
       if i==index
-        sec.subtitle = u8toeuc(content['title'])
-        sec.body     = u8toeuc(content['description'] || '').sub(/[\n\r]+\Z/, '') + "\n\n"
+        sec.subtitle = content['title']
+        sec.body     = content['description'] || ''.sub(/[\n\r]+\Z/, '') + "\n\n"
       end
       src << sec.to_src
     }
@@ -305,7 +296,7 @@ end
 server.add_handler('metaWeblog.getPost') do |postid, username, password|
   @cgi = CGI::new
   conf = ::TDiary::Config::new(@cgi)
-  unless username==euctou8(conf['xmlrpc.username']) && password==euctou8(conf['xmlrpc.password'])
+  unless username==conf['xmlrpc.username'] && password==conf['xmlrpc.password']
     raise XMLRPC::FaultException.new(1,'userid or password incorrect')
   end
   @cgi.params['date'] = [postid[0,8]]
@@ -323,11 +314,11 @@ server.add_handler('metaWeblog.getPost') do |postid, username, password|
       title = sec.stripped_subtitle || ''
       body  = sec.body
       result = {
-        'userid'       => euctou8(conf['xmlrpc.userid']),
+        'userid'       => conf['xmlrpc.userid'],
         'dateCreated'  => diary.last_modified.utc,
         'postid'       => postid,
-        'description'  => euctou8(body),
-        'title'        => euctou8(title),
+        'description'  => body,
+        'title'        => title,
         'link'         => link,
         'permaLink'    => link,
         'mt_excerpt'   => '',
@@ -346,7 +337,7 @@ end
 server.add_handler('metaWeblog.getRecentPosts') do |blogid, username, password, numberOfPosts|
   @cgi = CGI::new
   conf = ::TDiary::Config::new(@cgi)
-  unless username==euctou8(conf['xmlrpc.username']) && password==euctou8(conf['xmlrpc.password'])
+  unless username==conf['xmlrpc.username'] && password==conf['xmlrpc.password']
     raise XMLRPC::FaultException.new(1,'userid or password incorrect')
   end
   result = []
@@ -363,13 +354,13 @@ server.add_handler('metaWeblog.getRecentPosts') do |blogid, username, password, 
       link = conf.base_url + conf.index.sub(%r|^\./|, '') + diary.date.strftime('%Y%m%d') + ".html\#p%02d" % index
       title = sec.stripped_subtitle || ''
       body  = sec.body
-      author = sec.author || euctou8(conf['xmlrpc.userid'])
+      author = sec.author || conf['xmlrpc.userid']
       result << {
         'dateCreated'       => diary.last_modified.utc,
-        'userid'            => euctou8(author),
+        'userid'            => author,
         'postid'            => postid,
-        'description'       => euctou8(body),
-        'title'             => euctou8(title),
+        'description'       => body,
+        'title'             => title,
         'link'              => link,
         'permaLink'         => link,
         'mt_excerpt'        => '',
@@ -387,7 +378,7 @@ end
 server.add_handler('metaWeblog.newMediaObject') do |blogid, username, password, file|
   @cgi = CGI::new
   conf = ::TDiary::Config::new(@cgi)
-  unless username==euctou8(conf['xmlrpc.username']) && password==euctou8(conf['xmlrpc.password'])
+  unless username==conf['xmlrpc.username'] && password==conf['xmlrpc.password']
     raise XMLRPC::FaultException.new(1,'userid or password incorrect')
   end
   image_dir = conf['image.dir'] || './images/'
@@ -406,7 +397,7 @@ end
 server.add_handler('mt.getRecentPostTitles') do |blogid, username, password, numberOfPosts|
   @cgi = CGI::new
   conf = ::TDiary::Config::new(@cgi)
-  unless username==euctou8(conf['xmlrpc.username']) && password==euctou8(conf['xmlrpc.password'])
+  unless username==conf['xmlrpc.username'] && password==conf['xmlrpc.password']
     raise XMLRPC::FaultException.new(1,'userid or password incorrect')
   end
   result = []
@@ -420,12 +411,12 @@ server.add_handler('mt.getRecentPostTitles') do |blogid, username, password, num
     diary.each_section {|sec|
       index += 1
       postid = diary.date.strftime('%Y%m%d') + "%02d" % index
-      author = sec.author || euctou8(conf['xmlrpc.userid'])
+      author = sec.author || conf['xmlrpc.userid']
       result << {
         'dateCreated'       => diary.last_modified.utc,
-        'userid'            => euctou8(author),
+        'userid'            => author,
         'postid'            => postid,
-        'title'             => euctou8(sec.subtitle),
+        'title'             => sec.subtitle,
       }
     }
   }
@@ -435,7 +426,7 @@ end
 server.add_handler('mt.getCategoryList') do |blogid, username, password|
   @cgi = CGI::new
   conf = ::TDiary::Config::new(@cgi)
-  unless username==euctou8(conf['xmlrpc.username']) && password==euctou8(conf['xmlrpc.password'])
+  unless username==conf['xmlrpc.username'] && password==conf['xmlrpc.password']
     raise XMLRPC::FaultException.new(1,'userid or password incorrect')
   end
   @cgi.params['date'] = [Time.now.strftime('%Y%m%d')]
@@ -459,8 +450,8 @@ server.add_handler('mt.getCategoryList') do |blogid, username, password|
   result = []
   list.each {|c|
     result << {
-      'categoryId'   => euctou8(c),
-      'categoryName' => euctou8(c)
+      'categoryId'   => c,
+      'categoryName' => c
     }
   }
   result
@@ -469,7 +460,7 @@ end
 server.add_handler('mt.getPostCategories') do |postid, username, password|
   @cgi = CGI::new
   conf = ::TDiary::Config::new(@cgi)
-  unless username==euctou8(conf['xmlrpc.username']) && password==euctou8(conf['xmlrpc.password'])
+  unless username==conf['xmlrpc.username'] && password==conf['xmlrpc.password']
     raise XMLRPC::FaultException.new(1,'userid or password incorrect')
   end
   @cgi.params['date'] = [postid[0,8]]
@@ -485,8 +476,8 @@ server.add_handler('mt.getPostCategories') do |postid, username, password|
     if i==index
       sec.categories.each_with_index {|cat,j|
         result << {
-          'categoryName' => euctou8(cat),
-          'categoryId'   => euctou8(cat),
+          'categoryName' => cat,
+          'categoryId'   => cat,
           'isPrimary'    => j==0
         }
       }
@@ -501,7 +492,7 @@ server.add_handler('mt.setPostCategories') do |postid, username, password, categ
   conf = ::TDiary::Config::new(@cgi)
   ENV['REQUEST_METHOD'] = 'POST'
   ENV['HTTP_REFERER'] = (URI.parse(conf.base_url) + conf.update).to_s
-  unless username==euctou8(conf['xmlrpc.username']) && password==euctou8(conf['xmlrpc.password'])
+  unless username==conf['xmlrpc.username'] && password==conf['xmlrpc.password']
     raise XMLRPC::FaultException.new(1,'userid or password incorrect')
   end
   begin
@@ -587,7 +578,7 @@ server.add_handler('mt.getTrackbackPings') do |postid|
     result << {
       'pingURL'   => url,
       'pingIP'    => '127.0.0.1',
-      'pingTitle' => euctou8(title),
+      'pingTitle' => title,
     }
   }
   result

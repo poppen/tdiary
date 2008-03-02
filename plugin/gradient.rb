@@ -1,13 +1,13 @@
-# gradient.rb $Revision: 1.3 $
+# gradient.rb $Revision: 1.4 $
 #
-# gradient.rb: ʸ�����礭�����Ѳ������ʤ���ɽ��
-#   �ѥ�᥿:
-#     str:        ʸ����
-#     first_size: ����ʸ��������(���͡�ñ��pt)
-#     last_size:  ����ʸ��������(���͡�ñ��pt)
+# gradient.rb: 文字の大きさを変化させながら表示
+#   パラメタ:
+#     str:        文字列
+#     first_size: 開始文字サイズ(数値、単位pt)
+#     last_size:  開始文字サイズ(数値、単位pt)
 #
-#   ��: �֤���ʤ��Ȥ�Ǥ��ޤ��פ�10pt����30pt�˳���
-#     <%=gradient '����ʤ��Ȥ�Ǥ��ޤ�', 10, 30 %>
+#   例: 「こんなこともできます」を10ptから30ptに拡大
+#     <%=gradient 'こんなこともできます', 10, 30 %>
 #
 # Copyright (c) 2002 TADA Tadashi <sho@spc.gr.jp>
 # You can distribute this file under the GPL2.

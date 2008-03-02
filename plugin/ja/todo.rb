@@ -1,4 +1,4 @@
-# ja/todo.rb $Revision: 1.3 $
+# ja/todo.rb $Revision: 1.4 $
 #
 # Japanese resources for todo.rb
 #
@@ -6,33 +6,33 @@
 # Distributed under the GPL
 # 
 
-def todo_msg_today; "����"; end
-def todo_msg_in_time(days); "����#{days}��"; end
-def todo_msg_late(days); "#{days}���٤�"; end
-def todo_config_label; "ToDo�Խ�"; end
+def todo_msg_today; "今日"; end
+def todo_msg_in_time(days); "あと#{days}日"; end
+def todo_msg_late(days); "#{days}日遅れ"; end
+def todo_config_label; "ToDo編集"; end
 
-add_conf_proc('ToDo', 'ToDo�ץ饰����') do
+add_conf_proc('ToDo', 'ToDoプラグイン') do
 	saveconf_todo
 	todo_init
 
 	<<-HTML
-	<h3 class="subtitle">�Ȥ���</h3>
-	<p><a href="#{h @update}?conf=header">�إå����եå�</a>��'&lt;%=todo%&gt;'���ɲä��Ʋ�������</p>
-	<h3 class="subtitle">ToDo�Խ�</h3>
-	<p>��Ԥ˰�Ĥ���ToDo�򵭽Ҥ��ޤ���ToDo�η�����</p>
-	<pre>ͥ����[����] ���뤳��</pre>
-	<p>�Ǥ�����ͥ���١פȡ֤��뤳�ȡפδ֤�1�İʾ�Υ��ڡ����Ƕ��ڤ�ޤ���</p>
-	<p>ͥ���٤Ͼ�ά��ǽ�Ǥ���ͥ���٤���ꤹ�����1��99����������ꤷ�ޤ�������ʳ���ͥ���٤���ꤷ����硤����ToDo��̵�뤵��ޤ���</p>
-	<p>���¤Ͼ�ά��ǽ�Ǥ������¤���ꤹ�����'['��']'�ǰϤ�褦�ˤ��Ƥ������������¤ǻ��ꤷ��ʸ�����ruby��<a href="http://www.ruby-lang.org/ja/man-1.6/?cmd=view;name=ParseDate">ParseDate�⥸�塼��</a>�ǲ��ϤǤ���С����¤ޤǤ������⤢�碌��ɽ�����ޤ���</p>
+	<h3 class="subtitle">使い方</h3>
+	<p><a href="#{h @update}?conf=header">ヘッダ・フッタ</a>に'&lt;%=todo%&gt;'を追加して下さい．</p>
+	<h3 class="subtitle">ToDo編集</h3>
+	<p>一行に一つずつToDoを記述します．ToDoの形式は</p>
+	<pre>優先度[期限] すること</pre>
+	<p>です．「優先度」と「すること」の間は1つ以上のスペースで区切ります．</p>
+	<p>優先度は省略可能です。優先度を指定する場合は1〜99の整数を指定します．それ以外の優先度を指定した場合，そのToDoは無視されます．</p>
+	<p>期限は省略可能です．期限を指定する場合は'['と']'で囲むようにしてください．期限で指定した文字列をrubyの<a href="http://www.ruby-lang.org/ja/man-1.6/?cmd=view;name=ParseDate">ParseDateモジュール</a>で解析できれば，期限までの日数もあわせて表示します．</p>
 	<p><textarea name="todo.todos" cols="70" rows="15">#{@todos.join("\n")}</textarea></p>
 
-	<h3 class="subtitle">ToDo�ꥹ�ȤΥ����ȥ�</h3>
-	<p>ToDo�ꥹ�ȤΥ����ȥ����ꤷ�ޤ���������ꤷ�ʤ��ȡ�&quot;ToDo:&quot;�����Ѥ���ޤ���</p>
+	<h3 class="subtitle">ToDoリストのタイトル</h3>
+	<p>ToDoリストのタイトルを指定します。何も指定しないと、&quot;ToDo:&quot;が利用されます。</p>
 	<p><input name="todo.title" value="#{h(@conf['todo.title']) if @conf['todo.title']}"></p>
 
-	<h3 class="subtitle">ɽ������ToDo�η��</h3>
-	<p>ɽ������ToDo�η����ɽ�����ޤ���������ꤷ�ʤ��ȡ�10�郎���ꤵ��ޤ���</p>
-	<p>����<input name="todo.n" value="#{h @conf['todo.n']}" size="3">��</p>
+	<h3 class="subtitle">表示するToDoの件数</h3>
+	<p>表示するToDoの件数を表示します。何も指定しないと、10件が設定されます。</p>
+	<p>最大<input name="todo.n" value="#{h @conf['todo.n']}" size="3">件</p>
 	HTML
 end
 # vim: ts=3

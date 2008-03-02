@@ -1,20 +1,20 @@
 # Japanese resource of highlight.rb
 #
 
-def highlight_conf_label; 'е╧едещеде╚'; end
+def highlight_conf_label; 'уГПуВдуГйуВдуГИ'; end
 
 def highlight_conf_html
 	<<-HTML
-	<h3 class="subtitle">е╧едещеде╚д╬┐з└▀─ъ</h3>
-	<p>е╕еуеєе╫д╖д┐└шд╬е╡е╓е┐еде╚еыдЄ<span style="color: #{h @conf['highlight.color']}; background: #{h @conf['highlight.background']}">е╡еєе╫еы</span>д╬дшджд╦е╧едещеде╚д╖д▐д╣бг</p>
+	<h3 class="subtitle">уГПуВдуГйуВдуГИуБошЙ▓шинхоЪ</h3>
+	<p>уВ╕уГгуГ│уГЧуБЧуБЯхЕИуБоуВ╡уГЦуВ┐уВдуГИуГлуВТ<span style="color: #{h @conf['highlight.color']}; background: #{h @conf['highlight.background']}">уВ╡уГ│уГЧуГл</span>уБоуВИуБЖуБлуГПуВдуГйуВдуГИуБЧуБ╛уБЩуАВ</p>
 
 	<table>
 		<tr>
-			<th>е╧едещеде╚д╬╩╕╗·┐з</th>
+			<th>уГПуВдуГйуВдуГИуБоцЦЗхнЧшЙ▓</th>
 			<td><input name="highlight.color" value="#{h @conf['highlight.color']}"></td>
 		</tr>
 		<tr>
-			<th>е╧едещеде╚д╬╟╪╖╩┐з</th>
+			<th>уГПуВдуГйуВдуГИуБошГМцЩпшЙ▓</th>
 			<td><input name="highlight.background" value="#{h @conf['highlight.background']}"></td>
 		</tr>
 	</table>

@@ -1,5 +1,5 @@
 =begin
-= A little bit more powerful display of referrers((-$Id: disp_referrer.rb,v 1.11 2007-12-07 13:34:17 zunda Exp $-))
+= A little bit more powerful display of referrers((-$Id: disp_referrer.rb,v 1.12 2008-03-02 09:01:47 kazuhiko Exp $-))
 English resource
 
 == Copyright notice
@@ -34,22 +34,22 @@ See ../ChangeLog for changes after this.
 - instance_eval for e[2] in the search engine list
 * Wed Aug  7, 2003 zunda <zunda at freeshell.org>
 - WWW browser configuration interface
-  - ����å���ι�������μ¤ˤ���褦�ˤ��ޤ�����WWW�֥饦�������ִ�
-    �ꥹ�Ȥ��ä����ˤϥꥹ�Ȥκǽ���ɲä���ޤ���
-  - secure=true�������Ǥ���¾�Υ�󥯸��ꥹ�Ȥ�ɽ���Ǥ���褦�ˤʤ�ޤ�����
+  - 平乓永扑亙及凳蕙毛方曰割撢卞允月方丹卞仄引仄凶﹝WWW皮仿它扒井日譆晶
+    伉旦玄毛綜勻凶樺寧卞反伉旦玄及瘉賡卞馨笛今木引允﹝
+  - secure=true卅筏匹公及職及伉件弁葭伉旦玄互刓憎匹五月方丹卞卅曰引仄凶﹝
 - Regexp generation for Wiki sites
 * Wed Aug  6, 2003 zunda <zunda at freeshell.org>
 - WWW browser configuration interface
-  - ��ʥ��ץ����ȥ�󥯸��ִ��ꥹ�Ȥθ�ΨŪ���Խ���WWW�֥饦�������
-    ����褦�ˤʤ�ޤ�����secure=true�������Ǥϰ����ε�ǽ�ϻȤ��ޤ���
+  - 潛卅左皿扑亦件午伉件弁葭譆晶伉旦玄及躲峔讀卅彸螂互WWW皮仿它扒井日匹
+    五月方丹卞卅曰引仄凶﹝secure=true卅筏匹反域朿及窗反銀尹引六氏﹝
 * Sat Aug  2, 2003 zunda <zunda at freeshell.org>
 - Second version
 - basic functions re-implemented
-  - ���ץ�����̿̾���ʤ����ޤ������ޤ����פʥ��ץ�����ä��ޤ�����
-    tdiary.conf���Խ����Ƥ������ϡ�������Ǥ�������򤷤ʤ����Ƥ���������
-  - Nora�饤�֥��ȥ���å�������Ѥǹ�®�����ޤ�����
-  - �������󥸥�Υꥹ�Ȥ�ץ饰����ǻ��Ĥ褦�ˤʤ�ޤ�����&��;��ޤม
-    ��ʸ���������̤����ФǤ��ޤ���
+  - 左皿扑亦件毛抰抩仄卅云仄引仄凶﹝引凶尕邰卅左皿扑亦件毛壅仄引仄凶﹝
+    tdiary.conf毛彸螂仄化中凶杅反﹜云澎醒匹允互澀爛毛仄卅云仄化仁分今中﹝
+  - Nora仿奶皮仿伉午平乓永扑亙及厙迕匹嫖簧祭仄引仄凶﹝
+  - 腹綢巨件斥件及伉旦玄毛皿仿弘奶件匹儅勾方丹卞卅曰引仄凶﹝&支;毛殖戈腹
+    綢妐儂昫手渝謹騷曰卞鏟請匹五引允﹝
 * Mon Feb 17, 2003 zunda <zunda at freeshell.org>
 - First version
 =end
@@ -313,7 +313,7 @@ DispReferrer2_Engines = {
 	'metabot' => [[%r{\Ahttp://.*?\.metabot\.ru}i, '"MetaBot.ru"', ['st'], nil ]],
 	'altavista' => [[%r{\Ahttp://.*?\.altavista\.([^/]+)}i, '"Altavista in .#{$1}"', ['q'], nil ]],
 	'infoseek' => [[%r{\Ahttp://(www\.)?infoseek\.co\.jp}i, '"Infoseek"', ['qt'], nil ]],
-	'odn' => [[%r{\Ahttp://.*?\.odn\.ne\.jp}i, '"ODN����"', ['QueryString', 'key'], nil ]],
+	'odn' => [[%r{\Ahttp://.*?\.odn\.ne\.jp}i, '"ODN腹綢"', ['QueryString', 'key'], nil ]],
 	'lycos' => [[%r{\Ahttp://.*?\.lycos\.([^/]+)}i, '"Lycos in .#{$1}"', ['query', 'q', 'qt'], nil ]],
 	'fresheye' => [[%r{\Ahttp://.*?\.fresheye}i, '"Fresheye"', ['kw'], nil ]],
 	'goo' => [

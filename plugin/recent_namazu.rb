@@ -1,14 +1,14 @@
 # recent_namazu.rb $Revision 1.0 $
 #
-# recent_namazu: Namazu¸¡º÷¸ì¿·¤·¤¤½ç
-# 		 namazi.cgi¤¬ºîÀ®¤¹¤ë¸¡º÷¥­¡¼¥ï¡¼¥É¥í¥°(NMZ.slog)¤«¤é
-#		 ºÇ¿·xx·ïÊ¬¤Î¸¡º÷¸ì¤òÉ½¼¨¤·¤Þ¤¹¡£
-# ¥Ñ¥é¥á¥¿:
-#   file:       ¸¡º÷¥­¡¼¥ï¡¼¥É¥í¥°¥Õ¥¡¥¤¥ëÌ¾(ÀäÂÐ¥Ñ¥¹É½µ­) 
-#   namazu:     ¤Ê¤Þ¤ºcgiÌ¾ 
-#   limit:      É½¼¨·ï¿ô(Ì¤»ØÄê»þ:5) 
-#   sep:        ¥»¥Ñ¥ì¡¼¥¿(Ì¤»ØÄê»þ:¶õÇò)
-#   make_link:  <a>¤òÀ¸À®¤¹¤ë¤«?(Ì¤»ØÄê»þ:À¸À®¤¹¤ë)    
+# recent_namazu: Namazuæ¤œç´¢èªžæ–°ã—ã„é †
+# 		 namazi.cgiãŒä½œæˆã™ã‚‹æ¤œç´¢ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰ãƒ­ã‚°(NMZ.slog)ã‹ã‚‰
+#		 æœ€æ–°xxä»¶åˆ†ã®æ¤œç´¢èªžã‚’è¡¨ç¤ºã—ã¾ã™ã€‚
+# ãƒ‘ãƒ©ãƒ¡ã‚¿:
+#   file:       æ¤œç´¢ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«å(çµ¶å¯¾ãƒ‘ã‚¹è¡¨è¨˜) 
+#   namazu:     ãªã¾ãšcgiå 
+#   limit:      è¡¨ç¤ºä»¶æ•°(æœªæŒ‡å®šæ™‚:5) 
+#   sep:        ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿(æœªæŒ‡å®šæ™‚:ç©ºç™½)
+#   make_link:  <a>ã‚’ç”Ÿæˆã™ã‚‹ã‹?(æœªæŒ‡å®šæ™‚:ç”Ÿæˆã™ã‚‹)    
 #
 #
 # Copyright (c) 2002 Hiroyuki Ikezoe <zoe@kasumi.sakura.ne.jp>

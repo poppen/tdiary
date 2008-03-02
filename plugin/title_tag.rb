@@ -18,7 +18,7 @@
 # CODE.
 
 # title_tag2.rb to enhance <title> element of generating HTML
-# $Id: title_tag.rb,v 1.5 2007-01-09 13:36:06 hsbt Exp $
+# $Id: title_tag.rb,v 1.6 2008-03-02 09:01:45 kazuhiko Exp $
 # To use, just put this file into plugin folder.
 
 alias :title_tag2 :title_tag

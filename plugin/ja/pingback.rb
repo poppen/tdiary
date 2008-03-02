@@ -1,14 +1,14 @@
-def label_pingback_exclue; 'Pingbackµ­Ï¿½ü³°¥ê¥¹¥È'; end
+def label_pingback_exclue; 'Pingbackè¨˜éŒ²é™¤å¤–ãƒªã‚¹ãƒˆ'; end
 add_conf_proc( 'Pingback', 'Pingback') do
 	saveconf_pingback
 	pingback_init
 
 	<<-HTML
-	<h3 class="subtitle">Pingback¥µ¡¼¥Ğ¤ÎURL</h3>
+	<h3 class="subtitle">Pingbackã‚µãƒ¼ãƒã®URL</h3>
 	<p><input name="pingback.url" value="#{h(@conf['pingback.url'])}" size="100"></p>
-	<h3 class="subtitle">¥­¥ã¥Ã¥·¥å¤ÎÍ­¸ú»ş´Ö</h3>
-	<p><input name="pingback.expire" value="#{h(@conf['pingback.expire'])}" size="6">ÉÃ´Ö</p>
-	<h3 class="subtitle">Pingbackµ­Ï¿½ü³°¥ê¥¹¥È</h3>
+	<h3 class="subtitle">ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã®æœ‰åŠ¹æ™‚é–“</h3>
+	<p><input name="pingback.expire" value="#{h(@conf['pingback.expire'])}" size="6">ç§’é–“</p>
+	<h3 class="subtitle">Pingbackè¨˜éŒ²é™¤å¤–ãƒªã‚¹ãƒˆ</h3>
 	<p><textarea name="pingback.exclude" cols="70" rows="10">#{h( @conf['pingback.exclude'] )}</textarea></p>
 	HTML
 end

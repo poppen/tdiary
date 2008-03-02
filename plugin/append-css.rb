@@ -1,4 +1,4 @@
-# append-css.rb: $Revision: 1.10 $
+# append-css.rb: $Revision: 1.11 $
 #
 # Append CSS fragment via Preferences Page.
 #
@@ -19,14 +19,14 @@ end
 
 unless @resource_loaded then
 	def append_css_label
-		'CSS¤ÎÄÉ²Ã'
+		'CSSã®è¿½åŠ '
 	end
 
 	def append_css_desc
 		<<-HTML
-		<h3>CSSÃÇÊÒ</h3>
-		<p>¸½ºß»ØÄê¤·¤Æ¤¢¤ë¥Æ¡¼¥Ş¤Ë¡¢¥¹¥¿¥¤¥ë¥·¡¼¥È¤òÄÉ²ÃÀßÄê¤¹¤ë¾ì¹ç¡¢
-		°Ê²¼¤ËCSS¤ÎÃÇÊÒ¤òÆşÎÏ¤·¤Æ¤¯¤À¤µ¤¤¡£</p>
+		<h3>CSSæ–­ç‰‡</h3>
+		<p>ç¾åœ¨æŒ‡å®šã—ã¦ã‚ã‚‹ãƒ†ãƒ¼ãƒã«ã€ã‚¹ã‚¿ã‚¤ãƒ«ã‚·ãƒ¼ãƒˆã‚’è¿½åŠ è¨­å®šã™ã‚‹å ´åˆã€
+		ä»¥ä¸‹ã«CSSã®æ–­ç‰‡ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚</p>
 		HTML
 	end
 end

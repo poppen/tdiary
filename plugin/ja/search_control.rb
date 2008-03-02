@@ -1,23 +1,23 @@
 =begin
-= �������������ץ饰����((-$Id: search_control.rb,v 1.3 2004-11-09 21:07:45 zunda Exp $-))
-���ܸ�꥽����
+= ここだけ検索プラグイン((-$Id: search_control.rb,v 1.4 2008-03-02 09:01:46 kazuhiko Exp $-))
+日本語リソース
 
-== ����
-����ɽ�����ǿ�ɽ���ʤɤ��줾��ˤĤ���Google�ʤɤθ������󥸥�˥���ǥ�
-�������Ƥ�餦���ɤ��������椷�ޤ���
+== 概要
+一日表示、最新表示などそれぞれについてGoogleなどの検索エンジンにインデッ
+クスしてもらうかどうかを制御します。
 
-== �Ȥ���
-���Υץ饰�����plugin/�ǥ��쥯�ȥ�����֤��뤫���ץ饰��������ץ饰��
-���ȤäƤ��Υץ饰�����ͭ���ˤ��Ƥ���������
+== 使い方
+このプラグインをplugin/ディレクトリに配置するか、プラグイン選択プラグイ
+ンを使ってこのプラグインを有効にしてください。
 
-������̤���֤������������פ򥯥�å����뤳�Ȥǡ��ɤ�ɽ���⡼�ɤǤɤΤ�
-����ư�����Ԥ��뤫���ꤹ�뤳�Ȥ��Ǥ��ޤ����ǥե���ȤǤϡ�����ʬ��ɽ��
-�Τߡ��������󥸥����Ͽ�����褦�ˤʤäƤ��ޤ���
+設定画面から「ここだけ検索」をクリックすることで、どの表示モードでどのよ
+うな動作を期待するか設定することができます。デフォルトでは、一日分の表示
+のみ、検索エンジンに登録されるようになっています。
 
-�ºݤ˸��̤����뤫�ɤ����ϡ��������󥸥�Υ��ܥåȤ��᥿�������ᤷ�� 
-����뤫�ɤ����ˤ����äƤ��ޤ���
+実際に効果があるかどうかは、検索エンジンのロボットがメタタグを解釈して 
+くれるかどうかにかかっています。
 
-secure==true�������Ǥ�Ȥ��ޤ���
+secure==trueな日記でも使えます。
 
 == License
 Copyright (C) 2003, 2004 zunda <zunda at freeshell.org>
@@ -45,23 +45,23 @@ See ../ChangeLog for changes after this.
 
 # configuration
 unless defined?( Search_control_plugin_name ) then
-	Search_control_plugin_name = '������������'
+	Search_control_plugin_name = 'ここだけ検索'
 	Search_control_description_html = <<'_HTML'
-<p>�᥿������Ȥäơ��������󥸥�Υ��ܥåȤˡ�
-;ʬ�ʥڡ����Υ���ǥå�������ʤ��褦�ˤ��ꤤ���Ƥߤޤ���
-����ǥå������ä��ߤ���ɽ�������˥����å��򤷤Ƥ���������</p>
-<p>User agent(�������󥸥�Υ��ܥåȤ�̾��)�����ꤵ��Ƥ���ȡ�
-����agent�ˤĤ��ƻ��ꤵ�줿ư��򤷤ޤ���
-���פ���User agent��̵�����ϥǥե���Ȥ�ư��򤷤ޤ���</p>
+<p>メタタグを使って、検索エンジンのロボットに、
+余分なページのインデックスを作らないようにお願いしてみます。
+インデックスを作って欲しい表示だけにチェックをしてください。</p>
+<p>User agent(検索エンジンのロボットの名前)が指定されていると、
+そのagentについて指定された動作をします。
+一致するUser agentが無い場合はデフォルトの動作をします。</p>
 _HTML
-	Search_control_delete_label = '����agent����'
-	Search_control_new_label = '��������agent���ɲ�'
-	Search_control_default_label = '�ǥե����'
+	Search_control_delete_label = 'このagentを削除'
+	Search_control_new_label = '記入したagentを追加'
+	Search_control_default_label = 'デフォルト'
 	Search_control_categories = [
-		[ '�ǿ�', 'latest' ],
-		[ '����ʬ', 'day' ],
-		[ '���ʬ', 'month' ],
-		[ 'Ĺǯ', 'nyear' ],
-		[ '���ƥ��꡼', 'category' ]
+		[ '最新', 'latest' ],
+		[ '一日分', 'day' ],
+		[ '一月分', 'month' ],
+		[ '長年', 'nyear' ],
+		[ 'カテゴリー', 'category' ]
 	]
 end

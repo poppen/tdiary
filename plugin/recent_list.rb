@@ -1,16 +1,16 @@
-# $Revision: 1.24 $
-# recent_list: �Ƕ�񤤤������Υ����ȥ롤���֥����ȥ��ɽ������
-#   �ѥ�᥿(���å����̤���������):
-#     days:            ����ʬ��������ɽ�����뤫(20)
-#     date_format:     ����ɽ���ե����ޥå�(���������եե����ޥå�)
-#     title_with_body: true�ǳƥѥ饰��դؤΥ�󥯤�title°���ˤ��Υѥ饰��դΰ��������(false)
-#     show_size:       true������Ĺ��ɽ��(false)
-#     show_title:      true�ǳ����Υ����ȥ��ɽ��(false)
+# $Revision: 1.25 $
+# recent_list: 最近書いた日記のタイトル，サブタイトルを表示する
+#   パラメタ(カッコ内は未指定時の値):
+#     days:            何日分の日記を表示するか(20)
+#     date_format:     日付表示フォーマット(日記の日付フォーマット)
+#     title_with_body: trueで各パラグラフへのリンクのtitle属性にそのパラグラフの一部を指定(false)
+#     show_size:       trueで日記長を表示(false)
+#     show_title:      trueで各日のタイトルを表示(false)
 #
-#   ����: �����奢�⡼�ɤǤϻȤ��ޤ���
-#   ����: �����ȥ�ꥹ�Ȥ�������������ϡ��쥤�����Ȥ��פ��ʤ����
-#         �ʤ�ޤ��󡣥إå���եå���table������Ȥä��ꡢCSS��񤭴�
-#         ����ɬ�פ�����Ǥ��礦��
+#   注意: セキュアモードでは使えません。
+#   備考: タイトルリストを日記に埋め込むは、レイアウトを工夫しなければ
+#         なりません。ヘッダやフッタでtableタグを使ったり、CSSを書き換
+#         える必要があるでしょう。
 #
 # Copyright (c) 2001,2002 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL

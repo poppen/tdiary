@@ -1,6 +1,6 @@
-# recent_comment.rb $Revision: 1.11 $
+# recent_comment.rb $Revision: 1.12 $
 #
-# recent_comment: �Ƕ�Υĥå��ߤ�ꥹ�ȥ��åפ���
+# recent_comment: 最近のツッコミをリストアップする
 #
 # Copyright (c) 2002 TADA Tadashi <sho@spc.gr.jp>
 # You can distribute this file under the GPL2.

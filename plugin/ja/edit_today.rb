@@ -1,15 +1,15 @@
 # Japanese resources of edit_today plugin.
 
-@edit_today_caption = '¤³¤ÎÆü¤òÊÔ½¸'
+@edit_today_caption = 'ã“ã®æ—¥ã‚’ç·¨é›†'
 
 def edit_today_edit_label( date )
-	date.strftime( '%Y-%m-%d¤òÊÔ½¸' )
+	date.strftime( '%Y-%m-%dã‚’ç·¨é›†' )
 end
 
 def edit_today_conf_html
 	r = <<-HTML
-	<h3 class="subtitle">¥ê¥ó¥¯Ê¸»úÎó</h3>
-	<p>ÊÔ½¸¥Ú¡¼¥¸¤Ø¤Î¥ê¥ó¥¯¤ò¼¨¤¹Ê¸»úÎó¤ò»ØÄê¤·¤Ş¤¹¡£²èÁü¤¬ÍÑ°Õ¤Ç¤­¤ì¤Ğ¡¢¥¢¥¤¥³¥ó¤Ê¤É¤â»ØÄê½ĞÍè¤Ş¤¹¡£</p>
+	<h3 class="subtitle">ãƒªãƒ³ã‚¯æ–‡å­—åˆ—</h3>
+	<p>ç·¨é›†ãƒšãƒ¼ã‚¸ã¸ã®ãƒªãƒ³ã‚¯ã‚’ç¤ºã™æ–‡å­—åˆ—ã‚’æŒ‡å®šã—ã¾ã™ã€‚ç”»åƒãŒç”¨æ„ã§ãã‚Œã°ã€ã‚¢ã‚¤ã‚³ãƒ³ãªã©ã‚‚æŒ‡å®šå‡ºæ¥ã¾ã™ã€‚</p>
 	<p><input name="edit_today_caption" size="70" value="#{h @conf['edit_today.caption']}"></p>
 	HTML
 end

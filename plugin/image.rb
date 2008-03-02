@@ -1,50 +1,50 @@
-# image.rb $Revision: 1.34 $
+# image.rb $Revision: 1.35 $
 # -pv-
 # 
-# Ì¾¾Î:
-# ³¨Æüµ­Plugin
+# åç§°:
+# çµµæ—¥è¨˜Plugin
 #
-# ³µÍ×:
-# Æüµ­¹¹¿·²èÌÌ¤«¤é¤Î²èÁü¥¢¥Ã¥×¥í¡¼¥É¡¢ËÜÊ¸¤Ø¤ÎÉ½¼¨
+# æ¦‚è¦:
+# æ—¥è¨˜æ›´æ–°ç”»é¢ã‹ã‚‰ã®ç”»åƒã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰ã€æœ¬æ–‡ã¸ã®è¡¨ç¤º
 #
-# »È¤¦¾ì½ê:
-# ËÜÊ¸
+# ä½¿ã†å ´æ‰€:
+# æœ¬æ–‡
 #
-# »È¤¤Êı:
-# image( number, 'altword', thumbnail, size, place ) - ²èÁü¤òÉ½¼¨¤·¤Ş¤¹¡£
-#    number - ²èÁü¤ÎÈÖ¹æ0¡¢1¡¢2Åù
-#    altword - img¥¿¥°¤Î alt¤ËÆş¤ì¤ëÊ¸»úÎó
-#    thumbnail - ¥µ¥à¥Í¥¤¥ë(¾®¤µ¤Ê²èÁü)¤ò»ØÄê¤¹¤ë(¾ÊÎ¬²Ä)
-#    size - ²èÁü¤Î¥µ¥¤¥º(Array)¡£[width, height]¤Î·Á¼°¤Ç»ØÄê(¾ÊÎ¬²Ä)
-#    place - img¥¿¥°¤ÎclassÌ¾(¾ÊÎ¬²Ä)¡£¾ÊÎ¬»ş¤Ï'photo'
+# ä½¿ã„æ–¹:
+# image( number, 'altword', thumbnail, size, place ) - ç”»åƒã‚’è¡¨ç¤ºã—ã¾ã™ã€‚
+#    number - ç”»åƒã®ç•ªå·0ã€1ã€2ç­‰
+#    altword - imgã‚¿ã‚°ã® altã«å…¥ã‚Œã‚‹æ–‡å­—åˆ—
+#    thumbnail - ã‚µãƒ ãƒã‚¤ãƒ«(å°ã•ãªç”»åƒ)ã‚’æŒ‡å®šã™ã‚‹(çœç•¥å¯)
+#    size - ç”»åƒã®ã‚µã‚¤ã‚º(Array)ã€‚[width, height]ã®å½¢å¼ã§æŒ‡å®š(çœç•¥å¯)
+#    place - imgã‚¿ã‚°ã®classå(çœç•¥å¯)ã€‚çœç•¥æ™‚ã¯'photo'
 #
-# image_left( number, 'altword', thumbnail, size ) - image¤Ëclass=left¤òÄÉ²Ã¤·¤Ş¤¹¡£
-# image_right( number, 'altword', thumbnail, size ) - image¤Ëclass=right¤òÄÉ²Ã¤·¤Ş¤¹¡£
+# image_left( number, 'altword', thumbnail, size ) - imageã«class=leftã‚’è¿½åŠ ã—ã¾ã™ã€‚
+# image_right( number, 'altword', thumbnail, size ) - imageã«class=rightã‚’è¿½åŠ ã—ã¾ã™ã€‚
 #
-# image_link( number, 'desc' ) - ²èÁü¤Ø¤Î¥ê¥ó¥¯¤òÀ¸À®¤·¤Ş¤¹¡£
-#    number - ²èÁü¤ÎÈÖ¹æ0¡¢1¡¢2Åù
-#    desc - ²èÁü¤ÎÀâÌÀ
+# image_link( number, 'desc' ) - ç”»åƒã¸ã®ãƒªãƒ³ã‚¯ã‚’ç”Ÿæˆã—ã¾ã™ã€‚
+#    number - ç”»åƒã®ç•ªå·0ã€1ã€2ç­‰
+#    desc - ç”»åƒã®èª¬æ˜
 #
-# ¤½¤ÎÂ¾:
-# tDiary version 1.5.4°Ê¹ß¤ÇÆ°ºî¤·¤Ş¤¹¡£
-# tdiary.conf¤Ç»ØÄê¤Ç¤­¤ë¥ª¥×¥·¥ç¥ó:
+# ãã®ä»–:
+# tDiary version 1.5.4ä»¥é™ã§å‹•ä½œã—ã¾ã™ã€‚
+# tdiary.confã§æŒ‡å®šã§ãã‚‹ã‚ªãƒ—ã‚·ãƒ§ãƒ³:
 #  @options['image.dir']
-#     ²èÁü¥Õ¥¡¥¤¥ë¤òÊİÂ¸¤¹¤ë¥Ç¥£¥ì¥¯¥È¥ê¡£Ìµ»ØÄê»ş¤Ï'./images/'
-#     Web¥µ¡¼¥Ğ¤Î¸¢¸Â¤Ç½ñ¤­¹ş¤á¤ë¤è¤¦¤Ë¤·¤Æ¤ª¤¯É¬Í×¤¬¤¢¤ê¤Ş¤¹¡£
+#     ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä¿å­˜ã™ã‚‹ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã€‚ç„¡æŒ‡å®šæ™‚ã¯'./images/'
+#     Webã‚µãƒ¼ãƒã®æ¨©é™ã§æ›¸ãè¾¼ã‚ã‚‹ã‚ˆã†ã«ã—ã¦ãŠãå¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚
 #  @options['image.url']
-#     ²èÁü¥Õ¥¡¥¤¥ë¤òÊİÂ¸¤¹¤ë¥Ç¥£¥ì¥¯¥È¥ê¤ÎURL¡£Ìµ»ØÄê»ş¤Ï'./images/'
+#     ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä¿å­˜ã™ã‚‹ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®URLã€‚ç„¡æŒ‡å®šæ™‚ã¯'./images/'
 #  @options['image.maxnum']
-#     1Æü¤¢¤¿¤ê¤ÎºÇÂç²èÁü¿ô¡£Ìµ»ØÄê»ş¤Ï1
-#     ¤¿¤À¤·@secure = true»ş¤Î¤ßÍ­¸ú
+#     1æ—¥ã‚ãŸã‚Šã®æœ€å¤§ç”»åƒæ•°ã€‚ç„¡æŒ‡å®šæ™‚ã¯1
+#     ãŸã ã—@secure = trueæ™‚ã®ã¿æœ‰åŠ¹
 #  @options['image.maxsize']
-#     1Ëç¤¢¤¿¤ê¤ÎºÇÂç²èÁü¥Ğ¥¤¥È¿ô¡£Ìµ»ØÄê»ş¤Ï10000
-#     ¤¿¤À¤·@secure = true»ş¤Î¤ßÍ­¸ú
+#     1æšã‚ãŸã‚Šã®æœ€å¤§ç”»åƒãƒã‚¤ãƒˆæ•°ã€‚ç„¡æŒ‡å®šæ™‚ã¯10000
+#     ãŸã ã—@secure = trueæ™‚ã®ã¿æœ‰åŠ¹
 #  @options['image.maxwidth']
-#     size¤ò»ØÄê¤·¤Ê¤«¤Ã¤¿¾ì¹ç¤Ë»ØÄê¤Ç¤­¤ë²èÁü¤ÎºÇÂçÉ½¼¨Éı¡£Ìµ»ØÄê»ş¤Ïnil
-#     É½¼¨¤Î¤¿¤Ó¤Ë¥Õ¥¡¥¤¥ë¥¢¥¯¥»¥¹¤¬Æş¤ë¤Î¤Ç¡¢½Å¤¯¤Ê¤ë¤«¤â?
-#     @secure = true»ş¤ÏÌµ¸ú
+#     sizeã‚’æŒ‡å®šã—ãªã‹ã£ãŸå ´åˆã«æŒ‡å®šã§ãã‚‹ç”»åƒã®æœ€å¤§è¡¨ç¤ºå¹…ã€‚ç„¡æŒ‡å®šæ™‚ã¯nil
+#     è¡¨ç¤ºã®ãŸã³ã«ãƒ•ã‚¡ã‚¤ãƒ«ã‚¢ã‚¯ã‚»ã‚¹ãŒå…¥ã‚‹ã®ã§ã€é‡ããªã‚‹ã‹ã‚‚?
+#     @secure = trueæ™‚ã¯ç„¡åŠ¹
 #
-# ¥é¥¤¥»¥ó¥¹¤Ë¤Ä¤¤¤Æ:
+# ãƒ©ã‚¤ã‚»ãƒ³ã‚¹ã«ã¤ã„ã¦:
 # Copyright (c) 2002,2003 Daisuke Kato <dai@kato-agri.com>
 # Copyright (c) 2002 Toshi Okada <toshi@neverland.to>
 # Copyright (c) 2003 Yoshimi KURUMA <yoshimik@iris.dti.ne.jp>
@@ -52,15 +52,15 @@
 #
 
 unless @resource_loaded then
-	def image_error_num( max ); "²èÁü¤Ï1Æü#{h max}Ëç¤Ş¤Ç¤Ç¤¹¡£ÉÔÍ×¤Ê²èÁü¤òºï½ü¤·¤Æ¤«¤éÄÉ²Ã¤·¤Æ¤¯¤À¤µ¤¤"; end
-	def image_error_size( max ); "²èÁü¤ÎºÇÂç¥µ¥¤¥º¤Ï#{h max}¥Ğ¥¤¥È¤Ş¤Ç¤Ç¤¹"; end
-	def image_label_list_caption; '³¨Æüµ­(°ìÍ÷¡¦ºï½ü)'; end
-	def image_label_add_caption; '³¨Æüµ­(ÄÉ²Ã)'; end
-	def image_label_description; '²èÁü¤ÎÀâÌÀ'; end
-	def image_label_add_plugin; 'ËÜÊ¸¤ËÄÉ²Ã'; end
-	def image_label_delete; '¥Á¥§¥Ã¥¯¤·¤¿²èÁü¤Îºï½ü'; end
-	def image_label_only_jpeg; 'JPEG¤Î¤ß'; end
-	def image_label_add_image; '¤³¤Î²èÁü¤ò¥¢¥Ã¥×¥í¡¼¥É¤¹¤ë'; end
+	def image_error_num( max ); "ç”»åƒã¯1æ—¥#{h max}æšã¾ã§ã§ã™ã€‚ä¸è¦ãªç”»åƒã‚’å‰Šé™¤ã—ã¦ã‹ã‚‰è¿½åŠ ã—ã¦ãã ã•ã„"; end
+	def image_error_size( max ); "ç”»åƒã®æœ€å¤§ã‚µã‚¤ã‚ºã¯#{h max}ãƒã‚¤ãƒˆã¾ã§ã§ã™"; end
+	def image_label_list_caption; 'çµµæ—¥è¨˜(ä¸€è¦§ãƒ»å‰Šé™¤)'; end
+	def image_label_add_caption; 'çµµæ—¥è¨˜(è¿½åŠ )'; end
+	def image_label_description; 'ç”»åƒã®èª¬æ˜'; end
+	def image_label_add_plugin; 'æœ¬æ–‡ã«è¿½åŠ '; end
+	def image_label_delete; 'ãƒã‚§ãƒƒã‚¯ã—ãŸç”»åƒã®å‰Šé™¤'; end
+	def image_label_only_jpeg; 'JPEGã®ã¿'; end
+	def image_label_add_image; 'ã“ã®ç”»åƒã‚’ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰ã™ã‚‹'; end
 end
 
 def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )

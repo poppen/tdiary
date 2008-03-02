@@ -1,195 +1,195 @@
 =begin
-= ��������ŷ���ץ饰����((-$Id: weather.rb,v 1.12 2008-01-19 10:23:55 zunda Exp $-))
-��������ŷ���򡢤�������������ǽ�˹���������˼���������¸�������줾��
-�����������ξ�����ɽ�����ޤ���
+= その日の天気プラグイン((-$Id: weather.rb,v 1.13 2008-03-02 09:01:46 kazuhiko Exp $-))
+その日の天気を、その日の日記を最初に更新する時に取得して保存し、それぞれ
+の日の日記の上部に表示します。
 
-== ������ˡ
-���Υե�����κǿ��Ǥϡ�
+== 入手方法
+このファイルの最新版は、
 ((<URL:http://zunda.freeshell.org/d/plugin/weather.rb>))
-�ˤ���ޤ���
+にあります。
 
-== �Ȥ���
-=== ���󥹥ȡ�����������ˡ
-���Υե������plugin�ǥ��쥯�ȥ�˥��ԡ����Ƥ������������������ɤ�
-EUC-JP�Ǥ���
+== 使い方
+=== インストールと設定の方法
+このファイルをpluginディレクトリにコピーしてください。漢字コードは
+EUC-JPです。
 
-���ˡ�tdiary.conf���Խ����뤫��WWW�֥饦������tDiary��������̤���֤���
-����ŷ���פ�����ǡ�ŷ���ǡ����򤤤������Ƥ���URL�����ꤷ�Ƥ���������
-tdiary.conf���Խ�������ˤϡ�@options['weather.url']�����ꤷ�Ƥ����� 
-����ξ��������򤷤����ˤϡ�tDiary��������̤Ǥ����꤬ͥ�褵��ޤ���
+次に、tdiary.confを編集するか、WWWブラウザからtDiaryの設定画面から「その
+日の天気」を選んで、天気データをいただいてくるURLを設定してください。
+tdiary.confを編集する場合には、@options['weather.url']に設定してくださ 
+い。両方で設定をした場合には、tDiaryの設定画面での設定が優先されます。
 
-�㤨�С� NOAA National Weather Service�����Ѥ�����ˤϡ�
-((<URL:http://weather.noaa.gov/>))���顢Select a country...�ǹ�̾������
-��Go!�ܥ���򲡤������˴�¬����������Ǥ������������λ�ɽ�����줿�ڡ���
-��URL���㤨�С�
+例えば、 NOAA National Weather Serviceを利用する場合には、
+((<URL:http://weather.noaa.gov/>))から、Select a country...で国名を選ん
+でGo!ボタンを押し、次に観測地点を選んでください。その時表示されたページ
+のURLを、例えば、
   @options['weather.url'] = 'http://weather.noaa.gov/weather/current/RJTI.html'
-�Ƚ񤤤Ƥ���������������Ǥ�����إ�ݡ���((-�ɤ��ˤ���������-))��ŷ��
-����Ͽ����ޤ�������������Ѥ����¤���Ƥ����礬����ޤ��Τǡ����Τ�
-����WWW�ڡ�����������������ʤ��褦�����դ��Ƥ���������
+と書いてください。この例では東京ヘリポート((-どこにあるんだろ？-))の天気
+が記録されます。情報の二次利用が制限されている場合がありますので、そのよ
+うなWWWページから情報を取得しないように注意してください。
 
-����ˡ����������Υ����ॾ�����Ѳ������ǽ�����������ϡ����Υ����ॾ��
-���@options['weather.tz']�����Ķ��ѿ�TZ�����ꤷ�Ƥ������Ȥ򤪴��ᤷ 
-�ޤ�������ˤ�äơ����������ۤ�����⡢ŷ���ǡ����������Υ����ॾ���� 
-��ŷ����ɽ����³���뤳�Ȥ��Ǥ��ޤ���tdiary.conf�����ꤹ����ϡ��㤨��
-����ɸ����ξ��ϡ�
+さらに、将来日記のタイムゾーンが変化する可能性がある方は、今のタイムゾー
+ンを、@options['weather.tz']か、環境変数TZに設定しておくことをお勧めし 
+ます。これによって、日記が引越した後も、天気データ取得時のタイムゾーン 
+で天気を表示し続けることができます。tdiary.confに設定する場合は、例えば
+日本標準時の場合は、
   @options['weather.tz'] = 'Japan'
-�����ꤷ�Ƥ���������
+と設定してください。
 
-����ǡ�������������������٤ˡ����ꤷ��URL����ŷ���ǡ�����������ơ�
-ɽ������褦�ˤʤ�Ϥ��Ǥ���ŷ���ϡ�
-  <div class="weather"><span class="weather">hh:mm����<a href="������URL">ŷ��(����)</a></span></div>
-�Ȥ��������Ǥ��줾������������ξ��ɽ������ޤ���ɬ�פʤ�С�CSS���Խ�
-���Ƥ���������
+これで、新しい日の日記を書く度に、設定したURLから天候データを取得して、
+表示するようになるはずです。天気は、
+  <div class="weather"><span class="weather">hh:mm現在<a href="取得元URL">天気(温度)</a></span></div>
+という形式でそれぞれの日の日記の上に表示されます。必要ならば、CSSを編集
+してください。
   div.weather {
     text-align: right;
     font-size: 75%;
   }
-�ʤɤȤ��Ƥ����Ф����Ǥ��礦��
+などとしておけばいいでしょう。
 
-�����˻��Ѥ��Ƥ���WWW�����С����饵���С��θ��¤�WWW�ڡ����α������Ǥ���
-ɬ�פ�����ޤ����Ķ��ѿ�TZ���ѹ������礬����ޤ��Τǡ�secure�⡼�ɤǤ�
-�Ȥ��ޤ���mod_ruby�Ǥ�ư��Ϻ��ΤȤ�����ǧ���Ƥ��ޤ���
+日記に使用しているWWWサーバーからサーバーの権限でWWWページの閲覧ができる
+必要があります。環境変数TZを変更する場合がありますので、secureモードでは
+使えません。mod_rubyでの動作は今のところ確認していません。
 
-�ǥե���ȤǤϡ�����ü������������줿���ˤ�ŷ����ɽ�����ʤ��褦�ˤʤ�
-�Ƥ��ޤ������Ӥ���Ǥ�ŷ����ɽ�����������ˤϡ�������̤������ꤹ�뤫��
-tdiary.conf��
+デフォルトでは、携帯端末から閲覧された場合には天気を表示しないようになっ
+ています。携帯からでも天気を表示したい場合には、設定画面から設定するか、
+tdiary.confに
   @options['weather.show_mobile'] = true
-����ꤷ�Ƥ���������
+を指定してください。
 
-=== ��¸�����ŷ���ǡ����ˤĤ���
-ŷ���ǡ����ϡ�
-* �񤤤Ƥ����������դȸ��ߤ����դ����פ���
-* ��������ŷ���ǡ������ޤ���������Ƥ��ʤ���������μ������˥��顼�����ä�
-���ˡ���������ޤ���
+=== 保存される天気データについて
+天気データは、
+* 書いてる日記の日付と現在の日付が一致し、
+* その日の天気データがまだ取得されていないか、前回の取得時にエラーがあった
+場合に、取得されます。
 
-ŷ���ǡ����ϡ�@options['weather.dir']�����ꤷ���ǥ��쥯�ȥ꤫��
-@cache_path/weather/ �ǥ��쥯�ȥ�ʲ��ˡ�ǯ/ǯ��.weather �Ȥ����ե��� ��
-̾����¸����ޤ������ֶ��ڤ�Υƥ����ȥե�����Ǥ��Τ�ɬ�פ˱������Խ� 
-���뤳�Ȥ��Ǥ��ޤ������֤ο����Ѥ��Ƥ��ޤ�ʤ��褦�˵���Ĥ����Խ����Ƥ�
-���������ե����ޥåȤξܺ٤ϡ�Weather.to_s�᥽�åɤ򻲾Ȥ��Ƥ���������
+天気データは、@options['weather.dir']に設定したディレクトリか、
+@cache_path/weather/ ディレクトリ以下に、年/年月.weather というファイ ル
+名で保存されます。タブ区切りのテキストファイルですので必要に応じて編集 
+することができます。タブの数を変えてしまわないように気をつけて編集してく
+ださい。フォーマットの詳細は、Weather.to_sメソッドを参照してください。
 
-ŷ���ǡ����ˤϡ��ǡ����μ������郎��Ͽ����Ƥ��ޤ����ޤ����ǡ����μ�����
-��������줿��ŷ���ι������郎��Ͽ����Ƥ��뤳�Ȥ⤢��ޤ��������λ���
-�ϡ�����ɸ���(UNIX����)��ľ����Ƶ�Ͽ����Ƥ��ơ�������ɽ��������˸���
-�����ľ���Ƥ��ޤ������Τ��ᡢŷ����Ͽ�������Υ����ॾ����ȡ�ŷ����ɽ
-��������Υ����ॾ���󤬰ۤʤäƤ��ޤ��ȡ��㤨��ī��ŷ�����ä���Τ�ͼ��
-��ŷ���Ȥ���ɽ������Ƥ��ޤ����Ȥˤʤ�ޤ���������ɤ��ˤϡ��㤨�С�
+天気データには、データの取得時刻が記録されています。また、データの取得元
+から得られた、天気の更新時刻が記録されていることもあります。これらの時刻
+は、世界標準時(UNIX時刻)に直されて記録されていて、日記に表示する時に現地
+時刻に直しています。このため、天気を記録した時のタイムゾーンと、天気を表
+示する時のタイムゾーンが異なってしまうと、例えば朝の天気だったものが夕方
+の天気として表示されてしまうことになります。これを防ぐには、例えば、
   @options['weather.tz'] = 'Japan'
-�Ȥ������ץ��������ꤷ�ơ��ǡ����˥����ॾ�����Ͽ����褦�ˤ��Ƥ���
-������tdiary.conf�ʤɤǡ�
+というオプションを設定して、データにタイムゾーンを記録するようにしてくだ
+さい。tdiary.confなどで、
   ENV['TZ'] = 'Japan'
-�ʤɤȤ��ƴĶ��ѿ�TZ�����ꤹ�뤳�ȤǤ�Ʊ�ͤθ��̤������ޤ����Ķ��ѿ���
-���ꤷ�����ϡ�tDiary���Τ�ư��˱ƶ�������ޤ��Τ�α�դ��Ƥ���������
+などとして環境変数TZを設定することでも同様の効果が得られます。環境変数を
+設定した場合は、tDiary全体の動作に影響がありますので留意してください。
 
-�ʤ���1.1.2.19����������ΥС�������weather.rb�Ǥϥ����ॾ����ξ���
-ŷ���ǡ����˵�Ͽ����Ƥ��ޤ��󡣤�����Ǥ�����ɬ�פʤ�С��ե�������Խ�
-���ơ������ॾ���������ɲä��Ƥ�����������Ͽ�ե�����ϡ��ǥե���ȤǤϡ�
+なお、1.1.2.19かそれ以前のバージョンのweather.rbではタイムゾーンの情報が
+天気データに記録されていません。お手数ですが、必要ならば、ファイルを編集
+して、タイムゾーン情報を追加してください。記録ファイルは、デフォルトでは、
   .../cache/weather/2003/200301.weather
-�ʤɤˤ���ޤ���������URL�μ��ο�����UNIX����Ǥ��Τǡ������³���ơ���
-����Ĥȡ�Japan�ʤɥ����ॾ����򼨤�ʸ��������Ϥ��Ƥ����������ǡ���
-�������˥��顼���ʤ���С����θ売�ĤΥ��֤�³���ơ�ŷ���Υǡ�������Ͽ��
-��Ƥ���Ϥ��Ǥ���
+などにあります。取得元URLの次の数字がUNIX時刻ですので、それに続けて、空
+白を一つと、Japanなどタイムゾーンを示す文字列を入力してください。データ
+取得時にエラーがなければ、その後２つのタブに続いて、天気のデータが記録さ
+れているはずです。
 
-=== ���ץ����
-==== ɬ�����꤬ɬ�פʹ���
+=== オプション
+==== 必ず指定が必要な項目
 : @options['weather.url']
-  ŷ���ǡ�����������WWW�ڡ�����URL��
+  天気データを得られるWWWページのURL。
     @options['weather.url'] = 'http://weather.noaa.gov/weather/current/RJTI.html'
-  �ʤɡ�����������Ѥ����¤���Ƥ����礬����ޤ��Τǡ����Τ褦��WWW
-  �ڡ�����������������ʤ��褦�����դ��Ƥ����������֥饦���������ꤷ��
-  ���Ϥ����餬ͥ�褵��ޤ���
+  など。情報の二次利用が制限されている場合がありますので、そのようなWWW
+  ページから情報を取得しないように注意してください。ブラウザから設定した
+  場合はそちらが優先されます。
 
-==== ���ꤷ�ʤ��Ƥ⤤������
+==== 指定しなくてもいい項目
 : @options['weather.show_mobile'] = false
-  true�ξ��ϡ�����ü������Υ��������ξ��ˡ�i_html_string����������
-  ��CHTML��ɽ�����ޤ���false�ξ��ϡ�����ü������Υ��������ξ��ˤ�ŷ
-  ����ɽ�����ޤ��󡣥֥饦���������ꤷ�����Ϥ����餬ͥ�褵��ޤ���
+  trueの場合は、携帯端末からのアクセスの場合に、i_html_stringで生成され
+  たCHTMLを表示します。falseの場合は、携帯端末からのアクセスの場合には天
+  気を表示しません。ブラウザから設定した場合はそちらが優先されます。
   
 : @options['weather.tz']
-  �ǡ���������������Υ����ॾ���󡣥��ޥ�ɥ饤�����㤨�С�
+  データを取得した場所のタイムゾーン。コマンドライン上で例えば、
     TZ=Japan date
-  ��¹Ԥ������������郎ɽ�������ʸ��������ꤷ�Ƥ���������Linux�Ǥϡ�
-  /usr/share/zoneinfo�ʲ��Υե�����̾����ꤹ��Ф����Ϥ��Ǥ����֥饦��
-  �������ꤷ�����Ϥ����餬ͥ�褵��ޤ������Υ��ץ���󤬻��ꤵ��Ƥ�
-  �ʤ���硢�Ķ��ѿ�TZ�����ꤵ��Ƥ���Ф����ͤ���Ѥ��ޤ��������Ǥʤ�
-  ��Х����ॾ����ϵ�Ͽ���ޤ���
+  を実行して正しい時刻が表示される文字列を設定してください。Linuxでは、
+  /usr/share/zoneinfo以下のファイル名を指定すればいいはずです。ブラウザ
+  から設定した場合はそちらが優先されます。このオプションが指定されてい
+  ない場合、環境変数TZが設定されていればその値を使用します。そうでなけ
+  ればタイムゾーンは記録しません。
    
-  ŷ���ǡ����˥����ॾ���󤬵�Ͽ����Ƥ��ʤ����ϡ��⤷���������Υ�����
-  �������ѹ����줿���˰㤦�����ɽ�����뤳�Ȥˤʤ�ޤ���
+  天気データにタイムゾーンが記録されていない場合は、もし将来日記のタイム
+  ゾーンが変更された場合に違う時刻を表示することになります。
   
-  ���դ�Ƚ��ʤɡ�ŷ���ǡ����ε�Ͽ�ʳ��λ���δ����ˤϡ��������ΤΥ�����
-  �������Ѥ����ޤ���
+  日付の判定など、天気データの記録以外の時刻の管理には、日記全体のタイム
+  ゾーンが用いられます。
 
 : @options['weather.oldest'] = 21600
-  ����줿�ǡ����������Υ��ץ����(��)���Ť����ˤϡ�ŷ���μ������顼
-  �ˤʤꡢ���������ι����ǺƤӥǡ�����������褦�Ȥ��ޤ����ǥե���Ȥ�6
-  ����(21600��)�Ǥ������Υ��ץ����nil�����ꤵ��Ƥ�����ˤϡ��ɤ��
-  �˸Ť��ǡ����Ǥ��������ޤ���
+  得られたデータが、このオプション(秒)より古い場合には、天気の取得エラー
+  になり、次の日記の更新で再びデータを取得しようとします。デフォルトは6
+  時間(21600秒)です。このオプションがnilに設定されている場合には、どんな
+  に古いデータでも受け入れます。
 
 : @options['weather.show_error']
-  �ǡ����������˥��顼�����ä����ˤ����������ɽ�����������ˤ�true��
-  ���ޤ����ǥե���ȤǤ�ɽ�����ޤ���
+  データ取得時にエラーがあった場合にそれを日記に表示したい場合にはtrueに
+  します。デフォルトでは表示しません。
 
 : @options['weather.dir']
-  �ǡ�������¸��ꡣ�ǥե���Ȥϰʲ����̤ꡣ
+  データの保存場所。デフォルトは以下の通り。
     "#{@cache_path}/weather/"
-  ���β��ˡ�ǯ/ǯ��.weather �Ȥ����ե����뤬����ޤ��������
-  @data_path��Ʊ���ˤ���ȡ������Υǡ�����Ʊ���ǥ��쥯�ȥ��ŷ���Υǡ���
-  ����¸�Ǥ��뤫�⤷��ޤ���
+  この下に、年/年月.weather というファイルが作られます。これを、
+  @data_pathと同じにすると、日記のデータと同じディレクトリに天気のデータ
+  を保存できるかもしれません。
 
 : @options['weather.items']
-  WWW�ڡ����������������ܡ��ǥե���Ȥϡ���������������������
-  parse_html�����������̾�򥭡�����Ͽ�������̾���ͤȤ����ϥå���Ǥ���
-  www.nws.noaa.gov�Υե����ޥåȤ˹�碌�ơ�¿����ñ�̤���ư�ˤ��Ѥ����
-  ��褦�ˤ��Ƥ���ޤ���������ѹ�������ˤϡ�parse_html�᥽�åɤ���
-  ������ɬ�פ����뤫�⤷��ޤ���
+  WWWページから取得する項目。デフォルトは、ソースをご覧ください。
+  parse_htmlで得られる項目名をキー、記録する項目名を値としたハッシュです。
+  www.nws.noaa.govのフォーマットに合わせて、多少の単位の変動には耐えられ
+  るようにしてあります。これを変更する場合には、parse_htmlメソッドも編
+  集する必要があるかもしれません。
 
 : @options['weather.header']
-  HTTP�ꥯ�����ȥإå����ɲä�����ܤΥϥå���
+  HTTPリクエストヘッダに追加する項目のハッシュ
     @options['weather.header'] = {'Accept-language' => 'ja'}
-  �ʤɡ�((-Accept-language�ˤ�äƼ��������������٤륵���Ȥ⤢��ޤ���-))
-  �ǥե���ȤǤ��ɲäΥإå����������ޤ���
+  など。((-Accept-languageによって取得する言語を選べるサイトもあります。-))
+  デフォルトでは追加のヘッダは送信しません。
 
-== ŷ���������ˤĤ���
-NWS����Υǡ����ϱѸ�Ǥ��Τǡ�Ŭ�������ܸ��ľ���Ƥ�����Ϥ���褦�ˤ�
-�Ƥ���ޤ��������ϡ�WeatherTranslator�⥸�塼��ˤ�äƤ��ơ��Ѵ�ɽ�ϡ�
-Weather���饹�ˡ�Words_ja�Ȥ�����������Ȥ���Ϳ���Ƥ���ޤ���
+== 天候の翻訳について
+NWSからのデータは英語ですので、適当に日本語に直してから出力するようにし
+てあります。翻訳は、WeatherTranslatorモジュールによっていて、変換表は、
+Weatherクラスに、Words_jaという配列定数として与えてあります。
 
-���äϤޤ��ޤ���ʬ�ǤϤʤ��Ȼפ��ޤ����Τ�ʤ�ñ��ϱѸ�Τޤ�ɽ�������
-���Τǡ�Words_ja��Ŭ���ɲä��Ƥ���������
+語彙はまだまだ充分ではないと思います。知らない単語は英語のまま表示されま
+すので、Words_jaに適宜追加してください。
 ((<URL:http://tdiary-users.sourceforge.jp/cgi-bin/wiki.cgi?weather%2Erb>))
-�˽񤤤Ƥ����ȡ����Τ������۸����ɲä���뤫�⤷��ޤ���
+に書いておくと、そのうち配布元で追加されるかもしれません。
 
-== �٤�������
-ŷ���ǡ����������乥�ߤ˹��ơ��ʲ��Υ᥽�åɤ��ѹ����뤳�Ȥǡ����� 
-������꤬�Ǥ��ޤ���
+== 細かい設定
+天気データ取得元や好みに合わて、以下のメソッドを変更することで、より柔 
+軟な設定ができます。
 
-=== ɽ���˴ؤ�����
+=== 表示に関するもの
 : Weather.html_string
-  @data[item]�򻲾Ȥ��ơ�ŷ����ɽ������HTML���Ҥ��äƤ���������
+  @data[item]を参照して、天気を表示するHTML断片を作ってください。
 
 : Weather.error_html_string
-  �ǡ����������顼�����ä����ˡ�@error�򻲾Ȥ��ƥ��顼��ɽ������HTML��
-  �Ҥ��äƤ���������
+  データ取得エラーがあった場合に、@errorを参照してエラーを表示するHTML断
+  片を作ってください。
 
-����ü������α����κݤˤϡ�Weather.i_html_string���Ȥ��ޤ������顼��
-ɽ���ϤǤ��ޤ���
+携帯端末からの閲覧の際には、Weather.i_html_stringが使われます。エラーの
+表示はできません。
 
-=== ŷ���ǡ����μ����˴ؤ�����
+=== 天気データの取得に関するもの
 : Weather.parse_html( html, items )
-  ((|html|))ʸ�������Ϥ��ơ�((|items|))�ϥå���˽��ä�@data[item]����
-  �����Ƥ���������((|items|))�ˤ�@optins['weather.items']�ޤ���
-  Weather_default_items����������ޤ����֤��ͤ����Ѥ���ޤ��󡣥ơ��֥� 
-  ���Ѥ���ŷ�����󸻤ʤ�С����Υ᥽�åɤ򤢤ޤ��¤���ʤ��ǻȤ��뤫�� 
-  ����ޤ���
+  ((|html|))文字列を解析して、((|items|))ハッシュに従って@data[item]を定
+  義してください。((|items|))には@optins['weather.items']または
+  Weather_default_itemsが代入されます。返り値は利用されません。テーブル 
+  を用いた天気情報源ならば、このメソッドをあまり改造しないで使えるかも 
+  しれません。
 
-== �ޤ����٤�����
-* ŷ���˱��������������ɽ�� -�ɤ����������
+== まだやるべきこと
+* 天気に応じたアイコンの表示 -どうやろうか？
 
-== �ռ�
-��������ŷ���ץ饰����Υ����ǥ������󶡤��Ƥ������ä�hsbt���󡢼����Υ�
-��Ȥ��󶡤��Ƥ������ä�zoe����˴��դ��ޤ����ޤ���NOAA�ξ�����󶡤���
-�������ä�kotak����˴��դ��ޤ���
+== 謝辞
+その日の天気プラグインのアイディアを提供してくださったhsbtさん、実装のヒ
+ントを提供してくださったzoeさんに感謝します。また、NOAAの情報を提供して
+くださったkotakさんに感謝します。
 
 The author appreciates National Weather Service
 ((<URL:http://weather.noaa.gov/>)) making such valuable data available
@@ -206,7 +206,7 @@ of GPL version 2 or later.
 =begin
 == Instance variables
 =end
-@weather_plugin_name = '��������ŷ��'
+@weather_plugin_name = 'その日の天気'
 
 =begin
 == Classes and methods
@@ -223,43 +223,43 @@ require 'erb'
 class Weather
 	Words_ja = [
 		[%r[\A(.*)/(.*)], '"#{S.new( $1 ).translate( table )}/#{S.new( $2 ).translate( table )}"'],
-		[%r[\s*\b(greater|more) than (-?[\d.]+\s*\S*)\s*]i, '"#{S.new( $2 ).translate( table )}�ʾ�"'],
-		[%r[^(.*?) with (.*)$]i, '"#{S.new( $2 ).translate( table )}�����#{S.new( $1 ).translate( table )}"'],
-		[%r[^(.*?) during the past hours?$]i, '"ľ���ޤ�#{S.new( $1 ).translate( table )}"'],
-		#[%r[\s*\b([\w\s]+?) in the vicinity]i, '"���դ�#{S.new( $1).translate( table )}"'],
+		[%r[\s*\b(greater|more) than (-?[\d.]+\s*\S*)\s*]i, '"#{S.new( $2 ).translate( table )}以上"'],
+		[%r[^(.*?) with (.*)$]i, '"#{S.new( $2 ).translate( table )}ありの#{S.new( $1 ).translate( table )}"'],
+		[%r[^(.*?) during the past hours?$]i, '"直前まで#{S.new( $1 ).translate( table )}"'],
+		#[%r[\s*\b([\w\s]+?) in the vicinity]i, '"近辺で#{S.new( $1).translate( table )}"'],
 		[%r[\s*\bin the vicinity\b\s*]i, '""'],
-		# ... in the vicinity��̵�뤵���褦�ˤʤäƤ��ޤ������줬�ߤ������ϡ�
-		# ��Υ����ȥ����Ȥ���Ƥ���ԤΥ����Ȥ򳰤��Ƥ���������
+		# ... in the vicinityは無視されるようになっています。訳語が欲しい方は、
+		# 上のコメントアウトされている行のコメントを外してください。
 		[%r[\s*\bpatches of\b\s*]i, '""'],
-		[%r[\s*\bdirection variable\b\s*]i, '"����"'],
-		[%r[\s*(-?[\d.]+)\s*\(?F\)?], '"�ڻ�#{$1}��"'],
-		[%r[\s*\bmile(\(?s\)?)?\s*]i, '"�ޥ���"'],
-		[%r[\s*\b(mostly |partly )clear\b\s*]i, '"��"'],
-		[%r[\s*\bclear\b\s*]i, '"����"'],
-		[%r[\s*\b(mostly |partly )?cloudy\b\s*]i, '"��"'],
-		[%r[\s*\bovercast\b\s*]i, '"��"'],
-		[%r[\s*\blight snow showers?\b\s*]i, '"�ˤ狼��"'],
-		[%r[\s*\blight snow\b\s*]i, '"����"'],
-		[%r[\s*\blight drizzle\b\s*]i, '"����"'],
-		[%r[\s*\blight rain showers?\b\s*]i, '"�夤�ˤ狼��"'],
-		[%r[\s*\bheavy rain showers?\b\s*]i, '"�����ˤ狼��"'],
-		[%r[\s*\bheavy rain\b\s*]i, '"�뱫"'],
-		[%r[\s*\b(rain )?showers?\b\s*]i, '"�ˤ狼��"'],
-		[%r[\s*\bdrizzle\b\s*]i, '"���̤���"'],
-		[%r[\s*\blight rain\b\s*]i, '"̸��"'],
-		[%r[\s*\brain\b\s*]i, '"��"'],
-		[%r[\s*\bmist\b\s*]i, '"��"'],
-		[%r[\s*\bhaze\b\s*]i, '"��"'],
-		[%r[\s*\b(partial )?(freezing )?fog\b\s*]i, '"̸"'],
-		[%r[\s*\bsnow\b\s*]i, '"��"'],
-		[%r[\s*\bthunder( storm)?\b\s*]i, '"��"'],
-		[%r[\s*\blightning\b\s*]i, '"���"'],
-		[%r[\s*\bsand\b\s*]i, '"����"'],
-		[%r[\s*\bcumulonimbus clouds\b\s*]i, '"�����"'],
-		[%r[\s*\bcumulus clouds\b\s*]i, '"�ѱ�"'],
+		[%r[\s*\bdirection variable\b\s*]i, '"不定"'],
+		[%r[\s*(-?[\d.]+)\s*\(?F\)?], '"華氏#{$1}度"'],
+		[%r[\s*\bmile(\(?s\)?)?\s*]i, '"マイル"'],
+		[%r[\s*\b(mostly |partly )clear\b\s*]i, '"晴"'],
+		[%r[\s*\bclear\b\s*]i, '"快晴"'],
+		[%r[\s*\b(mostly |partly )?cloudy\b\s*]i, '"曇"'],
+		[%r[\s*\bovercast\b\s*]i, '"曇"'],
+		[%r[\s*\blight snow showers?\b\s*]i, '"にわか雪"'],
+		[%r[\s*\blight snow\b\s*]i, '"小雪"'],
+		[%r[\s*\blight drizzle\b\s*]i, '"小雨"'],
+		[%r[\s*\blight rain showers?\b\s*]i, '"弱いにわか雨"'],
+		[%r[\s*\bheavy rain showers?\b\s*]i, '"強いにわか雨"'],
+		[%r[\s*\bheavy rain\b\s*]i, '"豪雨"'],
+		[%r[\s*\b(rain )?showers?\b\s*]i, '"にわか雨"'],
+		[%r[\s*\bdrizzle\b\s*]i, '"こぬか雨"'],
+		[%r[\s*\blight rain\b\s*]i, '"霧雨"'],
+		[%r[\s*\brain\b\s*]i, '"雨"'],
+		[%r[\s*\bmist\b\s*]i, '"靄"'],
+		[%r[\s*\bhaze\b\s*]i, '"霞"'],
+		[%r[\s*\b(partial )?(freezing )?fog\b\s*]i, '"霧"'],
+		[%r[\s*\bsnow\b\s*]i, '"雪"'],
+		[%r[\s*\bthunder( storm)?\b\s*]i, '"雷"'],
+		[%r[\s*\blightning\b\s*]i, '"稲光"'],
+		[%r[\s*\bsand\b\s*]i, '"黄砂"'],
+		[%r[\s*\bcumulonimbus clouds\b\s*]i, '"積乱雲"'],
+		[%r[\s*\bcumulus clouds\b\s*]i, '"積雲"'],
 		[%r[\s*\btowering\b\s*]i, '""'],
 		[%r[\s*\bobserved\b\s*]i, '""'],
-		[%r[\s*\bC\b\s*], '"��"'],
+		[%r[\s*\bC\b\s*], '"℃"'],
 	].freeze
 end
 
@@ -278,7 +278,7 @@ class Weather
 	include ERB::Util
 
 	def error_html_string
-		%Q|<span class="weather">��ŷ�����顼:<a href="#{h(@url)}">#{h( @error )}</a></span>|
+		%Q|<span class="weather">お天気エラー:<a href="#{h(@url)}">#{h( @error )}</a></span>|
 	end
 
 	# edit this method to define how you show the weather
@@ -295,7 +295,7 @@ class Weather
 		else
 			r << Time::at( @time.to_i ).strftime( '%H:%M' ).sub( /^0/, '' )
 		end
-		r << '����'
+		r << '現在'
 		if @tz then
 			ENV['TZ'] = tzbak
 		end
@@ -310,7 +310,7 @@ class Weather
 
 		# temperature
 		if @data['temperature(C)'] and t = @data['temperature(C)'].scan(/-?[\d.]+/)[-1] then
-			r << %Q| <span class="temperature">#{sprintf( '%.0f', t )}��</span>|
+			r << %Q| <span class="temperature">#{sprintf( '%.0f', t )}℃</span>|
 		end
 
 		r << "</a></span>"
@@ -337,52 +337,52 @@ end
 # www configuration interface
 def weather_configure_html( conf )
 	<<-HTML
-	<h3 class="subtitle">��������ŷ���ץ饰����</h3>
-	<p>��������ŷ���򡢤�������������ǽ�˹���������˼���������¸����
-		���줾������������ξ�����ɽ�����ޤ���</p>
-	<h4>ŷ���ǡ���</h4>
-	<p>��������ŷ�����㤨��NOAA National Weather Service�����Ѥ�����ˤϡ�
+	<h3 class="subtitle">その日の天気プラグイン</h3>
+	<p>その日の天気を、その日の日記を最初に更新する時に取得して保存し、
+		それぞれの日の日記の上部に表示します。</p>
+	<h4>天気データ</h4>
+	<p>その日の天気を、例えばNOAA National Weather Serviceを利用する場合には、
 		<a href="http://weather.noaa.gov/">NOAA National Weather Service</a>
-		���顢Select a country...�ǹ�̾�������Go!�ܥ���򲡤���
-		���˴�¬����������Ǥ���������
-		�����ơ����λ�ɽ�����줿�ڡ�����URL�򡢰ʲ��˵������Ƥ���������</p>
+		から、Select a country...で国名を選んでGo!ボタンを押し、
+		次に観測地点を選んでください。
+		そして、その時表示されたページのURLを、以下に記入してください。</p>
 	<p><input name="weather.url" value="#{conf['weather.url']}" size="60"></p>
-	<p>���������Υ����ॾ�����Ѳ������ǽ�����������ϡ�
-		���Υ����ॾ�����Ͽ���Ƥ������Ȥ򤪴��ᤷ�ޤ���
-		����ˤ�äơ����������ۤ�����⡢
-		ŷ���ǡ����������Υ����ॾ�����ŷ����ɽ����³���뤳�Ȥ��Ǥ��ޤ���</p>
-	<p>�����ॾ�����Ͽ����ˤϡ��㤨������ɸ����ξ��ˤϡ�
-		tdiary.rb��Ʊ���ǥ��쥯�ȥ�ˤ���tdiary.conf�ˡ�
-		ENV['TZ'] = 'Japan'�ʤɤȽ�­������
-		�ʲ��ˡ�Japan�ȵ������Ƥ���������</p>
+	<p>将来日記のタイムゾーンが変化する可能性がある方は、
+		今のタイムゾーンを記録しておくことをお勧めします。
+		これによって、日記が引越した後も、
+		天気データ取得時のタイムゾーンで天気を表示し続けることができます。</p>
+	<p>タイムゾーンを記録するには、例えば日本標準時の場合には、
+		tdiary.rbと同じディレクトリにあるtdiary.confに、
+		ENV['TZ'] = 'Japan'などと書き足すか、
+		以下に、Japanと記入してください。</p>
 	<p><input name="weather.tz" value="#{conf['weather.tz']}"></p>
-	<h4>WWW�֥饦���ؤ�ɽ��</h4>
-	<p>������������Ǥ���������</p>
+	<h4>WWWブラウザへの表示</h4>
+	<p>下記から選んでください。</p>
 	<p><select name="weather.in_title">
 		<option value="false"#{' selected'unless conf['weather.in_title']}>
-		��ʸ�ξ��ɽ������
+		本文の上に表示する
 		<option value="true"#{' selected'if conf['weather.in_title']}>
-		�����ȥ�β���ɽ������
+		タイトルの横に表示する
 	</select></p>
-	<h4>�������äؤ�ɽ��</h4>
-	<p>������������Ǥ���������</p>
+	<h4>携帯電話への表示</h4>
+	<p>下記から選んでください。</p>
 	<p><select name="weather.show_mobile">
 		<option value="true"#{' selected'if conf['weather.show_mobile']}>
-		�������äˤ⺣����ŷ����ɽ������
+		携帯電話にも今日の天気を表示する
 		<option value="false"#{' selected'unless conf['weather.show_mobile']}>
-		�������äˤϺ�����ŷ����ɽ�����ʤ�
+		携帯電話には今日の天気を表示しない
 	</select></p>
-	<h4>�������󥸥�ʤɤΥ��ܥåȤؤ�ɽ��</h4>
-	<p>������������Ǥ���������</p>
+	<h4>検索エンジンなどのロボットへの表示</h4>
+	<p>下記から選んでください。</p>
 	<p><select name="weather.show_robot">
 		<option value="true"#{' selected'if conf['weather.show_robot']}>
-		�������󥸥�ʤɤΥ��ܥåȤˤ⺣����ŷ�����Τ餻��
+		検索エンジンなどのロボットにも今日の天気を知らせる
 		<option value="false"#{' selected'unless conf['weather.show_robot']}>
-		�������󥸥�ʤɤΥ��ܥåȤˤϺ�����ŷ�����Τ餻�ʤ�
+		検索エンジンなどのロボットには今日の天気を知らせない
 	</select></p>
-	<h4>����¾������</h4>
-	<p>����¾�ˤ⤤���Ĥ�tdiary.conf��������Ǥ�����ܤ�����ޤ���
-		�ܤ����ϡ��ץ饰����Υե�����(weather.rb)��������������</p>
+	<h4>その他の設定</h4>
+	<p>この他にもいくつかtdiary.confから設定できる項目があります。
+		詳しくは、プラグインのファイル(weather.rb)をご覧ください。</p>
 	HTML
 end
 

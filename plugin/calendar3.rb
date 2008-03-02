@@ -1,17 +1,17 @@
-# calendar3.rb $Revision: 1.41 $
+# calendar3.rb $Revision: 1.42 $
 #
-# calendar3: ����ɽ�����Ƥ����Υ���������ɽ�����ޤ���
-#  �ѥ�᥿: �ʤ�
+# calendar3: 現在表示している月のカレンダーを表示します．
+#  パラメタ: なし
 #
-# tdiary.conf�ǻ��ꤹ�륪�ץ����:
+# tdiary.confで指定するオプション:
 #   @options['calendar3.show_todo']
-#     �ѥ饰��դΥ��֥����ȥ�Ȥ����ǻ��ꤷ��ʸ���󤬰��פ�
-#     ���Ĥ���������������ɽ���ξ�硤���Υѥ饰��դ����Ƥ�
-#     ͽ��Ȥ���popup���롥
+#     パラグラフのサブサイトルとここで指定した文字列が一致し
+#     かつその日の日記が非表示の場合，そのパラグラフの内容を
+#     予定としてpopupする．
 #
 #   @options['calendar3.show_popup']
-#     JavaScript�ˤ��popup��ɽ�����뤫�ɤ�����
-#     ��ά�����ͤ�true�ʤΤǡ�ɽ���������ʤ����Τ�false�����ꤹ�롥
+#     JavaScriptによるpopupを表示するかどうか．
+#     省略時の値はtrueなので，表示したくない場合のみfalseを設定する．
 #
 # Copyright (c) 2001,2002 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -159,7 +159,7 @@ def calendar3
 				end
 			end
 			if todos.size != 0
-				result << %Q|<span class="calendar-todo"><a class="#{Calendar3::STYLE[kind]}" title="#{day}����ͽ��:&#13;&#10;#{todos.join "&#13;&#10;"}">#{day}</a></span>\n|
+				result << %Q|<span class="calendar-todo"><a class="#{Calendar3::STYLE[kind]}" title="#{day}日の予定:&#13;&#10;#{todos.join "&#13;&#10;"}">#{day}</a></span>\n|
 			else
 				result << %Q|<span class="calendar-normal"><a class="#{Calendar3::STYLE[kind]}">#{day}</a></span>\n|
 			end

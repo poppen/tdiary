@@ -1,4 +1,4 @@
-# tb-send.rb $Revision: 1.25 $
+# tb-send.rb $Revision: 1.26 $
 #
 # Copyright (c) 2003 Junichiro Kita <kita@kitaj.no-ip.com>
 # You can distribute this file under the GPL.
@@ -135,6 +135,10 @@ def tb_send_trackback
 			raise TDiaryTrackBackError.new( "unknown URL: #{url}" ) if urls.length == 1
 		end
 	end
+end
+
+def tb_send_utf8( str )
+	@conf.to_native( str )
 end
 
 # vim: ts=3

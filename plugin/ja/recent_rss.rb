@@ -5,22 +5,22 @@
 #
 
 def label_recent_rss_title
-	'³°ÉôRSS¤ÎÉ½¼¨'
+	'å¤–éƒ¨RSSã®è¡¨ç¤º'
 end
 
 def label_recent_rss_use_image_link_title
-	'²èÁü¤Î°·¤¤'
+	'ç”»åƒã®æ‰±ã„'
 end
 
 def label_recent_rss_use_image_link_description
-	'¤â¤·RSS¤ËWeb¥µ¥¤¥È¤Î²èÁü¾ğÊó¤¬´Ş¤Ş¤ì¤Æ¤¤¤¿¤é¡¤' +
-		'Web¥µ¥¤¥È¤Ø¤Î¥ê¥ó¥¯¤Ë¥Æ¥­¥¹¥È¤Ç¤Ï¤Ê¤¯¤½¤Î²èÁü¤òÍÑ¤¤¤Ş¤¹¡¥'
+	'ã‚‚ã—RSSã«Webã‚µã‚¤ãƒˆã®ç”»åƒæƒ…å ±ãŒå«ã¾ã‚Œã¦ã„ãŸã‚‰ï¼Œ' +
+		'Webã‚µã‚¤ãƒˆã¸ã®ãƒªãƒ³ã‚¯ã«ãƒ†ã‚­ã‚¹ãƒˆã§ã¯ãªããã®ç”»åƒã‚’ç”¨ã„ã¾ã™ï¼'
 end
 
 def label_recent_rss_not_use_image_link
-	'¥ê¥ó¥¯¤Ë²èÁü¤òÍÑ¤¤¤Ê¤¤'
+	'ãƒªãƒ³ã‚¯ã«ç”»åƒã‚’ç”¨ã„ãªã„'
 end
 
 def label_recent_rss_use_image_link
-	'¥ê¥ó¥¯¤Ë²èÁü¤òÍÑ¤¤¤ë'
+	'ãƒªãƒ³ã‚¯ã«ç”»åƒã‚’ç”¨ã„ã‚‹'
 end

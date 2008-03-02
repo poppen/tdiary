@@ -1,12 +1,12 @@
-# my-ex.rb $Revision: 1.19 $
+# my-ex.rb $Revision: 1.20 $
 #
-# my(��ĥ��): my�ץ饰������ĥ����title°���˻���������Ƥ��������ޤ���
-#             �����褬���������ξ���(�����)���֥����ȥ��
-#             �ĥå��ߤξ��ϥĥå�����ͤ�̾�������Ƥΰ�����Ȥ��ޤ���
-# �ѥ�᥿:
-#   a:   ��ʬ��������Υ�������('YYYYMMDD#pNN' �ޤ��� 'YYYYMMDD#cNN')
-#        URL�򤽤Τޤ޽񤯤��Ȥ�Ǥ��ޤ���
-#   str: ��󥯤ˤ���ʸ����
+# my(拡張版): myプラグインを拡張し、title属性に参照先の内容を挿入します。
+#             参照先がセクションの場合は(あれば)サブタイトルを、
+#             ツッコミの場合はツッコんだ人の名前と内容の一部を使います。
+# パラメタ:
+#   a:   自分の日記内のリンク先情報('YYYYMMDD#pNN' または 'YYYYMMDD#cNN')
+#        URLをそのまま書くこともできます。
+#   str: リンクにする文字列
 #
 # Copyright (c) 2002 TADA Tadashi <sho@spc.gr.jp>
 # Distributed under the GPL

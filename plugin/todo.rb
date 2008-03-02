@@ -1,4 +1,4 @@
-# todo.rb $Revision: 1.6 $
+# todo.rb $Revision: 1.7 $
 #
 # todo: show ToDo lists.
 #
@@ -84,7 +84,7 @@ def todo_pretty_print(todos)
 		s << %Q|<del>| if x.deleted?
 		s << %Q|<span class="todo-priority">#{if x.prio != '' then '%02d' % x.prio else '' end}</span> #{apply_plugin x.todo}|
 		if x.limit
-			s << "(¡Á#{x.limit}"
+			s << "(ã€œ#{x.limit}"
 			y, m, d = ParseDate.parsedate(x.limit)
 			y = today.year unless y
 			if y and m and d

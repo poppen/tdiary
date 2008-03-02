@@ -1,13 +1,13 @@
-# bq.rb $Revision: 1.5 $
+# bq.rb $Revision: 1.6 $
 #
-# bq: blockquote��Ȥä����Ѥ���������
-#   �ѥ�᥿:
-#     src:   ���Ѥ���ƥ�����
-#     title: ���Ѹ��Υ����ȥ�
-#     url:   ���Ѹ���URL
+# bq: blockquoteを使った引用を生成する
+#   パラメタ:
+#     src:   引用するテキスト
+#     title: 引用元のタイトル
+#     url:   引用元のURL
 #
-#   ���Ѹ������ȥ�򤦤ޤ�ɽ������ˤϡ��������륷���Ȥ�p.source��
-#   �������ɬ�פ�����ޤ��������������:
+#   引用元タイトルをうまく表示するには、スタイルシートでp.sourceを
+#   定義する必要があります。スタイルの例:
 #
 #       p.source {
 #          margin-top: 0.3em;

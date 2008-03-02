@@ -1,13 +1,13 @@
-# dropdown_calendar.rb $Revision: 1.5 $
+# dropdown_calendar.rb $Revision: 1.6 $
 #
-# calendar: ¥«¥ì¥ó¥À¡¼¤ò¥É¥í¥Ã¥×¥À¥¦¥ó¥ê¥¹¥È¤ËÃÖ¤­´¹¤¨¤ë¥×¥é¥°¥¤¥ó
-#   ¥Ñ¥é¥á¥¿: ¤Ê¤·
+# calendar: ã‚«ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚’ãƒ‰ãƒ­ãƒƒãƒ—ãƒ€ã‚¦ãƒ³ãƒªã‚¹ãƒˆã«ç½®ãæ›ãˆã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³
+#   ãƒ‘ãƒ©ãƒ¡ã‚¿: ãªã—
 #
 # 	Copyright (C) 2003 TADA Tadashi
 #	You can redistribute it and/or modify it under GPL2.
 #
 
-@dropdown_calendar_label = '²áµî¤ÎÆüµ­' unless @resource_loaded
+@dropdown_calendar_label = 'éå»ã®æ—¥è¨˜' unless @resource_loaded
 
 def calendar
 	result = %Q[<form method="get" action="#{h @index}">\n]

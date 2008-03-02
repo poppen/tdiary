@@ -1,15 +1,15 @@
 # Japanese resource of pb-show.rb
 #
 
-def pingback_today; 'ËÜÆü¤ÎPingbacks'; end
-def pingback_total( total ); "(Á´#{total}·ï)"; end
+def pingback_today; 'æœ¬æ—¥ã®Pingbacks'; end
+def pingback_total( total ); "(å…¨#{total}ä»¶)"; end
 def pb_show_conf_html
   <<-"HTML"
-  <h3 class="subtitle">Pingback ¥¢¥ó¥«¡¼</h3>
-  #{"<p>Â¾¤Îweblog¤«¤é¤ÎPingback¤ÎÀèÆ¬¤ËÁŞÆş¤µ¤ì¤ë¡¢¥ê¥ó¥¯ÍÑ¤Î¥¢¥ó¥«¡¼Ê¸»úÎó¤ò»ØÄê¤·¤Ş¤¹¡£¤Ê¤ª¡Ö&lt;span class=\"tanchor\"&gt;_&lt;/span&gt;¡×¤ò»ØÄê¤¹¤ë¤È¡¢¥Æ¡¼¥Ş¤Ë¤è¤Ã¤Æ¤Ï¼«Æ°Åª¤Ë²èÁü¥¢¥ó¥«¡¼¤¬¤Ä¤¯¤è¤¦¤Ë¤Ê¤ê¤Ş¤¹¡£</p>" unless @conf.mobile_agent?}
+  <h3 class="subtitle">Pingback ã‚¢ãƒ³ã‚«ãƒ¼</h3>
+  #{"<p>ä»–ã®weblogã‹ã‚‰ã®Pingbackã®å…ˆé ­ã«æŒ¿å…¥ã•ã‚Œã‚‹ã€ãƒªãƒ³ã‚¯ç”¨ã®ã‚¢ãƒ³ã‚«ãƒ¼æ–‡å­—åˆ—ã‚’æŒ‡å®šã—ã¾ã™ã€‚ãªãŠã€Œ&lt;span class=\"tanchor\"&gt;_&lt;/span&gt;ã€ã‚’æŒ‡å®šã™ã‚‹ã¨ã€ãƒ†ãƒ¼ãƒã«ã‚ˆã£ã¦ã¯è‡ªå‹•çš„ã«ç”»åƒã‚¢ãƒ³ã‚«ãƒ¼ãŒã¤ãã‚ˆã†ã«ãªã‚Šã¾ã™ã€‚</p>" unless @conf.mobile_agent?}
   <p><input name="pingback_anchor" value="#{ h(@conf['pingback_anchor'] || @conf.comment_anchor ) }" size="40"></p>
-  <h3 class="subtitle">Pingback ¥ê¥¹¥ÈÉ½¼¨¿ô</h3>
-  #{"<p>ºÇ¿·¤â¤·¤¯¤Ï·îÊÌÉ½¼¨»ş¤ËÉ½¼¨¤¹¤ë¡¢Pingback¤ÎºÇÂç·ï¿ô¤ò»ØÄê¤·¤Ş¤¹¡£¤Ê¤ª¡¢ÆüÊÌÉ½¼¨»ş¤Ë¤Ï¤³¤³¤Î»ØÄê¤Ë¤«¤«¤ï¤é¤ººÇÂç100·ï¤ÎPingback¤¬É½¼¨¤µ¤ì¤Ş¤¹¡£</p>" unless @conf.mobile_agent?}
-  <p>ºÇÂç<input name="pingback_limit" value="#{ h(@conf['pingback_limit'] || @conf.comment_limit ) }" size="3">·ï</p>
+  <h3 class="subtitle">Pingback ãƒªã‚¹ãƒˆè¡¨ç¤ºæ•°</h3>
+  #{"<p>æœ€æ–°ã‚‚ã—ãã¯æœˆåˆ¥è¡¨ç¤ºæ™‚ã«è¡¨ç¤ºã™ã‚‹ã€Pingbackã®æœ€å¤§ä»¶æ•°ã‚’æŒ‡å®šã—ã¾ã™ã€‚ãªãŠã€æ—¥åˆ¥è¡¨ç¤ºæ™‚ã«ã¯ã“ã“ã®æŒ‡å®šã«ã‹ã‹ã‚ã‚‰ãšæœ€å¤§100ä»¶ã®PingbackãŒè¡¨ç¤ºã•ã‚Œã¾ã™ã€‚</p>" unless @conf.mobile_agent?}
+  <p>æœ€å¤§<input name="pingback_limit" value="#{ h(@conf['pingback_limit'] || @conf.comment_limit ) }" size="3">ä»¶</p>
   HTML
 end

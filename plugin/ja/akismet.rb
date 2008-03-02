@@ -1,15 +1,15 @@
 #
-# ja/akismet.rb: Japanese resource of Akismet spam filter setup plugin. $Revision: 1.1 $
+# ja/akismet.rb: Japanese resource of Akismet spam filter setup plugin. $Revision: 1.2 $
 #
 
-@akismet_label_conf = 'Akismet spam¥Õ¥£¥ë¥¿'
-@akismet_desc = 'Akismet spam¥Õ¥£¥ë¥¿¤Ï¡¢<a href="http://akismet.com/">Akismet</a>¤¬Äó¶¡¤¹¤ëspamÈ½Äê¥µ¡¼¥Ó¥¹¤ò»È¤Ã¤Æ¡¢¥Ä¥Ã¥³¥ß¤äTrackBack¤Îspam¤òÇÓ½ü¤¹¤ë¥Õ¥£¥ë¥¿¤Ç¤¹¡£¤³¤Î¥µ¡¼¥Ó¥¹¤òÍøÍÑ¤¹¤ë¤Ë¤Ï¡¢Akismet¤«¤éAPI Key¤ò¼èÆÀ¤·¤Æ¡¢°Ê²¼¤ËÀßÄê¤¹¤ëÉ¬Í×¤¬¤¢¤ê¤Ş¤¹¡£'
+@akismet_label_conf = 'Akismet spamãƒ•ã‚£ãƒ«ã‚¿'
+@akismet_desc = 'Akismet spamãƒ•ã‚£ãƒ«ã‚¿ã¯ã€<a href="http://akismet.com/">Akismet</a>ãŒæä¾›ã™ã‚‹spamåˆ¤å®šã‚µãƒ¼ãƒ“ã‚¹ã‚’ä½¿ã£ã¦ã€ãƒ„ãƒƒã‚³ãƒŸã‚„TrackBackã®spamã‚’æ’é™¤ã™ã‚‹ãƒ•ã‚£ãƒ«ã‚¿ã§ã™ã€‚ã“ã®ã‚µãƒ¼ãƒ“ã‚¹ã‚’åˆ©ç”¨ã™ã‚‹ã«ã¯ã€Akismetã‹ã‚‰API Keyã‚’å–å¾—ã—ã¦ã€ä»¥ä¸‹ã«è¨­å®šã™ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚'
 
-@akismet_label_enable = 'Akismet spam¥Õ¥£¥ë¥¿¤ÎÍøÍÑ'
-@akismet_label_enable2 = 'Akismet spam¥Õ¥£¥ë¥¿¤ò'
-@akismet_option_enable = 'ÍøÍÑ¤¹¤ë'
-@akismet_option_disable = 'ÍøÍÑ¤·¤Ê¤¤'
+@akismet_label_enable = 'Akismet spamãƒ•ã‚£ãƒ«ã‚¿ã®åˆ©ç”¨'
+@akismet_label_enable2 = 'Akismet spamãƒ•ã‚£ãƒ«ã‚¿ã‚’'
+@akismet_option_enable = 'åˆ©ç”¨ã™ã‚‹'
+@akismet_option_disable = 'åˆ©ç”¨ã—ãªã„'
 
 @akismet_label_key = 'Akismet API Key'
 @akismet_desc_key = 'Akismet API Key'
-@akismet_warn_key = 'API Key¤¬Àµ¤·¤¯¤¢¤ê¤Ş¤»¤ó¡£Akiemet¤Ë¤è¤Ã¤ÆµñÀä¤µ¤ì¤Ş¤·¤¿¡£'
+@akismet_warn_key = 'API KeyãŒæ­£ã—ãã‚ã‚Šã¾ã›ã‚“ã€‚Akiemetã«ã‚ˆã£ã¦æ‹’çµ¶ã•ã‚Œã¾ã—ãŸã€‚'

@@ -1,4 +1,4 @@
-# tb-show.rb $Revision: 1.26 $
+# tb-show.rb $Revision: 1.27 $
 #
 # functions:
 #   * show TrackBack ping URL in right of TSUKKOMI label.

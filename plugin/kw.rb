@@ -1,4 +1,4 @@
-# kw.rb $Revision: 1.16 $
+# kw.rb $Revision: 1.17 $
 #
 # kw: keyword link generator
 #   Parameters:
@@ -28,6 +28,8 @@
 # Copyright (C) 2003, TADA Tadashi <sho@spc.gr.jp>
 # You can distribute this under GPL.
 #
+
+require "nkf"
 
 def kw_parse( str )
 	kw_list = []
@@ -76,14 +78,14 @@ def kw( keyword, name = nil, title = nil )
 	begin
 		key = u( case @kw_dic[inter][1]
 			when 'euc-jp'
-				#NKF::nkf( '-m0 -e', key )
+				NKF::nkf( '-m0 -W -e', key )
 				key
 			when 'sjis'
-				NKF::nkf( '-m0 -s', key )
+				NKF::nkf( '-m0 -W -s', key )
 			when 'jis'
-				NKF::nkf( '-m0 -j', key )
+				NKF::nkf( '-m0 -W -j', key )
 			when 'utf-8'
-				NKF::nkf( '-m0 -w', key )
+				key
 			else # none
 				key
 		end )
@@ -99,20 +101,20 @@ end
 #
 unless @resource_loaded then
 	def kw_label
-		"¥­¡¼¥ï¡¼¥É"
+		"ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰"
 	end
 
 	def kw_desc
 		<<-HTML
-		<h3>¥ê¥ó¥¯¥ê¥¹¥È¤Î»ØÄê</h3>
-		<p>ÆÃÄê¤Î¥µ¥¤¥È¤Ø¤Î¥ê¥ó¥¯¤ò¡¢´ÊÃ±¤Êµ­½Ò¤ÇÀ¸À®¤¹¤ë¤¿¤á¤Î¥×¥é¥°¥¤¥ó(kw)¤Ç¤¹¡£
-		¡Ö¥­¡¼ URL ¥¨¥ó¥³¡¼¥É¥¹¥¿¥¤¥ë¡×¤È¶õÇò¤Ç¶èÀÚ¤Ã¤Æ»ØÄê¤·¤Ş¤¹¡£Îã¤¨¤Ğ¡¢</p>
+		<h3>ãƒªãƒ³ã‚¯ãƒªã‚¹ãƒˆã®æŒ‡å®š</h3>
+		<p>ç‰¹å®šã®ã‚µã‚¤ãƒˆã¸ã®ãƒªãƒ³ã‚¯ã‚’ã€ç°¡å˜ãªè¨˜è¿°ã§ç”Ÿæˆã™ã‚‹ãŸã‚ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³(kw)ã§ã™ã€‚
+		ã€Œã‚­ãƒ¼ URL ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰ã‚¹ã‚¿ã‚¤ãƒ«ã€ã¨ç©ºç™½ã§åŒºåˆ‡ã£ã¦æŒ‡å®šã—ã¾ã™ã€‚ä¾‹ãˆã°ã€</p>
 		<pre>google http://www.google.com/search?ie=euc-jp&amp;q=$1 euc-jp</pre>
-		<p>¤È»ØÄê¤¹¤ë¤È¡¢</p>
+		<p>ã¨æŒ‡å®šã™ã‚‹ã¨ã€</p>
 		<pre>&lt;%=kw('google:tdiary')%&gt;</pre>
-		<p>¤Î¤è¤¦¤ËÆüµ­¤Ë½ñ¤±¤Ğgoogle¤Çtdiary¤ò¸¡º÷¤¹¤ë¥ê¥ó¥¯¤Ë¤Ê¤ê¤Ş¤¹
-		(µ­½ÒÊıË¡¤Ï¥¹¥¿¥¤¥ë¤Ë¤è¤Ã¤ÆÊÑ¤ï¤ê¤Ş¤¹)¡£¤Ê¤ª¡¢¥­¡¼¤Ënil¤ò»ØÄê¤¹¤ë¤È¡¢
-		¡Ögoogle:¡×¤ÎÉôÊ¬¤ò½ñ¤«¤Ê¤¤¾ì¹ç¤Î»ØÄê¤¬¤Ç¤­¤Ş¤¹¡£</p>
+		<p>ã®ã‚ˆã†ã«æ—¥è¨˜ã«æ›¸ã‘ã°googleã§tdiaryã‚’æ¤œç´¢ã™ã‚‹ãƒªãƒ³ã‚¯ã«ãªã‚Šã¾ã™
+		(è¨˜è¿°æ–¹æ³•ã¯ã‚¹ã‚¿ã‚¤ãƒ«ã«ã‚ˆã£ã¦å¤‰ã‚ã‚Šã¾ã™)ã€‚ãªãŠã€ã‚­ãƒ¼ã«nilã‚’æŒ‡å®šã™ã‚‹ã¨ã€
+		ã€Œgoogle:ã€ã®éƒ¨åˆ†ã‚’æ›¸ã‹ãªã„å ´åˆã®æŒ‡å®šãŒã§ãã¾ã™ã€‚</p>
 		HTML
 	end
 end

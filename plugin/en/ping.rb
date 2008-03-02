@@ -1,5 +1,4 @@
 # ping.rb English resources
-
 if /conf/ =~ @mode then
 	@ping_label_conf = 'Update ping'
 	@ping_label_list = 'List of ping servers'

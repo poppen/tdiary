@@ -1,4 +1,4 @@
-# English resource of hide-mail-field plugin $Revision: 1.4 $
+# English resource of hide-mail-field plugin $Revision: 1.5 $
 
 @hide_mail_field_label_conf = 'Hide Mail Field'
 

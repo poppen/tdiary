@@ -1,14 +1,14 @@
-# makelirs.rb $Revision: 1.18 $
+# makelirs.rb $Revision: 1.19 $
 #
-# ���������LIRS�ե����ޥåȤΥե�������Ǥ��Ф�
+# 更新情報をLIRSフォーマットのファイルに吐き出す
 #
-#   plugin�ǥ��쥯�ȥ���֤�������ư��ޤ���
+#   pluginディレクトリに置くだけで動作します。
 #
-#   tdiary.conf�ˤ����ơ�@options['makelirs.file']��
-#   �ե�����̾����ꤹ��ȡ����Υե������������
-#   LIRS�ե�����Ȥ��ޤ���̵������ˤ�index.rb��Ʊ��
-#   �ѥ���antenna.lirs�Ȥ����ե�����ˤʤ�ޤ���
-#   ������⡢Web�����Ф���񤭹���븢�¤�ɬ�פǤ���
+#   tdiary.confにおいて、@options['makelirs.file']に
+#   ファイル名を指定すると、そのファイルを出力先の
+#   LIRSファイルとします。無指定時にはindex.rbと同じ
+#   パスにantenna.lirsというファイルになります。
+#   いずれも、Webサーバから書き込める権限が必要です。
 #
 # Copyright (C) 2002 by Kazuhiro NISHIYAMA
 # You can redistribute it and/or modify it under GPL2.

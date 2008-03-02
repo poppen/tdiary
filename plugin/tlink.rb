@@ -1,18 +1,18 @@
-# tlink.rb $Revision: 1.19 $
+# tlink.rb $Revision: 1.20 $
 #
-# title °���� anchor plugin
+# title 属性付 anchor plugin
 #
-# �Ȥ���
-#   <%= tlink( "URL", "ʸ����", "title °������ȡʾ�ά�ġ�" ) %>
+# 使い方
+#   <%= tlink( "URL", "文字列", "title 属性の中身（省略可）" ) %>
 #
-#   �� 3 �ѥ�᡼�����ά��������URL �������� c#?? �ʤ�С�
-#   ���Υĥå��ߤ����Ƥ��ǽ�ιԤ���ɽ������ޤ���
-#   ������ p#?? �ʤ�С����֥����ȥ뤬����Х��֥����ȥ뤬��
-#   �ʤ���кǽ�Υѥ饰��դ�ɽ������ޤ���
+#   第 3 パラメータを省略した時、URL の末尾が c#?? ならば、
+#   そのツッコミの内容が最初の行だけ表示されます。
+#   末尾が p#?? ならば、サブタイトルがあればサブタイトルが、
+#   なければ最初のパラグラフが表示されます。
 #
-#   ��. <%= tlink( "http://tdiary.tdiary.net/20020131.html#c01", "���Υĥå���" ) %>
-#       ���Ϸ��:
-#       <a href="http://tdiary.tdiary.net/20020131.html#c01", title="�ƥ��ȤǤ������">���Υĥå���</a>
+#   例. <%= tlink( "http://tdiary.tdiary.net/20020131.html#c01", "このツッコミ" ) %>
+#       出力結果:
+#       <a href="http://tdiary.tdiary.net/20020131.html#c01", title="テストでござるよ">このツッコミ</a>
 #
 # Copyright(C) 2002 NT <nt@24i.net>
 # Distributed under the GPL.

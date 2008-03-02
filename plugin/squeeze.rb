@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-# squeeze.rb $Revision: 1.24 $
+# squeeze.rb $Revision: 1.25 $
 #
 # Create daily HTML file from tDiary database.
 #
@@ -28,7 +28,7 @@ if mode == "CMD" || mode == "CGI"
 
 	if mode == "CMD"
 		def usage
-			puts "squeeze $Revision: 1.24 $"
+			puts "squeeze $Revision: 1.25 $"
 			puts " making html files from tDiary's database."
 			puts " usage: ruby squeeze.rb [-p <tDiary path>] [-c <tdiary.conf path>] [-a] [-s] [-x suffix] <dest path>"
 			exit
@@ -196,7 +196,7 @@ if mode == "CGI" || mode == "CMD"
 			</head>
 			<body><div style="text-align:center">
 			<h1>Squeeze for tDiary</h1>
-			<p>$Revision: 1.24 $</p>
+			<p>$Revision: 1.25 $</p>
 			<p>Copyright (C) 2002 MUTOH Masao&lt;mutoh@highway.ne.jp&gt;</p></div>
 			<br><br>Start!</p><hr>
 		]

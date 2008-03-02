@@ -1,5 +1,5 @@
 #
-# zh/akismet.rb: Chinese resource of Akismet spam filter setup plugin. $Revision: 1.1 $
+# zh/akismet.rb: Chinese resource of Akismet spam filter setup plugin. $Revision: 1.2 $
 #
 
 @akismet_label_conf = 'Akismet spam filter'

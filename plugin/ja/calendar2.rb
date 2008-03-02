@@ -1,5 +1,5 @@
 # calendar2.rb language recource for Japanese
 
-@calendar2_days_format = "Æü·î²Ğ¿åÌÚ¶âÅÚ".split(//)
-@calendar2_navi_format = ["Á°", "%dÇ¯<br>%d·î", "¼¡"]
+@calendar2_days_format = "æ—¥æœˆç«æ°´æœ¨é‡‘åœŸ".split(//)
+@calendar2_navi_format = ["å‰", "%då¹´<br>%dæœˆ", "æ¬¡"]
 

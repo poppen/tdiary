@@ -1,32 +1,32 @@
-# whatsnew.rb $Revision: 1.4 $
+# whatsnew.rb $Revision: 1.5 $
 #
-# ̾�Ρ�
-# What's New�ץ饰����
+# 名称：
+# What's Newプラグイン
 #
-# ���ס�
-# ̤�ɤΥ��������˻��ꤷ���ޡ�����Ĥ��뤳�Ȥ��Ǥ��ޤ���
+# 概要：
+# 未読のセクションに指定したマークをつけることができます．
 #
-# �Ȥ�����
-# tdiary.conf �� @section_anchor ����Ƭ�˰ʲ��Τ褦�� <%= whats_new %> ���ɲä��ޤ���
+# 使い方：
+# tdiary.conf の @section_anchor の先頭に以下のように <%= whats_new %> を追加します．
 #
 #   @section_anchor = '<%= whats_new %><span class="sanchor">_</span>'
 #
-# ����������̤��/���ɤˤ�ä� <%= whats_new %> ����ʬ�����餫�����
-# �ꤷ���ޡ������֤��������ޤ����ǥե���ȤǤ�̤�ɥ��������Ǥ�
-# "!!!NEW!!!"�����ɥ��������Ǥ� "" ��Ÿ������ޤ���
+# セクションの未読/既読によって <%= whats_new %> の部分があらかじめ指
+# 定したマークで置き換えられます．デフォルトでは未読セクションでは
+# "!!!NEW!!!"，既読セクションでは "" に展開されます．
 #
-# ����Revision �� 1.1 �� whats_new.rb �������Ǥϡ�<span> �����
-#     <%= whats_new %> ��ޤ��褦�˽񤤤Ƥ��ޤ�������sanchor�ǲ�����
-#     ɽ������褦�ʥơ��ޤǤϡ�whats_new �ν��Ϥ� sanchor �β�������
-#     �ʤäƤ��ޤ��Ȥ������꤬����ޤ�����
-#     �����ѹ���ȼ�������ɻ��Υǥե���Ȥ� '' ���ѹ����ޤ�����
+# 注：Revision が 1.1 の whats_new.rb の説明では，<span> の中に
+#     <%= whats_new %> を含めるように書いていましたが，sanchorで画像を
+#     表示するようなテーマでは，whats_new の出力と sanchor の画像が重
+#     なってしまうという問題がありました．
+#     この変更に伴い，既読時のデフォルトは '' に変更しました．
 #
-# �֤���������ʸ������ѹ����������� tdiary.conf ���
+# 置き換えられる文字列を変更したい場合は tdiary.conf 中で
 #
 #   @options['whats_new.new_mark'] = '<img src="/Images/new.png" alt="NEW!" border="0">'
-#   @options['whats_new.read_mark'] = '��'
+#   @options['whats_new.read_mark'] = '既'
 #
-# �Τ褦�˻��ꤷ�ޤ���
+# のように指定します．
 #
 # Copyright (c) 2002 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -41,7 +41,7 @@ def whats_new
 	if t > @whats_new[:this_time]
 		@whats_new[:this_time] = t
 	end
-	# ���⤷���� cookie ��Ȥ�ʤ�����ξ��ϵ�ǽ���ʤ�
+	# 初回もしくは cookie を使わない設定の場合は機能しない
 	return apply_plugin( @whats_new[:read_mark] ) if @whats_new[:last_time] == "00000000000"
 	if t > @whats_new[:last_time]
 		apply_plugin( @whats_new[:new_mark] )
@@ -64,7 +64,7 @@ add_header_proc do
 		if @cgi.cookies['tdiary_whats_new'][0]
 			@whats_new[:this_time] = @whats_new[:last_time] = @cgi.cookies['tdiary_whats_new'][0]
 		else
-			# ���ơ��⤷���� cookie �ϻȤ�ʤ�����
+			# 初めて，もしくは cookie は使わない設定
 			@whats_new[:this_time] = @whats_new[:last_time] = "00000000000"
 		end
 		@whats_new[:new_mark] = @options['whats_new.new_mark'] || '!!!new!!!'

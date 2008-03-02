@@ -1,9 +1,9 @@
-# footnote.rb $Revision: 1.14 $
+# footnote.rb $Revision: 1.15 $
 #
-# fn: µ”√Ìplugin
-#   •—•È•·•ø:
-#     text: µ”√ÌÀ‹ ∏
-#     mark: µ”√Ì•ﬁ°º•Ø('*')
+# fn: ËÑöÊ≥®plugin
+#   „Éë„É©„É°„Çø:
+#     text: ËÑöÊ≥®Êú¨Êñá
+#     mark: ËÑöÊ≥®„Éû„Éº„ÇØ('*')
 #
 # Copyright (C) 2007 TADA Tadashi <sho@spc.gr.jp>
 # Distributed under the GPL.

@@ -1,16 +1,16 @@
-# referer-antibot.rb $Revision: 1.2 $
+# referer-antibot.rb $Revision: 1.3 $
 #
-# �������󥸥�ν��BOT�ˤϡ������Υ�󥯸��פ򸫤��ʤ��褦�ˤ���
-# ����ˤ�ꡢ̵�ط��ʸ�����ǥ�����������뤳�Ȥ�����(��ͽ�ۤ����)
-# plugin�ǥ��쥯�ȥ������������ư���
+# 検索エンジンの巡回BOTには「本日のリンク元」を見せないようにする
+# これにより、無関係な検索語でアクセスされることが減る(と予想される)
+# pluginディレクトリに入れるだけで動作する
 #
-# ���ץ����:
+# オプション:
 #   @options['bot']
-#      �������åȤˤ�����BOT��User-Agent���ɲä�������
-#      ̵�������["googlebot", "Hatena Antenna", "moget@goo.ne.jp"]�Τߡ�
+#      ターゲットにする巡回BOTのUser-Agentを追加する配列。
+#      無指定時は["googlebot", "Hatena Antenna", "moget@goo.ne.jp"]のみ。
 #
-# �ʤ���disp_referrer.rb�ץ饰����ˤ�Ʊ���ε�ǽ���ޤޤ�Ƥ���Τǡ�
-# disp_referrer��Ƴ���Ѥߤξ��ˤ������ɬ�פϤʤ�
+# なお、disp_referrer.rbプラグインには同等の機能が含まれているので、
+# disp_referrerを導入済みの場合には入れる必要はない
 #
 # ---------
 #

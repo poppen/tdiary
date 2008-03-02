@@ -1,4 +1,4 @@
-# ja/category.rb $Revision: 1.13 $
+# ja/category.rb $Revision: 1.14 $
 #
 # Copyright (c) 2004 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL

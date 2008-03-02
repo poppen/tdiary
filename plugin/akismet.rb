@@ -1,5 +1,5 @@
 #
-# akismet.rb: tDiary comment spam filter using Akismet API setup plugin. $Revision: 1.2 $
+# akismet.rb: tDiary comment spam filter using Akismet API setup plugin. $Revision: 1.3 $
 #
 # Copyright (C) TADA Tadashi <sho@spc.gr.jp> 2007.
 # Distributed under GPL2.

@@ -1,4 +1,4 @@
-# counter.rb $Revision: 1.27 $
+# counter.rb $Revision: 1.28 $
 #
 # Access counter plugin.
 #
@@ -60,7 +60,7 @@
    * translate documents to English.
 
 2003-02-15 Masao Mutoh
-   * counter.dat���礭���ʤ��Զ��ν���
+   * counter.datが大きくなる不具合の修正
    * version 1.6.3
 
 2002-11-26 Junichiro Kita <kita@kitaj.no-ip.com>
@@ -74,93 +74,93 @@
    * for squeeze.rb error.
 
 2002-10-12 Masao Mutoh
-   * ���ƻȤ��Ȥ���ư��ʤ��ʤäƤ����Զ��ν�����
-   * 1��1���ݻ����Ƥ���桼������򥯥꡼�󥢥åפ���褦�ˤ�����
+   * 初めて使うときに動作しなくなっていた不具合の修正。
+   * 1日1回保持しているユーザ情報をクリーンアップするようにした。
    * version 1.6.1
 
 2002-08-30 Masao Mutoh
-   * �ǡ����ե����뤬�ɤ߹���ʤ��ʤä��Ȥ���1�����ΥХå����åץǡ���
-     ���Ѥ������줹��褦�ˤ���(���κݤˡ�1�����ΥХå����åץǡ�����
-     counter.dat.?.bak�Ȥ���̾���ǥХå����åפ����)�������1������
-     �Хå����åץǡ������������Ǥ��ʤ��ä��������ƤΥ������ͤ�
-     0�ˤ��ƥ��顼���̤�ɽ������ʤ��褦�ˤ�����
+   * データファイルが読み込めなくなったとき、1つ前のバックアップデータ
+     を用いて復旧するようにした(その際に、1つ前のバックアップデータは
+     counter.dat.?.bakという名前でバックアップされる)。さらに1つ前の
+     バックアップデータからも復旧できなかった場合は全てのカウンタ値を
+     0にしてエラー画面が表示されないようにした。
    * version 1.6.0
 
 2002-07-23 Masao Mutoh
-   * �Хå����åץե�����Υե�����̾��suffix������(0-6�ο���)�ˤ�����
-      ���äơ�1������˸Ť��ե�����Ͼ�񤭤����Τǥե�����ο���
-      ����7�ĤȤʤ롣��������������Τ��ǿ��Ȥ����櫓�ǤϤʤ��Τ����ա�
+   * バックアップファイルのファイル名のsuffixを曜日(0-6の数値)にした。
+      従って、1週間毎に古いファイルは上書きされるのでファイルの数は
+      最大7つとなる。数字が新しいものが最新というわけではないので注意。
       (proposed by Junichiro KITA <kita@kitaj.no-ip.com>)
    * version 1.5.1
 
 2002-07-19 Masao Mutoh
-   * ����ñ�̤ǥǡ�����Хå����åפ���褦�ˤ�����
-     @options["counter.dairy_backup"]�ǻ��ꡣfalse����ꤷ�ʤ��¤�
-     �Хå����åפ��롣
-   * Date#==�᥽�åɤ�nil���Ϥ��ʤ��褦�˽���
-   * require 'pstore'�ɲ�(tDiary version 1.5.x���б�)
-   * log�Υե����ޥå��ѹ�(���ơ������������Υǡ��������)
-   * @options["counter.deny_same_src_interval"]�Υǥե�����ͤ�2����
-     ���ѹ�������
+   * 日々単位でデータをバックアップするようにした。
+     @options["counter.dairy_backup"]で指定。falseを指定しない限り
+     バックアップする。
+   * Date#==メソッドでnilを渡さないように修正
+   * require 'pstore'追加(tDiary version 1.5.x系対応)
+   * logのフォーマット変更(全て・今日・昨日のデータを出力)
+   * @options["counter.deny_same_src_interval"]のデフォルト値を2時間
+     に変更した。
    * version 1.5.0
 
 2002-05-19 Masao Mutoh
-   * Cookie��Ȥ����ȤΤǤ��ʤ�Ʊ�쥯�饤����Ȥ����Ϣ³����������
-     ������ȥ��åפ��ʤ��褦�ˤ�����
-   * @options["counter.deny_same_src_interval"]�ɲá�Ϣ³GET�δֳ֤���ꡣ
-     �ǥե���Ȥ�0.1����(6ʬ)��
+   * Cookieを使うことのできない同一クライアントからの連続アクセスを、
+     カウントアップしないようにした。
+   * @options["counter.deny_same_src_interval"]追加。連続GETの間隔を指定。
+     デフォルトで0.1時間(6分)。
    * version 1.4.0
 
 2002-05-11 Masao Mutoh
-   * ����ͤ�Ϳ���ʤ�����5��Ȥ��Ƥ�����������0��ʤ����פ��ѹ�������
-     �ޤ�����0��̵��������0����ꤷ�Ƥ��ɤ���
+   * 初期値を与えない場合は5桁としていたが、「前0をなくす」に変更した。
+     また、前0を無くす場合は0を指定しても良い。
    * version 1.3.0
 
 2002-05-05 Masao Mutoh
-   * @debug = true ��� :->
-   * �������ѹ�
+   * @debug = true 削除 :->
+   * コメント変更
    * version 1.2.1
 
 2002-05-04 Masao Mutoh
-   * tlink�ץ饰���󤫤�Υ��������򥫥���Ȥ��Ƥ��ޤ��Զ��ν���
-   * @options["counter.deny_user_agents"]�ɲ�
-   * @options["counter.deny_remote_addrs"]�ɲ�
-   * @options["counter.init_num"]�ɲá������ֵ�ǽ�Ȥδط��ǡ�counter
-   * �᥽�åɤΰ�����init_num��obsolete�Ȥ��ޤ���
-   * @options["counter.kiriban"], @options["counter.kiriban_today"]�ɲ�
-   * �����ֵ�ǽ�ɲ�(kiriban?,kiriban_today?�᥽�å��ɲ�)
+   * tlinkプラグインからのアクセスをカウントしてしまう不具合の修正
+   * @options["counter.deny_user_agents"]追加
+   * @options["counter.deny_remote_addrs"]追加
+   * @options["counter.init_num"]追加。キリ番機能との関係で、counter
+   * メソッドの引数のinit_numはobsoleteとします。
+   * @options["counter.kiriban"], @options["counter.kiriban_today"]追加
+   * キリ番機能追加(kiriban?,kiriban_today?メソッド追加)
    * version 1.2.0
 
 2002-04-27 Masao Mutoh
-   * add_header_proc��Ȥ�ʤ��褦�ˤ���
-   * @options["counter.timer"]��ͭ���ˤʤ�ʤ��Զ��ν���
-   * @options["counter.log"]�ɲá�true����ꤹ���counter.dat
-      ��Ʊ���ǥ��쥯�ȥ��counter.log�Ȥ����ե�����������
-      1�����Υ�����������Ͽ����褦�ˤ���
-   * cookie���ͤȤ��ƥС�������ֹ�������褦�ˤ���
+   * add_header_procを使わないようにした
+   * @options["counter.timer"]が有効にならない不具合の修正
+   * @options["counter.log"]追加。trueを指定するとcounter.dat
+      と同じディレクトリにcounter.logというファイルを作成し
+      1日前のアクセス数を記録するようにした
+   * cookieの値としてバージョン番号を入れるようにした
    * version 1.1.0
 
 2002-04-25 Masao Mutoh
-   * HEAD�ǥ������������ä����˺Ƥӥ�����Ȥ����褦��
-      �ʤäƤ��ޤäƤ����Զ��ν���(by NT<nt@24i.net>)
+   * HEADでアクセスがあった場合に再びカウントされるように
+      なってしまっていた不具合の修正(by NT<nt@24i.net>)
    * version 1.0.4
 
 2002-04-24 Masao Mutoh
-   * �ĥå��ߤ����줿�Ȥ��˥��顼��ȯ�������Զ��ν���
+   * ツッコミを入れたときにエラーが発生する不具合の修正
    * version 1.0.3
 
 2002-04-23 Masao Mutoh
-   * �ǡ����ե���������塢���å�����ͭ���������ü������
-      ����������������@today��0�ˤʤ��Զ��ν���
-   * ���������줿�Ȥ��˿�����ɽ������ʤ��Զ��ν���
-   * HEAD�ǥ������������ä����ϥ�����Ȥ��ʤ��褦�ˤ���
+   * データファイルを削除後、クッキーが有効期間中の端末から
+      アクセスした場合に@todayが0になる不具合の修正
+   * コメント入れたときに数字が表示されない不具合の修正
+   * HEADでアクセスがあった場合はカウントしないようにした
       (reported by NT<nt@24i.net>, suggested a solution 
          by TADA Tadashi <sho@spc.gr.jp>)
    * version 1.0.2
 
 2002-04-21 Masao Mutoh
-   * CSS��_��ȤäƤ���Ȥ�����-��ľ����(reported by NT<nt@24i.net>)
-   * TDiaryCountData#up��@all��+1����ʤ��Զ��ν���
+   * CSSで_を使っているところを-に直した(reported by NT<nt@24i.net>)
+   * TDiaryCountData#upで@allが+1されない不具合の修正
    * version 1.0.1
 
 2002-04-14 Masao Mutoh
@@ -500,38 +500,38 @@ TOPLEVEL_CLASS
   end
 end
 
-@counter_conf_counter ||= "��������������"
-@counter_conf_init_head ||= "����ͤλ���"
-@counter_conf_init_desc ||= "�����ơ�ɽ���κݤΥ����󥿤ν���ͤ����Ǥ��ޤ���¾�Υ������������󥿤���ξ�괹������ʤɤ˻��Ѥ�����ɤ��Ǥ��礦���ǥե���Ȥ�0�Ǥ���"
-@counter_conf_init_label ||= " ����͡�"
-@counter_conf_log_head ||= "�����μ���"
-@counter_conf_log_desc ||= " ���̤Υ���������������ե�����˻Ĥ��������˻��ꤷ�ޤ����ǥե���ȤϡֻĤ��פǤ�������Ū�ˤϻĤ��褦�ˤ��ޤ��礦��<br/>�����ե�����ϡ�&quot;#{@cache_path}/counter/counter.log&quot; ����¸����ޤ���"
-@counter_conf_log_true ||= "�Ĥ�"
-@counter_conf_log_false ||= "�Ĥ��ʤ�"
-@counter_conf_timer_head ||= "ˬ��ֳ֤λ���"
-@counter_conf_timer_desc ||= "���ꤷ�����֡������֤�ˬ�䤷�Ƥ���桼���򥫥���ȥ��åפ��ʤ��褦�ˤʤäƤ��ޤ�(Cookie��ȤäƤ��ޤ�)���ǥե���Ȥ�12(����)�Ǥ���"
-@counter_conf_timer_label ||= "ˬ��ֳ֡�"
-@counter_conf_timer_unit ||= "����"
-@counter_conf_deny_same_src_interval_head ||= "������ȥ��åפ��ʤ�Ϣ³���������ֳ֤λ���"
-@counter_conf_deny_same_src_interval_desc ||= "���ФΡ�ˬ��ֳ֤λ���פǤϡ�Cookie��ǽ������ʤ����饤����Ȥ���Υ�������������ȡ��������������뤿�Ӥ˥�����ȥ��åפ��Ƥ��ޤ��ޤ���������ε�ǽ�ϡ�Ʊ��IP���ɥ쥹/���饤����ȥ��ץꥱ������󤫤��Ϣ³���������򥫥���ȥ��åפ��ʤ��褦�ˤ��ޤ����ǥե���Ȥ�4���֤Ǥ���"
-@counter_conf_deny_same_src_interval_label ||= "������ȥ��åפ��ʤ�Ϣ³���������ֳ֡�"
-@counter_conf_deny_same_src_interval_unit ||= "����"
-@counter_conf_max_keep_access_num_head ||= "�����ݻ������������λ���"
-@counter_conf_max_keep_access_num_desc ||= "���ФΡ֥�����ȥ��åפ��ʤ�Ϣ³���������ֳ֤λ���פ�����Ū���ݻ����륯�饤����ȥ桼��������ꤷ�ޤ�������¿���ۤɽ����˻��֤�������褦�ˤʤ뤿�ᡢ����������˾�ޤ����Ǥ����ǥե���Ȥ�10000��Ǥ���"
-@counter_conf_max_keep_access_num_label ||= "�����ݻ�������������"
-@counter_conf_max_keep_access_num_unit ||= "��"
-@counter_conf_deny_user_agents_head ||= "������ȥ��åפ��ʤ��桼�������������"
-@counter_conf_deny_user_agents_desc ||= "������Ȥ��ʤ��桼��������������Ȥ���ꤷ�ޤ������ܥåȤʤɤ���ꤹ����ɤ��Ǥ��礦���ƥ���������Ȥ�'|'(�ѥ���)�Ƕ��ڤä��¤٤Ƥ�������������ɽ����Ȥ����Ȥ��Ǥ��ޤ��ˡ�<pre>�㡧Googlebot|Bulkfeeds</pre><p>���ꤷ�ʤ����Ǥ�ʲ��Υ桼��������������Ȥ���Υ��������ϥ�����Ȥ���ޤ���</p>"
-@counter_conf_deny_user_agents_label ||= "������Ȥ��ʤ��桼��������������ȡ�"
-@counter_conf_kiriban_head ||= "�����֤λ���"
-@counter_conf_kiriban_desc ||= "�����ơסֺ����פΥ����֤���ꤷ�ޤ���ʣ�����ꤹ�����','(�����)��ȤäƤ����������㡧100,123,300�ˡ�"
-@counter_conf_kiriban_label_all ||= "�����ơפΥ����֡�"
-@counter_conf_kiriban_label_today ||= "�ֺ����פΥ����֡�"
-@counter_conf_kiriban_messages_head ||= "kiriban�ץ饰����ǽ��Ϥ�����å������λ���"
-@counter_conf_kiriban_messages_desc ||= "�إå��䥵���ɥ�˥塼���ˡ�&lt;%= kiriban %&gt;�Ȥ������ǥ����֥ץ饰����򵭽Ҥ��Ƥ����ȡ������֤ˤʤä��Ȥ��ˡʤ��뤤�ϥ����֤�̵���Ȥ��ˡˤ����ǵ��Ҥ������Ƥ�ɽ�����ޤ����إå�Ʊ�͡�HTML�����Ǥ���"
-@counter_conf_kiriban_messages_label_all ||= "�����ơפΥ����֥�å�������"
-@counter_conf_kiriban_messages_label_today ||= "�ֺ����פΥ����֥�å�������"
-@counter_conf_kiriban_messages_label_nomatch ||= "�����֤Ǥ�̵���Ȥ��Υ�å�������"
+@counter_conf_counter ||= "アクセスカウンタ"
+@counter_conf_init_head ||= "初期値の指定"
+@counter_conf_init_desc ||= "「全て」表示の際のカウンタの初期値を指定できます。他のアクセスカウンタからの乗り換える時などに使用すると良いでしょう。デフォルトは0です。"
+@counter_conf_init_label ||= " 初期値："
+@counter_conf_log_head ||= "ログの取得"
+@counter_conf_log_desc ||= " 日別のアクセス数をログファイルに残したい場合に指定します。デフォルトは「残す」です。基本的には残すようにしましょう。<br/>ログファイルは、&quot;#{@cache_path}/counter/counter.log&quot; に保存されます。"
+@counter_conf_log_true ||= "残す"
+@counter_conf_log_false ||= "残さない"
+@counter_conf_timer_head ||= "訪問間隔の指定"
+@counter_conf_timer_desc ||= "指定した期間、繰り返し訪問してくるユーザをカウントアップしないようになっています(Cookieを使っています)。デフォルトは12(時間)です。"
+@counter_conf_timer_label ||= "訪問間隔："
+@counter_conf_timer_unit ||= "時間"
+@counter_conf_deny_same_src_interval_head ||= "カウントアップしない連続アクセス間隔の指定"
+@counter_conf_deny_same_src_interval_desc ||= "前出の「訪問間隔の指定」では、Cookie機能を持たないクライアントからのアクセスがあると、アクセスがあるたびにカウントアップしてしまいます。こちらの機能は、同一IPアドレス/クライアントアプリケーションからの連続アクセスをカウントアップしないようにします。デフォルトは4時間です。"
+@counter_conf_deny_same_src_interval_label ||= "カウントアップしない連続アクセス間隔："
+@counter_conf_deny_same_src_interval_unit ||= "時間"
+@counter_conf_max_keep_access_num_head ||= "最大保持アクセス数の指定"
+@counter_conf_max_keep_access_num_desc ||= "前出の「カウントアップしない連続アクセス間隔の指定」で内部的に保持するクライアントユーザ数を指定します。数が多いほど処理に時間がかかるようになるため、小さい方が望ましいです。デフォルトは10000件です。"
+@counter_conf_max_keep_access_num_label ||= "最大保持アクセス数："
+@counter_conf_max_keep_access_num_unit ||= "件"
+@counter_conf_deny_user_agents_head ||= "カウントアップしないユーザエージェント"
+@counter_conf_deny_user_agents_desc ||= "カウントしないユーザーエージェントを指定します。ロボットなどを指定すると良いでしょう。各エージェントを'|'(パイプ)で区切って並べてください（正規表現を使うことができます）。<pre>例：Googlebot|Bulkfeeds</pre><p>指定しない場合でも以下のユーザーエージェントからのアクセスはカウントされません。</p>"
+@counter_conf_deny_user_agents_label ||= "カウントしないユーザーエージェント："
+@counter_conf_kiriban_head ||= "キリ番の指定"
+@counter_conf_kiriban_desc ||= "「全て」「今日」のキリ番を指定します。複数指定する場合は','(カンマ)を使ってください（例：100,123,300）。"
+@counter_conf_kiriban_label_all ||= "「全て」のキリ番："
+@counter_conf_kiriban_label_today ||= "「今日」のキリ番："
+@counter_conf_kiriban_messages_head ||= "kiribanプラグインで出力されるメッセージの指定"
+@counter_conf_kiriban_messages_desc ||= "ヘッダやサイドメニュー等に、&lt;%= kiriban %&gt;という形でキリ番プラグインを記述しておくと、キリ番になったときに（あるいはキリ番で無いときに）ここで記述する内容を表示します。ヘッダ同様、HTML形式です。"
+@counter_conf_kiriban_messages_label_all ||= "「全て」のキリ番メッセージ："
+@counter_conf_kiriban_messages_label_today ||= "「今日」のキリ番メッセージ："
+@counter_conf_kiriban_messages_label_nomatch ||= "キリ番では無いときのメッセージ："
 
 def print_conf_html
   @conf["counter.init_num"] ||= 0

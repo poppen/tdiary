@@ -1,11 +1,11 @@
 =begin
-= �����Υ�󥯸��⤦����äȤ��������ץ饰����((-$Id: disp_referrer.rb,v 1.69 2007-12-11 07:23:39 zunda Exp $-))
+= 本日のリンク元もうちょっとだけ強化プラグイン((-$Id: disp_referrer.rb,v 1.70 2008-03-02 09:01:45 kazuhiko Exp $-))
 
-== ����
-����ƥʤ���Υ�󥯡����������󥸥�θ�����̤��̾�Υ�󥯸��β��ˤ�
-�Ȥ��ɽ�����ޤ������������󥸥�θ�����̤ϡ���������ˤޤȤ���ޤ���
+== 概要
+アンテナからのリンク、サーチエンジンの検索結果を、通常のリンク元の下にま
+とめて表示します。サーチエンジンの検索結果は、検索語毎にまとめられます。
 
-�ǿ���������ɽ���Ǥϡ��̾�Υ�󥯸��ʳ��Υ�󥯸��򱣤��ޤ���
+最新の日記の表示では、通常のリンク元以外のリンク元を隠します。
 
 == Acknowledgements
 This plugin uses
@@ -52,30 +52,30 @@ See ChangeLog for changes after this.
 - instance_eval for e[2] in the search engine list
 * Wed Aug  7, 2003 zunda <zunda at freeshell.org>
 - WWW browser configuration interface
-  - ����å���ι�������μ¤ˤ���褦�ˤ��ޤ�����WWW�֥饦�������ִ�
-    �ꥹ�Ȥ��ä����ˤϥꥹ�Ȥκǽ���ɲä���ޤ���
-  - secure=true�������Ǥ���¾�Υ�󥯸��ꥹ�Ȥ�ɽ���Ǥ���褦�ˤʤ�ޤ�����
+  - キャッシュの更新をより確実にするようにしました。WWWブラウザから置換
+    リストを作った場合にはリストの最初に追加されます。
+  - secure=trueな日記でその他のリンク元リストが表示できるようになりました。
 - Regexp generation for Wiki sites
 * Wed Aug  6, 2003 zunda <zunda at freeshell.org>
 - WWW browser configuration interface
-  - ��ʥ��ץ����ȥ�󥯸��ִ��ꥹ�Ȥθ�ΨŪ���Խ���WWW�֥饦�������
-    ����褦�ˤʤ�ޤ�����secure=true�������Ǥϰ����ε�ǽ�ϻȤ��ޤ���
+  - 主なオプションとリンク元置換リストの効率的な編集がWWWブラウザからで
+    きるようになりました。secure=trueな日記では一部の機能は使えません。
 * Sat Aug  2, 2003 zunda <zunda at freeshell.org>
 - Second version
 - basic functions re-implemented
-  - ���ץ�����̿̾���ʤ����ޤ������ޤ����פʥ��ץ�����ä��ޤ�����
-    tdiary.conf���Խ����Ƥ������ϡ�������Ǥ�������򤷤ʤ����Ƥ���������
-  - Nora�饤�֥��ȥ���å�������Ѥǹ�®�����ޤ�����
-  - �������󥸥�Υꥹ�Ȥ�ץ饰����ǻ��Ĥ褦�ˤʤ�ޤ�����&��;��ޤม
-    ��ʸ���������̤����ФǤ��ޤ���
+  - オプションを命名しなおしました。また不要なオプションを消しました。
+    tdiary.confを編集していた方は、お手数ですが設定をしなおしてください。
+  - Noraライブラリとキャッシュの利用で高速化しました。
+  - 検索エンジンのリストをプラグインで持つようになりました。&や;を含む検
+    索文字列も期待通りに抽出できます。
 * Mon Feb 17, 2003 zunda <zunda at freeshell.org>
 - First version
 =end
 
 =begin
-== ���Υץ饰������������륯�饹�ȥ᥽�å�
+== このプラグインで定義されるクラスとメソッド
 === Array
-Array#values_at()��̵����硢�ɲä��ޤ���
+Array#values_at()が無い場合、追加します。
 =end
 # 1.8 feature
 unless [].respond_to?( :values_at ) then
@@ -97,8 +97,8 @@ Root_DispRef2URL = 'dispref2url' # root for DispRef2URLs
 
 =begin
 === Tdiary::Plugin::DispRef2DummyPStore
-PStore��Ʊ���᥽�åɤ��󶡤��ޤ����ʤˤ⤷�ޤ���db[key]������nil���֤�
-���Ȥ����դ��Ƥ���������
+PStoreと同じメソッドを提供しますがなにもしません。db[key]は全てnilを返す
+ことに注意してください。
 =end
 # dummy PStore
 class DispRef2DummyPStore
@@ -129,30 +129,30 @@ end
 
 =begin
 === Tdiary::Plugin::DispRef2CachePath
-DispRef2Store�Υѥ��δ����򤷤ޤ���
+DispRef2Storeのパスの管理をします。
 
 --- DispRef2CachePath::new( setup )
 
 --- DispRef2CachePath#cache( date )
-     �������������Τ���Υ���å���Υѥ����֤��ޤ���
+     その日の日記のためのキャッシュのパスを返します。
 
 --- DispRef2CachePath#caches
-      ����¸�ߤ��뤽�줾��Υ���å���ե�����Υѥ���������֤��ޤ���
+      現在存在するそれぞれのキャッシュファイルのパスの配列を返します。
 
 --- DispRef2CachePath#shrink
-      �Ƕ�Ȥ��Ƥ��ʤ�����å���������뤳�Ȥǡ�
-      ����å�����礭�������������٤��ޤ��ޤ���
+      最近使われていないキャッシュを削除することで、
+      キャッシュの大きさを設定値程度に抑えます。
 
 === Tdiary::Plugin::DispRef2PStore
-@secure=false�������Ǥ�PStore��Ʊ���Υ᥽�åɤ�@secure=true�������Ǥ�
-���⤷�ʤ��᥽�åɤ��󶡤��ޤ���
+@secure=falseな日記ではPStoreと同等のメソッドを、@secure=trueな日記では
+何もしないメソッドを提供します。
 
 --- DispRef2PSTore#transaction( read_only = false )
-     Ruby-1.7�ʹߤξ����ɤ߹������Ѥ˳������Ȥ�Ǥ��ޤ���Ruby-1.6�ξ�
-     ���read_only = true�Ǥ��ɤ߽��Ѥ˳����ޤ���
+     Ruby-1.7以降の場合は読み込み専用に開くこともできます。Ruby-1.6の場
+     合はread_only = trueでも読み書き用に開きます。
 
 --- DispRef2PSTore#real?
-      ��ʪ��PSTore���Ȥ������true�������Ǥʤ�����false���֤��ޤ���
+      本物のPSToreが使える時はtrue、そうでない時はfalseを返します。
 =end
 
 unless @conf and @conf.secure then
@@ -242,51 +242,51 @@ end
 
 =begin
 === Tdiary::Plugin::DispRef2String
-ʸ�������ɤ��Ѵ���URL��HTML�Ǥμ�갷���˴ؤ���᥽�åɷ��Ǥ������󥹥�
-�󥹤Ϻ��ޤ���Uconv�饤�֥���Nora�饤�֥�꤬����Ф����Ȥ���̵
-�����̵���ʤ�˽������ޤ���
+文字コードの変換、URL、HTMLでの取り扱いに関するメソッド群です。インスタ
+ンスは作りません。UconvライブラリやNoraライブラリがあればそれを使い、無
+ければ無いなりに処理します。
 
 --- DispRef2String::nora?
-      Nora���Ȥ�����ˤ�true�������Ǥʤ��Ȥ��ˤ�false���֤��ޤ���
+      Noraが使える時にはtrue、そうでないときにはfalseを返します。
 
 --- DispRef2String::normalize( str )
-      ³����������ä���site:...�Ȥ���ʸ�����ä����ꤷ�ơ���������
-      ��ɤ򵬳ʲ����ޤ���
+      続く空白を取り去ったりsite:...という文字列を消したりして、検索キー
+      ワードを規格化します。
 
 --- DispRef2String::parse_query( str )
-      URL�˴ޤޤ��query��(key=value&...)����Ϥ�����̤�key�򥭡���
-      value��������ͤȤ����ϥå���Ȥ����֤��ޤ����ͤΥ��󥨥������פ�
-      ���ޤ���value��̵���ä����϶�ʸ�������ꤵ��ޤ���
+      URLに含まれるquery部(key=value&...)を解析し、結果をkeyをキー、
+      valueの配列を値としたハッシュとして返します。値のアンエスケープは
+      しません。valueが無かった場合は空文字列が設定されます。
 
 --- DispRef2String::separate_query( str )
-      URL��query��������ȸ��ʬ��������Ȥ����֤��ޤ���query����̵����
-      ���nil���֤��ޤ���
+      URLをquery部より前と後に分けて配列として返します。query部が無い場
+      合はnilを返します。
 
 --- DispRef2String::hostname( str )
-      URL�˴ޤޤ��ۥ���̾���뤤��IP���ɥ쥹���֤��ޤ����ۥ���̾���ߤ�
-      ����ʤ����ϡ�((|str|))���֤��ޤ���
+      URLに含まれるホスト名あるいはIPアドレスを返します。ホスト名がみつ
+      からない場合は、((|str|))を返します。
 
 --- DispRef2String::company_name( str, hash_list )
-      URL��ꡢgoogle��biglobe�Ȥ��ä�̾���Τ���((|hash_list|))��key�˴�
-      �ޤ���Τ��֤��ޤ����ߤĤ���ʤ����ϡ�nil���֤��ޤ���
+      URLより、googleやbiglobeといった名前のうち((|hash_list|))のkeyに含
+      まれるものを返します。みつからない場合は、nilを返します。
 
 --- DispRef2String::escapeHTML( str )
-      HTML�˴ޤޤ�Ƥ�����ʤ褦�˥��������פ��ޤ���
+      HTMLに含まれても安全なようにエスケープします。
 
 --- DispRef2String::unescape( str )
-      URL�򥢥󥨥������פ��ޤ���
+      URLをアンエスケープします。
 
 --- DispRef2String::bytes( size )
-      �Х���ñ�̤��礭����MB KB B��Ŭ�ڤ�ñ�̤��Ѵ����ޤ���
+      バイト単位の大きさをMB KB Bの適切な単位に変換します。
 
 --- DispRef2String::comma( integer )
-      �����򥫥�ޤ�3�夺�Ĥ�ʬ���ޤ���
+      数字をカンマで3桁ずつに分けます。
 
 --- DispRef2String::url_regexp( url )
-      ((|url|))�����ִ��ꥹ���Ѥ�����ɽ��ʸ�����Ĥ���ޤ���
+      ((|url|))から置換リスト用の正規表現文字列をつくります。
 
 --- DispRef2String::url_match?( url, list )
-      ((|url|))��((|list|))�Τɤ줫�˥ޥå����뤫�ɤ���Ĵ�٤ޤ���
+      ((|url|))が((|list|))のどれかにマッチするかどうか調べます。
 
 =end
 # string handling
@@ -294,7 +294,7 @@ class DispRef2String
 
 	# strips site:... portion (google), multiple spaces, and start/end spaces
 	def self::normalize( str )
-		str.sub( /\bsite:(\w+\.)*\w+\b/, '' ).gsub( /[��\s\n]+/, ' ' ).strip
+		str.sub( /\bsite:(\w+\.)*\w+\b/, '' ).gsub( /[　\s\n]+/, ' ' ).strip
 	end
 
 	# parse_query parses the not unescaped query in a URL
@@ -429,41 +429,41 @@ end
 
 =begin
 === Tdiary::Plugin::DispRef2Setup
-�ץ饰�����ư������ѥ�᡼�������ꤷ�ޤ���
+プラグインの動作を決めるパラメータを設定します。
 
 --- DispRef2Setup::Last_parenthesis
-      ʸ����κǸ��()����Ȥ�$1�����ꤵ�������ɽ���Ǥ���
+      文字列の最後の()の中身が$1に設定される正規表現です。
 
 --- DispRef2Setup::First_bracket
-      ʸ����κǽ��[]����Ȥ�$1�ˡ����θ��ʸ����$2�����ꤵ�������ɽ
-      ���Ǥ���
+      文字列の最初の[]の中身が$1に、その後の文字列が$2に設定される正規表
+      現です。
 
 --- DispRef2Setup::Defaults
-      ���ץ����Υǥե�����ͤǤ���tDiary���Τ���@options�����ꤹ��ˤϡ�
-      ���Υϥå����key�����ˡ�disp_referrer2.�פ�Ĥ���key��ȤäƤ���
-      ���������ץ����ξܺ٤ϥ������Υ����Ȥ򻲾Ȥ��Ƥ���������
+      オプションのデフォルト値です。tDiary本体から@optionsで設定するには、
+      このハッシュのkeyの前に「disp_referrer2.」をつけたkeyを使ってくだ
+      さい。オプションの詳細はソースのコメントを参照してください。
 
 --- DispRef2Setup::new( conf, limit = 100, is_long = true )
-      ((|conf|))�ˤ�tDiary��@conf��((|limit|))�ˤϰ���ܤ������ɽ����
-      �󥯸�����((|is_long|))�ϰ���ʬ��ɽ���ξ��ˤ�true�򡢺ǿ���ɽ
-      ���ξ��ˤ�false�����ꤷ�Ƥ���������
+      ((|conf|))にはtDiaryの@confを、((|limit|))には一項目あたりの表示リ
+      ンク元数を、((|is_long|))は一日分の表示の場合にはtrueを、最新の表
+      示の場合にはfalseを設定してください。
 
 --- DispRef2Setup#update!
-      tDiary��@options�ˤ�꼫�Ȥ򹹿����ޤ���
+      tDiaryの@optionsにより自身を更新します。
 
 --- DispRef2Setup#is_long
 --- DispRef2Setup#referer_table
 --- DispRef2Setup#no_referer
 --- DispRef2Setup#secure
-      ���줾�졢����ʬ��ɽ�����ɤ�����tDiary���ִ��ơ��֥롢tDiary�Υ��
-      ���������ꥹ�ȡ������Υ������ƥ�������֤��ޤ���
+      それぞれ、一日分の表示かどうか、tDiaryの置換テーブル、tDiaryのリン
+      ク元除外リスト、日記のセキュリティ設定を返します。
 
 --- DIspRef2Setup#to_native( str )
-      tDiary�θ���꥽�������������Ƥ���ʸ�������ɤ�����������᥽�å�
-      �Ǥ���
+      tDiaryの言語リソースで定義されている文字コードを正規化するメソッド
+      です。
 
 --- DispRef2Setup#[]
-      ���ꤵ��Ƥ����ͤ��֤��ޤ���
+      設定されている値を返します。
 =end
 # configuration of this plugin
 class DispRef2Setup < Hash
@@ -474,66 +474,66 @@ class DispRef2Setup < Hash
 	# default options
 	Defaults = {
 		'long.only_normal' => false,
-			# true�ξ�硢����ʬ��ɽ���ǡ��̾�Υ�󥯸��ʳ��򱣤��ޤ���
+			# trueの場合、一日分の表示で、通常のリンク元以外を隠します。
 		'short.only_normal' => true,
-			# true�ξ�硢�ǿ���ɽ���ǡ��̾�Υ�󥯸��ʳ��򱣤��ޤ���
-			# false�ξ��ϡ��ץ饰�����̵�������������ʤ�ɽ���ˤʤ�ޤ���
+			# trueの場合、最新の表示で、通常のリンク元以外を隠します。
+			# falseの場合は、プラグインの無い場合と全くおなじ表示になります。
 		'antenna.url' => '(\/a\/|(?!.*\/diary\/)antenna[\/\.]|\/tama\/|\Ahttp:\/\/www\.tdiary\.net\/?(i\/)?(\?|$)|links?|\Ahttp:\/\/kitaj\.no-ip\.com\/iraira\/|\Ahttp:\/\/i-know\.jp\/|\Ahttp:\/\/(www\.)?bloglines\.com\/(myblogs|public)_display|\Ahttp:\/\/del\.icio\.us\/\w+|\Ahttp:\/\/reader\.livedoor\.com\/reader\/)',
-			# ����ƥʤ�URL�˰��פ�������ɽ����ʸ����Ǥ���
-		'antenna.title' => '(����ƥ�|links?|����Ƥ�|antenna|entry|entries|��󥯽�|RSS|�֥å��ޡ���)',
-			# ����ƥʤ��ִ����ʸ����˰��פ�������ɽ����ʸ����Ǥ���
+			# アンテナのURLに一致する正規表現の文字列です。
+		'antenna.title' => '(アンテナ|links?|あんてな|antenna|entry|entries|リンク集|RSS|ブックマーク)',
+			# アンテナの置換後の文字列に一致する正規表現の文字列です。
 		'normal.label' => Dispref2plugin.referer_today,
-			# �̾�Υ�󥯸��Υ����ȥ�Ǥ����ǥե���ȤǤϡ��������Υ�󥯸��פǤ���
+			# 通常のリンク元のタイトルです。デフォルトでは、「本日のリンク元」です。
 		'antenna.label' => Disp_referrer2_antenna_label,
-			# ����ƥʤΥ�󥯸��Υ����ȥ�Ǥ���
+			# アンテナのリンク元のタイトルです。
 		'unknown.label' => Disp_referrer2_unknown_label,
-			# ����¾�Υ�󥯸��Υ����ȥ�Ǥ���
+			# その他のリンク元のタイトルです。
 		'unknown.hide' => false,
-			# true�ξ��ϥ�󥯸��ִ��ꥹ�Ȥˤʤ�URL��ɽ�����ޤ���
+			# trueの場合はリンク元置換リストにないURLは表示しません
 		'search.label' => Disp_referrer2_search_label,
-			# �������󥸥󤫤�Υ�󥯸��Υ����ȥ�Ǥ���
+			# 検索エンジンからのリンク元のタイトルです。
 		'unknown.divide' => true,
-			# true�ξ�硢�ִ��ꥹ�Ȥ�̵��URL���̾�Υ�󥯸���ʬ����ɽ�����ޤ���
-			# false�ξ�硢�ִ��ꥹ�Ȥ�̵��URL���̾�Υ�󥯸��Ⱥ�����ɽ�����ޤ���
+			# trueの場合、置換リストに無いURLを通常のリンク元と分けて表示します。
+			# falseの場合、置換リストに無いURLを通常のリンク元と混ぜて表示します。
 		'normal.group' => true,
-			# true�ξ�硢�ִ����ʸ������̾�Υ�󥯸��򥰥롼�פ��ޤ���
-			# false�ξ�硢URL����̤Υ�󥯸��Ȥ���ɽ�����ޤ���
+			# trueの場合、置換後の文字列で通常のリンク元をグループします。
+			# falseの場合、URL毎に別のリンク元として表示します。
 		'normal.categorize' => true,
-			# true�ξ�硢�ִ����ʸ����κǽ��[]��ʸ����ǥ��ƥ��꡼ʬ�����ޤ���
+			# trueの場合、置換後の文字列の最初の[]の文字列でカテゴリー分けします。
 		'normal.ignore_parenthesis' => true,
-			# true�ξ�硢���롼�פ���ݤ��ִ����ʸ����κǸ��()��̵�뤷�ޤ���
+			# trueの場合、グループする際に置換後の文字列の最後の()を無視します。
 		'antenna.group' => true,
-			# true�ξ�硢�ִ����ʸ������̾�Υ�󥯸��򥰥롼�פ��ޤ���
-			# false�ξ�硢URL����̤Υ�󥯸��Ȥ���ɽ�����ޤ���
+			# trueの場合、置換後の文字列で通常のリンク元をグループします。
+			# falseの場合、URL毎に別のリンク元として表示します。
 		'antenna.ignore_parenthesis' => true,
-			# true�ξ�硢���롼�פ���ݤ��ִ����ʸ����κǸ��()��̵�뤷�ޤ���
+			# trueの場合、グループする際に置換後の文字列の最後の()を無視します。
 		'search.expand' => false,
-			# true�ξ�硢����������ɤȤȤ�˸������󥸥�̾��ɽ�����ޤ���
-			# false�ξ�硢����Τߤ�ɽ�����ޤ���
+			# trueの場合、検索キーワードとともに検索エンジン名を表示します。
+			# falseの場合、回数のみを表示します。
 		'search.unknown_keyword' => Disp_referrer2_search_unknown_keyword,
-			# ������ɤ��狼��ʤ��������󥸥󤫤�Υ�󥯤˻Ȥ�ʸ����Ǥ���
+			# キーワードがわからない検索エンジンからのリンクに使う文字列です。
 		'search_engines' => DispReferrer2_Engines,
-			# �������󥸥�Υϥå���Ǥ���
+			# 検索エンジンのハッシュです。
 		'cache_label' => Disp_referrer2_cache_label,
-			# �������󥸥�Υ���å����URL��ɽ������ʸ����Ǥ���
+			# 検索エンジンのキャッシュのURLを表示する文字列です。
 		'cache_path' => "#{Dispref2plugin_cache_path}/disp_referrer2.cache",
-			# ���Υץ饰����ǻȤ�����å���ե�����Υѥ��Ǥ���
-			# ���Υ��ץ����ϸ��ߤϻȤ��Ƥ��ޤ���
+			# このプラグインで使うキャッシュファイルのパスです。
+			# このオプションは現在は使われていません。
 		'cache_dir' => "#{Dispref2plugin_cache_path}/disp_referrer2.d",
-			# ���Υץ饰����ǻȤ�����å���ե�����Υǥ��쥯�ȥ�Ǥ���
+			# このプラグインで使うキャッシュファイルのディレクトリです。
 		'cache_max_size' => 10485760,	# 10MB
-			# ����å���ι���̤�����(�Х���)�Ǥ��������ۤ��ޤ���
-			# 0̤���ʤ����¤��ޤ���
+			# キャッシュの合計量の制限(バイト)です。時々越えます。
+			# 0未満なら制限しません。
 		'no_cache' => false,
-			# true�ξ�硢@secure=false�������Ǥ⥭��å����Ȥ��ޤ���
+			# trueの場合、@secure=falseな日記でもキャッシュを使いません。
 		'normal-unknown.title' => '\Ahttps?:\/\/',
-			# �ִ����줿�֤���¾�פΥ�󥯸��Υ����ȥ롢���뤤���ִ�����Ƥ���
-			# ����󥯸��Υ����ȥ�˥ޥå����ޤ���
+			# 置換された「その他」のリンク元のタイトル、あるいは置換されていな
+			# いリンク元のタイトルにマッチします。
 		'configure.use_link' => true,
-			# ��󥯸��ִ��ꥹ�Ȥ��Խ����̤ǡ���󥯸��ؤΥ�󥯤���ޤ���
+			# リンク元置換リストの編集画面で、リンク元へのリンクを作ります。
 		'reflist.ignore_urls' => '',
-			# �ִ��ꥹ�ȤΥꥹ�ȥ��åפκݤ�̵�뤹��URL������ɽ����ʸ����
-			# \n���ڤ��¤٤ޤ�
+			# 置換リストのリストアップの際に無視するURLの正規表現の文字列
+			# \n区切で並べます
 	}
 
 	attr_reader :is_long, :referer_table, :no_referer, :secure, :years, :conf
@@ -626,28 +626,28 @@ end
 === Tdiary::Plugin::DispRef2URL
 
 --- DispRef2URL::new( unescaped_url, setup = nil )
-      �Ǥ�URL�򸵤ˤ��ƥ��󥹥��󥹤��������ޤ���((|setup|))��nil�ǤϤʤ�
-      ���ˤϡ�parse( ((|setup|)) ) �⤷�ޤ���
+      素のURLを元にしてインスタンスを生成します。((|setup|))がnilではない
+      場合には、parse( ((|setup|)) ) もします。
 
 --- DispRef2URL#restore( db )
-      ����å��夫�鼫ʬ��URL���б�����������Ф��ޤ���((|db|))��
-      DispRef2PStore�Υ��󥹥��󥹤Ǥ�������å��夵��Ƥ��ʤ��ä����
-      �ˤ�nil���֤��ޤ���
+      キャッシュから自分のURLに対応する情報を取り出します。((|db|))は
+      DispRef2PStoreのインスタンスです。キャッシュされていなかった場合
+      にはnilを返します。
 
 --- DispRef2URL#parse( setup )
-      DispRef2Setup�Υ��󥹥���((|setup|))�ˤ������äơ���ʬ����Ϥ��ޤ���
+      DispRef2Setupのインスタンス((|setup|))にしたがって、自分を解析します。
 
 --- DispRef2URL::Cached_options
-      DispRef2Setup�����ꤵ��륪�ץ����Τ���������å���˱ƶ���Ϳ��
-      ���Τ�������֤��ޤ���
+      DispRef2Setupで設定されるオプションのうち、キャッシュに影響を与え
+      るものの配列を返します。
 
 --- DispRef2URL#store( db )
-      ����å���˼�ʬ��Ͽ���ޤ���((|db|))��DispRef2PStore�Υ��󥹥�
-      �󥹤Ǥ�����Ͽ�������������ϼ�ʬ�򡢤����Ǥʤ����ˤ�nil���֤�
-      �ޤ���
+      キャッシュに自分を記録します。((|db|))はDispRef2PStoreのインスタ
+      ンスです。記録に成功した場合は自分を、そうでない場合にはnilを返し
+      ます。
 
 --- DispRef2URL#==( other )
-      ���Ϸ�̤����������˿����֤��ޤ���
+      解析結果が等しい場合に真を返します。
 
 --- DispRef2URL#url
 --- DispRef2URL#category
@@ -656,10 +656,10 @@ end
 --- DispRef2URL#title_ignored
 --- DispRef2URL#title_group
 --- DispRef2URL#key
-      ���줾�졢URL�����ƥ��꡼�����ƥ��꡼̾(�桼���������ꤷ�ʤ����nil)��
-      �����ȥ롢���롼�ײ���������̵�뤵�줿�����ȥ�(̵�����nil)������
-      ���ײ�������Υ����ȥ롢���롼�ײ�����ݤΥ������֤��ޤ���parse��
-      �뤤��restore���ʤ������ꤵ��ޤ���
+      それぞれ、URL、カテゴリー、カテゴリー名(ユーザーが設定しなければnil)、
+      タイトル、グループ化した時に無視されたタイトル(無ければnil)、グル
+      ープ化した後のタイトル、グループ化する際のキーを返します。parseあ
+      るいはrestoreしないと設定されません。
 
 =end
 # handling of a URL
@@ -900,21 +900,21 @@ end
 =begin
 === Tdiary::Plugin::DispRef2Refs
 --- DispRef2Refs::new( diary, setup )
-      ����((|diary|))�Υ�󥯸���DispRef2Setup�Υ��󥹥���((|setup|))
-      �ˤ������äƲ��Ϥ��ޤ���
+      日記((|diary|))のリンク元を、DispRef2Setupのインスタンス((|setup|))
+      にしたがって解析します。
 
 --- DispRef2Refs#special_categories
-      �ִ�ʸ����κǽ��[]�Ǥ����ä����ƥ���̾��٥���������뤳�Ȥˤ��
-      �ƥ桼�����ˤ�ä�������줿���ƥ��꡼��������֤��ޤ���
+      置換文字列の最初に[]でかこったカテゴリ名ラベルを挿入することによっ
+      てユーザーによって定義されたカテゴリーの配列を返します。
 
 --- DispRef2Refs#urls( category = nil )
-      ��󥯸��Τ��������ƥ��꡼��((|category|))�˰��פ����Τ�
-      DispRef2Cache#urls��Ʊ�ͤΥե����ޥåȤ��֤��ޤ���((|category|))
-      ��nil�ξ������Ƥ�URL�ξ�����֤��ޤ���
+      リンク元のうち、カテゴリーが((|category|))に一致するものを、
+      DispRef2Cache#urlsと同様のフォーマットで返します。((|category|))
+      がnilの場合は全てのURLの情報を返します。
 
 --- DispRef2Refs#to_long_html
 --- DispRef2Refs#to_short_html
-      ��󥯸��Υꥹ�Ȥ�HTML���Ҥˤ��ޤ���
+      リンク元のリストをHTML断片にします。
 
 =end
 class DispRef2Refs
@@ -1091,24 +1091,24 @@ end
 
 =begin
 === Tdiary::Plugin::DispRef2Cache
-����å���δ����򤹤륯�饹�Ǥ���
+キャッシュの管理をするクラスです。
 
 --- DispRef2Cache.new( setup )
-      ��󥯸��Υ���å����DispRef2Setup�Υ��󥹥���((|setup|))�ˤ���
-      ���äƴ������ޤ���
+      リンク元のキャッシュを、DispRef2Setupのインスタンス((|setup|))にした
+      がって管理します。
 
 --- DispRef2Cache#urls( category = nil, nmonth = 2 )
-      ����å��夵��Ƥ���URL�ξ���Τ��������ƥ��꡼��((|category|))��
-      ���פ����Τ�URL�򥭡���������������ͤȤ����ϥå���Ȥ����֤�
-      �ޤ���((|category|))��nil�ξ������Ƥ�URL�ξ�����֤��ޤ���
-      ((|nmonth|))��nil�ǤϤʤ����ϡ��Ƕ�NMONTHʬ�Υ���å����������
-      �������ޤ���
-      * ���ƥ��꡼
-      * ���ƥ��꡼�Υ�٥�(���뤤��nil)
-      * �ִ����ʸ����
-      * ���롼�פ���ݤ�̵�뤵�줿ʸ����
-      * ���롼�����Τ�ʸ����
-      * ���롼�פ���ݤΥ���
+      キャッシュされているURLの情報のうち、カテゴリーが((|category|))に
+      一致するものを、URLをキー、下記の配列を値としたハッシュとして返し
+      ます。((|category|))がnilの場合は全てのURLの情報を返します。
+      ((|nmonth|))がnilではない場合は、最近NMONTH分のキャッシュだけから
+      検索します。
+      * カテゴリー
+      * カテゴリーのラベル(あるいはnil)
+      * 置換後の文字列
+      * グループする際に無視された文字列
+      * グループ全体の文字列
+      * グループする際のキー
 
 =end
 # cache management
@@ -1144,31 +1144,31 @@ end
 
 =begin
 === TDiary::Plugin::DispRef2SetupIF
-���Υץ饰���������Τ����HTML����������CGI�ꥯ�����Ȥ�������ޤ���
+このプラグインの設定のためのHTMLを生成し、CGIリクエストを受け取ります。
 
 --- DispRef2SetupIF::new( cgi, setup, conf, mode )
-      CGI�Υ��󥹥���((|cgi|))��DispRef2Setup�Υ��󥹥���((|setup|))
-      ��ꡢ����Τ���Υ��󥹥��󥹤��������ޤ���TDiary::Plugin��ꡢ
-      @conf��@mode������˻��ꤷ�Ƥ���������
+      CGIのインスタンス((|cgi|))とDispRef2Setupのインスタンス((|setup|))
+      より、設定のためのインスタンスを生成します。TDiary::Pluginより、
+      @confと@modeも引数に指定してください。
 
 --- DispRef2SetupIF#show_html
-      ����ι�����ɬ�פʤ饭��å���ι����򤷤Ƥ���HTML��ɽ�����ޤ���
+      設定の更新と必要ならキャッシュの更新をしてからHTMLを表示します。
 
 --- DispRef2SetupIF#show_description
-      ���Υץ饰�����HTML�Ǥ������Ǥ������ꤹ����ܤ����٤ޤ���
+      このプラグインのHTML版の説明です。設定する項目も選べます。
 
 --- DispRef2SetupIF#show_options
-      ���Υץ饰����Υ��ץ��������ꤹ��HTML���Ҥ��֤��ޤ���
+      このプラグインのオプションを設定するHTML断片を返します。
 
 --- DispRef2SetupIF#show_unknown_list
-      ��󥯸��ִ��ꥹ�Ȥ��Խ��Τ����HTML���Ҥ��֤��ޤ���
+      リンク元置換リストの編集のためのHTML断片を返します。
 
 --- DispRef2SetupIF#update_options
-      cgi��������Ϥ˱����ơ����Υץ饰����Υ��ץ����򹹿����ޤ���
-      @setup�⹹�����ޤ���
+      cgiからの入力に応じて、このプラグインのオプションを更新します。
+      @setupも更新します。
 
 --- DispRef2SetupIF#update_tables
-      cgi��������Ϥ˱����ơ���󥯸��ִ��ꥹ�Ȥ򹹿����ޤ���
+      cgiからの入力に応じて、リンク元置換リストを更新します。
 =end
 # WWW Setup interface
 class DispRef2SetupIF
@@ -1393,16 +1393,16 @@ end
 
 =begin
 === TDiary::Plugin::DispRef2Latest
-����å��夬̵�����ˡ�����ץ饰����������Υ�󥯸������뤿��Υ��饹
-�Ǥ���
+キャッシュが無い場合に、設定プラグインで不明のリンク元を得るためのクラス
+です。
 
 --- DispRef2Latest::new( cgi, skeltonfile, conf, setup )
-      TDiary::TDiaryLatest�ΰ����˲ä��ơ�DispRef2Setup�Υ��󥹥���
-      ((|setup|))������ˤȤ�ޤ���
+      TDiary::TDiaryLatestの引数に加えて、DispRef2Setupのインスタンス
+      ((|setup|))を引数にとります。
 
 --- DispRef2Latest::unknown_urls
-      �ǿ��������Υ�󥯸��Τ������ִ��Ǥ��ʤ��ä���Τ�URL��������֤�
-      �ޤ����ִ��Ǥ��ʤ��ä�URL��̵�����ˤ϶���������֤��ޤ���
+      最新の日記のリンク元のうち、置換できなかったもののURLの配列を返し
+      ます。置換できなかったURLが無い場合には空の配列を返します。
 
 =end
 class DispRef2Latest < TDiary::TDiaryLatest
@@ -1437,10 +1437,10 @@ end
 =begin
 === Tdiary::Plugin
 --- Tdiary::Plugin#configure_disp_referrer2
-      ���Υץ饰���������Τ���˻Ȥ���᥽�åɤǤ���add_conf_proc��
-      ��ޤ���
+      このプラグインの設定のために使われるメソッドです。add_conf_procさ
+      れます。
 
-�ʲ��ϡ����Υץ饰����ǥ����С��饤�ɤ����tDiary�Υ᥽�åɤǤ���
+以下は、このプラグインでオーバーライドされるtDiaryのメソッドです。
 --- Tdiary::Plugin#referer_of_today_long( diary, limit = 100 )
 --- Tdiary::Plugin#referer_of_today_short( diary, limit = 10 )
 =end

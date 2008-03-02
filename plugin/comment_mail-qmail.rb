@@ -1,28 +1,28 @@
-# comment_mail_qmail.rb $Revision: 1.10 $
+# comment_mail_qmail.rb $Revision: 1.11 $
 #
-# qmail��Ȥäƥĥå��ߤ�᡼����Τ餻��
-#   ����������ư��롣
+# qmailを使ってツッコミをメールで知らせる
+#   入れるだけで動作する。
 #
 # Options:
-#   ������̤������Ǥ�����(�ĥå��ߥ᡼��ϥץ饰������):
+#   設定画面から指定できるもの(ツッコミメール系プラグイン共通):
 #     @options['comment_mail.enable']
-#          �᡼������뤫�ɤ�������ꤹ�롣true(����)��false(����ʤ�)��
-#          ̵�������false��
+#          メールを送るかどうかを指定する。true(送る)かfalse(送らない)。
+#          無指定時はfalse。
 #     @options['comment_mail.header']
-#          �᡼���Subject�˻Ȥ�ʸ���󡣿���ʬ�����������ʤ褦�˻��ꤹ�롣
-#          �ºݤ�Subject�ϡֻ���ʸ����:����-1�פΤ褦�ˡ����դȥ������ֹ椬
-#          �դ�������������ʸ������ˡ�%��³���ѻ������ä���硢�����
-#          ���եե����ޥåȻ���򸫤ʤ����Ĥޤ�����աפ���ʬ��
-#          ��ưŪ���ղä���ʤ��ʤ�(�������ֹ���ղä����)��
-#          ̵������ˤ϶�ʸ����
+#          メールのSubjectに使う文字列。振り分け等に便利なように指定する。
+#          実際のSubjectは「指定文字列:日付-1」のように、日付とコメント番号が
+#          付く。ただし指定文字列中に、%に続く英字があった場合、それを
+#          日付フォーマット指定を見なす。つまり「日付」の部分は
+#          自動的に付加されなくなる(コメント番号は付加される)。
+#          無指定時には空文字。
 #     @options['comment_mail.receivers']
-#          �᡼������륢�ɥ쥹ʸ���󡣥���ޤǶ��ڤä�ʣ������Ǥ��롣
-#          ̵������ˤ�����ɮ�ԤΥ��ɥ쥹�ˤʤ롣
+#          メールを送るアドレス文字列。カンマで区切って複数指定できる。
+#          無指定時には日記筆者のアドレスになる。
 #  
-#   tdiary.conf�ǤΤ߻���Ǥ�����:
+#   tdiary.confでのみ指定できるもの:
 #     @options['comment_mail.qmail']
-#          qmail_inject���ޥ�ɤΥѥ�����ꤹ�롣
-#          ̵������ˤϡ�'/var/qmail/bin/qmail-inject'�ס�
+#          qmail_injectコマンドのパスを指定する。
+#          無指定時には「'/var/qmail/bin/qmail-inject'」。
 #
 # Copyright (c) 2003 TADA Tadashi <sho@spc.gr.jp>
 # You can distribute this file under the GPL.

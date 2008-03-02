@@ -1,4 +1,4 @@
-# ja/category.rb $Revision: 1.13 $
+# ja/category.rb $Revision: 1.14 $
 #
 # Copyright (c) 2004 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -9,16 +9,16 @@ def category_title
 	mode = info.mode
 	case mode
 	when :year
-		period = "#{info.year}ǯ"
+		period = "#{info.year}年"
 	when :half
-		period = (info.month.to_i == 1 ? "��Ⱦ��" : "��Ⱦ��")
-		period = "#{info.year}ǯ #{period}" if info.year
+		period = (info.month.to_i == 1 ? "上半期" : "下半期")
+		period = "#{info.year}年 #{period}" if info.year
 	when :quarter
-		period = "��#{info.month.to_i}��Ⱦ��"
-		period = "#{info.year}ǯ #{period}" if info.year
+		period = "第#{info.month.to_i}四半期"
+		period = "#{info.year}年 #{period}" if info.year
 	when :month
-		period = "#{info.month.to_i}��"
-		period = "#{info.year}ǯ #{period}" if info.year
+		period = "#{info.month.to_i}月"
+		period = "#{info.year}年 #{period}" if info.year
 	end
 	period = " (#{period})" if period
 
@@ -34,57 +34,57 @@ def category_init_local
 	@conf['category.next_quarter'] ||= '($1-$2) >>'
 	@conf['category.prev_month'] ||= '<< ($1-$2)'
 	@conf['category.next_month'] ||= '($1-$2) >>'
-	@conf['category.this_year'] ||= 'ǯ'
-	@conf['category.this_half'] ||= 'Ⱦ��'
-	@conf['category.this_quarter'] ||= '��Ⱦ��'
-	@conf['category.this_month'] ||= '��'
-	@conf['category.all_diary'] ||= '������'
-	@conf['category.all_category'] ||= '�����ƥ���'
-	@conf['category.all'] ||= '������/�����ƥ���'
+	@conf['category.this_year'] ||= '年'
+	@conf['category.this_half'] ||= '半期'
+	@conf['category.this_quarter'] ||= '四半期'
+	@conf['category.this_month'] ||= '月'
+	@conf['category.all_diary'] ||= '全期間'
+	@conf['category.all_category'] ||= '全カテゴリ'
+	@conf['category.all'] ||= '全期間/全カテゴリ'
 end
 category_init_local
 
-@category_conf_label = '���ƥ���'
+@category_conf_label = 'カテゴリ'
 def category_conf_html
 	r = <<HTML
-<h3 class="subtitle">���ƥ��ꥤ��ǥå����κ���</h3>
+<h3 class="subtitle">カテゴリインデックスの作成</h3>
 <p>
-���ƥ���ε�ǽ�����Ѥ���ˤϥ��ƥ��ꥤ��ǥå����򤢤餫����������Ƥ���ɬ�פ�����ޤ���
-���ƥ��ꥤ��ǥå������������ˤ�
-�ʲ��Υ����å�������Ƥ���OK�ܥ���򲡤��Ƥ���������
+カテゴリの機能を利用するにはカテゴリインデックスをあらかじめ作成しておく必要があります。
+カテゴリインデックスを作成するには
+以下のチェックを入れてからOKボタンを押してください。
 </p>
 <p><label for="category_initialize">
-<input type="checkbox" id="category_initialize" name="category_initialize" value="1">���ƥ��ꥤ��ǥå����κ���
+<input type="checkbox" id="category_initialize" name="category_initialize" value="1">カテゴリインデックスの作成
 </label></p>
 <p>
-�������̤䥵���Ф���ǽ�ˤ���ޤ��������ä�������äǥ���ǥå����κ����Ͻ�λ���ޤ���
+日記の量やサーバの性能にもよりますが、数秒から数十秒でインデックスの作成は終了します。
 </p>
 
-<h3 class="subtitle">�����Խ����ݡ���</h3>
+<h3 class="subtitle">日記編集サポート</h3>
 <p>
-�����Խ����̤Ρ���ʸ�פβ��˥��ƥ���̾�����ɽ�����뤳�Ȥ��Ǥ��ޤ���
-���ƥ���̾�򥯥�å�����ȡ���ʸ�פˤ��Υ��ƥ���̾����������ޤ�(��JavaScript)��
+日記編集画面の「本文」の下にカテゴリ名を一覧表示することができます。
+カテゴリ名をクリックすると「本文」にそのカテゴリ名が挿入されます(要JavaScript)。
 </p>
 <p>
 <select name="category.edit_support">
-<option value="true"#{" selected" if @conf['category.edit_support']}>ɽ������</option>
-<option value="false"#{" selected" unless @conf['category.edit_support']}>ɽ�����ʤ�</option>
+<option value="true"#{" selected" if @conf['category.edit_support']}>表示する</option>
+<option value="false"#{" selected" unless @conf['category.edit_support']}>表示しない</option>
 </select>
 </p>
 
-<h3 class="subtitle">ɽ�����֤ν������</h3>
+<h3 class="subtitle">表示期間の初期状態</h3>
 <p>
-���ƥ���ɽ�����̤�ɽ���������Ρ��ǽ��ɽ�����֤���ꤷ�ޤ���
+カテゴリ表示画面を表示した時の、最初の表示期間を指定します。
 </p>
 <p>
 <select name="category.period">
 HTML
 	[
-		['��', 'month', false],
-		['��Ⱦ��', 'quarter', true],
-		['Ⱦ��', 'half', false],
-		['ǯ', 'year', false],
-		['������', 'all', false],
+		['月', 'month', false],
+		['四半期', 'quarter', true],
+		['半期', 'half', false],
+		['年', 'year', false],
+		['全日記', 'all', false],
 	].each do |text, value, default|
 		selected = @conf["category.period"] ? @conf["category.period"] == value : default
 		r << <<HTML
@@ -95,46 +95,46 @@ HTML
 </select>
 </p>
 
-<h3 class="subtitle">�إå�</h3>
+<h3 class="subtitle">ヘッダ</h3>
 <p>
-���̾�����ɽ������ʸ�Ϥ���ꤷ�ޤ���
-��&lt;%= category_navi %&gt;�פǡ����ƥ�����ò������ʥӥ��������ܥ����ɽ�����뤳�Ȥ��Ǥ��ޤ���
-�ޤ���&lt;%= category_list%&gt;�פǥ��ƥ���̾������ɽ�����뤳�Ȥ��Ǥ��ޤ���
-����¾���Ƽ�ץ饰�����HTML�򵭽ҤǤ��ޤ���
+画面上部に表示する文章を指定します。
+「&lt;%= category_navi %&gt;」で、カテゴリに特化したナビゲーションボタンを表示することができます。
+また「&lt;%= category_list%&gt;」でカテゴリ名一覧を表示することができます。
+その他，各種プラグインやHTMLを記述できます。
 </p>
 
-<h4>�إå�1</h4>
-<p>�ʥӥ��������ܥ���Τ�������ɽ������ޤ���</p>
+<h4>ヘッダ1</h4>
+<p>ナビゲーションボタンのすぐ下に表示されます。</p>
 <p><textarea name="category.header1" cols="60" rows="5">#{h @conf['category.header1']}</textarea></p>
 
-<h4>�إå�2</h4>
-<p>H1�Τ�������ɽ������ޤ���</p>
+<h4>ヘッダ2</h4>
+<p>H1のすぐ下に表示されます。</p>
 <p><textarea name="category.header2" cols="60" rows="5">#{h @conf['category.header2']}</textarea></p>
 
-<h3 class="subtitle">�ܥ����٥�</h3>
+<h3 class="subtitle">ボタンラベル</h3>
 <p>
-�ʥӥ��������ܥ���Υ�٥����ꤷ�ޤ���
-��٥����$1��$2�ϡ����줾���ǯ�סַ�פ�ɽ�����ͤ��ִ�����ޤ���
+ナビゲーションボタンのラベルを指定します。
+ラベル中の$1と$2は，それぞれ「年」「月」を表す数値で置換されます。
 </p>
 <table border="0">
-<tr><th>�ܥ���̾</th><th>��٥�</th><th>����ץ�</th></tr>
+<tr><th>ボタン名</th><th>ラベル</th><th>サンプル</th></tr>
 HTML
 	[
-		['��ǯ', 'category.prev_year'],
-		['��ǯ', 'category.next_year'],
-		['����Ⱦǯ', 'category.prev_half'],
-		['����Ⱦǯ', 'category.next_half'],
-		['����Ⱦ��', 'category.prev_quarter'],
-		['����Ⱦ��', 'category.next_quarter'],
-		['���', 'category.prev_month'],
-		['���', 'category.next_month'],
-		['��ǯ', 'category.this_year'],
-		['��Ⱦ��', 'category.this_half'],
-		['����Ⱦ��', 'category.this_quarter'],
-		['����', 'category.this_month'],
-		['������', 'category.all_diary'],
-		['�����ƥ���', 'category.all_category'],
-		['������/�����ƥ���', 'category.all'],
+		['前年', 'category.prev_year'],
+		['翌年', 'category.next_year'],
+		['前の半年', 'category.prev_half'],
+		['次の半年', 'category.next_half'],
+		['前四半期', 'category.prev_quarter'],
+		['次四半期', 'category.next_quarter'],
+		['先月', 'category.prev_month'],
+		['翌月', 'category.next_month'],
+		['今年', 'category.this_year'],
+		['現半期', 'category.this_half'],
+		['現四半期', 'category.this_quarter'],
+		['今月', 'category.this_month'],
+		['全日記', 'category.all_diary'],
+		['全カテゴリ', 'category.all_category'],
+		['全日記/全カテゴリ', 'category.all'],
 	].each do |button, name|
 		r << <<HTML
 <tr>
@@ -149,19 +149,19 @@ HTML
 HTML
 end
 
-@category_icon_none_label = '��������ʤ�'
-@category_icon_conf_label = '���ƥ��ꥢ������'
+@category_icon_none_label = 'アイコンなし'
+@category_icon_conf_label = 'カテゴリアイコン'
 def category_icon_conf_html
 	r = ''
 	unless @conf.secure
 		r << <<HTML
-<h3 class="subtitle">���ƥ��ꥢ��������֤����</h3>
+<h3 class="subtitle">カテゴリアイコンの置き場所</h3>
 <p>
-���ƥ��ꥢ�������Ѥβ�������¸����Ƥ���ǥ��쥯�ȥ�Ȥ���URL����ꤷ�ޤ���
+カテゴリアイコン用の画像が保存されているディレクトリとそのURLを指定します。
 </p>
 <p>
 <dl>
-<dt>�ǥ��쥯�ȥ�:</dt>
+<dt>ディレクトリ:</dt>
 <dd><input name="category.icon_dir" value="#{h @category_icon_dir}" size="30"></dd>
 <dt>URL:</dt>
 <dd><input name="category.icon_url" value="#{h @category_icon_url}" size="30"></dd>
@@ -179,20 +179,20 @@ HTML
 		str << %Q|</td>\n\t</tr>\n|
 	end
 	r << <<HTML
-<h3 class="subtitle">���ƥ��ꥢ������</h3>
+<h3 class="subtitle">カテゴリアイコン</h3>
 <p>
-�ƥ��ƥ���Υ��������ɥ��åץ�����ꥹ�Ȥ������򤷤ޤ���
+各カテゴリのアイコンをドロップダウンリストから選択します。
 <p>
 <table>
-	<tr><th>���ƥ���</th><th>��������</th></tr>
+	<tr><th>カテゴリ</th><th>アイコン</th></tr>
 #{str}
 </table>
 </p>
 <hr>
-<h3 class="subtitle">�������󥵥�ץ�</h3>
+<h3 class="subtitle">アイコンサンプル</h3>
 <p>
-�����ǽ�ʥ�����������Ǥ���
-��������˥ޥ�������������碌��ȥ�������Υե�����̾���ݥåץ��å�ɽ������ޤ���
+選択可能なアイコン一覧です．
+アイコンにマウスカーソルを合わせるとアイコンのファイル名がポップアップ表示されます。
 </p>
 <p>
 #{category_icon_sample}

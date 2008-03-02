@@ -1,5 +1,5 @@
-# $Revision: 1.22 $
-# recent_trackback3: �Ƕ�Υĥå��ߤ�ꥹ�ȥ��åפ���
+# $Revision: 1.23 $
+# recent_trackback3: 最近のツッコミをリストアップする
 #
 # Copyright (c) 2004 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -86,7 +86,7 @@ def recent_trackback3
             if diary != nil then
                title = diary.diaries[entry_date].title.gsub( /<[^>]*>/, '' )
             end
-            if title == nil || title.length == 0 || title.strip.delete('��').delete(' ').length == 0 then
+            if title == nil || title.length == 0 || title.strip.delete('　').delete(' ').length == 0 then
                date = Time.parse(entry_date)
                title = "#{date.strftime @date_format}"
             end

@@ -3,5 +3,5 @@
 # Copyright (c) 2005 SHIBATA Hiroshi <h-sbt@nifty.com>
 # Distributed under the GPL
 
-@daily_theme_label = 'ÆüÂØ¤ï¤ê¥Æ¡¼¥Ş'
-@daily_theme_label_desc = 'ÆüÂØ¤ï¤ê¥Æ¡¼¥Ş¤Ç»ÈÍÑ¤¹¤ë¥Æ¡¼¥ŞÌ¾¤ò¡¢1¹Ô¤Ë¤Ä¤­1¤ÄÆşÎÏ¤·¤Æ¤¯¤À¤µ¤¤¡£'
+@daily_theme_label = 'æ—¥æ›¿ã‚ã‚Šãƒ†ãƒ¼ãƒ'
+@daily_theme_label_desc = 'æ—¥æ›¿ã‚ã‚Šãƒ†ãƒ¼ãƒã§ä½¿ç”¨ã™ã‚‹ãƒ†ãƒ¼ãƒåã‚’ã€1è¡Œã«ã¤ã1ã¤å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚'

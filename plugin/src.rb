@@ -1,8 +1,8 @@
-# src.rb $Revision: 1.3 $
+# src.rb $Revision: 1.4 $
 #
-# src: ³°Éô¥Õ¥¡¥¤¥ë¤òÁŞÆş¤¹¤ë(HTML¥¨¥¹¥±¡¼¥×ÉÕ¤­)
-#   ¥Ñ¥é¥á¥¿:
-#     file: ¥Õ¥¡¥¤¥ëÌ¾
+# src: å¤–éƒ¨ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æŒ¿å…¥ã™ã‚‹(HTMLã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ä»˜ã)
+#   ãƒ‘ãƒ©ãƒ¡ã‚¿:
+#     file: ãƒ•ã‚¡ã‚¤ãƒ«å
 #
 # Copyright (c) 2005 TADA Tadashi <sho@spc.gr.jp>
 # You can distribute this file under the GPL2.
@@ -12,9 +12,9 @@ def src( file )
 end
 
 #
-# src_inline: ¥Æ¥­¥¹¥È¤òÁŞÆş¤¹¤ë(HTML¥¨¥¹¥±¡¼¥×ÉÕ¤­)
+# src_inline: ãƒ†ã‚­ã‚¹ãƒˆã‚’æŒ¿å…¥ã™ã‚‹(HTMLã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ä»˜ã)
 #
-# ¥Ñ¥é¥á¥¿: ¥Æ¥­¥¹¥ÈÊ¸»úÎó
+# ãƒ‘ãƒ©ãƒ¡ã‚¿: ãƒ†ã‚­ã‚¹ãƒˆæ–‡å­—åˆ—
 #
 def src_inline( str )
 	h( str )

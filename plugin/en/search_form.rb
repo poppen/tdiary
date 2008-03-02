@@ -1,4 +1,4 @@
-# search_form.rb English resource. $Revision: 1.1 $
+# search_form.rb English resource. $Revision: 1.2 $
 
 def google_form( button_name = "Google Search", size = 20, default_text = "" )
 	first = %Q[<a href="http://www.google.com/">

@@ -1,44 +1,44 @@
 =begin
-= Meta-scheme plugin((-$Id: referer_scheme.rb,v 1.8 2004-07-30 18:38:33 zunda Exp $-))
-�����Υ�󥯸��ִ��ꥹ�Ȥε��Ҥ�ڤˤ��ޤ���
+= Meta-scheme plugin((-$Id: referer_scheme.rb,v 1.9 2008-03-02 09:01:46 kazuhiko Exp $-))
+本日のリンク元置換リストの記述を楽にします。
 
-== ������ˡ
-���Υץ饰����򡢥ץ饰����Υǥ��쥯�ȥ������뤫�ץ饰��������ץ饰
-���󤫤�ͭ���ˤ��Ƥ���������
+== 利用方法
+このプラグインを、プラグインのディレクトリに入れるかプラグイン選択プラグ
+インから有効にしてください。
 
-���ˡ����ꡢ��󥯸����顢��󥯸��ִ��ꥹ�Ȥ��Խ����ơ�tdiary:��
-hatena:�Ȥ����ץ�ե��å���(�᥿����������ȸƤ֤��Ȥˤ��ޤ�)��URL������
-�դ��Ƥ���������
+次に、設定、リンク元から、リンク元置換リストを編集して、tdiary:や
+hatena:というプレフィックス(メタ・スキームと呼ぶことにします)をURLの前に
+付けてください。
 
-����ˤ�ꡢ���դ��ִ�����롼���񤫤ʤ��Ǥ⡢�ִ����ʸ����˼�ưŪ��
-���դʤɤ��������뤳�Ȥ��Ǥ��ޤ���
+これにより、日付を置換するルールを書かないでも、置換後の文字列に自動的に
+日付などを挿入することができます。
 
-�㤨�С����Τ褦�ʵ��Ҥ򤷤Ƥ���������
-* tdiary:http://tdiary.tdiary.net/ tDiary.net��������
-* tdiarynet:foo((-http://foo.tdiary.net/��Ÿ������ޤ�-)) foo���������
-* hatena:bar((-http://d.hatena.ne.jp/bar/��Ÿ������ޤ�-)) bar���������
-������Ǥϡ�URL�����դ��ޤޤ��С�(YYYY-MM-DD)�Ȥ����������ɲä��ޤ���
+例えば、次のような記述をしてください。
+* tdiary:http://tdiary.tdiary.net/ tDiary.net運営日誌
+* tdiarynet:foo((-http://foo.tdiary.net/に展開されます-)) fooさんの日記
+* hatena:bar((-http://d.hatena.ne.jp/bar/に展開されます-)) barさんの日記
+この例では、URLに日付が含まれれば、(YYYY-MM-DD)という形式で追加します。
 
-== ����
-tdiary:�ǻϤޤ�URL�ϡ�
-* ��̤�Ȥ�ʤ��Ǥ���������
-* /�ǽ���餻�Ƥ���������
+== 注意
+tdiary:で始まるURLは、
+* 括弧を使わないでください。
+* /で終わらせてください。
 
-tdiarynet:��hatena:�ǻϤޤ�URL�ϡ�
-* ��̤�Ȥ�ʤ��Ǥ���������
-* URL�Ȥ��Ƥϥ桼����ID��������ꤷ�Ƥ���������
+tdiarynet:やhatena:で始まるURLは、
+* 括弧を使わないでください。
+* URLとしてはユーザーIDだけを指定してください。
 
-== �᥿����������κ����
-��󥯸��ִ��ꥹ�Ȥ�URL������ɽ����ʸ������Ф��ơ�/^(\w+):/�Ȥ�������ɽ
-���ǰ��פ���ʸ���󤬥᥿����������Ȥ��Ƹ��Ф���ޤ���
-  def scheme_��������̾( url, name )
+== メタ・スキームの作り方
+リンク元置換リストのURLの正規表現の文字列に対して、/^(\w+):/という正規表
+現で一致する文字列がメタ・スキームとして検出されます。
+  def scheme_スキーム名( url, name )
     :
     yield( url_variants, name_variants )
     :
   end
-�Ȥ���@conf.referer_table���ðۥ᥽�åɤ򥤥ƥ졼���Ȥ���������Ƥ����С�
-�ִ��ꥹ�Ȥε��Ҥ˱����Ƥ��Υ᥽�åɤ��ƤФ�ޤ���url�ˤ�
-�֥᥿����������̾:�פ����������ɽ�����Ϥ���뤳�Ȥ����դ��Ƥ���������
+という@conf.referer_tableの特異メソッドをイテレータとして定義しておけば、
+置換リストの記述に応じてこのメソッドが呼ばれます。urlには
+「メタ・スキーム名:」を除いた正規表現が渡されることに注意してください。
 
 == Copyright
 Copyright (C) 2003 zunda <zunda at freeshell.org>

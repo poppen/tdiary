@@ -1,4 +1,4 @@
-# ja/recent_trackback3.rb $Revision: 1.7 $
+# ja/recent_trackback3.rb $Revision: 1.8 $
 #
 # English resources for recent_trackback3.rb
 #

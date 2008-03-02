@@ -1,4 +1,4 @@
-# amazon.rb $Revision: 1.64 $: Making link with image to Amazon using Amazon ECS.
+# amazon.rb $Revision: 1.65 $: Making link with image to Amazon using Amazon ECS.
 #
 # see document: #{@lang}/amazon.rb
 #
@@ -13,11 +13,29 @@ require 'rexml/document'
 @amazon_subscription_id = '1CVA98NEF1G753PFESR2'
 @amazon_require_version = '2007-01-17'
 
-def amazon_call_ecs( asin, id_type )
+@amazon_url_hash = {
+  'us' => 'http://www.amazon.com/exec/obidos/ASIN',
+  'jp' => 'http://www.amazon.co.jp/exec/obidos/ASIN',
+  'fr' => 'http://www.amazon.fr/exec/obidos/ASIN',
+  'uk' => 'http://www.amazon.co.uk/exec/obidos/ASIN',
+  'de' => 'http://www.amazon.de/exec/obidos/ASIN',
+  nil   => @amazon_url
+}
+
+@amazon_ecs_url_hash = {
+  'us' => 'http://webservices.amazon.com/onca/xml',
+  'jp' => 'http://webservices.amazon.co.jp/onca/xml',
+  'fr' => 'http://webservices.amazon.fr/onca/xml',
+  'uk' => 'http://webservices.amazon.co.uk/onca/xml',
+  'de' => 'http://webservices.amazon.de/onca/xml',
+  nil   => @amazon_ecs_url
+}
+
+def amazon_call_ecs( asin, id_type, country = nil )
 	aid =  @conf['amazon.aid'] || ''
 	aid = 'cshs-22' if aid.empty?
 
-	url =  @amazon_ecs_url.dup
+	url =  @amazon_ecs_url_hash[country].dup
 	url << "?Service=AWSECommerceService"
 	url << "&SubscriptionId=#{@amazon_subscription_id}"
 	url << "&AssociateTag=#{aid}"
@@ -134,7 +152,7 @@ def amazon_to_html( item, with_image = true, label = nil, pos = 'amazon' )
 
 	author = amazon_author( item )
 	author = "(#{author})" unless author.empty?
-	
+
 	if with_image and @conf['amazon.hidename'] || pos != 'amazon' then
 		label = ''
 	elsif not label
@@ -159,7 +177,7 @@ def amazon_to_html( item, with_image = true, label = nil, pos = 'amazon' )
 	%Q|<a href="#{h url}">#{img}#{h label}</a>|
 end
 
-def amazon_secure_html( asin, with_image, label, pos = 'amazon' )
+def amazon_secure_html( asin, with_image, label, pos = 'amazon', country = nil )
 	with_image = false if @mode == 'categoryview'
 	label = asin unless label
 
@@ -167,7 +185,7 @@ def amazon_secure_html( asin, with_image, label, pos = 'amazon' )
 	if with_image and @conf['amazon.secure-cgi'] then
 		image = <<-HTML
 		<img class="#{h pos}"
-		src="#{h @conf['amazon.secure-cgi']}?asin=#{u asin};size=#{u @conf['amazon.imgsize']}"
+		src="#{h @conf['amazon.secure-cgi']}?asin=#{u asin};size=#{u @conf['amazon.imgsize']};country=#{u country}"
 		alt="#{h label}" title="#{h label}">
 		HTML
 	end
@@ -177,7 +195,8 @@ def amazon_secure_html( asin, with_image, label, pos = 'amazon' )
 		label = ''
 	end
 
-	url =  "#{@amazon_url}/#{u asin}"
+	amazon_url = @amazon_url_hash[country]
+	url =  "#{amazon_url}/#{u asin}"
 	url << "/#{u @conf['amazon.aid']}" if @conf['amazon.aid'] and @conf['amazon.aid'].length > 0
 	url << "/ref=nosim/"
 	%Q|<a href="#{h url}">#{image}#{h label}</a>|
@@ -185,6 +204,8 @@ end
 
 def amazon_get( asin, with_image = true, label = nil, pos = 'amazon' )
 	asin = asin.to_s.strip # delete white spaces
+	asin.sub!(/\A([a-z]+):/, '')
+	country = $1
 	digit = asin.gsub( /[^\d]/, '' )
 	if digit.length == 13 then # ISBN-13
 		asin = digit
@@ -194,16 +215,16 @@ def amazon_get( asin, with_image = true, label = nil, pos = 'amazon' )
 	end
 
 	if @conf.secure then
-		amazon_secure_html( asin, with_image, label, pos )
+		amazon_secure_html( asin, with_image, label, pos, country )
 	else
 		begin
 			cache = "#{@cache_path}/amazon"
 			Dir::mkdir( cache ) unless File::directory?( cache )
 			begin
-				xml = File::read( "#{cache}/#{asin}.xml" )
+				xml = File::read( "#{cache}/#{country}#{asin}.xml" )
 			rescue Errno::ENOENT
-				xml =  amazon_call_ecs( asin, id_type )
-				File::open( "#{cache}/#{asin}.xml", 'wb' ) {|f| f.write( xml )}
+				xml =  amazon_call_ecs( asin, id_type, country )
+				File::open( "#{cache}/#{country}#{asin}.xml", 'wb' ) {|f| f.write( xml )}
 			end
 			doc = REXML::Document::new( xml ).root
 			item = doc.elements.to_a( '*/Item' )[0]

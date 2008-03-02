@@ -1,5 +1,5 @@
 =begin
-= ¤³¤³¤À¤±¸¡º÷¥×¥é¥°¥¤¥ó/search control plugin((-$Id: search_control.rb,v 1.10 2007-05-03 02:36:03 tadatadashi Exp $-))
+= ã“ã“ã ã‘æ¤œç´¢ãƒ—ãƒ©ã‚°ã‚¤ãƒ³/search control plugin((-$Id: search_control.rb,v 1.11 2008-03-02 09:01:45 kazuhiko Exp $-))
 
 Under revision! TODO: add/remove user agents
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-# amazonimg.rb $Revision: 1.5 $: CGI script for tDiary amazon plugin in secure mode.
+# amazonimg.rb $Revision: 1.6 $: CGI script for tDiary amazon plugin in secure mode.
 #
 # set URL of this script to @options['amazon.secure-cgi'] into tdiary.conf.
 #
@@ -28,16 +28,33 @@
 @amazon_require_version = '2005-07-26'
 #####################################
 
+@amazon_url_hash = {
+  'us' => 'http://www.amazon.com/exec/obidos/ASIN',
+  'jp' => 'http://www.amazon.co.jp/exec/obidos/ASIN',
+  'fr' => 'http://www.amazon.fr/exec/obidos/ASIN',
+  'uk' => 'http://www.amazon.co.uk/exec/obidos/ASIN',
+  'de' => 'http://www.amazon.de/exec/obidos/ASIN',
+  nil   => @amazon_url
+}
+
+@amazon_ecs_url_hash = {
+  'us' => 'http://webservices.amazon.com/onca/xml',
+  'jp' => 'http://webservices.amazon.co.jp/onca/xml',
+  'fr' => 'http://webservices.amazon.fr/onca/xml',
+  'uk' => 'http://webservices.amazon.co.uk/onca/xml',
+  'de' => 'http://webservices.amazon.de/onca/xml',
+  nil   => @amazon_ecs_url
+}
+
 require 'cgi'
 require 'open-uri'
 require 'timeout'
 require 'rexml/document'
-require 'nkf'
 
-def amazon_call_ecs( asin )
+def amazon_call_ecs( asin, country = nil )
 	aid = @amazon_aid || 'cshs-22'
 
-	url =  @amazon_ecs_url.dup
+	url =  @amazon_ecs_url_hash[country].dup
 	url << "?Service=AWSECommerceService"
 	url << "&SubscriptionId=#{@amazon_subscription_id}"
 	url << "&AssociateTag=#{aid}"
@@ -51,13 +68,13 @@ def amazon_call_ecs( asin )
 	end
 end
 
-def amazon_redirect( cgi, asin, size )
+def amazon_redirect( cgi, asin, size, country = nil )
 	begin
-		xml = File::read( "#{@cache_path}/#{asin}.xml" )
+		xml = File::read( "#{@cache_path}/#{country}#{asin}.xml" )
 	rescue Errno::ENOENT
-		xml =  amazon_call_ecs( asin )
+		xml =  amazon_call_ecs( asin, country )
 		Dir::mkdir( @cache_path ) unless File::directory?( @cache_path )
-		File::open( "#{@cache_path}/#{asin}.xml", 'wb' ) {|f| f.write( xml )}
+		File::open( "#{@cache_path}/#{country}#{asin}.xml", 'wb' ) {|f| f.write( xml )}
 	end
 	doc = REXML::Document::new( xml ).root
 	item = doc.elements.to_a( '*/Item' )[0]
@@ -77,9 +94,11 @@ end
 cgi = CGI::new
 asin, = cgi.params['asin']
 size, = cgi.params['size']
+country, = cgi.params['country']
 if asin && /\A[0-9A-Z]{10}\z/ =~ asin then
 	size = '1' if !size or size.length == 0
-	amazon_redirect( cgi, asin.untaint, size.to_i )
+	country = nil unless /\A[a-z]+\z/ =~ country
+	amazon_redirect( cgi, asin.untaint, size.to_i, country.untaint )
 else
-	puts "Content-Type: text/plain\n\nBAD REQUEST\nasin:#{asin}\nsize:#{size}"
+	puts "Content-Type: text/plain\n\nBAD REQUEST\nasin:#{CGI::escapeHTML(asin)}\nsize:#{CGI::escapeHTML(size)}"
 end

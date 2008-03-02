@@ -1,4 +1,4 @@
-# search_form.rb $Revision: 1.11 $ $Revision: 1.11 $
+# search_form.rb $Revision: 1.12 $ $Revision: 1.12 $
 #
 # Show a form for search engines.
 #

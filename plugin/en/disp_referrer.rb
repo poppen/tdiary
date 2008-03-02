@@ -1,5 +1,5 @@
 =begin
-= A little bit more powerful display of referrers((-$Id: disp_referrer.rb,v 1.19 2007-12-07 13:34:17 zunda Exp $-))
+= A little bit more powerful display of referrers((-$Id: disp_referrer.rb,v 1.20 2008-03-02 09:01:46 kazuhiko Exp $-))
 English resource
 
 == Copyright notice
@@ -34,22 +34,22 @@ See ../ChangeLog for changes after this.
 - instance_eval for e[2] in the search engine list
 * Wed Aug  7, 2003 zunda <zunda at freeshell.org>
 - WWW browser configuration interface
-  - ����å���ι�������μ¤ˤ���褦�ˤ��ޤ�����WWW�֥饦�������ִ�
-    �ꥹ�Ȥ��ä����ˤϥꥹ�Ȥκǽ���ɲä���ޤ���
-  - secure=true�������Ǥ���¾�Υ�󥯸��ꥹ�Ȥ�ɽ���Ǥ���褦�ˤʤ�ޤ�����
+  - キャッシュの更新をより確実にするようにしました。WWWブラウザから置換
+    リストを作った場合にはリストの最初に追加されます。
+  - secure=trueな日記でその他のリンク元リストが表示できるようになりました。
 - Regexp generation for Wiki sites
 * Wed Aug  6, 2003 zunda <zunda at freeshell.org>
 - WWW browser configuration interface
-  - ��ʥ��ץ����ȥ�󥯸��ִ��ꥹ�Ȥθ�ΨŪ���Խ���WWW�֥饦�������
-    ����褦�ˤʤ�ޤ�����secure=true�������Ǥϰ����ε�ǽ�ϻȤ��ޤ���
+  - 主なオプションとリンク元置換リストの効率的な編集がWWWブラウザからで
+    きるようになりました。secure=trueな日記では一部の機能は使えません。
 * Sat Aug  2, 2003 zunda <zunda at freeshell.org>
 - Second version
 - basic functions re-implemented
-  - ���ץ�����̿̾���ʤ����ޤ������ޤ����פʥ��ץ�����ä��ޤ�����
-    tdiary.conf���Խ����Ƥ������ϡ�������Ǥ�������򤷤ʤ����Ƥ���������
-  - Nora�饤�֥��ȥ���å�������Ѥǹ�®�����ޤ�����
-  - �������󥸥�Υꥹ�Ȥ�ץ饰����ǻ��Ĥ褦�ˤʤ�ޤ�����&��;��ޤม
-    ��ʸ���������̤����ФǤ��ޤ���
+  - オプションを命名しなおしました。また不要なオプションを消しました。
+    tdiary.confを編集していた方は、お手数ですが設定をしなおしてください。
+  - Noraライブラリとキャッシュの利用で高速化しました。
+  - 検索エンジンのリストをプラグインで持つようになりました。&や;を含む検
+    索文字列も期待通りに抽出できます。
 * Mon Feb 17, 2003 zunda <zunda at freeshell.org>
 - First version
 =end
@@ -313,7 +313,7 @@ DispReferrer2_Engines = {
 	'metabot' => [[%r{\Ahttp://.*?\.metabot\.ru}i, '"MetaBot.ru"', ['st'], nil ]],
 	'altavista' => [[%r{\Ahttp://.*?\.altavista\.([^/]+)}i, '"Altavista in .#{$1}"', ['q'], nil ]],
 	'infoseek' => [[%r{\Ahttp://(www\.)?infoseek\.co\.jp}i, '"Infoseek"', ['qt'], nil ]],
-	'odn' => [[%r{\Ahttp://.*?\.odn\.ne\.jp}i, '"ODN����"', ['QueryString', 'key'], nil ]],
+	'odn' => [[%r{\Ahttp://.*?\.odn\.ne\.jp}i, '"ODN検索"', ['QueryString', 'key'], nil ]],
 	'lycos' => [[%r{\Ahttp://.*?\.lycos\.([^/]+)}i, '"Lycos in .#{$1}"', ['query', 'q', 'qt'], nil ]],
 	'fresheye' => [[%r{\Ahttp://.*?\.fresheye}i, '"Fresheye"', ['kw'], nil ]],
 	'goo' => [

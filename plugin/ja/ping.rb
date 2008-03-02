@@ -1,10 +1,9 @@
 # ping.rb Japanese resources
-
 if /conf/ =~ @mode then
-	@ping_label_conf = '¹¹¿·ÄÌÃÎ'
-	@ping_label_list = 'ÄÌÃÎÀè¥ê¥¹¥È'
-	@ping_label_list_desc = '¹¹¿·ÄÌÃÎ¤ò¤¹¤ëping¥µ¡¼¥Ó¥¹¤ÎURL¤ò¡¢1¹Ô¤Ë¤Ä¤­1¤ÄÆþÎÏ¤·¤Æ¤¯¤À¤µ¤¤¡£¤Ê¤ª¡¢¤¢¤Þ¤ê¤¿¤¯¤µ¤ó»ØÄê¤¹¤ë¤È¡¢ÅÓÃæ¤Ç¥¿¥¤¥à¥¢¥¦¥È¤·¤Æ¤·¤Þ¤¦¤«¤âÃÎ¤ì¤Þ¤»¤ó'
-	@ping_label_timeout = '¥¿¥¤¥à¥¢¥¦¥È(ÉÃ)'
+	@ping_label_conf = 'æ›´æ–°é€šçŸ¥'
+	@ping_label_list = 'é€šçŸ¥å…ˆãƒªã‚¹ãƒˆ'
+	@ping_label_list_desc = 'æ›´æ–°é€šçŸ¥ã‚’ã™ã‚‹pingã‚µãƒ¼ãƒ“ã‚¹ã®URLã‚’ã€1è¡Œã«ã¤ã1ã¤å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚ãªãŠã€ã‚ã¾ã‚ŠãŸãã•ã‚“æŒ‡å®šã™ã‚‹ã¨ã€é€”ä¸­ã§ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆã—ã¦ã—ã¾ã†ã‹ã‚‚çŸ¥ã‚Œã¾ã›ã‚“'
+	@ping_label_timeout = 'ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆ(ç§’)'
 end
 
-@ping_label_send = '¹¹¿·¾ðÊó¤òÁ÷¤ë'
+@ping_label_send = 'æ›´æ–°æƒ…å ±ã‚’é€ã‚‹'

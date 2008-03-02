@@ -1,15 +1,15 @@
 =begin
-= ¤½¤ÎÆü¤ÎÅ·µ¤¥×¥é¥°¥¤¥ó / Weather-of-today plugin((-$Id: weather.rb,v 1.15 2008-01-19 10:23:55 zunda Exp $-))
+= ãã®æ—¥ã®å¤©æ°—ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ / Weather-of-today plugin((-$Id: weather.rb,v 1.16 2008-03-02 09:01:45 kazuhiko Exp $-))
 Records the weather when the diary is first updated for the date and
 displays it.
 
-¤½¤ÎÆü¤ÎÅ·µ¤¤ò¡¢¤½¤ÎÆü¤ÎÆüµ­¤òºÇ½é¤Ë¹¹¿·¤¹¤ë»ş¤Ë¼èÆÀ¤·¤ÆÊİÂ¸¤·¡¢¤½¤ì¤¾¤ì
-¤ÎÆü¤ÎÆüµ­¤Î¾åÉô¤ËÉ½¼¨¤·¤Ş¤¹¡£
+ãã®æ—¥ã®å¤©æ°—ã‚’ã€ãã®æ—¥ã®æ—¥è¨˜ã‚’æœ€åˆã«æ›´æ–°ã™ã‚‹æ™‚ã«å–å¾—ã—ã¦ä¿å­˜ã—ã€ãã‚Œãã‚Œ
+ã®æ—¥ã®æ—¥è¨˜ã®ä¸Šéƒ¨ã«è¡¨ç¤ºã—ã¾ã™ã€‚
 
 == Acknowledgements
-¤½¤ÎÆü¤ÎÅ·µ¤¥×¥é¥°¥¤¥ó¤Î¥¢¥¤¥Ç¥£¥¢¤òÄó¶¡¤·¤Æ¤¯¤À¤µ¤Ã¤¿hsbt¤µ¤ó¡¢¼ÂÁõ¤Î¥Ò
-¥ó¥È¤òÄó¶¡¤·¤Æ¤¯¤À¤µ¤Ã¤¿zoe¤µ¤ó¤Ë´¶¼Õ¤·¤Ş¤¹¡£¤Ş¤¿¡¢NOAA¤Î¾ğÊó¤òÄó¶¡¤·¤Æ
-¤¯¤À¤µ¤Ã¤¿kotak¤µ¤ó¤Ë´¶¼Õ¤·¤Ş¤¹¡£
+ãã®æ—¥ã®å¤©æ°—ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ã‚¢ã‚¤ãƒ‡ã‚£ã‚¢ã‚’æä¾›ã—ã¦ãã ã•ã£ãŸhsbtã•ã‚“ã€å®Ÿè£…ã®ãƒ’
+ãƒ³ãƒˆã‚’æä¾›ã—ã¦ãã ã•ã£ãŸzoeã•ã‚“ã«æ„Ÿè¬ã—ã¾ã™ã€‚ã¾ãŸã€NOAAã®æƒ…å ±ã‚’æä¾›ã—ã¦
+ãã ã•ã£ãŸkotakã•ã‚“ã«æ„Ÿè¬ã—ã¾ã™ã€‚
 
 The author appreciates National Weather Service
 ((<URL:http://weather.noaa.gov/>)) making such valuable data available
@@ -263,7 +263,7 @@ class Weather
 					d = ''
 					Net::HTTP.start( host, 80 ) do |http|
 						response , = http.get( path, header)
-						d = NKF::nkf( '-e', response.body )
+						d = NKF::nkf( '-m0 -w', response.body )
 					end
 					parse_html( d, items )
 				rescue Net::ProtoRetriableError => err
@@ -280,7 +280,7 @@ class Weather
 		rescue TimeoutError
 			@error = 'Timeout'
 		rescue
-			@error = NKF::nkf( '-e', $!.message.gsub( /[\t\n]/, ' ' ) )
+			@error = NKF::nkf( '-m0 -w', $!.message.gsub( /[\t\n]/, ' ' ) )
 		end
 		self
 	end

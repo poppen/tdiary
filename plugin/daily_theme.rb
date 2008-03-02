@@ -1,4 +1,4 @@
-# daily_theme.rb $Revision: 1.4 $
+# daily_theme.rb $Revision: 1.5 $
 #
 # Copyright (c) 2005 SHIBATA Hiroshi <h-sbt@nifty.com>
 # Distributed under the GPL

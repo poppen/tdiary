@@ -1,10 +1,10 @@
 def append_css_label
-	'·s¼W¼Ë¦¡ªí(CSS)'
+	'æ–°å¢æ¨£å¼è¡¨(CSS)'
 end
 
 def append_css_desc
 	<<-HTML
-	<h3>CSS ¤¸¯À</h3>
-	<p>±z¥i¥H¦b¤U­±·s¼W¦Û©wªº¼Ë¦¡ªí¤¸¯À¡C </p>
+	<h3>CSS å…ƒç´ </h3>
+	<p>æ‚¨å¯ä»¥åœ¨ä¸‹é¢æ–°å¢è‡ªå®šçš„æ¨£å¼è¡¨å…ƒç´ ã€‚ </p>
 	HTML
 end

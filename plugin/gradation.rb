@@ -1,10 +1,10 @@
-# gradation.rb $Revision: 1.3 $
+# gradation.rb $Revision: 1.4 $
 #
-# gradation.rb: Ê¸»úÎó¤ò¥°¥é¥Ç¡¼¥·¥ç¥óÉ½¼¨
-#   ¥Ñ¥é¥á¥¿:
-#     str:         Ê¸»úÎó
-#     first_color: ¥°¥é¥Ç¡¼¥·¥ç¥ó³«»Ï¿§(16¿Ê 6·å»ØÄê)
-#     last_color:  ¥°¥é¥Ç¡¼¥·¥ç¥ó½ªÎ»¿§(16¿Ê 6·å»ØÄê)
+# gradation.rb: æ–‡å­—åˆ—ã‚’ã‚°ãƒ©ãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³è¡¨ç¤º
+#   ãƒ‘ãƒ©ãƒ¡ã‚¿:
+#     str:         æ–‡å­—åˆ—
+#     first_color: ã‚°ãƒ©ãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³é–‹å§‹è‰²(16é€² 6æ¡æŒ‡å®š)
+#     last_color:  ã‚°ãƒ©ãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³çµ‚äº†è‰²(16é€² 6æ¡æŒ‡å®š)
 #
 # Copyright (c) 2002 TADA Tadashi <sho@spc.gr.jp>
 # You can distribute this file under the GPL2.

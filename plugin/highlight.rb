@@ -1,4 +1,4 @@
-# highlight.rb $Revision: 1.13 $
+# highlight.rb $Revision: 1.14 $
 #
 # Highlighting the element jumped from other pages.
 #

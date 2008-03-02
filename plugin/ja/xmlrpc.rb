@@ -1,7 +1,7 @@
-def label_xmlrpc_url; 'XML-RPC API ÀßÃÖÀèURL'; end
+def label_xmlrpc_url; 'XML-RPC API è¨­ç½®å…ˆURL'; end
 def label_xmlrpc_blogid; 'Blog ID'; end
-def label_xmlrpc_username; '¥æ¡¼¥¶Ì¾'; end
-def label_xmlrpc_password; '¥Ñ¥¹¥ï¡¼¥É'; end
-def label_xmlrpc_lastname; 'Ì¾'; end
-def label_xmlrpc_firstname; 'À«'; end
-def label_xmlrpc_userid; '¥æ¡¼¥¶ID'; end
+def label_xmlrpc_username; 'ãƒ¦ãƒ¼ã‚¶å'; end
+def label_xmlrpc_password; 'ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰'; end
+def label_xmlrpc_lastname; 'å'; end
+def label_xmlrpc_firstname; 'å§“'; end
+def label_xmlrpc_userid; 'ãƒ¦ãƒ¼ã‚¶ID'; end

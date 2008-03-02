@@ -1,7 +1,7 @@
-# $Revision: 1.37 $
-# recent_comment3: �Ƕ�Υĥå��ߤ�ꥹ�ȥ��åפ���
+# $Revision: 1.38 $
+# recent_comment3: 最近のツッコミをリストアップする
 #
-#	 @secure = true �ʴĶ��Ǥ�ư��ޤ���
+#   @secure = true な環境では動作しません．
 #
 # Copyright (c) 2002 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -88,7 +88,7 @@ def recent_comment3(ob_max = 'OBSOLUTE' ,sep = 'OBSOLUTE',ob_date_format = 'OBSO
 				if diary != nil then
 					title = diary.diaries[entry_date].title.gsub( /<[^>]*>/, '' )
 				end
-				if title == nil || title.length == 0 || title.strip.delete('��').delete(' ').length == 0 then
+				if title == nil || title.length == 0 || title.strip.delete('　').delete(' ').length == 0 then
 					date = Time.parse(entry_date)
 					title = "#{date.strftime @date_format}"
 				end
