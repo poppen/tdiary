@@ -1,4 +1,4 @@
-# category.rb $Revision: 1.46 $
+# category.rb $Revision: 1.47 $
 #
 # Copyright (c) 2003 Junichiro KITA <kita@kitaj.no-ip.com>
 # Distributed under the GPL
@@ -708,7 +708,7 @@ if @mode == 'conf' || @mode == 'saveconf'
 			].each do |name|
 				@conf[name] = @conf.to_native( @cgi.params[name][0] )
 			end
-			if ["month", "quearter", "half", "year", "all"].index(@cgi.params["category.period"][0])
+			if ["month", "quarter", "half", "year", "all"].index(@cgi.params["category.period"][0])
 				@conf["category.period"] = @cgi.params["category.period"][0]
 			end
 			@conf['category.edit_support'] = (@cgi.params['category.edit_support'][0] == 'true')
