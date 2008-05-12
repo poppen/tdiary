@@ -1,3 +1,6 @@
+2008-05-12 SHIBATA Hiroshi <shibata.hiroshi@gmail.com>
+	* makerss.rb: tabify.
+	
 2008-04-29 SHIBATA Hiroshi <shibata.hiroshi@gmail.com>
 	* category.rb: fixed #79.
 	

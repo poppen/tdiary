@@ -1,4 +1,4 @@
-# makerss.rb: $Revision: 1.59 $
+# makerss.rb: $Revision: 1.60 $
 #
 # generate RSS file when updating.
 #
@@ -365,14 +365,14 @@ def makerss_body( uri, rdfsec )
 			unless text.empty?
 				text.gsub!( /\]\]>/, ']]]]><![CDATA[>' )
 				rdf << %Q|<content:encoded><![CDATA[#{text}|
-            unless @conf['makerss.comment_link']
-               ymd = date.strftime( "%Y%m%d" )
-               uri = @conf.index.dup
-               uri[0, 0] = @conf.base_url unless %r|^https?://|i =~ uri
-               uri.gsub!( %r|/\./|, '/' )
-               rdf << %Q|\n<p><a href="#{h uri}#{anchor "#{ymd}c"}">#{comment_new}</a></p>|
-            end
-            rdf << %Q|]]></content:encoded>\n|
+				unless @conf['makerss.comment_link']
+					ymd = date.strftime( "%Y%m%d" )
+					uri = @conf.index.dup
+					uri[0, 0] = @conf.base_url unless %r|^https?://|i =~ uri
+					uri.gsub!( %r|/\./|, '/' )
+					rdf << %Q|\n<p><a href="#{h uri}#{anchor "#{ymd}c"}">#{comment_new}</a></p>|
+				end
+				rdf << %Q|]]></content:encoded>\n|
 			end
 		end
 
