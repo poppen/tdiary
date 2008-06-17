@@ -70,7 +70,7 @@ end
 
 # Local Variables:
 # mode: ruby
-# code: euc-jp-unix
+# code: utf-8-unix
 # indent-tabs-mode: t
 # tab-width: 3
 # ruby-indent-level: 3

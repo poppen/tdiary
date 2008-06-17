@@ -4,7 +4,7 @@ def googlej_form( button_name = "Google 検索", size = 20, default_text = "" )
 	first = %Q[<a href="http://www.google.com/">
 		<img src="http://www.google.com/logos/Logo_40wht.gif" 
 			style="border-width: 0px; vertical-align: middle;" alt="Google"></a>]
-	last = %Q[<input type="hidden" name="hl" value="ja"><input type="hidden" name="ie" value="euc-jp">]
+	last = %Q[<input type="hidden" name="hl" value="ja"><input type="hidden" name="ie" value="utf-8">]
 	search_form( "http://www.google.com/search", "q", button_name, size, default_text, first, last )
 end
 
