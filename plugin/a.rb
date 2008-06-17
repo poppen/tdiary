@@ -48,8 +48,8 @@ def a_conf_rows; 20; end
 A_REG_PIPE = /\|/
 A_REG_COLON = /\:/
 A_REG_URL = /:\/\//
-A_REG_CHARSET = /euc|sjis|jis/
-A_REG_CHARSET2 = /sjis|jis/
+A_REG_CHARSET = /utf8|euc|sjis|jis/
+A_REG_CHARSET2 = /euc|sjis|jis/
 A_REG_MY = /^\d{8}/
 
 if @options and @options["a.path"] 
