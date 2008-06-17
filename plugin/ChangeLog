@@ -1,4 +1,7 @@
 2008-06-18 SHIBATA Hiroshi <shibata.hiroshi@gmail.com>
+	* tlink.rb: convert to toutf8 instead of toeuc.
+
+2008-06-18 SHIBATA Hiroshi <shibata.hiroshi@gmail.com>
 	* a.rb: add utf8 option.
 
 2008-06-17 SHIBATA Hiroshi <shibata.hiroshi@gmail.com>

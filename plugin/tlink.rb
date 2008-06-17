@@ -113,13 +113,13 @@ def tlink_getcomment( url )
     response , = http.get( "/#{path}", agent )
     response.body.each { |line|
       if %r[<A NAME="#{frag}] =~ line
-        if %r[<(?:P|H3)><A NAME="#{frag}">(?:.*?)</A> (.*?)</(?:P|H3)>] =~ line.toeuc
+        if %r[<(?:P|H3)><A NAME="#{frag}">(?:.*?)</A> (.*?)</(?:P|H3)>] =~ line.toutf8
           result = $1
           break
         else
           hata = 1
         end
-      elsif hata == 1 && %r[^\t*(.*?)<BR>] =~ line.toeuc
+      elsif hata == 1 && %r[^\t*(.*?)<BR>] =~ line.toutf8
         result = $1
         hata = 0
         break
