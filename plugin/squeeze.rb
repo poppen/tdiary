@@ -103,7 +103,7 @@ end
 #
 # Dairy Squeeze
 #
-module TDiary
+module ::TDiary
 	class YATDiarySqueeze < TDiaryBase
 		def initialize(diary, dest, all_data, compat, conf, suffix)
 			@ignore_parser_cache = true
@@ -160,7 +160,7 @@ end
 #
 # Main
 #
-module TDiary
+module ::TDiary
 	class YATDiarySqueezeMain < TDiaryBase
 		def initialize(dest, all_data, compat, conf, suffix)
 			@ignore_parser_cache = true
