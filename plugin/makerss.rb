@@ -341,8 +341,8 @@ def makerss_body( uri, rdfsec )
 		body_leave = body_leave_proc( date )
 		@makerss_in_feed = false
 
-		sub = apply_plugin( subtitle, true ).strip
-		sub.sub!( /^(\[([^\]]+)\])+ */, '' )
+		sub = subtitle.sub( /^(\[([^\]]+)\])+ */, '' )
+		sub = apply_plugin( sub, true ).strip
 		if sub.empty?
 			sub = @conf.shorten( remove_tag( body ).strip, 20 )
 		end

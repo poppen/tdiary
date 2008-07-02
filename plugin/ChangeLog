@@ -1,3 +1,7 @@
+2008-07-02 TADA Tadashi <sho@spc.gr.jp>
+	* makerss.rb: fixed over deleting category name from title. thanks for
+	TAKAHASHI Tamotsu.
+
 2008-06-18 SHIBATA Hiroshi <shibata.hiroshi@gmail.com>
 	* tlink.rb: convert to toutf8 instead of toeuc.
 
