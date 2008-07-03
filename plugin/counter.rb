@@ -172,332 +172,330 @@
 #not bot: RssBar, AppleSyndication
 
 def counter_allow?
-  return false if bot?
-  if @options
-    if @options["counter.deny_user_agents"]
-      if @options["counter.deny_user_agents"].kind_of? Array
-	@options["counter.deny_user_agents"] = @options["counter.deny_user_agents"].uniq.join('|')
-      elsif @options["counter.deny_user_agents"].size > 1
-	agents = Regexp.new("(#{@counter_default_user_agents}|#{@options["counter.deny_user_agents"]})", true)
-      else
-	agents = Regexp.new("(#{@counter_default_user_agents})", true)
-      end
-    else
-      agents = Regexp.new("(#{@counter_default_user_agents})", true)
-    end
-    return false if agents =~ @cgi.user_agent
-  end
-  true
+	return false if bot?
+	if @options
+		if @options["counter.deny_user_agents"]
+			if @options["counter.deny_user_agents"].kind_of? Array
+				@options["counter.deny_user_agents"] = @options["counter.deny_user_agents"].uniq.join('|')
+			elsif @options["counter.deny_user_agents"].size > 1
+				agents = Regexp.new("(#{@counter_default_user_agents}|#{@options["counter.deny_user_agents"]})", true)
+			else
+				agents = Regexp.new("(#{@counter_default_user_agents})", true)
+			end
+		else
+			agents = Regexp.new("(#{@counter_default_user_agents})", true)
+		end
+		return false if agents =~ @cgi.user_agent
+	end
+	true
 end
 
 if @cgi.request_method == 'GET' and counter_allow?
-  require 'date'
-  require 'pstore'
-  require 'fileutils'
-
+	require 'date'
+	require 'pstore'
+	require 'fileutils'
+	
 eval(<<TOPLEVEL_CLASS, TOPLEVEL_BINDING)
-  class TDiaryAccessData
-    attr_accessor :ignore_cookie #means ALWAYS ignore a cookie.
-    def previous_access_time(time, remote_addr, user_agent, interval, maxaccessnum)
-      @time = time
-      @users = Hash.new unless @users
-      key = (remote_addr + user_agent).hash
-      ret = @users[key]
-      remove_olddata(interval)
+	class TDiaryAccessData
+		attr_accessor :ignore_cookie #means ALWAYS ignore a cookie.
+		def previous_access_time(time, remote_addr, user_agent, interval, maxaccessnum)
+			@time = time
+			@users = Hash.new unless @users
+			key = (remote_addr + user_agent).hash
+			ret = @users[key]
+			remove_olddata(interval)
 
-      @users[key] = @time if @users.size < maxaccessnum
-      ret
-    end
+			@users[key] = @time if @users.size < maxaccessnum
+			ret
+		end
 
-    def remove_olddata(interval)
-      @users.reject!{|key, val|
-	@time - val > interval * 3600
-      }
-    end
-  end
-  class TDiaryCountData
-    attr_reader :today, :yesterday, :all, :newestday
-
-    def initialize(path, all = 0, today = 0, yesterday = 0)
-      @path = path
-      @newestday = Date.today
-      @all, @today, @yesterday = all, today, yesterday
-    end
-
-    def up(now, cache_path, cgi, _log)
-      if @newestday
-	if now == @newestday
-	  @today += 1
-	else
-	  log if _log
-	  @yesterday = ((now - 1) == @newestday) ? @today : 0
-	  @today = 1
-	  @newestday = now
-	  time = Time.now
+		def remove_olddata(interval)
+			@users.reject!{|key, val|
+				@time - val > interval * 3600
+			}
+		end
 	end
-      else
-	@yesterday = 0
-	@today = 1
-	@newestday = now
-      end
-      @all += 1
-      save
-    end
+	class TDiaryCountData
+		attr_reader :today, :yesterday, :all, :newestday
 
-    def load
-      begin
-	open(File.join(@path, "counter2.dat"), "r") do |io|
-	  eval(io.read)
+		def initialize(path, all = 0, today = 0, yesterday = 0)
+			@path = path
+			@newestday = Date.today
+			@all, @today, @yesterday = all, today, yesterday
+		end
+
+		def up(now, cache_path, cgi, _log)
+			if @newestday
+				if now == @newestday
+					@today += 1
+				else
+					log if _log
+					@yesterday = ((now - 1) == @newestday) ? @today : 0
+					@today = 1
+					@newestday = now
+					time = Time.now
+				end
+			else
+				@yesterday = 0
+				@today = 1
+				@newestday = now
+			end
+			@all += 1
+			save
+		end
+
+		def load
+			begin
+				open(File.join(@path, "counter2.dat"), "r") do |io|
+					eval(io.read)
+				end
+			rescue Exception
+				back = (Dir.glob(File.join(@path, "counter2.dat.?")).sort{|a,b| 
+						File.mtime(a) <=> File.mtime(b)}.reverse)[0]
+				open(back, "r") do |io|
+					begin
+						eval(io.read)
+					rescue Exception
+					end
+				end
+				save
+			end
+			self
+		end
+
+		def save(file = "counter2.dat")
+			open(File.join(@path, file), "w") do |io|
+				io.print "@newestday = Date.parse('" + @newestday.to_s + "'); "
+				io.print "@all = " + @all.to_s + "; "
+				io.print "@today = " + @today.to_s + "; "
+				io.print "@yesterday = " + @yesterday.to_s
+			end
+		end
+
+		def log
+			if @newestday
+				open(File.join(@path, "counter.log"), "a") do |io|
+					io.print @newestday, " : ", @all, ",", @today, ",", @yesterday, "\n"
+				end
+				save("counter2.dat." + @newestday.wday.to_s)
+			end
+		end
 	end
-      rescue Exception
-	back = (Dir.glob(File.join(@path, "counter2.dat.?")).sort{|a,b| 
-		  File.mtime(a) <=> File.mtime(b)}.reverse)[0]
-	open(back, "r") do |io|
-	  begin
-	    eval(io.read)
-	  rescue Exception
-	  end
-	end
-	save
-      end
-      self
-    end
-
-    def save(file = "counter2.dat")
-      open(File.join(@path, file), "w") do |io|
-	io.print "@newestday = Date.parse('" + @newestday.to_s + "'); "
-	io.print "@all = " + @all.to_s + "; "
-	io.print "@today = " + @today.to_s + "; "
-	io.print "@yesterday = " + @yesterday.to_s
-      end
-    end
-
-    def log
-      if @newestday
-	open(File.join(@path, "counter.log"), "a") do |io|
-	  io.print @newestday, " : ", @all, ",", @today, ",", @yesterday, "\n"
-	end
-	save("counter2.dat." + @newestday.wday.to_s)
-      end
-    end
-  end
-
 TOPLEVEL_CLASS
 
+	module TDiaryCounter
+		extend ERB::Util
+		@version = "2.0.2"
 
-  module TDiaryCounter
-    extend ERB::Util
-    @version = "2.0.2"
+		def run(cache_path, cgi, options)
+			timer = options["counter.timer"] if options
+			timer = 12 unless timer	# 12 hour
+			@init_num = options["counter.init_num"] if options
+			@init_num = 0 unless @init_num
+			dir = File.join(cache_path, "counter")
+			path = File.join(dir, "counter2_access.dat")
+			today = Date.today
+			Dir.mkdir(dir, 0700) unless FileTest.exist?(dir)
 
-    def run(cache_path, cgi, options)
-      timer = options["counter.timer"] if options
-      timer = 12 unless timer	# 12 hour
-      @init_num = options["counter.init_num"] if options
-      @init_num = 0 unless @init_num
-      dir = File.join(cache_path, "counter")
-      path = File.join(dir, "counter2_access.dat")
-      today = Date.today
-      Dir.mkdir(dir, 0700) unless FileTest.exist?(dir)
-      
-      cookie = nil
-      begin
-	cookie = main(cache_path, cgi, options, timer, dir, path, today)
-      rescue => e
-	@cnt = TDiaryCountData.new(dir).load
-	if e.message =~ /marshal|dump|load|referred|depth|io needed|size/i
-	  begin
-	    File.unlink path
-	  rescue
-	  end
-      	end
-      end
-      cookie
-    end
-    
-    def main(cache_path, cgi, options, timer, dir, path, today)
-      cookie = nil
-      if FileTest.exist?(File.join(dir, "counter.dat"))
-	db = PStore.new(File.join(dir, "counter.dat"))
-	db.transaction do 
-	  old = db["countdata"]
-	  TDiaryCountData.new(dir, old.all, old.today, old.yesterday).save
-	end
-	FileUtils.mv(File.join(dir, "counter.dat"), File.join(dir, "counter.dat.old"))
-      end
-      db = PStore.new(path)
-      db.transaction do
-	begin
-	  @access = db["accessdata"]
-	rescue PStore::Error
-	end
-	unless @access
-	  @access = TDiaryAccessData.new
-	end
+			cookie = nil
+			begin
+				cookie = main(cache_path, cgi, options, timer, dir, path, today)
+			rescue => e
+				@cnt = TDiaryCountData.new(dir).load
+				if e.message =~ /marshal|dump|load|referred|depth|io needed|size/i
+					begin
+						File.unlink path
+					rescue
+					end
+				end
+			end
+			cookie
+		end
 
-	begin
-	  @cnt = TDiaryCountData.new(dir).load
-	rescue Exception
-	  @cnt = TDiaryCountData.new(dir)
-	end
+		def main(cache_path, cgi, options, timer, dir, path, today)
+			cookie = nil
+			if FileTest.exist?(File.join(dir, "counter.dat"))
+				db = PStore.new(File.join(dir, "counter.dat"))
+				db.transaction do 
+					old = db["countdata"]
+					TDiaryCountData.new(dir, old.all, old.today, old.yesterday).save
+				end
+				FileUtils.mv(File.join(dir, "counter.dat"), File.join(dir, "counter.dat.old"))
+			end
+			db = PStore.new(path)
+			db.transaction do
+				begin
+					@access = db["accessdata"]
+				rescue PStore::Error
+				end
+				unless @access
+					@access = TDiaryAccessData.new
+				end
 
-	changed = false
-	if new_user?(cgi, options)
-	  @cnt.up(today, dir, cgi, (options and options["counter.log"]))
-	  cookie = CGI::Cookie.new({"name" => "tdiary_counter", 
-				     "value" => @version, 
-				     "expires" => Time.now + timer * 3600})
-	  changed = true
-	end
+				begin
+					@cnt = TDiaryCountData.new(dir).load
+				rescue Exception
+					@cnt = TDiaryCountData.new(dir)
+				end
 
-	if options["counter.kiriban"]
-	  if options["counter.kiriban"].kind_of? String
-	    if options["counter.kiriban"] == ""
-	      options["counter.kiriban"] = [-1]
-	    elsif options["counter.kiriban"].include?(",")
-	      options["counter.kiriban"] =  
-		options["counter.kiriban"].split(",").collect{|i| i.to_i}
-	    else
-	      options["counter.kiriban"] = [options["counter.kiriban"].to_i]
-	    end
-	  end
-	  @kiriban = options["counter.kiriban"].include?(@cnt.all + @init_num) 
-	end
+				changed = false
+				if new_user?(cgi, options)
+					@cnt.up(today, dir, cgi, (options and options["counter.log"]))
+					cookie = CGI::Cookie.new({"name" => "tdiary_counter", 
+							"value" => @version, 
+							"expires" => Time.now + timer * 3600})
+					changed = true
+				end
 
-	if ! @kiriban and options["counter.kiriban_today"]
-	  if options["counter.kiriban_today"].kind_of? String
-	    if options["counter.kiriban_today"] == ""
-	      options["counter.kiriban_today"] = [-1]
-	    elsif options["counter.kiriban_today"].include?(",")
-	      options["counter.kiriban_today"] = 
-		options["counter.kiriban_today"].split(",").collect{|i| i.to_i}
-	    else
-	      options["counter.kiriban_today"] = [options["counter.kiriban_today"].to_i]
-	    end
-	  end
-	  @kiriban_today = options["counter.kiriban_today"].include?(@cnt.today)
-	end
+				if options["counter.kiriban"]
+					if options["counter.kiriban"].kind_of? String
+						if options["counter.kiriban"] == ""
+							options["counter.kiriban"] = [-1]
+						elsif options["counter.kiriban"].include?(",")
+							options["counter.kiriban"] =  
+								options["counter.kiriban"].split(",").collect{|i| i.to_i}
+						else
+							options["counter.kiriban"] = [options["counter.kiriban"].to_i]
+						end
+					end
+					@kiriban = options["counter.kiriban"].include?(@cnt.all + @init_num) 
+				end
 
-	if @access.ignore_cookie
-	  @access.ignore_cookie = false
-	  changed = true
-	end
+				if ! @kiriban and options["counter.kiriban_today"]
+					if options["counter.kiriban_today"].kind_of? String
+						if options["counter.kiriban_today"] == ""
+							options["counter.kiriban_today"] = [-1]
+						elsif options["counter.kiriban_today"].include?(",")
+							options["counter.kiriban_today"] = 
+								options["counter.kiriban_today"].split(",").collect{|i| i.to_i}
+						else
+							options["counter.kiriban_today"] = [options["counter.kiriban_today"].to_i]
+						end
+					end
+					@kiriban_today = options["counter.kiriban_today"].include?(@cnt.today)
+				end
 
-	#when it is kiriban time, ignore the cookie next access time. 
-	if @kiriban or @kiriban_today
-	  @access.ignore_cookie = true
-	  changed = true
-	end
+				if @access.ignore_cookie
+					@access.ignore_cookie = false
+					changed = true
+				end
 
-	if changed
-	  db["accessdata"] = @access
-	end
-      end
-      cookie
-    end
+				#when it is kiriban time, ignore the cookie next access time. 
+				if @kiriban or @kiriban_today
+					@access.ignore_cookie = true
+					changed = true
+				end
 
-    def new_user_without_cookie?(cgi, options)
-      if options
-	interval = options["counter.deny_same_src_interval"] 
-	maxaccessnum = options["counter.max_keep_access_num"] 
-      end
-      interval = 2 unless interval	         # 2 hour.
-      maxaccessnum = 10000 unless maxaccessnum # 2 hour.
-      current_time = Time.now
-      previous_access_time = @access.previous_access_time(current_time, cgi.remote_addr, 
-							  cgi.user_agent, interval, maxaccessnum)
-      if previous_access_time
-	ret = current_time - previous_access_time > interval * 3600
-      else
-	ret = true
-      end
-      ret
-    end
+				if changed
+					db["accessdata"] = @access
+				end
+			end
+			cookie
+		end
 
-    def new_user?(cgi, options)
-      return true if @access.ignore_cookie
-      if cgi.cookies 
-	if cgi.cookies.keys.include?("tdiary_counter")
-	  ret = false
-	else
-	  ret = new_user_without_cookie?(cgi, options)
-	end
-      else
-	ret = new_user_without_cookie?(cgi, options)
-      end
-      ret
-    end
+		def new_user_without_cookie?(cgi, options)
+			if options
+				interval = options["counter.deny_same_src_interval"] 
+				maxaccessnum = options["counter.max_keep_access_num"] 
+			end
+			interval = 2 unless interval	         # 2 hour.
+			maxaccessnum = 10000 unless maxaccessnum # 2 hour.
+			current_time = Time.now
+			previous_access_time = @access.previous_access_time(current_time, cgi.remote_addr, 
+				cgi.user_agent, interval, maxaccessnum)
+			if previous_access_time
+				ret = current_time - previous_access_time > interval * 3600
+			else
+				ret = true
+			end
+			ret
+		end
 
-    def format(classtype, theme_url, cnt, figure = 0, filetype = "", init_num = 0, &proc)
-      str = "%0#{figure}d" % (cnt + init_num)
-      result = %Q[<span class="counter#{classtype}">]
-      depth = 0
-      str.scan(/./).each do |num|
-	if block_given?
-	  result << %Q[<img src="#{h theme_url}/#{yield(num)}" alt="#{num}" />]
-	elsif filetype == ""
-	  result << %Q[<span class="counter-#{depth}"><span class="counter-num-#{num}">#{num}</span></span>]
-	else 
-	  result << %Q[<img src="#{h theme_url}/#{num}.#{filetype}" alt="#{num}" />]
-	end
-	depth += 1
-      end
-      result << "</span>"
-    end
+		def new_user?(cgi, options)
+			return true if @access.ignore_cookie
+			if cgi.cookies 
+				if cgi.cookies.keys.include?("tdiary_counter")
+					ret = false
+				else
+					ret = new_user_without_cookie?(cgi, options)
+				end
+			else
+				ret = new_user_without_cookie?(cgi, options)
+			end
+			ret
+		end
 
-    def called?; @called; end
-    def called; @called = true; end
-    def all; @cnt.all + @init_num; end
-    def today; @cnt.today; end
-    def yesterday; @cnt.yesterday; end
-    def kiriban?; @kiriban; end
-    def kiriban_today?; @kiriban_today; end
+		def format(classtype, theme_url, cnt, figure = 0, filetype = "", init_num = 0, &proc)
+			str = "%0#{figure}d" % (cnt + init_num)
+			result = %Q[<span class="counter#{classtype}">]
+			depth = 0
+			str.scan(/./).each do |num|
+				if block_given?
+					result << %Q[<img src="#{h theme_url}/#{yield(num)}" alt="#{num}" />]
+				elsif filetype == ""
+					result << %Q[<span class="counter-#{depth}"><span class="counter-num-#{num}">#{num}</span></span>]
+				else 
+					result << %Q[<img src="#{h theme_url}/#{num}.#{filetype}" alt="#{num}" />]
+				end
+				depth += 1
+			end
+			result << "</span>"
+		end
 
-    module_function :new_user?, :new_user_without_cookie?, :all, :today, :yesterday, :format, 
+		def called?; @called; end
+		def called; @called = true; end
+		def all; @cnt.all + @init_num; end
+		def today; @cnt.today; end
+		def yesterday; @cnt.yesterday; end
+		def kiriban?; @kiriban; end
+		def kiriban_today?; @kiriban_today; end
+
+		module_function :new_user?, :new_user_without_cookie?, :all, :today, :yesterday, :format, 
       :main, :run, :kiriban?, :kiriban_today?
-  end
+	end
 
-  #init_num is deprecated.
-  #please replace it to @options["counter.init_num"]
-  def counter(figure = 0, filetype = "", init_num = 0, &proc) 
-    TDiaryCounter.format("", theme_url, TDiaryCounter.all, figure, filetype, init_num, &proc)
-  end
+	#init_num is deprecated.
+	#please replace it to @options["counter.init_num"]
+	def counter(figure = 0, filetype = "", init_num = 0, &proc) 
+		TDiaryCounter.format("", theme_url, TDiaryCounter.all, figure, filetype, init_num, &proc)
+	end
 
-  def counter_today(figure = 0, filetype = "", &proc)
-    TDiaryCounter.format("-today", theme_url, TDiaryCounter.today, figure, filetype, 0, &proc)
-  end
+	def counter_today(figure = 0, filetype = "", &proc)
+		TDiaryCounter.format("-today", theme_url, TDiaryCounter.today, figure, filetype, 0, &proc)
+	end
 
-  def counter_yesterday(figure = 0, filetype = "", &proc)
-    TDiaryCounter.format("-yesterday", theme_url, TDiaryCounter.yesterday, figure, filetype, 0, &proc)
-  end
+	def counter_yesterday(figure = 0, filetype = "", &proc)
+		TDiaryCounter.format("-yesterday", theme_url, TDiaryCounter.yesterday, figure, filetype, 0, &proc)
+	end
 
-  def kiriban?
-    TDiaryCounter.kiriban?
-  end
+	def kiriban?
+		TDiaryCounter.kiriban?
+	end
 
-  def kiriban_today?
-    TDiaryCounter.kiriban_today?
-  end
+	def kiriban_today?
+		TDiaryCounter.kiriban_today?
+	end
 
-  tdiary_counter_cookie = TDiaryCounter.run(@cache_path, @cgi, @options)
-  if tdiary_counter_cookie
-    if defined?(add_cookie)
-      add_cookie(tdiary_counter_cookie)
-    else
-      @cookie = tdiary_counter_cookie if tdiary_counter_cookie
-    end
-  end
+	tdiary_counter_cookie = TDiaryCounter.run(@cache_path, @cgi, @options)
+	if tdiary_counter_cookie
+		if defined?(add_cookie)
+			add_cookie(tdiary_counter_cookie)
+		else
+			@cookie = tdiary_counter_cookie if tdiary_counter_cookie
+		end
+	end
 
-  def kiriban
-    if kiriban?
-      msg = @options["counter.kiriban_msg"] ? @options["counter.kiriban_msg"] : ""
-      ERB.new(msg.untaint).result(binding)
-    elsif kiriban_today?
-      msg = @options["counter.kiriban_today_msg"] ? @options["counter.kiriban_today_msg"] : ""
-      ERB.new(msg.untaint).result(binding)
-    else
-      msg = @options["counter.kiriban_nomatch_msg"] ? @options["counter.kiriban_nomatch_msg"] : ""
-    end
-  end
+	def kiriban
+		if kiriban?
+			msg = @options["counter.kiriban_msg"] ? @options["counter.kiriban_msg"] : ""
+			ERB.new(msg.untaint).result(binding)
+		elsif kiriban_today?
+			msg = @options["counter.kiriban_today_msg"] ? @options["counter.kiriban_today_msg"] : ""
+			ERB.new(msg.untaint).result(binding)
+		else
+			msg = @options["counter.kiriban_nomatch_msg"] ? @options["counter.kiriban_nomatch_msg"] : ""
+		end
+	end
 end
 
 @counter_conf_counter ||= "アクセスカウンタ"
@@ -534,93 +532,92 @@ end
 @counter_conf_kiriban_messages_label_nomatch ||= "キリ番では無いときのメッセージ："
 
 def print_conf_html
-  @conf["counter.init_num"] ||= 0
-  @conf["counter.log"] ||= true
-  @conf["counter.timer"] ||= 12
-  @conf["counter.deny_same_src_interval"] ||= 4
-  @conf["counter.deny_user_agents"] ||= ""
-  @conf["counter.max_keep_access_num"] ||= 10000
+	@conf["counter.init_num"] ||= 0
+	@conf["counter.log"] ||= true
+	@conf["counter.timer"] ||= 12
+	@conf["counter.deny_same_src_interval"] ||= 4
+	@conf["counter.deny_user_agents"] ||= ""
+	@conf["counter.max_keep_access_num"] ||= 10000
 
-  @conf["counter.kiriban"] ||= ""
-  if @conf["counter.kiriban"].kind_of? Array
-    @conf["counter.kiriban"] = @conf["counter.kiriban"].join(", ")
-  end 
-  @conf["counter.kiriban_today"] ||= ""
-  if @conf["counter.kiriban_today"].kind_of? Array
-    @conf["counter.kiriban_today"] = @conf["counter.kiriban_today"].join(", ")
-  end 
+	@conf["counter.kiriban"] ||= ""
+	if @conf["counter.kiriban"].kind_of? Array
+		@conf["counter.kiriban"] = @conf["counter.kiriban"].join(", ")
+	end 
+	@conf["counter.kiriban_today"] ||= ""
+	if @conf["counter.kiriban_today"].kind_of? Array
+		@conf["counter.kiriban_today"] = @conf["counter.kiriban_today"].join(", ")
+	end 
 
-  @conf["counter.kiriban_msg"] ||= ""
-  @conf["counter.kiriban_today_msg"] ||= ""
-  @conf["counter.kiriban_nomatch_msg"] ||= ""
+	@conf["counter.kiriban_msg"] ||= ""
+	@conf["counter.kiriban_today_msg"] ||= ""
+	@conf["counter.kiriban_nomatch_msg"] ||= ""
 
-  if @mode == 'saveconf' then
-    @conf["counter.init_num"] = @cgi.params['counter.init_num'][0].to_i
-    @conf["counter.log"] = @cgi.params['counter.log'][0] == "true"
-    @conf["counter.timer"] = @cgi.params['counter.timer'][0].to_i
-    @conf["counter.deny_same_src_interval"] = @cgi.params['counter.deny_same_src_interval'][0].to_i
-    @conf["counter.deny_user_agents"] = @cgi.params['counter.deny_user_agents'][0]
-    @conf["counter.max_keep_access_num"] ||= @cgi.params["counter.max_keep_access_num"][0].to_i
-    @conf["counter.kiriban"] = @cgi.params["counter.kiriban"][0]
-    @conf["counter.kiriban_today"] = @cgi.params["counter.kiriban_today"][0]
-    @conf["counter.kiriban_msg"] = @conf.to_native(@cgi.params["counter.kiriban_msg"][0]).gsub(/\r\n/, "\n" ).gsub(/\r/, '').sub(/\n+\z/, '')
-    @conf["counter.kiriban_today_msg"] = @conf.to_native(@cgi.params["counter.kiriban_today_msg"][0]).gsub(/\r\n/, "\n").gsub(/\r/, '').sub(/\n+\z/, '')
-    @conf["counter.kiriban_nomatch_msg"] = @conf.to_native(@cgi.params["counter.kiriban_nomatch_msg"][0]).gsub(/\r\n/, "\n").gsub(/\r/, '').sub(/\n+\z/, '')
-  end  
+	if @mode == 'saveconf' then
+		@conf["counter.init_num"] = @cgi.params['counter.init_num'][0].to_i
+		@conf["counter.log"] = @cgi.params['counter.log'][0] == "true"
+		@conf["counter.timer"] = @cgi.params['counter.timer'][0].to_i
+		@conf["counter.deny_same_src_interval"] = @cgi.params['counter.deny_same_src_interval'][0].to_i
+		@conf["counter.deny_user_agents"] = @cgi.params['counter.deny_user_agents'][0]
+		@conf["counter.max_keep_access_num"] ||= @cgi.params["counter.max_keep_access_num"][0].to_i
+		@conf["counter.kiriban"] = @cgi.params["counter.kiriban"][0]
+		@conf["counter.kiriban_today"] = @cgi.params["counter.kiriban_today"][0]
+		@conf["counter.kiriban_msg"] = @conf.to_native(@cgi.params["counter.kiriban_msg"][0]).gsub(/\r\n/, "\n" ).gsub(/\r/, '').sub(/\n+\z/, '')
+		@conf["counter.kiriban_today_msg"] = @conf.to_native(@cgi.params["counter.kiriban_today_msg"][0]).gsub(/\r\n/, "\n").gsub(/\r/, '').sub(/\n+\z/, '')
+		@conf["counter.kiriban_nomatch_msg"] = @conf.to_native(@cgi.params["counter.kiriban_nomatch_msg"][0]).gsub(/\r\n/, "\n").gsub(/\r/, '').sub(/\n+\z/, '')
+	end  
 
-  <<-HTML
-  <h3 class="subtitle">#{@counter_conf_init_head}</h3>
-  <p>#{@counter_conf_init_desc}</p>
-  <p>#{@counter_conf_init_label}<input name="counter.init_num" value="#{h @conf["counter.init_num"]}" size="5"></p>
+	<<-HTML
+	<h3 class="subtitle">#{@counter_conf_init_head}</h3>
+ 	p>#{@counter_conf_init_desc}</p>
+	<p>#{@counter_conf_init_label}<input name="counter.init_num" value="#{h @conf["counter.init_num"]}" size="5"></p>
 
-  <h3 class="subtitle">#{@counter_conf_log_head}</h3>
-  <p>#{@counter_conf_log_desc}</p>
-  <p>
-    <select name="counter.log">
-      <option value="true"#{" selected" if @conf["counter.log"]}>#{@counter_conf_log_true}</option>
-      <option value="false"#{" selected" if ! @conf["counter.log"]}>#{@counter_conf_log_false}</option>
-    </select></li>
-  </p>
+	<h3 class="subtitle">#{@counter_conf_log_head}</h3>
+	<p>#{@counter_conf_log_desc}</p>
+	<p>
+		<select name="counter.log">
+			<option value="true"#{" selected" if @conf["counter.log"]}>#{@counter_conf_log_true}</option>
+			<option value="false"#{" selected" if ! @conf["counter.log"]}>#{@counter_conf_log_false}</option>
+		</select></li>
+	</p>
 
-  <h3 class="subtitle">#{@counter_conf_timer_head}</h3>
-  <p>#{@counter_conf_timer_desc}</p>
-  <p>#{@counter_conf_timer_label}<input name="counter.timer" value="#{h @conf["counter.timer"]}" size="2">#{@counter_conf_timer_unit}</p>
+	<h3 class="subtitle">#{@counter_conf_timer_head}</h3>
+	<p>#{@counter_conf_timer_desc}</p>
+	<p>#{@counter_conf_timer_label}<input name="counter.timer" value="#{h @conf["counter.timer"]}" size="2">#{@counter_conf_timer_unit}</p>
 
-  <h3 class="subtitle">#{@counter_conf_deny_same_src_interval_head}</h3>
-  <p>#{@counter_conf_deny_same_src_interval_desc}</p>
-  <p>#{@counter_conf_deny_same_src_interval_label}<input name="counter.deny_same_src_interval" value="#{h @conf["counter.deny_same_src_interval"]}" size="2">#{@counter_conf_deny_same_src_interval_unit}</p>
+	<h3 class="subtitle">#{@counter_conf_deny_same_src_interval_head}</h3>
+	<p>#{@counter_conf_deny_same_src_interval_desc}</p>
+	<p>#{@counter_conf_deny_same_src_interval_label}<input name="counter.deny_same_src_interval" value="#{h @conf["counter.deny_same_src_interval"]}" size="2">#{@counter_conf_deny_same_src_interval_unit}</p>
 
-  <h3 class="subtitle">#{@counter_conf_max_keep_access_num_head}</h3>
-  <p>#{@counter_conf_max_keep_access_num_desc}</p>
-  <p>#{@counter_conf_max_keep_access_num_label}<input name="counter.max_keep_access_num" value="#{h @conf["counter.max_keep_access_num"]}" size="7">#{@counter_conf_max_keep_access_num_unit}</p>
+	<h3 class="subtitle">#{@counter_conf_max_keep_access_num_head}</h3>
+	<p>#{@counter_conf_max_keep_access_num_desc}</p>
+	<p>#{@counter_conf_max_keep_access_num_label}<input name="counter.max_keep_access_num" value="#{h @conf["counter.max_keep_access_num"]}" size="7">#{@counter_conf_max_keep_access_num_unit}</p>
 
-  <h3 class="subtitle">#{@counter_conf_deny_user_agents_head}</h3>
-  <p>#{@counter_conf_deny_user_agents_desc}</p>
-  <blockquote>#{@conf["bot"].join(", ")}, #{@counter_default_user_agents.gsub(/\|/, ", ")}</blockquote>
-  <dl><li>#{@counter_conf_deny_user_agents_label}<br/><textarea name="counter.deny_user_agents" cols="70" rows="3">#{@conf["counter.deny_user_agents"]}</textarea></li></dl>
+	<h3 class="subtitle">#{@counter_conf_deny_user_agents_head}</h3>
+	<p>#{@counter_conf_deny_user_agents_desc}</p>
+	<blockquote>#{@conf["bot"].join(", ")}, #{@counter_default_user_agents.gsub(/\|/, ", ")}</blockquote>
+	<dl><li>#{@counter_conf_deny_user_agents_label}<br/><textarea name="counter.deny_user_agents" cols="70" rows="3">#{@conf["counter.deny_user_agents"]}</textarea></li></dl>
 
-
-  <h3 class="subtitle">#{@counter_conf_kiriban_head}</h3>
-  <p>#{@counter_conf_kiriban_desc}</p>
-  <p><dl>
-    <li>#{@counter_conf_kiriban_label_all}<input name="counter.kiriban" value="#{h @conf["counter.kiriban"]}" size="60"></li>
-    <li>#{@counter_conf_kiriban_label_today}<input name="counter.kiriban_today" value="#{h @conf["counter.kiriban_today"]}" size="60"></li>
-  </dl></p>
-  <h3 class="subtitle">#{@counter_conf_kiriban_messages_head}</h3>
-  <p>#{@counter_conf_kiriban_messages_desc}</p>
-  <p><dl>
-  <li>#{@counter_conf_kiriban_messages_label_all}<br/>
-       <textarea name="counter.kiriban_msg" cols="70" rows="10">#{CGI.escapeHTML(@conf["counter.kiriban_msg"])}</textarea></li>
-  <li>#{@counter_conf_kiriban_messages_label_today}<br/>
-       <textarea name="counter.kiriban_today_msg" cols="70" rows="10">#{CGI.escapeHTML(@conf["counter.kiriban_today_msg"])}</textarea></li>
-  <li>#{@counter_conf_kiriban_messages_label_nomatch}<br/>
-       <textarea name="counter.kiriban_nomatch_msg" cols="70" rows="10">#{CGI.escapeHTML(@conf["counter.kiriban_nomatch_msg"])}</textarea></li>
-  </dl>
-  </p>
-  HTML
+	<h3 class="subtitle">#{@counter_conf_kiriban_head}</h3>
+	<p>#{@counter_conf_kiriban_desc}</p>
+	<p><dl>
+		<li>#{@counter_conf_kiriban_label_all}<input name="counter.kiriban" value="#{h @conf["counter.kiriban"]}" size="60"></li>
+		<li>#{@counter_conf_kiriban_label_today}<input name="counter.kiriban_today" value="#{h @conf["counter.kiriban_today"]}" size="60"></li>
+	</dl></p>
+	<h3 class="subtitle">#{@counter_conf_kiriban_messages_head}</h3>
+	<p>#{@counter_conf_kiriban_messages_desc}</p>
+	<p><dl>
+	<li>#{@counter_conf_kiriban_messages_label_all}<br/>
+		<textarea name="counter.kiriban_msg" cols="70" rows="10">#{CGI.escapeHTML(@conf["counter.kiriban_msg"])}</textarea></li>
+	<li>#{@counter_conf_kiriban_messages_label_today}<br/>
+		<textarea name="counter.kiriban_today_msg" cols="70" rows="10">#{CGI.escapeHTML(@conf["counter.kiriban_today_msg"])}</textarea></li>
+	<li>#{@counter_conf_kiriban_messages_label_nomatch}<br/>
+		<textarea name="counter.kiriban_nomatch_msg" cols="70" rows="10">#{CGI.escapeHTML(@conf["counter.kiriban_nomatch_msg"])}</textarea></li>
+	</dl>
+	</p>
+	HTML
 end
 
 # Configure
 add_conf_proc('counter', @counter_conf_counter) do 
-  print_conf_html
+	print_conf_html
 end

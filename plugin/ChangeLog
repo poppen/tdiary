@@ -1,3 +1,6 @@
+2008-07-04 SHIBATA Hiroshi <shibata.hiroshi@gmail.com>
+	* counter.rb: fix indent.
+
 2008-07-02 SHIBATA Hiroshi <shibata.hiroshi@gmail.com>
 	* squeeze.rb: changed module TDiary to TOPLEVEL.
 
