@@ -109,6 +109,8 @@ def category_list_sections
 	years = info.years
 	r = ''
 
+	raise ::TDiary::NotFound if @categorized.empty? and bot?
+
 	@categorized.keys.sort.each do |c|
 		info.category = c
 		if @category_icon[c]
@@ -142,6 +144,8 @@ def category_list_sections_mobile
 	category = info.category
 	years = info.years
 	r = ''
+
+	raise ::TDiary::NotFound if @categorized.empty? and bot?
 
 	@categorized.keys.sort.each do |c|
 		info.category = c
