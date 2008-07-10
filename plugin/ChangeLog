@@ -1,3 +1,6 @@
+2008-07-10 TADA Tadashi <sho@spc.gr.jp>
+	* category.rb: sorted categories in case-insensitive.
+
 2008-07-05 SHIBATA Hiroshi <shibata.hiroshi@gmail.com>
 	* category.rb: raise 404 error when bot access to no existent diary.
 
