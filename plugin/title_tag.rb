@@ -50,17 +50,18 @@ def title_tag
 		if !diary.visible? then
 			return title_tag2
 		end
-		title = @html_title + ' - '
+		site_title = " - #{@html_title}"
+		day_title = ''
 		if  !diary.title.empty? then
-			title << apply_plugin(diary.title, true) << ' - '
+			day_title << apply_plugin(diary.title, true) << ':'
 		end
 		t2 = ''
 		if @plugin_files.grep(/\/category.rb$/).empty? then
-			t2 << diary.all_subtitles_to_html.join(' , ')
+			t2 << diary.all_subtitles_to_html.join(', ')
 		else
-			t2 << diary.all_stripped_subtitles_to_html.join(' , ')
+			t2 << diary.all_stripped_subtitles_to_html.join(', ')
 		end
-		return "<title>#{h( title )}#{h( @conf.shorten(apply_plugin(t2, true)) )}</title>"
+		return "<title>#{h day_title}#{h( @conf.shorten(apply_plugin(t2, true)) )}#{h( title )}</title>"
 	elsif @mode == 'categoryview' then
 		return @conf.shorten("<title>#{h( @html_title )}#{h( category_title() )}</title>")
 	else
@@ -70,7 +71,7 @@ end
 
 # Local Variables:
 # mode: ruby
-# code: utf-8-unix
+# code: euc-jp-unix
 # indent-tabs-mode: t
 # tab-width: 3
 # ruby-indent-level: 3
