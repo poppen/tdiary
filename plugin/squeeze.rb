@@ -213,7 +213,7 @@ if mode == "CGI" || mode == "CMD"
 		def conf.bot?; true; end
 		output_path = "#{conf.data_path}/cache/html" unless output_path
 		Dir.mkdir(output_path, 0755) unless File.directory?(output_path)
-		TDiary::YATDiarySqueezeMain.new(output_path, all_data, compat, conf, suffix)
+		::TDiary::YATDiarySqueezeMain.new(output_path, all_data, compat, conf, suffix)
 	rescue
 		print $!, "\n"
 		$@.each do |v|
@@ -240,7 +240,7 @@ else
 		dir = @options['squeeze.output_path'] || @options['yasqueeze.output_path']
 		dir = @cache_path + "/html" unless dir
 		Dir.mkdir(dir, 0755) unless File.directory?(dir)
-		TDiary::YATDiarySqueeze.new(diary, dir,
+		::TDiary::YATDiarySqueeze.new(diary, dir,
 					    @options['squeeze.all_data'] || @options['yasqueeze.all_data'],
 					    @options['squeeze.compat_path'] || @options['yasqueeze.compat_path'],
 					    conf,

@@ -1,3 +1,6 @@
+2008-07-21 SHIBATA Hiroshi <shibata.hiroshi@gmail.com>
+	* squeeze.rb: fix #117. thx Kazuhiko.
+
 2008-07-11 TADA Tadashi <sho@spc.gr.jp>
 	* title_tag.rb: changed title format to start with day title.
 
