@@ -1,3 +1,6 @@
+2008-07-21 TADA Tadashi <sho@spc.gr.jp>
+	* makerss.rb: fixed error when subtitle was nil.
+
 2008-07-21 SHIBATA Hiroshi <shibata.hiroshi@gmail.com>
 	* squeeze.rb: fix #117. thx Kazuhiko.
 
