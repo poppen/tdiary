@@ -186,6 +186,8 @@ module ::TDiary
 	end
 end
 
+squeeze_navi_on_footer = '<div class="adminmenu"><%= navi_user %></div>'
+
 if mode == "CGI" || mode == "CMD"
 	if mode == "CGI"
 		print %Q[Content-type:text/html\n\n
@@ -207,7 +209,7 @@ if mode == "CGI" || mode == "CMD"
 		cgi = CGI.new
 		conf = TDiary::Config::new(cgi)
 		conf.header = ''
-		conf.footer = ''
+		conf.footer = squeeze_navi_on_footer
 		conf.show_comment = true
 		conf.hide_comment_form = true
 		def conf.bot?; true; end
@@ -231,7 +233,7 @@ else
 	add_update_proc do
 		conf = @conf.clone
 		conf.header = ''
-		conf.footer = ''
+		conf.footer = squeeze_navi_on_footer
 		conf.show_comment = true
 		conf.hide_comment_form = true
 		def conf.bot?; true; end

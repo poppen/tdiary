@@ -1,3 +1,6 @@
+2008-08-01 TADA Tadashi <sho@spc.gr.jp>
+	* squeeze.rb: inserted user_navi plugin into the footer.
+
 2008-07-21 TADA Tadashi <sho@spc.gr.jp>
 	* makerss.rb: fixed error when subtitle was nil.
 
