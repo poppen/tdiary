@@ -17,10 +17,11 @@ end
 MODIFY_CLASS
 
 class NaviUserCGI
-	attr_reader :params, :referer
+	attr_reader :params, :referer, :user_agent
 	def initialize(datestr)
 		@params = {'date' => [datestr]}
 		@referer = nil
+		@user_agent = nil
 	end
 end
 
