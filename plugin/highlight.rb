@@ -28,7 +28,7 @@ if @mode == 'day' and not bot? then
 				if (highlightElem.tagName == 'H3') {
 					var diary_title = "#{(@conf.html_title.gsub(/\\/, '\\\\\\') || '').gsub(/&/n, '&amp;').gsub(/"/n, '&quot;').gsub(/>/n, '&gt;').gsub(/</n, '&lt;')}(#{@date.strftime('%Y-%m-%d')})";
 					var sanchor_length = "#{apply_plugin( @conf.section_anchor ).gsub(/<[^>]+?>/, '').gsub(/\"/, '\"')}".length;
-					var section_title = highlightElem.innerHTML.replace(/<[^>]+?>/g, '').substr(sanchor_length + 1).replace(/[ ]*$/, '');;
+					var section_title = highlightElem.innerHTML.replace(/<[^>]+?>/g, '').substr(sanchor_length + 1).replace(/^[ ]*/, '').replace(/[ ]*$/, '');;
 					document.title = (section_title + ' - ' + diary_title).replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&amp;/g, '&');
 				}
 			}
