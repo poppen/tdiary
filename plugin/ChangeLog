@@ -1,5 +1,6 @@
 2008-08-03 TADA Tadashi <sho@spc.gr.jp>
 	* titile_tag.rb: fixed a bug about no site name in the title.
+	* highlight.rb: changed title format to as same as default.
 
 2008-08-01 TADA Tadashi <sho@spc.gr.jp>
 	* squeeze.rb: inserted user_navi plugin into the footer.
