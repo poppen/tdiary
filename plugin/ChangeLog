@@ -1,3 +1,6 @@
+2008-08-03 TADA Tadashi <sho@spc.gr.jp>
+	* titile_tag.rb: fixed a bug about no site name in the title.
+
 2008-08-01 TADA Tadashi <sho@spc.gr.jp>
 	* squeeze.rb: inserted user_navi plugin into the footer.
 	* navi_user.rb: added user_agent method into dummy CGI class.
