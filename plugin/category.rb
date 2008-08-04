@@ -545,7 +545,7 @@ class Cache
 private
 	def cache_file(category = nil)
 		if category
-			"#{@dir}/#{u category}".untaint
+			"#{@dir}/#{u( category ).gsub(/%20/,'+')}".untaint
 		else
 			"#{@dir}/category_list"
 		end

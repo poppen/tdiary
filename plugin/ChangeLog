@@ -1,3 +1,6 @@
+2008-08-04 TADA Tadashi <sho@spc.gr.jp>
+	* category.rb: fixed #82, incompatible of white space of category.
+
 2008-08-03 TADA Tadashi <sho@spc.gr.jp>
 	* titile_tag.rb: fixed a bug about no site name in the title.
 	* highlight.rb: changed title format to as same as default.
