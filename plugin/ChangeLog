@@ -3,6 +3,7 @@
 	<hiraku at sapporo.email.ne.jp>.
 	* squeeze.rb: fixed #122, unsecure operation using with -p option.
 	thanks KURODA Hiraku <hiraku at sapporo.email.ne.jp>.
+	* squeeze.rb: added --overwrite option.
 
 2008-08-04 TADA Tadashi <sho@spc.gr.jp>
 	* category.rb: fixed #82, incompatible of white space of category.

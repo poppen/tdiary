@@ -25,6 +25,7 @@ if mode == "CMD" || mode == "CGI"
 	tdiary_conf = "."
 	suffix = ''
 	all_data = false
+	overwrite = false
 	compat = false
 	$stdout.sync = true
 
@@ -42,6 +43,7 @@ if mode == "CMD" || mode == "CGI"
 											 ['--conf', '-c', GetoptLong::REQUIRED_ARGUMENT],
 											 ['--suffix', '-x', GetoptLong::REQUIRED_ARGUMENT],
 											 ['--all', '-a', GetoptLong::NO_ARGUMENT],
+											 ['--overwrite', '-o', GetoptLong::NO_ARGUMENT],
 											 ['--squeeze', '-s', GetoptLong::NO_ARGUMENT])
 		begin
 			parser.each do |opt, arg|
@@ -54,6 +56,8 @@ if mode == "CMD" || mode == "CGI"
 					suffix = arg
 				when '--all'
 					all_data = true
+				when '--overwrite'
+					overwrite = true
 				when '--squeeze'
 					compat = true
 				end
@@ -84,6 +88,7 @@ if mode == "CMD" || mode == "CGI"
 		output_path = @options['squeeze.output_path'] || @options['yasqueeze.output_path']
 		suffix = @options['squeeze.suffix'] || ''
 		all_data = @options['squeeze.all_data'] || @options['yasqueeze.all_data']
+		overwrite = @options['squeeze.overwrite']
 		compat = @options['squeeze.compat_path'] || @options['yasqueeze.compat_path']
 
 		if FileTest::symlink?( __FILE__ ) then
@@ -107,7 +112,7 @@ end
 #
 module ::TDiary
 	class YATDiarySqueeze < TDiaryBase
-		def initialize(diary, dest, all_data, compat, conf, suffix)
+		def initialize(diary, dest, all_data, overwrite, compat, conf, suffix)
 			@ignore_parser_cache = true
 	
 			cgi = CGI::new
@@ -118,6 +123,7 @@ module ::TDiary
 			@diaries = {@date.strftime('%Y%m%d') => @diary} if @diaries.size == 0
 			@dest = dest
 			@all_data = all_data
+			@overwrite = overwrite
 			@compat = compat
 			@suffix = suffix
 		end
@@ -132,6 +138,9 @@ module ::TDiary
 				Dir.mkdir(dir, 0755) unless File.directory?(dir)
 			end
 			filename = dir + "/" + name + @suffix
+			if FileTest.exist?( filename ) and @overwrite
+				File::delete( filename )
+			end
 			if @diary.visible? or @all_data
 				if not FileTest::exist?(filename) or 
 						File::mtime(filename) != @diary.last_modified
@@ -164,7 +173,7 @@ end
 #
 module ::TDiary
 	class YATDiarySqueezeMain < TDiaryBase
-		def initialize(dest, all_data, compat, conf, suffix)
+		def initialize(dest, all_data, overwrite, compat, conf, suffix)
 			@ignore_parser_cache = true
 	
 			cgi = CGI::new
@@ -180,7 +189,7 @@ module ::TDiary
 						DIRTY_NONE
 					end
 					diaries2.sort.each do |day, diary|
-						print YATDiarySqueeze.new(diary, dest, all_data, compat, conf, suffix).execute + " "
+						print YATDiarySqueeze.new(diary, dest, all_data, overwrite, compat, conf, suffix).execute + " "
 					end
 				end
 			end
@@ -217,7 +226,7 @@ if mode == "CGI" || mode == "CMD"
 		def conf.bot?; true; end
 		output_path = "#{conf.data_path}/cache/html" unless output_path
 		Dir.mkdir(output_path, 0755) unless File.directory?(output_path)
-		::TDiary::YATDiarySqueezeMain.new(output_path, all_data, compat, conf, suffix)
+		::TDiary::YATDiarySqueezeMain.new(output_path, all_data, overwrite, compat, conf, suffix)
 	rescue
 		print $!, "\n"
 		$@.each do |v|
@@ -246,6 +255,7 @@ else
 		Dir.mkdir(dir, 0755) unless File.directory?(dir)
 		::TDiary::YATDiarySqueeze.new(diary, dir,
 					    @options['squeeze.all_data'] || @options['yasqueeze.all_data'],
+					    @options['squeeze.overwrite'],
 					    @options['squeeze.compat_path'] || @options['yasqueeze.compat_path'],
 					    conf,
 					    @options['squeeze.suffix'] || ''
