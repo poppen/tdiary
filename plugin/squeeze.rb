@@ -47,7 +47,7 @@ if mode == "CMD" || mode == "CGI"
 			parser.each do |opt, arg|
 				case opt
 				when '--path'
-					tdiary_path = arg
+					tdiary_path = arg.dup.untaint
 				when '--conf'
 					tdiary_conf = arg
 				when '--suffix'
