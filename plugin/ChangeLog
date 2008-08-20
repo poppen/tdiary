@@ -1,3 +1,7 @@
+2008-08-20 TADA Tadashi <sho@spc.gr.jp>
+	* squeeze.rb: fixed #120, memory leak by nested loading. thanks KURODA Hiraku
+	<hiraku at sapporo.email.ne.jp>.
+
 2008-08-04 TADA Tadashi <sho@spc.gr.jp>
 	* category.rb: fixed #82, incompatible of white space of category.
 
