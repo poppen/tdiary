@@ -10,7 +10,7 @@
 #      url: URL of RSS
 #      max: max of list itmes(5)
 #      cache_time: cache time(second) of RSS(60*60)
-#
+#      show_modified: show modified time of the entry (true)
 #
 # Copyright (c) 2003-2005 Kouhei Sutou <kou@cozmixng.org>
 # Distributed under the GPL
@@ -27,7 +27,7 @@ RECENT_RSS_HTTP_HEADER = {
 		"Using RSS parser version is #{::RSS::VERSION}.",
 }
 
-def recent_rss(url, max=5, cache_time=3600)
+def recent_rss( url, max = 5, cache_time = 3600, show_modified = true )
 	return 'DO NOT USE IN SECURE MODE' if @conf.secure
 
 	url.untaint
@@ -44,7 +44,7 @@ def recent_rss(url, max=5, cache_time=3600)
   
 	if site_info
 		title, url, time, image = site_info
-		content = recent_rss_entry_to_html(title, url, time, image)
+		content = recent_rss_entry_to_html( title, url, time, image, show_modified )
 		rv << %Q|<div class="recent-rss-title">\n|
 		rv << %Q|<span class="#{recent_rss_modified_class(time)}">#{content}</span>\n|
 		rv << "</div>\n"
@@ -59,7 +59,7 @@ def recent_rss(url, max=5, cache_time=3600)
 		next if title.nil?
 		rv << '<li>'
 		rv << %Q[<span class="#{recent_rss_modified_class(time)}">]
-		rv << recent_rss_entry_to_html(title, url, time, image)
+		rv << recent_rss_entry_to_html( title, url, time, image, show_modified )
 		rv << %Q[</span>]
 		rv << "</li>\n"
 		i += 1
@@ -221,7 +221,7 @@ def recent_rss_convert(str)
 	end
 end
 
-def recent_rss_entry_to_html(title, url, time, image=nil)
+def recent_rss_entry_to_html(title, url, time, image = nil, show_modified = true )
 	rv = ""
 	unless url.nil?
 		rv << %Q[<a href="#{h( url )}" title="#{h( title )}]
@@ -237,7 +237,7 @@ def recent_rss_entry_to_html(title, url, time, image=nil)
 		rv << h( title )
 	end
 	rv << '</a>' unless url.nil?
-	rv << "(#{recent_rss_modified(time)})"
+	rv << "(#{recent_rss_modified(time)})" if show_modified
 	rv
 end
 
