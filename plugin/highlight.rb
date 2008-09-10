@@ -25,7 +25,7 @@ if @mode == 'day' and not bot? then
 				saveClass = highlightElem.className;
 				highlightElem.className = "highlight";
 
-				if (highlightElem.tagName == 'H3') {
+				if (highlightElem.tagName == 'h3') {
 					var diary_title = "#{(@conf.html_title.gsub(/\\/, '\\\\\\') || '').gsub(/&/n, '&amp;').gsub(/"/n, '&quot;').gsub(/>/n, '&gt;').gsub(/</n, '&lt;')}(#{@date.strftime('%Y-%m-%d')})";
 					var sanchor_length = "#{apply_plugin( @conf.section_anchor ).gsub(/<[^>]+?>/, '').gsub(/\"/, '\"')}".length;
 					var section_title = highlightElem.innerHTML.replace(/<[^>]+?>/g, '').substr(sanchor_length + 1).replace(/^[ ]*/, '').replace(/[ ]*$/, '');;

@@ -1,3 +1,6 @@
+2008-09-10 KURODA Hiraku <hiraku at sapporo.email.ne.jp>
+	* highlight.rb: enable to work on XHTML mode.
+
 2008-08-26 TADA Tadashi <sho@spc.gr.jp>
 	* recent_rss.rb: added a parameter 'show_modified'.
 
