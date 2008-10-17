@@ -1,3 +1,6 @@
+2008-10-17 TADA Tadashi <sho@spc.gr.jp>
+	* highlight.rb: compared tag name case insensitive.
+
 2008-09-10 KURODA Hiraku <hiraku at sapporo.email.ne.jp>
 	* highlight.rb: enable to work on XHTML mode.
 
