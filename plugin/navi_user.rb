@@ -23,6 +23,10 @@ class NaviUserCGI
 		@referer = nil
 		@user_agent = nil
 	end
+
+	def request_method
+		'GET'
+	end
 end
 
 add_header_proc do

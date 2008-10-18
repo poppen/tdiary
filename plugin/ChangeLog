@@ -1,3 +1,6 @@
+2008-10-18 TADA Tadashi <sho@spc.gr.jp>
+	* navi_user.rb: added request_method to NaviUserCGI class.
+
 2008-10-17 TADA Tadashi <sho@spc.gr.jp>
 	* highlight.rb: compared tag name case insensitive.
 
