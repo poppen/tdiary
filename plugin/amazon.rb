@@ -56,8 +56,10 @@ end
 def amazon_author( item )
 	begin
 		author = ''
-		item.elements.each( '*/Author' ) do |a|
-			author << a.text << '/'
+		%w(Author Creator).each do |elem|
+			item.elements.each( "*/#{elem}" ) do |a|
+				author << a.text << '/'
+			end
 		end
 		@conf.to_native( author.chop, 'utf-8' )
 	rescue
