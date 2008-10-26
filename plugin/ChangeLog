@@ -1,4 +1,7 @@
 2008-10-26 SHIBATA Hiroshi <shibata.hiroshi@gmail.com>
+	* recent_comment3.rb, */recent_comment3.rb: applied patch #128. thx tamo.
+
+2008-10-26 SHIBATA Hiroshi <shibata.hiroshi@gmail.com>
 	* recent_comment.rb, */recent_comment.rb: fix #128. thx tamo.
 
 2008-10-24 TADA Tadashi <sho@spc.gr.jp>

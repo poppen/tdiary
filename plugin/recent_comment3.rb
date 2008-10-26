@@ -22,6 +22,7 @@ def recent_comment3_init
 	@conf['recent_comment3.format'] ||= '<a href="$2" title="$3">$4 $5</a>'
 	@conf['recent_comment3.tree'] ||= ""
 	@conf['recent_comment3.titlelen'] ||= 20
+	@conf['recent_comment.notfound_msg'] ||= ''
 end
 
 def recent_comment3(ob_max = 'OBSOLUTE' ,sep = 'OBSOLUTE',ob_date_format = 'OBSOLUTE',*ob_except )
@@ -35,6 +36,7 @@ def recent_comment3(ob_max = 'OBSOLUTE' ,sep = 'OBSOLUTE',ob_date_format = 'OBSO
 	except = @conf['recent_comment3.except_list'].split(/,/)
 	format = @conf['recent_comment3.format']
 	titlelen = @conf['recent_comment3.titlelen']
+	notfound_msg = @conf['recent_comment.notfound_msg']
 	
 	entries = {}
 	tree_order =[]
@@ -75,7 +77,7 @@ def recent_comment3(ob_max = 'OBSOLUTE' ,sep = 'OBSOLUTE',ob_date_format = 'OBSO
 	
 	if @conf['recent_comment3.tree'] == "t" then
 		if entries.size == 0
-			''
+			notfound_msg
 		else
 			cgi = CGI::new
 			def cgi.referer; nil; end
@@ -162,7 +164,8 @@ if @mode == 'saveconf'
 		@conf['recent_comment3.format'] = @cgi.params['recent_comment3.format'][0]
 		@conf['recent_comment3.tree'] = @cgi.params['recent_comment3.tree'][0]
 		@conf['recent_comment3.titlelen'] = @cgi.params['recent_comment3.titlelen'][0].to_i
-   end
+		@conf['recent_comment.notfound_msg'] = @cgi.params['recent_comment.notfound_msg'][0]
+	end
 end
 
 # vim: ts=3
