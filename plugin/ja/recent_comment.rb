@@ -29,6 +29,9 @@ if @mode == 'conf' || @mode == 'saveconf'
       <dt>$4</dt><dd>ツッコミした人の名前</dd>
       <dt>$5</dt><dd>ツッコミの時刻．「日付フォーマット」で指定した形式で表示されます。</dd>
       </dl>
+      <h3 class="subtitle">ツッコミがないときのメッセージ</h3>
+      <p>表示するツッコミがない場合に表示する内容を指定します．</p>
+      <p><input name="recent_comment.notfound_msg" value="#{h(@conf['recent_comment.notfound_msg'])}" size="40" /></p>
       HTML
    end
 end

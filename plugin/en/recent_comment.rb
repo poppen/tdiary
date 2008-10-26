@@ -29,6 +29,9 @@ if @mode == 'conf' || @mode == 'saveconf'
       <dt>$4</dt><dd>name of comment's author</dd>
       <dt>$5</dt><dd>when the comment is received</dd>
       </dl>
+      <h3 class="subtitle">Message for no comment</h3>
+      <p>Specify the message to be shown when there is no comment entry.</p>
+      <p><input name="recent_comment.notfound_msg" value="#{h( @conf['recent_comment.notfound_msg'] )}" size="40" /></p>
       HTML
    end
 end

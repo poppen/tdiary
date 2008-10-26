@@ -1,3 +1,6 @@
+2008-10-26 SHIBATA Hiroshi <shibata.hiroshi@gmail.com>
+	* recent_comment.rb, */recent_comment.rb: fix #128. thx tamo.
+
 2008-10-24 TADA Tadashi <sho@spc.gr.jp>
 	* amazon.rb: added "Creator" to author elements.
 

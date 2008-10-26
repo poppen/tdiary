@@ -14,6 +14,7 @@ def recent_comment_init
    @conf['recent_comment.date_format'] ||= "(%m-%d)"
    @conf['recent_comment.except_list'] ||= ''
    @conf['recent_comment.format'] ||= '<a href="$2" title="$3">$4 $5</a>'
+   @conf['recent_comment.notfound_msg'] ||= ''
 end
 
 def recent_comment( ob_max = 'OBSOLUTE', sep = 'OBSOLUTE', ob_form = 'OBSOLUTE', ob_except = 'OBSOLUTE' )
@@ -23,6 +24,7 @@ def recent_comment( ob_max = 'OBSOLUTE', sep = 'OBSOLUTE', ob_form = 'OBSOLUTE',
    form = @conf['recent_comment.date_format'] 
    except = @conf['recent_comment.except_list']
    format = @conf['recent_comment.format']
+   notfound_msg = @conf['recent_comment.notfound_msg']
 
    comments = []
    date = {}
@@ -54,7 +56,11 @@ def recent_comment( ob_max = 'OBSOLUTE', sep = 'OBSOLUTE', ob_form = 'OBSOLUTE',
       result << "</li>\n"
    end
    
-   %Q|<ol class="recent-comment">\n| + result.join( '' ) + "</ol>\n"
+   if result.size == 0
+      notfound_msg
+   else
+      %Q|<ol class="recent-comment">\n| + result.join( '' ) + "</ol>\n"
+   end
 end
 
 if @mode == 'saveconf'
@@ -63,5 +69,6 @@ if @mode == 'saveconf'
       @conf['recent_comment.date_format'] = @cgi.params['recent_comment.date_format'][0]
       @conf['recent_comment.except_list'] = @cgi.params['recent_comment.except_list'][0]
       @conf['recent_comment.format'] = @cgi.params['recent_comment.format'][0]
+      @conf['recent_comment.notfound_msg'] = @cgi.params['recent_comment.notfound_msg'][0]
    end
 end
