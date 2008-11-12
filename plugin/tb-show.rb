@@ -77,7 +77,7 @@ module TDiary
 		def visible_true?
 			@show
 		end
-		#{if @mode !~ /^(form|edit|showcomment|trackbackreceive)$/ then
+		#{if @mode !~ /^(form|edit|comment|showcomment|trackbackreceive)$/ then
 			'def visible?
 				@show and /^(TrackBack|Pingback)$/ !~ name
 			end'
