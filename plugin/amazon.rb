@@ -56,7 +56,7 @@ end
 def amazon_author( item )
 	begin
 		author = ''
-		%w(Author Creator).each do |elem|
+		%w(Author Creator Artist).each do |elem|
 			item.elements.each( "*/#{elem}" ) do |a|
 				author << a.text << '/'
 			end

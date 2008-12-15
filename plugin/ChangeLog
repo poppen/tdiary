@@ -1,3 +1,6 @@
+2008-12-15 TADA Tadashi <sho@spc.gr.jp>
+	* amazon.rb: added "Artist" to author elements.
+
 2008-11-12 TADA Tadashi <sho@spc.gr.jp>
 	* tb-show.rb: added comment mode into no overriding TDiary::Comment class.
 
