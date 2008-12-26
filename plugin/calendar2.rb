@@ -47,7 +47,7 @@ def calendar2_make_cal(year, month)
 end
 
 def calendar2_prev_current_next
-	yyyymm = if @mode == "latest"
+	yyyymm = if /^(latest|search)$/ =~ @mode
 					Time.now
 				else
 					@date
@@ -97,7 +97,7 @@ def calendar2(days_format = nil, navi_format = nil, show_todo = nil)
 	navi_format ||= @calendar2_navi_format
 
 	return '' if /TAMATEBAKO/ =~ @cgi.user_agent
-	date = if @mode == "latest"
+	date = if /^(latest|search)$/ =~ @mode
 				Time.now
 			else
 				@date

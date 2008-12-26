@@ -133,7 +133,7 @@ def calendar3
 		result << %Q|<p class="message">@options['calendar3.erb'] is obsolete!<p>|
 	end
 
-	if @mode == 'latest'
+	if /^(latest|search)$/ =~ @mode
 		date = Time.now
 	else
 		date = @date
