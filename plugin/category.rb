@@ -221,6 +221,9 @@ class CGI
 	def initialize
 		@params = Hash.new([])
 	end
+	def referer; nil; end
+	def user_agent; nil; end
+	def request_method; 'GET'; end
 end
 
 #
@@ -483,7 +486,6 @@ class Cache
 	#
 	def recreate(years)
 		cgi = Category::CGI::new
-		def cgi.referer; nil; end
 
 		list = []
 		years.each do |y, ms|
