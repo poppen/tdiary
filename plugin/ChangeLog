@@ -1,3 +1,6 @@
+2009-02-03 TADA Tadashi <sho@spc.gr.jp>
+	* amazon.rb: deleted duplicated author names.
+
 2009-01-20 TADA Tadashi <sho@spc.gr.jp>
 	* category.rb: added user_agent and request_method into fake CGI class.
 
