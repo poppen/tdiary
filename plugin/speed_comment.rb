@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # speed_comment.rb $Revision: 1.7 $
 #
 # spped_comment: 最新・月毎表示時に簡易なツッコミフォームを表示する
@@ -26,7 +27,7 @@ add_body_leave_proc do |date|
 		r << %Q[<div class="form"><form method="post" action="#{h( @index )}"><p>]
 		r << %Q[<input type="hidden" name="date" value="#{h( date.strftime( '%Y%m%d' ) )}">]
 		r << %Q[<input type="hidden" name="mail" value="">]
-		r << %Q[#{h( comment_name_label )} : <input class="field" name="name" size="#{@conf['speed_comment.name_size']}" value="#{h( @cgi.cookies['tdiary'][0] )}">]
+		r << %Q[#{h( comment_name_label )} : <input class="field" name="name" size="#{@conf['speed_comment.name_size']}" value="#{h( @conf.to_native(@cgi.cookies['tdiary'][0] || '' ))}">]
 		r << %Q[#{h( comment_body_label )} : <input class="field" name="body" size="#{@conf['speed_comment.body_size']}">]
 		r << %Q[<input type="submit" name="comment" value="#{h( comment_submit_label )}">]
 		r << %Q[</p></form></div>]

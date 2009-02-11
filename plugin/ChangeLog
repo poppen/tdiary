@@ -1,3 +1,6 @@
+2009-02-11 SHIBATA Hiroshi <shibata.hiroshi@gmail.com>
+	* category.rb, random_google.rb, speed_comment.rb: supported ruby 1.9.1 more.
+	
 2009-02-03 TADA Tadashi <sho@spc.gr.jp>
 	* amazon.rb: deleted duplicated author names.
 

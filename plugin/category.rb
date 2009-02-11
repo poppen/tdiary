@@ -333,7 +333,7 @@ public
 				label = label.gsub(/\$1/, @year || '*')
 			end
 		else
-			label = @category.map.join(':')
+			label = @category.map.to_a.join(':')
 		end
 		%Q|<a href="#{h @conf.index}?#{h a}">#{h label}</a>|
 	end
