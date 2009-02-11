@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 =begin
 = その日の天気プラグイン / Weather-of-today plugin((-$Id: weather.rb,v 1.16 2008-03-02 09:01:45 kazuhiko Exp $-))
 Records the weather when the diary is first updated for the date and
@@ -250,7 +251,7 @@ class Weather
 		end
 	end
 
-	def get( url, header = nil, items = {} )
+	def get( url, header = {}, items = {} )
 		@url = url.gsub(/[\t\n]/, '')
 		@error = nil
 		@url =~ %r<http://([^/]+)(.*)>
@@ -437,7 +438,7 @@ def get_weather
 	if not w or w.error then
 		items = @options['weather.items'] || Weather_default_items
 		w = Weather.new( @date, @options['weather.tz'] )
-		w.get( @options['weather.url'], @options['weather.header'], items )
+		w.get( @options['weather.url'], @options['weather.header'] || {}, items )
 		if @options.has_key?( 'weather.oldest' ) then
 			oldest = @options['weather.oldest']
 		else
