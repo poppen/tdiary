@@ -14,7 +14,7 @@
 unless @conf.mobile_agent?
 
 def my( a, str, title = nil )
-	date, frag = a.scan( /(\d{4}|\d{6}|\d{8}|\d{8}-\d+)(?:[^\d]*)?(?:#?([pct]\d+))?$/ )[0]
+	date, frag = a.scan( /(\d{4}|\d{6}|\d{8}|\d{8}-\d+)[^\d]*(?:#?([pct]\d+))?$/ )[0]
 	anc = frag ? "#{date}#{frag}" : date
 	place, frag = frag.scan( /([cpt])(\d\d)/ )[0] if frag
 	if date and frag and @diaries[date] then

@@ -1,3 +1,6 @@
+2009-02-26 TADA Tadashi <t@tdtds.jp>
+	* my-ex.rb: fixed warning of Regexp on ruby 1.9.1.
+
 2009-02-25 TADA Tadashi <sho@spc.gr.jp>
 	* highlight.rb: suppressed Regexp warning on ruby 1.9.1.
 
