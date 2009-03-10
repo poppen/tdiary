@@ -84,7 +84,7 @@ def todo_pretty_print(todos)
 		s << %Q|<del>| if x.deleted?
 		s << %Q|<span class="todo-priority">#{if x.prio != '' then '%02d' % x.prio else '' end}</span> #{apply_plugin x.todo}|
 		if x.limit
-			s << "(〜#{x.limit}"
+			s << "(~#{x.limit}"
 			y, m, d = ParseDate.parsedate(x.limit)
 			y = today.year unless y
 			if y and m and d

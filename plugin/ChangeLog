@@ -1,3 +1,6 @@
+2009-03-10 TADA Tadashi <t@tdtds.jp>
+	* todo.rb: changed WAVE DASH to TILDA.
+
 2009-02-26 TADA Tadashi <t@tdtds.jp>
 	* my-ex.rb: fixed warning of Regexp on ruby 1.9.1.
 
