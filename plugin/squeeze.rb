@@ -14,8 +14,8 @@
 # The original version of this file was distributed with squeeze 
 # TADA Tadashi <sho@spc.gr.jp> with GPL2.
 #
-unless $squeeze_loaded
-$squeeze_loaded ||= true
+unless $tdiary_squeeze_loaded
+$tdiary_squeeze_loaded ||= true
 
 mode = defined?(TDiary) ? "PLUGIN" : ENV["REQUEST_METHOD"]? "CGI" : "CMD"
 
