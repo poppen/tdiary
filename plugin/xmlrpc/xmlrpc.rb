@@ -6,7 +6,7 @@
 #
 # require Ruby1.8 or xml-rpc(http://raa.ruby-lang.org/project/xml-rpc/)
 
-BEGIN { $defout.binmode }
+BEGIN { $stdout.binmode }
 $KCODE = 'n'
 
 if FileTest::symlink?( __FILE__ ) then

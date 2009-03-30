@@ -7,7 +7,7 @@
 # derived from sheepman's tb.rb. Thanks to sheepman <sheepman@tcn.zaq.ne.jp>
 # 
 
-BEGIN { $defout.binmode }
+BEGIN { $stdout.binmode }
 $KCODE = 'n'
 
 begin

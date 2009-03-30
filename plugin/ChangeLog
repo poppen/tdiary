@@ -1,3 +1,7 @@
+2009-03-30 SHIBATA Hiroshi <shibata.hiroshi@gmail.com>
+	* pingback/pb.rb, trackbacktb.rb, xmlrpc/xmlrpc.rb:
+	replace defout to stdout. defout is obsolete.
+
 2009-03-10 TADA Tadashi <t@tdtds.jp>
 	* todo.rb: changed WAVE DASH to TILDA.
 	* squeeze.rb: changed name of global variable.
