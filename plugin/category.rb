@@ -616,10 +616,20 @@ end # module Category
 		ret << %Q[
 		<script type="text/javascript">
 		<!--
-		function inj_c(val){
-			target = window.document.forms[0].body
-			target.focus();
-			target.value += val
+		function inj_c(str) {
+			var textarea = window.document.forms[0].body;
+			textarea.focus();
+			if (document.selection) { // IE, Opera
+				var range = document.selection.createRange();
+				range.text = str;
+			} else if (textarea.selectionStart != undefined) { // mozilla
+				var start = textarea.selectionStart;
+				var end = textarea.selectionEnd;
+				textarea.value = textarea.value.substring(0, start) + str + textarea.value.substring(end);
+				textarea.setSelectionRange(start + str.length, start + str.length);
+			 } else {
+				textarea.value += str;
+			 }
 		}
 		//-->
 		</script>

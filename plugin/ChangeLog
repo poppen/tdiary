@@ -1,3 +1,7 @@
+2009-04-26 SHIBATA Hiroshi <shibata.hiroshi@gmail.com>
+	* category.rb: applied patch #130. thx tamo.
+	thx sugiyama. http://www.kde.ics.tut.ac.jp/~sugiyama/diary/20061127.html#p01
+
 2009-03-30 SHIBATA Hiroshi <shibata.hiroshi@gmail.com>
 	* pingback/pb.rb, trackbacktb.rb, xmlrpc/xmlrpc.rb:
 	replace defout to stdout. defout is obsolete.
