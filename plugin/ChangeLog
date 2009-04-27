@@ -1,3 +1,6 @@
+2009-04-27 SHIBATA Hiroshi <shibata.hiroshi@gmail.com>
+	* ja/calendar2.rb: modified language resource, changed Array of String.
+
 2009-04-26 SHIBATA Hiroshi <shibata.hiroshi@gmail.com>
 	* category.rb: applied patch #130. thx tamo.
 	thx sugiyama. http://www.kde.ics.tut.ac.jp/~sugiyama/diary/20061127.html#p01
