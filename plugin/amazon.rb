@@ -79,9 +79,10 @@ def amazon_image( item )
 		when 2; 'Small'
 		else;   'Medium'
 		end
-		image[:src] = item.elements.to_a( "#{size}Image/URL" )[0].text
-		image[:height] = item.elements.to_a( "#{size}Image/Height" )[0].text
-		image[:width] = item.elements.to_a( "#{size}Image/Width" )[0].text
+		img = item.elements.to_a("#{size}Image")[0] || item.elements.to_a("ImageSets/ImageSet/#{size}Image")[0]
+		image[:src] = img.elements['URL'].text
+		image[:height] = img.elements['Height'].text
+		image[:width] = img.elements['Width'].text
 	rescue
 		base = @conf['amazon.default_image_base'] || 'http://www.tdiary.org/images/amazondefaults/'
 		case @conf['amazon.imgsize']
