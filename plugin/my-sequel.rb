@@ -487,7 +487,7 @@ _HTML
 	alias :my_sequel_orig_my :my unless defined?(my_sequel_orig_my)
 	def my(*args)
 		if @my_sequel_active and @my_sequel_date and @my_sequel_anchor and @mode != 'preview' then
-			dst_date, frag = args[0].scan(/(\d{8,8})(?:[^\d]*?)?(?:#?p(\d+))?$/)[0]
+			dst_date, frag = args[0].scan(/(\d{8,8})(?:[^\d]*)(?:#?p(\d+))?$/)[0]
 			if dst_date and dst_date < @my_sequel_date then
 				dst_anchor = "#{dst_date}#{frag ? "#p%02d" % frag.to_i : ''}"
 				@my_sequel.add(@my_sequel_anchor, dst_anchor)
