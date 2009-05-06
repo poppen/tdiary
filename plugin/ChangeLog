@@ -1,5 +1,6 @@
 2009-05-06 TADA Tadashi <t@tdtds.jp>
 	* my-sequel.rb: fixed redundant nested repeat operator in Regexp.
+	* comment_mail_smtp.rb: fixed error on ruby 1.9.1.
 
 2009-04-30 SHIBATA Hiroshi <shibata.hiroshi@gmail.com>
 	* amazon.rb: applied patch #151. thx arton.

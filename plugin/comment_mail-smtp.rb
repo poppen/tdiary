@@ -34,7 +34,7 @@ def comment_mail( text, to )
 		host = @conf['comment_mail.smtp_host'] || 'localhost'
 		port = @conf['comment_mail.smtp_port'] || 25
 		Net::SMTP.start( host, port ) do |smtp|
-			smtp.send_mail( text, @conf.author_mail.untaint, to )
+			smtp.send_mail( text.force_encoding( 'US-ASCII' ), @conf.author_mail.untaint, to )
 		end
 	rescue
 		$stderr.puts $!
