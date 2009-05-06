@@ -568,7 +568,7 @@ def print_conf_html
 
 	<<-HTML
 	<h3 class="subtitle">#{@counter_conf_init_head}</h3>
- 	p>#{@counter_conf_init_desc}</p>
+ 	<p>#{@counter_conf_init_desc}</p>
 	<p>#{@counter_conf_init_label}<input name="counter.init_num" value="#{h @conf["counter.init_num"]}" size="5"></p>
 
 	<h3 class="subtitle">#{@counter_conf_log_head}</h3>
@@ -594,7 +594,7 @@ def print_conf_html
 
 	<h3 class="subtitle">#{@counter_conf_deny_user_agents_head}</h3>
 	<p>#{@counter_conf_deny_user_agents_desc}</p>
-	<blockquote>#{@conf["bot"].join(", ")}, #{@counter_default_user_agents.gsub(/\|/, ", ")}</blockquote>
+	<blockquote>#{(@conf["bot"]||[]).join(", ")}, #{@counter_default_user_agents.gsub(/\|/, ", ")}</blockquote>
 	<dl><li>#{@counter_conf_deny_user_agents_label}<br/><textarea name="counter.deny_user_agents" cols="70" rows="3">#{@conf["counter.deny_user_agents"]}</textarea></li></dl>
 
 	<h3 class="subtitle">#{@counter_conf_kiriban_head}</h3>
