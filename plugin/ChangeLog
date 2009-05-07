@@ -1,3 +1,6 @@
+2009-05-07 TADA Tadashi <t@tdtds.jp>
+   * makerss.rb: without downcase character entities. thanks Masahiro Sakai.
+
 2009-05-06 TADA Tadashi <t@tdtds.jp>
 	* my-sequel.rb: fixed redundant nested repeat operator in Regexp.
 	* comment_mail_smtp.rb: fixed error on ruby 1.9.1.
