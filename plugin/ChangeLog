@@ -1,5 +1,5 @@
 2009-05-07 TADA Tadashi <t@tdtds.jp>
-   * makerss.rb: without downcase character entities. thanks Masahiro Sakai.
+	* makerss.rb: without downcase character entities. thanks Masahiro Sakai.
 
 2009-05-06 TADA Tadashi <t@tdtds.jp>
 	* my-sequel.rb: fixed redundant nested repeat operator in Regexp.
@@ -17,7 +17,7 @@
 	thx sugiyama. http://www.kde.ics.tut.ac.jp/~sugiyama/diary/20061127.html#p01
 
 2009-03-30 SHIBATA Hiroshi <shibata.hiroshi@gmail.com>
-	* pingback/pb.rb, trackbacktb.rb, xmlrpc/xmlrpc.rb:
+	* pingback/pb.rb, trackback/tb.rb, xmlrpc/xmlrpc.rb:
 	replace defout to stdout. defout is obsolete.
 
 2009-03-10 TADA Tadashi <t@tdtds.jp>
