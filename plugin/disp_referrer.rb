@@ -294,7 +294,7 @@ class DispRef2String
 
 	# strips site:... portion (google), multiple spaces, and start/end spaces
 	def self::normalize( str )
-		str.sub( /\bsite:(\w+\.)*\w+\b/, '' ).gsub( /[　\s\n]+/, ' ' ).strip
+		str.sub( /\bsite:(\w+\.)*\w+\b/u, '' ).gsub( /[　\s\n]+/u, ' ' ).strip
 	end
 
 	# parse_query parses the not unescaped query in a URL
