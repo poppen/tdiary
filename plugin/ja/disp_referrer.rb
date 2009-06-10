@@ -444,7 +444,7 @@ DispReferrer2_Google_cache = /cache:[^:]+:([^+]+)+/
 DispReferrer2_Yahoofs = /u=(.+)/
 DispReferrer2_Engines = {
 	'google' => [
-		[%r{\Ahttp://(?:[^./]+\.)*google\.([^/]+)/((?:hws/)?search|blogsearch|custom|ie)}i, '".#{$1}のGoogle検索"', ['as_q', 'q', 'as_epq'], DispReferrer2_Google_cache],
+		[%r{\Ahttp://(?:[^./]+\.)*google\.([^/]+)/((?:hws/|m/)?search|blogsearch|custom|ie)}i, '".#{$1}のGoogle検索"', ['as_q', 'q', 'as_epq'], DispReferrer2_Google_cache],
 		[%r{\Ahttp://.*?\bgoogle\.([^/]+)/.*url}i, '".#{$1}のGoogleのURL検索?"', ['as_q', 'q'], DispReferrer2_Google_cache],
 		[%r{\Ahttp://.*?\bgoogle/search}i, '"たぶんGoogle検索"', ['as_q', 'q'], DispReferrer2_Google_cache],
 		[%r{\Ahttp://eval.google\.([^/]+)}i, '".#{$1}のGoogle Accounts"', [], nil],
@@ -465,12 +465,14 @@ DispReferrer2_Engines = {
 	'yahoofs' => [[%r{\Ahttp://cache\.yahoofs\.jp/}i, '"Yahoo!検索"', ['w'], DispReferrer2_Yahoofs]],
 	'netscape' => [[%r{\Ahttp://[^/]+\.netscape\.([^/]+)/}i, '".#{$1}のNetscape検索"', ['search', 'query'], DispReferrer2_Google_cache]],
 	'msn' => [[%r{\Ahttp://[^/]+\.MSN\.([^/]+)/}i, '".#{$1}のMSNサーチ"', ['q', 'MT'], nil ]],
+	'bing' => [[%r{\Ahttp://www\.bing\.com/}i, '"Bing検索"', ['q'], nil ]],
+	'auone' => [[%r{\Ahttp://search\.auone.jp/}i, '"auOne検索"', ['q'], nil ]],
 	'metacrawler' => [[%r{\Ahttp://[^/]+\.metacrawler.com/}i, '"MetaCrawler"', ['q'], nil ]],
 	'metabot' => [[%r{\Ahttp://[^/]+\.metabot\.ru/}i, '"MetaBot.ru"', ['st'], nil ]],
 	'altavista' => [[%r{\Ahttp://(?:[^/]+\.)?altavista\.([^/]+)/}i, '".#{$1}のAltaVista検索"', ['q'], nil ]],
 	'infoseek' => [
 		[%r{\Ahttp://(www\.)?infoseek\.co\.jp/}i, '"Infoseek"', ['qt'], nil],
-		[%r{\Ahttp://search\d*\.www\.infoseek\.co\.jp/(?:[IO]Titles|Seek)}, '"Infoseekハイブリッド検索"', ['qt'], nil],
+		[%r{\Ahttp://search\d*\.www\.infoseek\.co\.jp/(?:[IO]Titles|Seek|Web)}, '"Infoseekハイブリッド検索"', ['qt'], nil],
 	],
 	'odn' => [[%r{\Ahttp://[^/]+\.odn\.ne\.jp/}i, '"ODN検索"', ['QueryString', 'key'], nil ]],
 	'lycos' => [[%r{\Ahttp://[^/]+\.lycos\.([^/]+)/}i, '".#{$1}のLycos"', ['query', 'q', 'qt'], nil ]],

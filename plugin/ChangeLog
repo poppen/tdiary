@@ -1,3 +1,8 @@
+2009-06-10 TADA Tadashi <t@tdtds.jp>
+	* ja/disp_referrer.rb: added search engine: Bing, auOne.
+	* ja/disp_referrer.rb: added some condition for some search engines:
+	Google, Infoseek.
+
 2009-05-17 zunda <zunda at freeshell.org>
 	* disp_referrer.rb: added u option to regular expressions
 
