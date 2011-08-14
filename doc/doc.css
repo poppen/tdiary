@@ -1,0 +1,115 @@
+/*
+doc.css: CSS for tDiary documents
+
+2002-11-13 TADA Tadashi <t@tdtds.jp>
+	* created
+*/
+
+body {
+	color: #000;
+	background-color: #fff;
+	line-height: 130%;
+}
+
+h1 {
+	color: #fff;
+	background-color: #32c832;
+	border-style: solid;
+	border-width: 0px 0px 2px 0px;
+	border-color: #166416;
+	padding: 4px;
+}
+
+div.footer {
+	margin-right: 4px;
+	text-align: right;
+	clear: both;
+	font-size: 80%;
+}
+
+a:link, a:visited {
+	color: #32c832;
+	background-color: transparent;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+hr.sep {
+	display: none;
+}
+
+h2 {
+	border-style: solid;
+	border-color: #32c832;
+	border-width: 0px 0px 1px 0px;
+}
+
+h3 {
+	margin: 1em;
+}
+
+h4 {
+	margin: 2em;
+}
+
+p {
+	margin-left: 3em;
+}
+
+pre, p.sample {
+	border-style: solid;
+	border-color: #32c832;
+	border-width: 1px 1px 1px 3px;
+	margin-left: 5em;
+	padding: 4px;
+}
+
+div.sample {
+	border-style: solid;
+	border-color: #32c832;
+	border-width: 1px 1px 1px 3px;
+	margin-left: 5em;
+	padding: 4px;
+}
+
+dl {
+	margin-left: 5em;
+}
+
+dt {
+	font-weight: bold;
+}
+
+dd {
+	margin-bottom: 0.5em;
+}
+
+ul, ol {
+	margin-left: 5em;
+}
+
+li {
+	margin-bottom: 0.5em;
+}
+
+table {
+	color: #fff;
+	background-color: #32c832;
+}
+
+th {
+	color: #fff;
+	background-color: #166416;
+	padding: 0.2em;
+	text-align: left;
+}
+
+td {
+	color: #000;
+	background-color: #fff;
+	padding: 0.2em;
+}
+

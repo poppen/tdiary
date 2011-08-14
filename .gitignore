@@ -1,0 +1,10 @@
+.bundle
+coverage
+coverage.*
+data
+log
+tmp
+rdoc
+index.rdf
+tdiary.conf
+vendor/bundle/

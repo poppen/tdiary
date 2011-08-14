@@ -1,0 +1,27 @@
+Options +ExecCGI
+
+# if you run tDiary with symbolic link, use settings below.
+#Options +FollowSymLinks
+
+# if making anchor style as 'YYYYMMDD.html', add some settings below.
+# SEE header of html_anchor.rb plugin.
+
+AddHandler cgi-script .rb
+DirectoryIndex index.rb
+AddType application/xml .rdf
+
+<Files "*.rhtml*">
+	deny from all
+</Files>
+
+<Files "tdiary.*">
+	deny from all
+</Files>
+
+<Files update.rb>
+	AuthName      tDiary
+	AuthType      Basic
+	AuthUserFile  /home/foo/.htpasswd
+	Require user  foo
+</Files>
+

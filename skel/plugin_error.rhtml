@@ -1,0 +1,27 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta name="generator" content="<%=h TDIARY_VERSION %>">
+	<title>Plugin Error</title>
+</head>
+<body>
+<h1>Plugin Error</h1>
+<%
+	if self.kind_of?( TDiary::TDiaryAdmin ) and @date then
+		update = %Q[<a href="#{h @conf.update}?edit=true;#{@date.strftime( 'year=%Y;month=%m;day=%d' )}">Edit(#{@date.strftime( '%Y-%m-%d' )})</a>]
+	else
+		update = %Q[<a href="#{h @conf.update}">Update</a>]
+	end
+%>
+<p style="font-size: large;"><strong>
+	Errors in plugins?
+	Retry to <%= update %> or <a href="<%=h @conf.update %>?conf=default">Configure</a>.
+</strong></p>
+<blockquote>
+	<strong><%=h $!.class %></strong><br>
+	<pre><%=h $! %></pre>
+	<pre><%=h $!.backtrace.join("\n") %></pre>
+</blockquote>
+</body>
+</html>
+

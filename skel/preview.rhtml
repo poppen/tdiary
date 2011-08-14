@@ -1,0 +1,86 @@
+<%# preview.rhtml $Revision: 1.17 $ %>
+<%%=navi%>
+
+<h1><%=h @conf.html_title %> [<%%=preview_label%>]</h1>
+<%
+param = {
+	'date_format' => @conf.date_format,
+	'index' => @conf.index,
+	'section_anchor' => @conf.section_anchor,
+	'comment_anchor' => @conf.comment_anchor,
+	'long_mode' => false,
+	'show_referer' => false,
+	'referer_limit' => 100,
+	'referer_table' => @conf.referer_table,
+	'show_comment' => false,
+	'comment_limit' => -1,
+	'multi_user' => @conf.multi_user,
+	'hide_comment_form' => true,
+	'anchor' => true,
+	'show_nyear' => @conf.show_nyear,
+}
+## accesskeys
+if @conf.accesskey_enabled
+	accesskeys = {
+		'title'   => ' accesskey="T"',
+		'body'    => ' accesskey="C"',
+		'preview' => ' accesskey="P"',
+		'submit'  => ' accesskey="A"',
+		'hide'    => ' accesskey="H"',
+	}
+else
+	accesskeys = {}
+end
+%>
+<% if @show_result %>
+	<%= @diary.eval_rhtml( param, PATH ) %>
+<% else %>
+	<div class="day">
+	<h2><span class="title">プラグイン・エラー</span></h2>
+	<div class="body">
+	<div class="section">
+		<h3><%=h @exception.class.to_s %></h3>
+		<pre><%=h @exception.to_s %></pre>
+	</div>
+	</div>
+	</div>
+<% end %>
+
+<hr class="sep">
+
+<div class="update day">
+<h2><span class="title">更新フォーム</span></h2>
+<div class="form">
+	<form class="update" method="post" action="<%=h @conf.update %>"><div>
+		<input type="hidden" name="old" value="<%=h @old_date %>">
+		<%=@csrf_protection%>
+		<span class="field year">
+			<input type="hidden" id="year" name="year" value="<%= @date.year %>"><%= @date.year %>年
+		</span>
+		<span class="field month">
+			<input type="hidden" id="month" name="month" value="<%= @date.mon %>"><%= @date.mon %>月
+		</span>
+		<span class="field day">
+			<input type="hidden" id="day" name="day" value="<%= @date.day %>"><%= @date.day %>日
+		</span>
+		<div class="field title">
+			タイトル: <input class="field" id="title" name="title" tabindex="5"<%= accesskeys['title'] %> size="40" value="<%=h @diary.title %>">
+		</div>
+		<div class="textarea">
+			本文(<span id="style"><%=h @conf.style %></span>スタイル<%%= style_howto %>):<textarea id="body" name="body" tabindex="6"<%= accesskeys['body'] %> cols="70" rows="15"><%=h @diary.to_src %></textarea>
+		</div>
+		<%%=edit_proc( @date )%>
+		<span class="button preview">
+			<input type="submit" tabindex="998"<%= accesskeys['preview'] %> name="<%%= preview_command %>" value="<%%= preview_label %>">
+		</span>
+		<span class="button append">
+			<input type="submit" tabindex="999"<%= accesskeys['submit'] %> name="<%%= submit_command %>" value=" <%%= submit_label %> ">
+		</span>
+		<span class="checkbox hidediary"><label for="hide">
+			<input type="checkbox" id="hide" name="hide" value="true" <% unless @diary.visible? then %>checked <% end %>tabindex="1000"<%= accesskeys['hide'] %>>この日の日記を隠す
+		</label></span>
+	</div></form>
+</div>
+</div>
+
+<hr class="sep">

@@ -1,0 +1,10 @@
+<%%=doctype%><%# header.rhtml $Revision: 1.7 $ %>
+<html lang="<%%=h @conf.html_lang%>">
+<head>
+<%%=header_proc%>
+</head>
+<body<%%= /form|edit|preview/ =~ @mode ? ' class="update"' : ''%>>
+<div class="whole-content">
+<% if @error then %><p class="message">Security Error?<br>
+<%=h @error[0].to_s %><br><%=h @error[1][0] %>
+</p><% end %>
